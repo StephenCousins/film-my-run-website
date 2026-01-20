@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
 import {
   formatTime,
+  parseTimeToSeconds,
   type ParkrunResult,
   type YearlyStats,
   type VenueStats,
@@ -23,7 +24,6 @@ export {
 };
 
 // Create a connection pool for the parkrun database
-// This connects to the existing Railway PostgreSQL database
 const globalForPool = globalThis as unknown as {
   parkrunPool: Pool | undefined;
 };
@@ -53,30 +53,57 @@ function getPool(): Pool {
   return pool;
 }
 
-// Query functions
+// Query functions - adapted to actual database schema
 export async function getAllParkruns(): Promise<ParkrunResult[]> {
   const client = await getPool().connect();
   try {
     const result = await client.query(`
       SELECT
         id,
-        date,
-        event,
-        run_number,
-        position,
-        time_seconds,
-        age_grade,
-        age_category_position,
-        pb
-      FROM parkrun_results
-      ORDER BY date DESC
+        parkrun_date,
+        date_display,
+        venue as event,
+        event_number as run_number,
+        overall_pos as position,
+        finish_time,
+        age_cat_pos as age_category_position
+      FROM parkruns
+      ORDER BY COALESCE(parkrun_date, '1900-01-01') DESC, id DESC
     `);
 
-    return result.rows.map(row => ({
-      ...row,
-      date: row.date.toISOString().split('T')[0],
-      time_formatted: formatTime(row.time_seconds),
-    }));
+    // Find PBs - track best time seen so far going chronologically
+    const sortedByDate = [...result.rows].sort((a, b) => {
+      const dateA = a.parkrun_date || '1900-01-01';
+      const dateB = b.parkrun_date || '1900-01-01';
+      return dateA.localeCompare(dateB);
+    });
+
+    let bestTime = Infinity;
+    const pbSet = new Set<number>();
+
+    for (const row of sortedByDate) {
+      const timeSeconds = parseTimeToSeconds(row.finish_time);
+      if (timeSeconds < bestTime) {
+        bestTime = timeSeconds;
+        pbSet.add(row.id);
+      }
+    }
+
+    return result.rows.map(row => {
+      const timeSeconds = parseTimeToSeconds(row.finish_time);
+      return {
+        id: row.id,
+        date: row.parkrun_date?.toISOString?.().split('T')[0] || row.date_display || '',
+        event: row.event,
+        run_number: row.run_number || 0,
+        position: row.position || 0,
+        time_seconds: timeSeconds,
+        time_formatted: row.finish_time,
+        age_grade: null,
+        age_category_position: row.age_category_position,
+        pb: pbSet.has(row.id),
+      };
+    });
   } finally {
     client.release();
   }
@@ -85,27 +112,51 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
 export async function getYearlyStats(): Promise<YearlyStats[]> {
   const client = await getPool().connect();
   try {
+    // Use pre-calculated yearly_stats table
     const result = await client.query(`
       SELECT
-        EXTRACT(YEAR FROM date) as year,
-        COUNT(*) as runs,
-        MIN(time_seconds) as best_time_seconds,
-        MIN(position) as best_position,
-        AVG(time_seconds)::INTEGER as average_time_seconds,
-        COUNT(*) FILTER (WHERE pb = true) as pb_count
-      FROM parkrun_results
-      GROUP BY EXTRACT(YEAR FROM date)
+        year,
+        runs,
+        fastest_time,
+        best_position,
+        cumulative
+      FROM yearly_stats
       ORDER BY year DESC
     `);
 
+    // Also get average times from parkruns table
+    const avgResult = await client.query(`
+      SELECT
+        year,
+        AVG(
+          CAST(SPLIT_PART(finish_time, ':', 1) AS INTEGER) * 60 +
+          CAST(SPLIT_PART(finish_time, ':', 2) AS INTEGER)
+        )::INTEGER as average_time_seconds
+      FROM parkruns
+      WHERE finish_time IS NOT NULL
+      GROUP BY year
+    `);
+
+    const avgMap = new Map(avgResult.rows.map(r => [r.year, r.average_time_seconds]));
+
+    // Count PBs per year
+    const allRuns = await getAllParkruns();
+    const pbCountByYear = new Map<number, number>();
+    for (const run of allRuns) {
+      if (run.pb) {
+        const year = new Date(run.date).getFullYear();
+        pbCountByYear.set(year, (pbCountByYear.get(year) || 0) + 1);
+      }
+    }
+
     return result.rows.map(row => ({
-      year: parseInt(row.year),
-      runs: parseInt(row.runs),
-      best_time_seconds: row.best_time_seconds,
-      best_time_formatted: formatTime(row.best_time_seconds),
-      best_position: row.best_position,
-      average_time_seconds: row.average_time_seconds,
-      pb_count: parseInt(row.pb_count),
+      year: row.year,
+      runs: row.runs || 0,
+      best_time_seconds: row.fastest_time ? parseTimeToSeconds(row.fastest_time) : 0,
+      best_time_formatted: row.fastest_time || '',
+      best_position: row.best_position || 0,
+      average_time_seconds: avgMap.get(row.year) || 0,
+      pb_count: pbCountByYear.get(row.year) || 0,
     }));
   } finally {
     client.release();
@@ -115,27 +166,42 @@ export async function getYearlyStats(): Promise<YearlyStats[]> {
 export async function getVenueStats(): Promise<VenueStats[]> {
   const client = await getPool().connect();
   try {
+    // Use pre-calculated venues table
     const result = await client.query(`
       SELECT
-        event,
-        COUNT(*) as visit_count,
-        MIN(time_seconds) as best_time_seconds,
-        MIN(date) as first_visit,
-        MAX(date) as last_visit,
-        AVG(time_seconds)::INTEGER as average_time_seconds
-      FROM parkrun_results
-      GROUP BY event
-      ORDER BY visit_count DESC, best_time_seconds ASC
+        name as event,
+        visit_count,
+        best_time,
+        first_visit,
+        last_visit
+      FROM venues
+      WHERE visit_count > 0
+      ORDER BY visit_count DESC, best_time ASC
     `);
+
+    // Get average times per venue
+    const avgResult = await client.query(`
+      SELECT
+        venue,
+        AVG(
+          CAST(SPLIT_PART(finish_time, ':', 1) AS INTEGER) * 60 +
+          CAST(SPLIT_PART(finish_time, ':', 2) AS INTEGER)
+        )::INTEGER as average_time_seconds
+      FROM parkruns
+      WHERE finish_time IS NOT NULL
+      GROUP BY venue
+    `);
+
+    const avgMap = new Map(avgResult.rows.map(r => [r.venue, r.average_time_seconds]));
 
     return result.rows.map(row => ({
       event: row.event,
-      visit_count: parseInt(row.visit_count),
-      best_time_seconds: row.best_time_seconds,
-      best_time_formatted: formatTime(row.best_time_seconds),
-      first_visit: row.first_visit.toISOString().split('T')[0],
-      last_visit: row.last_visit.toISOString().split('T')[0],
-      average_time_seconds: row.average_time_seconds,
+      visit_count: row.visit_count || 0,
+      best_time_seconds: row.best_time ? parseTimeToSeconds(row.best_time) : 0,
+      best_time_formatted: row.best_time || '',
+      first_visit: row.first_visit?.toISOString?.().split('T')[0] || '',
+      last_visit: row.last_visit?.toISOString?.().split('T')[0] || '',
+      average_time_seconds: avgMap.get(row.event) || 0,
     }));
   } finally {
     client.release();
@@ -145,19 +211,17 @@ export async function getVenueStats(): Promise<VenueStats[]> {
 export async function getAgeCategoryStats(): Promise<AgeCategoryStats[]> {
   const client = await getPool().connect();
   try {
+    // Use pre-calculated age_category_stats table
     const result = await client.query(`
-      SELECT
-        age_category_position as position,
-        COUNT(*) as count
-      FROM parkrun_results
-      WHERE age_category_position IS NOT NULL
-      GROUP BY age_category_position
-      ORDER BY age_category_position
+      SELECT position, count
+      FROM age_category_stats
+      WHERE count > 0
+      ORDER BY position
     `);
 
     return result.rows.map(row => ({
       position: row.position,
-      count: parseInt(row.count),
+      count: row.count || 0,
     }));
   } finally {
     client.release();
@@ -167,37 +231,24 @@ export async function getAgeCategoryStats(): Promise<AgeCategoryStats[]> {
 export async function getVenueCoordinates(): Promise<VenueCoordinate[]> {
   const client = await getPool().connect();
   try {
-    // First get venues with visit counts
-    const visitResult = await client.query(`
+    // Join venue_coordinates with venues to get visit counts
+    const result = await client.query(`
       SELECT
-        event,
-        COUNT(*) as visit_count
-      FROM parkrun_results
-      GROUP BY event
+        vc.name as event,
+        vc.lat as latitude,
+        vc.lng as longitude,
+        COALESCE(v.visit_count, 0) as visit_count
+      FROM venue_coordinates vc
+      LEFT JOIN venues v ON LOWER(v.name) = LOWER(vc.name)
+      WHERE v.visit_count > 0
     `);
 
-    // Then get coordinates from venue table
-    const coordResult = await client.query(`
-      SELECT
-        name,
-        latitude,
-        longitude
-      FROM parkrun_venues
-      WHERE latitude IS NOT NULL AND longitude IS NOT NULL
-    `);
-
-    const visitCounts = new Map(
-      visitResult.rows.map(r => [r.event.toLowerCase(), parseInt(r.visit_count)])
-    );
-
-    return coordResult.rows
-      .filter(row => visitCounts.has(row.name.toLowerCase()))
-      .map(row => ({
-        event: row.name,
-        latitude: parseFloat(row.latitude),
-        longitude: parseFloat(row.longitude),
-        visit_count: visitCounts.get(row.name.toLowerCase()) || 0,
-      }));
+    return result.rows.map(row => ({
+      event: row.event,
+      latitude: parseFloat(row.latitude),
+      longitude: parseFloat(row.longitude),
+      visit_count: row.visit_count || 0,
+    }));
   } finally {
     client.release();
   }
@@ -206,38 +257,42 @@ export async function getVenueCoordinates(): Promise<VenueCoordinate[]> {
 export async function getMetadata(): Promise<ParkrunMetadata> {
   const client = await getPool().connect();
   try {
+    // Get totals from parkruns table
     const result = await client.query(`
       SELECT
         COUNT(*) as total,
-        MIN(time_seconds) as pb,
-        MIN(position) as best_position,
-        COUNT(DISTINCT event) as unique_venues,
-        MIN(date) as first_date,
-        MAX(date) as last_date
-      FROM parkrun_results
+        MIN(age_cat_pos) as best_position,
+        COUNT(DISTINCT venue) as unique_venues,
+        MIN(COALESCE(parkrun_date, '2000-01-01')) as first_date,
+        MAX(COALESCE(parkrun_date, '2000-01-01')) as last_date
+      FROM parkruns
     `);
 
+    // Get PB info
     const pbResult = await client.query(`
-      SELECT event, date
-      FROM parkrun_results
-      WHERE time_seconds = (SELECT MIN(time_seconds) FROM parkrun_results)
+      SELECT venue, parkrun_date, date_display, finish_time
+      FROM parkruns
+      WHERE finish_time = (
+        SELECT MIN(finish_time) FROM parkruns WHERE finish_time IS NOT NULL
+      )
       LIMIT 1
     `);
 
     const row = result.rows[0];
     const pbRow = pbResult.rows[0];
+    const pbTimeSeconds = pbRow?.finish_time ? parseTimeToSeconds(pbRow.finish_time) : 0;
 
     return {
-      totalParkruns: parseInt(row.total),
-      personalBest: row.pb,
-      personalBestFormatted: formatTime(row.pb),
-      personalBestVenue: pbRow?.event || '',
-      personalBestDate: pbRow?.date?.toISOString().split('T')[0] || '',
-      bestPosition: row.best_position,
-      uniqueVenues: parseInt(row.unique_venues),
-      firstParkrunDate: row.first_date.toISOString().split('T')[0],
-      lastParkrunDate: row.last_date.toISOString().split('T')[0],
-      totalDistanceKm: parseInt(row.total) * 5,
+      totalParkruns: parseInt(row.total) || 0,
+      personalBest: pbTimeSeconds,
+      personalBestFormatted: pbRow?.finish_time || '',
+      personalBestVenue: pbRow?.venue || '',
+      personalBestDate: pbRow?.parkrun_date?.toISOString?.().split('T')[0] || pbRow?.date_display || '',
+      bestPosition: row.best_position || 0,
+      uniqueVenues: parseInt(row.unique_venues) || 0,
+      firstParkrunDate: row.first_date?.toISOString?.().split('T')[0] || '',
+      lastParkrunDate: row.last_date?.toISOString?.().split('T')[0] || '',
+      totalDistanceKm: (parseInt(row.total) || 0) * 5,
     };
   } finally {
     client.release();
@@ -250,59 +305,53 @@ export async function getUKRankings(search?: string): Promise<{
 }> {
   const client = await getPool().connect();
   try {
-    // Get all UK parkrun venues with rankings
+    // Get rankings from parkrun_rankings table
     let query = `
-      SELECT
-        v.name as venue,
-        v.difficulty_rank as rank,
-        v.difficulty_rating,
-        v.total_finishers,
-        v.average_time_seconds
-      FROM parkrun_venues v
-      WHERE v.country = 'UK' OR v.country IS NULL
+      SELECT rank, name as venue, rating as difficulty_rating
+      FROM parkrun_rankings
     `;
 
     if (search) {
-      query += ` AND LOWER(v.name) LIKE LOWER($1)`;
+      query += ` WHERE LOWER(name) LIKE LOWER($1)`;
     }
 
-    query += ` ORDER BY v.difficulty_rank ASC NULLS LAST`;
+    query += ` ORDER BY rank ASC`;
 
     const params = search ? [`%${search}%`] : [];
-    const venueResult = await client.query(query, params);
+    const rankingResult = await client.query(query, params);
 
-    // Get user's visited venues
+    // Get user's visited venues from venues table
     const userResult = await client.query(`
-      SELECT
-        event,
-        MIN(time_seconds) as best_time,
-        COUNT(*) as visits
-      FROM parkrun_results
-      GROUP BY event
+      SELECT name, visit_count, best_time
+      FROM venues
+      WHERE visit_count > 0
     `);
 
     const userVisits = new Map(
       userResult.rows.map(r => [
-        r.event.toLowerCase(),
-        { best_time: r.best_time, visits: parseInt(r.visits) }
+        r.name.toLowerCase(),
+        {
+          best_time: r.best_time ? parseTimeToSeconds(r.best_time) : null,
+          visits: r.visit_count
+        }
       ])
     );
 
-    const rankings = venueResult.rows.map(row => {
+    const rankings = rankingResult.rows.map(row => {
       const userData = userVisits.get(row.venue.toLowerCase());
       return {
         rank: row.rank || 999,
         venue: row.venue,
-        difficulty_rating: row.difficulty_rating || 0,
-        total_finishers: row.total_finishers || 0,
-        average_time_seconds: row.average_time_seconds || 0,
+        difficulty_rating: parseFloat(row.difficulty_rating) || 0,
+        total_finishers: 0,
+        average_time_seconds: 0,
         user_visited: !!userData,
         user_best_time: userData?.best_time || null,
         user_visits: userData?.visits || 0,
       };
     });
 
-    const totalVenues = venueResult.rows.length;
+    const totalVenues = rankingResult.rows.length;
     const completed = rankings.filter(r => r.user_visited).length;
 
     return {
@@ -320,23 +369,27 @@ export async function getUKRankings(search?: string): Promise<{
 
 // Get PB progression over time
 export async function getPBProgression(): Promise<{ date: string; time_seconds: number; venue: string }[]> {
-  const client = await getPool().connect();
-  try {
-    const result = await client.query(`
-      SELECT date, time_seconds, event
-      FROM parkrun_results
-      WHERE pb = true
-      ORDER BY date ASC
-    `);
+  const allRuns = await getAllParkruns();
 
-    return result.rows.map(row => ({
-      date: row.date.toISOString().split('T')[0],
-      time_seconds: row.time_seconds,
-      venue: row.event,
-    }));
-  } finally {
-    client.release();
+  // Sort chronologically
+  const sorted = [...allRuns].sort((a, b) => a.date.localeCompare(b.date));
+
+  // Find PBs
+  const pbs: { date: string; time_seconds: number; venue: string }[] = [];
+  let bestTime = Infinity;
+
+  for (const run of sorted) {
+    if (run.time_seconds < bestTime) {
+      bestTime = run.time_seconds;
+      pbs.push({
+        date: run.date,
+        time_seconds: run.time_seconds,
+        venue: run.event,
+      });
+    }
   }
+
+  return pbs;
 }
 
 // Get streak information
@@ -349,10 +402,13 @@ export async function getStreakInfo(): Promise<{
   const client = await getPool().connect();
   try {
     const result = await client.query(`
-      SELECT date FROM parkrun_results ORDER BY date ASC
+      SELECT DISTINCT parkrun_date
+      FROM parkruns
+      WHERE parkrun_date IS NOT NULL
+      ORDER BY parkrun_date ASC
     `);
 
-    const dates = result.rows.map(r => new Date(r.date));
+    const dates = result.rows.map(r => new Date(r.parkrun_date));
 
     if (dates.length === 0) {
       return {
@@ -374,10 +430,8 @@ export async function getStreakInfo(): Promise<{
       const daysDiff = Math.round((dates[i].getTime() - dates[i-1].getTime()) / (1000 * 60 * 60 * 24));
 
       if (daysDiff >= 6 && daysDiff <= 8) {
-        // Consecutive week
         tempStreak++;
       } else {
-        // Streak broken
         if (tempStreak > longestStreak) {
           longestStreak = tempStreak;
           longestStart = tempStart;
@@ -388,7 +442,6 @@ export async function getStreakInfo(): Promise<{
       }
     }
 
-    // Check final streak
     if (tempStreak > longestStreak) {
       longestStreak = tempStreak;
       longestStart = tempStart;
@@ -401,7 +454,7 @@ export async function getStreakInfo(): Promise<{
     const lastRun = dates[dates.length - 1];
     const daysSinceLast = Math.round((now.getTime() - lastRun.getTime()) / (1000 * 60 * 60 * 24));
 
-    if (daysSinceLast <= 7) {
+    if (daysSinceLast <= 14) {
       currentStreak = 1;
       for (let i = dates.length - 2; i >= 0; i--) {
         const daysDiff = Math.round((dates[i+1].getTime() - dates[i].getTime()) / (1000 * 60 * 60 * 24));
@@ -434,18 +487,22 @@ export async function getMonthlyStats(): Promise<{
   try {
     const result = await client.query(`
       SELECT
-        TO_CHAR(date, 'YYYY-MM') as month,
+        TO_CHAR(parkrun_date, 'YYYY-MM') as month,
         COUNT(*) as runs,
-        AVG(time_seconds)::INTEGER as average_time
-      FROM parkrun_results
-      GROUP BY TO_CHAR(date, 'YYYY-MM')
+        AVG(
+          CAST(SPLIT_PART(finish_time, ':', 1) AS INTEGER) * 60 +
+          CAST(SPLIT_PART(finish_time, ':', 2) AS INTEGER)
+        )::INTEGER as average_time
+      FROM parkruns
+      WHERE parkrun_date IS NOT NULL AND finish_time IS NOT NULL
+      GROUP BY TO_CHAR(parkrun_date, 'YYYY-MM')
       ORDER BY month ASC
     `);
 
     return result.rows.map(row => ({
       month: row.month,
       runs: parseInt(row.runs),
-      average_time: row.average_time,
+      average_time: row.average_time || 0,
     }));
   } finally {
     client.release();
