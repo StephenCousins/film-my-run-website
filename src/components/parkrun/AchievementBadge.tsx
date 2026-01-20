@@ -121,10 +121,10 @@ export function PBProgression({ pbs }: PBProgressionProps) {
               </div>
               <p className="text-sm text-zinc-400">{pb.venue}</p>
 
-              {/* Improvement from previous */}
-              {index > 0 && (
+              {/* Improvement from previous PB */}
+              {index < pbs.length - 1 && (
                 <p className="text-xs text-green-500 mt-1">
-                  ⬇ {pbs[index - 1].time_seconds - pb.time_seconds}s improvement
+                  ⬇ {pbs[index + 1].time_seconds - pb.time_seconds}s faster
                 </p>
               )}
             </div>

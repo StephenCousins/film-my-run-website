@@ -356,7 +356,7 @@ export default function ParkrunPage() {
                 PB Timeline
               </h3>
               <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent pr-2">
-                <PBProgression pbs={data.pbProgression} />
+                <PBProgression pbs={[...data.pbProgression].reverse()} />
               </div>
             </div>
 
