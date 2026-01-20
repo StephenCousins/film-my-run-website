@@ -1,0 +1,27 @@
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Race Dashboard',
+  description:
+    'Track and analyze all race results. 174 races, 94 marathons, 80 ultras - explore the complete race history with times, positions, and analysis.',
+  keywords: [
+    'race results',
+    'marathon times',
+    'ultra marathon results',
+    'running statistics',
+    'race history',
+  ],
+  openGraph: {
+    title: 'Race Dashboard | Film My Run',
+    description: '174 races analyzed. Track times, positions, and progress.',
+    images: ['/images/races-og.jpg'],
+  },
+};
+
+export default function RacesLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return children;
+}

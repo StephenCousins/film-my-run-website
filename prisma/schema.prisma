@@ -1,0 +1,207 @@
+// Film My Run - Database Schema
+// See ARCHITECTURE.md for full documentation
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER & AUTH
+// ============================================
+
+model User {
+  id               Int       @id @default(autoincrement())
+  email            String    @unique
+  name             String?
+  passwordHash     String?   @map("password_hash")
+  googleId         String?   @unique @map("google_id")
+  profilePicture   String?   @map("profile_picture")
+  subscriptionTier String    @default("free") @map("subscription_tier")
+  stripeCustomerId String?   @map("stripe_customer_id")
+  emailVerified    Boolean   @default(false) @map("email_verified")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+
+  posts  Post[]
+  orders Order[]
+
+  @@map("users")
+}
+
+// ============================================
+// CONTENT
+// ============================================
+
+model Post {
+  id            Int       @id @default(autoincrement())
+  title         String
+  slug          String    @unique
+  content       String
+  excerpt       String?
+  featuredImage String?   @map("featured_image")
+  status        String    @default("published")
+  postType      String    @default("post") @map("post_type")
+  authorId      Int?      @map("author_id")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  publishedAt   DateTime? @map("published_at")
+  meta          Json      @default("{}")
+
+  author User?      @relation(fields: [authorId], references: [id])
+  terms  PostTerm[]
+  media  Media[]
+
+  @@index([status, postType])
+  @@index([createdAt])
+  @@map("posts")
+}
+
+model Term {
+  id          Int        @id @default(autoincrement())
+  name        String
+  slug        String     @unique
+  taxonomy    String     // 'category' or 'tag'
+  description String?
+
+  posts PostTerm[]
+
+  @@index([taxonomy])
+  @@map("terms")
+}
+
+model PostTerm {
+  postId Int @map("post_id")
+  termId Int @map("term_id")
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  term Term @relation(fields: [termId], references: [id], onDelete: Cascade)
+
+  @@id([postId, termId])
+  @@map("post_terms")
+}
+
+model Media {
+  id        Int      @id @default(autoincrement())
+  filename  String
+  url       String
+  altText   String?  @map("alt_text")
+  mimeType  String?  @map("mime_type")
+  sizeBytes Int?     @map("size_bytes")
+  width     Int?
+  height    Int?
+  postId    Int?     @map("post_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  post Post? @relation(fields: [postId], references: [id])
+
+  @@map("media")
+}
+
+// ============================================
+// RACES
+// ============================================
+
+model Race {
+  id          Int      @id @default(autoincrement())
+  date        DateTime @db.Date
+  event       String
+  type        String?
+  distanceKm  Decimal? @map("distance_km") @db.Decimal(10, 3)
+  timeHms     String?  @map("time_hms")
+  timeSeconds Int?     @map("time_seconds")
+  elevation   Int?
+  position    String?
+  terrain     String?
+  videoUrl    String?  @map("video_url")
+  stravaUrl   String?  @map("strava_url")
+  resultsUrl  String?  @map("results_url")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([date])
+  @@index([type])
+  @@map("races")
+}
+
+// ============================================
+// FILMS
+// ============================================
+
+model Film {
+  id              Int      @id @default(autoincrement())
+  title           String
+  slug            String   @unique
+  description     String?
+  youtubeId       String?  @map("youtube_id")
+  vimeoId         String?  @map("vimeo_id")
+  thumbnailUrl    String?  @map("thumbnail_url")
+  durationSeconds Int?     @map("duration_seconds")
+  year            Int?
+  awards          String[]
+  featured        Boolean  @default(false)
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@map("films")
+}
+
+// ============================================
+// SHOP
+// ============================================
+
+model Product {
+  id                Int      @id @default(autoincrement())
+  name              String
+  slug              String   @unique
+  description       String?
+  priceCents        Int      @map("price_cents")
+  comparePriceCents Int?     @map("compare_price_cents")
+  currency          String   @default("GBP")
+  images            String[]
+  category          String?
+  inventoryCount    Int      @default(0) @map("inventory_count")
+  isDigital         Boolean  @default(false) @map("is_digital")
+  stripePriceId     String?  @map("stripe_price_id")
+  status            String   @default("active")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([category])
+  @@map("products")
+}
+
+model Order {
+  id              Int      @id @default(autoincrement())
+  userId          Int?     @map("user_id")
+  stripeSessionId String?  @map("stripe_session_id")
+  status          String   @default("pending")
+  totalCents      Int      @map("total_cents")
+  currency        String   @default("GBP")
+  shippingAddress Json?    @map("shipping_address")
+  items           Json
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@map("orders")
+}
+
+// ============================================
+// SETTINGS
+// ============================================
+
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}

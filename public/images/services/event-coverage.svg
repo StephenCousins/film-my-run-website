@@ -1,0 +1,8 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="600" fill="#1a1a1a"/>
+  <rect x="300" y="200" width="200" height="200" rx="20" fill="#27272a"/>
+  <circle cx="400" cy="280" r="50" fill="#f88c00"/>
+  <rect x="375" y="260" width="50" height="40" rx="4" fill="white"/>
+  <circle cx="400" cy="275" r="10" fill="#1a1a1a"/>
+  <text x="400" y="360" text-anchor="middle" fill="#71717a" font-family="system-ui" font-size="16">Event Coverage</text>
+</svg>

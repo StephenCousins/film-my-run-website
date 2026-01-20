@@ -1,0 +1,7 @@
+<svg width="600" height="600" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#f4f4f5"/>
+  <ellipse cx="300" cy="320" rx="150" ry="60" fill="#18181b"/>
+  <path d="M150 320 Q150 200 300 200 Q450 200 450 320" fill="#18181b"/>
+  <path d="M200 280 L400 280 L380 260 L220 260 Z" fill="#f97316"/>
+  <text x="300" y="500" text-anchor="middle" fill="#71717a" font-family="system-ui" font-size="14">Running Cap</text>
+</svg>

@@ -1,0 +1,201 @@
+// Blog posts data extracted from WordPress database
+// Images are served from the original WordPress site: filmmyrun.co.uk
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  publishedAt: string;
+  featuredImage: string | null;
+  readTime: number;
+  category: {
+    name: string;
+    slug: string;
+  };
+}
+
+export const blogPosts: BlogPost[] = [
+  {
+    id: '11291',
+    title: 'The Liberating Experience of Running Without a Watch',
+    slug: 'the-liberating-experience-of-running-without-a-watch',
+    excerpt: 'Have you ever considered running without a watch? No, not literally running naked, but leaving your trusty timepiece at home...',
+    publishedAt: '2023-03-26',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2023/03/IMG_4044.jpg',
+    readTime: 5,
+    category: { name: 'Running Tips', slug: 'running-tips' },
+  },
+  {
+    id: '11238',
+    title: 'In the Footsteps of the Dukes of Savoy | TDS 2022',
+    slug: 'in-the-footsteps-of-the-dukes-of-savoy-tds-2022',
+    excerpt: 'My day began at midnight. The gun went off and hundreds of runners began shuffling towards the start gantry...',
+    publishedAt: '2022-08-31',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2022/08/59671751.jpg',
+    readTime: 15,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '11202',
+    title: 'Val D\'Aran 100 Miles | By UTMB',
+    slug: 'val-daran-by-utmb-100-miles',
+    excerpt: 'Introducing the Val D\'Aran 100 miler. When it comes to entering 100 mile races around the world, there are...',
+    publishedAt: '2022-04-25',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2022/04/Screenshot-2022-04-08-at-11.33.56.png',
+    readTime: 12,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '11180',
+    title: 'Ben Nevis Ultra | Second Attempt',
+    slug: 'ben-nevis-ultra-second-attempt',
+    excerpt: 'I am starting to get addicted to the Ben Nevis Ultra. It has a bit of a hold on me and I know why...',
+    publishedAt: '2021-11-01',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2021/10/IMG_4618.png',
+    readTime: 10,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '8862',
+    title: 'Brighton Half Marathon 2015',
+    slug: 'brighton-half-marathon-2015',
+    excerpt: 'Brighton Half Marathon is a regular fixture on my race list, although Brighton Half Marathon 2015 would be my first for a couple of years...',
+    publishedAt: '2015-03-19',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2015/03/brighton-half-2015.jpg',
+    readTime: 8,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '6972',
+    title: 'Worthing 20 Mile Race',
+    slug: 'worthing-20-mile-race',
+    excerpt: 'Paris Marathon training continues. On Sunday 10th March I took part in the Worthing 20 Mile Race...',
+    publishedAt: '2013-03-21',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2013/03/20130323-000837.jpg',
+    readTime: 6,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '6683',
+    title: 'Eastbourne Half Marathon 2013',
+    slug: 'eastbourne-half-marathon-2013',
+    excerpt: 'Four weeks to go before my goal race, the Paris Marathon, and the training races are coming thick and fast...',
+    publishedAt: '2013-03-06',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2013/03/20130306-121136.jpg',
+    readTime: 7,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '6508',
+    title: 'Chichester 10k',
+    slug: 'chichester-10k',
+    excerpt: 'Yesterday was rather a crazy running day. After taking Elsa and Ellis to their swimming lesson early in the morning...',
+    publishedAt: '2013-02-04',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2013/02/20130204-145339.jpg',
+    readTime: 5,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '6413',
+    title: 'Brighton Brooks 10k',
+    slug: 'brighton-brooks-10k',
+    excerpt: 'I am slowly recovering from injury. About 7 weeks ago I suffered a serious bout of Sciatica...',
+    publishedAt: '2012-11-18',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2012/11/20121118-122146.jpg',
+    readTime: 5,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '6327',
+    title: 'The Great North Run',
+    slug: 'the-great-north-run',
+    excerpt: 'What a busy weekend. I foolishly agreed to photograph a wedding in Worthing on the Saturday before the Great North Run...',
+    publishedAt: '2012-09-19',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2012/09/20120919-110819.jpg',
+    readTime: 8,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '3339',
+    title: 'Paris Marathon 2012',
+    slug: 'paris-marathon-2012',
+    excerpt: 'I have completed my first marathon! I ran the very well attended Paris Marathon 2012 on Sunday April 15th...',
+    publishedAt: '2012-04-19',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2012/04/20120419-114348.jpg',
+    readTime: 10,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '3268',
+    title: 'Eastbourne Half Marathon 2012',
+    slug: 'eastbourne-half-marathon-2012',
+    excerpt: 'Managed to run a personal best at the Eastbourne Half Marathon 2012 on Sunday. There is a huge hill on the course...',
+    publishedAt: '2012-03-05',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2012/03/IMG_2798.jpg',
+    readTime: 6,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '3254',
+    title: 'Brighton Half Marathon',
+    slug: 'brighton-half-marathon',
+    excerpt: 'Ran my first Brighton Half Marathon yesterday. It was a beautiful day. It started out cold at 7:30 when we left Worthing...',
+    publishedAt: '2012-02-20',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2012/02/20120220-114904.jpg',
+    readTime: 7,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '3044',
+    title: 'Great South Run',
+    slug: 'great-south-run',
+    excerpt: 'Yesterday I ran 10 miles in 1 hour 12 minutes and 38 seconds. It\'s my fastest time for 10 miles...',
+    publishedAt: '2011-10-31',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2011/10/IMG_2203.jpg',
+    readTime: 5,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '3040',
+    title: 'Under 20 Minutes for 5k',
+    slug: 'under-20-minutes-for-5k',
+    excerpt: 'Finally managed to break 20 minutes for 5k round Hove park, Brighton at parkrun. It\'s a good start to the weekend...',
+    publishedAt: '2011-10-29',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2011/10/IMG_2201.jpg',
+    readTime: 4,
+    category: { name: 'Training', slug: 'training' },
+  },
+  {
+    id: '2877',
+    title: 'Graduation and Bristol Half Marathon',
+    slug: 'graduation-and-bristol-half-marathon',
+    excerpt: 'What a good weekend. Saturday morning we set out for Portsmouth for my graduation ceremony...',
+    publishedAt: '2011-09-15',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2011/09/20110915-145929.jpg',
+    readTime: 6,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '2780',
+    title: 'Royal Wedding and Running',
+    slug: 'royal-wedding-and-running',
+    excerpt: 'The wedding of William and Kate took place a couple of weeks ago. I have started running again on a regular basis...',
+    publishedAt: '2011-05-16',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2011/05/20110516-161623.jpg',
+    readTime: 4,
+    category: { name: 'Life', slug: 'life' },
+  },
+  {
+    id: '2871',
+    title: 'Another Great Week with Hal and Jev',
+    slug: 'another-great-week-with-hal-and-jev',
+    excerpt: 'Apart from missing Victoria and the children more and more as the weeks have progressed, I have had a fantastic time with Hallum and Jevan...',
+    publishedAt: '2011-08-31',
+    featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2011/08/20110831-134007.jpg',
+    readTime: 8,
+    category: { name: 'Life', slug: 'life' },
+  },
+];
+
+export default blogPosts;

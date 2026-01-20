@@ -1,0 +1,309 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   DESIGN SYSTEM TOKENS
+   See DESIGN_SYSTEM.md for documentation
+   ============================================ */
+
+@layer base {
+  :root {
+    /* Brand Colors */
+    --orange-primary: #f88c00;
+    --orange-hover: #ea580c;
+    --orange-light: #fff7ed;
+
+    /* Light Mode */
+    --bg-primary: #fafafa;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #f4f4f5;
+    --text-primary: #18181b;
+    --text-secondary: #52525b;
+    --text-muted: #a1a1aa;
+    --border-color: #e4e4e7;
+
+    /* Semantic */
+    --success: #22c55e;
+    --warning: #eab308;
+    --error: #ef4444;
+    --info: #3b82f6;
+  }
+
+  .dark {
+    --bg-primary: #09090b;
+    --bg-secondary: #18181b;
+    --bg-tertiary: #27272a;
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    --border-color: #27272a;
+  }
+
+  /* Base Styles */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50;
+    @apply antialiased;
+    font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display font-semibold tracking-tight;
+  }
+
+  h1 {
+    @apply text-display-lg md:text-display-xl lg:text-display-2xl;
+  }
+
+  h2 {
+    @apply text-heading-xl md:text-display-lg;
+  }
+
+  h3 {
+    @apply text-heading-lg md:text-heading-xl;
+  }
+
+  h4 {
+    @apply text-heading-md md:text-heading-lg;
+  }
+
+  p {
+    @apply text-body-md;
+  }
+
+  /* Focus States */
+  :focus-visible {
+    @apply outline-none ring-2 ring-orange-500 ring-offset-2 ring-offset-zinc-50 dark:ring-offset-zinc-950;
+  }
+
+  :focus:not(:focus-visible) {
+    @apply outline-none;
+  }
+
+  /* Selection */
+  ::selection {
+    @apply bg-orange-500/20 text-orange-900 dark:text-orange-100;
+  }
+}
+
+/* ============================================
+   COMPONENTS
+   ============================================ */
+
+@layer components {
+  /* Container */
+  .container {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .container-narrow {
+    @apply mx-auto w-full max-w-3xl px-4 sm:px-6;
+  }
+
+  .container-wide {
+    @apply mx-auto w-full max-w-[96rem] px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2;
+    @apply px-6 py-3 font-semibold;
+    @apply rounded-full;
+    @apply transition-all duration-300;
+    @apply focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2;
+  }
+
+  .btn-primary {
+    @apply btn;
+    @apply bg-orange-500 text-white;
+    @apply hover:bg-orange-600 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25;
+    @apply active:scale-100;
+  }
+
+  .btn-secondary {
+    @apply btn;
+    @apply border-2 border-zinc-800 text-zinc-900;
+    @apply dark:border-zinc-200 dark:text-zinc-100;
+    @apply hover:bg-zinc-900 hover:text-white;
+    @apply dark:hover:bg-zinc-100 dark:hover:text-zinc-900;
+  }
+
+  .btn-ghost {
+    @apply btn;
+    @apply text-zinc-600 dark:text-zinc-400;
+    @apply hover:text-orange-500;
+    @apply relative;
+  }
+
+  .btn-ghost::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-orange-500;
+    @apply transition-all duration-300;
+  }
+
+  .btn-ghost:hover::after {
+    @apply w-full;
+  }
+
+  /* Cards */
+  .card {
+    @apply bg-white dark:bg-zinc-900;
+    @apply rounded-2xl;
+    @apply border border-zinc-200 dark:border-zinc-800;
+    @apply transition-all duration-300;
+  }
+
+  .card-interactive {
+    @apply card;
+    @apply hover:shadow-xl hover:shadow-zinc-900/10 hover:-translate-y-1;
+  }
+
+  .card-glass {
+    @apply backdrop-blur-xl;
+    @apply bg-white/70 dark:bg-zinc-900/70;
+    @apply rounded-2xl;
+    @apply border border-white/20;
+    @apply shadow-xl;
+  }
+
+  /* Stat Card */
+  .stat-card {
+    @apply card;
+    @apply border-2 border-orange-500/20;
+    @apply p-6 text-center;
+    @apply hover:border-orange-500 hover:shadow-lg hover:shadow-orange-500/10;
+  }
+
+  .stat-number {
+    @apply font-mono text-4xl md:text-5xl font-bold text-orange-500;
+  }
+
+  .stat-label {
+    @apply text-caption uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mt-2;
+  }
+
+  /* Section Headers */
+  .section-header {
+    @apply font-display text-heading-xl md:text-display-lg lowercase;
+  }
+
+  /* Prose (for blog content) */
+  .prose {
+    @apply max-w-none;
+  }
+
+  .prose p {
+    @apply text-body-lg text-zinc-700 dark:text-zinc-300 mb-6;
+  }
+
+  .prose h2 {
+    @apply text-heading-lg mt-12 mb-4;
+  }
+
+  .prose h3 {
+    @apply text-heading-md mt-8 mb-3;
+  }
+
+  .prose img {
+    @apply rounded-xl my-8;
+  }
+
+  .prose a {
+    @apply text-orange-500 underline decoration-orange-500/30;
+    @apply hover:decoration-orange-500 transition-colors;
+  }
+
+  .prose ul, .prose ol {
+    @apply my-6 ml-6;
+  }
+
+  .prose li {
+    @apply text-body-lg text-zinc-700 dark:text-zinc-300 mb-2;
+  }
+
+  .prose blockquote {
+    @apply border-l-4 border-orange-500 pl-6 my-8;
+    @apply text-xl italic text-zinc-600 dark:text-zinc-400;
+  }
+}
+
+/* ============================================
+   UTILITIES
+   ============================================ */
+
+@layer utilities {
+  /* Text Gradient */
+  .text-gradient {
+    @apply bg-gradient-to-r from-orange-500 to-orange-300;
+    @apply bg-clip-text text-transparent;
+  }
+
+  /* Background Gradient */
+  .bg-gradient-radial {
+    background: radial-gradient(circle at center, var(--tw-gradient-stops));
+  }
+
+  /* Hide scrollbar */
+  .hide-scrollbar,
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar,
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Aspect ratios */
+  .aspect-video-tall {
+    aspect-ratio: 9/16;
+  }
+}
+
+/* ============================================
+   ANIMATIONS & REDUCED MOTION
+   ============================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom cursor styles (applied via JS) */
+.cursor-custom {
+  cursor: none;
+}
+
+/* GSAP Animation Classes */
+.gsap-reveal {
+  visibility: hidden;
+}
+
+.gsap-reveal.is-revealed {
+  visibility: visible;
+}
+
+/* GSAP Pin Spacer for Tools Showcase - ensure dark background */
+.tools-showcase-wrapper.pin-spacer,
+.pin-spacer > .tools-showcase-wrapper,
+.pin-spacer:has(.tools-showcase-wrapper) {
+  background-color: #18181b !important;
+}
+
+/* Fallback for all pin-spacers */
+div.pin-spacer {
+  background-color: inherit;
+}
+

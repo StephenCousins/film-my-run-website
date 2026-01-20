@@ -1,0 +1,17 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="ogbg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0a"/>
+      <stop offset="100%" style="stop-color:#18181b"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#ogbg)"/>
+  <rect x="60" y="60" width="8" height="120" fill="#f97316"/>
+  <text x="90" y="140" fill="#ffffff" font-family="system-ui" font-size="56" font-weight="700">Film My Run</text>
+  <text x="90" y="200" fill="#a1a1aa" font-family="system-ui" font-size="24">Documentary Filmmaker & Ultra Runner</text>
+  <text x="90" y="520" fill="#f97316" font-family="system-ui" font-size="18">filmmyrun.co.uk</text>
+  <g transform="translate(900, 250)">
+    <circle cx="100" cy="100" r="80" fill="#27272a"/>
+    <polygon points="85,60 85,140 145,100" fill="#f97316"/>
+  </g>
+</svg>
