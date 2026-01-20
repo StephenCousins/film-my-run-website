@@ -182,7 +182,7 @@ export default function ContactPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24">
+      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Background image */}
@@ -216,7 +216,7 @@ export default function ContactPage() {
         </section>
 
         {/* Contact reasons */}
-        <section className="py-12 bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800">
+        <section className="py-12 bg-zinc-950 border-b border-zinc-800">
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {contactReasons.map((reason) => {
@@ -244,7 +244,7 @@ export default function ContactPage() {
         </section>
 
         {/* Form & Info section */}
-        <section id="form" className="py-16 lg:py-24 bg-white dark:bg-zinc-950">
+        <section id="form" className="py-16 lg:py-24 bg-zinc-950">
           <div className="container">
             <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
               {/* Form */}
@@ -335,7 +335,7 @@ export default function ContactPage() {
         </section>
 
         {/* FAQ teaser */}
-        <section className="py-16 bg-zinc-50 dark:bg-zinc-900">
+        <section className="py-16 bg-zinc-900">
           <div className="container">
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mb-4">

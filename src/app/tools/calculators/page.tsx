@@ -372,9 +372,9 @@ export default function CalculatorsPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24">
+      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}
-        <section className="relative py-20 lg:py-28 overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
+        <section className="relative py-20 lg:py-28 overflow-hidden border-b border-zinc-800">
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
@@ -406,7 +406,7 @@ export default function CalculatorsPage() {
         </section>
 
         {/* Calculators */}
-        <section className="py-12 lg:py-16 bg-white dark:bg-zinc-950">
+        <section className="py-12 lg:py-16 bg-zinc-950">
           <div className="container">
             <div className="grid lg:grid-cols-12 gap-8">
               {/* Calculator navigation - sidebar on desktop, dropdown on mobile */}
@@ -447,13 +447,13 @@ export default function CalculatorsPage() {
         </section>
 
         {/* Other tools CTA */}
-        <section className="py-16 bg-zinc-50 dark:bg-zinc-900">
+        <section className="py-16 bg-zinc-900">
           <div className="container">
             <div className="text-center mb-12">
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-white mb-4">
                 More Running Tools
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-zinc-400">
                 Explore our other free tools for runners.
               </p>
             </div>
@@ -461,36 +461,36 @@ export default function CalculatorsPage() {
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <Link
                 href="/tools/parkrun"
-                className="group p-6 bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all"
+                className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
               >
-                <h3 className="font-display font-bold text-zinc-900 dark:text-white mb-2 group-hover:text-orange-500 transition-colors">
+                <h3 className="font-display font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
                   Parkrun Stats
                 </h3>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                <p className="text-sm text-zinc-400">
                   Track your parkrun history and compare with friends.
                 </p>
               </Link>
 
               <Link
                 href="/tools/race-map"
-                className="group p-6 bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all"
+                className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
               >
-                <h3 className="font-display font-bold text-zinc-900 dark:text-white mb-2 group-hover:text-orange-500 transition-colors">
+                <h3 className="font-display font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
                   Race Map
                 </h3>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                <p className="text-sm text-zinc-400">
                   Visualize race routes with elevation and markers.
                 </p>
               </Link>
 
               <Link
                 href="/races"
-                className="group p-6 bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all"
+                className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
               >
-                <h3 className="font-display font-bold text-zinc-900 dark:text-white mb-2 group-hover:text-orange-500 transition-colors">
+                <h3 className="font-display font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
                   Race Dashboard
                 </h3>
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                <p className="text-sm text-zinc-400">
                   Track and analyze all your race results.
                 </p>
               </Link>

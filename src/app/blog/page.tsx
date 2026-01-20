@@ -114,7 +114,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
   return (
     <article
       className={cn(
-        'group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
+        'group bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
         featured && 'lg:col-span-2 lg:row-span-2'
       )}
     >
@@ -229,7 +229,7 @@ export default async function BlogPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24">
+      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Background image */}
@@ -263,7 +263,7 @@ export default async function BlogPage() {
         </section>
 
         {/* Filters */}
-        <section className="py-8 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-16 lg:top-20 z-30">
+        <section className="py-8 border-b border-zinc-800 bg-zinc-950 sticky top-16 lg:top-20 z-30">
           <div className="container">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               {/* Category filters */}
@@ -285,7 +285,7 @@ export default async function BlogPage() {
         </section>
 
         {/* Posts grid */}
-        <section className="py-12 lg:py-16 bg-white dark:bg-zinc-950">
+        <section className="py-12 lg:py-16 bg-zinc-950">
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Featured post */}
