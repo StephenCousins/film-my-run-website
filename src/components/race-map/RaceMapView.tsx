@@ -111,7 +111,7 @@ export function RaceMapView({ races, routes, selectedRace, onRaceSelect }: RaceM
     return (
       <div className="flex items-center justify-center h-full bg-zinc-900">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
           <p className="text-zinc-400">Loading map...</p>
         </div>
       </div>
@@ -136,7 +136,7 @@ export function RaceMapView({ races, routes, selectedRace, onRaceSelect }: RaceM
       {selectedRace && (
         <button
           onClick={resetZoom}
-          className="absolute top-3 right-3 px-4 py-2 bg-zinc-800 border-2 border-green-500 rounded-lg text-green-500 font-semibold text-sm hover:bg-green-500 hover:text-zinc-900 transition-colors z-10"
+          className="absolute top-3 right-3 px-4 py-2 bg-zinc-800 border-2 border-orange-500 rounded-lg text-orange-500 font-semibold text-sm hover:bg-orange-500 hover:text-white transition-colors z-10"
         >
           🗺️ View All Routes
         </button>
