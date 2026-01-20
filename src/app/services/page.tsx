@@ -65,7 +65,7 @@ export default function ServicesPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="/images/services/race-filming.jpg"
+              src="/images/hero/hero-main.jpg"
               alt="Race filming"
               fill
               className="object-cover"
