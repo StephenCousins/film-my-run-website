@@ -65,7 +65,7 @@ export default function ServicesPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="https://filmmyrun.co.uk/wp-content/uploads/2018/06/IMG_0091-scaled.jpg"
+              src="/images/services/race-filming.jpg"
               alt="Race filming"
               fill
               className="object-cover"

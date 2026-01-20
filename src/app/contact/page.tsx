@@ -188,7 +188,7 @@ export default function ContactPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="https://filmmyrun.co.uk/wp-content/uploads/2019/09/tds2019-5050-scaled.jpg"
+              src="/images/hero/hero-trail.jpg"
               alt="Mountain running"
               fill
               className="object-cover"

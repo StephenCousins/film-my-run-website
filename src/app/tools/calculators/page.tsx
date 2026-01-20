@@ -378,7 +378,7 @@ export default function CalculatorsPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="https://filmmyrun.co.uk/wp-content/uploads/2017/04/transvulcania2017-5127-scaled.jpg"
+              src="/images/hero/hero-trail.jpg"
               alt="Trail running"
               fill
               className="object-cover"
