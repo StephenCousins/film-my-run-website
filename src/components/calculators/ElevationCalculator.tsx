@@ -61,8 +61,8 @@ export function ElevationCalculator() {
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 lg:p-8">
-      <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-4">
+    <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 lg:p-8">
+      <h3 className="font-display text-xl font-bold text-white mb-4">
         Elevation Adjustment Calculator
       </h3>
 
@@ -75,14 +75,14 @@ export function ElevationCalculator() {
 
       <div className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Distance (km)
           </label>
           <input
             type="number"
             value={distance}
             onChange={(e) => setDistance(e.target.value)}
-            className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
             placeholder="21.0975"
           />
           <div className="flex gap-2 mt-2">
@@ -90,7 +90,7 @@ export function ElevationCalculator() {
               <button
                 key={d}
                 onClick={() => setDistance(d)}
-                className="px-3 py-1 text-xs bg-zinc-100 dark:bg-zinc-800 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
+                className="px-3 py-1 text-xs bg-zinc-800 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
               >
                 {d === '21.0975' ? 'Half' : d === '42.195' ? 'Full' : `${d}K`}
               </button>
@@ -99,7 +99,7 @@ export function ElevationCalculator() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Flat Time (your road pace for this distance)
           </label>
           <div className="flex gap-2">
@@ -108,7 +108,7 @@ export function ElevationCalculator() {
                 type="number"
                 value={time.hours}
                 onChange={(e) => setTime({ ...time, hours: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 min="0"
               />
               <span className="text-xs text-zinc-500 block text-center mt-1">hours</span>
@@ -119,7 +119,7 @@ export function ElevationCalculator() {
                 type="number"
                 value={time.minutes}
                 onChange={(e) => setTime({ ...time, minutes: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 min="0"
                 max="59"
               />
@@ -131,7 +131,7 @@ export function ElevationCalculator() {
                 type="number"
                 value={time.seconds}
                 onChange={(e) => setTime({ ...time, seconds: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 min="0"
                 max="59"
               />
@@ -142,27 +142,27 @@ export function ElevationCalculator() {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Elevation Gain (m)
             </label>
             <input
               type="number"
               value={elevGain}
               onChange={(e) => setElevGain(e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               placeholder="500"
               min="0"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Elevation Loss (m)
             </label>
             <input
               type="number"
               value={elevLoss}
               onChange={(e) => setElevLoss(e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               placeholder="500"
               min="0"
             />
@@ -170,13 +170,13 @@ export function ElevationCalculator() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Terrain Difficulty
           </label>
           <select
             value={terrain}
             onChange={(e) => setTerrain(e.target.value)}
-            className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
           >
             <option value="1.0">Smooth trail / Fire road</option>
             <option value="1.1">Moderate trail</option>
@@ -195,11 +195,11 @@ export function ElevationCalculator() {
         {result && (
           <div className="space-y-4">
             {/* Main result */}
-            <div className="p-6 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+            <div className="p-6 bg-zinc-800 rounded-xl">
               <div className="grid grid-cols-2 gap-6">
                 <div className="text-center">
                   <div className="text-sm text-zinc-500 mb-1">Flat Time</div>
-                  <div className="text-2xl font-mono font-bold text-zinc-900 dark:text-white">
+                  <div className="text-2xl font-mono font-bold text-white">
                     {result.originalTime}
                   </div>
                 </div>
@@ -213,8 +213,8 @@ export function ElevationCalculator() {
             </div>
 
             {/* Breakdown */}
-            <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
-              <h4 className="font-medium text-zinc-900 dark:text-white mb-3">Time Breakdown</h4>
+            <div className="p-4 bg-zinc-800 rounded-xl">
+              <h4 className="font-medium text-white mb-3">Time Breakdown</h4>
               <div className="space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-zinc-500">Elevation gain penalty:</span>
@@ -228,17 +228,17 @@ export function ElevationCalculator() {
                   <span className="text-zinc-500">Terrain factor:</span>
                   <span className="text-red-500">+{result.terrainPenalty} min</span>
                 </div>
-                <div className="flex justify-between pt-2 border-t border-zinc-200 dark:border-zinc-700 font-medium">
-                  <span className="text-zinc-900 dark:text-white">Total added time:</span>
+                <div className="flex justify-between pt-2 border-t border-zinc-700 font-medium">
+                  <span className="text-white">Total added time:</span>
                   <span className="text-orange-500">+{result.timeDifference} min</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+            <div className="p-4 bg-zinc-800 rounded-xl">
               <div className="text-center">
                 <div className="text-sm text-zinc-500 mb-1">Equivalent Flat Distance</div>
-                <div className="text-xl font-mono font-semibold text-zinc-900 dark:text-white">
+                <div className="text-xl font-mono font-semibold text-white">
                   {result.equivalentFlatDistance.toFixed(1)} km
                 </div>
                 <p className="text-xs text-zinc-500 mt-1">

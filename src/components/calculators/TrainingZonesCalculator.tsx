@@ -96,8 +96,8 @@ export function TrainingZonesCalculator() {
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 lg:p-8">
-      <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-4">
+    <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 lg:p-8">
+      <h3 className="font-display text-xl font-bold text-white mb-4">
         Training Zones Calculator
       </h3>
 
@@ -110,7 +110,7 @@ export function TrainingZonesCalculator() {
       </div>
 
       {/* Mode selector */}
-      <div className="flex gap-2 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl mb-6">
+      <div className="flex gap-2 p-1 bg-zinc-800 rounded-xl mb-6">
         <button
           onClick={() => {
             setMode('hr');
@@ -119,7 +119,7 @@ export function TrainingZonesCalculator() {
           className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
             mode === 'hr'
               ? 'bg-orange-500 text-white'
-              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+              : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
           }`}
         >
           Heart Rate Based
@@ -132,7 +132,7 @@ export function TrainingZonesCalculator() {
           className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
             mode === 'pace'
               ? 'bg-orange-500 text-white'
-              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+              : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
           }`}
         >
           Pace Based
@@ -143,14 +143,14 @@ export function TrainingZonesCalculator() {
         {mode === 'hr' ? (
           <>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Maximum Heart Rate (bpm)
               </label>
               <input
                 type="number"
                 value={maxHR}
                 onChange={(e) => setMaxHR(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
                 placeholder="180"
                 min="100"
                 max="220"
@@ -161,14 +161,14 @@ export function TrainingZonesCalculator() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Resting Heart Rate (bpm)
               </label>
               <input
                 type="number"
                 value={restHR}
                 onChange={(e) => setRestHR(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
                 placeholder="55"
                 min="30"
                 max="100"
@@ -186,7 +186,7 @@ export function TrainingZonesCalculator() {
         ) : (
           <>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Threshold Pace (min/km)
               </label>
               <div className="flex gap-2">
@@ -195,7 +195,7 @@ export function TrainingZonesCalculator() {
                     type="number"
                     value={thresholdMin}
                     onChange={(e) => setThresholdMin(e.target.value)}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="3"
                     max="10"
                   />
@@ -207,7 +207,7 @@ export function TrainingZonesCalculator() {
                     type="number"
                     value={thresholdSec}
                     onChange={(e) => setThresholdSec(e.target.value)}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="0"
                     max="59"
                   />
@@ -231,10 +231,10 @@ export function TrainingZonesCalculator() {
         {/* HR Zones Results */}
         {hrZones && (
           <div className="space-y-4">
-            <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+            <div className="p-4 bg-zinc-800 rounded-xl">
               <div className="text-center">
                 <div className="text-sm text-zinc-500 mb-1">Heart Rate Reserve</div>
-                <div className="text-xl font-mono font-semibold text-zinc-900 dark:text-white">
+                <div className="text-xl font-mono font-semibold text-white">
                   {parseInt(maxHR) - parseInt(restHR)} bpm
                 </div>
                 <p className="text-xs text-zinc-500">Max {maxHR} - Rest {restHR}</p>
@@ -256,13 +256,13 @@ export function TrainingZonesCalculator() {
                   {hrZones.map((zone, i) => (
                     <tr
                       key={zone.name}
-                      className={`border-b border-zinc-200 dark:border-zinc-700 ${
+                      className={`border-b border-zinc-700 ${
                         i === 1
                           ? 'bg-orange-50 dark:bg-orange-500/10'
-                          : 'bg-white dark:bg-zinc-900'
+                          : 'bg-zinc-900'
                       }`}
                     >
-                      <td className="px-3 py-3 font-medium text-zinc-900 dark:text-white">
+                      <td className="px-3 py-3 font-medium text-white">
                         {zone.name}
                         {i === 1 && (
                           <span className="ml-2 text-xs bg-orange-500 text-white px-1.5 py-0.5 rounded">
@@ -270,7 +270,7 @@ export function TrainingZonesCalculator() {
                           </span>
                         )}
                       </td>
-                      <td className="px-3 py-3 font-mono text-zinc-700 dark:text-zinc-300">
+                      <td className="px-3 py-3 font-mono text-zinc-300">
                         {zone.minHR}-{zone.maxHR}
                       </td>
                       <td className="px-3 py-3 text-zinc-500">
@@ -289,10 +289,10 @@ export function TrainingZonesCalculator() {
         {/* Pace Zones Results */}
         {paceZones && (
           <div className="space-y-4">
-            <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+            <div className="p-4 bg-zinc-800 rounded-xl">
               <div className="text-center">
                 <div className="text-sm text-zinc-500 mb-1">Threshold Pace</div>
-                <div className="text-xl font-mono font-semibold text-zinc-900 dark:text-white">
+                <div className="text-xl font-mono font-semibold text-white">
                   {thresholdMin}:{thresholdSec.padStart(2, '0')}/km
                 </div>
                 <p className="text-xs text-zinc-500">Baseline for zone calculation</p>
@@ -312,13 +312,13 @@ export function TrainingZonesCalculator() {
                   {paceZones.map((zone, i) => (
                     <tr
                       key={zone.name}
-                      className={`border-b border-zinc-200 dark:border-zinc-700 ${
+                      className={`border-b border-zinc-700 ${
                         i === 1
                           ? 'bg-orange-50 dark:bg-orange-500/10'
-                          : 'bg-white dark:bg-zinc-900'
+                          : 'bg-zinc-900'
                       }`}
                     >
-                      <td className="px-3 py-3 font-medium text-zinc-900 dark:text-white">
+                      <td className="px-3 py-3 font-medium text-white">
                         {zone.name}
                         {i === 1 && (
                           <span className="ml-2 text-xs bg-orange-500 text-white px-1.5 py-0.5 rounded">

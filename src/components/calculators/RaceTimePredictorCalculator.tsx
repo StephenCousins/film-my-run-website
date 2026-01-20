@@ -222,8 +222,8 @@ export function RaceTimePredictorCalculator() {
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 lg:p-8">
-      <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-4">
+    <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 lg:p-8">
+      <h3 className="font-display text-xl font-bold text-white mb-4">
         Race Time Predictor
       </h3>
 
@@ -236,7 +236,7 @@ export function RaceTimePredictorCalculator() {
       </div>
 
       {/* Mode selector */}
-      <div className="flex gap-2 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-xl mb-6">
+      <div className="flex gap-2 p-1 bg-zinc-800 rounded-xl mb-6">
         <button
           onClick={() => {
             setMode('quick');
@@ -245,7 +245,7 @@ export function RaceTimePredictorCalculator() {
           className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
             mode === 'quick'
               ? 'bg-orange-500 text-white'
-              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+              : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
           }`}
         >
           Quick Mode
@@ -258,7 +258,7 @@ export function RaceTimePredictorCalculator() {
           className={`flex-1 py-2 px-4 rounded-lg font-medium transition-colors ${
             mode === 'advanced'
               ? 'bg-orange-500 text-white'
-              : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
+              : 'text-zinc-400 hover:text-zinc-900 dark:hover:text-white'
           }`}
         >
           Advanced Mode
@@ -269,13 +269,13 @@ export function RaceTimePredictorCalculator() {
         {mode === 'quick' ? (
           <>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Gender
               </label>
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value as 'male' | 'female')}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -283,13 +283,13 @@ export function RaceTimePredictorCalculator() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Known Race Distance (km)
               </label>
               <select
                 value={knownDistance}
                 onChange={(e) => setKnownDistance(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               >
                 {standardDistances.slice(0, 4).map((d) => (
                   <option key={d.km} value={d.km}>
@@ -300,7 +300,7 @@ export function RaceTimePredictorCalculator() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Your Time
               </label>
               <div className="flex gap-2">
@@ -309,7 +309,7 @@ export function RaceTimePredictorCalculator() {
                     type="number"
                     value={knownTime.hours}
                     onChange={(e) => setKnownTime({ ...knownTime, hours: e.target.value })}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="0"
                   />
                   <span className="text-xs text-zinc-500 block text-center mt-1">hours</span>
@@ -320,7 +320,7 @@ export function RaceTimePredictorCalculator() {
                     type="number"
                     value={knownTime.minutes}
                     onChange={(e) => setKnownTime({ ...knownTime, minutes: e.target.value })}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="0"
                     max="59"
                   />
@@ -332,7 +332,7 @@ export function RaceTimePredictorCalculator() {
                     type="number"
                     value={knownTime.seconds}
                     onChange={(e) => setKnownTime({ ...knownTime, seconds: e.target.value })}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="0"
                     max="59"
                   />
@@ -342,13 +342,13 @@ export function RaceTimePredictorCalculator() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Target Distance
               </label>
               <select
                 value={targetDistance}
                 onChange={(e) => setTargetDistance(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               >
                 {standardDistances.map((d) => (
                   <option key={d.km} value={d.km}>
@@ -359,13 +359,13 @@ export function RaceTimePredictorCalculator() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Experience Level
               </label>
               <select
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               >
                 <option value="1.04">Elite (1.04)</option>
                 <option value="1.06">Experienced (1.06)</option>
@@ -387,13 +387,13 @@ export function RaceTimePredictorCalculator() {
         ) : (
           <>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Gender
               </label>
               <select
                 value={gender}
                 onChange={(e) => setGender(e.target.value as 'male' | 'female')}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               >
                 <option value="male">Male</option>
                 <option value="female">Female</option>
@@ -402,43 +402,43 @@ export function RaceTimePredictorCalculator() {
 
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Age
                 </label>
                 <input
                   type="number"
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Weight (kg)
                 </label>
                 <input
                   type="number"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
-                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Height (cm)
                 </label>
                 <input
                   type="number"
                   value={height}
                   onChange={(e) => setHeight(e.target.value)}
-                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
                 />
               </div>
             </div>
 
             {/* Race 1 */}
-            <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
-              <h4 className="font-medium text-zinc-900 dark:text-white mb-3">
+            <div className="p-4 bg-zinc-800 rounded-xl">
+              <h4 className="font-medium text-white mb-3">
                 Race #1 (Shorter Distance)
               </h4>
               <div className="grid grid-cols-2 gap-4">
@@ -447,7 +447,7 @@ export function RaceTimePredictorCalculator() {
                   <select
                     value={race1Distance}
                     onChange={(e) => setRace1Distance(e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm focus:outline-none focus:border-orange-500"
+                    className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:border-orange-500"
                   >
                     {standardDistances.slice(0, 4).map((d) => (
                       <option key={d.km} value={d.km}>
@@ -463,7 +463,7 @@ export function RaceTimePredictorCalculator() {
                       type="number"
                       value={race1Time.hours}
                       onChange={(e) => setRace1Time({ ...race1Time, hours: e.target.value })}
-                      className="w-12 px-2 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm text-center focus:outline-none focus:border-orange-500"
+                      className="w-12 px-2 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm text-center focus:outline-none focus:border-orange-500"
                       placeholder="H"
                     />
                     <span className="text-zinc-400 self-center">:</span>
@@ -471,7 +471,7 @@ export function RaceTimePredictorCalculator() {
                       type="number"
                       value={race1Time.minutes}
                       onChange={(e) => setRace1Time({ ...race1Time, minutes: e.target.value })}
-                      className="w-12 px-2 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm text-center focus:outline-none focus:border-orange-500"
+                      className="w-12 px-2 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm text-center focus:outline-none focus:border-orange-500"
                       placeholder="M"
                     />
                     <span className="text-zinc-400 self-center">:</span>
@@ -479,7 +479,7 @@ export function RaceTimePredictorCalculator() {
                       type="number"
                       value={race1Time.seconds}
                       onChange={(e) => setRace1Time({ ...race1Time, seconds: e.target.value })}
-                      className="w-12 px-2 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm text-center focus:outline-none focus:border-orange-500"
+                      className="w-12 px-2 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm text-center focus:outline-none focus:border-orange-500"
                       placeholder="S"
                     />
                   </div>
@@ -488,8 +488,8 @@ export function RaceTimePredictorCalculator() {
             </div>
 
             {/* Race 2 */}
-            <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
-              <h4 className="font-medium text-zinc-900 dark:text-white mb-3">
+            <div className="p-4 bg-zinc-800 rounded-xl">
+              <h4 className="font-medium text-white mb-3">
                 Race #2 (Longer Distance)
               </h4>
               <div className="grid grid-cols-2 gap-4">
@@ -498,7 +498,7 @@ export function RaceTimePredictorCalculator() {
                   <select
                     value={race2Distance}
                     onChange={(e) => setRace2Distance(e.target.value)}
-                    className="w-full px-3 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm focus:outline-none focus:border-orange-500"
+                    className="w-full px-3 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:border-orange-500"
                   >
                     {standardDistances.map((d) => (
                       <option key={d.km} value={d.km}>
@@ -514,7 +514,7 @@ export function RaceTimePredictorCalculator() {
                       type="number"
                       value={race2Time.hours}
                       onChange={(e) => setRace2Time({ ...race2Time, hours: e.target.value })}
-                      className="w-12 px-2 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm text-center focus:outline-none focus:border-orange-500"
+                      className="w-12 px-2 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm text-center focus:outline-none focus:border-orange-500"
                       placeholder="H"
                     />
                     <span className="text-zinc-400 self-center">:</span>
@@ -522,7 +522,7 @@ export function RaceTimePredictorCalculator() {
                       type="number"
                       value={race2Time.minutes}
                       onChange={(e) => setRace2Time({ ...race2Time, minutes: e.target.value })}
-                      className="w-12 px-2 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm text-center focus:outline-none focus:border-orange-500"
+                      className="w-12 px-2 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm text-center focus:outline-none focus:border-orange-500"
                       placeholder="M"
                     />
                     <span className="text-zinc-400 self-center">:</span>
@@ -530,7 +530,7 @@ export function RaceTimePredictorCalculator() {
                       type="number"
                       value={race2Time.seconds}
                       onChange={(e) => setRace2Time({ ...race2Time, seconds: e.target.value })}
-                      className="w-12 px-2 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm text-center focus:outline-none focus:border-orange-500"
+                      className="w-12 px-2 py-2 bg-zinc-900 border border-zinc-700 rounded-lg text-white text-sm text-center focus:outline-none focus:border-orange-500"
                       placeholder="S"
                     />
                   </div>
@@ -550,7 +550,7 @@ export function RaceTimePredictorCalculator() {
         {/* Results */}
         {results.length > 0 && (
           <div className="space-y-4">
-            <h4 className="font-medium text-zinc-900 dark:text-white">Predicted Times</h4>
+            <h4 className="font-medium text-white">Predicted Times</h4>
             <div className="grid gap-3">
               {results.map((result) => (
                 <div
@@ -558,12 +558,12 @@ export function RaceTimePredictorCalculator() {
                   className={`p-4 rounded-xl border ${
                     result.isUltra
                       ? 'bg-orange-50 dark:bg-orange-500/10 border-orange-200 dark:border-orange-500/30'
-                      : 'bg-zinc-50 dark:bg-zinc-800 border-zinc-200 dark:border-zinc-700'
+                      : 'bg-zinc-800 border-zinc-700'
                   }`}
                 >
                   <div className="flex justify-between items-start">
                     <div>
-                      <div className="font-semibold text-zinc-900 dark:text-white">
+                      <div className="font-semibold text-white">
                         {result.distance}
                         {result.isUltra && (
                           <span className="ml-2 text-xs bg-orange-500 text-white px-2 py-0.5 rounded-full">

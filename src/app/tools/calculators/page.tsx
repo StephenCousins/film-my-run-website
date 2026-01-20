@@ -153,15 +153,15 @@ function PaceCalculator() {
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 lg:p-8">
-      <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-6">
+    <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 lg:p-8">
+      <h3 className="font-display text-xl font-bold text-white mb-6">
         Pace Calculator
       </h3>
 
       <div className="grid gap-6">
         {/* Distance input */}
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Distance
           </label>
           <div className="flex gap-2">
@@ -169,13 +169,13 @@ function PaceCalculator() {
               type="number"
               value={distance}
               onChange={(e) => setDistance(e.target.value)}
-              className="flex-1 px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+              className="flex-1 px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
               placeholder="42.195"
             />
             <select
               value={distanceUnit}
               onChange={(e) => setDistanceUnit(e.target.value as 'km' | 'miles')}
-              className="px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+              className="px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
             >
               <option value="km">km</option>
               <option value="miles">miles</option>
@@ -189,7 +189,7 @@ function PaceCalculator() {
                   setDistance(d);
                   setDistanceUnit('km');
                 }}
-                className="px-3 py-1 text-xs bg-zinc-100 dark:bg-zinc-800 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
+                className="px-3 py-1 text-xs bg-zinc-800 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
               >
                 {d === '21.0975' ? 'Half' : d === '42.195' ? 'Full' : `${d}K`}
               </button>
@@ -199,7 +199,7 @@ function PaceCalculator() {
 
         {/* Time input */}
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Time
           </label>
           <div className="flex gap-2">
@@ -208,7 +208,7 @@ function PaceCalculator() {
                 type="number"
                 value={time.hours}
                 onChange={(e) => setTime({ ...time, hours: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 placeholder="0"
                 min="0"
               />
@@ -220,7 +220,7 @@ function PaceCalculator() {
                 type="number"
                 value={time.minutes}
                 onChange={(e) => setTime({ ...time, minutes: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 placeholder="0"
                 min="0"
                 max="59"
@@ -233,7 +233,7 @@ function PaceCalculator() {
                 type="number"
                 value={time.seconds}
                 onChange={(e) => setTime({ ...time, seconds: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 placeholder="0"
                 min="0"
                 max="59"
@@ -254,7 +254,7 @@ function PaceCalculator() {
         {/* Results */}
         {pace && (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+            <div className="grid grid-cols-2 gap-4 p-4 bg-zinc-800 rounded-xl">
               <div className="text-center">
                 <div className="text-2xl font-mono font-bold text-orange-500">{pace}</div>
                 <div className="text-xs text-zinc-500 mt-1">Pace</div>
@@ -266,15 +266,15 @@ function PaceCalculator() {
             </div>
 
             {predictions.length > 0 && (
-              <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
-                <h4 className="font-medium text-zinc-900 dark:text-white mb-3">
+              <div className="p-4 bg-zinc-800 rounded-xl">
+                <h4 className="font-medium text-white mb-3">
                   At This Pace
                 </h4>
                 <div className="grid grid-cols-2 gap-3">
                   {predictions.map((pred) => (
                     <div key={pred.name} className="flex justify-between">
                       <span className="text-zinc-500">{pred.name}:</span>
-                      <span className="font-mono text-zinc-900 dark:text-white">{pred.time}</span>
+                      <span className="font-mono text-white">{pred.time}</span>
                     </div>
                   ))}
                 </div>
@@ -311,13 +311,13 @@ function CalculatorNav({ activeId, onChange }: CalculatorNavProps) {
               'w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all',
               isActive
                 ? 'bg-orange-500/10 text-orange-500'
-                : 'hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-700 dark:text-zinc-300'
+                : 'hover:bg-zinc-800 text-zinc-300'
             )}
           >
             <div
               className={cn(
                 'w-10 h-10 rounded-lg flex items-center justify-center',
-                isActive ? 'bg-orange-500 text-white' : 'bg-zinc-100 dark:bg-zinc-800'
+                isActive ? 'bg-orange-500 text-white' : 'bg-zinc-800'
               )}
             >
               <Icon className="w-5 h-5" />
@@ -374,7 +374,7 @@ export default function CalculatorsPage() {
 
       <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}
-        <section className="relative py-20 lg:py-28 overflow-hidden border-b border-zinc-800">
+        <section className="relative py-20 lg:py-28 overflow-hidden">
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
@@ -417,7 +417,7 @@ export default function CalculatorsPage() {
                     <select
                       value={activeCalculator}
                       onChange={(e) => setActiveCalculator(e.target.value)}
-                      className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl text-zinc-900 dark:text-white"
+                      className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-800 rounded-xl text-white"
                     >
                       {calculators.map((calc) => (
                         <option key={calc.id} value={calc.id}>
@@ -429,7 +429,7 @@ export default function CalculatorsPage() {
 
                   {/* Desktop nav */}
                   <div className="hidden lg:block">
-                    <h2 className="font-display font-bold text-zinc-900 dark:text-white mb-4">
+                    <h2 className="font-display font-bold text-white mb-4">
                       Calculators
                     </h2>
                     <CalculatorNav

@@ -89,8 +89,8 @@ export function VO2MaxCalculator() {
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 lg:p-8">
-      <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-4">
+    <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 lg:p-8">
+      <h3 className="font-display text-xl font-bold text-white mb-4">
         VO2 Max Estimator
       </h3>
 
@@ -104,7 +104,7 @@ export function VO2MaxCalculator() {
       <div className="space-y-6">
         {/* Test type selector */}
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Test Method
           </label>
           <select
@@ -113,7 +113,7 @@ export function VO2MaxCalculator() {
               setTestType(e.target.value as TestType);
               setResult(null);
             }}
-            className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
           >
             <option value="vdot">VDOT (Race Time)</option>
             <option value="cooper">Cooper Test (12-min run)</option>
@@ -125,14 +125,14 @@ export function VO2MaxCalculator() {
         {testType === 'vdot' && (
           <>
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Race Distance (meters)
               </label>
               <input
                 type="number"
                 value={vdotDistance}
                 onChange={(e) => setVdotDistance(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
                 placeholder="5000"
               />
               <div className="flex gap-2 mt-2">
@@ -140,7 +140,7 @@ export function VO2MaxCalculator() {
                   <button
                     key={d}
                     onClick={() => setVdotDistance(d)}
-                    className="px-3 py-1 text-xs bg-zinc-100 dark:bg-zinc-800 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
+                    className="px-3 py-1 text-xs bg-zinc-800 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
                   >
                     {d === '1609' ? 'Mile' : d === '21097' ? 'Half' : `${parseInt(d) / 1000}K`}
                   </button>
@@ -149,7 +149,7 @@ export function VO2MaxCalculator() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 Race Time
               </label>
               <div className="flex gap-2">
@@ -158,7 +158,7 @@ export function VO2MaxCalculator() {
                     type="number"
                     value={vdotTime.hours}
                     onChange={(e) => setVdotTime({ ...vdotTime, hours: e.target.value })}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="0"
                   />
                   <span className="text-xs text-zinc-500 block text-center mt-1">hours</span>
@@ -169,7 +169,7 @@ export function VO2MaxCalculator() {
                     type="number"
                     value={vdotTime.minutes}
                     onChange={(e) => setVdotTime({ ...vdotTime, minutes: e.target.value })}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="0"
                     max="59"
                   />
@@ -181,7 +181,7 @@ export function VO2MaxCalculator() {
                     type="number"
                     value={vdotTime.seconds}
                     onChange={(e) => setVdotTime({ ...vdotTime, seconds: e.target.value })}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="0"
                     max="59"
                   />
@@ -195,14 +195,14 @@ export function VO2MaxCalculator() {
         {/* Cooper Test Form */}
         {testType === 'cooper' && (
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Distance covered in 12 minutes (meters)
             </label>
             <input
               type="number"
               value={cooperDistance}
               onChange={(e) => setCooperDistance(e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               placeholder="2400"
             />
             <p className="text-xs text-zinc-500 mt-2">
@@ -216,27 +216,27 @@ export function VO2MaxCalculator() {
           <>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Gender
                 </label>
                 <select
                   value={customGender}
                   onChange={(e) => setCustomGender(e.target.value as 'male' | 'female')}
-                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
                 >
                   <option value="male">Male</option>
                   <option value="female">Female</option>
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Age
                 </label>
                 <input
                   type="number"
                   value={customAge}
                   onChange={(e) => setCustomAge(e.target.value)}
-                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
                   min="10"
                   max="100"
                 />
@@ -244,7 +244,7 @@ export function VO2MaxCalculator() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
                 5K Time
               </label>
               <div className="flex gap-2">
@@ -253,7 +253,7 @@ export function VO2MaxCalculator() {
                     type="number"
                     value={customTime.hours}
                     onChange={(e) => setCustomTime({ ...customTime, hours: e.target.value })}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="0"
                   />
                   <span className="text-xs text-zinc-500 block text-center mt-1">hours</span>
@@ -264,7 +264,7 @@ export function VO2MaxCalculator() {
                     type="number"
                     value={customTime.minutes}
                     onChange={(e) => setCustomTime({ ...customTime, minutes: e.target.value })}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="0"
                     max="59"
                   />
@@ -276,7 +276,7 @@ export function VO2MaxCalculator() {
                     type="number"
                     value={customTime.seconds}
                     onChange={(e) => setCustomTime({ ...customTime, seconds: e.target.value })}
-                    className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                    className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                     min="0"
                     max="59"
                   />
@@ -287,26 +287,26 @@ export function VO2MaxCalculator() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Max Heart Rate (bpm)
                 </label>
                 <input
                   type="number"
                   value={customMaxHR}
                   onChange={(e) => setCustomMaxHR(e.target.value)}
-                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
                   placeholder="190"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
                   Resting HR (bpm)
                 </label>
                 <input
                   type="number"
                   value={customRestHR}
                   onChange={(e) => setCustomRestHR(e.target.value)}
-                  className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
                   placeholder="60"
                 />
               </div>
@@ -322,7 +322,7 @@ export function VO2MaxCalculator() {
         </button>
 
         {result && (
-          <div className="p-6 bg-zinc-50 dark:bg-zinc-800 rounded-xl space-y-4">
+          <div className="p-6 bg-zinc-800 rounded-xl space-y-4">
             <div className="text-center">
               <div className="text-4xl font-mono font-bold text-orange-500">
                 {result.vo2max.toFixed(1)}
@@ -331,15 +331,15 @@ export function VO2MaxCalculator() {
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-3 bg-white dark:bg-zinc-900 rounded-lg">
-                <div className="text-lg font-semibold text-zinc-900 dark:text-white">
+              <div className="text-center p-3 bg-zinc-900 rounded-lg">
+                <div className="text-lg font-semibold text-white">
                   {result.classification}
                 </div>
                 <div className="text-xs text-zinc-500">Classification</div>
               </div>
               {result.hrReserve && (
-                <div className="text-center p-3 bg-white dark:bg-zinc-900 rounded-lg">
-                  <div className="text-lg font-semibold text-zinc-900 dark:text-white">
+                <div className="text-center p-3 bg-zinc-900 rounded-lg">
+                  <div className="text-lg font-semibold text-white">
                     {result.hrReserve} bpm
                   </div>
                   <div className="text-xs text-zinc-500">HR Reserve</div>

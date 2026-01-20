@@ -61,7 +61,7 @@ export default function ServicesPage() {
       <Header />
       <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}
-        <section className="relative py-20 lg:py-32 overflow-hidden border-b border-zinc-800">
+        <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Background image */}
           <div className="absolute inset-0">
             <Image

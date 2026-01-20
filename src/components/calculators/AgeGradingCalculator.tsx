@@ -76,8 +76,8 @@ export function AgeGradingCalculator() {
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 lg:p-8">
-      <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-4">
+    <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 lg:p-8">
+      <h3 className="font-display text-xl font-bold text-white mb-4">
         Age Grading Calculator
       </h3>
 
@@ -92,27 +92,27 @@ export function AgeGradingCalculator() {
       <div className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Age
             </label>
             <input
               type="number"
               value={age}
               onChange={(e) => setAge(e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               min="30"
               max="110"
             />
             <p className="text-xs text-zinc-500 mt-1">30-110 years</p>
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Gender
             </label>
             <select
               value={gender}
               onChange={(e) => setGender(e.target.value as 'men' | 'women')}
-              className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
             >
               <option value="men">Male</option>
               <option value="women">Female</option>
@@ -121,13 +121,13 @@ export function AgeGradingCalculator() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Event
           </label>
           <select
             value={event}
             onChange={(e) => setEvent(e.target.value)}
-            className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+            className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
           >
             {ageGradingEvents.map((e) => (
               <option key={e.value} value={e.value}>
@@ -138,7 +138,7 @@ export function AgeGradingCalculator() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Your Time
           </label>
           <div className="flex gap-2">
@@ -147,7 +147,7 @@ export function AgeGradingCalculator() {
                 type="number"
                 value={time.hours}
                 onChange={(e) => setTime({ ...time, hours: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 min="0"
               />
               <span className="text-xs text-zinc-500 block text-center mt-1">hours</span>
@@ -158,7 +158,7 @@ export function AgeGradingCalculator() {
                 type="number"
                 value={time.minutes}
                 onChange={(e) => setTime({ ...time, minutes: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 min="0"
                 max="59"
               />
@@ -170,7 +170,7 @@ export function AgeGradingCalculator() {
                 type="number"
                 value={time.seconds}
                 onChange={(e) => setTime({ ...time, seconds: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 min="0"
                 max="59"
               />
@@ -196,72 +196,72 @@ export function AgeGradingCalculator() {
         {result && (
           <div className="space-y-4">
             {/* Main result */}
-            <div className="p-6 bg-zinc-50 dark:bg-zinc-800 rounded-xl text-center">
+            <div className="p-6 bg-zinc-800 rounded-xl text-center">
               <div className="text-5xl font-mono font-bold text-orange-500">
                 {result.ageGradedPercentage.toFixed(2)}%
               </div>
-              <div className="text-lg font-semibold text-zinc-900 dark:text-white mt-2">
+              <div className="text-lg font-semibold text-white mt-2">
                 {result.classification}
               </div>
             </div>
 
             {/* Details */}
             <div className="grid grid-cols-2 gap-4">
-              <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+              <div className="p-4 bg-zinc-800 rounded-xl">
                 <div className="text-sm text-zinc-500 mb-1">Your Performance</div>
-                <div className="text-lg font-mono font-semibold text-zinc-900 dark:text-white">
+                <div className="text-lg font-mono font-semibold text-white">
                   {result.actualTime}
                 </div>
               </div>
-              <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+              <div className="p-4 bg-zinc-800 rounded-xl">
                 <div className="text-sm text-zinc-500 mb-1">Age Graded Time</div>
-                <div className="text-lg font-mono font-semibold text-zinc-900 dark:text-white">
+                <div className="text-lg font-mono font-semibold text-white">
                   {result.ageGradedTime}
                 </div>
               </div>
-              <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+              <div className="p-4 bg-zinc-800 rounded-xl">
                 <div className="text-sm text-zinc-500 mb-1">WMA Factor</div>
-                <div className="text-lg font-mono font-semibold text-zinc-900 dark:text-white">
+                <div className="text-lg font-mono font-semibold text-white">
                   {result.factor.toFixed(4)}
                 </div>
               </div>
-              <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+              <div className="p-4 bg-zinc-800 rounded-xl">
                 <div className="text-sm text-zinc-500 mb-1">Open World Record</div>
-                <div className="text-lg font-mono font-semibold text-zinc-900 dark:text-white">
+                <div className="text-lg font-mono font-semibold text-white">
                   {formatTimeFromSeconds(result.openRecord)}
                 </div>
               </div>
             </div>
 
             {/* Classification guide */}
-            <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
-              <h4 className="font-medium text-zinc-900 dark:text-white mb-3">
+            <div className="p-4 bg-zinc-800 rounded-xl">
+              <h4 className="font-medium text-white mb-3">
                 Age Grading Classifications
               </h4>
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-zinc-500">World Class:</span>
-                  <span className="text-zinc-900 dark:text-white">100%+</span>
+                  <span className="text-white">100%+</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-500">National Class:</span>
-                  <span className="text-zinc-900 dark:text-white">90-100%</span>
+                  <span className="text-white">90-100%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-500">Regional Class:</span>
-                  <span className="text-zinc-900 dark:text-white">80-90%</span>
+                  <span className="text-white">80-90%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-500">Local Class:</span>
-                  <span className="text-zinc-900 dark:text-white">70-80%</span>
+                  <span className="text-white">70-80%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-500">Excellent:</span>
-                  <span className="text-zinc-900 dark:text-white">60-70%</span>
+                  <span className="text-white">60-70%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-zinc-500">Good:</span>
-                  <span className="text-zinc-900 dark:text-white">&lt;60%</span>
+                  <span className="text-white">&lt;60%</span>
                 </div>
               </div>
             </div>

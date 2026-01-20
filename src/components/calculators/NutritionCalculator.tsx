@@ -77,8 +77,8 @@ export function NutritionCalculator() {
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 lg:p-8">
-      <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-4">
+    <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 lg:p-8">
+      <h3 className="font-display text-xl font-bold text-white mb-4">
         Nutrition & Hydration Calculator
       </h3>
 
@@ -93,28 +93,28 @@ export function NutritionCalculator() {
       <div className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Body Weight (kg)
             </label>
             <input
               type="number"
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               placeholder="70"
               min="40"
               max="150"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Distance (km)
             </label>
             <input
               type="number"
               value={distance}
               onChange={(e) => setDistance(e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
               placeholder="42.195"
             />
           </div>
@@ -125,7 +125,7 @@ export function NutritionCalculator() {
             <button
               key={d}
               onClick={() => setDistance(d)}
-              className="px-3 py-1 text-xs bg-zinc-100 dark:bg-zinc-800 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
+              className="px-3 py-1 text-xs bg-zinc-800 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
             >
               {d === '21.0975'
                 ? 'Half'
@@ -141,7 +141,7 @@ export function NutritionCalculator() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-zinc-300 mb-2">
             Estimated Pace (min/km)
           </label>
           <div className="flex gap-2">
@@ -150,7 +150,7 @@ export function NutritionCalculator() {
                 type="number"
                 value={paceMin}
                 onChange={(e) => setPaceMin(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 min="4"
                 max="12"
               />
@@ -162,7 +162,7 @@ export function NutritionCalculator() {
                 type="number"
                 value={paceSec}
                 onChange={(e) => setPaceSec(e.target.value)}
-                className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white text-center focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
                 min="0"
                 max="59"
               />
@@ -173,13 +173,13 @@ export function NutritionCalculator() {
 
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Terrain Type
             </label>
             <select
               value={terrain}
               onChange={(e) => setTerrain(e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
             >
               <option value="1.0">Road / Flat trail</option>
               <option value="1.1">Rolling hills</option>
@@ -188,13 +188,13 @@ export function NutritionCalculator() {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">
+            <label className="block text-sm font-medium text-zinc-300 mb-2">
               Temperature
             </label>
             <select
               value={temperature}
               onChange={(e) => setTemperature(e.target.value)}
-              className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500"
+              className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
             >
               <option value="0.9">Cold (&lt; 10°C)</option>
               <option value="1.0">Moderate (10-20°C)</option>
@@ -215,8 +215,8 @@ export function NutritionCalculator() {
         {result && (
           <div className="space-y-4">
             {/* Race overview */}
-            <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
-              <h4 className="font-medium text-zinc-900 dark:text-white mb-3">Race Overview</h4>
+            <div className="p-4 bg-zinc-800 rounded-xl">
+              <h4 className="font-medium text-white mb-3">Race Overview</h4>
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center">
                   <div className="text-2xl font-mono font-bold text-orange-500">
@@ -225,7 +225,7 @@ export function NutritionCalculator() {
                   <div className="text-xs text-zinc-500">Estimated Time</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-mono font-bold text-zinc-900 dark:text-white">
+                  <div className="text-2xl font-mono font-bold text-white">
                     {result.speedKmh.toFixed(1)} km/h
                   </div>
                   <div className="text-xs text-zinc-500">Average Speed</div>
@@ -244,42 +244,42 @@ export function NutritionCalculator() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-b border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900">
-                    <td className="px-4 py-3 font-medium text-zinc-900 dark:text-white">
+                  <tr className="border-b border-zinc-700 bg-zinc-900">
+                    <td className="px-4 py-3 font-medium text-white">
                       Calories
                     </td>
-                    <td className="px-4 py-3 text-right text-zinc-700 dark:text-zinc-300 font-mono">
+                    <td className="px-4 py-3 text-right text-zinc-300 font-mono">
                       {result.caloriesPerHour} kcal
                     </td>
                     <td className="px-4 py-3 text-right text-orange-500 font-mono font-semibold">
                       {result.totalCalories} kcal
                     </td>
                   </tr>
-                  <tr className="border-b border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900">
-                    <td className="px-4 py-3 font-medium text-zinc-900 dark:text-white">
+                  <tr className="border-b border-zinc-700 bg-zinc-900">
+                    <td className="px-4 py-3 font-medium text-white">
                       Carbohydrates
                     </td>
-                    <td className="px-4 py-3 text-right text-zinc-700 dark:text-zinc-300 font-mono">
+                    <td className="px-4 py-3 text-right text-zinc-300 font-mono">
                       {result.carbsPerHour}g
                     </td>
                     <td className="px-4 py-3 text-right text-orange-500 font-mono font-semibold">
                       {result.totalCarbs}g
                     </td>
                   </tr>
-                  <tr className="border-b border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900">
-                    <td className="px-4 py-3 font-medium text-zinc-900 dark:text-white">
+                  <tr className="border-b border-zinc-700 bg-zinc-900">
+                    <td className="px-4 py-3 font-medium text-white">
                       Hydration
                     </td>
-                    <td className="px-4 py-3 text-right text-zinc-700 dark:text-zinc-300 font-mono">
+                    <td className="px-4 py-3 text-right text-zinc-300 font-mono">
                       {result.hydrationPerHour}ml
                     </td>
                     <td className="px-4 py-3 text-right text-orange-500 font-mono font-semibold">
                       {(result.totalHydration / 1000).toFixed(1)}L
                     </td>
                   </tr>
-                  <tr className="bg-white dark:bg-zinc-900">
-                    <td className="px-4 py-3 font-medium text-zinc-900 dark:text-white">Sodium</td>
-                    <td className="px-4 py-3 text-right text-zinc-700 dark:text-zinc-300 font-mono">
+                  <tr className="bg-zinc-900">
+                    <td className="px-4 py-3 font-medium text-white">Sodium</td>
+                    <td className="px-4 py-3 text-right text-zinc-300 font-mono">
                       {result.sodiumPerHour}mg
                     </td>
                     <td className="px-4 py-3 text-right text-orange-500 font-mono font-semibold">

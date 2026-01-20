@@ -225,15 +225,15 @@ export default function ContactPage() {
                   <Link
                     key={reason.title}
                     href={reason.href}
-                    className="group p-6 bg-zinc-50 dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all"
+                    className="group p-6 bg-zinc-900 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
                   >
                     <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center mb-4 group-hover:bg-orange-500 group-hover:text-white transition-colors">
                       <Icon className="w-6 h-6 text-orange-500 group-hover:text-white transition-colors" />
                     </div>
-                    <h3 className="font-display text-lg font-semibold text-zinc-900 dark:text-white mb-1 group-hover:text-orange-500 transition-colors">
+                    <h3 className="font-display text-lg font-semibold text-white mb-1 group-hover:text-orange-500 transition-colors">
                       {reason.title}
                     </h3>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="text-sm text-zinc-400">
                       {reason.description}
                     </p>
                   </Link>
