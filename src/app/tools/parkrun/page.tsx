@@ -355,7 +355,9 @@ export default function ParkrunPage() {
                 <Trophy className="w-5 h-5 text-amber-500" />
                 PB Timeline
               </h3>
-              <PBProgression pbs={data.pbProgression} />
+              <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent pr-2">
+                <PBProgression pbs={data.pbProgression} />
+              </div>
             </div>
 
             {/* Streaks */}
