@@ -17,7 +17,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
         {/* Error icon */}
         <div className="w-20 h-20 rounded-full bg-red-500/10 flex items-center justify-center mx-auto mb-6">
@@ -25,10 +25,10 @@ export default function Error({
         </div>
 
         {/* Message */}
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mb-4">
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-white mb-4">
           Something Went Wrong
         </h1>
-        <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+        <p className="text-zinc-400 mb-8">
           We hit an unexpected hurdle. Don&apos;t worry, even the best runners
           stumble sometimes. Let&apos;s get you back on track.
         </p>
@@ -58,7 +58,7 @@ export default function Error({
           </button>
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-6 py-3 border border-zinc-300 dark:border-zinc-700 rounded-full hover:border-orange-500 transition-colors text-zinc-700 dark:text-zinc-300"
+            className="inline-flex items-center gap-2 px-6 py-3 border border-zinc-700 rounded-full hover:border-orange-500 transition-colors text-zinc-300"
           >
             <Home className="w-5 h-5" />
             Go Home

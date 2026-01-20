@@ -37,11 +37,11 @@ interface PostCardProps {
 function PostCard({ post, featured = false }: PostCardProps) {
   return (
     <article
-      className="blog-card group relative overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all duration-300 h-full"
+      className="blog-card group relative overflow-hidden rounded-2xl bg-zinc-900 border border-zinc-800 hover:border-orange-500/50 transition-all duration-300 h-full"
     >
       <Link href={`/blog/${post.slug}`} className="block h-full">
         {/* Image */}
-        <div className="relative overflow-hidden bg-zinc-100 dark:bg-zinc-800 aspect-[16/10]">
+        <div className="relative overflow-hidden bg-zinc-800 aspect-[16/10]">
           {post.featuredImage ? (
             <Image
               src={post.featuredImage}
@@ -170,7 +170,7 @@ export default function LatestPosts({ posts = blogPosts }: LatestPostsProps) {
   return (
     <section
       ref={sectionRef}
-      className="py-24 lg:py-32 bg-white dark:bg-zinc-950"
+      className="py-24 lg:py-32 bg-zinc-950"
       style={{ position: 'relative', zIndex: 1 }}
     >
       <div className="container">

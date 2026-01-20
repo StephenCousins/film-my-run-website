@@ -165,7 +165,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
 
           {/* Title */}
           <h2 className={cn(
-            'font-display font-semibold text-zinc-900 dark:text-white group-hover:text-orange-500 transition-colors mb-3',
+            'font-display font-semibold text-white group-hover:text-orange-500 transition-colors mb-3',
             featured ? 'text-2xl lg:text-3xl' : 'text-lg'
           )}>
             {post.title}
@@ -173,7 +173,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
 
           {/* Excerpt */}
           <p className={cn(
-            'text-zinc-600 dark:text-zinc-400 line-clamp-2',
+            'text-zinc-400 line-clamp-2',
             featured ? 'text-base lg:line-clamp-3' : 'text-sm'
           )}>
             {post.excerpt}

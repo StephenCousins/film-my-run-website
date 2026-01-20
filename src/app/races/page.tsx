@@ -190,13 +190,13 @@ interface StatCardProps {
 
 function StatCard({ icon: Icon, value, label, color = 'text-orange-500' }: StatCardProps) {
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4">
+    <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4">
       <div className="flex items-center gap-3">
-        <div className={cn('p-2 rounded-lg bg-zinc-100 dark:bg-zinc-800', color)}>
+        <div className={cn('p-2 rounded-lg bg-zinc-800', color)}>
           <Icon className="w-5 h-5" />
         </div>
         <div>
-          <div className="font-mono text-xl font-bold text-zinc-900 dark:text-white">
+          <div className="font-mono text-xl font-bold text-white">
             {value}
           </div>
           <div className="text-xs text-zinc-500">{label}</div>
@@ -230,10 +230,10 @@ function RaceRow({ race }: { race: Race }) {
   const TerrainIcon = terrainIcons[race.terrain];
 
   return (
-    <tr className="border-b border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
+    <tr className="border-b border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
       <td className="py-4 px-4">
         <div>
-          <div className="font-medium text-zinc-900 dark:text-white">{race.name}</div>
+          <div className="font-medium text-white">{race.name}</div>
           <div className="flex items-center gap-2 text-xs text-zinc-500 mt-1">
             <MapPin className="w-3 h-3" />
             {race.location}
@@ -241,7 +241,7 @@ function RaceRow({ race }: { race: Race }) {
         </div>
       </td>
       <td className="py-4 px-4">
-        <div className="flex items-center gap-2 text-sm text-zinc-600 dark:text-zinc-400">
+        <div className="flex items-center gap-2 text-sm text-zinc-400">
           <Calendar className="w-4 h-4" />
           {new Date(race.date).toLocaleDateString('en-GB', {
             day: 'numeric',
@@ -260,7 +260,7 @@ function RaceRow({ race }: { race: Race }) {
       </td>
       <td className="py-4 px-4">
         <div className="text-sm">
-          <span className="font-medium text-zinc-900 dark:text-white">
+          <span className="font-medium text-white">
             {race.distance} {race.distanceUnit}
           </span>
           {race.elevation && (
@@ -271,7 +271,7 @@ function RaceRow({ race }: { race: Race }) {
         </div>
       </td>
       <td className="py-4 px-4">
-        <div className="font-mono text-sm font-medium text-zinc-900 dark:text-white">
+        <div className="font-mono text-sm font-medium text-white">
           {race.time}
         </div>
         <div className="text-xs text-zinc-500">{race.pace}</div>
@@ -279,7 +279,7 @@ function RaceRow({ race }: { race: Race }) {
       <td className="py-4 px-4">
         {race.position && race.totalRunners && (
           <div className="text-sm">
-            <span className="font-medium text-zinc-900 dark:text-white">
+            <span className="font-medium text-white">
               {race.position.toLocaleString()}
             </span>
             <span className="text-zinc-500">
@@ -356,16 +356,16 @@ export default function RacesPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-zinc-50 dark:bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}
-        <section className="py-12 lg:py-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
+        <section className="py-12 lg:py-16 bg-zinc-900 border-b border-zinc-800">
           <div className="container">
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
               <div>
-                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-white mb-2">
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
                   Race Dashboard
                 </h1>
-                <p className="text-zinc-600 dark:text-zinc-400">
+                <p className="text-zinc-400">
                   Every race, every finish line, every story. Tracking since 2011.
                 </p>
               </div>
@@ -382,7 +382,7 @@ export default function RacesPage() {
         </section>
 
         {/* Stats Grid */}
-        <section className="py-8 bg-zinc-50 dark:bg-zinc-950">
+        <section className="py-8 bg-zinc-950">
           <div className="container">
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
               <StatCard icon={Trophy} value={stats.marathons} label="Marathons" />
@@ -396,7 +396,7 @@ export default function RacesPage() {
         </section>
 
         {/* Filters */}
-        <section className="py-6 bg-white dark:bg-zinc-900 border-y border-zinc-200 dark:border-zinc-800 sticky top-16 lg:top-20 z-30">
+        <section className="py-6 bg-zinc-900 border-y border-zinc-800 sticky top-16 lg:top-20 z-30">
           <div className="container">
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
               {/* Search */}
@@ -407,7 +407,7 @@ export default function RacesPage() {
                   placeholder="Search races..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-zinc-100 dark:bg-zinc-800 border border-transparent rounded-lg text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                  className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-transparent rounded-lg text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                 />
               </div>
 
@@ -419,7 +419,7 @@ export default function RacesPage() {
                 <select
                   value={categoryFilter}
                   onChange={(e) => setCategoryFilter(e.target.value)}
-                  className="px-3 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  className="px-3 py-2 bg-zinc-800 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
                 >
                   <option value="all">All Categories</option>
                   <option value="marathon">Marathons</option>
@@ -434,7 +434,7 @@ export default function RacesPage() {
                 <select
                   value={terrainFilter}
                   onChange={(e) => setTerrainFilter(e.target.value)}
-                  className="px-3 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  className="px-3 py-2 bg-zinc-800 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
                 >
                   <option value="all">All Terrain</option>
                   <option value="road">Road</option>
@@ -454,11 +454,11 @@ export default function RacesPage() {
         {/* Race Table */}
         <section className="py-8">
           <div className="container">
-            <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+            <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-zinc-50 dark:bg-zinc-800/50 text-left">
+                    <tr className="bg-zinc-800/50 text-left">
                       <th className="py-3 px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">
                         Race
                       </th>
@@ -509,9 +509,9 @@ export default function RacesPage() {
         </section>
 
         {/* Year breakdown */}
-        <section className="py-12 bg-zinc-50 dark:bg-zinc-950">
+        <section className="py-12 bg-zinc-950">
           <div className="container">
-            <h2 className="font-display text-2xl font-bold text-zinc-900 dark:text-white mb-6">
+            <h2 className="font-display text-2xl font-bold text-white mb-6">
               Races by Year
             </h2>
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4">
@@ -522,7 +522,7 @@ export default function RacesPage() {
                 return (
                   <div
                     key={year}
-                    className="p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 text-center"
+                    className="p-4 bg-zinc-900 rounded-xl border border-zinc-800 text-center"
                   >
                     <div className="font-mono text-2xl font-bold text-orange-500">{count}</div>
                     <div className="text-sm text-zinc-500">{year}</div>

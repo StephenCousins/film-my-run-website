@@ -153,7 +153,7 @@ export default function ProductPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-white dark:bg-zinc-950">
+      <main className="pt-20 lg:pt-24 bg-zinc-950">
         {/* Breadcrumb */}
         <div className="container py-4">
           <nav className="flex items-center gap-2 text-sm text-zinc-500">
@@ -168,7 +168,7 @@ export default function ProductPage() {
               {product.category}
             </Link>
             <ChevronRight className="w-4 h-4" />
-            <span className="text-zinc-900 dark:text-white">{product.name}</span>
+            <span className="text-white">{product.name}</span>
           </nav>
         </div>
 
@@ -179,7 +179,7 @@ export default function ProductPage() {
               {/* Images */}
               <div className="space-y-4">
                 {/* Main image */}
-                <div className="relative aspect-square bg-zinc-100 dark:bg-zinc-900 rounded-2xl overflow-hidden">
+                <div className="relative aspect-square bg-zinc-900 rounded-2xl overflow-hidden">
                   <Image
                     src={product.images[selectedImage]}
                     alt={product.name}
@@ -237,7 +237,7 @@ export default function ProductPage() {
                 <div className="text-sm text-zinc-500 mb-2">{product.category}</div>
 
                 {/* Title */}
-                <h1 className="font-display text-3xl lg:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+                <h1 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
                   {product.name}
                 </h1>
 
@@ -256,7 +256,7 @@ export default function ProductPage() {
                       />
                     ))}
                   </div>
-                  <span className="text-sm font-medium text-zinc-900 dark:text-white">
+                  <span className="text-sm font-medium text-white">
                     {product.rating}
                   </span>
                   <span className="text-sm text-zinc-500">({product.reviews} reviews)</span>
@@ -280,14 +280,14 @@ export default function ProductPage() {
                 </div>
 
                 {/* Description */}
-                <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-8">
+                <p className="text-zinc-400 leading-relaxed mb-8">
                   {product.description}
                 </p>
 
                 {/* Colors */}
                 {product.colors && (
                   <div className="mb-6">
-                    <div className="text-sm font-medium text-zinc-900 dark:text-white mb-3">
+                    <div className="text-sm font-medium text-white mb-3">
                       Color: <span className="text-zinc-500">{selectedColor}</span>
                     </div>
                     <div className="flex gap-2">
@@ -299,7 +299,7 @@ export default function ProductPage() {
                             'w-10 h-10 rounded-full border-2 transition-all',
                             selectedColor === color.name
                               ? 'border-orange-500 ring-2 ring-orange-500/30'
-                              : 'border-zinc-200 dark:border-zinc-700'
+                              : 'border-zinc-700'
                           )}
                           style={{ backgroundColor: color.hex }}
                           title={color.name}
@@ -313,7 +313,7 @@ export default function ProductPage() {
                 {product.sizes && (
                   <div className="mb-6">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-medium text-zinc-900 dark:text-white">
+                      <span className="text-sm font-medium text-white">
                         Size: <span className="text-zinc-500">{selectedSize}</span>
                       </span>
                       <button className="text-sm text-orange-500 hover:text-orange-600">
@@ -329,7 +329,7 @@ export default function ProductPage() {
                             'px-4 py-2 rounded-lg border text-sm font-medium transition-all',
                             selectedSize === size
                               ? 'border-orange-500 bg-orange-500/10 text-orange-500'
-                              : 'border-zinc-200 dark:border-zinc-700 text-zinc-700 dark:text-zinc-300 hover:border-orange-500/50'
+                              : 'border-zinc-700 text-zinc-300 hover:border-orange-500/50'
                           )}
                         >
                           {size}
@@ -341,21 +341,21 @@ export default function ProductPage() {
 
                 {/* Quantity */}
                 <div className="mb-8">
-                  <div className="text-sm font-medium text-zinc-900 dark:text-white mb-3">
+                  <div className="text-sm font-medium text-white mb-3">
                     Quantity
                   </div>
                   <div className="flex items-center gap-3">
-                    <div className="flex items-center border border-zinc-200 dark:border-zinc-700 rounded-lg">
+                    <div className="flex items-center border border-zinc-700 rounded-lg">
                       <button
                         onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="p-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                        className="p-3 hover:bg-zinc-800 transition-colors"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
                       <span className="w-12 text-center font-medium">{quantity}</span>
                       <button
                         onClick={() => setQuantity(quantity + 1)}
-                        className="p-3 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                        className="p-3 hover:bg-zinc-800 transition-colors"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
@@ -382,7 +382,7 @@ export default function ProductPage() {
                   </button>
                   <button
                     onClick={() => setIsWishlisted(!isWishlisted)}
-                    className="p-4 border border-zinc-200 dark:border-zinc-700 rounded-full hover:border-orange-500 transition-colors"
+                    className="p-4 border border-zinc-700 rounded-full hover:border-orange-500 transition-colors"
                   >
                     <Heart
                       className={cn(
@@ -391,24 +391,24 @@ export default function ProductPage() {
                       )}
                     />
                   </button>
-                  <button className="p-4 border border-zinc-200 dark:border-zinc-700 rounded-full hover:border-orange-500 transition-colors">
+                  <button className="p-4 border border-zinc-700 rounded-full hover:border-orange-500 transition-colors">
                     <Share2 className="w-5 h-5 text-zinc-400" />
                   </button>
                 </div>
 
                 {/* Benefits */}
-                <div className="grid grid-cols-3 gap-4 p-4 bg-zinc-50 dark:bg-zinc-900 rounded-xl">
+                <div className="grid grid-cols-3 gap-4 p-4 bg-zinc-900 rounded-xl">
                   <div className="text-center">
                     <Truck className="w-5 h-5 mx-auto text-zinc-400 mb-2" />
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">Free Shipping</div>
+                    <div className="text-xs text-zinc-400">Free Shipping</div>
                   </div>
                   <div className="text-center">
                     <RefreshCw className="w-5 h-5 mx-auto text-zinc-400 mb-2" />
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">30-Day Returns</div>
+                    <div className="text-xs text-zinc-400">30-Day Returns</div>
                   </div>
                   <div className="text-center">
                     <Shield className="w-5 h-5 mx-auto text-zinc-400 mb-2" />
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">Secure Payment</div>
+                    <div className="text-xs text-zinc-400">Secure Payment</div>
                   </div>
                 </div>
               </div>
@@ -417,12 +417,12 @@ export default function ProductPage() {
         </section>
 
         {/* Features & Specs */}
-        <section className="py-12 lg:py-16 bg-zinc-50 dark:bg-zinc-900">
+        <section className="py-12 lg:py-16 bg-zinc-900">
           <div className="container">
             <div className="grid lg:grid-cols-2 gap-12">
               {/* Features */}
               <div>
-                <h2 className="font-display text-2xl font-bold text-zinc-900 dark:text-white mb-6">
+                <h2 className="font-display text-2xl font-bold text-white mb-6">
                   Features
                 </h2>
                 <ul className="space-y-3">
@@ -431,7 +431,7 @@ export default function ProductPage() {
                       <div className="w-5 h-5 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
                         <Check className="w-3 h-3 text-orange-500" />
                       </div>
-                      <span className="text-zinc-700 dark:text-zinc-300">{feature}</span>
+                      <span className="text-zinc-300">{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -440,17 +440,17 @@ export default function ProductPage() {
               {/* Specifications */}
               {product.specs.length > 0 && (
                 <div>
-                  <h2 className="font-display text-2xl font-bold text-zinc-900 dark:text-white mb-6">
+                  <h2 className="font-display text-2xl font-bold text-white mb-6">
                     Specifications
                   </h2>
                   <div className="space-y-3">
                     {product.specs.map((spec, index) => (
                       <div
                         key={index}
-                        className="flex justify-between py-3 border-b border-zinc-200 dark:border-zinc-800"
+                        className="flex justify-between py-3 border-b border-zinc-800"
                       >
                         <span className="text-zinc-500">{spec.label}</span>
-                        <span className="font-medium text-zinc-900 dark:text-white">
+                        <span className="font-medium text-white">
                           {spec.value}
                         </span>
                       </div>

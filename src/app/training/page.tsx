@@ -189,7 +189,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
         'relative rounded-2xl p-8 transition-all duration-300',
         plan.highlighted
           ? 'bg-orange-500 text-white scale-105 shadow-2xl shadow-orange-500/30'
-          : 'bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50'
+          : 'bg-zinc-900 border border-zinc-800 hover:border-orange-500/50'
       )}
     >
       {/* Badge */}
@@ -212,7 +212,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
       <h3
         className={cn(
           'font-display text-xl font-bold mb-2',
-          plan.highlighted ? 'text-white' : 'text-zinc-900 dark:text-white'
+          plan.highlighted ? 'text-white' : 'text-white'
         )}
       >
         {plan.name}
@@ -242,7 +242,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
       <p
         className={cn(
           'text-sm mb-6',
-          plan.highlighted ? 'text-white/90' : 'text-zinc-600 dark:text-zinc-400'
+          plan.highlighted ? 'text-white/90' : 'text-zinc-400'
         )}
       >
         {plan.description}
@@ -261,7 +261,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
             <span
               className={cn(
                 'text-sm',
-                plan.highlighted ? 'text-white/90' : 'text-zinc-700 dark:text-zinc-300'
+                plan.highlighted ? 'text-white/90' : 'text-zinc-300'
               )}
             >
               {feature}
@@ -291,7 +291,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
 
 function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6">
+    <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
       {/* Stars */}
       <div className="flex gap-1 mb-4">
         {[...Array(5)].map((_, i) => (
@@ -300,7 +300,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
       </div>
 
       {/* Quote */}
-      <p className="text-zinc-700 dark:text-zinc-300 mb-6 leading-relaxed">
+      <p className="text-zinc-300 mb-6 leading-relaxed">
         "{testimonial.quote}"
       </p>
 
@@ -319,7 +319,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
           </div>
         </div>
         <div>
-          <div className="font-medium text-zinc-900 dark:text-white">
+          <div className="font-medium text-white">
             {testimonial.name}
           </div>
           <div className="text-sm text-zinc-500">{testimonial.role}</div>
@@ -365,13 +365,13 @@ export default function TrainingPage() {
                 </span>
               </div>
 
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-white mb-6">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
                 Train Smarter.
                 <br />
                 <span className="text-orange-500">Race Faster.</span>
               </h1>
 
-              <p className="text-lg lg:text-xl text-zinc-600 dark:text-zinc-400 mb-8 max-w-2xl mx-auto">
+              <p className="text-lg lg:text-xl text-zinc-400 mb-8 max-w-2xl mx-auto">
                 Personalized marathon and half-marathon training plans powered by AI.
                 Join 50,000+ runners who've achieved their goals with our proven methodology.
               </p>
@@ -385,7 +385,7 @@ export default function TrainingPage() {
                   Start Free Trial
                   <ArrowRight className="w-5 h-5" />
                 </Link>
-                <button className="inline-flex items-center gap-2 px-8 py-4 border border-zinc-300 dark:border-zinc-700 rounded-full hover:border-orange-500 transition-colors group">
+                <button className="inline-flex items-center gap-2 px-8 py-4 border border-zinc-700 rounded-full hover:border-orange-500 transition-colors group">
                   <Play className="w-5 h-5 text-orange-500" />
                   <span className="group-hover:text-orange-500 transition-colors">
                     Watch Demo
@@ -394,7 +394,7 @@ export default function TrainingPage() {
               </div>
 
               {/* Social proof */}
-              <div className="flex items-center justify-center gap-6 mt-12 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+              <div className="flex items-center justify-center gap-6 mt-12 pt-8 border-t border-zinc-800">
                 <div className="flex -space-x-2">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <div
@@ -408,7 +408,7 @@ export default function TrainingPage() {
                     {[1, 2, 3, 4, 5].map((i) => (
                       <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
                     ))}
-                    <span className="text-sm font-medium text-zinc-900 dark:text-white ml-1">
+                    <span className="text-sm font-medium text-white ml-1">
                       4.9
                     </span>
                   </div>
@@ -436,14 +436,14 @@ export default function TrainingPage() {
         </section>
 
         {/* Features */}
-        <section className="py-20 lg:py-32 bg-white dark:bg-zinc-950">
+        <section className="py-20 lg:py-32 bg-zinc-950">
           <div className="container">
             <div className="text-center mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
                 Everything You Need to
                 <span className="text-orange-500"> Reach Your Goal</span>
               </h2>
-              <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
                 Our comprehensive training platform adapts to your life, not the other way around.
               </p>
             </div>
@@ -454,15 +454,15 @@ export default function TrainingPage() {
                 return (
                   <div
                     key={feature.title}
-                    className="group p-6 bg-zinc-50 dark:bg-zinc-900 rounded-2xl hover:bg-orange-500 transition-all duration-300"
+                    className="group p-6 bg-zinc-900 rounded-2xl hover:bg-orange-500 transition-all duration-300"
                   >
                     <div className="w-12 h-12 rounded-xl bg-orange-500/10 group-hover:bg-white/20 flex items-center justify-center mb-4 transition-colors">
                       <Icon className="w-6 h-6 text-orange-500 group-hover:text-white transition-colors" />
                     </div>
-                    <h3 className="font-display text-lg font-bold text-zinc-900 dark:text-white group-hover:text-white mb-2 transition-colors">
+                    <h3 className="font-display text-lg font-bold text-white group-hover:text-white mb-2 transition-colors">
                       {feature.title}
                     </h3>
-                    <p className="text-zinc-600 dark:text-zinc-400 group-hover:text-white/80 transition-colors">
+                    <p className="text-zinc-400 group-hover:text-white/80 transition-colors">
                       {feature.description}
                     </p>
                   </div>
@@ -473,16 +473,16 @@ export default function TrainingPage() {
         </section>
 
         {/* App preview */}
-        <section className="py-20 lg:py-32 bg-zinc-50 dark:bg-zinc-900 overflow-hidden">
+        <section className="py-20 lg:py-32 bg-zinc-900 overflow-hidden">
           <div className="container">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-6">
+                <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-6">
                   Your Personal Coach,
                   <br />
                   <span className="text-orange-500">Always Available</span>
                 </h2>
-                <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-8">
+                <p className="text-lg text-zinc-400 mb-8">
                   The Marathon Plan App combines years of coaching expertise with modern AI
                   to deliver personalized training that adapts to your progress, schedule, and goals.
                 </p>
@@ -496,7 +496,7 @@ export default function TrainingPage() {
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                      <span className="text-zinc-700 dark:text-zinc-300">{item}</span>
+                      <span className="text-zinc-300">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -554,13 +554,13 @@ export default function TrainingPage() {
         </section>
 
         {/* Testimonials */}
-        <section className="py-20 lg:py-32 bg-white dark:bg-zinc-950">
+        <section className="py-20 lg:py-32 bg-zinc-950">
           <div className="container">
             <div className="text-center mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
                 Trusted by <span className="text-orange-500">Thousands</span> of Runners
               </h2>
-              <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
                 See what our community has achieved with personalized training.
               </p>
             </div>
@@ -574,25 +574,25 @@ export default function TrainingPage() {
         </section>
 
         {/* Pricing */}
-        <section id="pricing" className="py-20 lg:py-32 bg-zinc-50 dark:bg-zinc-900">
+        <section id="pricing" className="py-20 lg:py-32 bg-zinc-900">
           <div className="container">
             <div className="text-center mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
                 Simple, <span className="text-orange-500">Transparent</span> Pricing
               </h2>
-              <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto mb-8">
+              <p className="text-lg text-zinc-400 max-w-2xl mx-auto mb-8">
                 Start with a 14-day free trial. No credit card required.
               </p>
 
               {/* Billing toggle */}
-              <div className="inline-flex items-center gap-4 p-1 bg-white dark:bg-zinc-800 rounded-full shadow-sm">
+              <div className="inline-flex items-center gap-4 p-1 bg-zinc-800 rounded-full shadow-sm">
                 <button
                   onClick={() => setBillingPeriod('monthly')}
                   className={cn(
                     'px-6 py-2 rounded-full text-sm font-medium transition-all',
                     billingPeriod === 'monthly'
                       ? 'bg-orange-500 text-white'
-                      : 'text-zinc-600 dark:text-zinc-400 hover:text-orange-500'
+                      : 'text-zinc-400 hover:text-orange-500'
                   )}
                 >
                   Monthly
@@ -603,7 +603,7 @@ export default function TrainingPage() {
                     'px-6 py-2 rounded-full text-sm font-medium transition-all',
                     billingPeriod === 'annual'
                       ? 'bg-orange-500 text-white'
-                      : 'text-zinc-600 dark:text-zinc-400 hover:text-orange-500'
+                      : 'text-zinc-400 hover:text-orange-500'
                   )}
                 >
                   Annual
@@ -620,7 +620,7 @@ export default function TrainingPage() {
 
             {/* Guarantee */}
             <div className="mt-12 text-center">
-              <div className="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+              <div className="inline-flex items-center gap-2 text-zinc-400">
                 <Lock className="w-4 h-4" />
                 <span className="text-sm">30-day money-back guarantee. Cancel anytime.</span>
               </div>

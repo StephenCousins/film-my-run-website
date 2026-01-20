@@ -55,7 +55,7 @@ function ContactForm() {
         <div>
           <label
             htmlFor="name"
-            className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+            className="block text-sm font-medium text-white mb-2"
           >
             Name
           </label>
@@ -64,14 +64,14 @@ function ContactForm() {
             id="name"
             name="name"
             required
-            className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+            className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
             placeholder="Your name"
           />
         </div>
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+            className="block text-sm font-medium text-white mb-2"
           >
             Email
           </label>
@@ -80,7 +80,7 @@ function ContactForm() {
             id="email"
             name="email"
             required
-            className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+            className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
             placeholder="you@example.com"
           />
         </div>
@@ -90,7 +90,7 @@ function ContactForm() {
       <div>
         <label
           htmlFor="subject"
-          className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+          className="block text-sm font-medium text-white mb-2"
         >
           Subject
         </label>
@@ -98,7 +98,7 @@ function ContactForm() {
           id="subject"
           name="subject"
           required
-          className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+          className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
         >
           <option value="">Select a topic...</option>
           <option value="race-filming">Race Filming Inquiry</option>
@@ -115,7 +115,7 @@ function ContactForm() {
         <div>
           <label
             htmlFor="event-name"
-            className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+            className="block text-sm font-medium text-white mb-2"
           >
             Event Name <span className="text-zinc-500">(optional)</span>
           </label>
@@ -123,14 +123,14 @@ function ContactForm() {
             type="text"
             id="event-name"
             name="event-name"
-            className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+            className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
             placeholder="e.g., London Marathon"
           />
         </div>
         <div>
           <label
             htmlFor="event-date"
-            className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+            className="block text-sm font-medium text-white mb-2"
           >
             Event Date <span className="text-zinc-500">(optional)</span>
           </label>
@@ -138,7 +138,7 @@ function ContactForm() {
             type="date"
             id="event-date"
             name="event-date"
-            className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+            className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
           />
         </div>
       </div>
@@ -147,7 +147,7 @@ function ContactForm() {
       <div>
         <label
           htmlFor="message"
-          className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+          className="block text-sm font-medium text-white mb-2"
         >
           Message
         </label>
@@ -156,7 +156,7 @@ function ContactForm() {
           name="message"
           required
           rows={6}
-          className="w-full px-4 py-3 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors resize-none"
+          className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors resize-none"
           placeholder="Tell us about your project or question..."
         />
       </div>
@@ -249,10 +249,10 @@ export default function ContactPage() {
             <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
               {/* Form */}
               <div className="lg:col-span-7">
-                <h2 className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mb-2">
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-white mb-2">
                   Send a Message
                 </h2>
-                <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+                <p className="text-zinc-400 mb-8">
                   Fill out the form below and I'll get back to you within 24 hours.
                 </p>
 
@@ -263,19 +263,19 @@ export default function ContactPage() {
               <div className="lg:col-span-5">
                 <div className="lg:sticky lg:top-28 space-y-8">
                   {/* Direct contact */}
-                  <div className="p-6 bg-zinc-50 dark:bg-zinc-900 rounded-2xl">
-                    <h3 className="font-display text-lg font-semibold text-zinc-900 dark:text-white mb-4">
+                  <div className="p-6 bg-zinc-900 rounded-2xl">
+                    <h3 className="font-display text-lg font-semibold text-white mb-4">
                       Direct Contact
                     </h3>
                     <div className="space-y-4">
                       <a
                         href="mailto:hello@filmmyrun.co.uk"
-                        className="flex items-center gap-3 text-zinc-600 dark:text-zinc-400 hover:text-orange-500 transition-colors"
+                        className="flex items-center gap-3 text-zinc-400 hover:text-orange-500 transition-colors"
                       >
                         <Mail className="w-5 h-5" />
                         hello@filmmyrun.co.uk
                       </a>
-                      <div className="flex items-center gap-3 text-zinc-600 dark:text-zinc-400">
+                      <div className="flex items-center gap-3 text-zinc-400">
                         <MapPin className="w-5 h-5" />
                         United Kingdom
                       </div>
@@ -283,8 +283,8 @@ export default function ContactPage() {
                   </div>
 
                   {/* Social media */}
-                  <div className="p-6 bg-zinc-50 dark:bg-zinc-900 rounded-2xl">
-                    <h3 className="font-display text-lg font-semibold text-zinc-900 dark:text-white mb-4">
+                  <div className="p-6 bg-zinc-900 rounded-2xl">
+                    <h3 className="font-display text-lg font-semibold text-white mb-4">
                       Follow Along
                     </h3>
                     <div className="flex gap-3">
@@ -292,38 +292,38 @@ export default function ContactPage() {
                         href="https://instagram.com/filmmyrun"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 bg-white dark:bg-zinc-800 rounded-xl hover:bg-orange-500 hover:text-white transition-colors group"
+                        className="p-3 bg-zinc-800 rounded-xl hover:bg-orange-500 hover:text-white transition-colors group"
                         aria-label="Instagram"
                       >
-                        <Instagram className="w-5 h-5 text-zinc-600 dark:text-zinc-400 group-hover:text-white transition-colors" />
+                        <Instagram className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
                       </a>
                       <a
                         href="https://youtube.com/@filmmyrun"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 bg-white dark:bg-zinc-800 rounded-xl hover:bg-orange-500 hover:text-white transition-colors group"
+                        className="p-3 bg-zinc-800 rounded-xl hover:bg-orange-500 hover:text-white transition-colors group"
                         aria-label="YouTube"
                       >
-                        <Youtube className="w-5 h-5 text-zinc-600 dark:text-zinc-400 group-hover:text-white transition-colors" />
+                        <Youtube className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
                       </a>
                       <a
                         href="https://twitter.com/filmmyrun"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 bg-white dark:bg-zinc-800 rounded-xl hover:bg-orange-500 hover:text-white transition-colors group"
+                        className="p-3 bg-zinc-800 rounded-xl hover:bg-orange-500 hover:text-white transition-colors group"
                         aria-label="Twitter"
                       >
-                        <Twitter className="w-5 h-5 text-zinc-600 dark:text-zinc-400 group-hover:text-white transition-colors" />
+                        <Twitter className="w-5 h-5 text-zinc-400 group-hover:text-white transition-colors" />
                       </a>
                     </div>
                   </div>
 
                   {/* Response time */}
-                  <div className="p-6 bg-orange-50 dark:bg-orange-500/10 rounded-2xl border border-orange-200 dark:border-orange-500/20">
-                    <h3 className="font-display text-lg font-semibold text-orange-900 dark:text-orange-400 mb-2">
+                  <div className="p-6 bg-orange-500/10 rounded-2xl border border-orange-500/20">
+                    <h3 className="font-display text-lg font-semibold text-orange-400 mb-2">
                       Quick Response
                     </h3>
-                    <p className="text-orange-800 dark:text-orange-300 text-sm">
+                    <p className="text-orange-300 text-sm">
                       I typically respond within 24 hours. For urgent filming inquiries,
                       please mention the date in your message.
                     </p>
@@ -338,10 +338,10 @@ export default function ContactPage() {
         <section className="py-16 bg-zinc-900">
           <div className="container">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-white mb-4">
                 Frequently Asked Questions
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+              <p className="text-zinc-400 mb-8">
                 Before reaching out, you might find your answer in our FAQ section.
               </p>
 
@@ -362,12 +362,12 @@ export default function ContactPage() {
                 ].map((faq, index) => (
                   <div
                     key={index}
-                    className="p-4 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800"
+                    className="p-4 bg-zinc-950 rounded-xl border border-zinc-800"
                   >
-                    <h4 className="font-semibold text-zinc-900 dark:text-white mb-2">
+                    <h4 className="font-semibold text-white mb-2">
                       {faq.q}
                     </h4>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="text-sm text-zinc-400">
                       {faq.a}
                     </p>
                   </div>

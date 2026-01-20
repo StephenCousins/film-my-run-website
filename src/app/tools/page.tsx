@@ -106,15 +106,15 @@ export default function ToolsPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-50 dark:bg-zinc-950">
+      <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
         {/* Hero */}
-        <section className="py-12 lg:py-20 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
+        <section className="py-12 lg:py-20 bg-zinc-900 border-b border-zinc-800">
           <div className="container">
             <div className="max-w-3xl">
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-white mb-6">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
                 Running <span className="text-orange-500">Tools</span>
               </h1>
-              <p className="text-xl text-zinc-600 dark:text-zinc-400">
+              <p className="text-xl text-zinc-400">
                 Free tools used by over 250,000 runners every week. Calculate pace, predict
                 race times, track parkrun stats, and visualize your routes.
               </p>
@@ -125,7 +125,7 @@ export default function ToolsPage() {
         {/* Main tools */}
         <section className="py-12 lg:py-16">
           <div className="container">
-            <h2 className="font-display text-2xl font-bold text-zinc-900 dark:text-white mb-8">
+            <h2 className="font-display text-2xl font-bold text-white mb-8">
               Featured Tools
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
@@ -135,7 +135,7 @@ export default function ToolsPage() {
                   <Link
                     key={tool.name}
                     href={tool.href}
-                    className="group bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6 hover:border-orange-500/50 hover:-translate-y-1 transition-all duration-300"
+                    className="group bg-zinc-900 rounded-2xl border border-zinc-800 p-6 hover:border-orange-500/50 hover:-translate-y-1 transition-all duration-300"
                   >
                     {/* Icon */}
                     <div
@@ -145,10 +145,10 @@ export default function ToolsPage() {
                     </div>
 
                     {/* Content */}
-                    <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-2 group-hover:text-orange-500 transition-colors">
+                    <h3 className="font-display text-xl font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
                       {tool.name}
                     </h3>
-                    <p className="text-zinc-600 dark:text-zinc-400 mb-4">{tool.description}</p>
+                    <p className="text-zinc-400 mb-4">{tool.description}</p>
 
                     {/* Stats and link */}
                     <div className="flex items-center justify-between">
@@ -175,10 +175,10 @@ export default function ToolsPage() {
         </section>
 
         {/* Calculator quick links */}
-        <section className="py-12 lg:py-16 bg-white dark:bg-zinc-900">
+        <section className="py-12 lg:py-16 bg-zinc-900">
           <div className="container">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="font-display text-2xl font-bold text-zinc-900 dark:text-white">
+              <h2 className="font-display text-2xl font-bold text-white">
                 Calculators
               </h2>
               <Link
@@ -196,10 +196,10 @@ export default function ToolsPage() {
                   <Link
                     key={tool.name}
                     href={tool.href}
-                    className="group p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl hover:bg-orange-500/10 transition-colors"
+                    className="group p-4 bg-zinc-800 rounded-xl hover:bg-orange-500/10 transition-colors"
                   >
                     <Icon className="w-6 h-6 text-orange-500 mb-2" />
-                    <div className="font-medium text-zinc-900 dark:text-white group-hover:text-orange-500 transition-colors text-sm">
+                    <div className="font-medium text-white group-hover:text-orange-500 transition-colors text-sm">
                       {tool.name}
                     </div>
                     <div className="text-xs text-zinc-500 mt-1">{tool.description}</div>
@@ -214,10 +214,10 @@ export default function ToolsPage() {
         <section className="py-16 lg:py-24">
           <div className="container">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-display text-3xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-3xl font-bold text-white mb-4">
                 Need Something Specific?
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+              <p className="text-zinc-400 mb-8">
                 Have a suggestion for a new tool or feature? We&apos;re always looking to
                 build tools that help runners train smarter and race faster.
               </p>

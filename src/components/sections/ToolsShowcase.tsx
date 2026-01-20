@@ -92,7 +92,7 @@ function ToolCard({ tool, index }: ToolCardProps) {
   return (
     <Link
       href={tool.href}
-      className="tool-card group relative p-6 bg-white dark:bg-zinc-800 rounded-2xl border border-zinc-200 dark:border-zinc-700 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 w-[320px] flex-shrink-0"
+      className="tool-card group relative p-6 bg-zinc-800 rounded-2xl border border-zinc-700 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 w-[320px] flex-shrink-0"
     >
       {/* Icon */}
       <div

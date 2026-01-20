@@ -89,7 +89,7 @@ function DesktopNavItem({ item, isActive }: NavItemProps) {
             'flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors',
             isActive
               ? 'text-orange-500'
-              : 'text-zinc-600 dark:text-zinc-300 hover:text-orange-500'
+              : 'text-zinc-300 hover:text-orange-500'
           )}
         >
           {item.name}
@@ -108,12 +108,12 @@ function DesktopNavItem({ item, isActive }: NavItemProps) {
             isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
           )}
         >
-          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-zinc-200 dark:border-zinc-800 py-2 min-w-[200px]">
+          <div className="bg-zinc-900 rounded-xl shadow-xl border border-zinc-800 py-2 min-w-[200px]">
             {item.children?.map((child) => (
               <Link
                 key={child.href}
                 href={child.href}
-                className="block px-4 py-2 text-sm text-zinc-600 dark:text-zinc-300 hover:text-orange-500 hover:bg-zinc-50 dark:hover:bg-zinc-800"
+                className="block px-4 py-2 text-sm text-zinc-300 hover:text-orange-500 hover:bg-zinc-800"
               >
                 {child.name}
               </Link>
@@ -131,7 +131,7 @@ function DesktopNavItem({ item, isActive }: NavItemProps) {
         'px-3 py-2 text-sm font-medium transition-colors',
         isActive
           ? 'text-orange-500'
-          : 'text-zinc-600 dark:text-zinc-300 hover:text-orange-500'
+          : 'text-zinc-300 hover:text-orange-500'
       )}
     >
       {item.name}
@@ -177,16 +177,16 @@ function MobileNav({ isOpen, onClose }: MobileNavProps) {
       {/* Menu */}
       <div
         className={cn(
-          'fixed inset-y-0 right-0 w-full max-w-sm bg-white dark:bg-zinc-950 z-50 lg:hidden',
+          'fixed inset-y-0 right-0 w-full max-w-sm bg-zinc-950 z-50 lg:hidden',
           'transform transition-transform duration-300 ease-out-expo',
           isOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
-        <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
+        <div className="flex items-center justify-between p-4 border-b border-zinc-800">
           <Logo />
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
+            className="p-2 rounded-full hover:bg-zinc-800"
           >
             <X className="w-6 h-6" />
           </button>
@@ -206,7 +206,7 @@ function MobileNav({ isOpen, onClose }: MobileNavProps) {
                     'block px-4 py-3 rounded-lg text-base font-medium transition-colors',
                     isActive
                       ? 'text-orange-500 bg-orange-50 dark:bg-orange-500/10'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+                      : 'text-zinc-300 hover:bg-zinc-800'
                   )}
                 >
                   {item.name}
@@ -232,7 +232,7 @@ function MobileNav({ isOpen, onClose }: MobileNavProps) {
         </nav>
 
         {/* Bottom section */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-zinc-200 dark:border-zinc-800 space-y-4">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-zinc-800 space-y-4">
           {/* Theme toggle */}
           <div className="flex items-center justify-between px-4">
             <span className="text-sm text-zinc-600 dark:text-zinc-400">Theme</span>
@@ -314,7 +314,7 @@ export default function Header() {
 
             {/* Mobile menu button */}
             <button
-              className="lg:hidden p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800"
+              className="lg:hidden p-2 rounded-full hover:bg-zinc-800"
               onClick={() => setMobileMenuOpen(true)}
             >
               <Menu className="w-6 h-6" />

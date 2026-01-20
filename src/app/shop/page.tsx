@@ -153,9 +153,9 @@ function ProductCard({ product }: { product: Product }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   return (
-    <div className="group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <div className="group bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Image */}
-      <Link href={`/shop/${product.slug}`} className="block relative aspect-square bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+      <Link href={`/shop/${product.slug}`} className="block relative aspect-square bg-zinc-800 overflow-hidden">
         <Image
           src={product.image}
           alt={product.name}
@@ -194,7 +194,7 @@ function ProductCard({ product }: { product: Product }) {
             e.preventDefault();
             setIsWishlisted(!isWishlisted);
           }}
-          className="absolute top-3 right-3 p-2 bg-white dark:bg-zinc-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-zinc-100 dark:hover:bg-zinc-700"
+          className="absolute top-3 right-3 p-2 bg-zinc-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-zinc-700"
         >
           <Heart
             className={cn(
@@ -221,7 +221,7 @@ function ProductCard({ product }: { product: Product }) {
 
         {/* Name */}
         <Link href={`/shop/${product.slug}`}>
-          <h3 className="font-display font-semibold text-zinc-900 dark:text-white group-hover:text-orange-500 transition-colors line-clamp-1 mb-2">
+          <h3 className="font-display font-semibold text-white group-hover:text-orange-500 transition-colors line-clamp-1 mb-2">
             {product.name}
           </h3>
         </Link>
@@ -229,7 +229,7 @@ function ProductCard({ product }: { product: Product }) {
         {/* Rating */}
         <div className="flex items-center gap-1 mb-3">
           <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-          <span className="text-sm font-medium text-zinc-900 dark:text-white">
+          <span className="text-sm font-medium text-white">
             {product.rating}
           </span>
           <span className="text-sm text-zinc-500">({product.reviews})</span>
@@ -288,15 +288,15 @@ export default function ShopPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-zinc-50 dark:bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}
-        <section className="py-12 lg:py-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
+        <section className="py-12 lg:py-16 bg-zinc-900 border-b border-zinc-800">
           <div className="container">
             <div className="max-w-2xl">
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
                 Shop
               </h1>
-              <p className="text-lg text-zinc-600 dark:text-zinc-400">
+              <p className="text-lg text-zinc-400">
                 Gear designed by runners, for runners. Quality equipment tested on
                 trails and roads around the world.
               </p>
@@ -305,7 +305,7 @@ export default function ShopPage() {
         </section>
 
         {/* Filters bar */}
-        <section className="py-4 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800 sticky top-16 lg:top-20 z-30">
+        <section className="py-4 bg-zinc-900 border-b border-zinc-800 sticky top-16 lg:top-20 z-30">
           <div className="container">
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
               {/* Search */}
@@ -316,7 +316,7 @@ export default function ShopPage() {
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-zinc-100 dark:bg-zinc-800 border border-transparent rounded-lg text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                  className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-transparent rounded-lg text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                 />
               </div>
 
@@ -330,7 +330,7 @@ export default function ShopPage() {
                       'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all',
                       activeCategory === cat
                         ? 'bg-orange-500 text-white'
-                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
+                        : 'bg-zinc-800 text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
                     )}
                   >
                     {cat}
@@ -343,7 +343,7 @@ export default function ShopPage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 py-2 bg-zinc-100 dark:bg-zinc-800 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  className="px-3 py-2 bg-zinc-800 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
                 >
                   <option value="featured">Featured</option>
                   <option value="price-low">Price: Low to High</option>
@@ -352,12 +352,12 @@ export default function ShopPage() {
                   <option value="newest">Newest</option>
                 </select>
 
-                <div className="hidden sm:flex items-center gap-1 p-1 bg-zinc-100 dark:bg-zinc-800 rounded-lg">
+                <div className="hidden sm:flex items-center gap-1 p-1 bg-zinc-800 rounded-lg">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={cn(
                       'p-2 rounded',
-                      viewMode === 'grid' ? 'bg-white dark:bg-zinc-700' : ''
+                      viewMode === 'grid' ? 'bg-zinc-700' : ''
                     )}
                   >
                     <Grid className="w-4 h-4" />
@@ -366,7 +366,7 @@ export default function ShopPage() {
                     onClick={() => setViewMode('list')}
                     className={cn(
                       'p-2 rounded',
-                      viewMode === 'list' ? 'bg-white dark:bg-zinc-700' : ''
+                      viewMode === 'list' ? 'bg-zinc-700' : ''
                     )}
                   >
                     <List className="w-4 h-4" />
@@ -410,7 +410,7 @@ export default function ShopPage() {
         </section>
 
         {/* Features */}
-        <section className="py-12 bg-white dark:bg-zinc-900 border-t border-zinc-200 dark:border-zinc-800">
+        <section className="py-12 bg-zinc-900 border-t border-zinc-800">
           <div className="container">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {[
@@ -420,7 +420,7 @@ export default function ShopPage() {
                 { title: 'Quality Guarantee', desc: 'Tested by runners' },
               ].map((feature) => (
                 <div key={feature.title} className="text-center">
-                  <div className="font-display font-semibold text-zinc-900 dark:text-white">
+                  <div className="font-display font-semibold text-white">
                     {feature.title}
                   </div>
                   <div className="text-sm text-zinc-500">{feature.desc}</div>

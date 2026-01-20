@@ -121,7 +121,7 @@ function ServiceCard({ service, index }: ServiceCardProps) {
           {service.features.map((feature) => (
             <li
               key={feature}
-              className="flex items-center gap-3 text-zinc-700 dark:text-zinc-300"
+              className="flex items-center gap-3 text-zinc-300"
             >
               <div className="w-5 h-5 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
                 <Check className="w-3 h-3 text-orange-500" />
@@ -199,7 +199,7 @@ export default function ServicesTeaser() {
   return (
     <section
       ref={sectionRef}
-      className="py-24 lg:py-32 bg-zinc-50 dark:bg-zinc-900"
+      className="py-24 lg:py-32 bg-zinc-900"
       style={{ position: 'relative', zIndex: 1 }}
     >
       <div className="container">

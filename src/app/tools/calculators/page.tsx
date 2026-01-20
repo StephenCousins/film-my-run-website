@@ -417,7 +417,7 @@ export default function CalculatorsPage() {
                     <select
                       value={activeCalculator}
                       onChange={(e) => setActiveCalculator(e.target.value)}
-                      className="w-full px-4 py-3 bg-zinc-50 dark:bg-zinc-900 border border-zinc-800 rounded-xl text-white"
+                      className="w-full px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white"
                     >
                       {calculators.map((calc) => (
                         <option key={calc.id} value={calc.id}>

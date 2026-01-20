@@ -72,19 +72,19 @@ export default function RaceMapPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-50 dark:bg-zinc-950">
+      <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
         {/* Hero */}
-        <section className="py-12 lg:py-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
+        <section className="py-12 lg:py-16 bg-zinc-900 border-b border-zinc-800">
           <div className="container">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-500/10 text-blue-600 dark:text-blue-400 rounded-full text-sm font-medium mb-4">
                 <Map className="w-4 h-4" />
                 Visualization Tool
               </div>
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
                 Race Map
               </h1>
-              <p className="text-lg text-zinc-600 dark:text-zinc-400">
+              <p className="text-lg text-zinc-400">
                 Visualize race routes with elevation profiles, distance markers, and key waypoints.
                 Upload a GPX file or explore a sample route.
               </p>
@@ -105,11 +105,11 @@ export default function RaceMapPage() {
                     onChange={handleFileUpload}
                     className="hidden"
                   />
-                  <div className="border-2 border-dashed border-zinc-300 dark:border-zinc-700 rounded-2xl p-12 text-center hover:border-orange-500 dark:hover:border-orange-500 transition-colors group-hover:bg-orange-500/5">
-                    <div className="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-800 flex items-center justify-center mx-auto mb-4 group-hover:bg-orange-500/10 transition-colors">
+                  <div className="border-2 border-dashed border-zinc-700 rounded-2xl p-12 text-center hover:border-orange-500 dark:hover:border-orange-500 transition-colors group-hover:bg-orange-500/5">
+                    <div className="w-16 h-16 rounded-full bg-zinc-800 flex items-center justify-center mx-auto mb-4 group-hover:bg-orange-500/10 transition-colors">
                       <Upload className="w-8 h-8 text-zinc-400 group-hover:text-orange-500 transition-colors" />
                     </div>
-                    <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-2">
+                    <h3 className="font-display text-xl font-bold text-white mb-2">
                       Upload Route File
                     </h3>
                     <p className="text-zinc-500 mb-4">
@@ -122,10 +122,10 @@ export default function RaceMapPage() {
                 {/* Divider */}
                 <div className="relative my-8">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-zinc-200 dark:border-zinc-800" />
+                    <div className="w-full border-t border-zinc-800" />
                   </div>
                   <div className="relative flex justify-center">
-                    <span className="px-4 text-sm text-zinc-500 bg-zinc-50 dark:bg-zinc-950">
+                    <span className="px-4 text-sm text-zinc-500 bg-zinc-950">
                       or try a demo
                     </span>
                   </div>
@@ -135,20 +135,20 @@ export default function RaceMapPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <button
                     onClick={handleDemoLoad}
-                    className="p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-orange-500 transition-colors text-left group"
+                    className="p-4 bg-zinc-900 rounded-xl border border-zinc-800 hover:border-orange-500 transition-colors text-left group"
                   >
                     <Mountain className="w-6 h-6 text-orange-500 mb-2" />
-                    <div className="font-semibold text-zinc-900 dark:text-white group-hover:text-orange-500 transition-colors">
+                    <div className="font-semibold text-white group-hover:text-orange-500 transition-colors">
                       London Marathon
                     </div>
                     <div className="text-sm text-zinc-500">42.2km • +50m</div>
                   </button>
                   <button
                     onClick={handleDemoLoad}
-                    className="p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 hover:border-orange-500 transition-colors text-left group"
+                    className="p-4 bg-zinc-900 rounded-xl border border-zinc-800 hover:border-orange-500 transition-colors text-left group"
                   >
                     <Mountain className="w-6 h-6 text-orange-500 mb-2" />
-                    <div className="font-semibold text-zinc-900 dark:text-white group-hover:text-orange-500 transition-colors">
+                    <div className="font-semibold text-white group-hover:text-orange-500 transition-colors">
                       UTMB
                     </div>
                     <div className="text-sm text-zinc-500">171km • +10,000m</div>
@@ -177,25 +177,25 @@ export default function RaceMapPage() {
 
                     {/* Map controls */}
                     <div className="absolute top-4 right-4 flex flex-col gap-2">
-                      <button className="p-2 bg-white dark:bg-zinc-900 rounded-lg shadow hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+                      <button className="p-2 bg-zinc-900 rounded-lg shadow hover:bg-zinc-800 transition-colors">
                         <Maximize2 className="w-5 h-5" />
                       </button>
-                      <button className="p-2 bg-white dark:bg-zinc-900 rounded-lg shadow hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors">
+                      <button className="p-2 bg-zinc-900 rounded-lg shadow hover:bg-zinc-800 transition-colors">
                         <Navigation className="w-5 h-5" />
                       </button>
                     </div>
                   </div>
 
                   {/* Elevation profile */}
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6">
+                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-display font-bold text-zinc-900 dark:text-white">
+                      <h3 className="font-display font-bold text-white">
                         Elevation Profile
                       </h3>
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => setIsPlaying(!isPlaying)}
-                          className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+                          className="p-2 rounded-lg hover:bg-zinc-800 transition-colors"
                         >
                           {isPlaying ? (
                             <Pause className="w-5 h-5" />
@@ -207,7 +207,7 @@ export default function RaceMapPage() {
                     </div>
 
                     {/* Simple elevation viz */}
-                    <div className="relative h-32 bg-zinc-50 dark:bg-zinc-800 rounded-lg overflow-hidden">
+                    <div className="relative h-32 bg-zinc-800 rounded-lg overflow-hidden">
                       {/* Elevation line (simplified) */}
                       <svg className="absolute inset-0 w-full h-full" preserveAspectRatio="none">
                         <path
@@ -255,8 +255,8 @@ export default function RaceMapPage() {
                 {/* Sidebar */}
                 <div className="space-y-6">
                   {/* Route stats */}
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6">
-                    <h3 className="font-display font-bold text-zinc-900 dark:text-white mb-4">
+                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+                    <h3 className="font-display font-bold text-white mb-4">
                       Route Stats
                     </h3>
                     <dl className="space-y-3">
@@ -265,7 +265,7 @@ export default function RaceMapPage() {
                           <Navigation className="w-4 h-4" />
                           Distance
                         </dt>
-                        <dd className="font-mono font-bold text-zinc-900 dark:text-white">
+                        <dd className="font-mono font-bold text-white">
                           {sampleRouteStats.distance}km
                         </dd>
                       </div>
@@ -274,7 +274,7 @@ export default function RaceMapPage() {
                           <TrendingUp className="w-4 h-4" />
                           Elevation Gain
                         </dt>
-                        <dd className="font-mono font-bold text-zinc-900 dark:text-white">
+                        <dd className="font-mono font-bold text-white">
                           {sampleRouteStats.elevation}
                         </dd>
                       </div>
@@ -283,7 +283,7 @@ export default function RaceMapPage() {
                           <Mountain className="w-4 h-4" />
                           Max Elevation
                         </dt>
-                        <dd className="font-mono font-bold text-zinc-900 dark:text-white">
+                        <dd className="font-mono font-bold text-white">
                           {sampleRouteStats.maxElevation}
                         </dd>
                       </div>
@@ -292,7 +292,7 @@ export default function RaceMapPage() {
                           <Clock className="w-4 h-4" />
                           Est. Time
                         </dt>
-                        <dd className="font-mono font-bold text-zinc-900 dark:text-white">
+                        <dd className="font-mono font-bold text-white">
                           {sampleRouteStats.estimatedTime}
                         </dd>
                       </div>
@@ -300,8 +300,8 @@ export default function RaceMapPage() {
                   </div>
 
                   {/* Actions */}
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6">
-                    <h3 className="font-display font-bold text-zinc-900 dark:text-white mb-4">
+                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+                    <h3 className="font-display font-bold text-white mb-4">
                       Actions
                     </h3>
                     <div className="space-y-2">
@@ -309,7 +309,7 @@ export default function RaceMapPage() {
                         <Download className="w-5 h-5" />
                         Download GPX
                       </button>
-                      <button className="w-full flex items-center justify-center gap-2 py-3 border border-zinc-200 dark:border-zinc-700 rounded-xl hover:border-orange-500 transition-colors">
+                      <button className="w-full flex items-center justify-center gap-2 py-3 border border-zinc-700 rounded-xl hover:border-orange-500 transition-colors">
                         <Share2 className="w-5 h-5" />
                         Share Route
                       </button>
@@ -317,25 +317,25 @@ export default function RaceMapPage() {
                   </div>
 
                   {/* Quick links */}
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6">
-                    <h3 className="font-display font-bold text-zinc-900 dark:text-white mb-4">
+                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+                    <h3 className="font-display font-bold text-white mb-4">
                       More Tools
                     </h3>
                     <div className="space-y-2">
                       <Link
                         href="/tools/calculators"
-                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors group"
+                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-800 transition-colors group"
                       >
-                        <span className="text-zinc-700 dark:text-zinc-300 group-hover:text-orange-500">
+                        <span className="text-zinc-300 group-hover:text-orange-500">
                           Pace Calculator
                         </span>
                         <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-orange-500" />
                       </Link>
                       <Link
                         href="/tools/parkrun"
-                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors group"
+                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-800 transition-colors group"
                       >
-                        <span className="text-zinc-700 dark:text-zinc-300 group-hover:text-orange-500">
+                        <span className="text-zinc-300 group-hover:text-orange-500">
                           parkrun Stats
                         </span>
                         <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-orange-500" />

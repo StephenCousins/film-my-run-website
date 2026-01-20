@@ -67,19 +67,19 @@ export default function ParkrunPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-50 dark:bg-zinc-950">
+      <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
         {/* Hero */}
-        <section className="py-12 lg:py-16 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
+        <section className="py-12 lg:py-16 bg-zinc-900 border-b border-zinc-800">
           <div className="container">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-400 rounded-full text-sm font-medium mb-4">
                 <Users className="w-4 h-4" />
                 parkrun Stats
               </div>
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
                 Parkrun Statistics
               </h1>
-              <p className="text-lg text-zinc-600 dark:text-zinc-400">
+              <p className="text-lg text-zinc-400">
                 Track your parkrun history, compare performances, and visualize your progress
                 over time. Enter your athlete ID to get started.
               </p>
@@ -88,7 +88,7 @@ export default function ParkrunPage() {
         </section>
 
         {/* Search */}
-        <section className="py-8 bg-white dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
+        <section className="py-8 bg-zinc-900 border-b border-zinc-800">
           <div className="container">
             <form onSubmit={handleSearch} className="max-w-xl">
               <div className="flex gap-3">
@@ -99,7 +99,7 @@ export default function ParkrunPage() {
                     value={athleteId}
                     onChange={(e) => setAthleteId(e.target.value)}
                     placeholder="Enter parkrun athlete ID (e.g., A12345)"
-                    className="w-full pl-12 pr-4 py-3 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                    className="w-full pl-12 pr-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                   />
                 </div>
                 <button
@@ -135,10 +135,10 @@ export default function ParkrunPage() {
                   return (
                     <div
                       key={stat.label}
-                      className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6"
+                      className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6"
                     >
                       <Icon className="w-5 h-5 text-orange-500 mb-3" />
-                      <div className="font-mono text-2xl font-bold text-zinc-900 dark:text-white mb-1">
+                      <div className="font-mono text-2xl font-bold text-white mb-1">
                         {stat.value}
                       </div>
                       <div className="text-sm text-zinc-500">{stat.label}</div>
@@ -150,9 +150,9 @@ export default function ParkrunPage() {
               <div className="grid lg:grid-cols-3 gap-8">
                 {/* Recent runs */}
                 <div className="lg:col-span-2">
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden">
-                    <div className="p-6 border-b border-zinc-200 dark:border-zinc-800">
-                      <h2 className="font-display text-xl font-bold text-zinc-900 dark:text-white">
+                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
+                    <div className="p-6 border-b border-zinc-800">
+                      <h2 className="font-display text-xl font-bold text-white">
                         Recent Runs
                       </h2>
                     </div>
@@ -160,10 +160,10 @@ export default function ParkrunPage() {
                       {recentRuns.map((run, index) => (
                         <div
                           key={index}
-                          className="flex items-center justify-between p-4 hover:bg-zinc-50 dark:hover:bg-zinc-800/50 transition-colors"
+                          className="flex items-center justify-between p-4 hover:bg-zinc-800/50 transition-colors"
                         >
                           <div>
-                            <div className="font-medium text-zinc-900 dark:text-white">
+                            <div className="font-medium text-white">
                               {run.event}
                             </div>
                             <div className="text-sm text-zinc-500">{run.date}</div>
@@ -181,32 +181,32 @@ export default function ParkrunPage() {
                 {/* Sidebar */}
                 <div className="space-y-6">
                   {/* Profile card */}
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6">
-                    <h3 className="font-display font-bold text-zinc-900 dark:text-white mb-4">
+                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+                    <h3 className="font-display font-bold text-white mb-4">
                       Athlete Profile
                     </h3>
                     <dl className="space-y-3">
                       <div className="flex justify-between">
                         <dt className="text-zinc-500">Home Event</dt>
-                        <dd className="font-medium text-zinc-900 dark:text-white">
+                        <dd className="font-medium text-white">
                           {sampleStats.homeEvent}
                         </dd>
                       </div>
                       <div className="flex justify-between">
                         <dt className="text-zinc-500">Different Events</dt>
-                        <dd className="font-medium text-zinc-900 dark:text-white">
+                        <dd className="font-medium text-white">
                           {sampleStats.differentEvents}
                         </dd>
                       </div>
                       <div className="flex justify-between">
                         <dt className="text-zinc-500">Volunteering</dt>
-                        <dd className="font-medium text-zinc-900 dark:text-white">
+                        <dd className="font-medium text-white">
                           {sampleStats.volunteeringCount} times
                         </dd>
                       </div>
                       <div className="flex justify-between">
                         <dt className="text-zinc-500">First Run</dt>
-                        <dd className="font-medium text-zinc-900 dark:text-white">
+                        <dd className="font-medium text-white">
                           {sampleStats.firstRun}
                         </dd>
                       </div>
@@ -214,34 +214,34 @@ export default function ParkrunPage() {
                   </div>
 
                   {/* Quick links */}
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-6">
-                    <h3 className="font-display font-bold text-zinc-900 dark:text-white mb-4">
+                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+                    <h3 className="font-display font-bold text-white mb-4">
                       More Tools
                     </h3>
                     <div className="space-y-2">
                       <Link
                         href="/tools/calculators"
-                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors group"
+                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-800 transition-colors group"
                       >
-                        <span className="text-zinc-700 dark:text-zinc-300 group-hover:text-orange-500">
+                        <span className="text-zinc-300 group-hover:text-orange-500">
                           Pace Calculator
                         </span>
                         <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-orange-500" />
                       </Link>
                       <Link
                         href="/tools/race-map"
-                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors group"
+                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-800 transition-colors group"
                       >
-                        <span className="text-zinc-700 dark:text-zinc-300 group-hover:text-orange-500">
+                        <span className="text-zinc-300 group-hover:text-orange-500">
                           Race Map
                         </span>
                         <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-orange-500" />
                       </Link>
                       <Link
                         href="/races"
-                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors group"
+                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-800 transition-colors group"
                       >
-                        <span className="text-zinc-700 dark:text-zinc-300 group-hover:text-orange-500">
+                        <span className="text-zinc-300 group-hover:text-orange-500">
                           Race Dashboard
                         </span>
                         <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-orange-500" />
@@ -262,10 +262,10 @@ export default function ParkrunPage() {
                 <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-6">
                   <BarChart3 className="w-10 h-10 text-green-500" />
                 </div>
-                <h2 className="font-display text-2xl font-bold text-zinc-900 dark:text-white mb-4">
+                <h2 className="font-display text-2xl font-bold text-white mb-4">
                   Enter Your Athlete ID
                 </h2>
-                <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+                <p className="text-zinc-400 mb-8">
                   Your parkrun athlete ID can be found on your barcode or on the parkrun website.
                   Enter it above to view your complete parkrun history and statistics.
                 </p>
@@ -292,7 +292,7 @@ export default function ParkrunPage() {
                     return (
                       <div key={feature.title} className="p-4">
                         <Icon className="w-6 h-6 text-orange-500 mb-3" />
-                        <h3 className="font-semibold text-zinc-900 dark:text-white mb-1">
+                        <h3 className="font-semibold text-white mb-1">
                           {feature.title}
                         </h3>
                         <p className="text-sm text-zinc-500">{feature.description}</p>

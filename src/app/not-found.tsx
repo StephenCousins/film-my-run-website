@@ -5,7 +5,7 @@ import { Home, ArrowLeft, Search } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-zinc-950 flex items-center justify-center px-4">
       <div className="max-w-md w-full text-center">
         {/* 404 Number */}
         <div className="relative mb-8">
@@ -20,10 +20,10 @@ export default function NotFound() {
         </div>
 
         {/* Message */}
-        <h1 className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mb-4">
+        <h1 className="font-display text-2xl sm:text-3xl font-bold text-white mb-4">
           Page Not Found
         </h1>
-        <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+        <p className="text-zinc-400 mb-8">
           Looks like this page went for a run and never came back.
           It might have been moved, deleted, or maybe it never existed.
         </p>
@@ -39,7 +39,7 @@ export default function NotFound() {
           </Link>
           <button
             onClick={() => window.history.back()}
-            className="inline-flex items-center gap-2 px-6 py-3 border border-zinc-300 dark:border-zinc-700 rounded-full hover:border-orange-500 transition-colors text-zinc-700 dark:text-zinc-300"
+            className="inline-flex items-center gap-2 px-6 py-3 border border-zinc-700 rounded-full hover:border-orange-500 transition-colors text-zinc-300"
           >
             <ArrowLeft className="w-5 h-5" />
             Go Back
@@ -47,7 +47,7 @@ export default function NotFound() {
         </div>
 
         {/* Helpful links */}
-        <div className="mt-12 pt-8 border-t border-zinc-200 dark:border-zinc-800">
+        <div className="mt-12 pt-8 border-t border-zinc-800">
           <p className="text-sm text-zinc-500 mb-4">Maybe try one of these:</p>
           <div className="flex flex-wrap justify-center gap-3">
             {[
@@ -59,7 +59,7 @@ export default function NotFound() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="px-4 py-2 text-sm bg-zinc-100 dark:bg-zinc-900 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
+                className="px-4 py-2 text-sm bg-zinc-900 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
               >
                 {link.name}
               </Link>

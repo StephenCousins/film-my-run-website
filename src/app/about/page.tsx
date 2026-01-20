@@ -101,7 +101,7 @@ export default function AboutPage() {
         </section>
 
         {/* Story section */}
-        <section className="py-24 lg:py-32 bg-white dark:bg-zinc-950">
+        <section className="py-24 lg:py-32 bg-zinc-950">
           <div className="container">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               {/* Image */}
@@ -119,7 +119,7 @@ export default function AboutPage() {
                 <span className="text-orange-500 text-sm font-semibold uppercase tracking-wider">
                   My Story
                 </span>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mt-2 mb-6">
+                <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mt-2 mb-6">
                   From First Marathon to Ultra Running
                 </h2>
                 <div className="prose dark:prose-invert prose-zinc max-w-none">
@@ -152,13 +152,13 @@ export default function AboutPage() {
         </section>
 
         {/* Three pillars */}
-        <section className="py-24 lg:py-32 bg-zinc-50 dark:bg-zinc-900">
+        <section className="py-24 lg:py-32 bg-zinc-900">
           <div className="container">
             <div className="text-center max-w-2xl mx-auto mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
                 What I Do
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-zinc-400">
                 Film My Run has evolved into three distinct areas, each driven by a passion
                 for running and helping others in the community.
               </p>
@@ -166,14 +166,14 @@ export default function AboutPage() {
 
             <div className="grid md:grid-cols-3 gap-8">
               {/* Filmmaking */}
-              <div className="p-8 bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+              <div className="p-8 bg-zinc-950 rounded-2xl border border-zinc-800">
                 <div className="w-14 h-14 rounded-xl bg-orange-500/10 flex items-center justify-center mb-6">
                   <Camera className="w-7 h-7 text-orange-500" />
                 </div>
-                <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-3">
+                <h3 className="font-display text-xl font-bold text-white mb-3">
                   Filmmaking
                 </h3>
-                <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+                <p className="text-zinc-400 mb-6">
                   Documentary-style race films that capture the spirit of running.
                   From personal journeys to full event coverage.
                 </p>
@@ -186,14 +186,14 @@ export default function AboutPage() {
               </div>
 
               {/* Tools */}
-              <div className="p-8 bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+              <div className="p-8 bg-zinc-950 rounded-2xl border border-zinc-800">
                 <div className="w-14 h-14 rounded-xl bg-blue-500/10 flex items-center justify-center mb-6">
                   <Code className="w-7 h-7 text-blue-500" />
                 </div>
-                <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-3">
+                <h3 className="font-display text-xl font-bold text-white mb-3">
                   Running Tools
                 </h3>
-                <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+                <p className="text-zinc-400 mb-6">
                   Free calculators, dashboards, and apps built for runners.
                   Used by 250,000+ people every week.
                 </p>
@@ -206,14 +206,14 @@ export default function AboutPage() {
               </div>
 
               {/* Content */}
-              <div className="p-8 bg-white dark:bg-zinc-950 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+              <div className="p-8 bg-zinc-950 rounded-2xl border border-zinc-800">
                 <div className="w-14 h-14 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-6">
                   <Heart className="w-7 h-7 text-emerald-500" />
                 </div>
-                <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-3">
+                <h3 className="font-display text-xl font-bold text-white mb-3">
                   Content & Community
                 </h3>
-                <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+                <p className="text-zinc-400 mb-6">
                   Race reports, training insights, and gear reviews.
                   Sharing 15 years of running experience.
                 </p>
@@ -229,13 +229,13 @@ export default function AboutPage() {
         </section>
 
         {/* Timeline */}
-        <section className="py-24 lg:py-32 bg-white dark:bg-zinc-950">
+        <section className="py-24 lg:py-32 bg-zinc-950">
           <div className="container">
             <div className="text-center max-w-2xl mx-auto mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
                 Running Milestones
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400">
+              <p className="text-zinc-400">
                 Key moments from 15 years of running adventures.
               </p>
             </div>
@@ -251,7 +251,7 @@ export default function AboutPage() {
                     <div className="font-mono text-orange-500 text-sm mb-1">
                       {milestone.year}
                     </div>
-                    <div className="text-lg font-medium text-zinc-900 dark:text-white">
+                    <div className="text-lg font-medium text-white">
                       {milestone.event}
                     </div>
                   </div>
@@ -301,13 +301,13 @@ export default function AboutPage() {
         )}
 
         {/* CTA */}
-        <section className="py-24 lg:py-32 bg-white dark:bg-zinc-950">
+        <section className="py-24 lg:py-32 bg-zinc-950">
           <div className="container">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
                 Let's Connect
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+              <p className="text-zinc-400 mb-8">
                 Whether you want to chat about running, discuss a filming project, or just
                 say hello - I'd love to hear from you.
               </p>
@@ -320,7 +320,7 @@ export default function AboutPage() {
                 </Link>
                 <Link
                   href="/blog"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-white font-semibold rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-800 text-white font-semibold rounded-full hover:bg-zinc-700 transition-colors"
                 >
                   Read the Blog
                 </Link>

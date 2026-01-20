@@ -193,7 +193,7 @@ export default function StatsBanner() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-16 lg:py-20 bg-zinc-50 dark:bg-zinc-900/50 overflow-hidden"
+      className="relative py-16 lg:py-20 bg-zinc-900/50 overflow-hidden"
       style={{ position: 'relative', zIndex: 1 }}
     >
       {/* Subtle background pattern */}
