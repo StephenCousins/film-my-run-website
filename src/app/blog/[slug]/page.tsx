@@ -7,6 +7,9 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import prisma from '@/lib/db';
 
+// Force dynamic rendering - fetch data at runtime, not build time
+export const dynamic = 'force-dynamic';
+
 // ============================================
 // TYPES
 // ============================================
@@ -126,17 +129,6 @@ async function getRelatedPosts(currentSlug: string): Promise<RelatedPost[]> {
   });
 }
 
-async function getAllSlugs() {
-  const posts = await prisma.post.findMany({
-    where: {
-      status: 'published',
-      postType: 'post',
-    },
-    select: { slug: true },
-  });
-
-  return posts.map((post) => ({ slug: post.slug }));
-}
 
 // ============================================
 // METADATA
@@ -167,10 +159,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-// Generate static paths for all blog posts
-export async function generateStaticParams() {
-  return getAllSlugs();
-}
 
 // ============================================
 // SHARE BUTTONS
