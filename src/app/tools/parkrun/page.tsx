@@ -1,309 +1,419 @@
 'use client';
 
-import { useState } from 'react';
-import Link from 'next/link';
+import { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import {
-  Search,
-  TrendingUp,
-  Calendar,
-  Clock,
-  Award,
-  Users,
+  Activity,
+  Trophy,
+  Medal,
   MapPin,
-  ChevronRight,
-  BarChart3,
-  Target,
+  Calendar,
+  TrendingUp,
+  Clock,
+  Users,
+  Flame,
+  ChartBar,
+  Award,
+  Sparkles,
+  Globe,
+  AlertCircle,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { cn } from '@/lib/utils';
 
-// ============================================
-// SAMPLE DATA
-// ============================================
+// Components
+import { ParkrunStatCard, SubStat } from '@/components/parkrun/ParkrunStatCard';
+import { RecentRunsTable } from '@/components/parkrun/RecentRunsTable';
+import { PaceChart } from '@/components/parkrun/PaceChart';
+import { YearCard, YearBarChart } from '@/components/parkrun/YearCard';
+import { VenueCard } from '@/components/parkrun/VenueCard';
+import { VenueMap } from '@/components/parkrun/VenueMap';
+import { AgeCategoryChart } from '@/components/parkrun/AgeCategoryChart';
+import { AchievementBadge, PBProgression, StreakDisplay } from '@/components/parkrun/AchievementBadge';
+import { InsightsSection } from '@/components/parkrun/InsightsSection';
+import { RankingsSearch } from '@/components/parkrun/RankingsSearch';
 
-const sampleStats = {
-  totalRuns: 247,
-  totalDistance: 1235,
-  averageTime: '22:34',
-  pb: '19:12',
-  firstRun: '2011-01-15',
-  lastRun: '2024-01-13',
-  homeEvent: 'Bushy parkrun',
-  differentEvents: 42,
-  volunteeringCount: 23,
-};
+// Types
+import type {
+  ParkrunResult,
+  YearlyStats,
+  VenueStats,
+  AgeCategoryStats,
+  VenueCoordinate,
+  ParkrunMetadata,
+} from '@/lib/parkrun-types';
 
-const recentRuns = [
-  { date: '2024-01-13', event: 'Bushy parkrun', time: '21:45', position: 34 },
-  { date: '2024-01-06', event: 'Richmond parkrun', time: '22:12', position: 28 },
-  { date: '2023-12-30', event: 'Bushy parkrun', time: '21:33', position: 41 },
-  { date: '2023-12-23', event: 'Fulham Palace parkrun', time: '22:45', position: 52 },
-  { date: '2023-12-16', event: 'Bushy parkrun', time: '21:28', position: 37 },
-];
+interface ParkrunData {
+  ok: boolean;
+  parkruns: ParkrunResult[];
+  recentRuns: ParkrunResult[];
+  yearlyStats: YearlyStats[];
+  venues: VenueStats[];
+  ageCategoryStats: AgeCategoryStats[];
+  venueCoordinates: VenueCoordinate[];
+  metadata: ParkrunMetadata;
+  pbProgression: { date: string; time_seconds: number; venue: string }[];
+  streakInfo: {
+    currentStreak: number;
+    longestStreak: number;
+    longestStreakStart: string;
+    longestStreakEnd: string;
+  };
+  monthlyStats: { month: string; runs: number; average_time: number }[];
+  insights: {
+    rollingAverage: number;
+    seasonalAverages: {
+      winter: number;
+      spring: number;
+      summer: number;
+      autumn: number;
+    };
+    bestSeason: 'winter' | 'spring' | 'summer' | 'autumn';
+    fastestVenues: VenueStats[];
+    totalImprovement: number;
+  };
+  achievements: {
+    id: string;
+    name: string;
+    description: string;
+    icon: string;
+    earned: boolean;
+    earnedDate?: string;
+    category: 'milestone' | 'venue' | 'speed' | 'streak' | 'special';
+  }[];
+  error?: string;
+}
 
-// ============================================
-// PARKRUN PAGE
-// ============================================
+// Section wrapper component
+function Section({
+  id,
+  title,
+  icon: Icon,
+  children,
+  className = '',
+}: {
+  id: string;
+  title: string;
+  icon: React.ElementType;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section id={id} className={`py-12 lg:py-16 ${className}`}>
+      <div className="container">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="p-2 rounded-xl bg-green-500/10">
+            <Icon className="w-5 h-5 text-green-500" />
+          </div>
+          <h2 className="font-display text-2xl font-bold text-white">{title}</h2>
+        </div>
+        {children}
+      </div>
+    </section>
+  );
+}
 
 export default function ParkrunPage() {
-  const [athleteId, setAthleteId] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [hasSearched, setHasSearched] = useState(false);
+  const [data, setData] = useState<ParkrunData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const yearScrollRef = useRef<HTMLDivElement>(null);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!athleteId.trim()) return;
+  // Fetch data on mount
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        setIsLoading(true);
+        const res = await fetch('/api/parkrun');
+        const json = await res.json();
 
-    setIsLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      setHasSearched(true);
-    }, 1500);
-  };
+        if (!json.ok) {
+          throw new Error(json.error || 'Failed to fetch parkrun data');
+        }
+
+        setData(json);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load data');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
+          <div className="container py-20">
+            <div className="flex flex-col items-center justify-center">
+              <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mb-4" />
+              <p className="text-zinc-400">Loading your parkrun stats...</p>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  // Error state
+  if (error || !data) {
+    return (
+      <>
+        <Header />
+        <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
+          <div className="container py-20">
+            <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
+              <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-4">
+                <AlertCircle className="w-8 h-8 text-red-500" />
+              </div>
+              <h2 className="text-xl font-bold text-white mb-2">Unable to load data</h2>
+              <p className="text-zinc-400 mb-6">{error || 'Something went wrong'}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-6 py-3 bg-green-500 text-white font-medium rounded-xl hover:bg-green-600 transition-colors"
+              >
+                Try again
+              </button>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </>
+    );
+  }
+
+  // Calculate cumulative totals for year cards
+  const cumulativeTotals = data.yearlyStats.reduce<number[]>((acc, stat, index) => {
+    if (index === 0) {
+      acc.push(stat.runs);
+    } else {
+      acc.push(acc[index - 1] + stat.runs);
+    }
+    return acc;
+  }, []);
 
   return (
     <>
       <Header />
 
       <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
-        {/* Hero */}
-        <section className="py-12 lg:py-16 bg-zinc-900 border-b border-zinc-800">
+        {/* ==================== HERO SECTION ==================== */}
+        <section className="py-12 lg:py-20 bg-gradient-to-b from-zinc-900 to-zinc-950 border-b border-zinc-800">
           <div className="container">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 text-green-600 dark:text-green-400 rounded-full text-sm font-medium mb-4">
-                <Users className="w-4 h-4" />
+            {/* Header */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center mb-10"
+            >
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 text-green-400 rounded-full text-sm font-medium mb-4">
+                <Activity className="w-4 h-4" />
+                My parkrun Journey
+              </div>
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-2">
                 parkrun Stats
-              </div>
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-                Parkrun Statistics
               </h1>
-              <p className="text-lg text-zinc-400">
-                Track your parkrun history, compare performances, and visualize your progress
-                over time. Enter your athlete ID to get started.
+              <p className="text-zinc-400">
+                {data.metadata.firstParkrunDate} – {data.metadata.lastParkrunDate}
               </p>
+            </motion.div>
+
+            {/* Big stats */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+              <ParkrunStatCard
+                label="Total Runs"
+                value={data.metadata.totalParkruns}
+                subValue={`${data.metadata.totalDistanceKm}km total distance`}
+                icon={<Calendar className="w-6 h-6 text-green-500" />}
+              />
+              <ParkrunStatCard
+                label="Personal Best"
+                value={data.metadata.personalBestFormatted}
+                subValue={`at ${data.metadata.personalBestVenue}`}
+                icon={<Trophy className="w-6 h-6 text-amber-500" />}
+                highlight
+              />
+              <ParkrunStatCard
+                label="Best Position"
+                value={data.metadata.bestPosition}
+                subValue="in age category"
+                icon={<Medal className="w-6 h-6 text-amber-400" />}
+              />
+              <ParkrunStatCard
+                label="Unique Venues"
+                value={data.metadata.uniqueVenues}
+                subValue="different parkruns"
+                icon={<MapPin className="w-6 h-6 text-purple-500" />}
+              />
+            </div>
+
+            {/* Sub stats */}
+            <div className="flex items-center justify-center gap-8 flex-wrap">
+              <SubStat label="First Run" value={data.metadata.firstParkrunDate} />
+              <div className="w-px h-8 bg-zinc-800" />
+              <SubStat label="Last Run" value={data.metadata.lastParkrunDate} />
+              <div className="w-px h-8 bg-zinc-800 hidden sm:block" />
+              <SubStat label="PB Date" value={data.metadata.personalBestDate} />
             </div>
           </div>
         </section>
 
-        {/* Search */}
-        <section className="py-8 bg-zinc-900 border-b border-zinc-800">
-          <div className="container">
-            <form onSubmit={handleSearch} className="max-w-xl">
-              <div className="flex gap-3">
-                <div className="relative flex-1">
-                  <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
-                  <input
-                    type="text"
-                    value={athleteId}
-                    onChange={(e) => setAthleteId(e.target.value)}
-                    placeholder="Enter parkrun athlete ID (e.g., A12345)"
-                    className="w-full pl-12 pr-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  disabled={isLoading || !athleteId.trim()}
-                  className={cn(
-                    'px-6 py-3 font-semibold rounded-xl transition-all',
-                    isLoading || !athleteId.trim()
-                      ? 'bg-zinc-200 dark:bg-zinc-700 text-zinc-500 cursor-not-allowed'
-                      : 'bg-orange-500 text-white hover:bg-orange-600'
-                  )}
-                >
-                  {isLoading ? 'Loading...' : 'Search'}
-                </button>
-              </div>
-            </form>
+        {/* ==================== RECENT RUNS ==================== */}
+        <Section id="recent" title="Recent Runs" icon={Clock}>
+          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
+            <RecentRunsTable runs={data.recentRuns} />
           </div>
-        </section>
+        </Section>
 
-        {/* Results */}
-        {hasSearched && (
-          <section className="py-12 lg:py-16">
-            <div className="container">
-              {/* Stats grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-                {[
-                  { label: 'Total Runs', value: sampleStats.totalRuns, icon: Calendar },
-                  { label: 'Total Distance', value: `${sampleStats.totalDistance}km`, icon: MapPin },
-                  { label: 'Average Time', value: sampleStats.averageTime, icon: Clock },
-                  { label: 'Personal Best', value: sampleStats.pb, icon: Award },
-                ].map((stat) => {
-                  const Icon = stat.icon;
-                  return (
-                    <div
-                      key={stat.label}
-                      className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6"
-                    >
-                      <Icon className="w-5 h-5 text-orange-500 mb-3" />
-                      <div className="font-mono text-2xl font-bold text-white mb-1">
-                        {stat.value}
-                      </div>
-                      <div className="text-sm text-zinc-500">{stat.label}</div>
-                    </div>
-                  );
-                })}
-              </div>
+        {/* ==================== PROGRESS CHART ==================== */}
+        <Section id="progress" title="Performance Over Time" icon={TrendingUp} className="bg-zinc-900/50">
+          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+            <PaceChart
+              parkruns={data.parkruns}
+              personalBest={data.metadata.personalBest}
+            />
+          </div>
+        </Section>
 
-              <div className="grid lg:grid-cols-3 gap-8">
-                {/* Recent runs */}
-                <div className="lg:col-span-2">
-                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
-                    <div className="p-6 border-b border-zinc-800">
-                      <h2 className="font-display text-xl font-bold text-white">
-                        Recent Runs
-                      </h2>
-                    </div>
-                    <div className="divide-y divide-zinc-100 dark:divide-zinc-800">
-                      {recentRuns.map((run, index) => (
-                        <div
-                          key={index}
-                          className="flex items-center justify-between p-4 hover:bg-zinc-800/50 transition-colors"
-                        >
-                          <div>
-                            <div className="font-medium text-white">
-                              {run.event}
-                            </div>
-                            <div className="text-sm text-zinc-500">{run.date}</div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-mono font-bold text-orange-500">{run.time}</div>
-                            <div className="text-sm text-zinc-500">#{run.position}</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+        {/* ==================== YEAR BY YEAR ==================== */}
+        <Section id="years" title="Year by Year" icon={Calendar}>
+          {/* Bar chart overview */}
+          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 mb-8">
+            <h3 className="text-sm text-zinc-400 mb-4">Runs per year</h3>
+            <YearBarChart yearlyStats={data.yearlyStats} />
+          </div>
+
+          {/* Scrolling year cards */}
+          <div
+            ref={yearScrollRef}
+            className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent"
+          >
+            {data.yearlyStats.map((stats, index) => (
+              <YearCard
+                key={stats.year}
+                stats={stats}
+                index={index}
+                cumulativeTotal={cumulativeTotals[index]}
+              />
+            ))}
+          </div>
+        </Section>
+
+        {/* ==================== VENUES ==================== */}
+        <Section id="venues" title="Venues Visited" icon={MapPin} className="bg-zinc-900/50">
+          {/* Stats header */}
+          <div className="flex items-center justify-between mb-6">
+            <p className="text-zinc-400">
+              <span className="text-2xl font-bold text-white">{data.metadata.uniqueVenues}</span>
+              {' '}different parkruns visited
+            </p>
+          </div>
+
+          {/* Map */}
+          {data.venueCoordinates.length > 0 && (
+            <div className="mb-8 relative">
+              <VenueMap venues={data.venueCoordinates} />
+            </div>
+          )}
+
+          {/* Venue grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {data.venues.map((venue, index) => (
+              <VenueCard
+                key={venue.event}
+                venue={venue}
+                index={index}
+                isHome={index === 0 && venue.visit_count >= 20}
+              />
+            ))}
+          </div>
+        </Section>
+
+        {/* ==================== AGE CATEGORY ==================== */}
+        <Section id="positions" title="Age Category Positions" icon={Users}>
+          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+            <AgeCategoryChart stats={data.ageCategoryStats} />
+          </div>
+        </Section>
+
+        {/* ==================== ACHIEVEMENTS ==================== */}
+        <Section id="achievements" title="Achievements" icon={Award} className="bg-zinc-900/50">
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* PB Progression */}
+            <div className="lg:col-span-1">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <Trophy className="w-5 h-5 text-amber-500" />
+                PB Timeline
+              </h3>
+              <PBProgression pbs={data.pbProgression} />
+            </div>
+
+            {/* Streaks */}
+            <div className="lg:col-span-1">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <Flame className="w-5 h-5 text-orange-500" />
+                Streaks
+              </h3>
+              <StreakDisplay {...data.streakInfo} />
+            </div>
+
+            {/* Quick achievements summary */}
+            <div className="lg:col-span-1">
+              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-purple-500" />
+                Quick Stats
+              </h3>
+              <div className="space-y-3">
+                <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+                  <p className="text-zinc-400 text-sm">Achievements Earned</p>
+                  <p className="text-2xl font-bold text-white">
+                    {data.achievements.filter(a => a.earned).length} / {data.achievements.length}
+                  </p>
                 </div>
-
-                {/* Sidebar */}
-                <div className="space-y-6">
-                  {/* Profile card */}
-                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
-                    <h3 className="font-display font-bold text-white mb-4">
-                      Athlete Profile
-                    </h3>
-                    <dl className="space-y-3">
-                      <div className="flex justify-between">
-                        <dt className="text-zinc-500">Home Event</dt>
-                        <dd className="font-medium text-white">
-                          {sampleStats.homeEvent}
-                        </dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-zinc-500">Different Events</dt>
-                        <dd className="font-medium text-white">
-                          {sampleStats.differentEvents}
-                        </dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-zinc-500">Volunteering</dt>
-                        <dd className="font-medium text-white">
-                          {sampleStats.volunteeringCount} times
-                        </dd>
-                      </div>
-                      <div className="flex justify-between">
-                        <dt className="text-zinc-500">First Run</dt>
-                        <dd className="font-medium text-white">
-                          {sampleStats.firstRun}
-                        </dd>
-                      </div>
-                    </dl>
-                  </div>
-
-                  {/* Quick links */}
-                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
-                    <h3 className="font-display font-bold text-white mb-4">
-                      More Tools
-                    </h3>
-                    <div className="space-y-2">
-                      <Link
-                        href="/tools/calculators"
-                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-800 transition-colors group"
-                      >
-                        <span className="text-zinc-300 group-hover:text-orange-500">
-                          Pace Calculator
-                        </span>
-                        <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-orange-500" />
-                      </Link>
-                      <Link
-                        href="/tools/race-map"
-                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-800 transition-colors group"
-                      >
-                        <span className="text-zinc-300 group-hover:text-orange-500">
-                          Race Map
-                        </span>
-                        <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-orange-500" />
-                      </Link>
-                      <Link
-                        href="/races"
-                        className="flex items-center justify-between p-3 rounded-lg hover:bg-zinc-800 transition-colors group"
-                      >
-                        <span className="text-zinc-300 group-hover:text-orange-500">
-                          Race Dashboard
-                        </span>
-                        <ChevronRight className="w-4 h-4 text-zinc-400 group-hover:text-orange-500" />
-                      </Link>
-                    </div>
-                  </div>
+                <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+                  <p className="text-zinc-400 text-sm">PBs Set</p>
+                  <p className="text-2xl font-bold text-green-400">{data.pbProgression.length}</p>
                 </div>
               </div>
             </div>
-          </section>
-        )}
+          </div>
 
-        {/* Placeholder when not searched */}
-        {!hasSearched && (
-          <section className="py-16 lg:py-24">
-            <div className="container">
-              <div className="max-w-2xl mx-auto text-center">
-                <div className="w-20 h-20 rounded-full bg-green-500/10 flex items-center justify-center mx-auto mb-6">
-                  <BarChart3 className="w-10 h-10 text-green-500" />
-                </div>
-                <h2 className="font-display text-2xl font-bold text-white mb-4">
-                  Enter Your Athlete ID
-                </h2>
-                <p className="text-zinc-400 mb-8">
-                  Your parkrun athlete ID can be found on your barcode or on the parkrun website.
-                  Enter it above to view your complete parkrun history and statistics.
-                </p>
-
-                <div className="grid sm:grid-cols-3 gap-6 text-left">
-                  {[
-                    {
-                      icon: TrendingUp,
-                      title: 'Track Progress',
-                      description: 'See how your times have improved over the years',
-                    },
-                    {
-                      icon: Target,
-                      title: 'Set Goals',
-                      description: 'Predict when you might hit your next milestone',
-                    },
-                    {
-                      icon: MapPin,
-                      title: 'Explore Events',
-                      description: 'See all the different parkrun events you have visited',
-                    },
-                  ].map((feature) => {
-                    const Icon = feature.icon;
-                    return (
-                      <div key={feature.title} className="p-4">
-                        <Icon className="w-6 h-6 text-orange-500 mb-3" />
-                        <h3 className="font-semibold text-white mb-1">
-                          {feature.title}
-                        </h3>
-                        <p className="text-sm text-zinc-500">{feature.description}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+          {/* Achievement badges grid */}
+          <div className="mt-8">
+            <h3 className="text-lg font-semibold text-white mb-4">All Achievements</h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+              {data.achievements.map((achievement, index) => (
+                <AchievementBadge
+                  key={achievement.id}
+                  achievement={achievement}
+                  index={index}
+                />
+              ))}
             </div>
-          </section>
-        )}
+          </div>
+        </Section>
+
+        {/* ==================== INSIGHTS ==================== */}
+        <Section id="insights" title="Insights & Analytics" icon={ChartBar}>
+          <InsightsSection
+            monthlyStats={data.monthlyStats}
+            seasonalAverages={data.insights.seasonalAverages}
+            bestSeason={data.insights.bestSeason}
+            fastestVenues={data.insights.fastestVenues}
+            totalImprovement={data.insights.totalImprovement}
+            rollingAverage={data.insights.rollingAverage}
+          />
+        </Section>
+
+        {/* ==================== UK RANKINGS ==================== */}
+        <Section id="rankings" title="UK parkrun Rankings" icon={Globe} className="bg-zinc-900/50">
+          <RankingsSearch />
+        </Section>
       </main>
 
       <Footer />
