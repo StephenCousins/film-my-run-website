@@ -81,7 +81,7 @@ export default function ServicesPage() {
                 <span className="text-orange-400 text-sm font-medium">Professional Services</span>
               </div>
 
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
                 Capture Your Running Story
               </h1>
 
