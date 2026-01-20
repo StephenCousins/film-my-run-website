@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Calculator,
   Timer,
@@ -290,13 +290,30 @@ export default function CalculatorsPage() {
 
       <main className="pt-20 lg:pt-24">
         {/* Hero */}
-        <section className="py-12 lg:py-16 bg-zinc-50 dark:bg-zinc-900 border-b border-zinc-200 dark:border-zinc-800">
-          <div className="container">
+        <section className="relative py-20 lg:py-28 overflow-hidden border-b border-zinc-200 dark:border-zinc-800">
+          {/* Background image */}
+          <div className="absolute inset-0">
+            <Image
+              src="https://filmmyrun.co.uk/wp-content/uploads/2017/04/transvulcania2017-5127-scaled.jpg"
+              alt="Trail running"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950" />
+          </div>
+
+          <div className="container relative">
             <div className="max-w-2xl">
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-white mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
+                <Calculator className="w-4 h-4 text-orange-500" />
+                <span className="text-orange-400 text-sm font-medium">Free Running Tools</span>
+              </div>
+
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
                 Running Calculators
               </h1>
-              <p className="text-lg text-zinc-600 dark:text-zinc-400">
+              <p className="text-lg text-zinc-300">
                 Free tools used by over 250,000 runners every week. Calculate pace, predict
                 race times, plan your splits, and more.
               </p>

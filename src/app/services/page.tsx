@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Video, Users, Sparkles, Camera, ArrowRight, Check } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -60,19 +61,31 @@ export default function ServicesPage() {
       <Header />
       <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}
-        <section className="py-16 lg:py-24 border-b border-zinc-800">
-          <div className="container">
+        <section className="relative py-20 lg:py-32 overflow-hidden border-b border-zinc-800">
+          {/* Background image */}
+          <div className="absolute inset-0">
+            <Image
+              src="https://filmmyrun.co.uk/wp-content/uploads/2018/06/IMG_0091-scaled.jpg"
+              alt="Race filming"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950" />
+          </div>
+
+          <div className="container relative">
             <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-orange-500/10 rounded-full border border-orange-500/20 mb-6">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
                 <Camera className="w-4 h-4 text-orange-500" />
-                <span className="text-orange-500 text-sm font-medium">Professional Services</span>
+                <span className="text-orange-400 text-sm font-medium">Professional Services</span>
               </div>
 
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
                 Capture Your Running Story
               </h1>
 
-              <p className="text-lg text-zinc-400">
+              <p className="text-lg text-zinc-300 max-w-2xl">
                 From personal race films to full event coverage, we bring your running
                 moments to life with professional video production.
               </p>

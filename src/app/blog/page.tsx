@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, Clock, ArrowRight, Search, Filter } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, Search, Filter, BookOpen } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
@@ -231,13 +231,30 @@ export default async function BlogPage() {
 
       <main className="pt-20 lg:pt-24">
         {/* Hero section */}
-        <section className="py-16 lg:py-24 bg-zinc-50 dark:bg-zinc-900">
-          <div className="container">
+        <section className="relative py-20 lg:py-32 overflow-hidden">
+          {/* Background image */}
+          <div className="absolute inset-0">
+            <Image
+              src="https://filmmyrun.co.uk/wp-content/uploads/2020/03/transgrancanaria2020-18777-1-scaled.jpg"
+              alt="Trail running"
+              fill
+              className="object-cover"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950" />
+          </div>
+
+          <div className="container relative">
             <div className="max-w-3xl">
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-white mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
+                <BookOpen className="w-4 h-4 text-orange-500" />
+                <span className="text-orange-400 text-sm font-medium">Stories & Insights</span>
+              </div>
+
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
                 Blog
               </h1>
-              <p className="text-lg text-zinc-600 dark:text-zinc-400">
+              <p className="text-lg text-zinc-300 max-w-2xl">
                 Race reports, training insights, gear reviews, and stories from 15 years
                 of running and filming. Every mile has a story.
               </p>
