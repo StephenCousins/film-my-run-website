@@ -73,9 +73,9 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
 
     // Find PBs - track best time seen so far going chronologically
     const sortedByDate = [...result.rows].sort((a, b) => {
-      const dateA = a.parkrun_date || '1900-01-01';
-      const dateB = b.parkrun_date || '1900-01-01';
-      return dateA.localeCompare(dateB);
+      const dateA = a.parkrun_date ? new Date(a.parkrun_date).getTime() : 0;
+      const dateB = b.parkrun_date ? new Date(b.parkrun_date).getTime() : 0;
+      return dateA - dateB;
     });
 
     let bestTime = Infinity;
@@ -372,7 +372,11 @@ export async function getPBProgression(): Promise<{ date: string; time_seconds: 
   const allRuns = await getAllParkruns();
 
   // Sort chronologically
-  const sorted = [...allRuns].sort((a, b) => a.date.localeCompare(b.date));
+  const sorted = [...allRuns].sort((a, b) => {
+    const dateA = a.date ? new Date(a.date).getTime() : 0;
+    const dateB = b.date ? new Date(b.date).getTime() : 0;
+    return dateA - dateB;
+  });
 
   // Find PBs
   const pbs: { date: string; time_seconds: number; venue: string }[] = [];
