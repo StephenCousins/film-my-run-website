@@ -188,7 +188,7 @@ export default function ContactPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="/images/hero/hero-trail.jpg"
+              src="/images/films/utmb.jpg"
               alt="Mountain running"
               fill
               className="object-cover"
