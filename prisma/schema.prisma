@@ -207,3 +207,20 @@ model Setting {
 
   @@map("settings")
 }
+
+// ============================================
+// RUNNING CALCULATORS
+// ============================================
+
+model AgeGradingFactor {
+  id           Int     @id @default(autoincrement())
+  gender       String  // 'men' or 'women'
+  event        String  // e.g., '5km', '10km', 'marathon'
+  openRecord   Decimal @map("open_record") @db.Decimal(10, 4) // World record time in seconds
+  age          Int     // Age from 30-110
+  factor       Decimal @db.Decimal(6, 4) // Factor to apply (e.g., 0.9999)
+
+  @@unique([gender, event, age])
+  @@index([gender, event])
+  @@map("age_grading_factors")
+}

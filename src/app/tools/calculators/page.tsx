@@ -10,13 +10,22 @@ import {
   TrendingUp,
   Zap,
   Gauge,
-  Scale,
-  ArrowRight,
-  ChevronDown,
+  Mountain,
+  Cookie,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
+
+// Import all calculator components
+import {
+  VO2MaxCalculator,
+  RaceTimePredictorCalculator,
+  AgeGradingCalculator,
+  ElevationCalculator,
+  TrainingZonesCalculator,
+  NutritionCalculator,
+} from '@/components/calculators';
 
 // ============================================
 // CALCULATOR TYPES
@@ -34,26 +43,10 @@ const calculators = [
   {
     id: 'predictor',
     name: 'Race Predictor',
-    description: 'Predict race times based on a recent performance',
+    description: 'Predict race times based on recent performances',
     icon: Target,
     color: 'from-blue-500 to-blue-600',
     popular: true,
-  },
-  {
-    id: 'splits',
-    name: 'Splits Calculator',
-    description: 'Calculate even or negative splits for your target time',
-    icon: Timer,
-    color: 'from-purple-500 to-purple-600',
-    popular: false,
-  },
-  {
-    id: 'age-grade',
-    name: 'Age Grading',
-    description: 'Calculate age-graded performance percentages',
-    icon: TrendingUp,
-    color: 'from-emerald-500 to-emerald-600',
-    popular: false,
   },
   {
     id: 'vo2max',
@@ -61,6 +54,22 @@ const calculators = [
     description: 'Estimate your VO2 max from race results',
     icon: Zap,
     color: 'from-red-500 to-red-600',
+    popular: false,
+  },
+  {
+    id: 'age-grade',
+    name: 'Age Grading',
+    description: 'Calculate WMA age-graded performance percentages',
+    icon: TrendingUp,
+    color: 'from-emerald-500 to-emerald-600',
+    popular: true,
+  },
+  {
+    id: 'elevation',
+    name: 'Elevation Adjustment',
+    description: 'Adjust race times for elevation gain and terrain',
+    icon: Mountain,
+    color: 'from-purple-500 to-purple-600',
     popular: false,
   },
   {
@@ -72,17 +81,17 @@ const calculators = [
     popular: false,
   },
   {
-    id: 'bmi',
-    name: 'BMI Calculator',
-    description: 'Calculate body mass index and ideal race weight',
-    icon: Scale,
+    id: 'nutrition',
+    name: 'Nutrition Calculator',
+    description: 'Plan your race nutrition and hydration strategy',
+    icon: Cookie,
     color: 'from-amber-500 to-amber-600',
     popular: false,
   },
 ];
 
 // ============================================
-// PACE CALCULATOR COMPONENT (Example)
+// PACE CALCULATOR COMPONENT
 // ============================================
 
 function PaceCalculator() {
@@ -91,13 +100,18 @@ function PaceCalculator() {
   const [time, setTime] = useState({ hours: '3', minutes: '30', seconds: '0' });
   const [pace, setPace] = useState('');
   const [speed, setSpeed] = useState('');
+  const [predictions, setPredictions] = useState<{ name: string; time: string }[]>([]);
 
   const calculatePace = () => {
-    const dist = parseFloat(distance);
+    let dist = parseFloat(distance);
+    if (distanceUnit === 'miles') {
+      dist = dist * 1.60934;
+    }
+
     const totalSeconds =
-      parseInt(time.hours) * 3600 +
-      parseInt(time.minutes) * 60 +
-      parseInt(time.seconds);
+      parseInt(time.hours || '0') * 3600 +
+      parseInt(time.minutes || '0') * 60 +
+      parseInt(time.seconds || '0');
 
     if (dist && totalSeconds) {
       const paceSecondsPerKm = totalSeconds / dist;
@@ -105,8 +119,36 @@ function PaceCalculator() {
       const paceSeconds = Math.round(paceSecondsPerKm % 60);
       setPace(`${paceMinutes}:${paceSeconds.toString().padStart(2, '0')} /km`);
 
+      const paceSecondsPerMile = paceSecondsPerKm * 1.60934;
+      const paceMiMin = Math.floor(paceSecondsPerMile / 60);
+      const paceMiSec = Math.round(paceSecondsPerMile % 60);
+
       const speedKmh = (dist / totalSeconds) * 3600;
-      setSpeed(`${speedKmh.toFixed(2)} km/h`);
+      setSpeed(`${speedKmh.toFixed(2)} km/h (${paceMiMin}:${paceMiSec.toString().padStart(2, '0')} /mile)`);
+
+      // Calculate predictions for standard distances
+      const distances = [
+        { name: '5K', km: 5 },
+        { name: '10K', km: 10 },
+        { name: 'Half Marathon', km: 21.0975 },
+        { name: 'Marathon', km: 42.195 },
+      ];
+
+      const preds = distances.map((d) => {
+        const predictedSeconds = paceSecondsPerKm * d.km;
+        const predHours = Math.floor(predictedSeconds / 3600);
+        const predMinutes = Math.floor((predictedSeconds % 3600) / 60);
+        const predSeconds = Math.floor(predictedSeconds % 60);
+        return {
+          name: d.name,
+          time:
+            predHours > 0
+              ? `${predHours}:${predMinutes.toString().padStart(2, '0')}:${predSeconds.toString().padStart(2, '0')}`
+              : `${predMinutes}:${predSeconds.toString().padStart(2, '0')}`,
+        };
+      });
+
+      setPredictions(preds);
     }
   };
 
@@ -143,7 +185,10 @@ function PaceCalculator() {
             {['5', '10', '21.0975', '42.195'].map((d) => (
               <button
                 key={d}
-                onClick={() => setDistance(d)}
+                onClick={() => {
+                  setDistance(d);
+                  setDistanceUnit('km');
+                }}
                 className="px-3 py-1 text-xs bg-zinc-100 dark:bg-zinc-800 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
               >
                 {d === '21.0975' ? 'Half' : d === '42.195' ? 'Full' : `${d}K`}
@@ -208,15 +253,33 @@ function PaceCalculator() {
 
         {/* Results */}
         {pace && (
-          <div className="grid grid-cols-2 gap-4 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
-            <div className="text-center">
-              <div className="text-2xl font-mono font-bold text-orange-500">{pace}</div>
-              <div className="text-xs text-zinc-500 mt-1">Pace</div>
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4 p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+              <div className="text-center">
+                <div className="text-2xl font-mono font-bold text-orange-500">{pace}</div>
+                <div className="text-xs text-zinc-500 mt-1">Pace</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-mono font-bold text-orange-500">{speed}</div>
+                <div className="text-xs text-zinc-500 mt-1">Speed</div>
+              </div>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-mono font-bold text-orange-500">{speed}</div>
-              <div className="text-xs text-zinc-500 mt-1">Speed</div>
-            </div>
+
+            {predictions.length > 0 && (
+              <div className="p-4 bg-zinc-50 dark:bg-zinc-800 rounded-xl">
+                <h4 className="font-medium text-zinc-900 dark:text-white mb-3">
+                  At This Pace
+                </h4>
+                <div className="grid grid-cols-2 gap-3">
+                  {predictions.map((pred) => (
+                    <div key={pred.name} className="flex justify-between">
+                      <span className="text-zinc-500">{pred.name}:</span>
+                      <span className="font-mono text-zinc-900 dark:text-white">{pred.time}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -284,6 +347,27 @@ function CalculatorNav({ activeId, onChange }: CalculatorNavProps) {
 export default function CalculatorsPage() {
   const [activeCalculator, setActiveCalculator] = useState('pace');
 
+  const renderCalculator = () => {
+    switch (activeCalculator) {
+      case 'pace':
+        return <PaceCalculator />;
+      case 'predictor':
+        return <RaceTimePredictorCalculator />;
+      case 'vo2max':
+        return <VO2MaxCalculator />;
+      case 'age-grade':
+        return <AgeGradingCalculator />;
+      case 'elevation':
+        return <ElevationCalculator />;
+      case 'zones':
+        return <TrainingZonesCalculator />;
+      case 'nutrition':
+        return <NutritionCalculator />;
+      default:
+        return <PaceCalculator />;
+    }
+  };
+
   return (
     <>
       <Header />
@@ -315,7 +399,7 @@ export default function CalculatorsPage() {
               </h1>
               <p className="text-lg text-zinc-300">
                 Free tools used by over 250,000 runners every week. Calculate pace, predict
-                race times, plan your splits, and more.
+                race times, age-grade your results, plan nutrition, and more.
               </p>
             </div>
           </div>
@@ -357,33 +441,7 @@ export default function CalculatorsPage() {
               </div>
 
               {/* Active calculator */}
-              <div className="lg:col-span-8 xl:col-span-9">
-                {/* Currently showing pace calculator as example */}
-                {/* TODO: Add all calculator components */}
-                {activeCalculator === 'pace' && <PaceCalculator />}
-
-                {activeCalculator !== 'pace' && (
-                  <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 p-8 text-center">
-                    <div className="w-16 h-16 rounded-2xl bg-orange-500/10 flex items-center justify-center mx-auto mb-4">
-                      {(() => {
-                        const calc = calculators.find((c) => c.id === activeCalculator);
-                        const Icon = calc?.icon || Calculator;
-                        return <Icon className="w-8 h-8 text-orange-500" />;
-                      })()}
-                    </div>
-                    <h3 className="font-display text-xl font-bold text-zinc-900 dark:text-white mb-2">
-                      {calculators.find((c) => c.id === activeCalculator)?.name}
-                    </h3>
-                    <p className="text-zinc-600 dark:text-zinc-400 mb-6">
-                      {calculators.find((c) => c.id === activeCalculator)?.description}
-                    </p>
-                    <p className="text-sm text-zinc-500">
-                      This calculator will be fully functional when integrated with the
-                      existing running calculator codebase.
-                    </p>
-                  </div>
-                )}
-              </div>
+              <div className="lg:col-span-8 xl:col-span-9">{renderCalculator()}</div>
             </div>
           </div>
         </section>
