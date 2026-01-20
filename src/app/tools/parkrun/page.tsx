@@ -26,7 +26,7 @@ import { ParkrunStatCard, SubStat } from '@/components/parkrun/ParkrunStatCard';
 import { RecentRunsTable } from '@/components/parkrun/RecentRunsTable';
 import { PaceChart } from '@/components/parkrun/PaceChart';
 import { YearCard, YearBarChart } from '@/components/parkrun/YearCard';
-import { VenueCard } from '@/components/parkrun/VenueCard';
+import { VenueCardCompact } from '@/components/parkrun/VenueCardCompact';
 import { VenueMap } from '@/components/parkrun/VenueMap';
 import { AgeCategoryChart } from '@/components/parkrun/AgeCategoryChart';
 import { AchievementBadge, PBProgression, StreakDisplay } from '@/components/parkrun/AchievementBadge';
@@ -263,10 +263,15 @@ export default function ParkrunPage() {
           </div>
         </section>
 
-        {/* ==================== RECENT RUNS ==================== */}
-        <Section id="recent" title="Recent Runs" icon={Clock}>
+        {/* ==================== ALL RUNS ==================== */}
+        <Section id="recent" title="All Runs" icon={Clock}>
           <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
-            <RecentRunsTable runs={data.recentRuns} />
+            <div className="max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+              <RecentRunsTable runs={data.parkruns} />
+            </div>
+            <div className="px-4 py-3 bg-zinc-800/50 border-t border-zinc-800 text-center">
+              <span className="text-sm text-zinc-400">{data.parkruns.length} total runs</span>
+            </div>
           </div>
         </Section>
 
@@ -316,15 +321,15 @@ export default function ParkrunPage() {
 
           {/* Map */}
           {data.venueCoordinates.length > 0 && (
-            <div className="mb-8 relative">
+            <div className="mb-6 relative">
               <VenueMap venues={data.venueCoordinates} />
             </div>
           )}
 
-          {/* Venue grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+          {/* Scrolling venue cards */}
+          <div className="flex gap-3 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
             {data.venues.map((venue, index) => (
-              <VenueCard
+              <VenueCardCompact
                 key={venue.event}
                 venue={venue}
                 index={index}
