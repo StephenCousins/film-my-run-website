@@ -2,12 +2,10 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, Clock, ArrowLeft, Share2, Twitter, Facebook, Linkedin, Tag, ChevronRight } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft, Twitter, Facebook, Linkedin, Tag, ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { cn } from '@/lib/utils';
-import { blogPosts } from '@/data/blog-posts';
-import { blogContent } from '@/data/blog-content';
+import prisma from '@/lib/db';
 
 // ============================================
 // TYPES
@@ -34,18 +32,16 @@ interface Post {
   };
 }
 
-// ============================================
-// HELPER FUNCTIONS
-// ============================================
-
-function getPostBySlug(slug: string) {
-  return blogPosts.find((post) => post.slug === slug);
-}
-
-function getRelatedPosts(currentSlug: string, category: string) {
-  return blogPosts
-    .filter((post) => post.slug !== currentSlug)
-    .slice(0, 3);
+interface RelatedPost {
+  id: string;
+  title: string;
+  slug: string;
+  featuredImage: string | null;
+  readTime: number;
+  category: {
+    name: string;
+    slug: string;
+  };
 }
 
 // Default author info
@@ -54,6 +50,93 @@ const defaultAuthor = {
   avatar: '/images/stephen-portrait.jpg',
   bio: 'Runner, filmmaker, and tool builder. Documenting every mile since 2011.',
 };
+
+// ============================================
+// DATA FETCHING
+// ============================================
+
+async function getPostBySlug(slug: string) {
+  const post = await prisma.post.findUnique({
+    where: { slug },
+    include: {
+      terms: {
+        include: {
+          term: true,
+        },
+      },
+    },
+  });
+
+  if (!post) return null;
+
+  const categoryTerm = post.terms.find((pt) => pt.term.taxonomy === 'category');
+  const tags = post.terms.map((pt) => ({
+    name: pt.term.name,
+    slug: pt.term.slug,
+  }));
+
+  return {
+    id: post.id.toString(),
+    title: post.title,
+    slug: post.slug,
+    content: post.content,
+    excerpt: post.excerpt || post.content.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
+    featuredImage: post.featuredImage,
+    publishedAt: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
+    readTime: post.readTime,
+    category: categoryTerm
+      ? { name: categoryTerm.term.name, slug: categoryTerm.term.slug }
+      : { name: 'Running', slug: 'running' },
+    tags: tags.length > 0 ? tags : [{ name: 'Running', slug: 'running' }],
+    author: defaultAuthor,
+  };
+}
+
+async function getRelatedPosts(currentSlug: string): Promise<RelatedPost[]> {
+  const posts = await prisma.post.findMany({
+    where: {
+      slug: { not: currentSlug },
+      status: 'published',
+      postType: 'post',
+    },
+    orderBy: { publishedAt: 'desc' },
+    take: 3,
+    include: {
+      terms: {
+        include: {
+          term: true,
+        },
+      },
+    },
+  });
+
+  return posts.map((post) => {
+    const categoryTerm = post.terms.find((pt) => pt.term.taxonomy === 'category');
+
+    return {
+      id: post.id.toString(),
+      title: post.title,
+      slug: post.slug,
+      featuredImage: post.featuredImage,
+      readTime: post.readTime,
+      category: categoryTerm
+        ? { name: categoryTerm.term.name, slug: categoryTerm.term.slug }
+        : { name: 'Running', slug: 'running' },
+    };
+  });
+}
+
+async function getAllSlugs() {
+  const posts = await prisma.post.findMany({
+    where: {
+      status: 'published',
+      postType: 'post',
+    },
+    select: { slug: true },
+  });
+
+  return posts.map((post) => ({ slug: post.slug }));
+}
 
 // ============================================
 // METADATA
@@ -65,7 +148,7 @@ interface PageProps {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
 
   if (!post) {
     return {
@@ -86,9 +169,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 // Generate static paths for all blog posts
 export async function generateStaticParams() {
-  return blogPosts.map((post) => ({
-    slug: post.slug,
-  }));
+  return getAllSlugs();
 }
 
 // ============================================
@@ -139,24 +220,13 @@ function ShareButtons({ url, title }: { url: string; title: string }) {
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  const postData = getPostBySlug(slug);
+  const post = await getPostBySlug(slug);
 
-  if (!postData) {
+  if (!post) {
     notFound();
   }
 
-  // Get full content from content file, or fall back to excerpt
-  const fullContent = blogContent[postData.id] || `<p>${postData.excerpt}</p><p class="text-zinc-500 italic mt-8">Full content coming soon. <a href="https://filmmyrun.co.uk/${postData.slug}" class="text-orange-500 hover:underline" target="_blank" rel="noopener">Read the original post on WordPress</a>.</p>`;
-
-  // Extend post data with required fields for the page
-  const post = {
-    ...postData,
-    content: fullContent,
-    tags: [{ name: postData.category.name, slug: postData.category.slug }],
-    author: defaultAuthor,
-  };
-
-  const relatedPosts = getRelatedPosts(slug, postData.category.slug);
+  const relatedPosts = await getRelatedPosts(slug);
   const postUrl = `https://filmmyrun.co.uk/blog/${post.slug}`;
 
   return (

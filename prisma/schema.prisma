@@ -39,13 +39,15 @@ model User {
 
 model Post {
   id            Int       @id @default(autoincrement())
+  wpId          Int?      @unique @map("wp_id") // Original WordPress ID
   title         String
   slug          String    @unique
-  content       String
-  excerpt       String?
+  content       String    @db.Text
+  excerpt       String?   @db.Text
   featuredImage String?   @map("featured_image")
   status        String    @default("published")
   postType      String    @default("post") @map("post_type")
+  readTime      Int       @default(5) @map("read_time")
   authorId      Int?      @map("author_id")
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")

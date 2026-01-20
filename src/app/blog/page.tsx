@@ -5,7 +5,7 @@ import { Calendar, Clock, ArrowRight, Search, Filter } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
-import { blogPosts } from '@/data/blog-posts';
+import prisma from '@/lib/db';
 
 // ============================================
 // METADATA
@@ -45,23 +45,63 @@ interface Category {
 }
 
 // ============================================
-// CATEGORIES (computed from blog posts)
+// DATA FETCHING
 // ============================================
 
-// Get unique categories from posts
-const categoryMap = new Map<string, number>();
-blogPosts.forEach((post) => {
-  const count = categoryMap.get(post.category.slug) || 0;
-  categoryMap.set(post.category.slug, count + 1);
-});
+async function getPosts() {
+  const posts = await prisma.post.findMany({
+    where: {
+      status: 'published',
+      postType: 'post',
+    },
+    orderBy: {
+      publishedAt: 'desc',
+    },
+    include: {
+      terms: {
+        include: {
+          term: true,
+        },
+      },
+    },
+  });
 
-const categories: Category[] = [
-  { name: 'All Posts', slug: 'all', count: blogPosts.length },
-  ...Array.from(categoryMap.entries()).map(([slug, count]) => {
-    const post = blogPosts.find((p) => p.category.slug === slug);
-    return { name: post?.category.name || slug, slug, count };
-  }),
-];
+  return posts.map((post) => {
+    // Find the first category term, or default
+    const categoryTerm = post.terms.find((pt) => pt.term.taxonomy === 'category');
+
+    return {
+      id: post.id.toString(),
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt || post.content.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
+      featuredImage: post.featuredImage,
+      publishedAt: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
+      readTime: post.readTime,
+      category: categoryTerm
+        ? { name: categoryTerm.term.name, slug: categoryTerm.term.slug }
+        : { name: 'Running', slug: 'running' },
+    };
+  });
+}
+
+async function getCategories(posts: Post[]) {
+  const categoryMap = new Map<string, number>();
+  posts.forEach((post) => {
+    const count = categoryMap.get(post.category.slug) || 0;
+    categoryMap.set(post.category.slug, count + 1);
+  });
+
+  const categories: Category[] = [
+    { name: 'All Posts', slug: 'all', count: posts.length },
+    ...Array.from(categoryMap.entries()).map(([slug, count]) => {
+      const post = posts.find((p) => p.category.slug === slug);
+      return { name: post?.category.name || slug, slug, count };
+    }),
+  ];
+
+  return categories;
+}
 
 // ============================================
 // POST CARD COMPONENT
@@ -178,8 +218,9 @@ function CategoryFilter({ categories, activeSlug = 'all' }: { categories: Catego
 // ============================================
 
 export default async function BlogPage() {
-  // Use imported blog posts data
-  const posts = blogPosts;
+  // Fetch posts from database
+  const posts = await getPosts();
+  const categories = await getCategories(posts);
 
   return (
     <>
