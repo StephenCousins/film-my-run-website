@@ -121,7 +121,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
       <Link href={`/blog/${post.slug}`} className="block h-full">
         {/* Image */}
         <div className={cn(
-          'relative overflow-hidden bg-zinc-100 dark:bg-zinc-800',
+          'relative overflow-hidden bg-zinc-800',
           featured ? 'aspect-[16/9]' : 'aspect-[16/10]'
         )}>
           {post.featuredImage ? (
@@ -205,7 +205,7 @@ function CategoryFilter({ categories, activeSlug = 'all' }: { categories: Catego
             'px-4 py-2 rounded-full text-sm font-medium transition-all',
             activeSlug === category.slug
               ? 'bg-orange-500 text-white'
-              : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
+              : 'bg-zinc-800 text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
           )}
         >
           {category.name}
@@ -251,7 +251,7 @@ export default async function BlogPage() {
                 <span className="text-orange-400 text-sm font-medium">Stories & Insights</span>
               </div>
 
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
                 Blog
               </h1>
               <p className="text-lg text-zinc-300 max-w-2xl">
@@ -277,7 +277,7 @@ export default async function BlogPage() {
                 <input
                   type="search"
                   placeholder="Search posts..."
-                  className="w-full pl-10 pr-4 py-2 bg-zinc-100 dark:bg-zinc-800 border border-transparent rounded-full text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+                  className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-transparent rounded-full text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
                 />
               </div>
             </div>
@@ -302,7 +302,7 @@ export default async function BlogPage() {
               <nav className="flex items-center gap-2">
                 <button
                   disabled
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed"
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-zinc-800 text-zinc-400 cursor-not-allowed"
                 >
                   Previous
                 </button>
@@ -314,7 +314,7 @@ export default async function BlogPage() {
                       'w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium transition-colors',
                       page === 1
                         ? 'bg-orange-500 text-white'
-                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
+                        : 'bg-zinc-800 text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
                     )}
                   >
                     {page}
@@ -323,13 +323,13 @@ export default async function BlogPage() {
                 <span className="text-zinc-400">...</span>
                 <Link
                   href="/blog?page=12"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium bg-zinc-800 text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500"
                 >
                   12
                 </Link>
                 <Link
                   href="/blog?page=2"
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500"
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-zinc-800 text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500"
                 >
                   Next
                 </Link>

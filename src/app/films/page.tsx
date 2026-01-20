@@ -324,10 +324,10 @@ export default function FilmsPage() {
 
       <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero section */}
-        <section className="py-16 lg:py-24 border-b border-zinc-800">
+        <section className="py-16 lg:py-24">
           <div className="container">
             <div className="max-w-3xl">
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
                 Films
               </h1>
               <p className="text-lg text-zinc-400">

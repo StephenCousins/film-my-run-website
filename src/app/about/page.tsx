@@ -70,7 +70,7 @@ export default function AboutPage() {
 
           <div className="container relative">
             <div className="max-w-2xl">
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
                 Runner. Filmmaker.
                 <br />
                 <span className="text-orange-500">Tool Builder.</span>

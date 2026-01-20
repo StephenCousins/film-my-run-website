@@ -204,7 +204,7 @@ export default function ContactPage() {
                 <span className="text-orange-400 text-sm font-medium">Let's Connect</span>
               </div>
 
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
                 Get in Touch
               </h1>
               <p className="text-lg text-zinc-300 max-w-2xl">
