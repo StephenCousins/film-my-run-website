@@ -47,7 +47,7 @@ interface RelatedPost {
 // Default author info
 const defaultAuthor = {
   name: 'Stephen Cousins',
-  avatar: '/images/stephen-portrait.jpg',
+  avatar: '/images/stephen-avatar.svg',
   bio: 'Runner, filmmaker, and tool builder. Documenting every mile since 2011.',
 };
 
