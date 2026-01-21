@@ -89,8 +89,15 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
 
     // Sort by date, using date_display as fallback when parkrun_date is null
     const sortedRows = [...result.rows].sort((a, b) => {
-      const dateA = a.parkrun_date ? new Date(a.parkrun_date) : parseDateDisplay(a.date_display);
-      const dateB = b.parkrun_date ? new Date(b.parkrun_date) : parseDateDisplay(b.date_display);
+      let dateA = a.parkrun_date ? new Date(a.parkrun_date) : null;
+      let dateB = b.parkrun_date ? new Date(b.parkrun_date) : null;
+      // Check if dates are valid, fall back to date_display
+      if (!dateA || isNaN(dateA.getTime())) {
+        dateA = parseDateDisplay(a.date_display);
+      }
+      if (!dateB || isNaN(dateB.getTime())) {
+        dateB = parseDateDisplay(b.date_display);
+      }
       const timeA = dateA?.getTime() || 0;
       const timeB = dateB?.getTime() || 0;
       return timeB - timeA; // DESC order (most recent first)
@@ -116,7 +123,11 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
       let dateStr = '';
       if (row.parkrun_date) {
         const d = new Date(row.parkrun_date);
-        dateStr = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+        if (!isNaN(d.getTime())) {
+          dateStr = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+        } else if (row.date_display) {
+          dateStr = row.date_display;
+        }
       } else if (row.date_display) {
         dateStr = row.date_display;
       }
