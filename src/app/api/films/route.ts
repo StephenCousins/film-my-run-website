@@ -24,12 +24,15 @@ function extractYouTubeId(url: string): string | null {
 
 export async function GET() {
   try {
-    // Fetch all Ultra races with video URLs
+    // Fetch Ultra races with video URLs from 2018 onwards
     const races = await prisma.race.findMany({
       where: {
         type: 'Ultra',
         videoUrl: {
           not: null,
+        },
+        date: {
+          gte: new Date('2018-01-01'),
         },
       },
       orderBy: {
@@ -50,7 +53,7 @@ export async function GET() {
           title: race.event,
           subtitle: 'Ultra Marathon',
           description: `Experience the challenge of ${race.event}${race.distanceKm ? ` - ${Number(race.distanceKm)}km` : ''} of incredible trail running.`,
-          thumbnail: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+          thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
           videoId,
           year,
           location: race.terrain || 'Trail',
