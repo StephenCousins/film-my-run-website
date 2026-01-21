@@ -57,26 +57,30 @@ function getPool(): Pool {
 function parseDateDisplay(dateDisplay: string | null): Date | null {
   if (!dateDisplay) return null;
 
+  // Trim and normalize whitespace
+  const cleaned = dateDisplay.trim().replace(/\s+/g, ' ');
+
   // Try DD/MM/YYYY format (e.g., "30/04/2011")
-  if (dateDisplay.includes('/')) {
-    const parts = dateDisplay.split('/');
+  if (cleaned.includes('/')) {
+    const parts = cleaned.split('/');
     if (parts.length === 3) {
       const day = parseInt(parts[0], 10);
       const month = parseInt(parts[1], 10) - 1;
-      const year = parseInt(parts[2], 10);
+      let year = parseInt(parts[2], 10);
+      if (year < 100) year = year + 2000;
       if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
         return new Date(year, month, day);
       }
     }
   }
 
-  // Try DD-MM-YY format (e.g., "12-10-24" for 12 Oct 2024)
-  if (dateDisplay.includes('-') && dateDisplay.split('-').length === 3) {
-    const parts = dateDisplay.split('-');
+  // Try DD-MM-YY or DD-MM-YYYY format (e.g., "12-10-24" or "12-10-2024")
+  if (cleaned.includes('-') && cleaned.split('-').length === 3) {
+    const parts = cleaned.split('-');
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10) - 1;
     let year = parseInt(parts[2], 10);
-    // Convert 2-digit year to 4-digit (assume 20xx for now)
+    // Convert 2-digit year to 4-digit (assume 20xx)
     if (year < 100) {
       year = year + 2000;
     }
@@ -85,20 +89,27 @@ function parseDateDisplay(dateDisplay: string | null): Date | null {
     }
   }
 
-  // Try "DD MMM YYYY" format (e.g., "10 Jul 2023")
+  // Try "DD MMM YYYY" or "D MMM YYYY" format (e.g., "10 Jul 2023" or "1 Jan 2020")
   const monthNames: { [key: string]: number } = {
     'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'jun': 5,
     'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
   };
-  const match = dateDisplay.match(/^(\d{1,2})\s+([a-zA-Z]{3})\s+(\d{4})$/);
+  const match = cleaned.match(/^(\d{1,2})\s+([a-zA-Z]{3,})\s+(\d{2,4})$/);
   if (match) {
     const day = parseInt(match[1], 10);
-    const monthStr = match[2].toLowerCase();
-    const year = parseInt(match[3], 10);
+    const monthStr = match[2].toLowerCase().substring(0, 3);
+    let year = parseInt(match[3], 10);
+    if (year < 100) year = year + 2000;
     const month = monthNames[monthStr];
     if (!isNaN(day) && month !== undefined && !isNaN(year)) {
       return new Date(year, month, day);
     }
+  }
+
+  // Try parsing with built-in Date parser as last resort
+  const parsed = new Date(cleaned);
+  if (!isNaN(parsed.getTime())) {
+    return parsed;
   }
 
   return null;
