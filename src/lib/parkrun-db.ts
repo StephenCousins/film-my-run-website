@@ -254,19 +254,34 @@ export async function getVenueCoordinates(): Promise<VenueCoordinate[]> {
   }
 }
 
+// Helper to format date as DD/MM/YYYY
+function formatDateDMY(date: Date | string | null): string {
+  if (!date) return '';
+  const d = typeof date === 'string' ? new Date(date) : date;
+  if (isNaN(d.getTime())) return '';
+  const day = d.getDate().toString().padStart(2, '0');
+  const month = (d.getMonth() + 1).toString().padStart(2, '0');
+  const year = d.getFullYear();
+  return `${day}/${month}/${year}`;
+}
+
 export async function getMetadata(): Promise<ParkrunMetadata> {
   const client = await getPool().connect();
   try {
-    // Get totals from parkruns table
+    // Get totals from parkruns table (exclude null dates for min/max)
     const result = await client.query(`
       SELECT
         COUNT(*) as total,
         MIN(age_cat_pos) as best_position,
         COUNT(DISTINCT venue) as unique_venues,
-        MIN(COALESCE(parkrun_date, '2000-01-01')) as first_date,
-        MAX(COALESCE(parkrun_date, '2000-01-01')) as last_date
+        MIN(parkrun_date) as first_date,
+        MAX(parkrun_date) as last_date
       FROM parkruns
+      WHERE parkrun_date IS NOT NULL
     `);
+
+    // Get total count including those without dates
+    const totalResult = await client.query(`SELECT COUNT(*) as total FROM parkruns`);
 
     // Get PB info
     const pbResult = await client.query(`
@@ -279,20 +294,21 @@ export async function getMetadata(): Promise<ParkrunMetadata> {
     `);
 
     const row = result.rows[0];
+    const totalRow = totalResult.rows[0];
     const pbRow = pbResult.rows[0];
     const pbTimeSeconds = pbRow?.finish_time ? parseTimeToSeconds(pbRow.finish_time) : 0;
 
     return {
-      totalParkruns: parseInt(row.total) || 0,
+      totalParkruns: parseInt(totalRow.total) || 0,
       personalBest: pbTimeSeconds,
       personalBestFormatted: pbRow?.finish_time || '',
       personalBestVenue: pbRow?.venue || '',
-      personalBestDate: pbRow?.parkrun_date?.toISOString?.().split('T')[0] || pbRow?.date_display || '',
+      personalBestDate: formatDateDMY(pbRow?.parkrun_date) || pbRow?.date_display || '',
       bestPosition: row.best_position || 0,
       uniqueVenues: parseInt(row.unique_venues) || 0,
-      firstParkrunDate: row.first_date?.toISOString?.().split('T')[0] || '',
-      lastParkrunDate: row.last_date?.toISOString?.().split('T')[0] || '',
-      totalDistanceKm: (parseInt(row.total) || 0) * 5,
+      firstParkrunDate: formatDateDMY(row.first_date),
+      lastParkrunDate: formatDateDMY(row.last_date),
+      totalDistanceKm: (parseInt(totalRow.total) || 0) * 5,
     };
   } finally {
     client.release();
