@@ -86,12 +86,11 @@ export default function ServicesPage() {
               </div>
 
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-                Capture Your Running Story
+                Your Event. Hosted. Captured. Shared.
               </h1>
 
               <p className="text-lg text-zinc-300 max-w-2xl">
-                From personal race films to full event coverage, we bring your running
-                moments to life with professional video production.
+                POV race footage, award-winning documentaries, live streaming, and MC services — bringing the energy and story of trail and ultra running to life.
               </p>
             </div>
           </div>
