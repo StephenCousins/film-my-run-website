@@ -81,7 +81,7 @@ export function YearCard({ stats, index, cumulativeTotal }: YearCardProps) {
         {stats.pb_count > 0 && (
           <div className="bg-green-500/10 rounded-lg p-2 text-center">
             <span className="text-green-400 text-sm font-medium">
-              🏆 {stats.pb_count} PB{stats.pb_count > 1 ? 's' : ''} set this year
+              {stats.pb_count} PB{stats.pb_count > 1 ? 's' : ''} set this year
             </span>
           </div>
         )}
@@ -90,35 +90,45 @@ export function YearCard({ stats, index, cumulativeTotal }: YearCardProps) {
   );
 }
 
-// Bar chart showing runs per year
+// Bar chart showing runs per year - all bars aligned at bottom
 interface YearBarChartProps {
   yearlyStats: YearlyStats[];
 }
 
 export function YearBarChart({ yearlyStats }: YearBarChartProps) {
   const maxRuns = Math.max(...yearlyStats.map(y => y.runs));
+  const chartHeight = 120; // Fixed height in pixels
 
   return (
-    <div className="flex items-end gap-2 h-32 justify-center">
-      {yearlyStats.slice().reverse().map((year, index) => (
-        <motion.div
-          key={year.year}
-          initial={{ height: 0 }}
-          animate={{ height: `${(year.runs / maxRuns) * 100}%` }}
-          transition={{ delay: index * 0.05, duration: 0.5 }}
-          className="flex flex-col items-center"
-        >
+    <div className="flex items-end gap-2 justify-center" style={{ height: `${chartHeight + 24}px` }}>
+      {yearlyStats.slice().reverse().map((year, index) => {
+        const barHeight = Math.max(4, (year.runs / maxRuns) * chartHeight);
+
+        return (
           <div
-            className="w-8 bg-gradient-to-t from-green-600 to-green-400 rounded-t hover:from-green-500 hover:to-green-300 transition-colors cursor-pointer relative group"
-            style={{ height: '100%', minHeight: '4px' }}
+            key={year.year}
+            className="flex flex-col items-center justify-end"
+            style={{ height: `${chartHeight + 24}px` }}
           >
-            <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-zinc-800 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10">
-              {year.runs} runs
+            {/* Bar container - fixed height with bar at bottom */}
+            <div className="relative" style={{ height: `${chartHeight}px`, width: '32px' }}>
+              <motion.div
+                initial={{ height: 0 }}
+                animate={{ height: barHeight }}
+                transition={{ delay: index * 0.05, duration: 0.5 }}
+                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-600 to-green-400 rounded-t hover:from-green-500 hover:to-green-300 transition-colors cursor-pointer group"
+              >
+                {/* Tooltip */}
+                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-zinc-800 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
+                  {year.runs} runs
+                </div>
+              </motion.div>
             </div>
+            {/* Year label */}
+            <span className="text-xs text-zinc-500 mt-2">{year.year.toString().slice(-2)}</span>
           </div>
-          <span className="text-xs text-zinc-500 mt-2">{year.year.toString().slice(-2)}</span>
-        </motion.div>
-      ))}
+        );
+      })}
     </div>
   );
 }

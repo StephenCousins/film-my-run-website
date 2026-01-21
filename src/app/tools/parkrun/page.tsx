@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Activity,
@@ -25,7 +25,7 @@ import Footer from '@/components/layout/Footer';
 import { ParkrunStatCard, SubStat } from '@/components/parkrun/ParkrunStatCard';
 import { RecentRunsTable } from '@/components/parkrun/RecentRunsTable';
 import { PaceChart } from '@/components/parkrun/PaceChart';
-import { YearCard, YearBarChart } from '@/components/parkrun/YearCard';
+import { YearByYearSection } from '@/components/parkrun/YearByYearSection';
 import { VenueCardCompact } from '@/components/parkrun/VenueCardCompact';
 import { VenueMap } from '@/components/parkrun/VenueMap';
 import { AgeCategoryChart } from '@/components/parkrun/AgeCategoryChart';
@@ -117,7 +117,6 @@ export default function ParkrunPage() {
   const [data, setData] = useState<ParkrunData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const yearScrollRef = useRef<HTMLDivElement>(null);
 
   // Fetch data on mount
   useEffect(() => {
@@ -303,28 +302,10 @@ export default function ParkrunPage() {
         </Section>
 
         {/* ==================== YEAR BY YEAR ==================== */}
-        <Section id="years" title="Year by Year" icon={Calendar}>
-          {/* Bar chart overview */}
-          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 mb-8">
-            <h3 className="text-sm text-zinc-400 mb-4">Runs per year</h3>
-            <YearBarChart yearlyStats={data.yearlyStats} />
-          </div>
-
-          {/* Scrolling year cards */}
-          <div
-            ref={yearScrollRef}
-            className="flex gap-4 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent"
-          >
-            {data.yearlyStats.map((stats, index) => (
-              <YearCard
-                key={stats.year}
-                stats={stats}
-                index={index}
-                cumulativeTotal={cumulativeTotals[index]}
-              />
-            ))}
-          </div>
-        </Section>
+        <YearByYearSection
+          yearlyStats={data.yearlyStats}
+          cumulativeTotals={cumulativeTotals}
+        />
 
         {/* ==================== VENUES ==================== */}
         <Section id="venues" title="Venues Visited" icon={MapPin} className="bg-zinc-900/50">
