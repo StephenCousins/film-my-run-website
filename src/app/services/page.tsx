@@ -1,56 +1,71 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import { Video, Users, Sparkles, Camera, ArrowRight, Check } from 'lucide-react';
+import Image from 'next/image';
+import { Video, Mic, Film, Radio, Camera, ArrowRight, Check } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Services',
-  description: 'Professional race filming, event coverage, and custom video projects for runners and race organizers.',
+  description: 'POV race footage, award-winning documentaries, MC services, and live streaming for trail and ultra running events.',
 };
 
 const services = [
   {
-    title: 'Race Filming',
-    description: 'Professional video coverage of your race. From start to finish, we capture every moment of your journey with cinematic quality.',
+    title: 'POV Race Footage',
+    description: 'Hire me to run your race and capture it from the inside. Authentic, immersive footage filmed as a competitor on the course.',
     icon: Video,
     features: [
-      'Multi-camera coverage',
-      'Drone footage available',
-      'Same-day highlights',
-      'Full race edit delivery',
+      'First-person race perspective',
+      'Filmed while competing',
+      'Course highlights and atmosphere',
+      'Runner interactions captured',
       '4K video quality',
     ],
-    price: 'From £299',
-    href: '/contact?service=filming',
+    price: 'Get in touch',
+    href: '/contact?service=pov',
   },
   {
-    title: 'Event Coverage',
-    description: 'Complete event documentation for race organizers. Promotional content, live streams, and post-event packages.',
-    icon: Users,
+    title: 'Documentary Films',
+    description: 'Award-winning documentary filmmaking specialising in trail and ultra running. Telling the stories that matter.',
+    icon: Film,
     features: [
-      'Live streaming setup',
-      'Promotional videos',
-      'Participant photography',
-      'Social media content',
-      'Post-event highlight reel',
+      'Award-winning productions',
+      'Trail & ultra running focus',
+      'Compelling storytelling',
+      'Professional cinematography',
+      'Festival-ready quality',
     ],
-    price: 'From £999',
-    href: '/contact?service=events',
+    price: 'Get in touch',
+    href: '/contact?service=documentary',
   },
   {
-    title: 'Custom Projects',
-    description: 'Bespoke video projects for brands, clubs, and individuals. Tell your unique running story.',
-    icon: Sparkles,
+    title: 'Master of Ceremonies',
+    description: 'Energise your event from start to finish. Pre-race briefings, runner motivation, and finish line celebrations on the mic.',
+    icon: Mic,
     features: [
-      'Documentary style films',
-      'Brand partnerships',
-      'Running club promos',
-      'Personal journey films',
-      'Product reviews',
+      'Pre-race briefings & info',
+      'Start line energy & motivation',
+      'Finish line welcomes',
+      'Sponsor announcements',
+      'Professional PA presence',
     ],
-    price: 'Custom quote',
-    href: '/contact?service=custom',
+    price: 'Get in touch',
+    href: '/contact?service=mc',
+  },
+  {
+    title: 'Live Streaming',
+    description: 'Bring your event to a global audience. Live coverage with real-time interviews, race updates, and professional presentation.',
+    icon: Radio,
+    features: [
+      'Multi-platform streaming',
+      'Live runner interviews',
+      'Real-time race coverage',
+      'Professional commentary',
+      'Social media integration',
+    ],
+    price: 'Get in touch',
+    href: '/contact?service=streaming',
   },
 ];
 
@@ -86,7 +101,7 @@ export default function ServicesPage() {
               </div>
 
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
-                Your Event. Hosted. Captured. Shared.
+                Sharing Your Event With The World
               </h1>
 
               <p className="text-lg text-zinc-300 max-w-2xl">
@@ -99,7 +114,7 @@ export default function ServicesPage() {
         {/* Services */}
         <section className="py-16 lg:py-24">
           <div className="container">
-            <div className="grid gap-8 lg:grid-cols-3">
+            <div className="grid gap-8 md:grid-cols-2">
               {services.map((service) => {
                 const Icon = service.icon;
                 return (
@@ -150,20 +165,31 @@ export default function ServicesPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-16 lg:py-24 border-t border-zinc-800">
-          <div className="container">
+        <section className="relative py-20 lg:py-32 overflow-hidden">
+          {/* Background image */}
+          <div className="absolute inset-0">
+            <Image
+              src="/images/services-cta.jpg"
+              alt="Stephen Cousins filming at a trail running event"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-950/60 to-zinc-950" />
+          </div>
+
+          <div className="container relative">
             <div className="max-w-2xl mx-auto text-center">
               <h2 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
                 Ready to Get Started?
               </h2>
-              <p className="text-zinc-400 mb-8">
-                Get in touch to discuss your project. We'd love to hear about your race or event.
+              <p className="text-zinc-300 mb-8">
+                Get in touch to discuss your project. I'd love to hear about your race or event.
               </p>
               <Link
                 href="/contact"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
               >
-                Contact Us
+                Contact Me
                 <ArrowRight className="w-5 h-5" />
               </Link>
             </div>
