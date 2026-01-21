@@ -113,7 +113,6 @@ function parseDateDisplay(dateDisplay: string | null): Date | null {
 export async function getAllParkruns(): Promise<ParkrunResult[]> {
   const client = await getPool().connect();
   try {
-    // Sort by parkrun_date in SQL like the original app does
     const result = await client.query(`
       SELECT
         id,
@@ -125,11 +124,29 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
         finish_time,
         age_cat_pos as age_category_position
       FROM parkruns
-      ORDER BY parkrun_date DESC NULLS LAST, id DESC
+      ORDER BY id DESC
     `);
 
+    // Sort by parkrun_date, falling back to parsing date_display for NULL dates
+    const sortedRows = [...result.rows].sort((a, b) => {
+      let dateA: Date | null = a.parkrun_date ? new Date(a.parkrun_date) : null;
+      let dateB: Date | null = b.parkrun_date ? new Date(b.parkrun_date) : null;
+
+      // Fall back to parsing date_display for NULL parkrun_date
+      if (!dateA || isNaN(dateA.getTime())) {
+        dateA = parseDateDisplay(a.date_display);
+      }
+      if (!dateB || isNaN(dateB.getTime())) {
+        dateB = parseDateDisplay(b.date_display);
+      }
+
+      const timeA = dateA?.getTime() || 0;
+      const timeB = dateB?.getTime() || 0;
+      return timeB - timeA; // DESC order
+    });
+
     // Find PBs - track best time seen so far going chronologically (oldest first)
-    const chronological = [...result.rows].reverse();
+    const chronological = [...sortedRows].reverse();
 
     let bestTime = Infinity;
     const pbSet = new Set<number>();
@@ -142,7 +159,7 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
       }
     }
 
-    return result.rows.map(row => {
+    return sortedRows.map(row => {
       const timeSeconds = parseTimeToSeconds(row.finish_time);
       return {
         id: row.id,
