@@ -203,7 +203,7 @@ export default function ParkrunPage() {
 
       <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
         {/* ==================== HERO SECTION ==================== */}
-        <section className="relative py-16 lg:py-24 overflow-hidden border-b border-zinc-800">
+        <section className="relative py-16 lg:py-24 overflow-hidden">
           {/* Video background */}
           <div className="absolute inset-0">
             <video
