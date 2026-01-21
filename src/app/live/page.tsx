@@ -96,26 +96,49 @@ export default function LivePage() {
     <>
       <Header />
       <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
-        <section className="py-16 lg:py-24">
+        {/* Hero Section with Video Background */}
+        <section className="relative py-24 lg:py-32 overflow-hidden">
+          {/* Video background */}
+          <div className="absolute inset-0">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src="/videos/live-hero.mp4" type="video/mp4" />
+              <source src="/videos/live-hero.webm" type="video/webm" />
+            </video>
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/60 to-zinc-950" />
+            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/50 via-transparent to-zinc-950/50" />
+          </div>
+
+          <div className="container relative">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 backdrop-blur-sm rounded-full border border-red-500/30 mb-6">
+                <Radio className={`w-4 h-4 text-red-500 ${streamInfo.type === 'live' ? 'animate-pulse' : ''}`} />
+                <span className="text-red-400 text-sm font-medium">
+                  {streamInfo.type === 'live' ? 'Live Now' : 'Virtual Film My Run'}
+                </span>
+              </div>
+
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+                Live Treadmill Running
+              </h1>
+
+              <p className="text-lg lg:text-xl text-zinc-300 max-w-2xl mx-auto drop-shadow-md">
+                Watch live coverage from the Virtual Film My Run Channel - featuring treadmill running sessions, training streams, and more.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Content Section */}
+        <section className="py-12 lg:py-16">
           <div className="container">
             <div className="max-w-4xl mx-auto">
-              {/* Header */}
-              <div className="text-center mb-12">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/20 rounded-full border border-red-500/30 mb-6">
-                  <Radio className={`w-4 h-4 text-red-500 ${streamInfo.type === 'live' ? 'animate-pulse' : ''}`} />
-                  <span className="text-red-400 text-sm font-medium">
-                    {streamInfo.type === 'live' ? 'Live Now' : 'Virtual Film My Run'}
-                  </span>
-                </div>
-
-                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-                  Live Treadmill Running
-                </h1>
-
-                <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
-                  Watch live coverage from the Virtual Film My Run Channel - featuring treadmill running sessions, training streams, and more.
-                </p>
-              </div>
 
               {/* Loading State */}
               {isLoading && (
