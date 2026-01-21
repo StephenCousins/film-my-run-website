@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
 import { Video, Users, Sparkles, Camera, ArrowRight, Check } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -62,16 +61,21 @@ export default function ServicesPage() {
       <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
-          {/* Background image */}
+          {/* Video background */}
           <div className="absolute inset-0">
-            <Image
-              src="/images/hero/hero-main.jpg"
-              alt="Race filming"
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950" />
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src="/videos/services-hero.mp4" type="video/mp4" />
+              <source src="/videos/services-hero.webm" type="video/webm" />
+            </video>
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-950/60 to-zinc-950" />
+            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/50 via-transparent to-zinc-950/50" />
           </div>
 
           <div className="container relative">
