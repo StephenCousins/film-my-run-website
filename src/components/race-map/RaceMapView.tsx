@@ -55,7 +55,9 @@ export function RaceMapView({ races, routes, selectedRace, onRaceSelect }: RaceM
     const activityId = extractActivityId(selectedRace.strava);
     if (!activityId) return;
 
-    const coordinates = routes[activityId];
+    const routeData = routes[activityId];
+    // Handle both formats: direct array or object with coordinates property
+    const coordinates = Array.isArray(routeData) ? routeData : routeData?.coordinates;
     const bounds = calculateRouteBounds(coordinates);
 
     let timeoutId: NodeJS.Timeout | null = null;
@@ -149,7 +151,9 @@ export function RaceMapView({ races, routes, selectedRace, onRaceSelect }: RaceM
           const activityId = extractActivityId(race.strava);
           if (!activityId) return null;
 
-          const coordinates = routes[activityId];
+          const routeData = routes[activityId];
+          // Handle both formats: direct array or object with coordinates property
+          const coordinates = Array.isArray(routeData) ? routeData : routeData?.coordinates;
           if (!coordinates || coordinates.length === 0) return null;
 
           const isSelected = selectedRace && extractActivityId(selectedRace.strava) === activityId;

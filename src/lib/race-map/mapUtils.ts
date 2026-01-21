@@ -26,7 +26,9 @@ export const calculateBounds = (routes: Routes): google.maps.LatLngBounds | null
   const bounds = new window.google.maps.LatLngBounds();
   let hasValidCoords = false;
 
-  Object.values(routes).forEach((coordinates) => {
+  Object.values(routes).forEach((routeData) => {
+    // Handle both formats: direct array or object with coordinates property
+    const coordinates = Array.isArray(routeData) ? routeData : routeData?.coordinates;
     if (coordinates && Array.isArray(coordinates)) {
       coordinates.forEach((coord) => {
         if (coord && typeof coord.lat === 'number' && typeof coord.lng === 'number') {

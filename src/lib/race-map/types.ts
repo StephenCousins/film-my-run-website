@@ -27,8 +27,16 @@ export interface Coordinate {
   lng: number;
 }
 
+export interface RouteData {
+  activityId?: string;
+  name?: string;
+  date?: string;
+  coordinates: Coordinate[];
+}
+
+// Routes can be either direct coordinate arrays or objects with coordinates property
 export interface Routes {
-  [activityId: string]: Coordinate[];
+  [activityId: string]: Coordinate[] | RouteData;
 }
 
 export interface Filters {
