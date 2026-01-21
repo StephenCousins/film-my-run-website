@@ -53,19 +53,54 @@ function getPool(): Pool {
   return pool;
 }
 
-// Helper to parse date_display (DD/MM/YYYY format) to a sortable date
+// Helper to parse date_display in various formats to a sortable date
 function parseDateDisplay(dateDisplay: string | null): Date | null {
   if (!dateDisplay) return null;
-  // Try DD/MM/YYYY format
-  const parts = dateDisplay.split('/');
-  if (parts.length === 3) {
+
+  // Try DD/MM/YYYY format (e.g., "30/04/2011")
+  if (dateDisplay.includes('/')) {
+    const parts = dateDisplay.split('/');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+        return new Date(year, month, day);
+      }
+    }
+  }
+
+  // Try DD-MM-YY format (e.g., "12-10-24" for 12 Oct 2024)
+  if (dateDisplay.includes('-') && dateDisplay.split('-').length === 3) {
+    const parts = dateDisplay.split('-');
     const day = parseInt(parts[0], 10);
     const month = parseInt(parts[1], 10) - 1;
-    const year = parseInt(parts[2], 10);
+    let year = parseInt(parts[2], 10);
+    // Convert 2-digit year to 4-digit (assume 20xx for now)
+    if (year < 100) {
+      year = year + 2000;
+    }
     if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
       return new Date(year, month, day);
     }
   }
+
+  // Try "DD MMM YYYY" format (e.g., "10 Jul 2023")
+  const monthNames: { [key: string]: number } = {
+    'jan': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'may': 4, 'jun': 5,
+    'jul': 6, 'aug': 7, 'sep': 8, 'oct': 9, 'nov': 10, 'dec': 11
+  };
+  const match = dateDisplay.match(/^(\d{1,2})\s+([a-zA-Z]{3})\s+(\d{4})$/);
+  if (match) {
+    const day = parseInt(match[1], 10);
+    const monthStr = match[2].toLowerCase();
+    const year = parseInt(match[3], 10);
+    const month = monthNames[monthStr];
+    if (!isNaN(day) && month !== undefined && !isNaN(year)) {
+      return new Date(year, month, day);
+    }
+  }
+
   return null;
 }
 
