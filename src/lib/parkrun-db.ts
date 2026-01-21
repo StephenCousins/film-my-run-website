@@ -87,17 +87,10 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
       ORDER BY id DESC
     `);
 
-    // Sort by date, using date_display as fallback when parkrun_date is null
+    // Sort by date using date_display (DD/MM/YYYY format) which is the reliable field
     const sortedRows = [...result.rows].sort((a, b) => {
-      let dateA = a.parkrun_date ? new Date(a.parkrun_date) : null;
-      let dateB = b.parkrun_date ? new Date(b.parkrun_date) : null;
-      // Check if dates are valid, fall back to date_display
-      if (!dateA || isNaN(dateA.getTime())) {
-        dateA = parseDateDisplay(a.date_display);
-      }
-      if (!dateB || isNaN(dateB.getTime())) {
-        dateB = parseDateDisplay(b.date_display);
-      }
+      const dateA = parseDateDisplay(a.date_display);
+      const dateB = parseDateDisplay(b.date_display);
       const timeA = dateA?.getTime() || 0;
       const timeB = dateB?.getTime() || 0;
       return timeB - timeA; // DESC order (most recent first)
