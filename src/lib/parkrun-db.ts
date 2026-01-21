@@ -106,12 +106,6 @@ function parseDateDisplay(dateDisplay: string | null): Date | null {
     }
   }
 
-  // Try parsing with built-in Date parser as last resort
-  const parsed = new Date(cleaned);
-  if (!isNaN(parsed.getTime())) {
-    return parsed;
-  }
-
   return null;
 }
 
