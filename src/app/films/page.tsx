@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Play, Clock, Calendar, Mountain, Trophy, X, Filter } from 'lucide-react';
+import { Play, Calendar, Mountain, X, Route, Timer } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
@@ -19,128 +19,14 @@ interface Film {
   description: string;
   thumbnail: string;
   videoId: string;
-  duration: string;
-  year: string;
+  year: string | null;
   location: string;
-  category: 'ultra' | 'marathon' | 'trail' | 'documentary' | 'parkrun';
-  featured?: boolean;
-  awards?: string[];
-  stats?: {
-    distance?: string;
-    elevation?: string;
-    finishers?: string;
+  stats: {
+    distance: string | null;
+    elevation: string | null;
+    time: string | null;
   };
 }
-
-// ============================================
-// FILMS DATA
-// ============================================
-
-const films: Film[] = [
-  {
-    id: 'tds-2022',
-    title: 'TDS 2022',
-    subtitle: 'Sur les Traces des Ducs de Savoie',
-    description: 'Follow the journey through 145km of the most breathtaking alpine terrain. From the peaks of Chamonix to the finish in Courmayeur, this is trail running at its most epic.',
-    thumbnail: '/images/films/tds-thumbnail.jpg',
-    videoId: 'dQw4w9WgXcQ',
-    duration: '42:18',
-    year: '2022',
-    location: 'Alps, France/Italy',
-    category: 'ultra',
-    featured: true,
-    awards: ['Best Running Film - Sheffield Adventure Film Festival'],
-    stats: {
-      distance: '145km',
-      elevation: '9,100m',
-      finishers: '1,847',
-    },
-  },
-  {
-    id: 'utmb-2023',
-    title: 'UTMB 2023',
-    subtitle: 'Ultra-Trail du Mont-Blanc',
-    description: 'The ultimate test of endurance. 171km around Mont Blanc, through France, Italy, and Switzerland.',
-    thumbnail: '/images/films/utmb.jpg',
-    videoId: 'dQw4w9WgXcQ',
-    duration: '55:24',
-    year: '2023',
-    location: 'Alps, France/Italy/Switzerland',
-    category: 'ultra',
-    stats: {
-      distance: '171km',
-      elevation: '10,000m',
-    },
-  },
-  {
-    id: 'london-2024',
-    title: 'London Marathon 2024',
-    subtitle: 'Sub-3 Journey',
-    description: 'A personal documentary of finally breaking the 3-hour barrier at the London Marathon after years of trying.',
-    thumbnail: '/images/films/london-marathon.jpg',
-    videoId: 'dQw4w9WgXcQ',
-    duration: '28:45',
-    year: '2024',
-    location: 'London, UK',
-    category: 'marathon',
-    stats: {
-      distance: '42.2km',
-    },
-  },
-  {
-    id: 'lakeland-100',
-    title: 'Lakeland 100',
-    subtitle: '100 Miles Through the Lakes',
-    description: 'One of the toughest 100-mile races in the UK, circumnavigating the Lake District in under 40 hours.',
-    thumbnail: '/images/films/lakeland.jpg',
-    videoId: 'dQw4w9WgXcQ',
-    duration: '48:30',
-    year: '2023',
-    location: 'Lake District, UK',
-    category: 'ultra',
-    stats: {
-      distance: '105 miles',
-      elevation: '6,500m',
-    },
-  },
-  {
-    id: 'parkrun-story',
-    title: 'The Parkrun Story',
-    subtitle: '297 Runs and Counting',
-    description: 'A celebration of the parkrun community and how these 5k events have changed running culture.',
-    thumbnail: '/images/films/parkrun.png',
-    videoId: 'dQw4w9WgXcQ',
-    duration: '22:15',
-    year: '2024',
-    location: 'Various, UK',
-    category: 'parkrun',
-  },
-  {
-    id: 'spine-race',
-    title: 'The Spine Race',
-    subtitle: 'Britain\'s Most Brutal Race',
-    description: '268 miles along the Pennine Way in the depths of winter. This is as hard as it gets.',
-    thumbnail: '/images/films/spine.jpg',
-    videoId: 'dQw4w9WgXcQ',
-    duration: '62:00',
-    year: '2023',
-    location: 'Pennines, UK',
-    category: 'ultra',
-    stats: {
-      distance: '268 miles',
-      elevation: '12,000m',
-    },
-  },
-];
-
-const categories = [
-  { value: 'all', label: 'All Films' },
-  { value: 'ultra', label: 'Ultra Marathons' },
-  { value: 'marathon', label: 'Marathons' },
-  { value: 'trail', label: 'Trail Running' },
-  { value: 'documentary', label: 'Documentaries' },
-  { value: 'parkrun', label: 'Parkrun' },
-];
 
 // ============================================
 // VIDEO MODAL
@@ -153,6 +39,22 @@ interface VideoModalProps {
 }
 
 function VideoModal({ isOpen, onClose, film }: VideoModalProps) {
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', handleEscape);
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [isOpen, onClose]);
+
   if (!isOpen || !film) return null;
 
   return (
@@ -222,6 +124,7 @@ function FilmCard({ film, onPlay, featured = false }: FilmCardProps) {
         alt={film.title}
         fill
         className="object-cover transition-transform duration-700 group-hover:scale-105"
+        unoptimized
       />
 
       {/* Overlay */}
@@ -234,16 +137,10 @@ function FilmCard({ film, onPlay, featured = false }: FilmCardProps) {
         </div>
       </div>
 
-      {/* Duration badge */}
-      <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/60 backdrop-blur-sm rounded-lg text-white text-sm font-mono">
-        {film.duration}
-      </div>
-
-      {/* Award badge */}
-      {film.awards && film.awards.length > 0 && (
-        <div className="absolute top-4 left-4 flex items-center gap-2 px-3 py-1.5 bg-orange-500 rounded-lg text-white text-xs font-semibold">
-          <Trophy className="w-3.5 h-3.5" />
-          Award Winner
+      {/* Distance badge */}
+      {film.stats.distance && (
+        <div className="absolute top-4 right-4 px-3 py-1.5 bg-black/60 backdrop-blur-sm rounded-lg text-white text-sm font-mono">
+          {film.stats.distance}
         </div>
       )}
 
@@ -251,10 +148,12 @@ function FilmCard({ film, onPlay, featured = false }: FilmCardProps) {
       <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6">
         {/* Year & Location */}
         <div className="flex items-center gap-3 text-xs text-zinc-400 mb-2">
-          <span className="flex items-center gap-1">
-            <Calendar className="w-3.5 h-3.5" />
-            {film.year}
-          </span>
+          {film.year && (
+            <span className="flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5" />
+              {film.year}
+            </span>
+          )}
           <span className="flex items-center gap-1">
             <Mountain className="w-3.5 h-3.5" />
             {film.location}
@@ -282,18 +181,33 @@ function FilmCard({ film, onPlay, featured = false }: FilmCardProps) {
         )}
 
         {/* Stats */}
-        {featured && film.stats && (
+        {featured && (
           <div className="flex gap-6 mt-4">
             {film.stats.distance && (
               <div>
-                <span className="font-mono text-lg font-bold text-orange-500">{film.stats.distance}</span>
+                <span className="font-mono text-lg font-bold text-orange-500 flex items-center gap-1">
+                  <Route className="w-4 h-4" />
+                  {film.stats.distance}
+                </span>
                 <span className="text-xs text-zinc-500 block">Distance</span>
               </div>
             )}
             {film.stats.elevation && (
               <div>
-                <span className="font-mono text-lg font-bold text-orange-500">{film.stats.elevation}</span>
+                <span className="font-mono text-lg font-bold text-orange-500 flex items-center gap-1">
+                  <Mountain className="w-4 h-4" />
+                  {film.stats.elevation}
+                </span>
                 <span className="text-xs text-zinc-500 block">Elevation</span>
+              </div>
+            )}
+            {film.stats.time && (
+              <div>
+                <span className="font-mono text-lg font-bold text-orange-500 flex items-center gap-1">
+                  <Timer className="w-4 h-4" />
+                  {film.stats.time}
+                </span>
+                <span className="text-xs text-zinc-500 block">Time</span>
               </div>
             )}
           </div>
@@ -304,19 +218,55 @@ function FilmCard({ film, onPlay, featured = false }: FilmCardProps) {
 }
 
 // ============================================
+// LOADING SKELETON
+// ============================================
+
+function LoadingSkeleton() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[...Array(6)].map((_, i) => (
+        <div key={i} className="aspect-video bg-zinc-800 rounded-2xl animate-pulse" />
+      ))}
+    </div>
+  );
+}
+
+// ============================================
 // FILMS PAGE
 // ============================================
 
 export default function FilmsPage() {
-  const [activeCategory, setActiveCategory] = useState('all');
+  const [films, setFilms] = useState<Film[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedFilm, setSelectedFilm] = useState<Film | null>(null);
 
-  const filteredFilms = activeCategory === 'all'
-    ? films
-    : films.filter(film => film.category === activeCategory);
+  // Fetch films from API
+  useEffect(() => {
+    async function fetchFilms() {
+      try {
+        const res = await fetch('/api/films');
+        const data = await res.json();
 
-  const featuredFilm = films.find(f => f.featured);
-  const regularFilms = filteredFilms.filter(f => !f.featured);
+        if (!data.ok) {
+          throw new Error(data.error || 'Failed to load films');
+        }
+
+        setFilms(data.films);
+      } catch (err) {
+        console.error('Failed to fetch films:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchFilms();
+  }, []);
+
+  // First film is featured
+  const featuredFilm = films.length > 0 ? films[0] : null;
+  const regularFilms = films.slice(1);
 
   return (
     <>
@@ -328,22 +278,53 @@ export default function FilmsPage() {
           <div className="container">
             <div className="max-w-3xl">
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-                Films
+                Ultra Race Films
               </h1>
               <p className="text-lg text-zinc-400">
-                Documentary-style race films capturing the spirit of running. From
-                alpine ultras to personal marathon journeys.
+                Documentary-style race films capturing the spirit of ultra running.
+                From alpine adventures to British classics, these are my ultra marathon journeys.
               </p>
+              {!isLoading && films.length > 0 && (
+                <p className="text-sm text-zinc-500 mt-4">
+                  {films.length} films from my ultra running adventures
+                </p>
+              )}
             </div>
           </div>
         </section>
 
+        {/* Loading state */}
+        {isLoading && (
+          <section className="py-12 lg:py-16">
+            <div className="container">
+              <LoadingSkeleton />
+            </div>
+          </section>
+        )}
+
+        {/* Error state */}
+        {error && (
+          <section className="py-12 lg:py-16">
+            <div className="container">
+              <div className="text-center py-16">
+                <p className="text-zinc-500">{error}</p>
+                <button
+                  onClick={() => window.location.reload()}
+                  className="mt-4 px-6 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors"
+                >
+                  Try again
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Featured film */}
-        {featuredFilm && activeCategory === 'all' && (
+        {!isLoading && !error && featuredFilm && (
           <section className="py-12 lg:py-16">
             <div className="container">
               <span className="text-orange-500 text-sm font-semibold uppercase tracking-wider mb-4 block">
-                Featured Film
+                Latest Film
               </span>
               <FilmCard
                 film={featuredFilm}
@@ -354,49 +335,36 @@ export default function FilmsPage() {
           </section>
         )}
 
-        {/* Filter */}
-        <section className="py-6 border-b border-zinc-800 sticky top-16 lg:top-20 z-30 bg-zinc-950">
-          <div className="container">
-            <div className="flex items-center gap-4 overflow-x-auto scrollbar-hide">
-              <Filter className="w-4 h-4 text-zinc-500 flex-shrink-0" />
-              {categories.map((cat) => (
-                <button
-                  key={cat.value}
-                  onClick={() => setActiveCategory(cat.value)}
-                  className={cn(
-                    'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all',
-                    activeCategory === cat.value
-                      ? 'bg-orange-500 text-white'
-                      : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-white'
-                  )}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Films grid */}
-        <section className="py-12 lg:py-16">
-          <div className="container">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {(activeCategory === 'all' ? regularFilms : filteredFilms).map((film) => (
-                <FilmCard
-                  key={film.id}
-                  film={film}
-                  onPlay={setSelectedFilm}
-                />
-              ))}
-            </div>
-
-            {filteredFilms.length === 0 && (
-              <div className="text-center py-16">
-                <p className="text-zinc-500">No films found in this category.</p>
+        {!isLoading && !error && regularFilms.length > 0 && (
+          <section className="py-12 lg:py-16">
+            <div className="container">
+              <h2 className="font-display text-2xl font-bold text-white mb-8">
+                All Films
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {regularFilms.map((film) => (
+                  <FilmCard
+                    key={film.id}
+                    film={film}
+                    onPlay={setSelectedFilm}
+                  />
+                ))}
               </div>
-            )}
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
+
+        {/* Empty state */}
+        {!isLoading && !error && films.length === 0 && (
+          <section className="py-12 lg:py-16">
+            <div className="container">
+              <div className="text-center py-16">
+                <p className="text-zinc-500">No films available yet.</p>
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* CTA section */}
         <section className="py-16 lg:py-24 border-t border-zinc-800">
@@ -406,14 +374,14 @@ export default function FilmsPage() {
                 Want Your Race Filmed?
               </h2>
               <p className="text-zinc-400 mb-8">
-                Personal race films, event coverage, or documentary projects.
+                POV race footage, event coverage, or documentary projects.
                 Let's capture your running story.
               </p>
               <Link
-                href="/contact"
+                href="/services"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
               >
-                Get in Touch
+                View Services
               </Link>
             </div>
           </div>
