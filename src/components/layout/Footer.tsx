@@ -152,7 +152,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-zinc-950 border-t border-zinc-800">
+    <footer className="bg-zinc-950">
       {/* Main footer content */}
       <div className="container py-16 lg:py-20">
         {/* Top row: Brand + Newsletter */}

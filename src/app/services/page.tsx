@@ -174,7 +174,7 @@ export default function ServicesPage() {
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-950/60 to-zinc-950" />
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/70 via-50% to-zinc-950 to-85%" />
           </div>
 
           <div className="container relative">
