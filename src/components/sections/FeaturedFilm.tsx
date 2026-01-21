@@ -3,30 +3,28 @@
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Play, Clock, Mountain, Calendar, ArrowRight, X } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Play, Mountain, Calendar, ArrowRight, X, Route, Timer } from 'lucide-react';
 
 // ============================================
-// FEATURED FILM DATA
+// TYPES
 // ============================================
 
-const featuredFilm = {
-  title: 'TDS 2022',
-  subtitle: 'Sur les Traces des Ducs de Savoie',
-  description:
-    'Follow the journey through 145km of the most breathtaking alpine terrain. From the peaks of Chamonix to the finish in Courmayeur, this is trail running at its most epic.',
-  thumbnail: '/images/films/tds-thumbnail.jpg',
-  videoId: 'dQw4w9WgXcQ', // Replace with actual YouTube ID
-  duration: '42:18',
-  year: '2022',
-  location: 'Alps, France/Italy',
+interface FeaturedVideoData {
+  title: string;
+  subtitle: string;
+  description: string;
+  videoId: string;
+  thumbnail: string;
+  year: string | null;
+  location: string;
   stats: {
-    distance: '145km',
-    elevation: '9,100m',
-    finishers: '1,847',
-  },
-  href: '/films/tds-2022',
-};
+    distance: string;
+    elevation: string;
+    time: string;
+  };
+  totalVideos: number;
+  currentIndex: number;
+}
 
 // ============================================
 // VIDEO MODAL
@@ -91,16 +89,76 @@ function VideoModal({ isOpen, onClose, videoId, title }: VideoModalProps) {
 }
 
 // ============================================
+// LOADING SKELETON
+// ============================================
+
+function LoadingSkeleton() {
+  return (
+    <section className="relative py-24 lg:py-32 overflow-hidden bg-zinc-950">
+      <div className="container">
+        <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+          {/* Content skeleton */}
+          <div className="order-2 lg:order-1 animate-pulse">
+            <div className="h-6 w-32 bg-zinc-800 rounded-full mb-6" />
+            <div className="h-12 w-3/4 bg-zinc-800 rounded mb-4" />
+            <div className="h-6 w-1/2 bg-zinc-800 rounded mb-6" />
+            <div className="h-20 w-full bg-zinc-800 rounded mb-8" />
+            <div className="h-24 w-full bg-zinc-800 rounded mb-8" />
+            <div className="flex gap-4">
+              <div className="h-12 w-36 bg-zinc-800 rounded-full" />
+              <div className="h-12 w-36 bg-zinc-800 rounded-full" />
+            </div>
+          </div>
+
+          {/* Thumbnail skeleton */}
+          <div className="order-1 lg:order-2">
+            <div className="aspect-video bg-zinc-800 rounded-2xl animate-pulse" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ============================================
 // FEATURED FILM SECTION
 // ============================================
 
 export default function FeaturedFilm() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [video, setVideo] = useState<FeaturedVideoData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch featured video
+  useEffect(() => {
+    async function fetchFeaturedVideo() {
+      try {
+        const res = await fetch('/api/featured-video');
+        const data = await res.json();
+
+        if (!data.ok) {
+          throw new Error(data.error || 'Failed to load featured video');
+        }
+
+        setVideo(data.video);
+      } catch (err) {
+        console.error('Failed to fetch featured video:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load');
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchFeaturedVideo();
+  }, []);
 
   // Initialize GSAP animations
   useEffect(() => {
-    let ctx: any;
+    if (isLoading || !video) return;
+
+    let ctx: ReturnType<typeof import('gsap').gsap.context> | undefined;
 
     const initGSAP = async () => {
       try {
@@ -169,7 +227,17 @@ export default function FeaturedFilm() {
     return () => {
       if (ctx) ctx.revert();
     };
-  }, []);
+  }, [isLoading, video]);
+
+  // Loading state
+  if (isLoading) {
+    return <LoadingSkeleton />;
+  }
+
+  // Error state - hide section
+  if (error || !video) {
+    return null;
+  }
 
   return (
     <>
@@ -184,37 +252,37 @@ export default function FeaturedFilm() {
             <div className="film-content order-2 lg:order-1">
               {/* Tag */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-orange-500/10 rounded-full border border-orange-500/20 mb-6">
-                <span className="text-orange-500 text-sm font-medium">Featured Film</span>
+                <span className="text-orange-500 text-sm font-medium">
+                  Featured Film ({video.currentIndex}/{video.totalVideos})
+                </span>
               </div>
 
               {/* Title */}
               <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
-                {featuredFilm.title}
+                {video.title}
               </h2>
 
               {/* Subtitle */}
               <p className="text-xl text-zinc-400 italic mb-6">
-                {featuredFilm.subtitle}
+                {video.subtitle}
               </p>
 
               {/* Description */}
               <p className="text-zinc-400 leading-relaxed mb-8 max-w-lg">
-                {featuredFilm.description}
+                {video.description}
               </p>
 
               {/* Meta info */}
               <div className="flex flex-wrap gap-6 mb-8 text-sm text-zinc-500">
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4" />
-                  {featuredFilm.duration}
-                </div>
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  {featuredFilm.year}
-                </div>
+                {video.year && (
+                  <div className="flex items-center gap-2">
+                    <Calendar className="w-4 h-4" />
+                    {video.year}
+                  </div>
+                )}
                 <div className="flex items-center gap-2">
                   <Mountain className="w-4 h-4" />
-                  {featuredFilm.location}
+                  {video.location}
                 </div>
               </div>
 
@@ -222,26 +290,29 @@ export default function FeaturedFilm() {
               <div className="film-stats grid grid-cols-3 gap-4 p-4 bg-zinc-900 rounded-xl border border-zinc-800 mb-8">
                 <div className="film-stat text-center">
                   <div className="font-mono text-xl font-bold text-orange-500">
-                    {featuredFilm.stats.distance}
+                    {video.stats.distance}
                   </div>
-                  <div className="text-xs text-zinc-500 uppercase tracking-wider">
+                  <div className="text-xs text-zinc-500 uppercase tracking-wider flex items-center justify-center gap-1">
+                    <Route className="w-3 h-3" />
                     Distance
                   </div>
                 </div>
                 <div className="film-stat text-center border-x border-zinc-800">
                   <div className="font-mono text-xl font-bold text-orange-500">
-                    {featuredFilm.stats.elevation}
+                    {video.stats.elevation}
                   </div>
-                  <div className="text-xs text-zinc-500 uppercase tracking-wider">
+                  <div className="text-xs text-zinc-500 uppercase tracking-wider flex items-center justify-center gap-1">
+                    <Mountain className="w-3 h-3" />
                     Elevation
                   </div>
                 </div>
                 <div className="film-stat text-center">
                   <div className="font-mono text-xl font-bold text-orange-500">
-                    {featuredFilm.stats.finishers}
+                    {video.stats.time}
                   </div>
-                  <div className="text-xs text-zinc-500 uppercase tracking-wider">
-                    Finishers
+                  <div className="text-xs text-zinc-500 uppercase tracking-wider flex items-center justify-center gap-1">
+                    <Timer className="w-3 h-3" />
+                    Time
                   </div>
                 </div>
               </div>
@@ -275,10 +346,11 @@ export default function FeaturedFilm() {
                 {/* Image */}
                 <div className="film-thumbnail absolute inset-0 scale-110">
                   <Image
-                    src={featuredFilm.thumbnail}
-                    alt={featuredFilm.title}
+                    src={video.thumbnail}
+                    alt={video.title}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    unoptimized // YouTube thumbnails are external
                   />
                 </div>
 
@@ -292,9 +364,9 @@ export default function FeaturedFilm() {
                   </div>
                 </div>
 
-                {/* Duration badge */}
+                {/* Stats badge */}
                 <div className="absolute bottom-4 right-4 px-3 py-1.5 bg-black/60 backdrop-blur-sm rounded-lg text-white text-sm font-mono">
-                  {featuredFilm.duration}
+                  {video.stats.distance}
                 </div>
               </div>
             </div>
@@ -309,8 +381,8 @@ export default function FeaturedFilm() {
       <VideoModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        videoId={featuredFilm.videoId}
-        title={featuredFilm.title}
+        videoId={video.videoId}
+        title={video.title}
       />
     </>
   );
