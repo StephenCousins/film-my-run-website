@@ -53,6 +53,22 @@ function getPool(): Pool {
   return pool;
 }
 
+// Helper to parse date_display (DD/MM/YYYY format) to a sortable date
+function parseDateDisplay(dateDisplay: string | null): Date | null {
+  if (!dateDisplay) return null;
+  // Try DD/MM/YYYY format
+  const parts = dateDisplay.split('/');
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const year = parseInt(parts[2], 10);
+    if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+      return new Date(year, month, day);
+    }
+  }
+  return null;
+}
+
 // Query functions - adapted to actual database schema
 export async function getAllParkruns(): Promise<ParkrunResult[]> {
   const client = await getPool().connect();
@@ -68,20 +84,25 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
         finish_time,
         age_cat_pos as age_category_position
       FROM parkruns
-      ORDER BY COALESCE(parkrun_date, '1900-01-01') DESC, id DESC
+      ORDER BY id DESC
     `);
 
-    // Find PBs - track best time seen so far going chronologically
-    const sortedByDate = [...result.rows].sort((a, b) => {
-      const dateA = a.parkrun_date ? new Date(a.parkrun_date).getTime() : 0;
-      const dateB = b.parkrun_date ? new Date(b.parkrun_date).getTime() : 0;
-      return dateA - dateB;
+    // Sort by date, using date_display as fallback when parkrun_date is null
+    const sortedRows = [...result.rows].sort((a, b) => {
+      const dateA = a.parkrun_date ? new Date(a.parkrun_date) : parseDateDisplay(a.date_display);
+      const dateB = b.parkrun_date ? new Date(b.parkrun_date) : parseDateDisplay(b.date_display);
+      const timeA = dateA?.getTime() || 0;
+      const timeB = dateB?.getTime() || 0;
+      return timeB - timeA; // DESC order (most recent first)
     });
+
+    // Find PBs - track best time seen so far going chronologically (oldest first)
+    const chronological = [...sortedRows].reverse();
 
     let bestTime = Infinity;
     const pbSet = new Set<number>();
 
-    for (const row of sortedByDate) {
+    for (const row of chronological) {
       const timeSeconds = parseTimeToSeconds(row.finish_time);
       if (timeSeconds < bestTime) {
         bestTime = timeSeconds;
@@ -89,11 +110,19 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
       }
     }
 
-    return result.rows.map(row => {
+    return sortedRows.map(row => {
       const timeSeconds = parseTimeToSeconds(row.finish_time);
+      // Format date as DD/MM/YYYY
+      let dateStr = '';
+      if (row.parkrun_date) {
+        const d = new Date(row.parkrun_date);
+        dateStr = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
+      } else if (row.date_display) {
+        dateStr = row.date_display;
+      }
       return {
         id: row.id,
-        date: row.parkrun_date?.toISOString?.().split('T')[0] || row.date_display || '',
+        date: dateStr,
         event: row.event,
         run_number: row.run_number || 0,
         position: row.position || 0,
