@@ -65,7 +65,7 @@ export function YearByYearSection({ yearlyStats, cumulativeTotals }: YearByYearS
   const gap = 16; // gap-4
   const cardsWidth = cardWidth * yearlyStats.length + gap * (yearlyStats.length - 1);
   const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
-  const maxTranslate = Math.max(0, cardsWidth - viewportWidth + 600);
+  const maxTranslate = Math.max(0, cardsWidth - viewportWidth + 800); // Increased to show final card
   const translateX = -scrollProgress * maxTranslate;
 
   // Mobile: simple scrolling
