@@ -119,17 +119,14 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
 
     return sortedRows.map(row => {
       const timeSeconds = parseTimeToSeconds(row.finish_time);
-      // Format date as DD/MM/YYYY
-      let dateStr = '';
-      if (row.parkrun_date) {
-        const d = new Date(row.parkrun_date);
+      // Use date_display if available (already in DD/MM/YYYY), otherwise format parkrun_date
+      let dateStr = row.date_display || '';
+      if (!dateStr && row.parkrun_date) {
+        // parkrun_date from PostgreSQL is a Date object
+        const d = row.parkrun_date instanceof Date ? row.parkrun_date : new Date(row.parkrun_date);
         if (!isNaN(d.getTime())) {
           dateStr = `${d.getDate().toString().padStart(2, '0')}/${(d.getMonth() + 1).toString().padStart(2, '0')}/${d.getFullYear()}`;
-        } else if (row.date_display) {
-          dateStr = row.date_display;
         }
-      } else if (row.date_display) {
-        dateStr = row.date_display;
       }
       return {
         id: row.id,
