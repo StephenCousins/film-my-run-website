@@ -28,6 +28,7 @@
     "@radix-ui/react-tabs": "^1.x",
     "@react-google-maps/api": "^2.20.8",
     "axios": "^1.13.2",
+    "cheerio": "^1.1.2",
     "class-variance-authority": "^0.7.x",
     "clsx": "^2.x",
     "framer-motion": "^11.x",

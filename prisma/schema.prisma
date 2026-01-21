@@ -224,3 +224,70 @@ model AgeGradingFactor {
   @@index([gender, event])
   @@map("age_grading_factors")
 }
+
+// ============================================
+// HOW FAST AM I - ATHLETE LOOKUP CACHE
+// ============================================
+
+model ParkrunAthlete {
+  id                   Int      @id @default(autoincrement())
+  athleteId            String   @unique @map("athlete_id")
+  name                 String
+  totalRuns            Int      @map("total_runs")
+  bestTimeSeconds      Int?     @map("best_time_seconds")
+  averageTimeSeconds   Int?     @map("average_time_seconds")
+  typicalAvgSeconds    Int?     @map("typical_avg_seconds")
+  recentAvgSeconds     Int?     @map("recent_avg_seconds")
+  avgAgeGrade          Decimal? @map("avg_age_grade") @db.Decimal(5, 2)
+  recentAvgAgeGrade    Decimal? @map("recent_avg_age_grade") @db.Decimal(5, 2)
+  pbDate               String?  @map("pb_date")
+  pbEvent              String?  @map("pb_event")
+  pbAge                String?  @map("pb_age")
+  trend                String?  // 'improving', 'stable', 'declining'
+  trendMessage         String?  @map("trend_message")
+  outlierCount         Int      @default(0) @map("outlier_count")
+  normalRunCount       Int      @default(0) @map("normal_run_count")
+  recentResultsJson    Json?    @map("recent_results_json") // Last 10 runs
+  lookupCount          Int      @default(1) @map("lookup_count")
+  createdAt            DateTime @default(now()) @map("created_at")
+  updatedAt            DateTime @updatedAt @map("updated_at")
+  lastLookupAt         DateTime @default(now()) @map("last_lookup_at")
+
+  @@index([athleteId])
+  @@index([lastLookupAt])
+  @@map("parkrun_athletes")
+}
+
+model Po10Athlete {
+  id                 Int      @id @default(autoincrement())
+  athleteId          String   @unique @map("athlete_id")
+  name               String
+  club               String?
+  gender             String?  // 'male' or 'female'
+  ageGroup           String?  @map("age_group")
+  pbsJson            Json?    @map("pbs_json") // PBs by distance
+  overallPercentile  Decimal? @map("overall_percentile") @db.Decimal(5, 2)
+  overallAgeGrade    Decimal? @map("overall_age_grade") @db.Decimal(5, 2)
+  overallAbilityLevel String? @map("overall_ability_level")
+  lookupCount        Int      @default(1) @map("lookup_count")
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+  lastLookupAt       DateTime @default(now()) @map("last_lookup_at")
+
+  @@index([athleteId])
+  @@index([lastLookupAt])
+  @@map("po10_athletes")
+}
+
+model AthleteLookup {
+  id          Int      @id @default(autoincrement())
+  source      String   // 'parkrun' or 'po10'
+  athleteId   String   @map("athlete_id")
+  athleteName String?  @map("athlete_name")
+  lookupAt    DateTime @default(now()) @map("lookup_at")
+  ipAddress   String?  @map("ip_address")
+
+  @@index([source, athleteId])
+  @@index([lookupAt])
+  @@map("athlete_lookups")
+}
