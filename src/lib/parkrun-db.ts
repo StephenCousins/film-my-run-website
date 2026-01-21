@@ -113,6 +113,7 @@ function parseDateDisplay(dateDisplay: string | null): Date | null {
 export async function getAllParkruns(): Promise<ParkrunResult[]> {
   const client = await getPool().connect();
   try {
+    // Sort by parkrun_date in SQL like the original app does
     const result = await client.query(`
       SELECT
         id,
@@ -124,20 +125,11 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
         finish_time,
         age_cat_pos as age_category_position
       FROM parkruns
-      ORDER BY id DESC
+      ORDER BY parkrun_date DESC NULLS LAST, id DESC
     `);
 
-    // Sort by date using date_display (DD/MM/YYYY format) which is the reliable field
-    const sortedRows = [...result.rows].sort((a, b) => {
-      const dateA = parseDateDisplay(a.date_display);
-      const dateB = parseDateDisplay(b.date_display);
-      const timeA = dateA?.getTime() || 0;
-      const timeB = dateB?.getTime() || 0;
-      return timeB - timeA; // DESC order (most recent first)
-    });
-
     // Find PBs - track best time seen so far going chronologically (oldest first)
-    const chronological = [...sortedRows].reverse();
+    const chronological = [...result.rows].reverse();
 
     let bestTime = Infinity;
     const pbSet = new Set<number>();
@@ -150,19 +142,11 @@ export async function getAllParkruns(): Promise<ParkrunResult[]> {
       }
     }
 
-    return sortedRows.map(row => {
+    return result.rows.map(row => {
       const timeSeconds = parseTimeToSeconds(row.finish_time);
-      // Normalize all dates to DD/MM/YYYY format
-      let dateStr = '';
-      const parsedDate = parseDateDisplay(row.date_display);
-      if (parsedDate) {
-        dateStr = `${parsedDate.getDate().toString().padStart(2, '0')}/${(parsedDate.getMonth() + 1).toString().padStart(2, '0')}/${parsedDate.getFullYear()}`;
-      } else {
-        dateStr = row.date_display || '';
-      }
       return {
         id: row.id,
-        date: dateStr,
+        date: row.date_display || '',  // Use date_display directly like the original app
         event: row.event,
         run_number: row.run_number || 0,
         position: row.position || 0,
