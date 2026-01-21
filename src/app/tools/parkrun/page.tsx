@@ -203,22 +203,39 @@ export default function ParkrunPage() {
 
       <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
         {/* ==================== HERO SECTION ==================== */}
-        <section className="py-12 lg:py-20 bg-gradient-to-b from-zinc-900 to-zinc-950 border-b border-zinc-800">
-          <div className="container">
+        <section className="relative py-16 lg:py-24 overflow-hidden border-b border-zinc-800">
+          {/* Video background */}
+          <div className="absolute inset-0">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src="/videos/parkrun-hero.mp4" type="video/mp4" />
+              <source src="/videos/parkrun-hero.webm" type="video/webm" />
+            </video>
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-950/60 to-zinc-950" />
+            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/50 via-transparent to-zinc-950/50" />
+          </div>
+
+          <div className="container relative">
             {/* Header */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-center mb-10"
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 text-green-400 rounded-full text-sm font-medium mb-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/20 backdrop-blur-sm text-green-400 rounded-full text-sm font-medium mb-4 border border-green-500/30">
                 <Activity className="w-4 h-4" />
                 My parkrun Journey
               </div>
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-2">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-2 drop-shadow-lg">
                 parkrun Stats
               </h1>
-              <p className="text-zinc-400">
+              <p className="text-zinc-300 drop-shadow-md">
                 {data.metadata.firstParkrunDate} – {data.metadata.lastParkrunDate}
               </p>
             </motion.div>
@@ -255,9 +272,9 @@ export default function ParkrunPage() {
             {/* Sub stats */}
             <div className="flex items-center justify-center gap-8 flex-wrap">
               <SubStat label="First Run" value={data.metadata.firstParkrunDate} />
-              <div className="w-px h-8 bg-zinc-800" />
+              <div className="w-px h-8 bg-zinc-700" />
               <SubStat label="Last Run" value={data.metadata.lastParkrunDate} />
-              <div className="w-px h-8 bg-zinc-800 hidden sm:block" />
+              <div className="w-px h-8 bg-zinc-700 hidden sm:block" />
               <SubStat label="PB Date" value={data.metadata.personalBestDate} />
             </div>
           </div>
