@@ -179,8 +179,8 @@ export default function HowFastAmIPage() {
     <>
       <Header />
       <main className="min-h-screen bg-zinc-950">
-        {/* Video Hero Section */}
-        <section className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+        {/* Video Hero Banner */}
+        <section className="relative h-[35vh] min-h-[250px] max-h-[350px] overflow-hidden">
           {/* Video Background */}
           <div className="absolute inset-0 z-0">
             <video
@@ -194,99 +194,100 @@ export default function HowFastAmIPage() {
               <source src="/videos/fast-running.mp4" type="video/mp4" />
             </video>
             {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/40 to-zinc-950" />
-          </div>
-
-          {/* Content */}
-          <div className="container relative z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="max-w-3xl mx-auto text-center"
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
-                <Activity className="w-4 h-4 text-orange-500" />
-                <span className="text-orange-400 text-sm font-medium">Running Analysis</span>
-              </div>
-
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
-                How Fast Are You?
-              </h1>
-
-              <p className="text-lg sm:text-xl text-zinc-200 mb-8 drop-shadow-md">
-                Find out how your running compares to others. Enter your parkrun or Power of 10 athlete ID
-                to see your percentile ranking, trends, and comparisons.
-              </p>
-            </motion.div>
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/40 via-zinc-950/20 to-zinc-950" />
           </div>
         </section>
 
-        {/* Search Section */}
-        <section className="py-12 lg:py-16 border-b border-zinc-800 bg-zinc-950">
+        {/* Main Tool Section */}
+        <section className="py-12 lg:py-16">
           <div className="container">
-            <div className="max-w-xl mx-auto text-center">
-              {/* Tabs */}
-              <div className="flex justify-center mb-6">
-                <div className="inline-flex bg-zinc-900 rounded-xl p-1 border border-zinc-800">
-                  <button
-                    onClick={() => { setActiveTab('parkrun'); setError(null); }}
-                    className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      activeTab === 'parkrun'
-                        ? 'bg-orange-500 text-white'
-                        : 'text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    parkrun
-                  </button>
-                  <button
-                    onClick={() => { setActiveTab('po10'); setError(null); }}
-                    className={`px-6 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      activeTab === 'po10'
-                        ? 'bg-orange-500 text-white'
-                        : 'text-zinc-400 hover:text-white'
-                    }`}
-                  >
-                    Power of 10
-                  </button>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="max-w-2xl mx-auto"
+            >
+              {/* Header */}
+              <div className="text-center mb-10">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 rounded-full border border-orange-500/30 mb-6">
+                  <Activity className="w-4 h-4 text-orange-500" />
+                  <span className="text-orange-400 text-sm font-medium">Running Analysis</span>
                 </div>
+
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+                  How Fast Are You?
+                </h1>
+
+                <p className="text-lg text-zinc-400">
+                  Find out how your running compares to others. Enter your parkrun or Power of 10 athlete ID
+                  to see your percentile ranking, trends, and comparisons.
+                </p>
               </div>
 
-              {/* Search Form */}
-              <div className="flex gap-3 max-w-md mx-auto">
-                <div className="relative flex-1">
-                  <input
-                    type="text"
-                    value={athleteId}
-                    onChange={(e) => setAthleteId(e.target.value)}
-                    onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                    placeholder={activeTab === 'parkrun' ? 'Enter parkrun ID (e.g., 123456)' : 'Enter Power of 10 ID'}
-                    className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 transition-colors"
-                  />
+              {/* Tool Card */}
+              <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 sm:p-8">
+                {/* Tabs */}
+                <div className="flex justify-center mb-6">
+                  <div className="inline-flex bg-zinc-800 rounded-xl p-1">
+                    <button
+                      onClick={() => { setActiveTab('parkrun'); setError(null); }}
+                      className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        activeTab === 'parkrun'
+                          ? 'bg-orange-500 text-white'
+                          : 'text-zinc-400 hover:text-white'
+                      }`}
+                    >
+                      parkrun
+                    </button>
+                    <button
+                      onClick={() => { setActiveTab('po10'); setError(null); }}
+                      className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                        activeTab === 'po10'
+                          ? 'bg-orange-500 text-white'
+                          : 'text-zinc-400 hover:text-white'
+                      }`}
+                    >
+                      Power of 10
+                    </button>
+                  </div>
                 </div>
-                <button
-                  onClick={handleSearch}
-                  disabled={isLoading}
-                  className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
-                >
-                  {isLoading ? (
-                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                  ) : (
-                    <>
-                      <Search className="w-5 h-5" />
-                      Search
-                    </>
-                  )}
-                </button>
-              </div>
 
-              {/* Help text */}
-              <p className="text-sm text-zinc-500 mt-3 flex items-center justify-center gap-1">
-                <Info className="w-4 h-4" />
-                {activeTab === 'parkrun'
-                  ? 'Find your ID on your parkrun profile page'
-                  : 'Find your ID on thepowerof10.info'}
-              </p>
-            </div>
+                {/* Search Form */}
+                <div className="flex gap-3">
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      value={athleteId}
+                      onChange={(e) => setAthleteId(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                      placeholder={activeTab === 'parkrun' ? 'Enter parkrun ID (e.g., 123456)' : 'Enter Power of 10 ID'}
+                      className="w-full px-4 py-3.5 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 transition-colors"
+                    />
+                  </div>
+                  <button
+                    onClick={handleSearch}
+                    disabled={isLoading}
+                    className="px-6 py-3.5 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                  >
+                    {isLoading ? (
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <>
+                        <Search className="w-5 h-5" />
+                        Search
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Help text */}
+                <p className="text-sm text-zinc-500 mt-4 flex items-center justify-center gap-1">
+                  <Info className="w-4 h-4" />
+                  {activeTab === 'parkrun'
+                    ? 'Find your ID on your parkrun profile page'
+                    : 'Find your ID on thepowerof10.info'}
+                </p>
+              </div>
+            </motion.div>
           </div>
         </section>
 
