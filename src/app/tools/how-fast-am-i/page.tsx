@@ -193,7 +193,7 @@ export default function HowFastAmIPage() {
               </div>
 
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-                How Fast Am I?
+                How Fast Are You?
               </h1>
 
               <p className="text-lg text-zinc-400 mb-8">
