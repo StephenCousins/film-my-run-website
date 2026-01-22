@@ -12,12 +12,19 @@ import ThemeToggle from '@/components/ui/ThemeToggle';
 // ============================================
 
 const navigation = [
-  { name: 'Running Calculators', href: '/tools/calculators' },
   {
-    name: 'Services',
-    href: '/services',
+    name: 'Tools',
+    href: '/tools/calculators',
+    children: [
+      { name: 'Running Calculators', href: '/tools/calculators' },
+      { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
+      { name: 'Parkrun Stats', href: '/tools/parkrun' },
+      { name: 'Race Map', href: '/tools/race-map' },
+    ],
   },
-  { name: 'Discount Codes', href: '/discounts' },
+  { name: 'Services', href: '/services' },
+  { name: 'Discounts', href: '/discounts' },
+  { name: 'Shop', href: '/shop' },
   { name: 'Live', href: '/live' },
   { name: 'Contact', href: '/contact' },
 ];

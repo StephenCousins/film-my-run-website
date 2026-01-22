@@ -9,12 +9,16 @@ import { cn } from '@/lib/utils';
 // ============================================
 
 const footerLinks = {
-  tools: {
-    title: 'Running Tools',
+  forRunners: {
+    title: 'For Runners',
     links: [
-      { name: 'Pace Calculator', href: '/tools/calculators' },
-      { name: 'Race Predictor', href: '/tools/calculators' },
+      { name: 'Running Calculators', href: '/tools/calculators' },
       { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
+      { name: 'Parkrun Stats', href: '/tools/parkrun' },
+      { name: 'Race Map', href: '/tools/race-map' },
+      { name: 'Discount Codes', href: '/discounts' },
+      { name: 'Shop', href: '/shop' },
+      { name: 'Training Plans', href: '/training' },
     ],
   },
   services: {
@@ -22,20 +26,15 @@ const footerLinks = {
     links: [
       { name: 'Race Filming', href: '/services/filming' },
       { name: 'Event Coverage', href: '/services/events' },
-      { name: 'Training Plans', href: '/training' },
-      { name: 'Shop', href: '/shop' },
     ],
   },
   content: {
-    title: 'Content',
+    title: "Stephen's Running",
     links: [
       { name: 'Blog', href: '/blog' },
       { name: 'Films', href: '/films' },
-      { name: 'Live Events', href: '/live' },
-      { name: 'Discount Codes', href: '/discounts' },
-      { name: 'Race Dashboard', href: '/races' },
-      { name: 'Race Map', href: '/tools/race-map' },
-      { name: 'Parkrun Stats', href: '/tools/parkrun' },
+      { name: 'Race Results', href: '/races' },
+      { name: 'Live', href: '/live' },
     ],
   },
   company: {
@@ -189,7 +188,7 @@ export default function Footer() {
 
         {/* Bottom row: Link columns spread evenly */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-16 pt-12 border-t border-zinc-800">
-          <LinkColumn {...footerLinks.tools} />
+          <LinkColumn {...footerLinks.forRunners} />
           <LinkColumn {...footerLinks.services} />
           <LinkColumn {...footerLinks.content} />
           <LinkColumn {...footerLinks.company} />
