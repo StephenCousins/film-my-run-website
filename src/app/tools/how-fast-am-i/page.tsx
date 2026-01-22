@@ -178,11 +178,11 @@ export default function HowFastAmIPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-zinc-950">
-        {/* Video Hero Banner */}
-        <section className="relative h-[35vh] min-h-[250px] max-h-[350px] overflow-hidden">
+      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+        {/* Hero Section */}
+        <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Video Background */}
-          <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0">
             <video
               autoPlay
               muted
@@ -193,36 +193,36 @@ export default function HowFastAmIPage() {
               <source src="/videos/fast-running.webm" type="video/webm" />
               <source src="/videos/fast-running.mp4" type="video/mp4" />
             </video>
-            {/* Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/40 via-zinc-950/20 to-zinc-950" />
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950" />
           </div>
-        </section>
 
-        {/* Main Tool Section */}
-        <section className="py-12 lg:py-16">
-          <div className="container">
+          <div className="container relative">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="max-w-2xl mx-auto"
+              className="max-w-3xl mx-auto text-center"
             >
-              {/* Header */}
-              <div className="text-center mb-10">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 rounded-full border border-orange-500/30 mb-6">
-                  <Activity className="w-4 h-4 text-orange-500" />
-                  <span className="text-orange-400 text-sm font-medium">Running Analysis</span>
-                </div>
-
-                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-                  How Fast Are You?
-                </h1>
-
-                <p className="text-lg text-zinc-400">
-                  Find out how your running compares to others. Enter your parkrun or Power of 10 athlete ID
-                  to see your percentile ranking, trends, and comparisons.
-                </p>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
+                <Activity className="w-4 h-4 text-orange-500" />
+                <span className="text-orange-400 text-sm font-medium">Running Analysis</span>
               </div>
 
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+                How Fast Are You?
+              </h1>
+
+              <p className="text-lg text-zinc-300 max-w-2xl mx-auto">
+                Find out how your running compares to others. Enter your parkrun or Power of 10 athlete ID
+                to see your percentile ranking, trends, and comparisons.
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Tool Section */}
+        <section className="py-8 lg:py-16">
+          <div className="container">
+            <div className="max-w-xl mx-auto">
               {/* Tool Card */}
               <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 sm:p-8">
                 {/* Tabs */}
@@ -287,7 +287,7 @@ export default function HowFastAmIPage() {
                     : 'Find your ID on thepowerof10.info'}
                 </p>
               </div>
-            </motion.div>
+            </div>
           </div>
         </section>
 
