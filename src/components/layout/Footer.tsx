@@ -24,8 +24,10 @@ const footerLinks = {
   services: {
     title: 'Services',
     links: [
-      { name: 'Race Filming', href: '/services/filming' },
-      { name: 'Event Coverage', href: '/services/events' },
+      { name: 'POV Race Coverage', href: '/services' },
+      { name: 'Documentary Films', href: '/services' },
+      { name: 'Social Media Coverage', href: '/services' },
+      { name: 'Event Live Streaming', href: '/services' },
     ],
   },
   content: {
