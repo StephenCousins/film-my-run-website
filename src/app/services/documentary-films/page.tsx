@@ -206,8 +206,9 @@ export default function DocumentaryFilmsPage() {
               </h1>
 
               <p className="text-lg text-zinc-300 max-w-2xl mx-auto">
-                Telling the stories that matter. From the brutal conditions of the Spine Race to
-                the personal journeys of ultra runners, these films capture the heart of our sport.
+                Telling the stories that matter. From the mountains of Mont Blanc and UTMB to
+                the rolling hills of the South Downs in the UK, award winning personal journeys
+                of ultra runners. Films that capture the heart of our sport.
               </p>
             </div>
           </div>
