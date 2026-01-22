@@ -14,9 +14,7 @@ const footerLinks = {
     links: [
       { name: 'Pace Calculator', href: '/tools/calculators' },
       { name: 'Race Predictor', href: '/tools/calculators' },
-      { name: 'Parkrun Stats', href: '/tools/parkrun' },
-      { name: 'Race Map', href: '/tools/race-map' },
-      { name: 'Race Dashboard', href: '/races' },
+      { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
     ],
   },
   services: {
@@ -35,6 +33,9 @@ const footerLinks = {
       { name: 'Films', href: '/films' },
       { name: 'Live Events', href: '/live' },
       { name: 'Discount Codes', href: '/discounts' },
+      { name: 'Race Dashboard', href: '/races' },
+      { name: 'Race Map', href: '/tools/race-map' },
+      { name: 'Parkrun Stats', href: '/tools/parkrun' },
     ],
   },
   company: {

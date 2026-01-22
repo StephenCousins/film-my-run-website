@@ -52,11 +52,11 @@ const tools = [
     users: '45K+',
   },
   {
-    name: 'Parkrun Stats',
-    description: 'Deep dive into your parkrun history and compare with friends',
+    name: 'How Fast Are You',
+    description: 'Look up any runner and see how their times compare',
     icon: Trophy,
     color: 'from-amber-500 to-amber-600',
-    href: '/tools/parkrun',
+    href: '/tools/how-fast-am-i',
     users: '60K+',
   },
   {

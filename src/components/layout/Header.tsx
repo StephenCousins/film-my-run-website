@@ -19,16 +19,6 @@ const navigation = [
   },
   { name: 'Discount Codes', href: '/discounts' },
   { name: 'Live', href: '/live' },
-  { name: 'Blog', href: '/blog' },
-  {
-    name: 'Results',
-    href: '/races',
-    children: [
-      { name: 'Race Dashboard', href: '/races' },
-      { name: 'Parkrun Stats', href: '/tools/parkrun' },
-      { name: 'Race Map', href: '/tools/race-map' },
-    ],
-  },
   { name: 'Contact', href: '/contact' },
 ];
 
