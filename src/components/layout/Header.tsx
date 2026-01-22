@@ -18,8 +18,6 @@ const navigation = [
     children: [
       { name: 'Running Calculators', href: '/tools/calculators' },
       { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
-      { name: 'Parkrun Stats', href: '/tools/parkrun' },
-      { name: 'Race Map', href: '/tools/race-map' },
     ],
   },
   { name: 'Services', href: '/services' },
