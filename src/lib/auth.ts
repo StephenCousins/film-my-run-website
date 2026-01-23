@@ -1,10 +1,9 @@
 import { NextAuthOptions } from 'next-auth';
-import { PrismaAdapter } from '@auth/prisma-adapter';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { prisma } from './db';
-import type { Adapter } from 'next-auth/adapters';
+import { PrismaAdapterWithIntIds } from './prisma-adapter-int';
 
 // Extend the built-in session types
 declare module 'next-auth' {
@@ -31,7 +30,7 @@ declare module 'next-auth/jwt' {
 }
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma) as Adapter,
+  adapter: PrismaAdapterWithIntIds(prisma),
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
