@@ -447,13 +447,24 @@ export default function CalculatorsPage() {
         </section>
 
         {/* Other tools CTA */}
-        <section className="py-16 bg-zinc-900">
-          <div className="container">
+        <section className="relative py-16 overflow-hidden">
+          {/* Background image */}
+          <div className="absolute inset-0">
+            <Image
+              src="/images/hero/hero-trail.jpg"
+              alt="Running trail"
+              fill
+              className="object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/90 via-zinc-900/85 to-zinc-950/90" />
+          </div>
+
+          <div className="container relative">
             <div className="text-center mb-12">
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-white mb-4">
                 More Running Tools
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-zinc-300">
                 Explore our other free tools for runners.
               </p>
             </div>
