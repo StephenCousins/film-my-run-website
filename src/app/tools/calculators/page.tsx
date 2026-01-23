@@ -451,8 +451,8 @@ export default function CalculatorsPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="/images/hero/hero-trail.jpg"
-              alt="Running trail"
+              src="/images/hero/running-tools-bg.jpg"
+              alt="Runners on trail"
               fill
               className="object-cover"
             />
