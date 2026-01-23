@@ -19,6 +19,18 @@ const nextConfig: NextConfig = {
         hostname: 'www.filmmyrun.co.uk',
         pathname: '/wp-content/uploads/**',
       },
+      // Google profile pictures (OAuth)
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        pathname: '/**',
+      },
+      // Gravatar (for email-based avatars)
+      {
+        protocol: 'https',
+        hostname: '*.gravatar.com',
+        pathname: '/**',
+      },
     ],
   },
 
