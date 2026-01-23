@@ -138,8 +138,6 @@ function DocumentaryCard({
   doc: typeof documentaries[0];
   onPlay: () => void;
 }) {
-  const [imgSrc, setImgSrc] = useState(`https://img.youtube.com/vi/${doc.id}/maxresdefault.jpg`);
-
   return (
     <div className={`group relative ${doc.featured ? 'md:col-span-2' : ''}`}>
       {/* Thumbnail */}
@@ -148,10 +146,9 @@ function DocumentaryCard({
         onClick={onPlay}
       >
         <img
-          src={imgSrc}
+          src={`https://img.youtube.com/vi/${doc.id}/hqdefault.jpg`}
           alt={doc.title}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          onError={() => setImgSrc(`https://img.youtube.com/vi/${doc.id}/hqdefault.jpg`)}
         />
 
         {/* Overlay */}
@@ -197,7 +194,7 @@ export default function DocumentaryFilmsPage() {
           {/* Background - use featured video thumbnail */}
           <div className="absolute inset-0">
             <img
-              src={`https://img.youtube.com/vi/${documentaries[0].id}/maxresdefault.jpg`}
+              src={`https://img.youtube.com/vi/${documentaries[0].id}/hqdefault.jpg`}
               alt="Documentary background"
               className="absolute inset-0 w-full h-full object-cover"
             />
