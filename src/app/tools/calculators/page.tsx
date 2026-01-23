@@ -460,38 +460,38 @@ export default function CalculatorsPage() {
 
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <Link
-                href="/tools/parkrun"
+                href="/tools/how-fast-am-i"
                 className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
               >
                 <h3 className="font-display font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
-                  Parkrun Stats
+                  How Fast Are You?
                 </h3>
                 <p className="text-sm text-zinc-400">
-                  Track your parkrun history and compare with friends.
+                  Compare your running ability against others and see where you rank.
                 </p>
               </Link>
 
               <Link
-                href="/tools/race-map"
+                href="/tools/route-comparison"
                 className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
               >
                 <h3 className="font-display font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
-                  Race Map
+                  Route Comparison
                 </h3>
                 <p className="text-sm text-zinc-400">
-                  Visualize race routes with elevation and markers.
+                  Compare GPX and FIT files to analyze your runs side by side.
                 </p>
               </Link>
 
               <Link
-                href="/races"
+                href="/training"
                 className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
               >
                 <h3 className="font-display font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
-                  Race Dashboard
+                  Marathon Training Plans
                 </h3>
                 <p className="text-sm text-zinc-400">
-                  Track and analyze all your race results.
+                  Personalized training plans to help you reach your marathon goals.
                 </p>
               </Link>
             </div>
