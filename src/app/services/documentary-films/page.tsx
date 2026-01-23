@@ -13,22 +13,29 @@ import Footer from '@/components/layout/Footer';
 const documentaries = [
   {
     id: 'R2fhcCSvZj8',
-    title: 'The Montane Spine Race',
-    description: 'Following runners through Britain\'s most brutal winter ultra - 268 miles along the Pennine Way in January conditions.',
+    title: '81 Yards',
+    description: 'When John Stocker lined up for his backyard ultra attempt, nobody knew they were about to witness history. This film documents his extraordinary journey to 81 yards and a new world record.',
     award: 'Best Running Film - Sheffield Adventure Film Festival',
     featured: true,
   },
   {
     id: 'p6ReCqvcvz8',
-    title: 'Ultra Running Documentary',
-    description: 'An intimate look at the world of ultra running and the athletes who push beyond conventional limits.',
+    title: 'Sub 40',
+    description: 'Can a masters athlete defy the clock? We follow Tim Grose through months of dedicated training as he chases one of running\'s magic numbers - the sub 40 minute 10k.',
     award: null,
     featured: false,
   },
   {
     id: 'sdA-qO1_MP8',
-    title: 'Trail Running Stories',
-    description: 'Capturing the spirit of trail running through the eyes of those who live for the mountains.',
+    title: 'Victoria\'s Marathon',
+    description: 'From nervous beginner to marathon finisher. An intimate portrait of Victoria Cousins as she takes on 26.2 miles for the very first time.',
+    award: null,
+    featured: false,
+  },
+  {
+    id: 'v8hYS6BWioo',
+    title: 'The Road to 100',
+    description: 'Through the streets of Paris, James Bennett reflects on a lifetime of running as he closes in on his hundredth marathon. Part race film, part autobiography.',
     award: null,
     featured: false,
   },
@@ -131,6 +138,8 @@ function DocumentaryCard({
   doc: typeof documentaries[0];
   onPlay: () => void;
 }) {
+  const [imgSrc, setImgSrc] = useState(`https://img.youtube.com/vi/${doc.id}/maxresdefault.jpg`);
+
   return (
     <div className={`group relative ${doc.featured ? 'md:col-span-2' : ''}`}>
       {/* Thumbnail */}
@@ -139,9 +148,10 @@ function DocumentaryCard({
         onClick={onPlay}
       >
         <img
-          src={`https://img.youtube.com/vi/${doc.id}/maxresdefault.jpg`}
+          src={imgSrc}
           alt={doc.title}
           className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+          onError={() => setImgSrc(`https://img.youtube.com/vi/${doc.id}/hqdefault.jpg`)}
         />
 
         {/* Overlay */}
