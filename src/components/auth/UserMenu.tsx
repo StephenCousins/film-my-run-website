@@ -18,6 +18,7 @@ import { cn } from '@/lib/utils';
 export default function UserMenu() {
   const { user, status, signOut, hasAccess } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -112,13 +113,14 @@ export default function UserMenu() {
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        {user.image ? (
+        {user.image && !imageError ? (
           <Image
             src={user.image}
             alt={user.name || 'User avatar'}
             width={32}
             height={32}
             className="rounded-full"
+            onError={() => setImageError(true)}
           />
         ) : (
           <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center text-white font-medium text-sm">
@@ -146,13 +148,14 @@ export default function UserMenu() {
         {/* User Info */}
         <div className="px-4 py-3 border-b border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center gap-3">
-            {user.image ? (
+            {user.image && !imageError ? (
               <Image
                 src={user.image}
                 alt={user.name || 'User avatar'}
                 width={40}
                 height={40}
                 className="rounded-full"
+                onError={() => setImageError(true)}
               />
             ) : (
               <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-white font-semibold">
