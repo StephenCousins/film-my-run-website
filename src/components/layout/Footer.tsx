@@ -26,8 +26,9 @@ const footerLinks = {
     links: [
       { name: 'POV Race Coverage', href: '/services/pov-race-coverage' },
       { name: 'Documentary Films', href: '/services/documentary-films' },
-      { name: 'Social Media Coverage', href: '/services' },
-      { name: 'Event Live Streaming', href: '/services' },
+      { name: 'Social Media Coverage', href: '/services/social-media-coverage' },
+      { name: 'Event Live Streaming', href: '/services/event-live-streaming' },
+      { name: 'Master of Ceremonies', href: '/services/master-of-ceremonies' },
     ],
   },
   content: {
