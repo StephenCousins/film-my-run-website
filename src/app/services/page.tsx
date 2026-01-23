@@ -23,7 +23,8 @@ const services = [
       '4K video quality',
     ],
     price: 'Get in touch',
-    href: '/contact?service=pov',
+    detailsHref: '/services/pov-race-coverage',
+    enquireHref: '/contact?service=pov',
   },
   {
     title: 'Documentary Films',
@@ -37,7 +38,8 @@ const services = [
       'Festival-ready quality',
     ],
     price: 'Get in touch',
-    href: '/contact?service=documentary',
+    detailsHref: '/services/documentary-films',
+    enquireHref: '/contact?service=documentary',
   },
   {
     title: 'Master of Ceremonies',
@@ -51,7 +53,8 @@ const services = [
       'Professional PA presence',
     ],
     price: 'Get in touch',
-    href: '/contact?service=mc',
+    detailsHref: '/services/master-of-ceremonies',
+    enquireHref: '/contact?service=mc',
   },
   {
     title: 'Live Streaming',
@@ -65,7 +68,8 @@ const services = [
       'Social media integration',
     ],
     price: 'Get in touch',
-    href: '/contact?service=streaming',
+    detailsHref: '/services/event-live-streaming',
+    enquireHref: '/contact?service=streaming',
   },
 ];
 
@@ -146,15 +150,18 @@ export default function ServicesPage() {
                     </ul>
 
                     <div className="flex items-center justify-between pt-6 border-t border-zinc-800">
-                      <span className="font-display font-semibold text-orange-500">
-                        {service.price}
-                      </span>
                       <Link
-                        href={service.href}
-                        className="inline-flex items-center gap-2 text-white hover:text-orange-500 transition-colors"
+                        href={service.detailsHref}
+                        className="inline-flex items-center gap-2 text-zinc-300 hover:text-white transition-colors"
+                      >
+                        More details
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                      <Link
+                        href={service.enquireHref}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors text-sm font-medium"
                       >
                         Enquire
-                        <ArrowRight className="w-4 h-4" />
                       </Link>
                     </div>
                   </div>
