@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/contexts/ThemeContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 import '@/styles/globals.css';
 
 // Fonts
@@ -119,10 +120,12 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans bg-zinc-950 text-white transition-colors">
-        <ThemeProvider>
-          {children}
-        </ThemeProvider>
+      <body className="font-sans bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white transition-colors">
+        <AuthProvider>
+          <ThemeProvider>
+            {children}
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );

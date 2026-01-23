@@ -17,6 +17,7 @@
     "migrate:images": "tsx scripts/migrate-images.ts"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.11.1",
     "@aws-sdk/client-s3": "^3.x",
     "@gsap/react": "^2.x",
     "@hookform/resolvers": "^3.x",
@@ -28,14 +29,17 @@
     "@radix-ui/react-tabs": "^1.x",
     "@react-google-maps/api": "^2.20.8",
     "axios": "^1.13.2",
+    "bcryptjs": "^3.0.3",
     "cheerio": "^1.1.2",
     "class-variance-authority": "^0.7.x",
     "clsx": "^2.x",
+    "fit-file-parser": "^2.2.5",
     "framer-motion": "^11.x",
     "gsap": "^3.x",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.x",
     "next": "15.x",
+    "next-auth": "^4.24.13",
     "pg": "^8.17.2",
     "react": "19.x",
     "react-dom": "19.x",
@@ -48,6 +52,7 @@
     "zod": "^3.x"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/leaflet": "^1.9.21",
     "@types/node": "^22.x",
     "@types/pg": "^8.16.0",
