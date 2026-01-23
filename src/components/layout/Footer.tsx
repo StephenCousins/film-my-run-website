@@ -33,7 +33,7 @@ const footerLinks = {
     ],
   },
   content: {
-    title: "Stephen's Running",
+    title: 'Explore',
     links: [
       { name: 'Blog', href: '/blog' },
       { name: 'Films', href: '/films' },
