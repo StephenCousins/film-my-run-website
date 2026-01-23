@@ -3,8 +3,9 @@ import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
 
 // Routes that require authentication (FREE tier or higher)
+// Note: /tools/route-comparison has its own client-side auth check
+// so we don't need to protect it at the middleware level
 const protectedRoutes = [
-  '/tools/route-comparison',
   '/training/dashboard',
   '/training/plans',
   '/account',
@@ -77,7 +78,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/tools/route-comparison/:path*',
     '/training/:path*',
     '/account/:path*',
   ],
