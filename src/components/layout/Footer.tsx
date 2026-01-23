@@ -24,7 +24,7 @@ const footerLinks = {
   services: {
     title: 'Services',
     links: [
-      { name: 'POV Race Coverage', href: '/services' },
+      { name: 'POV Race Coverage', href: '/services/pov-race-coverage' },
       { name: 'Documentary Films', href: '/services/documentary-films' },
       { name: 'Social Media Coverage', href: '/services' },
       { name: 'Event Live Streaming', href: '/services' },
