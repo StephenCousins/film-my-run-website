@@ -14,16 +14,27 @@ import UserMenu from '@/components/auth/UserMenu';
 
 const navigation = [
   {
-    name: 'Tools',
+    name: 'For Runners',
     href: '/tools/calculators',
     children: [
       { name: 'Running Calculators', href: '/tools/calculators' },
       { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
       { name: 'Route Comparison', href: '/tools/route-comparison' },
+      { name: 'Discount Codes', href: '/discounts' },
     ],
   },
-  { name: 'Services', href: '/services' },
-  { name: 'Discounts', href: '/discounts' },
+  {
+    name: 'For Event Organisers',
+    href: '/services',
+    children: [
+      { name: 'All Services', href: '/services' },
+      { name: 'POV Race Coverage', href: '/services/pov-race-coverage' },
+      { name: 'Documentary Films', href: '/services/documentary-films' },
+      { name: 'Social Media Coverage', href: '/services/social-media-coverage' },
+      { name: 'Live Streaming', href: '/services/event-live-streaming' },
+      { name: 'Master of Ceremonies', href: '/services/master-of-ceremonies' },
+    ],
+  },
   { name: 'Shop', href: '/shop' },
   { name: 'Live', href: '/live' },
   { name: 'Contact', href: '/contact' },
