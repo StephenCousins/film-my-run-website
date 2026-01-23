@@ -474,7 +474,7 @@ export default function CalculatorsPage() {
                 href="/tools/how-fast-am-i"
                 className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
               >
-                <h3 className="font-display font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
+                <h3 className="font-display text-sm font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
                   How Fast Are You?
                 </h3>
                 <p className="text-sm text-zinc-400">
@@ -486,7 +486,7 @@ export default function CalculatorsPage() {
                 href="/tools/route-comparison"
                 className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
               >
-                <h3 className="font-display font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
+                <h3 className="font-display text-sm font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
                   Route Comparison
                 </h3>
                 <p className="text-sm text-zinc-400">
@@ -498,7 +498,7 @@ export default function CalculatorsPage() {
                 href="/training"
                 className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
               >
-                <h3 className="font-display font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
+                <h3 className="font-display text-sm font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
                   Marathon Training Plans
                 </h3>
                 <p className="text-sm text-zinc-400">
