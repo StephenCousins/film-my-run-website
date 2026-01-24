@@ -114,14 +114,14 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
   return (
     <article
       className={cn(
-        'group bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
+        'group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
         featured && 'lg:col-span-2 lg:row-span-2'
       )}
     >
       <Link href={`/blog/${post.slug}`} className="block h-full">
         {/* Image */}
         <div className={cn(
-          'relative overflow-hidden bg-zinc-800',
+          'relative overflow-hidden bg-zinc-200 dark:bg-zinc-800',
           featured ? 'aspect-[16/9]' : 'aspect-[16/10]'
         )}>
           {post.featuredImage ? (
@@ -165,7 +165,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
 
           {/* Title */}
           <h2 className={cn(
-            'font-display font-semibold text-white group-hover:text-orange-500 transition-colors mb-3',
+            'font-display font-semibold text-zinc-900 dark:text-white group-hover:text-orange-500 transition-colors mb-3',
             featured ? 'text-2xl lg:text-3xl' : 'text-lg'
           )}>
             {post.title}
@@ -173,7 +173,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
 
           {/* Excerpt */}
           <p className={cn(
-            'text-zinc-400 line-clamp-2',
+            'text-zinc-600 dark:text-zinc-400 line-clamp-2',
             featured ? 'text-base lg:line-clamp-3' : 'text-sm'
           )}>
             {post.excerpt}
@@ -205,7 +205,7 @@ function CategoryFilter({ categories, activeSlug = 'all' }: { categories: Catego
             'px-4 py-2 rounded-full text-sm font-medium transition-all',
             activeSlug === category.slug
               ? 'bg-orange-500 text-white'
-              : 'bg-zinc-800 text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
+              : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
           )}
         >
           {category.name}
@@ -229,7 +229,7 @@ export default async function BlogPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-white dark:bg-zinc-950 min-h-screen">
         {/* Hero section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Background image */}
@@ -241,7 +241,7 @@ export default async function BlogPage() {
               className="object-cover"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950" />
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950 dark:from-zinc-950/80 dark:via-zinc-950/70 dark:to-zinc-950" />
           </div>
 
           <div className="container relative">
@@ -263,7 +263,7 @@ export default async function BlogPage() {
         </section>
 
         {/* Filters */}
-        <section className="py-8 border-b border-zinc-800 bg-zinc-950 sticky top-16 lg:top-20 z-30">
+        <section className="py-8 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-16 lg:top-20 z-30">
           <div className="container">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               {/* Category filters */}
@@ -277,7 +277,7 @@ export default async function BlogPage() {
                 <input
                   type="search"
                   placeholder="Search posts..."
-                  className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-transparent rounded-full text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+                  className="w-full pl-10 pr-4 py-2 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-transparent rounded-full text-zinc-900 dark:text-white text-sm placeholder:text-zinc-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
                 />
               </div>
             </div>
@@ -285,7 +285,7 @@ export default async function BlogPage() {
         </section>
 
         {/* Posts grid */}
-        <section className="py-12 lg:py-16 bg-zinc-950">
+        <section className="py-12 lg:py-16 bg-white dark:bg-zinc-950">
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Featured post */}
@@ -302,7 +302,7 @@ export default async function BlogPage() {
               <nav className="flex items-center gap-2">
                 <button
                   disabled
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-zinc-800 text-zinc-400 cursor-not-allowed"
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed"
                 >
                   Previous
                 </button>
@@ -314,7 +314,7 @@ export default async function BlogPage() {
                       'w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium transition-colors',
                       page === 1
                         ? 'bg-orange-500 text-white'
-                        : 'bg-zinc-800 text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
+                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
                     )}
                   >
                     {page}
@@ -323,13 +323,13 @@ export default async function BlogPage() {
                 <span className="text-zinc-400">...</span>
                 <Link
                   href="/blog?page=12"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium bg-zinc-800 text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500"
                 >
                   12
                 </Link>
                 <Link
                   href="/blog?page=2"
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-zinc-800 text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500"
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500"
                 >
                   Next
                 </Link>
@@ -339,13 +339,13 @@ export default async function BlogPage() {
         </section>
 
         {/* Newsletter CTA */}
-        <section className="py-16 lg:py-24 bg-zinc-900">
+        <section className="py-16 lg:py-24 bg-zinc-100 dark:bg-zinc-900">
           <div className="container">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
+              <h2 className="font-display text-3xl lg:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
                 Never Miss a Post
               </h2>
-              <p className="text-zinc-400 mb-8">
+              <p className="text-zinc-600 dark:text-zinc-400 mb-8">
                 Get the latest race reports, training tips, and running stories delivered
                 straight to your inbox.
               </p>
@@ -353,7 +353,7 @@ export default async function BlogPage() {
                 <input
                   type="email"
                   placeholder="your@email.com"
-                  className="flex-1 px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-full text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                  className="flex-1 px-4 py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-full text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
                 />
                 <button
                   type="submit"

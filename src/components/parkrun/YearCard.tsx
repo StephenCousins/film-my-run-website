@@ -16,16 +16,16 @@ export function YearCard({ stats, index, cumulativeTotal }: YearCardProps) {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="flex-shrink-0 w-72 bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden"
+      className="flex-shrink-0 w-72 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm"
     >
       {/* Header */}
-      <div className="bg-gradient-to-r from-green-500/20 to-transparent p-4 border-b border-zinc-800">
+      <div className="bg-gradient-to-r from-green-500/20 to-transparent p-4 border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Calendar className="w-5 h-5 text-green-500" />
-            <span className="text-2xl font-bold text-white">{stats.year}</span>
+            <span className="text-2xl font-bold text-zinc-900 dark:text-white">{stats.year}</span>
           </div>
-          <span className="text-xs text-zinc-500 bg-zinc-800 px-2 py-1 rounded-full">
+          <span className="text-xs text-zinc-500 bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded-full">
             #{cumulativeTotal} total
           </span>
         </div>
@@ -36,43 +36,43 @@ export function YearCard({ stats, index, cumulativeTotal }: YearCardProps) {
         {/* Runs count with mini bar */}
         <div>
           <div className="flex items-center justify-between mb-1">
-            <span className="text-sm text-zinc-400">Runs</span>
-            <span className="text-xl font-bold text-white font-mono">{stats.runs}</span>
+            <span className="text-sm text-zinc-500 dark:text-zinc-400">Runs</span>
+            <span className="text-xl font-bold text-zinc-900 dark:text-white font-mono">{stats.runs}</span>
           </div>
-          <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+          <div className="h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-green-500 to-green-400 rounded-full transition-all"
               style={{ width: `${Math.min(100, (stats.runs / 52) * 100)}%` }}
             />
           </div>
-          <p className="text-xs text-zinc-600 mt-1">{Math.round((stats.runs / 52) * 100)}% of Saturdays</p>
+          <p className="text-xs text-zinc-500 dark:text-zinc-600 mt-1">{Math.round((stats.runs / 52) * 100)}% of Saturdays</p>
         </div>
 
         {/* Best time */}
-        <div className="flex items-center justify-between py-2 border-t border-zinc-800">
+        <div className="flex items-center justify-between py-2 border-t border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center gap-2">
             <Trophy className="w-4 h-4 text-amber-500" />
-            <span className="text-sm text-zinc-400">Best Time</span>
+            <span className="text-sm text-zinc-500 dark:text-zinc-400">Best Time</span>
           </div>
-          <span className="font-mono font-medium text-green-400">{stats.best_time_formatted}</span>
+          <span className="font-mono font-medium text-green-500 dark:text-green-400">{stats.best_time_formatted}</span>
         </div>
 
         {/* Best position */}
-        <div className="flex items-center justify-between py-2 border-t border-zinc-800">
+        <div className="flex items-center justify-between py-2 border-t border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center gap-2">
             <Medal className="w-4 h-4 text-amber-400" />
-            <span className="text-sm text-zinc-400">Best Position</span>
+            <span className="text-sm text-zinc-500 dark:text-zinc-400">Best Position</span>
           </div>
-          <span className="font-mono font-medium text-white">{stats.best_position}</span>
+          <span className="font-mono font-medium text-zinc-900 dark:text-white">{stats.best_position}</span>
         </div>
 
         {/* Average time */}
-        <div className="flex items-center justify-between py-2 border-t border-zinc-800">
+        <div className="flex items-center justify-between py-2 border-t border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-blue-400" />
-            <span className="text-sm text-zinc-400">Average</span>
+            <span className="text-sm text-zinc-500 dark:text-zinc-400">Average</span>
           </div>
-          <span className="font-mono text-zinc-300">
+          <span className="font-mono text-zinc-600 dark:text-zinc-300">
             {Math.floor(stats.average_time_seconds / 60)}:{(stats.average_time_seconds % 60).toString().padStart(2, '0')}
           </span>
         </div>
@@ -119,7 +119,7 @@ export function YearBarChart({ yearlyStats }: YearBarChartProps) {
                 className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-green-600 to-green-400 rounded-t hover:from-green-500 hover:to-green-300 transition-colors cursor-pointer group"
               >
                 {/* Tooltip */}
-                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-zinc-800 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
+                <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-zinc-700 dark:bg-zinc-800 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10 pointer-events-none">
                   {year.runs} runs
                 </div>
               </motion.div>

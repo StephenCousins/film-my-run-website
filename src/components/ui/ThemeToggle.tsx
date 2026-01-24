@@ -21,7 +21,7 @@ export default function ThemeToggle({
     return (
       <div className={cn('relative group', className)}>
         <button
-          className="p-2 rounded-lg hover:bg-zinc-800 transition-colors"
+          className="p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           aria-label="Toggle theme"
         >
           {resolvedTheme === 'dark' ? (
@@ -32,11 +32,11 @@ export default function ThemeToggle({
         </button>
 
         {/* Dropdown menu */}
-        <div className="absolute right-0 top-full mt-2 py-2 bg-zinc-900 border border-zinc-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[140px]">
+        <div className="absolute right-0 top-full mt-2 py-2 bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 min-w-[140px]">
           <button
             onClick={() => setTheme('light')}
             className={cn(
-              'w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-zinc-800 transition-colors',
+              'w-full flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors',
               theme === 'light' && 'text-orange-500'
             )}
           >
@@ -46,7 +46,7 @@ export default function ThemeToggle({
           <button
             onClick={() => setTheme('dark')}
             className={cn(
-              'w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-zinc-800 transition-colors',
+              'w-full flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors',
               theme === 'dark' && 'text-orange-500'
             )}
           >
@@ -56,7 +56,7 @@ export default function ThemeToggle({
           <button
             onClick={() => setTheme('system')}
             className={cn(
-              'w-full flex items-center gap-3 px-4 py-2 text-sm hover:bg-zinc-800 transition-colors',
+              'w-full flex items-center gap-3 px-4 py-2 text-sm text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors',
               theme === 'system' && 'text-orange-500'
             )}
           >
@@ -73,7 +73,7 @@ export default function ThemeToggle({
     <button
       onClick={toggleTheme}
       className={cn(
-        'flex items-center gap-2 p-2 rounded-lg hover:bg-zinc-800 transition-colors',
+        'flex items-center gap-2 p-2 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors',
         className
       )}
       aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}

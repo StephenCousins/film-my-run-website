@@ -77,7 +77,7 @@ export default function ServicesPage() {
   return (
     <>
       <Header />
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-white dark:bg-zinc-950 min-h-screen">
         {/* Hero */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Video background */}
@@ -124,23 +124,23 @@ export default function ServicesPage() {
                 return (
                   <div
                     key={service.title}
-                    className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800 hover:border-orange-500/50 transition-all hover:-translate-y-1"
+                    className="bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all hover:-translate-y-1 shadow-sm"
                   >
                     <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center mb-6">
                       <Icon className="w-7 h-7 text-white" />
                     </div>
 
-                    <h2 className="font-display text-2xl font-bold text-white mb-3">
+                    <h2 className="font-display text-2xl font-bold text-zinc-900 dark:text-white mb-3">
                       {service.title}
                     </h2>
 
-                    <p className="text-zinc-400 mb-6">
+                    <p className="text-zinc-600 dark:text-zinc-400 mb-6">
                       {service.description}
                     </p>
 
                     <ul className="space-y-3 mb-8">
                       {service.features.map((feature) => (
-                        <li key={feature} className="flex items-center gap-3 text-zinc-300 text-sm">
+                        <li key={feature} className="flex items-center gap-3 text-zinc-700 dark:text-zinc-300 text-sm">
                           <div className="w-5 h-5 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
                             <Check className="w-3 h-3 text-orange-500" />
                           </div>
@@ -149,10 +149,10 @@ export default function ServicesPage() {
                       ))}
                     </ul>
 
-                    <div className="flex items-center justify-between pt-6 border-t border-zinc-800">
+                    <div className="flex items-center justify-between pt-6 border-t border-zinc-200 dark:border-zinc-800">
                       <Link
                         href={service.detailsHref}
-                        className="inline-flex items-center gap-2 text-zinc-300 hover:text-white transition-colors"
+                        className="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-300 hover:text-orange-500 transition-colors"
                       >
                         More details
                         <ArrowRight className="w-4 h-4" />

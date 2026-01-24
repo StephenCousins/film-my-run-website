@@ -113,7 +113,7 @@ function StatCard({ title, value, icon, onClick, color = 'orange' }: StatCardPro
   return (
     <button
       onClick={onClick}
-      className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800 hover:border-orange-500/50 transition-all text-left w-full group"
+      className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all text-left w-full group shadow-sm"
     >
       <div className="flex items-start justify-between mb-4">
         <div
@@ -125,10 +125,10 @@ function StatCard({ title, value, icon, onClick, color = 'orange' }: StatCardPro
           {icon}
         </div>
       </div>
-      <div className="text-3xl font-bold text-white mb-1 group-hover:text-orange-500 transition-colors">
+      <div className="text-3xl font-bold text-zinc-900 dark:text-white mb-1 group-hover:text-orange-500 transition-colors">
         {value}
       </div>
-      <div className="text-sm text-zinc-400">{title}</div>
+      <div className="text-sm text-zinc-500 dark:text-zinc-400">{title}</div>
     </button>
   );
 }
@@ -147,10 +147,10 @@ function SubStatCard({ title, value, onClick }: SubStatCardProps) {
   return (
     <button
       onClick={onClick}
-      className="bg-zinc-900/50 rounded-xl p-4 border border-zinc-800 hover:border-orange-500/50 transition-all text-left w-full"
+      className="bg-zinc-100/50 dark:bg-zinc-900/50 rounded-xl p-4 border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all text-left w-full"
     >
-      <div className="text-2xl font-bold text-white mb-1">{value}</div>
-      <div className="text-xs text-zinc-400">{title}</div>
+      <div className="text-2xl font-bold text-zinc-900 dark:text-white mb-1">{value}</div>
+      <div className="text-xs text-zinc-500 dark:text-zinc-400">{title}</div>
     </button>
   );
 }
@@ -169,12 +169,12 @@ interface ChartProps {
 
 function RaceChart({ title, subtitle, races, color, icon }: ChartProps) {
   return (
-    <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
+    <div className="bg-white dark:bg-zinc-900 rounded-2xl p-6 border border-zinc-200 dark:border-zinc-800 shadow-sm">
       <div className="flex items-center gap-3 mb-2">
         {icon}
-        <h3 className="font-display text-lg font-bold text-white">{title}</h3>
+        <h3 className="font-display text-lg font-bold text-zinc-900 dark:text-white">{title}</h3>
       </div>
-      <p className="text-sm text-zinc-400 mb-6">{subtitle}</p>
+      <p className="text-sm text-zinc-500 dark:text-zinc-400 mb-6">{subtitle}</p>
 
       <div className="space-y-3">
         {races.map((race, index) => {
@@ -186,14 +186,14 @@ function RaceChart({ title, subtitle, races, color, icon }: ChartProps) {
           return (
             <div key={race.id} className="group">
               <div className="flex items-center justify-between text-sm mb-1">
-                <span className="text-zinc-300 truncate max-w-[200px]">
-                  <span className="text-zinc-500 mr-2">{String(index + 1).padStart(2, '0')}</span>
+                <span className="text-zinc-600 dark:text-zinc-300 truncate max-w-[200px]">
+                  <span className="text-zinc-400 dark:text-zinc-500 mr-2">{String(index + 1).padStart(2, '0')}</span>
                   {race.event}
-                  {year && <span className="text-zinc-500 ml-1">({year})</span>}
+                  {year && <span className="text-zinc-400 dark:text-zinc-500 ml-1">({year})</span>}
                 </span>
-                <span className="font-mono text-white">{race.timeHms || '—'}</span>
+                <span className="font-mono text-zinc-900 dark:text-white">{race.timeHms || '—'}</span>
               </div>
-              <div className="h-2 bg-zinc-800 rounded-full overflow-hidden">
+              <div className="h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
                 <div
                   className={cn('h-full rounded-full transition-all', color)}
                   style={{ width: `${percentage}%` }}
@@ -217,10 +217,10 @@ interface RaceRowProps {
 
 function RaceRow({ race }: RaceRowProps) {
   return (
-    <tr className="border-b border-zinc-800 hover:bg-zinc-900/50 transition-colors">
-      <td className="py-4 px-4 text-sm text-zinc-400">{formatDate(race.date)}</td>
+    <tr className="border-b border-zinc-200 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-900/50 transition-colors">
+      <td className="py-4 px-4 text-sm text-zinc-500 dark:text-zinc-400">{formatDate(race.date)}</td>
       <td className="py-4 px-4">
-        <span className="font-medium text-white">{race.event}</span>
+        <span className="font-medium text-zinc-900 dark:text-white">{race.event}</span>
       </td>
       <td className="py-4 px-4">
         {race.type && (
@@ -228,27 +228,27 @@ function RaceRow({ race }: RaceRowProps) {
             className={cn(
               'px-2 py-1 text-xs font-medium rounded-full',
               race.type === 'Marathon'
-                ? 'bg-blue-500/20 text-blue-400'
-                : 'bg-orange-500/20 text-orange-400'
+                ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400'
+                : 'bg-orange-500/20 text-orange-600 dark:text-orange-400'
             )}
           >
             {race.type}
           </span>
         )}
       </td>
-      <td className="py-4 px-4 text-sm text-zinc-300">{formatDistance(race.distanceKm)}</td>
+      <td className="py-4 px-4 text-sm text-zinc-600 dark:text-zinc-300">{formatDistance(race.distanceKm)}</td>
       <td className="py-4 px-4">
-        <code className="text-sm text-white bg-zinc-800 px-2 py-1 rounded">
+        <code className="text-sm text-zinc-900 dark:text-white bg-zinc-100 dark:bg-zinc-800 px-2 py-1 rounded">
           {race.timeHms || '—'}
         </code>
       </td>
-      <td className="py-4 px-4 text-sm text-zinc-400">
+      <td className="py-4 px-4 text-sm text-zinc-500 dark:text-zinc-400">
         {race.elev ? `${race.elev} m` : '—'}
       </td>
-      <td className="py-4 px-4 text-sm text-zinc-400">{race.pos || '—'}</td>
+      <td className="py-4 px-4 text-sm text-zinc-500 dark:text-zinc-400">{race.pos || '—'}</td>
       <td className="py-4 px-4">
         {race.terrain && (
-          <span className="px-2 py-1 text-xs bg-zinc-800 text-zinc-300 rounded-full">
+          <span className="px-2 py-1 text-xs bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-300 rounded-full">
             {race.terrain}
           </span>
         )}
@@ -260,7 +260,7 @@ function RaceRow({ race }: RaceRowProps) {
               href={race.video}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 hover:bg-zinc-800 rounded transition-colors"
+              className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded transition-colors"
               title="Watch Video"
             >
               <Play className="w-4 h-4 text-zinc-400 hover:text-orange-500" />
@@ -271,7 +271,7 @@ function RaceRow({ race }: RaceRowProps) {
               href={race.strava}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 hover:bg-zinc-800 rounded transition-colors"
+              className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded transition-colors"
               title="View on Strava"
             >
               <Activity className="w-4 h-4 text-zinc-400 hover:text-orange-500" />
@@ -282,7 +282,7 @@ function RaceRow({ race }: RaceRowProps) {
               href={race.results}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-1.5 hover:bg-zinc-800 rounded transition-colors"
+              className="p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded transition-colors"
               title="View Results"
             >
               <FileText className="w-4 h-4 text-zinc-400 hover:text-orange-500" />
@@ -302,7 +302,7 @@ function MobileRaceCard({ race }: RaceRowProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4">
+    <div className="bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 p-4 shadow-sm">
       <div className="flex items-start justify-between mb-2">
         <span className="text-xs text-zinc-500">{formatDate(race.date)}</span>
         {race.type && (
@@ -310,8 +310,8 @@ function MobileRaceCard({ race }: RaceRowProps) {
             className={cn(
               'px-2 py-0.5 text-xs font-medium rounded-full',
               race.type === 'Marathon'
-                ? 'bg-blue-500/20 text-blue-400'
-                : 'bg-orange-500/20 text-orange-400'
+                ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400'
+                : 'bg-orange-500/20 text-orange-600 dark:text-orange-400'
             )}
           >
             {race.type}
@@ -319,36 +319,36 @@ function MobileRaceCard({ race }: RaceRowProps) {
         )}
       </div>
 
-      <h3 className="font-medium text-white mb-3">{race.event}</h3>
+      <h3 className="font-medium text-zinc-900 dark:text-white mb-3">{race.event}</h3>
 
       <div className="flex items-center justify-between mb-3">
-        <code className="text-lg font-bold text-white bg-zinc-800 px-3 py-1 rounded">
+        <code className="text-lg font-bold text-zinc-900 dark:text-white bg-zinc-100 dark:bg-zinc-800 px-3 py-1 rounded">
           {race.timeHms || '—'}
         </code>
-        <span className="text-zinc-400">{formatDistance(race.distanceKm)}</span>
+        <span className="text-zinc-500 dark:text-zinc-400">{formatDistance(race.distanceKm)}</span>
       </div>
 
       <button
         onClick={() => setExpanded(!expanded)}
-        className="flex items-center gap-1 text-sm text-zinc-400 hover:text-orange-500 transition-colors"
+        className="flex items-center gap-1 text-sm text-zinc-500 dark:text-zinc-400 hover:text-orange-500 transition-colors"
       >
         {expanded ? 'Less Details' : 'More Details'}
         {expanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
       </button>
 
       {expanded && (
-        <div className="mt-4 pt-4 border-t border-zinc-800 space-y-2">
+        <div className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800 space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-zinc-500">Elevation</span>
-            <span className="text-zinc-300">{race.elev ? `${race.elev} m` : '—'}</span>
+            <span className="text-zinc-600 dark:text-zinc-300">{race.elev ? `${race.elev} m` : '—'}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-zinc-500">Position</span>
-            <span className="text-zinc-300">{race.pos || '—'}</span>
+            <span className="text-zinc-600 dark:text-zinc-300">{race.pos || '—'}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-zinc-500">Surface</span>
-            <span className="text-zinc-300">{race.terrain || '—'}</span>
+            <span className="text-zinc-600 dark:text-zinc-300">{race.terrain || '—'}</span>
           </div>
           {(race.video || race.strava || race.results) && (
             <div className="flex items-center gap-3 pt-2">
@@ -538,11 +538,11 @@ export default function RacesPage() {
     return (
       <>
         <Header />
-        <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+        <main className="pt-20 lg:pt-24 bg-white dark:bg-zinc-950 min-h-screen">
           <div className="container py-20">
             <div className="flex items-center justify-center gap-3">
               <Loader2 className="w-6 h-6 text-orange-500 animate-spin" />
-              <span className="text-zinc-400">Loading race data...</span>
+              <span className="text-zinc-500 dark:text-zinc-400">Loading race data...</span>
             </div>
           </div>
         </main>
@@ -555,10 +555,10 @@ export default function RacesPage() {
     return (
       <>
         <Header />
-        <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+        <main className="pt-20 lg:pt-24 bg-white dark:bg-zinc-950 min-h-screen">
           <div className="container py-20">
             <div className="text-center">
-              <p className="text-red-400 mb-4">Error loading data: {error}</p>
+              <p className="text-red-500 dark:text-red-400 mb-4">Error loading data: {error}</p>
               <button
                 onClick={() => window.location.reload()}
                 className="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
@@ -577,14 +577,14 @@ export default function RacesPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-white dark:bg-zinc-950 min-h-screen">
         {/* Hero */}
         <section className="py-12 lg:py-16">
           <div className="container">
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-white mb-4">
               Race Dashboard
             </h1>
-            <p className="text-lg text-zinc-400 max-w-2xl">
+            <p className="text-lg text-zinc-600 dark:text-zinc-400 max-w-2xl">
               Complete race history from marathons to ultra marathons. Click any stat to filter
               the results.
             </p>
@@ -688,15 +688,15 @@ export default function RacesPage() {
         </section>
 
         {/* Filters */}
-        <section className="py-6 bg-zinc-900 border-y border-zinc-800 sticky top-16 lg:top-20 z-30">
+        <section className="py-6 bg-zinc-100 dark:bg-zinc-900 border-y border-zinc-200 dark:border-zinc-800 sticky top-16 lg:top-20 z-30">
           <div className="container">
             {/* Active Filter Indicator */}
             {activeFilterLabel && (
               <div className="mb-4 flex items-center gap-2">
-                <span className="text-sm text-zinc-400">Filtering:</span>
-                <span className="px-3 py-1 bg-orange-500/20 text-orange-400 text-sm rounded-full flex items-center gap-2">
+                <span className="text-sm text-zinc-500 dark:text-zinc-400">Filtering:</span>
+                <span className="px-3 py-1 bg-orange-500/20 text-orange-600 dark:text-orange-400 text-sm rounded-full flex items-center gap-2">
                   {activeFilterLabel}
-                  <button onClick={resetFilters} className="hover:text-white">
+                  <button onClick={resetFilters} className="hover:text-orange-700 dark:hover:text-white">
                     <X className="w-4 h-4" />
                   </button>
                 </span>
@@ -710,7 +710,7 @@ export default function RacesPage() {
                   setYearFilter(e.target.value);
                   setActiveFilterLabel(e.target.value ? `Year ${e.target.value}` : null);
                 }}
-                className="px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                className="px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
               >
                 <option value="">All Years</option>
                 {data?.years.map((year) => (
@@ -726,7 +726,7 @@ export default function RacesPage() {
                   setTypeFilter(e.target.value);
                   if (!e.target.value) setActiveFilterLabel(null);
                 }}
-                className="px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                className="px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
               >
                 <option value="">All Types</option>
                 <option value="Marathon">Marathon</option>
@@ -736,7 +736,7 @@ export default function RacesPage() {
               <select
                 value={terrainFilter}
                 onChange={(e) => setTerrainFilter(e.target.value)}
-                className="px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                className="px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
               >
                 <option value="">All Surfaces</option>
                 <option value="Road">Road</option>
@@ -752,7 +752,7 @@ export default function RacesPage() {
                     DISTANCE_CATEGORIES[e.target.value as keyof typeof DISTANCE_CATEGORIES];
                   setActiveFilterLabel(cat?.label || null);
                 }}
-                className="px-3 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                className="px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
               >
                 <option value="">All Distances</option>
                 <option value="100mile">100 Mile (146-190km)</option>
@@ -769,19 +769,19 @@ export default function RacesPage() {
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
                   placeholder="Search race name..."
-                  className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  className="w-full pl-10 pr-4 py-2 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-1 focus:ring-orange-500"
                 />
               </div>
 
               <button
                 onClick={resetFilters}
-                className="px-4 py-2 bg-zinc-800 text-zinc-300 rounded-lg hover:bg-zinc-700 transition-colors text-sm"
+                className="px-4 py-2 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 text-zinc-600 dark:text-zinc-300 rounded-lg hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors text-sm"
               >
                 Reset
               </button>
             </div>
 
-            <div className="mt-4 text-sm text-zinc-400">
+            <div className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
               Showing {filteredRaces.length} result{filteredRaces.length !== 1 ? 's' : ''}
             </div>
           </div>
@@ -790,20 +790,20 @@ export default function RacesPage() {
         {/* Results Table (Desktop) */}
         <section className="py-8 hidden lg:block">
           <div className="container">
-            <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
+            <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 overflow-hidden shadow-sm">
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead>
-                    <tr className="bg-zinc-800/50 text-left">
-                      <th className="py-3 px-4 text-sm font-medium text-zinc-400">Date</th>
-                      <th className="py-3 px-4 text-sm font-medium text-zinc-400">Event</th>
-                      <th className="py-3 px-4 text-sm font-medium text-zinc-400">Type</th>
-                      <th className="py-3 px-4 text-sm font-medium text-zinc-400">Distance</th>
-                      <th className="py-3 px-4 text-sm font-medium text-zinc-400">Time</th>
-                      <th className="py-3 px-4 text-sm font-medium text-zinc-400">Elevation</th>
-                      <th className="py-3 px-4 text-sm font-medium text-zinc-400">Position</th>
-                      <th className="py-3 px-4 text-sm font-medium text-zinc-400">Surface</th>
-                      <th className="py-3 px-4 text-sm font-medium text-zinc-400">Links</th>
+                    <tr className="bg-zinc-100 dark:bg-zinc-800/50 text-left">
+                      <th className="py-3 px-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">Date</th>
+                      <th className="py-3 px-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">Event</th>
+                      <th className="py-3 px-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">Type</th>
+                      <th className="py-3 px-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">Distance</th>
+                      <th className="py-3 px-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">Time</th>
+                      <th className="py-3 px-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">Elevation</th>
+                      <th className="py-3 px-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">Position</th>
+                      <th className="py-3 px-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">Surface</th>
+                      <th className="py-3 px-4 text-sm font-medium text-zinc-600 dark:text-zinc-400">Links</th>
                     </tr>
                   </thead>
                   <tbody>

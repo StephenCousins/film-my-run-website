@@ -150,7 +150,7 @@ export default function Hero() {
         {/* Fallback image while loading */}
         <div
           className={cn(
-            'absolute inset-0 bg-zinc-900 transition-opacity duration-1000',
+            'absolute inset-0 bg-zinc-200 dark:bg-zinc-900 transition-opacity duration-1000',
             isLoaded ? 'opacity-0' : 'opacity-100'
           )}
           style={{
