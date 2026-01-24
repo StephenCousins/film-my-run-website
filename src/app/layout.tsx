@@ -120,7 +120,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white transition-colors">
+      <body className="font-sans transition-colors">
         <AuthProvider>
           <ThemeProvider>
             {children}

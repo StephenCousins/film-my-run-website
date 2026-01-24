@@ -77,7 +77,7 @@ function ServiceCard({ service, index }: ServiceCardProps) {
     >
       {/* Image */}
       <div className="relative aspect-[4/3] rounded-2xl overflow-hidden group">
-        <div className="absolute inset-0 bg-zinc-200 dark:bg-zinc-800">
+        <div className="absolute inset-0 bg-surface-secondary">
           <Image
             src={service.image}
             alt={service.title}
@@ -108,11 +108,11 @@ function ServiceCard({ service, index }: ServiceCardProps) {
           <Icon className="w-6 h-6 text-white" />
         </div>
 
-        <h3 className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mb-4">
+        <h3 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-4">
           {service.title}
         </h3>
 
-        <p className="text-zinc-600 dark:text-zinc-400 mb-6 leading-relaxed">
+        <p className="text-secondary mb-6 leading-relaxed">
           {service.description}
         </p>
 
@@ -121,10 +121,10 @@ function ServiceCard({ service, index }: ServiceCardProps) {
           {service.features.map((feature) => (
             <li
               key={feature}
-              className="flex items-center gap-3 text-zinc-700 dark:text-zinc-300"
+              className="flex items-center gap-3 text-secondary"
             >
-              <div className="w-5 h-5 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
-                <Check className="w-3 h-3 text-orange-500" />
+              <div className="w-5 h-5 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0">
+                <Check className="w-3 h-3 text-brand" />
               </div>
               {feature}
             </li>
@@ -134,7 +134,7 @@ function ServiceCard({ service, index }: ServiceCardProps) {
         {/* CTA */}
         <Link
           href={service.href}
-          className="inline-flex items-center gap-2 text-orange-500 font-semibold hover:text-orange-600 transition-colors group"
+          className="inline-flex items-center gap-2 text-brand font-semibold hover:text-brand-hover transition-colors group"
         >
           Learn More
           <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -199,19 +199,19 @@ export default function ServicesTeaser() {
   return (
     <section
       ref={sectionRef}
-      className="py-24 lg:py-32 bg-white dark:bg-zinc-900"
+      className="section bg-surface"
       style={{ position: 'relative', zIndex: 1 }}
     >
       <div className="container">
         {/* Section header */}
         <div className="text-center max-w-2xl mx-auto mb-16">
-          <span className="text-orange-500 text-sm font-semibold uppercase tracking-wider">
+          <span className="text-brand text-sm font-semibold uppercase tracking-wider">
             Our Services
           </span>
-          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-zinc-900 dark:text-white mt-2 mb-4">
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mt-2 mb-4">
             Capture Your Running Story
           </h2>
-          <p className="text-zinc-600 dark:text-zinc-400 text-lg">
+          <p className="text-secondary text-lg">
             From personal race films to full event coverage, we bring your running moments to life.
           </p>
         </div>
@@ -227,7 +227,7 @@ export default function ServicesTeaser() {
         <div className="mt-20 text-center">
           <Link
             href="/services"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-all hover:scale-105"
+            className="btn-primary"
           >
             View All Services
             <ArrowRight className="w-5 h-5" />

@@ -92,7 +92,7 @@ function ToolCard({ tool, index }: ToolCardProps) {
   return (
     <Link
       href={tool.href}
-      className="tool-card group relative p-6 bg-white dark:bg-zinc-800 rounded-2xl border border-zinc-200 dark:border-zinc-700 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 w-[320px] flex-shrink-0"
+      className="tool-card card-interactive p-6 w-[320px] flex-shrink-0"
     >
       {/* Icon */}
       <div
@@ -105,20 +105,20 @@ function ToolCard({ tool, index }: ToolCardProps) {
       </div>
 
       {/* Content */}
-      <h3 className="font-display text-xl font-semibold text-zinc-900 dark:text-white mb-2 group-hover:text-orange-500 transition-colors">
+      <h3 className="font-display text-xl font-semibold text-foreground mb-2 group-hover:text-brand transition-colors">
         {tool.name}
       </h3>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4 line-clamp-2">
+      <p className="text-sm text-secondary mb-4 line-clamp-2">
         {tool.description}
       </p>
 
       {/* Footer */}
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-zinc-500 dark:text-zinc-500">
+        <span className="text-xs font-medium text-muted">
           {tool.users} weekly users
         </span>
-        <div className="w-8 h-8 rounded-full bg-orange-500/10 flex items-center justify-center group-hover:bg-orange-500 transition-colors">
-          <ArrowRight className="w-4 h-4 text-orange-500 group-hover:text-white transition-colors" />
+        <div className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center group-hover:bg-brand transition-colors">
+          <ArrowRight className="w-4 h-4 text-brand group-hover:text-white transition-colors" />
         </div>
       </div>
     </Link>
@@ -148,12 +148,8 @@ export default function ToolsShowcase() {
       const windowHeight = window.innerHeight;
 
       // Calculate how far we've scrolled through the section
-      // Start when section top reaches viewport top
-      // End when section bottom reaches viewport bottom
       const scrollStart = 0;
       const scrollEnd = sectionHeight - windowHeight;
-
-      // rect.top is negative when section top is above viewport
       const scrolled = -rect.top;
 
       // Calculate progress (0 to 1)
@@ -176,48 +172,48 @@ export default function ToolsShowcase() {
   }, []);
 
   // Calculate card translation based on scroll progress
-  const cardsWidth = 320 * tools.length + 32 * (tools.length - 1); // card width + gaps
+  const cardsWidth = 320 * tools.length + 32 * (tools.length - 1);
   const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
-  const maxTranslate = Math.max(0, cardsWidth - viewportWidth + 600); // Extra padding
+  const maxTranslate = Math.max(0, cardsWidth - viewportWidth + 600);
   const translateX = -scrollProgress * maxTranslate;
 
   return (
     <div
       ref={sectionRef}
-      className="relative bg-zinc-100 dark:bg-zinc-900"
+      className="relative bg-surface-secondary"
       style={{
-        height: '200vh', // Double height for scroll room
+        height: '200vh',
         zIndex: 50,
       }}
     >
       {/* Sticky container */}
       <div
-        className="sticky top-0 h-screen overflow-hidden bg-zinc-100 dark:bg-zinc-900"
+        className="sticky top-0 h-screen overflow-hidden bg-surface-secondary"
         style={{ zIndex: 50 }}
       >
         {/* Background */}
-        <div className="absolute inset-0 bg-zinc-100 dark:bg-zinc-900" />
+        <div className="absolute inset-0 bg-surface-secondary" />
 
         {/* Content */}
         <div className="relative h-full flex items-center">
           {/* Left side - Header */}
-          <div className="absolute lg:relative left-0 top-0 w-full lg:w-[450px] p-8 lg:p-16 lg:flex-shrink-0 z-20 bg-zinc-100 dark:bg-zinc-900">
+          <div className="absolute lg:relative left-0 top-0 w-full lg:w-[450px] p-8 lg:p-16 lg:flex-shrink-0 z-20 bg-surface-secondary">
             <div className="max-w-sm">
-              <span className="text-orange-500 text-sm font-bold uppercase tracking-wider">
+              <span className="text-brand text-sm font-bold uppercase tracking-wider">
                 Free Tools
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-white mt-3 mb-6 leading-tight">
+              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mt-3 mb-6 leading-tight">
                 Built for
                 <br />
-                <span className="text-orange-500">Runners</span>
+                <span className="text-brand">Runners</span>
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 text-lg mb-8 leading-relaxed">
+              <p className="text-secondary text-lg mb-8 leading-relaxed">
                 Powerful calculators and tools used by over 250,000 runners every week.
                 All free, no signup required.
               </p>
               <Link
                 href="/tools/calculators"
-                className="inline-flex items-center gap-3 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-all hover:scale-105 group"
+                className="btn-primary"
               >
                 Explore All Tools
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -252,18 +248,18 @@ export default function ToolsShowcase() {
 
         {/* Scroll progress indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex items-center gap-2">
-          <div className="w-32 h-1 bg-zinc-300 dark:bg-zinc-700 rounded-full overflow-hidden">
+          <div className="w-32 h-1 bg-border rounded-full overflow-hidden">
             <div
-              className="h-full bg-orange-500 transition-all duration-100"
+              className="h-full bg-brand transition-all duration-100"
               style={{ width: `${scrollProgress * 100}%` }}
             />
           </div>
-          <span className="text-zinc-500 text-sm">Scroll</span>
+          <span className="text-muted text-sm">Scroll</span>
         </div>
 
         {/* Decorative elements */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-info/10 rounded-full blur-3xl pointer-events-none" />
       </div>
     </div>
   );

@@ -3,51 +3,76 @@
 @tailwind utilities;
 
 /* ============================================
-   DESIGN SYSTEM TOKENS
-   See DESIGN_SYSTEM.md for documentation
+   DESIGN TOKENS - SINGLE SOURCE OF TRUTH
+
+   Professional design system using CSS custom properties.
+   All colors are defined once here and referenced via Tailwind.
+   Theme switching happens automatically via the .dark class.
    ============================================ */
 
 @layer base {
   :root {
-    /* Brand Colors */
-    --orange-primary: #f88c00;
-    --orange-hover: #ea580c;
-    --orange-light: #fff7ed;
+    /* ========== BRAND ========== */
+    --color-brand: 248 140 0;           /* #f88c00 - Primary orange */
+    --color-brand-hover: 234 88 12;     /* #ea580c - Hover state */
+    --color-brand-muted: 255 247 237;   /* #fff7ed - Light orange bg */
 
-    /* Light Mode */
-    --bg-primary: #fafafa;
-    --bg-secondary: #ffffff;
-    --bg-tertiary: #f4f4f5;
-    --text-primary: #18181b;
-    --text-secondary: #52525b;
-    --text-muted: #a1a1aa;
-    --border-color: #e4e4e7;
+    /* ========== SURFACES ========== */
+    --color-background: 250 250 250;    /* #fafafa - Page background */
+    --color-surface: 255 255 255;       /* #ffffff - Cards, elevated */
+    --color-surface-secondary: 244 244 245; /* #f4f4f5 - Subtle sections */
+    --color-surface-tertiary: 228 228 231;  /* #e4e4e7 - Inputs, wells */
 
-    /* Semantic */
-    --success: #22c55e;
-    --warning: #eab308;
-    --error: #ef4444;
-    --info: #3b82f6;
+    /* ========== TEXT ========== */
+    --color-text: 24 24 27;             /* #18181b - Primary text */
+    --color-text-secondary: 82 82 91;   /* #52525b - Secondary text */
+    --color-text-muted: 161 161 170;    /* #a1a1aa - Muted/placeholder */
+    --color-text-inverted: 250 250 250; /* #fafafa - Text on dark bg */
+
+    /* ========== BORDERS ========== */
+    --color-border: 228 228 231;        /* #e4e4e7 - Default borders */
+    --color-border-secondary: 212 212 216; /* #d4d4d8 - Subtle borders */
+
+    /* ========== SEMANTIC ========== */
+    --color-success: 34 197 94;         /* #22c55e */
+    --color-warning: 234 179 8;         /* #eab308 */
+    --color-error: 239 68 68;           /* #ef4444 */
+    --color-info: 59 130 246;           /* #3b82f6 */
+
+    /* ========== OVERLAYS ========== */
+    --color-overlay: 0 0 0;             /* Black for overlays */
+    --overlay-opacity: 0.5;
   }
 
   .dark {
-    --bg-primary: #09090b;
-    --bg-secondary: #18181b;
-    --bg-tertiary: #27272a;
-    --text-primary: #fafafa;
-    --text-secondary: #a1a1aa;
-    --text-muted: #71717a;
-    --border-color: #27272a;
+    /* ========== SURFACES ========== */
+    --color-background: 9 9 11;         /* #09090b - Page background */
+    --color-surface: 24 24 27;          /* #18181b - Cards, elevated */
+    --color-surface-secondary: 39 39 42;    /* #27272a - Subtle sections */
+    --color-surface-tertiary: 63 63 70;     /* #3f3f46 - Inputs, wells */
+
+    /* ========== TEXT ========== */
+    --color-text: 250 250 250;          /* #fafafa - Primary text */
+    --color-text-secondary: 161 161 170;    /* #a1a1aa - Secondary text */
+    --color-text-muted: 113 113 122;    /* #71717a - Muted/placeholder */
+    --color-text-inverted: 24 24 27;    /* #18181b - Text on light bg */
+
+    /* ========== BORDERS ========== */
+    --color-border: 39 39 42;           /* #27272a - Default borders */
+    --color-border-secondary: 63 63 70; /* #3f3f46 - Subtle borders */
+
+    /* ========== OVERLAYS ========== */
+    --color-overlay: 0 0 0;
+    --overlay-opacity: 0.7;
   }
 
-  /* Base Styles */
+  /* ========== BASE STYLES ========== */
   html {
     scroll-behavior: smooth;
   }
 
   body {
-    @apply bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-50;
-    @apply antialiased;
+    @apply bg-background text-foreground antialiased;
     font-feature-settings: 'ss01' on, 'ss02' on, 'cv01' on;
   }
 
@@ -56,29 +81,9 @@
     @apply font-display font-semibold tracking-tight;
   }
 
-  h1 {
-    @apply text-display-lg md:text-display-xl lg:text-display-2xl;
-  }
-
-  h2 {
-    @apply text-heading-xl md:text-display-lg;
-  }
-
-  h3 {
-    @apply text-heading-lg md:text-heading-xl;
-  }
-
-  h4 {
-    @apply text-heading-md md:text-heading-lg;
-  }
-
-  p {
-    @apply text-body-md;
-  }
-
   /* Focus States */
   :focus-visible {
-    @apply outline-none ring-2 ring-orange-500 ring-offset-2 ring-offset-zinc-50 dark:ring-offset-zinc-950;
+    @apply outline-none ring-2 ring-brand ring-offset-2 ring-offset-background;
   }
 
   :focus:not(:focus-visible) {
@@ -87,12 +92,14 @@
 
   /* Selection */
   ::selection {
-    @apply bg-orange-500/20 text-orange-900 dark:text-orange-100;
+    background-color: rgb(var(--color-brand) / 0.2);
+    color: rgb(var(--color-text));
   }
 }
 
 /* ============================================
-   COMPONENTS
+   COMPONENT CLASSES
+   Reusable patterns that use design tokens
    ============================================ */
 
 @layer components {
@@ -109,113 +116,94 @@
     @apply mx-auto w-full max-w-[96rem] px-4 sm:px-6 lg:px-8;
   }
 
-  /* Buttons */
+  /* ========== BUTTONS ========== */
   .btn {
     @apply inline-flex items-center justify-center gap-2;
     @apply px-6 py-3 font-semibold;
     @apply rounded-full;
     @apply transition-all duration-300;
-    @apply focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2;
+    @apply focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2;
   }
 
   .btn-primary {
-    @apply btn;
-    @apply bg-orange-500 text-white;
-    @apply hover:bg-orange-600 hover:scale-105 hover:shadow-lg hover:shadow-orange-500/25;
-    @apply active:scale-100;
+    @apply btn bg-brand text-white;
+    @apply hover:bg-brand-hover hover:scale-105 hover:shadow-lg;
   }
 
   .btn-secondary {
-    @apply btn;
-    @apply border-2 border-zinc-800 text-zinc-900;
-    @apply dark:border-zinc-200 dark:text-zinc-100;
-    @apply hover:bg-zinc-900 hover:text-white;
-    @apply dark:hover:bg-zinc-100 dark:hover:text-zinc-900;
+    @apply btn border-2 border-border text-foreground;
+    @apply hover:bg-surface-secondary;
   }
 
   .btn-ghost {
-    @apply btn;
-    @apply text-zinc-600 dark:text-zinc-400;
-    @apply hover:text-orange-500;
-    @apply relative;
+    @apply btn text-muted;
+    @apply hover:text-brand;
   }
 
-  .btn-ghost::after {
-    content: '';
-    @apply absolute bottom-0 left-0 w-0 h-0.5 bg-orange-500;
-    @apply transition-all duration-300;
-  }
-
-  .btn-ghost:hover::after {
-    @apply w-full;
-  }
-
-  /* Cards */
+  /* ========== CARDS ========== */
   .card {
-    @apply bg-white dark:bg-zinc-900;
-    @apply rounded-2xl;
-    @apply border border-zinc-200 dark:border-zinc-800;
+    @apply bg-surface rounded-2xl border border-border;
     @apply transition-all duration-300;
   }
 
   .card-interactive {
     @apply card;
-    @apply hover:shadow-xl hover:shadow-zinc-900/10 hover:-translate-y-1;
+    @apply hover:shadow-xl hover:shadow-black/5 hover:-translate-y-1;
+    @apply hover:border-brand/50;
   }
 
-  .card-glass {
-    @apply backdrop-blur-xl;
-    @apply bg-white/70 dark:bg-zinc-900/70;
-    @apply rounded-2xl;
-    @apply border border-white/20;
-    @apply shadow-xl;
+  .card-elevated {
+    @apply card shadow-sm;
   }
 
-  /* Stat Card */
+  /* ========== SECTIONS ========== */
+  .section {
+    @apply py-24 lg:py-32;
+  }
+
+  .section-alt {
+    @apply section bg-surface-secondary;
+  }
+
+  /* ========== INPUTS ========== */
+  .input {
+    @apply w-full px-4 py-3;
+    @apply bg-surface-tertiary border border-border rounded-xl;
+    @apply text-foreground placeholder:text-muted;
+    @apply focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand;
+    @apply transition-colors;
+  }
+
+  /* ========== STAT CARDS ========== */
   .stat-card {
-    @apply card;
-    @apply border-2 border-orange-500/20;
-    @apply p-6 text-center;
-    @apply hover:border-orange-500 hover:shadow-lg hover:shadow-orange-500/10;
+    @apply card border-2 border-brand/20 p-6 text-center;
+    @apply hover:border-brand hover:shadow-lg;
   }
 
   .stat-number {
-    @apply font-mono text-4xl md:text-5xl font-bold text-orange-500;
+    @apply font-mono text-4xl md:text-5xl font-bold text-brand;
   }
 
   .stat-label {
-    @apply text-caption uppercase tracking-wide text-zinc-500 dark:text-zinc-400 mt-2;
+    @apply text-xs uppercase tracking-wide text-muted mt-2;
   }
 
-  /* Section Headers */
-  .section-header {
-    @apply font-display text-heading-xl md:text-display-lg lowercase;
-  }
-
-  /* Prose (for blog content) */
-  .prose {
-    @apply max-w-none;
-  }
-
+  /* ========== PROSE ========== */
   .prose p {
-    @apply text-body-lg text-zinc-700 dark:text-zinc-300 mb-6;
+    @apply text-lg text-secondary mb-6 leading-relaxed;
   }
 
   .prose h2 {
-    @apply text-heading-lg mt-12 mb-4;
+    @apply text-2xl font-bold mt-12 mb-4;
   }
 
   .prose h3 {
-    @apply text-heading-md mt-8 mb-3;
-  }
-
-  .prose img {
-    @apply rounded-xl my-8;
+    @apply text-xl font-bold mt-8 mb-3;
   }
 
   .prose a {
-    @apply text-orange-500 underline decoration-orange-500/30;
-    @apply hover:decoration-orange-500 transition-colors;
+    @apply text-brand underline decoration-brand/30;
+    @apply hover:decoration-brand transition-colors;
   }
 
   .prose ul, .prose ol {
@@ -223,12 +211,12 @@
   }
 
   .prose li {
-    @apply text-body-lg text-zinc-700 dark:text-zinc-300 mb-2;
+    @apply text-lg text-secondary mb-2;
   }
 
   .prose blockquote {
-    @apply border-l-4 border-orange-500 pl-6 my-8;
-    @apply text-xl italic text-zinc-600 dark:text-zinc-400;
+    @apply border-l-4 border-brand pl-6 my-8;
+    @apply text-xl italic text-muted;
   }
 }
 
@@ -239,7 +227,7 @@
 @layer utilities {
   /* Text Gradient */
   .text-gradient {
-    @apply bg-gradient-to-r from-orange-500 to-orange-300;
+    @apply bg-gradient-to-r from-brand to-orange-300;
     @apply bg-clip-text text-transparent;
   }
 
@@ -281,11 +269,6 @@
   }
 }
 
-/* Custom cursor styles (applied via JS) */
-.cursor-custom {
-  cursor: none;
-}
-
 /* GSAP Animation Classes */
 .gsap-reveal {
   visibility: hidden;
@@ -294,16 +277,3 @@
 .gsap-reveal.is-revealed {
   visibility: visible;
 }
-
-/* GSAP Pin Spacer for Tools Showcase - ensure dark background */
-.tools-showcase-wrapper.pin-spacer,
-.pin-spacer > .tools-showcase-wrapper,
-.pin-spacer:has(.tools-showcase-wrapper) {
-  background-color: #18181b !important;
-}
-
-/* Fallback for all pin-spacers */
-div.pin-spacer {
-  background-color: inherit;
-}
-

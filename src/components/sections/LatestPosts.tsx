@@ -3,8 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar, Clock, ArrowRight, Tag } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Calendar, Clock, ArrowRight } from 'lucide-react';
 import { blogPosts } from '@/data/blog-posts';
 
 // ============================================
@@ -36,12 +35,10 @@ interface PostCardProps {
 
 function PostCard({ post, featured = false }: PostCardProps) {
   return (
-    <article
-      className="blog-card group relative overflow-hidden rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all duration-300 h-full"
-    >
+    <article className="blog-card card-interactive h-full overflow-hidden">
       <Link href={`/blog/${post.slug}`} className="block h-full">
         {/* Image */}
-        <div className="relative overflow-hidden bg-zinc-200 dark:bg-zinc-800 aspect-[16/10]">
+        <div className="relative overflow-hidden bg-surface-secondary aspect-[16/10]">
           {post.featuredImage ? (
             <Image
               src={post.featuredImage}
@@ -57,7 +54,7 @@ function PostCard({ post, featured = false }: PostCardProps) {
 
           {/* Category badge */}
           <div className="absolute top-4 left-4">
-            <span className="px-3 py-1 bg-orange-500 text-white text-xs font-semibold rounded-full">
+            <span className="px-3 py-1 bg-brand text-white text-xs font-semibold rounded-full">
               {post.category.name}
             </span>
           </div>
@@ -69,7 +66,7 @@ function PostCard({ post, featured = false }: PostCardProps) {
         {/* Content */}
         <div className="p-5">
           {/* Meta */}
-          <div className="flex items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+          <div className="flex items-center gap-4 text-xs text-muted mb-3">
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
               {new Date(post.publishedAt).toLocaleDateString('en-GB', {
@@ -85,17 +82,17 @@ function PostCard({ post, featured = false }: PostCardProps) {
           </div>
 
           {/* Title */}
-          <h3 className="font-display text-lg md:text-xl font-semibold text-zinc-900 dark:text-white group-hover:text-orange-500 transition-colors line-clamp-2 mb-2">
+          <h3 className="font-display text-lg md:text-xl font-semibold text-foreground group-hover:text-brand transition-colors line-clamp-2 mb-2">
             {post.title}
           </h3>
 
           {/* Excerpt */}
-          <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-2">
+          <p className="text-sm text-secondary line-clamp-2">
             {post.excerpt}
           </p>
 
           {/* Read more */}
-          <div className="flex items-center gap-1 mt-4 text-orange-500 font-medium text-sm group-hover:gap-2 transition-all">
+          <div className="flex items-center gap-1 mt-4 text-brand font-medium text-sm group-hover:gap-2 transition-all">
             Read More
             <ArrowRight className="w-4 h-4" />
           </div>
@@ -133,7 +130,7 @@ export default function LatestPosts({ posts = blogPosts }: LatestPostsProps) {
           // Pop-out effect: cards scale from small to big as they scroll into view
           const cards = section.querySelectorAll('.blog-card');
 
-          cards.forEach((card, index) => {
+          cards.forEach((card) => {
             // Initial state - smaller scale
             gsap.set(card, {
               scale: 0.85,
@@ -170,23 +167,23 @@ export default function LatestPosts({ posts = blogPosts }: LatestPostsProps) {
   return (
     <section
       ref={sectionRef}
-      className="py-24 lg:py-32 bg-zinc-50 dark:bg-zinc-950"
+      className="section bg-background"
       style={{ position: 'relative', zIndex: 1 }}
     >
       <div className="container">
         {/* Section header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
           <div>
-            <span className="text-orange-500 text-sm font-semibold uppercase tracking-wider">
+            <span className="text-brand text-sm font-semibold uppercase tracking-wider">
               From the Blog
             </span>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mt-2">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mt-2">
               Latest Stories
             </h2>
           </div>
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-orange-500 font-semibold hover:text-orange-600 transition-colors group"
+            className="inline-flex items-center gap-2 text-brand font-semibold hover:text-brand-hover transition-colors group"
           >
             View All Posts
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

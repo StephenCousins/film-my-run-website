@@ -65,10 +65,10 @@ function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={product.href}
-      className="product-card group block bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+      className="product-card card-interactive overflow-hidden"
     >
       {/* Image */}
-      <div className="relative aspect-square bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+      <div className="relative aspect-square bg-surface-secondary overflow-hidden">
         <Image
           src={product.image}
           alt={product.name}
@@ -81,8 +81,8 @@ function ProductCard({ product }: ProductCardProps) {
           <div className="absolute top-3 left-3">
             <span className={cn(
               'px-3 py-1 text-xs font-semibold rounded-full',
-              product.badge === 'Best Seller' && 'bg-orange-500 text-white',
-              product.badge === 'New' && 'bg-emerald-500 text-white'
+              product.badge === 'Best Seller' && 'bg-brand text-white',
+              product.badge === 'New' && 'bg-success text-white'
             )}>
               {product.badge}
             </span>
@@ -91,7 +91,7 @@ function ProductCard({ product }: ProductCardProps) {
 
         {/* Quick add button */}
         <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="p-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors shadow-lg">
+          <button className="p-3 bg-brand text-white rounded-full hover:bg-brand-hover transition-colors shadow-lg">
             <ShoppingBag className="w-5 h-5" />
           </button>
         </div>
@@ -101,22 +101,22 @@ function ProductCard({ product }: ProductCardProps) {
       <div className="p-4">
         {/* Rating */}
         <div className="flex items-center gap-1 mb-2">
-          <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-          <span className="text-sm font-medium text-zinc-900 dark:text-white">
+          <Star className="w-4 h-4 text-warning fill-warning" />
+          <span className="text-sm font-medium text-foreground">
             {product.rating}
           </span>
-          <span className="text-sm text-zinc-500">
+          <span className="text-sm text-muted">
             ({product.reviews})
           </span>
         </div>
 
         {/* Name */}
-        <h3 className="font-display font-semibold text-zinc-900 dark:text-white group-hover:text-orange-500 transition-colors line-clamp-1 mb-2">
+        <h3 className="font-display font-semibold text-foreground group-hover:text-brand transition-colors line-clamp-1 mb-2">
           {product.name}
         </h3>
 
         {/* Price */}
-        <div className="font-mono text-lg font-bold text-orange-500">
+        <div className="font-mono text-lg font-bold text-brand">
           £{product.price.toFixed(2)}
         </div>
       </div>
@@ -178,26 +178,26 @@ export default function ShopTeaser() {
   return (
     <section
       ref={sectionRef}
-      className="py-24 lg:py-32 bg-zinc-100 dark:bg-zinc-950"
+      className="section bg-surface-secondary"
       style={{ position: 'relative', zIndex: 1 }}
     >
       <div className="container">
         {/* Section header */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-12">
           <div>
-            <span className="text-orange-500 text-sm font-semibold uppercase tracking-wider">
+            <span className="text-brand text-sm font-semibold uppercase tracking-wider">
               Shop
             </span>
-            <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mt-2">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mt-2">
               Runner's Essentials
             </h2>
-            <p className="text-zinc-600 dark:text-zinc-400 mt-2">
+            <p className="text-secondary mt-2">
               Gear designed by runners, for runners.
             </p>
           </div>
           <Link
             href="/shop"
-            className="inline-flex items-center gap-2 text-orange-500 font-semibold hover:text-orange-600 transition-colors group"
+            className="inline-flex items-center gap-2 text-brand font-semibold hover:text-brand-hover transition-colors group"
           >
             Browse All Products
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -213,21 +213,21 @@ export default function ShopTeaser() {
 
         {/* Bottom CTA */}
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-4 px-6 py-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800">
+          <div className="inline-flex items-center gap-4 px-6 py-4 card">
             <div className="flex -space-x-2">
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className="w-10 h-10 rounded-full bg-zinc-300 dark:bg-zinc-700 border-2 border-white dark:border-zinc-900"
+                  className="w-10 h-10 rounded-full bg-surface-secondary border-2 border-surface"
                 />
               ))}
             </div>
             <div className="text-left">
-              <div className="text-sm font-medium text-zinc-900 dark:text-white">
+              <div className="text-sm font-medium text-foreground">
                 Trusted by 5,000+ runners
               </div>
-              <div className="flex items-center gap-1 text-sm text-zinc-500">
-                <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+              <div className="flex items-center gap-1 text-sm text-muted">
+                <Star className="w-4 h-4 text-warning fill-warning" />
                 4.9 average rating
               </div>
             </div>
