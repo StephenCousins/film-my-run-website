@@ -94,25 +94,25 @@ function VideoModal({ isOpen, onClose, videoId, title }: VideoModalProps) {
 
 function LoadingSkeleton() {
   return (
-    <section className="relative py-24 lg:py-32 overflow-hidden bg-zinc-950">
+    <section className="relative py-24 lg:py-32 overflow-hidden bg-zinc-100 dark:bg-zinc-950">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Content skeleton */}
           <div className="order-2 lg:order-1 animate-pulse">
-            <div className="h-6 w-32 bg-zinc-800 rounded-full mb-6" />
-            <div className="h-12 w-3/4 bg-zinc-800 rounded mb-4" />
-            <div className="h-6 w-1/2 bg-zinc-800 rounded mb-6" />
-            <div className="h-20 w-full bg-zinc-800 rounded mb-8" />
-            <div className="h-24 w-full bg-zinc-800 rounded mb-8" />
+            <div className="h-6 w-32 bg-zinc-300 dark:bg-zinc-800 rounded-full mb-6" />
+            <div className="h-12 w-3/4 bg-zinc-300 dark:bg-zinc-800 rounded mb-4" />
+            <div className="h-6 w-1/2 bg-zinc-300 dark:bg-zinc-800 rounded mb-6" />
+            <div className="h-20 w-full bg-zinc-300 dark:bg-zinc-800 rounded mb-8" />
+            <div className="h-24 w-full bg-zinc-300 dark:bg-zinc-800 rounded mb-8" />
             <div className="flex gap-4">
-              <div className="h-12 w-36 bg-zinc-800 rounded-full" />
-              <div className="h-12 w-36 bg-zinc-800 rounded-full" />
+              <div className="h-12 w-36 bg-zinc-300 dark:bg-zinc-800 rounded-full" />
+              <div className="h-12 w-36 bg-zinc-300 dark:bg-zinc-800 rounded-full" />
             </div>
           </div>
 
           {/* Thumbnail skeleton */}
           <div className="order-1 lg:order-2">
-            <div className="aspect-video bg-zinc-800 rounded-2xl animate-pulse" />
+            <div className="aspect-video bg-zinc-300 dark:bg-zinc-800 rounded-2xl animate-pulse" />
           </div>
         </div>
       </div>
@@ -243,7 +243,7 @@ export default function FeaturedFilm() {
     <>
       <section
         ref={sectionRef}
-        className="relative py-24 lg:py-32 overflow-hidden bg-zinc-950"
+        className="relative py-24 lg:py-32 overflow-hidden bg-zinc-100 dark:bg-zinc-950"
         style={{ position: 'relative', zIndex: 1 }}
       >
         <div className="container">
@@ -258,22 +258,22 @@ export default function FeaturedFilm() {
               </div>
 
               {/* Title */}
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
+              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-white mb-4">
                 {video.title}
               </h2>
 
               {/* Subtitle */}
-              <p className="text-xl text-zinc-400 italic mb-6">
+              <p className="text-xl text-zinc-600 dark:text-zinc-400 italic mb-6">
                 {video.subtitle}
               </p>
 
               {/* Description */}
-              <p className="text-zinc-400 leading-relaxed mb-8 max-w-lg">
+              <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-8 max-w-lg">
                 {video.description}
               </p>
 
               {/* Meta info */}
-              <div className="flex flex-wrap gap-6 mb-8 text-sm text-zinc-500">
+              <div className="flex flex-wrap gap-6 mb-8 text-sm text-zinc-500 dark:text-zinc-500">
                 {video.year && (
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
@@ -287,7 +287,7 @@ export default function FeaturedFilm() {
               </div>
 
               {/* Stats */}
-              <div className="film-stats grid grid-cols-3 gap-4 p-4 bg-zinc-900 rounded-xl border border-zinc-800 mb-8">
+              <div className="film-stats grid grid-cols-3 gap-4 p-4 bg-white dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-800 mb-8">
                 <div className="film-stat text-center">
                   <div className="font-mono text-xl font-bold text-orange-500">
                     {video.stats.distance}
@@ -297,7 +297,7 @@ export default function FeaturedFilm() {
                     Distance
                   </div>
                 </div>
-                <div className="film-stat text-center border-x border-zinc-800">
+                <div className="film-stat text-center border-x border-zinc-200 dark:border-zinc-800">
                   <div className="font-mono text-xl font-bold text-orange-500">
                     {video.stats.elevation}
                   </div>
@@ -328,7 +328,7 @@ export default function FeaturedFilm() {
                 </button>
                 <Link
                   href="/films"
-                  className="inline-flex items-center gap-2 px-6 py-3 text-white font-medium hover:text-orange-500 transition-colors group"
+                  className="inline-flex items-center gap-2 px-6 py-3 text-zinc-700 dark:text-white font-medium hover:text-orange-500 transition-colors group"
                 >
                   Browse All Films
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />

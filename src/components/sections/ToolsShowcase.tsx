@@ -92,7 +92,7 @@ function ToolCard({ tool, index }: ToolCardProps) {
   return (
     <Link
       href={tool.href}
-      className="tool-card group relative p-6 bg-zinc-800 rounded-2xl border border-zinc-700 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 w-[320px] flex-shrink-0"
+      className="tool-card group relative p-6 bg-white dark:bg-zinc-800 rounded-2xl border border-zinc-200 dark:border-zinc-700 hover:border-orange-500/50 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 w-[320px] flex-shrink-0"
     >
       {/* Icon */}
       <div
@@ -184,7 +184,7 @@ export default function ToolsShowcase() {
   return (
     <div
       ref={sectionRef}
-      className="relative bg-zinc-900"
+      className="relative bg-zinc-100 dark:bg-zinc-900"
       style={{
         height: '200vh', // Double height for scroll room
         zIndex: 50,
@@ -192,26 +192,26 @@ export default function ToolsShowcase() {
     >
       {/* Sticky container */}
       <div
-        className="sticky top-0 h-screen overflow-hidden bg-zinc-900"
+        className="sticky top-0 h-screen overflow-hidden bg-zinc-100 dark:bg-zinc-900"
         style={{ zIndex: 50 }}
       >
         {/* Background */}
-        <div className="absolute inset-0 bg-zinc-900" />
+        <div className="absolute inset-0 bg-zinc-100 dark:bg-zinc-900" />
 
         {/* Content */}
         <div className="relative h-full flex items-center">
           {/* Left side - Header */}
-          <div className="absolute lg:relative left-0 top-0 w-full lg:w-[450px] p-8 lg:p-16 lg:flex-shrink-0 z-20 bg-zinc-900">
+          <div className="absolute lg:relative left-0 top-0 w-full lg:w-[450px] p-8 lg:p-16 lg:flex-shrink-0 z-20 bg-zinc-100 dark:bg-zinc-900">
             <div className="max-w-sm">
               <span className="text-orange-500 text-sm font-bold uppercase tracking-wider">
                 Free Tools
               </span>
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mt-3 mb-6 leading-tight">
+              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-zinc-900 dark:text-white mt-3 mb-6 leading-tight">
                 Built for
                 <br />
                 <span className="text-orange-500">Runners</span>
               </h2>
-              <p className="text-zinc-400 text-lg mb-8 leading-relaxed">
+              <p className="text-zinc-600 dark:text-zinc-400 text-lg mb-8 leading-relaxed">
                 Powerful calculators and tools used by over 250,000 runners every week.
                 All free, no signup required.
               </p>
@@ -252,7 +252,7 @@ export default function ToolsShowcase() {
 
         {/* Scroll progress indicator */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex items-center gap-2">
-          <div className="w-32 h-1 bg-zinc-700 rounded-full overflow-hidden">
+          <div className="w-32 h-1 bg-zinc-300 dark:bg-zinc-700 rounded-full overflow-hidden">
             <div
               className="h-full bg-orange-500 transition-all duration-100"
               style={{ width: `${scrollProgress * 100}%` }}

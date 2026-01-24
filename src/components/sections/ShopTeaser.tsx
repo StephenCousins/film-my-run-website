@@ -65,10 +65,10 @@ function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={product.href}
-      className="product-card group block bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+      className="product-card group block bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
     >
       {/* Image */}
-      <div className="relative aspect-square bg-zinc-800 overflow-hidden">
+      <div className="relative aspect-square bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
         <Image
           src={product.image}
           alt={product.name}
@@ -178,7 +178,7 @@ export default function ShopTeaser() {
   return (
     <section
       ref={sectionRef}
-      className="py-24 lg:py-32 bg-zinc-950"
+      className="py-24 lg:py-32 bg-zinc-100 dark:bg-zinc-950"
       style={{ position: 'relative', zIndex: 1 }}
     >
       <div className="container">
@@ -213,7 +213,7 @@ export default function ShopTeaser() {
 
         {/* Bottom CTA */}
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-4 px-6 py-4 bg-zinc-900 rounded-2xl border border-zinc-800">
+          <div className="inline-flex items-center gap-4 px-6 py-4 bg-white dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800">
             <div className="flex -space-x-2">
               {[1, 2, 3, 4].map((i) => (
                 <div
