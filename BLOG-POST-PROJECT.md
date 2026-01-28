@@ -2,7 +2,7 @@
 
 Track progress on creating blog posts for races with video but no written report.
 
-**Last Updated:** 2026-01-27
+**Last Updated:** 2026-01-28
 
 ---
 
@@ -11,7 +11,9 @@ Track progress on creating blog posts for races with video but no written report
 - **Total Races in Video Archive:** 76
 - **Races Already Having Blog Posts:** ~50+ (migrated from WordPress)
 - **Races Confirmed Missing Blog Posts:** See list below
-- **Blog Posts Written This Project:** 1 (Transgrancanaria 2022 - enhanced format)
+- **Blog Posts Written/Rewritten This Project:** 2
+  - Transgrancanaria 2022 (enhanced format)
+  - Three Forts Challenge 2015 (rewritten with proper HTML)
 
 ### Races Confirmed Missing Blog Posts
 
@@ -146,7 +148,7 @@ These 37 races have videos but transcripts couldn't be downloaded due to IP bloc
 
 | Status | Date | Race | Distance | Time | Transcript | Strava |
 |--------|------|------|----------|------|------------|--------|
-| [T] | 03/05/2015 | Three Forts Challenge | 27.2mi | 04:27:23 | ✅ | [Link](https://www.strava.com/activities/297445792) |
+| [x] | 03/05/2015 | Three Forts Challenge | 27.2mi | 04:27:23 | ✅ | [Link](https://www.strava.com/activities/297445792) |
 
 ---
 
@@ -154,9 +156,9 @@ These 37 races have videos but transcripts couldn't be downloaded due to IP bloc
 
 | Status | Date | Race | Distance | Time | Transcript | Strava |
 |--------|------|------|----------|------|------------|--------|
-| [T] | 15/02/2016 | Phoenix Breakfast Run | 26.2mi | 04:27:50 | ✅ | [Link](https://www.strava.com/activities/494099686) |
-| [T] | 29/05/2016 | Weald Ultra 50k | 31mi | 05:19:30 | ✅ | [Link](https://www.strava.com/activities/591989654) |
-| [T] | 21/08/2016 | Bad Cow Marathon | 26.2mi | 04:01:05 | ✅ | [Link](https://www.strava.com/activities/683666336) |
+| [x] | 15/02/2016 | Phoenix Breakfast Run | 26.2mi | 04:27:50 | ✅ | [Link](https://www.strava.com/activities/494099686) |
+| [x] | 29/05/2016 | Weald Ultra 50k | 31mi | 05:19:30 | ✅ | [Link](https://www.strava.com/activities/591989654) |
+| [x] | 21/08/2016 | Bad Cow Marathon | 26.2mi | 04:01:05 | ✅ | [Link](https://www.strava.com/activities/683666336) |
 | [ ] | 18/09/2016 | Purbeck Marathon | 26.2mi | 04:55:09 | ❌ Disabled | [Link](https://www.strava.com/activities/717166698) |
 
 ---
@@ -165,7 +167,7 @@ These 37 races have videos but transcripts couldn't be downloaded due to IP bloc
 
 | Status | Date | Race | Distance | Time | Transcript | Strava |
 |--------|------|------|----------|------|------------|--------|
-| [T] | 28/05/2017 | Dorchester Marathon | 26.2mi | 04:41:41 | ✅ | [Link](https://www.strava.com/activities/1009882616) |
+| [x] | 28/05/2017 | Dorchester Marathon | 26.2mi | 04:41:41 | ✅ | [Link](https://www.strava.com/activities/1009882616) |
 | [T] | 06/10/2017 | Atlantic Coast Challenge Day 1 | 26.2mi | 04:49:00 | ✅ | [Link](https://www.strava.com/activities/1217791516) |
 | [T] | 07/10/2017 | Atlantic Coast Challenge Day 2 | 26.2mi | 04:51:22 | ✅ | [Link](https://www.strava.com/activities/1219026570) |
 | [T] | 08/10/2017 | Atlantic Coast Challenge Day 3 | 26.2mi | 06:29:48 | ✅ | [Link](https://www.strava.com/activities/1221431431) |
@@ -400,6 +402,17 @@ Before writing a single word, gather and READ all available resources:
 - Direct quotes except at truly dramatic moments
 
 ---
+
+### ⚠️ CRITICAL: HTML Format Required
+
+**Blog posts MUST be HTML, not Markdown.** The site uses `dangerouslySetInnerHTML` to render content.
+
+See `BLOG-WRITING-INSTRUCTIONS.md` for the complete HTML template including:
+- `<div class="tldr-box">` - TL;DR summary at top
+- `<div class="stats-grid">` - Stats grid (distance, time, elevation, position)
+- `<div class="pull-quote">` - Pull quotes for impact
+- `<figure>` - Images with captions
+- Proper `<h2>`, `<p>` tags throughout
 
 ### Enhanced Blog Post Layout
 
