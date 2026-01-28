@@ -271,7 +271,7 @@ export const blogContent: Record<string, string> = {
 
 <p>We're so used to relying on our watches to dictate our pace and effort level that we forget to listen to our bodies. We train with goal paces in mind and lock into specific paces for different types of runs. We check our heart rate zones to make sure we're in the right zone. We glance down at our watch and adjust our pace accordingly, even if it means deviating from our natural rhythm.</p>
 
-<figure><img src="https://filmmyrun.co.uk/wp-content/uploads/2023/03/Screenshot-2023-03-24-at-09.16.27-1024x349.png" alt="" /></figure>
+<figure><img src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2023/03/Screenshot-2023-03-24-at-09.16.27-1024x349.png" alt="" /></figure>
 
 <p>By running without a watch, I was able to break free from this constraint. I had no feedback on how fast or slow I was going, and it was surprisingly liberating. I could focus on my surroundings and enjoy the feeling of running fast without worrying about hitting a specific pace.</p>
 
@@ -279,7 +279,7 @@ export const blogContent: Record<string, string> = {
 
 <p>There's a strong connection between our mind and body, and we often forget that they don't function independently. By running without a watch, I was able to reconnect with my body and listen to its cues. I could tell when I was running fast, and I knew when to settle into a comfortable pace.</p>
 
-<figure><img src="https://filmmyrun.co.uk/wp-content/uploads/2023/03/Screenshot-2023-03-19-at-14.21.37-1024x621.png" alt="" /></figure>
+<figure><img src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2023/03/Screenshot-2023-03-19-at-14.21.37-1024x621.png" alt="" /></figure>
 
 <p>I also noticed that my effort level remained consistent throughout the race in terms of heart rate. It gradually rose during the race and spiked towards the end when I could smell the finish line. But overall, I was able to maintain a steady effort level without constantly adjusting my pace based on my watch.</p>
 
@@ -293,7 +293,7 @@ export const blogContent: Record<string, string> = {
 
 <p>So, what were the results of running without looking at my watch? Well, I finished the Surrey Half Marathon in 1 hour 24 minutes and 10 seconds, which was faster than I thought I was going. In fact, the last 10k was faster than my official 10K PB of 39 minutes and 43 seconds.</p>
 
-<figure><img src="https://filmmyrun.co.uk/wp-content/uploads/2023/03/Screenshot-2023-03-25-at-15.57.02-1-1024x562.png" alt="" /></figure>
+<figure><img src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2023/03/Screenshot-2023-03-25-at-15.57.02-1-1024x562.png" alt="" /></figure>
 
 <p>But more importantly, I enjoyed the experience of running without checking the watch every few seconds! I was able to focus on my surroundings and connect with my body. I was able to let go of the burden of tracking my pace and just enjoy the feeling of running fast.</p>
 
