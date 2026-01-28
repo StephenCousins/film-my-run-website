@@ -298,23 +298,32 @@
   @apply text-lg text-foreground leading-relaxed mb-0;
 }
 
-/* Pull Quotes */
+/* Pull Quotes - needs high specificity to override prose styles */
+.prose blockquote.pull-quote,
+.prose .pull-quote,
+blockquote.pull-quote,
 .pull-quote {
   @apply my-12 py-6 px-4 text-center;
   @apply border-t border-b border-zinc-700;
   @apply max-w-full overflow-hidden box-border;
   /* Reset prose blockquote styles */
   border-left: none !important;
+  border-left-width: 0 !important;
   background: transparent !important;
+  background-color: transparent !important;
   border-radius: 0 !important;
   font-style: normal !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
 }
 
-.pull-quote p,
-blockquote.pull-quote {
+.prose blockquote.pull-quote,
+.prose .pull-quote,
+blockquote.pull-quote p,
+.pull-quote p {
   @apply font-display text-xl md:text-2xl font-semibold;
   @apply text-zinc-200 leading-snug;
-  margin: 0;
+  margin: 0 !important;
   font-style: normal !important;
 }
 
