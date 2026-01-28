@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
   // Image optimization
   images: {
     remotePatterns: [
+      // Cloudflare R2 - primary image hosting
+      {
+        protocol: 'https',
+        hostname: 'pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev',
+        pathname: '/**',
+      },
+      // Future custom domain for R2
       {
         protocol: 'https',
         hostname: 'images.filmmyrun.co.uk',
