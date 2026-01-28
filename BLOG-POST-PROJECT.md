@@ -339,80 +339,162 @@ These 37 races have videos but transcripts couldn't be downloaded due to IP bloc
 
 ## Writing Approach
 
-### CRITICAL: DO NOT COPY TRANSCRIPTS VERBATIM
+### ⚠️ CRITICAL: NEVER COPY TRANSCRIPTS VERBATIM ⚠️
 
-The transcript is a **resource and reference**, NOT content to copy. Use it to understand:
-- What happened at each point in the race
-- How Stephen was feeling
-- Weather, scenery, struggles, triumphs
-- Key quotes worth preserving
+**THIS IS THE MOST IMPORTANT RULE.**
 
-Then **write original prose** in Stephen's voice based on this information.
+The YouTube transcript is ONE of several resources. It is NOT content to copy-paste.
+
+**The transcript tells you WHAT happened. Your job is to WRITE about it.**
+
+Think of it like a journalist who interviews someone - you don't publish the interview transcript as the article. You use it to understand the story, then write your own prose.
+
+---
+
+### Resources to Use for EVERY Blog Post
+
+Before writing a single word, gather and READ all available resources:
+
+| Resource | Location | What It Provides |
+|----------|----------|------------------|
+| **Transcript** | `/transcripts/` | Timeline of events, feelings, struggles |
+| **Strava Activity** | WebFetch the URL | Photos, GPS data, pace, elevation, description |
+| **Strava Embed** | `data/strava-embeds.json` | Embeddable route map |
+| **Race Screenshot** | `/screenshots/` | Pace chart, elevation profile, splits |
+| **Centurion RD Reports** | `data/centurion-reports/` | Weather, field stats, notable runners |
+| **Race Research** | `data/race-research/` | Course details, history, context |
+| **Existing Blog Posts** | Database | Stephen's writing style reference |
+
+**YOU MUST USE MULTIPLE SOURCES.** A blog post that only uses the transcript is WRONG.
 
 ---
 
 ### Stephen's Writing Style
 
-Study existing posts (Val D'Aran, TDS 2022, Running Without a Watch) for reference. Key characteristics:
+**BEFORE writing, read 2-3 existing posts to absorb the style:**
+- Val D'Aran 100 (2021) - epic suffering, reflective
+- TDS 2022 - vivid scene-setting
+- Running Without a Watch - conversational, philosophical
 
 **Voice & Tone:**
-- First person, reflective - written as looking BACK on the experience, not live commentary
+- First person, REFLECTIVE - written looking BACK, not live commentary
 - Conversational but polished prose - NOT transcript-speak
 - Self-deprecating humor ("Then, like an idiot - as I always do...")
 - Honest about suffering without melodrama
+- Rich in specific details (times, places, feelings)
 
 **Structure:**
-- **Strong opening hook** - memorable first line that grabs attention
-  - "That was the hardest race I have ever, ever done."
-  - "Have you ever considered running without a watch?"
-- **Context early** - what the race is, why it matters, the stakes
-- **Narrative flow** - time/distance markers woven naturally into story
-- **Section headers that tell a story** - "The Quads Start to Go", "Sunrise, Sickness, and Stubbornness"
-- **Reflective conclusion** - what it meant, what comes next
+- **Strong opening hook** - memorable first line
+  - ✅ "That was the hardest race I have ever, ever done."
+  - ✅ "Have you ever considered running without a watch?"
+  - ❌ "So this is the video from my race at..."
+- **Context early** - what the race is, why it matters
+- **Narrative flow** - time/distance woven naturally
+- **Evocative section headers** - "The Quads Start to Go", "Sunrise and Suffering"
+- **Reflective conclusion** - lessons learned, what's next
 
-**What TO do:**
-- Set scenes vividly ("standing in the finish area in Vielha, having just spent nearly 47 hours traversing the Spanish Pyrenees")
-- Share inner thoughts and feelings
-- Explain context for readers who don't know the race
-- Use specific details (times, distances, place names)
-- Include forward-looking conclusions
+**NEVER include:**
+- Transcript speech patterns ("okay so", "right", "um", "basically")
+- Present tense live commentary ("I'm now at mile 50")
+- Every single checkpoint - summarize where appropriate
+- Direct quotes except at truly dramatic moments
 
-**What NOT to do:**
-- Copy transcript speech patterns verbatim
-- Use "okay so" or "right" or "um" filler words
-- Write in present tense as if live (write as past reflection)
-- Include every checkpoint - summarize where appropriate
-- Over-quote yourself - use quotes sparingly at dramatic moments only
+---
+
+### Enhanced Blog Post Layout
+
+All race report blog posts should use this enhanced structure:
+
+```html
+<!-- Opening hook paragraph - vivid, memorable -->
+
+<h2>The Race</h2>
+<!-- Context: what is this race, distance, elevation, why it matters -->
+
+<h2>Training & Preparation</h2>
+<!-- What training looked like, any issues, goals going in -->
+
+<!-- STRAVA EMBED HERE -->
+<iframe src="..." width="100%" height="405"></iframe>
+
+<h2>[Evocative Section Title]</h2>
+<!-- e.g., "Into the Mountains", "The Wheels Come Off" -->
+<!-- Narrative of key race moments with photos interspersed -->
+
+<figure>
+  <img src="/images/blog/{year}/{filename}.jpg" alt="Description" />
+  <figcaption>Caption describing the moment</figcaption>
+</figure>
+
+<h2>[Another Section]</h2>
+<!-- Continue narrative... -->
+
+<!-- RACE ANALYSIS SCREENSHOT (if available) -->
+<figure>
+  <img src="/images/blog/{year}/{race}-race-analysis.png" alt="Strava race analysis" />
+  <figcaption>Pace and elevation profile from Strava</figcaption>
+</figure>
+
+<h2>Results & Reflection</h2>
+<!-- Final time, position, what it meant -->
+
+<h2>What's Next</h2>
+<!-- Forward-looking conclusion -->
+
+<!-- YOUTUBE VIDEO EMBED -->
+<iframe src="https://www.youtube.com/embed/{VIDEO_ID}" ...></iframe>
+```
+
+**Required elements:**
+- 3-5 photos from Strava activity
+- Strava route embed
+- Race analysis screenshot (if available)
+- YouTube video embed
+- Evocative section headers (not generic "Mile 50-75")
 
 ---
 
 ## Workflow for Writing Each Post
 
-1. **Gather Resources**
-   - [ ] **Read transcript file FIRST** (in `/transcripts/`) - this is the PRIMARY source
-   - [ ] Check Strava activity for photos, description, stats
-   - [ ] Check for race analysis screenshot (see mapping above)
-   - [ ] Get Strava embed code from `data/strava-embeds.json`
-   - [ ] For Centurion races: read RD report from `data/centurion-reports/`
-   - [ ] Read race research for context (`data/race-research/`)
+### Step 1: Gather ALL Resources (MANDATORY)
 
-2. **Write Draft**
-   - [ ] Opening hook (scene-setting)
-   - [ ] Race context (training, goals, conditions)
-   - [ ] Narrative sections with H2 headers
-   - [ ] Results and reflection
-   - [ ] Forward-looking conclusion
+- [ ] Read transcript file (`/transcripts/`)
+- [ ] WebFetch Strava activity - get photos, description, stats
+- [ ] Get Strava embed code from `data/strava-embeds.json`
+- [ ] Check for race screenshot in `/screenshots/`
+- [ ] For Centurion races: read RD report from `data/centurion-reports/`
+- [ ] Read race research from `data/race-research/`
+- [ ] Read 1-2 existing blog posts for style reference
 
-3. **Add Media**
-   - [ ] Featured image (from Strava or video thumbnail)
-   - [ ] In-post images (Strava photos, screenshots)
-   - [ ] Embed YouTube video
-   - [ ] Include Strava activity embed (route map)
+### Step 2: Plan the Narrative
 
-4. **Publish**
-   - [ ] Add to database
-   - [ ] Link in race spreadsheet
-   - [ ] Update this tracker
+- [ ] Identify the key moments/turning points
+- [ ] Choose 3-5 section headers that tell a story
+- [ ] Select which photos to use and where
+- [ ] Note any specific data to include (splits, conditions, position)
+
+### Step 3: Write Original Prose
+
+- [ ] Strong opening hook (scene-setting, NOT "This is my race report from...")
+- [ ] Race context paragraph
+- [ ] Narrative sections with photos
+- [ ] Results and reflection
+- [ ] Forward-looking conclusion
+
+### Step 4: Add Media
+
+- [ ] Featured image (first Strava photo)
+- [ ] 3-5 inline photos at key moments
+- [ ] Strava route embed
+- [ ] Race analysis screenshot
+- [ ] YouTube video embed
+
+### Step 5: Review
+
+- [ ] Does it read like Stephen wrote it, or like a transcript?
+- [ ] Is it reflective (past tense) not live commentary?
+- [ ] Are there specific details from multiple sources?
+- [ ] Would a reader who doesn't know the race understand it?
 
 ---
 
