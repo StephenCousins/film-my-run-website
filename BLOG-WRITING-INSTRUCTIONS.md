@@ -503,9 +503,16 @@ Include these with captions explaining what they show.
 
 ### Image Hosting on Cloudflare R2
 
-All blog images are hosted on Cloudflare R2 at: `https://images.filmmyrun.co.uk/`
+**⚠️ CRITICAL: Always use the full R2 URL. Never use relative paths.**
 
-Image URL pattern: `https://images.filmmyrun.co.uk/blog/{year}/{filename}.jpg`
+**R2 Public URL:** `https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev`
+
+#### URL Patterns
+
+| Image Type | URL Pattern |
+|------------|-------------|
+| **New blog images** | `https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/{year}/{filename}.jpg` |
+| **Migrated WordPress images** | `https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/{year}/{month}/{filename}.jpg` |
 
 ### Getting Photos from Strava
 
@@ -519,20 +526,40 @@ Image URL pattern: `https://images.filmmyrun.co.uk/blog/{year}/{filename}.jpg`
 # Download photo from Strava CDN (if accessible)
 curl -o /tmp/photo.jpg "https://dgtzuqphqg23d.cloudfront.net/[photo-path]"
 
-# Upload to R2 (requires wrangler CLI configured)
-# Or manually upload via Cloudflare dashboard
+# Upload to R2 using the migration script:
+# 1. Place image in public/images/blog/{year}/ with descriptive filename
+# 2. Run: node scripts/migrate-images-to-r2.mjs
+# 3. Use the R2 URL in your content
 
-# Alternative: Use existing photos from WordPress migration
-# Check: /new-site/public/images/blog/{year}/
+# Or upload manually via Cloudflare dashboard
 ```
 
 ### Using Photos in Posts
 
 ```html
+<!-- ✅ CORRECT - Full R2 URL -->
 <figure>
-  <img src="https://images.filmmyrun.co.uk/blog/{year}/{filename}.jpg" alt="Descriptive alt text" />
+  <img src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/2025/race-name-photo.jpg" alt="Descriptive alt text" />
   <figcaption>Caption describing the moment</figcaption>
 </figure>
+
+<!-- ❌ WRONG - Relative path will break -->
+<figure>
+  <img src="/images/blog/2025/race-name-photo.jpg" alt="Alt text" />
+</figure>
+```
+
+### Setting featured_image in Database
+
+```typescript
+// ✅ CORRECT
+featured_image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/2025/race-name-01.jpg'
+
+// ❌ WRONG - relative paths break
+featured_image: '/images/blog/2025/race-name-01.jpg'
+
+// ❌ WRONG - old WordPress URL
+featured_image: 'https://filmmyrun.co.uk/wp-content/uploads/...'
 ```
 
 **Photo placement guidelines:**
@@ -590,7 +617,8 @@ Before submitting any blog post, verify:
 | Centurion Reports | `/new-site/data/centurion-reports/` |
 | Screenshots | `/screenshots/` (project root) |
 | Race Data | `/new-site/public/races-data.json` |
-| Blog Images | `https://images.filmmyrun.co.uk/blog/{year}/` (R2) |
+| Blog Images (R2) | `https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/{year}/` |
+| WordPress Images (R2) | `https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/{year}/{month}/` |
 | Local Image Drafts | `/new-site/public/images/blog/{year}/` |
 | Existing Blog Posts | Database (query via Prisma) |
 
