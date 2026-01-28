@@ -114,14 +114,14 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
   return (
     <article
       className={cn(
-        'group bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
+        'group bg-surface rounded-2xl overflow-hidden border border-border hover:border-brand/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl',
         featured && 'lg:col-span-2 lg:row-span-2'
       )}
     >
       <Link href={`/blog/${post.slug}`} className="block h-full">
         {/* Image */}
         <div className={cn(
-          'relative overflow-hidden bg-zinc-200 dark:bg-zinc-800',
+          'relative overflow-hidden bg-surface-secondary',
           featured ? 'aspect-[16/9]' : 'aspect-[16/10]'
         )}>
           {post.featuredImage ? (
@@ -139,7 +139,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
 
           {/* Category badge */}
           <div className="absolute top-4 left-4">
-            <span className="px-3 py-1.5 bg-orange-500 text-white text-xs font-semibold rounded-full">
+            <span className="px-3 py-1.5 bg-brand text-white text-xs font-semibold rounded-full">
               {post.category.name}
             </span>
           </div>
@@ -148,7 +148,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
         {/* Content */}
         <div className={cn('p-5', featured && 'lg:p-8')}>
           {/* Meta */}
-          <div className="flex items-center gap-4 text-xs text-zinc-500 dark:text-zinc-400 mb-3">
+          <div className="flex items-center gap-4 text-xs text-muted mb-3">
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
               {new Date(post.publishedAt).toLocaleDateString('en-GB', {
@@ -165,7 +165,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
 
           {/* Title */}
           <h2 className={cn(
-            'font-display font-semibold text-zinc-900 dark:text-white group-hover:text-orange-500 transition-colors mb-3',
+            'font-display font-semibold text-foreground group-hover:text-brand transition-colors mb-3',
             featured ? 'text-2xl lg:text-3xl' : 'text-lg'
           )}>
             {post.title}
@@ -173,14 +173,14 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
 
           {/* Excerpt */}
           <p className={cn(
-            'text-zinc-600 dark:text-zinc-400 line-clamp-2',
+            'text-secondary line-clamp-2',
             featured ? 'text-base lg:line-clamp-3' : 'text-sm'
           )}>
             {post.excerpt}
           </p>
 
           {/* Read more */}
-          <div className="flex items-center gap-1 mt-4 text-orange-500 font-medium text-sm group-hover:gap-2 transition-all">
+          <div className="flex items-center gap-1 mt-4 text-brand font-medium text-sm group-hover:gap-2 transition-all">
             Read More
             <ArrowRight className="w-4 h-4" />
           </div>
@@ -204,8 +204,8 @@ function CategoryFilter({ categories, activeSlug = 'all' }: { categories: Catego
           className={cn(
             'px-4 py-2 rounded-full text-sm font-medium transition-all',
             activeSlug === category.slug
-              ? 'bg-orange-500 text-white'
-              : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
+              ? 'bg-brand text-white'
+              : 'bg-surface-secondary text-secondary hover:bg-brand/10 hover:text-brand'
           )}
         >
           {category.name}
@@ -229,7 +229,7 @@ export default async function BlogPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-white dark:bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Background image */}
@@ -263,7 +263,7 @@ export default async function BlogPage() {
         </section>
 
         {/* Filters */}
-        <section className="py-8 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 sticky top-16 lg:top-20 z-30">
+        <section className="py-8 border-b border-border bg-background sticky top-16 lg:top-20 z-30">
           <div className="container">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               {/* Category filters */}
@@ -273,11 +273,11 @@ export default async function BlogPage() {
 
               {/* Search */}
               <div className="relative w-full lg:w-64">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                 <input
                   type="search"
                   placeholder="Search posts..."
-                  className="w-full pl-10 pr-4 py-2 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-transparent rounded-full text-zinc-900 dark:text-white text-sm placeholder:text-zinc-400 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+                  className="w-full pl-10 pr-4 py-2 bg-surface-secondary border border-border rounded-full text-foreground text-sm placeholder:text-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
                 />
               </div>
             </div>
@@ -285,7 +285,7 @@ export default async function BlogPage() {
         </section>
 
         {/* Posts grid */}
-        <section className="py-12 lg:py-16 bg-white dark:bg-zinc-950">
+        <section className="py-12 lg:py-16 bg-background">
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Featured post */}
@@ -302,7 +302,7 @@ export default async function BlogPage() {
               <nav className="flex items-center gap-2">
                 <button
                   disabled
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-400 cursor-not-allowed"
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-surface-secondary text-muted cursor-not-allowed"
                 >
                   Previous
                 </button>
@@ -313,23 +313,23 @@ export default async function BlogPage() {
                     className={cn(
                       'w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium transition-colors',
                       page === 1
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
+                        ? 'bg-brand text-white'
+                        : 'bg-surface-secondary text-secondary hover:bg-brand/10 hover:text-brand'
                     )}
                   >
                     {page}
                   </Link>
                 ))}
-                <span className="text-zinc-400">...</span>
+                <span className="text-muted">...</span>
                 <Link
                   href="/blog?page=12"
-                  className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500"
+                  className="w-10 h-10 rounded-lg flex items-center justify-center text-sm font-medium bg-surface-secondary text-secondary hover:bg-brand/10 hover:text-brand"
                 >
                   12
                 </Link>
                 <Link
                   href="/blog?page=2"
-                  className="px-4 py-2 rounded-lg text-sm font-medium bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500"
+                  className="px-4 py-2 rounded-lg text-sm font-medium bg-surface-secondary text-secondary hover:bg-brand/10 hover:text-brand"
                 >
                   Next
                 </Link>
@@ -339,13 +339,13 @@ export default async function BlogPage() {
         </section>
 
         {/* Newsletter CTA */}
-        <section className="py-16 lg:py-24 bg-zinc-100 dark:bg-zinc-900">
+        <section className="py-16 lg:py-24 bg-surface-secondary">
           <div className="container">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-display text-3xl lg:text-4xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 Never Miss a Post
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+              <p className="text-secondary mb-8">
                 Get the latest race reports, training tips, and running stories delivered
                 straight to your inbox.
               </p>
@@ -353,11 +353,11 @@ export default async function BlogPage() {
                 <input
                   type="email"
                   placeholder="your@email.com"
-                  className="flex-1 px-4 py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-full text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                  className="flex-1 px-4 py-3 bg-surface border border-border rounded-full text-foreground placeholder:text-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
                 />
                 <button
                   type="submit"
-                  className="px-6 py-3 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors whitespace-nowrap"
+                  className="px-6 py-3 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-colors whitespace-nowrap"
                 >
                   Subscribe
                 </button>

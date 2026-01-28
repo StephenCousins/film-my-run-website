@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     title: 'Running Calculators | Film My Run',
     description:
       'Free tools used by 250,000+ runners weekly. Calculate pace, predict times, plan splits.',
-    images: ['/images/calculators-og.jpg'],
+    images: ['https://images.filmmyrun.co.uk/og/calculators-og.jpg'],
   },
 };
 

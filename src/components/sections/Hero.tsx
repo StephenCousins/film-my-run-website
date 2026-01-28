@@ -140,21 +140,21 @@ export default function Hero() {
             'absolute inset-0 w-full h-full object-cover transition-opacity duration-1000',
             isLoaded ? 'opacity-100' : 'opacity-0'
           )}
-          poster="/images/hero/hero-main.jpg"
+          poster="https://images.filmmyrun.co.uk/hero/hero-main.jpg"
         >
-          {/* Will be replaced with actual video URLs */}
-          <source src="/videos/hero-loop.mp4" type="video/mp4" />
-          <source src="/videos/hero-loop.webm" type="video/webm" />
+          {/* Videos hosted on Cloudflare R2 */}
+          <source src="https://images.filmmyrun.co.uk/videos/hero-loop.mp4" type="video/mp4" />
+          <source src="https://images.filmmyrun.co.uk/videos/hero-loop.webm" type="video/webm" />
         </video>
 
         {/* Fallback image while loading */}
         <div
           className={cn(
-            'absolute inset-0 bg-zinc-200 dark:bg-zinc-900 transition-opacity duration-1000',
+            'absolute inset-0 bg-surface-secondary transition-opacity duration-1000',
             isLoaded ? 'opacity-0' : 'opacity-100'
           )}
           style={{
-            backgroundImage: 'url(/images/hero/hero-main.jpg)',
+            backgroundImage: 'url(https://images.filmmyrun.co.uk/hero/hero-main.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}

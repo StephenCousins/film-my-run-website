@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'parkrun Statistics | Film My Run',
     description: 'Track your parkrun history and visualize your progress.',
-    images: ['/images/parkrun-og.jpg'],
+    images: ['https://images.filmmyrun.co.uk/og/parkrun-og.jpg'],
   },
 };
 

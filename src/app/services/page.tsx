@@ -77,7 +77,7 @@ export default function ServicesPage() {
   return (
     <>
       <Header />
-      <main className="pt-20 lg:pt-24 bg-white dark:bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Video background */}
@@ -89,8 +89,8 @@ export default function ServicesPage() {
               playsInline
               className="absolute inset-0 w-full h-full object-cover"
             >
-              <source src="/videos/services-hero.mp4" type="video/mp4" />
-              <source src="/videos/services-hero.webm" type="video/webm" />
+              <source src="https://images.filmmyrun.co.uk/videos/services-hero.mp4" type="video/mp4" />
+              <source src="https://images.filmmyrun.co.uk/videos/services-hero.webm" type="video/webm" />
             </video>
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-950/60 to-zinc-950" />
@@ -124,42 +124,42 @@ export default function ServicesPage() {
                 return (
                   <div
                     key={service.title}
-                    className="bg-white dark:bg-zinc-900 rounded-2xl p-8 border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all hover:-translate-y-1 shadow-sm"
+                    className="bg-surface rounded-2xl p-8 border border-border hover:border-brand/50 transition-all hover:-translate-y-1 shadow-sm"
                   >
-                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center mb-6">
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-brand to-brand-hover flex items-center justify-center mb-6">
                       <Icon className="w-7 h-7 text-white" />
                     </div>
 
-                    <h2 className="font-display text-2xl font-bold text-zinc-900 dark:text-white mb-3">
+                    <h2 className="font-display text-2xl font-bold text-foreground mb-3">
                       {service.title}
                     </h2>
 
-                    <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+                    <p className="text-secondary mb-6">
                       {service.description}
                     </p>
 
                     <ul className="space-y-3 mb-8">
                       {service.features.map((feature) => (
-                        <li key={feature} className="flex items-center gap-3 text-zinc-700 dark:text-zinc-300 text-sm">
-                          <div className="w-5 h-5 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0">
-                            <Check className="w-3 h-3 text-orange-500" />
+                        <li key={feature} className="flex items-center gap-3 text-secondary text-sm">
+                          <div className="w-5 h-5 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0">
+                            <Check className="w-3 h-3 text-brand" />
                           </div>
                           {feature}
                         </li>
                       ))}
                     </ul>
 
-                    <div className="flex items-center justify-between pt-6 border-t border-zinc-200 dark:border-zinc-800">
+                    <div className="flex items-center justify-between pt-6 border-t border-border">
                       <Link
                         href={service.detailsHref}
-                        className="inline-flex items-center gap-2 text-zinc-600 dark:text-zinc-300 hover:text-orange-500 transition-colors"
+                        className="inline-flex items-center gap-2 text-secondary hover:text-brand transition-colors"
                       >
                         More details
                         <ArrowRight className="w-4 h-4" />
                       </Link>
                       <Link
                         href={service.enquireHref}
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors text-sm font-medium"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-brand text-white rounded-full hover:bg-brand-hover transition-colors text-sm font-medium"
                       >
                         Enquire
                       </Link>
@@ -176,7 +176,7 @@ export default function ServicesPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="/images/services-cta.jpg"
+              src="https://images.filmmyrun.co.uk/services-cta.jpg"
               alt="Stephen Cousins filming at a trail running event"
               fill
               className="object-cover"

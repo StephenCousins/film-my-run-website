@@ -82,7 +82,7 @@ function FooterLogo() {
           </svg>
         ))}
       </div>
-      <span className="font-display text-xl font-semibold text-zinc-900 dark:text-white">
+      <span className="font-display text-xl font-semibold text-foreground">
         Film My Run
       </span>
     </Link>
@@ -96,21 +96,21 @@ function FooterLogo() {
 function NewsletterForm() {
   return (
     <div className="max-w-md">
-      <h3 className="font-display text-lg font-semibold text-zinc-900 dark:text-white mb-2">
+      <h3 className="font-display text-lg font-semibold text-foreground mb-2">
         Stay in the loop
       </h3>
-      <p className="text-zinc-600 dark:text-zinc-400 text-sm mb-4">
+      <p className="text-secondary text-sm mb-4">
         Get race updates, new tools, and exclusive content delivered to your inbox.
       </p>
       <form className="flex gap-2">
         <input
           type="email"
           placeholder="your@email.com"
-          className="flex-1 px-4 py-2.5 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-full text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+          className="flex-1 px-4 py-2.5 bg-surface border border-border rounded-full text-foreground placeholder:text-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
         />
         <button
           type="submit"
-          className="px-6 py-2.5 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors whitespace-nowrap"
+          className="px-6 py-2.5 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-colors whitespace-nowrap"
         >
           Subscribe
         </button>
@@ -131,13 +131,13 @@ interface LinkColumnProps {
 function LinkColumn({ title, links }: LinkColumnProps) {
   return (
     <div>
-      <h4 className="font-display font-semibold text-zinc-900 dark:text-white mb-4">{title}</h4>
+      <h4 className="font-display font-semibold text-foreground mb-4">{title}</h4>
       <ul className="space-y-2">
         {links.map((link) => (
           <li key={link.name}>
             <Link
               href={link.href}
-              className="text-zinc-600 dark:text-zinc-400 hover:text-orange-500 transition-colors text-sm"
+              className="text-secondary hover:text-brand transition-colors text-sm"
             >
               {link.name}
             </Link>
@@ -156,7 +156,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-zinc-100 dark:bg-zinc-950">
+    <footer className="bg-surface-secondary">
       {/* Main footer content */}
       <div className="container py-16 lg:py-20">
         {/* Top row: Brand + Newsletter */}
@@ -164,7 +164,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:max-w-sm">
             <FooterLogo />
-            <p className="mt-4 text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed">
+            <p className="mt-4 text-secondary text-sm leading-relaxed">
               Capturing the spirit of running since 2011. From parkruns to ultras,
               we film, we run, we celebrate every stride.
             </p>
@@ -177,10 +177,10 @@ export default function Footer() {
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="p-2.5 bg-zinc-200 dark:bg-zinc-800 rounded-full hover:bg-orange-500 transition-colors group"
+                  className="p-2.5 bg-surface-tertiary rounded-full hover:bg-brand transition-colors group"
                   aria-label={social.name}
                 >
-                  <social.icon className="w-5 h-5 text-zinc-600 dark:text-zinc-400 group-hover:text-white transition-colors" />
+                  <social.icon className="w-5 h-5 text-secondary group-hover:text-white transition-colors" />
                 </a>
               ))}
             </div>
@@ -191,7 +191,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom row: Link columns spread evenly */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-16 pt-12 border-t border-zinc-300 dark:border-zinc-800">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-16 pt-12 border-t border-border">
           <LinkColumn {...footerLinks.forRunners} />
           <LinkColumn {...footerLinks.services} />
           <LinkColumn {...footerLinks.content} />
@@ -199,15 +199,15 @@ export default function Footer() {
         </div>
 
         {/* Contact info */}
-        <div className="flex flex-wrap gap-6 mt-12 pt-8 border-t border-zinc-300 dark:border-zinc-800">
+        <div className="flex flex-wrap gap-6 mt-12 pt-8 border-t border-border">
           <a
             href="mailto:hello@filmmyrun.co.uk"
-            className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 hover:text-orange-500 transition-colors text-sm"
+            className="flex items-center gap-2 text-secondary hover:text-brand transition-colors text-sm"
           >
             <Mail className="w-4 h-4" />
             hello@filmmyrun.co.uk
           </a>
-          <div className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400 text-sm">
+          <div className="flex items-center gap-2 text-secondary text-sm">
             <MapPin className="w-4 h-4" />
             United Kingdom
           </div>
@@ -215,33 +215,33 @@ export default function Footer() {
       </div>
 
       {/* Stats bar */}
-      <div className="border-t border-zinc-300 dark:border-zinc-800">
+      <div className="border-t border-border">
         <div className="container py-6">
           <div className="flex flex-wrap justify-center gap-8 text-center">
             <div>
-              <span className="font-display text-2xl font-bold text-orange-500">500+</span>
-              <p className="text-zinc-500 text-xs mt-1">Races Filmed</p>
+              <span className="font-display text-2xl font-bold text-brand">500+</span>
+              <p className="text-muted text-xs mt-1">Races Filmed</p>
             </div>
             <div>
-              <span className="font-display text-2xl font-bold text-orange-500">15</span>
-              <p className="text-zinc-500 text-xs mt-1">Years Running</p>
+              <span className="font-display text-2xl font-bold text-brand">15</span>
+              <p className="text-muted text-xs mt-1">Years Running</p>
             </div>
             <div>
-              <span className="font-display text-2xl font-bold text-orange-500">250K</span>
-              <p className="text-zinc-500 text-xs mt-1">Weekly Tool Users</p>
+              <span className="font-display text-2xl font-bold text-brand">250K</span>
+              <p className="text-muted text-xs mt-1">Weekly Tool Users</p>
             </div>
             <div>
-              <span className="font-display text-2xl font-bold text-orange-500">1M+</span>
-              <p className="text-zinc-500 text-xs mt-1">Video Views</p>
+              <span className="font-display text-2xl font-bold text-brand">1M+</span>
+              <p className="text-muted text-xs mt-1">Video Views</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Copyright bar */}
-      <div className="border-t border-zinc-300 dark:border-zinc-800">
+      <div className="border-t border-border">
         <div className="container py-4">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-zinc-500 text-xs">
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-muted text-xs">
             <p>&copy; {currentYear} Film My Run. All rights reserved.</p>
             <div className="flex items-center gap-1">
               <Camera className="w-3 h-3" />

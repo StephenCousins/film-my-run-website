@@ -66,7 +66,7 @@ function Logo() {
           </svg>
         ))}
       </div>
-      <span className="font-display text-lg font-semibold text-zinc-900 dark:text-white">
+      <span className="font-display text-lg font-semibold text-foreground">
         Film My Run
       </span>
     </Link>
@@ -97,8 +97,8 @@ function DesktopNavItem({ item, isActive }: NavItemProps) {
           className={cn(
             'flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors',
             isActive
-              ? 'text-orange-500'
-              : 'text-zinc-600 dark:text-zinc-300 hover:text-orange-500'
+              ? 'text-brand'
+              : 'text-secondary hover:text-brand'
           )}
         >
           {item.name}
@@ -117,12 +117,12 @@ function DesktopNavItem({ item, isActive }: NavItemProps) {
             isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
           )}
         >
-          <div className="bg-white dark:bg-zinc-900 rounded-xl shadow-xl border border-zinc-200 dark:border-zinc-800 py-2 min-w-[200px]">
+          <div className="bg-surface rounded-xl shadow-xl border border-border py-2 min-w-[200px]">
             {item.children?.map((child) => (
               <Link
                 key={child.href}
                 href={child.href}
-                className="block px-4 py-2 text-sm text-zinc-600 dark:text-zinc-300 hover:text-orange-500 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                className="block px-4 py-2 text-sm text-secondary hover:text-brand hover:bg-surface-secondary"
               >
                 {child.name}
               </Link>
@@ -139,8 +139,8 @@ function DesktopNavItem({ item, isActive }: NavItemProps) {
       className={cn(
         'px-3 py-2 text-sm font-medium transition-colors',
         isActive
-          ? 'text-orange-500'
-          : 'text-zinc-600 dark:text-zinc-300 hover:text-orange-500'
+          ? 'text-brand'
+          : 'text-secondary hover:text-brand'
       )}
     >
       {item.name}
@@ -186,16 +186,16 @@ function MobileNav({ isOpen, onClose }: MobileNavProps) {
       {/* Menu */}
       <div
         className={cn(
-          'fixed inset-y-0 right-0 w-full max-w-sm bg-white dark:bg-zinc-950 z-50 lg:hidden',
+          'fixed inset-y-0 right-0 w-full max-w-sm bg-background z-50 lg:hidden',
           'transform transition-transform duration-300 ease-out-expo',
           isOpen ? 'translate-x-0' : 'translate-x-full'
         )}
       >
-        <div className="flex items-center justify-between p-4 border-b border-zinc-200 dark:border-zinc-800">
+        <div className="flex items-center justify-between p-4 border-b border-border">
           <Logo />
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-white"
+            className="p-2 rounded-full hover:bg-surface-secondary text-secondary hover:text-foreground"
           >
             <X className="w-6 h-6" />
           </button>
@@ -214,8 +214,8 @@ function MobileNav({ isOpen, onClose }: MobileNavProps) {
                   className={cn(
                     'block px-4 py-3 rounded-lg text-base font-medium transition-colors',
                     isActive
-                      ? 'text-orange-500 bg-orange-50 dark:bg-orange-500/10'
-                      : 'text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+                      ? 'text-brand bg-brand-muted'
+                      : 'text-secondary hover:bg-surface-secondary'
                   )}
                 >
                   {item.name}
@@ -228,7 +228,7 @@ function MobileNav({ isOpen, onClose }: MobileNavProps) {
                         key={child.href}
                         href={child.href}
                         onClick={onClose}
-                        className="block px-4 py-2 text-sm text-zinc-500 dark:text-zinc-400 hover:text-orange-500"
+                        className="block px-4 py-2 text-sm text-muted hover:text-brand"
                       >
                         {child.name}
                       </Link>
@@ -241,10 +241,10 @@ function MobileNav({ isOpen, onClose }: MobileNavProps) {
         </nav>
 
         {/* Bottom section */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-zinc-200 dark:border-zinc-800 space-y-4">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border space-y-4">
           {/* Theme toggle */}
           <div className="flex items-center justify-between px-4">
-            <span className="text-sm text-zinc-600 dark:text-zinc-400">Theme</span>
+            <span className="text-sm text-secondary">Theme</span>
             <ThemeToggle variant="dropdown" />
           </div>
 
@@ -290,7 +290,7 @@ export default function Header() {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
         isScrolled
-          ? 'bg-white/80 dark:bg-zinc-950/80 backdrop-blur-lg border-b border-zinc-200/50 dark:border-zinc-800/50'
+          ? 'bg-surface/80 backdrop-blur-lg border-b border-border/50'
           : 'bg-transparent'
       )}
     >
@@ -320,7 +320,7 @@ export default function Header() {
 
             {/* Mobile menu button */}
             <button
-              className="lg:hidden p-2 rounded-full hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-600 dark:text-white"
+              className="lg:hidden p-2 rounded-full hover:bg-surface-secondary text-secondary hover:text-foreground"
               onClick={() => setMobileMenuOpen(true)}
             >
               <Menu className="w-6 h-6" />

@@ -52,13 +52,13 @@ export default function AboutPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24">
+      <main className="pt-20 lg:pt-24 bg-background">
         {/* Hero section */}
         <section className="relative py-24 lg:py-32 overflow-hidden">
           {/* Background */}
           <div className="absolute inset-0 bg-zinc-950">
             <Image
-              src="/images/about-hero.jpg"
+              src="https://images.filmmyrun.co.uk/about-hero.jpg"
               alt="Running in the mountains"
               fill
               className="object-cover opacity-40"
@@ -73,7 +73,7 @@ export default function AboutPage() {
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
                 Runner. Filmmaker.
                 <br />
-                <span className="text-orange-500">Tool Builder.</span>
+                <span className="text-brand">Tool Builder.</span>
               </h1>
               <p className="text-lg text-zinc-300 leading-relaxed">
                 I'm Stephen Cousins, and I've been documenting my running journey since 2011.
@@ -85,15 +85,15 @@ export default function AboutPage() {
         </section>
 
         {/* Stats bar */}
-        <section className="py-12 bg-zinc-900 border-y border-zinc-800">
+        <section className="py-12 bg-surface-secondary border-y border-border">
           <div className="container">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
-                  <div className="font-mono text-3xl lg:text-4xl font-bold text-orange-500">
+                  <div className="font-mono text-3xl lg:text-4xl font-bold text-brand">
                     {stat.value}
                   </div>
-                  <div className="text-zinc-400 text-sm mt-1">{stat.label}</div>
+                  <div className="text-muted text-sm mt-1">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -101,13 +101,13 @@ export default function AboutPage() {
         </section>
 
         {/* Story section */}
-        <section className="py-24 lg:py-32 bg-zinc-950">
+        <section className="py-24 lg:py-32 bg-background">
           <div className="container">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               {/* Image */}
               <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
                 <Image
-                  src="/images/about/stephen.jpg"
+                  src="https://images.filmmyrun.co.uk/about/stephen.jpg"
                   alt="Stephen Cousins"
                   fill
                   className="object-cover"
@@ -116,10 +116,10 @@ export default function AboutPage() {
 
               {/* Content */}
               <div>
-                <span className="text-orange-500 text-sm font-semibold uppercase tracking-wider">
+                <span className="text-brand text-sm font-semibold uppercase tracking-wider">
                   My Story
                 </span>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mt-2 mb-6">
+                <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mt-2 mb-6">
                   From First Marathon to Ultra Running
                 </h2>
                 <div className="prose dark:prose-invert prose-zinc max-w-none">
@@ -152,13 +152,13 @@ export default function AboutPage() {
         </section>
 
         {/* Three pillars */}
-        <section className="py-24 lg:py-32 bg-zinc-900">
+        <section className="py-24 lg:py-32 bg-surface-secondary">
           <div className="container">
             <div className="text-center max-w-2xl mx-auto mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 What I Do
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-muted">
                 Film My Run has evolved into three distinct areas, each driven by a passion
                 for running and helping others in the community.
               </p>
@@ -166,60 +166,60 @@ export default function AboutPage() {
 
             <div className="grid md:grid-cols-3 gap-8">
               {/* Filmmaking */}
-              <div className="p-8 bg-zinc-950 rounded-2xl border border-zinc-800">
-                <div className="w-14 h-14 rounded-xl bg-orange-500/10 flex items-center justify-center mb-6">
-                  <Camera className="w-7 h-7 text-orange-500" />
+              <div className="p-8 bg-surface rounded-2xl border border-border">
+                <div className="w-14 h-14 rounded-xl bg-brand/10 flex items-center justify-center mb-6">
+                  <Camera className="w-7 h-7 text-brand" />
                 </div>
-                <h3 className="font-display text-xl font-bold text-white mb-3">
+                <h3 className="font-display text-xl font-bold text-foreground mb-3">
                   Filmmaking
                 </h3>
-                <p className="text-zinc-400 mb-6">
+                <p className="text-muted mb-6">
                   Documentary-style race films that capture the spirit of running.
                   From personal journeys to full event coverage.
                 </p>
                 <Link
                   href="/films"
-                  className="inline-flex items-center gap-1 text-orange-500 font-medium hover:gap-2 transition-all"
+                  className="inline-flex items-center gap-1 text-brand font-medium hover:gap-2 transition-all"
                 >
                   Watch Films <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
 
               {/* Tools */}
-              <div className="p-8 bg-zinc-950 rounded-2xl border border-zinc-800">
+              <div className="p-8 bg-surface rounded-2xl border border-border">
                 <div className="w-14 h-14 rounded-xl bg-blue-500/10 flex items-center justify-center mb-6">
                   <Code className="w-7 h-7 text-blue-500" />
                 </div>
-                <h3 className="font-display text-xl font-bold text-white mb-3">
+                <h3 className="font-display text-xl font-bold text-foreground mb-3">
                   Running Tools
                 </h3>
-                <p className="text-zinc-400 mb-6">
+                <p className="text-muted mb-6">
                   Free calculators, dashboards, and apps built for runners.
                   Used by 250,000+ people every week.
                 </p>
                 <Link
                   href="/tools/calculators"
-                  className="inline-flex items-center gap-1 text-orange-500 font-medium hover:gap-2 transition-all"
+                  className="inline-flex items-center gap-1 text-brand font-medium hover:gap-2 transition-all"
                 >
                   Try Tools <ArrowRight className="w-4 h-4" />
                 </Link>
               </div>
 
               {/* Content */}
-              <div className="p-8 bg-zinc-950 rounded-2xl border border-zinc-800">
+              <div className="p-8 bg-surface rounded-2xl border border-border">
                 <div className="w-14 h-14 rounded-xl bg-emerald-500/10 flex items-center justify-center mb-6">
                   <Heart className="w-7 h-7 text-emerald-500" />
                 </div>
-                <h3 className="font-display text-xl font-bold text-white mb-3">
+                <h3 className="font-display text-xl font-bold text-foreground mb-3">
                   Content & Community
                 </h3>
-                <p className="text-zinc-400 mb-6">
+                <p className="text-muted mb-6">
                   Race reports, training insights, and gear reviews.
                   Sharing 15 years of running experience.
                 </p>
                 <Link
                   href="/blog"
-                  className="inline-flex items-center gap-1 text-orange-500 font-medium hover:gap-2 transition-all"
+                  className="inline-flex items-center gap-1 text-brand font-medium hover:gap-2 transition-all"
                 >
                   Read Blog <ArrowRight className="w-4 h-4" />
                 </Link>
@@ -229,29 +229,29 @@ export default function AboutPage() {
         </section>
 
         {/* Timeline */}
-        <section className="py-24 lg:py-32 bg-zinc-950">
+        <section className="py-24 lg:py-32 bg-background">
           <div className="container">
             <div className="text-center max-w-2xl mx-auto mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 Running Milestones
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-muted">
                 Key moments from 15 years of running adventures.
               </p>
             </div>
 
             <div className="max-w-2xl mx-auto">
-              <div className="relative border-l-2 border-orange-500/30 pl-8">
+              <div className="relative border-l-2 border-brand/30 pl-8">
                 {milestones.map((milestone, index) => (
                   <div key={milestone.year} className="relative mb-10 last:mb-0">
                     {/* Dot */}
-                    <div className="absolute -left-[41px] w-4 h-4 rounded-full bg-orange-500" />
+                    <div className="absolute -left-[41px] w-4 h-4 rounded-full bg-brand" />
 
                     {/* Content */}
-                    <div className="font-mono text-orange-500 text-sm mb-1">
+                    <div className="font-mono text-brand text-sm mb-1">
                       {milestone.year}
                     </div>
-                    <div className="text-lg font-medium text-white">
+                    <div className="text-lg font-medium text-foreground">
                       {milestone.event}
                     </div>
                   </div>
@@ -263,10 +263,10 @@ export default function AboutPage() {
 
         {/* Awards */}
         {awards.length > 0 && (
-          <section className="py-24 lg:py-32 bg-zinc-900">
+          <section className="py-24 lg:py-32 bg-surface-secondary">
             <div className="container">
               <div className="text-center max-w-2xl mx-auto mb-16">
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
+                <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
                   Awards & Recognition
                 </h2>
               </div>
@@ -275,20 +275,20 @@ export default function AboutPage() {
                 {awards.map((award, index) => (
                   <div
                     key={index}
-                    className="p-6 bg-zinc-800 rounded-2xl border border-zinc-700"
+                    className="p-6 bg-surface rounded-2xl border border-border"
                   >
                     <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center flex-shrink-0">
-                        <Award className="w-6 h-6 text-orange-500" />
+                      <div className="w-12 h-12 rounded-xl bg-brand/20 flex items-center justify-center flex-shrink-0">
+                        <Award className="w-6 h-6 text-brand" />
                       </div>
                       <div>
-                        <div className="font-display font-bold text-white mb-1">
+                        <div className="font-display font-bold text-foreground mb-1">
                           {award.title}
                         </div>
-                        <div className="text-zinc-400 text-sm">
+                        <div className="text-muted text-sm">
                           {award.event} • {award.year}
                         </div>
-                        <div className="text-orange-500 text-sm mt-1">
+                        <div className="text-brand text-sm mt-1">
                           For: {award.film}
                         </div>
                       </div>
@@ -301,26 +301,26 @@ export default function AboutPage() {
         )}
 
         {/* CTA */}
-        <section className="py-24 lg:py-32 bg-zinc-950">
+        <section className="py-24 lg:py-32 bg-background">
           <div className="container">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 Let's Connect
               </h2>
-              <p className="text-zinc-400 mb-8">
+              <p className="text-muted mb-8">
                 Whether you want to chat about running, discuss a filming project, or just
                 say hello - I'd love to hear from you.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/contact"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
+                  className="btn-primary inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full"
                 >
                   Get in Touch
                 </Link>
                 <Link
                   href="/blog"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-800 text-white font-semibold rounded-full hover:bg-zinc-700 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-surface-secondary text-foreground font-semibold rounded-full hover:bg-surface-tertiary transition-colors border border-border"
                 >
                   Read the Blog
                 </Link>

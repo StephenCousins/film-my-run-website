@@ -153,7 +153,7 @@ function RaceCard({
 }) {
   return (
     <div className={`group ${race.featured ? 'md:col-span-2 lg:col-span-3' : ''}`}>
-      <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden hover:border-orange-500/50 transition-all h-full">
+      <div className="bg-surface rounded-2xl border border-border overflow-hidden hover:border-brand/50 transition-all h-full">
         {/* Thumbnail */}
         <div
           className="relative aspect-video cursor-pointer"
@@ -164,16 +164,16 @@ function RaceCard({
             alt={race.title}
             className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
 
           {/* Distance badge */}
-          <div className="absolute top-4 left-4 px-3 py-1.5 bg-zinc-900/80 backdrop-blur-sm rounded-full">
+          <div className="absolute top-4 left-4 px-3 py-1.5 bg-black/60 backdrop-blur-sm rounded-full">
             <span className="text-white text-sm font-semibold">{race.distance}</span>
           </div>
 
           {/* Play button */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-16 h-16 rounded-full bg-orange-500/90 flex items-center justify-center transform group-hover:scale-110 transition-transform">
+            <div className="w-16 h-16 rounded-full bg-brand/90 flex items-center justify-center transform group-hover:scale-110 transition-transform">
               <Play className="w-6 h-6 text-white ml-1" fill="white" />
             </div>
           </div>
@@ -181,7 +181,7 @@ function RaceCard({
           {/* Title overlay */}
           <div className="absolute bottom-4 left-4 right-4">
             <h3 className="font-display text-xl font-bold text-white">{race.title}</h3>
-            <p className="text-zinc-300 text-sm flex items-center gap-1">
+            <p className="text-white/80 text-sm flex items-center gap-1">
               <MapPin className="w-3 h-3" /> {race.location}
             </p>
           </div>
@@ -189,19 +189,19 @@ function RaceCard({
 
         {/* Content */}
         <div className="p-5">
-          <p className="text-zinc-400 text-sm mb-4">
+          <p className="text-secondary text-sm mb-4">
             {race.description}
           </p>
 
           {/* Stats */}
-          <div className="flex items-center justify-between pt-4 border-t border-zinc-800">
+          <div className="flex items-center justify-between pt-4 border-t border-border">
             <div>
-              <p className="text-orange-500 font-display font-bold">{race.stats.views}</p>
-              <p className="text-zinc-500 text-xs">Views</p>
+              <p className="text-brand font-display font-bold">{race.stats.views}</p>
+              <p className="text-muted text-xs">Views</p>
             </div>
             <button
               onClick={onPlay}
-              className="text-sm text-orange-500 hover:text-orange-400 font-medium flex items-center gap-1"
+              className="text-sm text-brand hover:text-brand-hover font-medium flex items-center gap-1"
             >
               Watch <ArrowRight className="w-4 h-4" />
             </button>
@@ -222,7 +222,7 @@ export default function POVRaceCoveragePage() {
   return (
     <>
       <Header />
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           <div className="absolute inset-0">
@@ -272,18 +272,18 @@ export default function POVRaceCoveragePage() {
         </section>
 
         {/* Stats Bar */}
-        <section className="border-y border-zinc-800 bg-zinc-900/50">
+        <section className="border-y border-border bg-surface-secondary/50">
           <div className="container py-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat) => {
                 const Icon = stat.icon;
                 return (
                   <div key={stat.label} className="text-center">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-orange-500/10 mb-3">
-                      <Icon className="w-6 h-6 text-orange-500" />
+                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-brand/10 mb-3">
+                      <Icon className="w-6 h-6 text-brand" />
                     </div>
-                    <p className="font-display text-3xl font-bold text-white">{stat.value}</p>
-                    <p className="text-zinc-400 text-sm">{stat.label}</p>
+                    <p className="font-display text-3xl font-bold text-foreground">{stat.value}</p>
+                    <p className="text-secondary text-sm">{stat.label}</p>
                   </div>
                 );
               })}
@@ -295,10 +295,10 @@ export default function POVRaceCoveragePage() {
         <section className="py-16 lg:py-24">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                 Why Race Directors Choose POV Coverage
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-secondary">
                 Drone shots are beautiful. Finish line videos are essential. But nothing sells
                 your race like showing runners exactly what it's like to be out there on the course.
               </p>
@@ -310,15 +310,15 @@ export default function POVRaceCoveragePage() {
                 return (
                   <div
                     key={benefit.title}
-                    className="bg-zinc-900 rounded-xl p-6 border border-zinc-800"
+                    className="bg-surface rounded-xl p-6 border border-border"
                   >
-                    <div className="w-12 h-12 rounded-lg bg-orange-500/10 flex items-center justify-center mb-4">
-                      <Icon className="w-6 h-6 text-orange-500" />
+                    <div className="w-12 h-12 rounded-lg bg-brand/10 flex items-center justify-center mb-4">
+                      <Icon className="w-6 h-6 text-brand" />
                     </div>
-                    <h3 className="font-display font-semibold text-white mb-2">
+                    <h3 className="font-display font-semibold text-foreground mb-2">
                       {benefit.title}
                     </h3>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-secondary text-sm">
                       {benefit.description}
                     </p>
                   </div>
@@ -329,14 +329,14 @@ export default function POVRaceCoveragePage() {
         </section>
 
         {/* What You Get */}
-        <section className="py-16 lg:py-24 bg-zinc-900/30">
+        <section className="py-16 lg:py-24 bg-surface-secondary/30">
           <div className="container">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+                <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                   Everything You Need to Promote Your Race
                 </h2>
-                <p className="text-zinc-400 mb-8">
+                <p className="text-secondary mb-8">
                   One race entry, one competitor with a camera, and you get a complete content
                   package that keeps driving sign-ups year after year.
                 </p>
@@ -344,15 +344,15 @@ export default function POVRaceCoveragePage() {
                 <div className="grid sm:grid-cols-2 gap-3">
                   {whatYouGet.map((item) => (
                     <div key={item} className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-orange-500 flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-300 text-sm">{item}</span>
+                      <CheckCircle className="w-5 h-5 text-brand flex-shrink-0 mt-0.5" />
+                      <span className="text-secondary text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800">
-                <h3 className="font-display text-xl font-semibold text-white mb-6">
+              <div className="bg-surface rounded-2xl p-8 border border-border">
+                <h3 className="font-display text-xl font-semibold text-foreground mb-6">
                   How It Works
                 </h3>
                 <div className="space-y-6">
@@ -363,12 +363,12 @@ export default function POVRaceCoveragePage() {
                     { step: '4', title: 'Promote & Grow', desc: 'Video goes live to our audience with links to your registration.' },
                   ].map((item) => (
                     <div key={item.step} className="flex gap-4">
-                      <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-brand flex items-center justify-center flex-shrink-0">
                         <span className="text-white font-bold">{item.step}</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-white">{item.title}</h4>
-                        <p className="text-zinc-400 text-sm">{item.desc}</p>
+                        <h4 className="font-semibold text-foreground">{item.title}</h4>
+                        <p className="text-secondary text-sm">{item.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -382,10 +382,10 @@ export default function POVRaceCoveragePage() {
         <section className="py-16 lg:py-24">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                 Races I've Covered
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-secondary">
                 From local trail races to iconic ultras, I bring the same energy and quality
                 to every event. Here's a selection of recent work.
               </p>
@@ -404,28 +404,28 @@ export default function POVRaceCoveragePage() {
         </section>
 
         {/* CTA */}
-        <section className="py-16 lg:py-24 border-t border-zinc-800">
+        <section className="py-16 lg:py-24 border-t border-border">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
-              <Star className="w-12 h-12 text-orange-500 mx-auto mb-6" />
-              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+              <Star className="w-12 h-12 text-brand mx-auto mb-6" />
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                 Ready to Showcase Your Race?
               </h2>
-              <p className="text-zinc-400 mb-8 max-w-xl mx-auto">
+              <p className="text-secondary mb-8 max-w-xl mx-auto">
                 Let's talk about your event. I'm booking races for 2026 now—secure your
                 date before the calendar fills up.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   href="/contact?service=pov-coverage"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
+                  className="btn-primary"
                 >
                   Book Your Race
                   <ArrowRight className="w-5 h-5" />
                 </Link>
                 <Link
                   href="/services"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-800 text-white font-semibold rounded-full hover:bg-zinc-700 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-surface-tertiary text-foreground font-semibold rounded-full hover:bg-surface-secondary transition-colors"
                 >
                   View All Services
                 </Link>

@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Blog | Film My Run',
     description: 'Race reports, training insights, and stories from 15 years of running.',
-    images: ['/images/blog-og.jpg'],
+    images: ['https://images.filmmyrun.co.uk/og/blog-og.jpg'],
   },
 };
 

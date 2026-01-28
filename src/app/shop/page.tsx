@@ -38,8 +38,8 @@ const products: Product[] = [
     name: 'Film My Run Running Cap',
     slug: 'running-cap',
     price: 24.99,
-    image: '/images/shop/cap.svg',
-    images: ['/images/shop/cap.svg', '/images/shop/cap.svg'],
+    image: 'https://images.filmmyrun.co.uk/shop/cap.svg',
+    images: ['https://images.filmmyrun.co.uk/shop/cap.svg', 'https://images.filmmyrun.co.uk/shop/cap.svg'],
     category: 'Accessories',
     rating: 4.9,
     reviews: 47,
@@ -53,8 +53,8 @@ const products: Product[] = [
     slug: 'ultra-vest',
     price: 89.99,
     comparePrice: 109.99,
-    image: '/images/shop/vest.svg',
-    images: ['/images/shop/vest.svg'],
+    image: 'https://images.filmmyrun.co.uk/shop/vest.svg',
+    images: ['https://images.filmmyrun.co.uk/shop/vest.svg'],
     category: 'Gear',
     rating: 4.8,
     reviews: 32,
@@ -67,8 +67,8 @@ const products: Product[] = [
     name: 'Race Day Performance T-Shirt',
     slug: 'race-day-tee',
     price: 34.99,
-    image: '/images/shop/placeholder.svg',
-    images: ['/images/shop/placeholder.svg'],
+    image: 'https://images.filmmyrun.co.uk/shop/placeholder.svg',
+    images: ['https://images.filmmyrun.co.uk/shop/placeholder.svg'],
     category: 'Apparel',
     rating: 4.7,
     reviews: 65,
@@ -81,8 +81,8 @@ const products: Product[] = [
     name: 'Trail Running Buff',
     slug: 'trail-buff',
     price: 19.99,
-    image: '/images/shop/placeholder.svg',
-    images: ['/images/shop/placeholder.svg'],
+    image: 'https://images.filmmyrun.co.uk/shop/placeholder.svg',
+    images: ['https://images.filmmyrun.co.uk/shop/placeholder.svg'],
     category: 'Accessories',
     rating: 4.9,
     reviews: 89,
@@ -94,8 +94,8 @@ const products: Product[] = [
     name: 'Running Socks - 3 Pack',
     slug: 'running-socks-3pack',
     price: 29.99,
-    image: '/images/shop/placeholder.svg',
-    images: ['/images/shop/placeholder.svg'],
+    image: 'https://images.filmmyrun.co.uk/shop/placeholder.svg',
+    images: ['https://images.filmmyrun.co.uk/shop/placeholder.svg'],
     category: 'Accessories',
     rating: 4.6,
     reviews: 124,
@@ -107,8 +107,8 @@ const products: Product[] = [
     name: 'Hydration Belt',
     slug: 'hydration-belt',
     price: 44.99,
-    image: '/images/shop/placeholder.svg',
-    images: ['/images/shop/placeholder.svg'],
+    image: 'https://images.filmmyrun.co.uk/shop/placeholder.svg',
+    images: ['https://images.filmmyrun.co.uk/shop/placeholder.svg'],
     category: 'Gear',
     rating: 4.5,
     reviews: 56,
@@ -120,8 +120,8 @@ const products: Product[] = [
     name: 'Film My Run Hoodie',
     slug: 'fmr-hoodie',
     price: 54.99,
-    image: '/images/shop/placeholder.svg',
-    images: ['/images/shop/placeholder.svg'],
+    image: 'https://images.filmmyrun.co.uk/shop/placeholder.svg',
+    images: ['https://images.filmmyrun.co.uk/shop/placeholder.svg'],
     category: 'Apparel',
     rating: 4.8,
     reviews: 38,
@@ -133,8 +133,8 @@ const products: Product[] = [
     name: 'Arm Sleeves - UV Protection',
     slug: 'arm-sleeves',
     price: 22.99,
-    image: '/images/shop/placeholder.svg',
-    images: ['/images/shop/placeholder.svg'],
+    image: 'https://images.filmmyrun.co.uk/shop/placeholder.svg',
+    images: ['https://images.filmmyrun.co.uk/shop/placeholder.svg'],
     category: 'Accessories',
     rating: 4.4,
     reviews: 28,
@@ -153,9 +153,9 @@ function ProductCard({ product }: { product: Product }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
 
   return (
-    <div className="group bg-zinc-900 rounded-2xl overflow-hidden border border-zinc-800 hover:border-orange-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
+    <div className="group bg-surface rounded-2xl overflow-hidden border border-border hover:border-brand/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl">
       {/* Image */}
-      <Link href={`/shop/${product.slug}`} className="block relative aspect-square bg-zinc-800 overflow-hidden">
+      <Link href={`/shop/${product.slug}`} className="block relative aspect-square bg-surface-secondary overflow-hidden">
         <Image
           src={product.image}
           alt={product.name}
@@ -182,7 +182,7 @@ function ProductCard({ product }: { product: Product }) {
         {/* Out of stock overlay */}
         {!product.inStock && (
           <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-            <span className="px-4 py-2 bg-zinc-900 text-white text-sm font-medium rounded-full">
+            <span className="px-4 py-2 bg-surface text-foreground text-sm font-medium rounded-full">
               Out of Stock
             </span>
           </div>
@@ -194,12 +194,12 @@ function ProductCard({ product }: { product: Product }) {
             e.preventDefault();
             setIsWishlisted(!isWishlisted);
           }}
-          className="absolute top-3 right-3 p-2 bg-zinc-800 rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-zinc-700"
+          className="absolute top-3 right-3 p-2 bg-surface-secondary rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-surface-tertiary"
         >
           <Heart
             className={cn(
               'w-5 h-5 transition-colors',
-              isWishlisted ? 'fill-red-500 text-red-500' : 'text-zinc-400'
+              isWishlisted ? 'fill-red-500 text-red-500' : 'text-muted'
             )}
           />
         </button>
@@ -207,7 +207,7 @@ function ProductCard({ product }: { product: Product }) {
         {/* Quick add button */}
         {product.inStock && (
           <div className="absolute bottom-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
-            <button className="p-3 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors shadow-lg">
+            <button className="p-3 bg-brand text-white rounded-full hover:bg-brand-hover transition-colors shadow-lg">
               <ShoppingBag className="w-5 h-5" />
             </button>
           </div>
@@ -217,11 +217,11 @@ function ProductCard({ product }: { product: Product }) {
       {/* Content */}
       <div className="p-4">
         {/* Category */}
-        <div className="text-xs text-zinc-500 mb-1">{product.category}</div>
+        <div className="text-xs text-muted mb-1">{product.category}</div>
 
         {/* Name */}
         <Link href={`/shop/${product.slug}`}>
-          <h3 className="font-display font-semibold text-white group-hover:text-orange-500 transition-colors line-clamp-1 mb-2">
+          <h3 className="font-display font-semibold text-foreground group-hover:text-brand transition-colors line-clamp-1 mb-2">
             {product.name}
           </h3>
         </Link>
@@ -229,19 +229,19 @@ function ProductCard({ product }: { product: Product }) {
         {/* Rating */}
         <div className="flex items-center gap-1 mb-3">
           <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-          <span className="text-sm font-medium text-white">
+          <span className="text-sm font-medium text-foreground">
             {product.rating}
           </span>
-          <span className="text-sm text-zinc-500">({product.reviews})</span>
+          <span className="text-sm text-muted">({product.reviews})</span>
         </div>
 
         {/* Price */}
         <div className="flex items-center gap-2">
-          <span className="font-mono text-lg font-bold text-orange-500">
+          <span className="font-mono text-lg font-bold text-brand">
             £{product.price.toFixed(2)}
           </span>
           {product.comparePrice && (
-            <span className="font-mono text-sm text-zinc-400 line-through">
+            <span className="font-mono text-sm text-muted line-through">
               £{product.comparePrice.toFixed(2)}
             </span>
           )}
@@ -288,15 +288,15 @@ export default function ShopPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero */}
-        <section className="py-12 lg:py-16 bg-zinc-900 border-b border-zinc-800">
+        <section className="py-12 lg:py-16 bg-surface-secondary border-b border-border">
           <div className="container">
             <div className="max-w-2xl">
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 Shop
               </h1>
-              <p className="text-lg text-zinc-400">
+              <p className="text-lg text-secondary">
                 Gear designed by runners, for runners. Quality equipment tested on
                 trails and roads around the world.
               </p>
@@ -305,18 +305,18 @@ export default function ShopPage() {
         </section>
 
         {/* Filters bar */}
-        <section className="py-4 bg-zinc-900 border-b border-zinc-800 sticky top-16 lg:top-20 z-30">
+        <section className="py-4 bg-surface-secondary border-b border-border sticky top-16 lg:top-20 z-30">
           <div className="container">
             <div className="flex flex-col lg:flex-row lg:items-center gap-4">
               {/* Search */}
               <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                 <input
                   type="search"
                   placeholder="Search products..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-transparent rounded-lg text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+                  className="input w-full pl-10"
                 />
               </div>
 
@@ -329,8 +329,8 @@ export default function ShopPage() {
                     className={cn(
                       'px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all',
                       activeCategory === cat
-                        ? 'bg-orange-500 text-white'
-                        : 'bg-zinc-800 text-zinc-300 hover:bg-orange-500/10 hover:text-orange-500'
+                        ? 'bg-brand text-white'
+                        : 'bg-surface-tertiary text-secondary hover:bg-brand/10 hover:text-brand'
                     )}
                   >
                     {cat}
@@ -343,7 +343,7 @@ export default function ShopPage() {
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-3 py-2 bg-zinc-800 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  className="input"
                 >
                   <option value="featured">Featured</option>
                   <option value="price-low">Price: Low to High</option>
@@ -352,12 +352,12 @@ export default function ShopPage() {
                   <option value="newest">Newest</option>
                 </select>
 
-                <div className="hidden sm:flex items-center gap-1 p-1 bg-zinc-800 rounded-lg">
+                <div className="hidden sm:flex items-center gap-1 p-1 bg-surface-tertiary rounded-lg">
                   <button
                     onClick={() => setViewMode('grid')}
                     className={cn(
-                      'p-2 rounded',
-                      viewMode === 'grid' ? 'bg-zinc-700' : ''
+                      'p-2 rounded text-secondary',
+                      viewMode === 'grid' ? 'bg-surface' : ''
                     )}
                   >
                     <Grid className="w-4 h-4" />
@@ -365,8 +365,8 @@ export default function ShopPage() {
                   <button
                     onClick={() => setViewMode('list')}
                     className={cn(
-                      'p-2 rounded',
-                      viewMode === 'list' ? 'bg-zinc-700' : ''
+                      'p-2 rounded text-secondary',
+                      viewMode === 'list' ? 'bg-surface' : ''
                     )}
                   >
                     <List className="w-4 h-4" />
@@ -381,7 +381,7 @@ export default function ShopPage() {
         <section className="py-8 lg:py-12">
           <div className="container">
             {/* Results count */}
-            <div className="text-sm text-zinc-500 mb-6">
+            <div className="text-sm text-muted mb-6">
               Showing {sortedProducts.length} products
             </div>
 
@@ -402,15 +402,15 @@ export default function ShopPage() {
             {/* Empty state */}
             {sortedProducts.length === 0 && (
               <div className="py-16 text-center">
-                <ShoppingBag className="w-12 h-12 text-zinc-300 mx-auto mb-4" />
-                <p className="text-zinc-500">No products found matching your search.</p>
+                <ShoppingBag className="w-12 h-12 text-muted mx-auto mb-4" />
+                <p className="text-muted">No products found matching your search.</p>
               </div>
             )}
           </div>
         </section>
 
         {/* Features */}
-        <section className="py-12 bg-zinc-900 border-t border-zinc-800">
+        <section className="py-12 bg-surface-secondary border-t border-border">
           <div className="container">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {[
@@ -420,10 +420,10 @@ export default function ShopPage() {
                 { title: 'Quality Guarantee', desc: 'Tested by runners' },
               ].map((feature) => (
                 <div key={feature.title} className="text-center">
-                  <div className="font-display font-semibold text-white">
+                  <div className="font-display font-semibold text-foreground">
                     {feature.title}
                   </div>
-                  <div className="text-sm text-zinc-500">{feature.desc}</div>
+                  <div className="text-sm text-muted">{feature.desc}</div>
                 </div>
               ))}
             </div>

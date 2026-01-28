@@ -153,15 +153,15 @@ function PaceCalculator() {
   };
 
   return (
-    <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 lg:p-8">
-      <h3 className="font-display text-xl font-bold text-white mb-6">
+    <div className="bg-surface rounded-2xl border border-border p-6 lg:p-8">
+      <h3 className="font-display text-xl font-bold text-foreground mb-6">
         Pace Calculator
       </h3>
 
       <div className="grid gap-6">
         {/* Distance input */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-secondary mb-2">
             Distance
           </label>
           <div className="flex gap-2">
@@ -169,13 +169,13 @@ function PaceCalculator() {
               type="number"
               value={distance}
               onChange={(e) => setDistance(e.target.value)}
-              className="flex-1 px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500"
+              className="input flex-1"
               placeholder="42.195"
             />
             <select
               value={distanceUnit}
               onChange={(e) => setDistanceUnit(e.target.value as 'km' | 'miles')}
-              className="px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
+              className="input w-auto"
             >
               <option value="km">km</option>
               <option value="miles">miles</option>
@@ -189,7 +189,7 @@ function PaceCalculator() {
                   setDistance(d);
                   setDistanceUnit('km');
                 }}
-                className="px-3 py-1 text-xs bg-zinc-800 rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
+                className="px-3 py-1 text-xs bg-surface-tertiary text-secondary rounded-full hover:bg-brand/10 hover:text-brand transition-colors"
               >
                 {d === '21.0975' ? 'Half' : d === '42.195' ? 'Full' : `${d}K`}
               </button>
@@ -199,7 +199,7 @@ function PaceCalculator() {
 
         {/* Time input */}
         <div>
-          <label className="block text-sm font-medium text-zinc-300 mb-2">
+          <label className="block text-sm font-medium text-secondary mb-2">
             Time
           </label>
           <div className="flex gap-2">
@@ -208,37 +208,37 @@ function PaceCalculator() {
                 type="number"
                 value={time.hours}
                 onChange={(e) => setTime({ ...time, hours: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
+                className="input text-center"
                 placeholder="0"
                 min="0"
               />
-              <span className="text-xs text-zinc-500 block text-center mt-1">hours</span>
+              <span className="text-xs text-muted block text-center mt-1">hours</span>
             </div>
-            <span className="text-2xl text-zinc-400 self-start mt-3">:</span>
+            <span className="text-2xl text-muted self-start mt-3">:</span>
             <div className="flex-1">
               <input
                 type="number"
                 value={time.minutes}
                 onChange={(e) => setTime({ ...time, minutes: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
+                className="input text-center"
                 placeholder="0"
                 min="0"
                 max="59"
               />
-              <span className="text-xs text-zinc-500 block text-center mt-1">minutes</span>
+              <span className="text-xs text-muted block text-center mt-1">minutes</span>
             </div>
-            <span className="text-2xl text-zinc-400 self-start mt-3">:</span>
+            <span className="text-2xl text-muted self-start mt-3">:</span>
             <div className="flex-1">
               <input
                 type="number"
                 value={time.seconds}
                 onChange={(e) => setTime({ ...time, seconds: e.target.value })}
-                className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white text-center focus:outline-none focus:border-orange-500"
+                className="input text-center"
                 placeholder="0"
                 min="0"
                 max="59"
               />
-              <span className="text-xs text-zinc-500 block text-center mt-1">seconds</span>
+              <span className="text-xs text-muted block text-center mt-1">seconds</span>
             </div>
           </div>
         </div>
@@ -246,7 +246,7 @@ function PaceCalculator() {
         {/* Calculate button */}
         <button
           onClick={calculatePace}
-          className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors"
+          className="w-full py-4 bg-brand text-white font-semibold rounded-xl hover:bg-brand-hover transition-colors"
         >
           Calculate
         </button>
@@ -254,27 +254,27 @@ function PaceCalculator() {
         {/* Results */}
         {pace && (
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4 p-4 bg-zinc-800 rounded-xl">
+            <div className="grid grid-cols-2 gap-4 p-4 bg-surface-tertiary rounded-xl">
               <div className="text-center">
-                <div className="text-2xl font-mono font-bold text-orange-500">{pace}</div>
-                <div className="text-xs text-zinc-500 mt-1">Pace</div>
+                <div className="text-2xl font-mono font-bold text-brand">{pace}</div>
+                <div className="text-xs text-muted mt-1">Pace</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-mono font-bold text-orange-500">{speed}</div>
-                <div className="text-xs text-zinc-500 mt-1">Speed</div>
+                <div className="text-2xl font-mono font-bold text-brand">{speed}</div>
+                <div className="text-xs text-muted mt-1">Speed</div>
               </div>
             </div>
 
             {predictions.length > 0 && (
-              <div className="p-4 bg-zinc-800 rounded-xl">
-                <h4 className="font-medium text-white mb-3">
+              <div className="p-4 bg-surface-tertiary rounded-xl">
+                <h4 className="font-medium text-foreground mb-3">
                   At This Pace
                 </h4>
                 <div className="grid grid-cols-2 gap-3">
                   {predictions.map((pred) => (
                     <div key={pred.name} className="flex justify-between">
-                      <span className="text-zinc-500">{pred.name}:</span>
-                      <span className="font-mono text-white">{pred.time}</span>
+                      <span className="text-muted">{pred.name}:</span>
+                      <span className="font-mono text-foreground">{pred.time}</span>
                     </div>
                   ))}
                 </div>
@@ -310,26 +310,26 @@ function CalculatorNav({ activeId, onChange }: CalculatorNavProps) {
             className={cn(
               'w-full flex items-center gap-3 p-3 rounded-xl text-left transition-all',
               isActive
-                ? 'bg-orange-500/10 text-orange-500'
-                : 'hover:bg-zinc-800 text-zinc-300'
+                ? 'bg-brand/10 text-brand'
+                : 'hover:bg-surface-secondary text-secondary'
             )}
           >
             <div
               className={cn(
                 'w-10 h-10 rounded-lg flex items-center justify-center',
-                isActive ? 'bg-orange-500 text-white' : 'bg-zinc-800'
+                isActive ? 'bg-brand text-white' : 'bg-surface-tertiary'
               )}
             >
               <Icon className="w-5 h-5" />
             </div>
             <div className="flex-1">
-              <div className={cn('font-medium', isActive && 'text-orange-500')}>
+              <div className={cn('font-medium', isActive && 'text-brand')}>
                 {calc.name}
               </div>
-              <div className="text-xs text-zinc-500 line-clamp-1">{calc.description}</div>
+              <div className="text-xs text-muted line-clamp-1">{calc.description}</div>
             </div>
             {calc.popular && (
-              <span className="px-2 py-0.5 text-xs bg-orange-500/10 text-orange-500 rounded-full">
+              <span className="px-2 py-0.5 text-xs bg-brand/10 text-brand rounded-full">
                 Popular
               </span>
             )}
@@ -372,13 +372,13 @@ export default function CalculatorsPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero */}
         <section className="relative py-20 lg:py-28 overflow-hidden">
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="/images/hero/hero-trail.jpg"
+              src="https://images.filmmyrun.co.uk/hero/hero-trail.jpg"
               alt="Trail running"
               fill
               className="object-cover"
@@ -406,7 +406,7 @@ export default function CalculatorsPage() {
         </section>
 
         {/* Calculators */}
-        <section className="py-12 lg:py-16 bg-zinc-950">
+        <section className="py-12 lg:py-16 bg-background">
           <div className="container">
             <div className="grid lg:grid-cols-12 gap-8">
               {/* Calculator navigation - sidebar on desktop, dropdown on mobile */}
@@ -417,7 +417,7 @@ export default function CalculatorsPage() {
                     <select
                       value={activeCalculator}
                       onChange={(e) => setActiveCalculator(e.target.value)}
-                      className="w-full px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-xl text-white"
+                      className="input"
                     >
                       {calculators.map((calc) => (
                         <option key={calc.id} value={calc.id}>
@@ -429,7 +429,7 @@ export default function CalculatorsPage() {
 
                   {/* Desktop nav */}
                   <div className="hidden lg:block">
-                    <h2 className="font-display font-bold text-white mb-4">
+                    <h2 className="font-display font-bold text-foreground mb-4">
                       Calculators
                     </h2>
                     <CalculatorNav
@@ -451,7 +451,7 @@ export default function CalculatorsPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="/images/hero/running-tools-bg.jpg"
+              src="https://images.filmmyrun.co.uk/hero/running-tools-bg.jpg"
               alt="Runners on trail"
               fill
               className="object-cover"
@@ -464,7 +464,7 @@ export default function CalculatorsPage() {
               <h2 className="font-display text-2xl sm:text-3xl font-bold text-white mb-4">
                 More Running Tools
               </h2>
-              <p className="text-zinc-300">
+              <p className="text-white/80">
                 Explore our other free tools for runners.
               </p>
             </div>
@@ -472,36 +472,36 @@ export default function CalculatorsPage() {
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               <Link
                 href="/tools/how-fast-am-i"
-                className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
+                className="group p-6 bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-brand/50 transition-all"
               >
-                <h3 className="font-display text-base font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
+                <h3 className="font-display text-base font-bold text-white mb-2 group-hover:text-brand transition-colors">
                   How Fast Are You?
                 </h3>
-                <p className="text-sm text-zinc-400">
+                <p className="text-sm text-white/70">
                   Compare your running ability against others and see where you rank.
                 </p>
               </Link>
 
               <Link
                 href="/tools/route-comparison"
-                className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
+                className="group p-6 bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-brand/50 transition-all"
               >
-                <h3 className="font-display text-base font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
+                <h3 className="font-display text-base font-bold text-white mb-2 group-hover:text-brand transition-colors">
                   Route Comparison
                 </h3>
-                <p className="text-sm text-zinc-400">
+                <p className="text-sm text-white/70">
                   Compare GPX and FIT files to analyze your runs side by side.
                 </p>
               </Link>
 
               <Link
                 href="/training"
-                className="group p-6 bg-zinc-950 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all"
+                className="group p-6 bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-brand/50 transition-all"
               >
-                <h3 className="font-display text-base font-bold text-white mb-2 group-hover:text-orange-500 transition-colors">
+                <h3 className="font-display text-base font-bold text-white mb-2 group-hover:text-brand transition-colors">
                   Marathon Training Plans
                 </h3>
-                <p className="text-sm text-zinc-400">
+                <p className="text-sm text-white/70">
                   Personalized training plans to help you reach your marathon goals.
                 </p>
               </Link>

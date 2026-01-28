@@ -14,7 +14,9 @@
     "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "tsx scripts/seed.ts",
     "migrate:wordpress": "tsx scripts/migrate-wordpress.ts",
-    "migrate:images": "tsx scripts/migrate-images.ts"
+    "migrate:images": "tsx scripts/migrate-images.ts",
+    "r2:upload": "node scripts/migrate-images-to-r2.mjs",
+    "r2:db-update": "node scripts/update-database-image-urls.mjs"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.1",
@@ -38,6 +40,7 @@
     "gsap": "^3.x",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.x",
+    "mime-types": "^3.0.2",
     "next": "15.x",
     "next-auth": "^4.24.13",
     "pg": "^8.17.2",
@@ -49,11 +52,13 @@
     "sharp": "^0.33.x",
     "stripe": "^14.x",
     "tailwind-merge": "^2.x",
+    "youtube-transcript": "^1.2.1",
     "zod": "^3.x"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/leaflet": "^1.9.21",
+    "@types/mime-types": "^3.0.1",
     "@types/node": "^22.x",
     "@types/pg": "^8.16.0",
     "@types/react": "^19.x",

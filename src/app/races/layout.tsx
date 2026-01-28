@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Race Dashboard | Film My Run',
     description: '174 races analyzed. Track times, positions, and progress.',
-    images: ['/images/races-og.jpg'],
+    images: ['https://images.filmmyrun.co.uk/og/races-og.jpg'],
   },
 };
 

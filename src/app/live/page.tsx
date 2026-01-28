@@ -107,8 +107,8 @@ export default function LivePage() {
               playsInline
               className="absolute inset-0 w-full h-full object-cover"
             >
-              <source src="/videos/live-hero.mp4" type="video/mp4" />
-              <source src="/videos/live-hero.webm" type="video/webm" />
+              <source src="https://images.filmmyrun.co.uk/videos/live-hero.mp4" type="video/mp4" />
+              <source src="https://images.filmmyrun.co.uk/videos/live-hero.webm" type="video/webm" />
             </video>
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/60 to-zinc-950" />

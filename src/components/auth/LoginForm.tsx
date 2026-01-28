@@ -51,12 +51,12 @@ export default function LoginForm() {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 p-8">
+      <div className="bg-surface rounded-2xl shadow-xl border border-border p-8">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-display font-bold text-zinc-900 dark:text-white">
+          <h1 className="text-2xl font-display font-bold text-foreground">
             Welcome back
           </h1>
-          <p className="text-zinc-600 dark:text-zinc-400 mt-2">
+          <p className="text-secondary mt-2">
             Sign in to your account to continue
           </p>
         </div>
@@ -72,7 +72,7 @@ export default function LoginForm() {
           type="button"
           onClick={handleGoogleSignIn}
           disabled={isLoading}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg text-zinc-700 dark:text-zinc-300 font-medium hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-surface border border-border rounded-lg text-secondary font-medium hover:bg-surface-secondary transition-colors disabled:opacity-50"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -97,10 +97,10 @@ export default function LoginForm() {
 
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-zinc-200 dark:border-zinc-700" />
+            <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white dark:bg-zinc-900 text-zinc-500">
+            <span className="px-4 bg-surface text-muted">
               or continue with email
             </span>
           </div>
@@ -111,12 +111,12 @@ export default function LoginForm() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+              className="block text-sm font-medium text-secondary mb-1.5"
             >
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
               <input
                 id="email"
                 type="email"
@@ -124,7 +124,7 @@ export default function LoginForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 required
-                className="w-full pl-10 pr-4 py-3 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                className="input w-full pl-10 py-3"
               />
             </div>
           </div>
@@ -132,12 +132,12 @@ export default function LoginForm() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+              className="block text-sm font-medium text-secondary mb-1.5"
             >
               Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
               <input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
@@ -145,12 +145,12 @@ export default function LoginForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter your password"
                 required
-                className="w-full pl-10 pr-12 py-3 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                className="input w-full pl-10 pr-12 py-3"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground"
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -162,16 +162,16 @@ export default function LoginForm() {
           </div>
 
           <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2 text-zinc-600 dark:text-zinc-400">
+            <label className="flex items-center gap-2 text-secondary">
               <input
                 type="checkbox"
-                className="w-4 h-4 rounded border-zinc-300 dark:border-zinc-600 text-orange-500 focus:ring-orange-500"
+                className="w-4 h-4 rounded border-border text-brand focus:ring-brand"
               />
               Remember me
             </label>
             <Link
               href="/forgot-password"
-              className="text-orange-500 hover:text-orange-600 font-medium"
+              className="text-brand hover:text-brand-hover font-medium"
             >
               Forgot password?
             </Link>
@@ -180,7 +180,7 @@ export default function LoginForm() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+            className="btn-primary w-full py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
           >
             {isLoading ? (
               <>
@@ -193,11 +193,11 @@ export default function LoginForm() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="mt-6 text-center text-sm text-secondary">
           Don&apos;t have an account?{' '}
           <Link
             href="/register"
-            className="text-orange-500 hover:text-orange-600 font-medium"
+            className="text-brand hover:text-brand-hover font-medium"
           >
             Sign up
           </Link>

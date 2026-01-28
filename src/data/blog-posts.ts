@@ -17,6 +17,26 @@ export interface BlogPost {
 
 export const blogPosts: BlogPost[] = [
   {
+    id: '12001',
+    title: 'How I Ran My First Sub-3 Marathon | Goodwood 2020',
+    slug: 'how-i-ran-my-first-sub-3-marathon-goodwood-2020',
+    excerpt: 'After eight years of running marathons, I finally broke the three-hour barrier. This is the story of how I got there - the training, the nutrition, the kit, and the race itself...',
+    publishedAt: '2020-12-06',
+    featuredImage: 'https://images.filmmyrun.co.uk/blog/2020/goodwood-marathon-running.jpg',
+    readTime: 12,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
+    id: '12002',
+    title: 'Arc of Attrition 100 | 2019',
+    slug: 'arc-of-attrition-100-2019',
+    excerpt: "The Arc of Attrition has a way of testing you before you've even started. Snow chaos, marble-sized hailstones, navigation errors in the dark - this is the story of my third attempt at Britain's most brutal 100-miler.",
+    publishedAt: '2019-02-01',
+    featuredImage: 'https://images.filmmyrun.co.uk/blog/2019/arc-of-attrition-coastal-path.jpg',
+    readTime: 10,
+    category: { name: 'Race Reports', slug: 'race-reports' },
+  },
+  {
     id: '11291',
     title: 'The Liberating Experience of Running Without a Watch',
     slug: 'the-liberating-experience-of-running-without-a-watch',
@@ -38,12 +58,12 @@ export const blogPosts: BlogPost[] = [
   },
   {
     id: '11202',
-    title: 'Val D\'Aran 100 Miles | By UTMB',
+    title: 'Val d\'Aran 100 by UTMB: The Hardest Race I Have Ever Done',
     slug: 'val-daran-by-utmb-100-miles',
-    excerpt: 'Introducing the Val D\'Aran 100 miler. When it comes to entering 100 mile races around the world, there are...',
-    publishedAt: '2022-04-25',
+    excerpt: 'That was the hardest race I have ever, ever done. Standing in the finish area in Vielha, having just spent nearly 47 hours traversing the Spanish Pyrenees, I meant it more than I\'d ever meant anything...',
+    publishedAt: '2021-07-09',
     featuredImage: 'https://filmmyrun.co.uk/wp-content/uploads/2022/04/Screenshot-2022-04-08-at-11.33.56.png',
-    readTime: 12,
+    readTime: 15,
     category: { name: 'Race Reports', slug: 'race-reports' },
   },
   {

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Shop | Film My Run',
     description: 'Gear designed by runners, for runners.',
-    images: ['/images/shop-og.jpg'],
+    images: ['https://images.filmmyrun.co.uk/og/shop-og.jpg'],
   },
 };
 

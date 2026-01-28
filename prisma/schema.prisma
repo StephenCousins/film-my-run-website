@@ -1,6 +1,3 @@
-// Film My Run - Database Schema
-// See ARCHITECTURE.md for full documentation
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,347 +7,280 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============================================
-// USER & AUTH
-// ============================================
+model accounts {
+  id                  Int     @id @default(autoincrement())
+  user_id             Int
+  type                String
+  provider            String
+  provider_account_id String
+  refresh_token       String?
+  access_token        String?
+  expires_at          Int?
+  token_type          String?
+  scope               String?
+  id_token            String?
+  session_state       String?
+  users               users   @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-enum AccessTier {
-  FREE     // Free account (Route Comparison access)
-  PREMIUM  // AI coaching tier
-  PRO      // Personal coaching tier
+  @@unique([provider, provider_account_id])
 }
 
-model User {
-  id               Int        @id @default(autoincrement())
-  email            String     @unique
-  name             String?
-  passwordHash     String?    @map("password_hash")
-  image            String?    // For OAuth profile pictures
-  emailVerified    DateTime?  @map("email_verified_at")
-  accessTier       AccessTier @default(FREE) @map("access_tier")
-  subscriptionEnd  DateTime?  @map("subscription_end")
-  stripeCustomerId String?    @map("stripe_customer_id")
-  createdAt        DateTime   @default(now()) @map("created_at")
-  updatedAt        DateTime   @updatedAt @map("updated_at")
+model age_grading_factors {
+  id          Int     @id @default(autoincrement())
+  gender      String
+  event       String
+  open_record Decimal @db.Decimal(10, 4)
+  age         Int
+  factor      Decimal @db.Decimal(6, 4)
 
-  accounts    Account[]
-  sessions    Session[]
-  posts       Post[]
-  orders      Order[]
-  savedRoutes SavedRoute[]
-
-  @@map("users")
+  @@unique([gender, event, age])
+  @@index([gender, event])
 }
 
-// NextAuth adapter tables
-model Account {
-  id                Int     @id @default(autoincrement())
-  userId            Int     @map("user_id")
-  type              String
-  provider          String
-  providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-  @@map("accounts")
-}
-
-model Session {
+model athlete_lookups {
   id           Int      @id @default(autoincrement())
-  sessionToken String   @unique @map("session_token")
-  userId       Int      @map("user_id")
-  expires      DateTime
+  source       String
+  athlete_id   String
+  athlete_name String?
+  lookup_at    DateTime @default(now())
+  ip_address   String?
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("sessions")
+  @@index([lookup_at])
+  @@index([source, athlete_id])
 }
 
-model VerificationToken {
+model films {
+  id               Int      @id @default(autoincrement())
+  title            String
+  slug             String   @unique
+  description      String?
+  youtube_id       String?
+  vimeo_id         String?
+  thumbnail_url    String?
+  duration_seconds Int?
+  year             Int?
+  awards           String[]
+  featured         Boolean  @default(false)
+  created_at       DateTime @default(now())
+}
+
+model media {
+  id         Int      @id @default(autoincrement())
+  filename   String
+  url        String
+  alt_text   String?
+  mime_type  String?
+  size_bytes Int?
+  width      Int?
+  height     Int?
+  post_id    Int?
+  created_at DateTime @default(now())
+  posts      posts?   @relation(fields: [post_id], references: [id])
+}
+
+model orders {
+  id                Int      @id @default(autoincrement())
+  user_id           Int?
+  stripe_session_id String?
+  status            String   @default("pending")
+  total_cents       Int
+  currency          String   @default("GBP")
+  shipping_address  Json?
+  items             Json
+  created_at        DateTime @default(now())
+  updated_at        DateTime
+  users             users?   @relation(fields: [user_id], references: [id])
+
+  @@index([status])
+  @@index([user_id])
+}
+
+model parkrun_athletes {
+  id                   Int      @id @default(autoincrement())
+  athlete_id           String   @unique
+  name                 String
+  total_runs           Int
+  best_time_seconds    Int?
+  average_time_seconds Int?
+  typical_avg_seconds  Int?
+  recent_avg_seconds   Int?
+  avg_age_grade        Decimal? @db.Decimal(5, 2)
+  recent_avg_age_grade Decimal? @db.Decimal(5, 2)
+  pb_date              String?
+  pb_event             String?
+  pb_age               String?
+  trend                String?
+  trend_message        String?
+  outlier_count        Int      @default(0)
+  normal_run_count     Int      @default(0)
+  recent_results_json  Json?
+  lookup_count         Int      @default(1)
+  created_at           DateTime @default(now())
+  updated_at           DateTime
+  last_lookup_at       DateTime @default(now())
+
+  @@index([athlete_id])
+  @@index([last_lookup_at])
+}
+
+model po10_athletes {
+  id                    Int      @id @default(autoincrement())
+  athlete_id            String   @unique
+  name                  String
+  club                  String?
+  gender                String?
+  age_group             String?
+  pbs_json              Json?
+  overall_percentile    Decimal? @db.Decimal(5, 2)
+  overall_age_grade     Decimal? @db.Decimal(5, 2)
+  overall_ability_level String?
+  lookup_count          Int      @default(1)
+  created_at            DateTime @default(now())
+  updated_at            DateTime
+  last_lookup_at        DateTime @default(now())
+
+  @@index([athlete_id])
+  @@index([last_lookup_at])
+}
+
+model post_terms {
+  post_id Int
+  term_id Int
+  posts   posts @relation(fields: [post_id], references: [id], onDelete: Cascade)
+  terms   terms @relation(fields: [term_id], references: [id], onDelete: Cascade)
+
+  @@id([post_id, term_id])
+}
+
+model posts {
+  id             Int          @id @default(autoincrement())
+  wp_id          Int?         @unique
+  title          String
+  slug           String       @unique
+  content        String
+  excerpt        String?
+  featured_image String?
+  status         String       @default("published")
+  post_type      String       @default("post")
+  read_time      Int          @default(5)
+  author_id      Int?
+  created_at     DateTime     @default(now())
+  updated_at     DateTime
+  published_at   DateTime?
+  meta           Json         @default("{}")
+  media          media[]
+  post_terms     post_terms[]
+  users          users?       @relation(fields: [author_id], references: [id])
+
+  @@index([created_at])
+  @@index([status, post_type])
+}
+
+model products {
+  id                  Int      @id @default(autoincrement())
+  name                String
+  slug                String   @unique
+  description         String?
+  price_cents         Int
+  compare_price_cents Int?
+  currency            String   @default("GBP")
+  images              String[]
+  category            String?
+  inventory_count     Int      @default(0)
+  is_digital          Boolean  @default(false)
+  stripe_price_id     String?
+  status              String   @default("active")
+  created_at          DateTime @default(now())
+  updated_at          DateTime
+
+  @@index([category])
+  @@index([status])
+}
+
+model races {
+  id           Int      @id @default(autoincrement())
+  date         DateTime @db.Date
+  event        String
+  type         String?
+  distance_km  Decimal? @db.Decimal(10, 3)
+  time_hms     String?
+  time_seconds Int?
+  elevation    Int?
+  position     String?
+  terrain      String?
+  video_url    String?
+  strava_url   String?
+  results_url  String?
+  created_at   DateTime @default(now())
+  updated_at   DateTime
+
+  @@index([date])
+  @@index([type])
+}
+
+model saved_routes {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  name       String
+  route_data Json
+  created_at DateTime @default(now())
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model sessions {
+  id            Int      @id @default(autoincrement())
+  session_token String   @unique
+  user_id       Int
+  expires       DateTime
+  users         users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+}
+
+model settings {
+  key        String   @id
+  value      Json
+  updated_at DateTime
+}
+
+model terms {
+  id          Int          @id @default(autoincrement())
+  name        String
+  slug        String       @unique
+  taxonomy    String
+  description String?
+  post_terms  post_terms[]
+
+  @@index([taxonomy])
+}
+
+model users {
+  id                 Int            @id @default(autoincrement())
+  email              String         @unique
+  name               String?
+  password_hash      String?
+  stripe_customer_id String?
+  created_at         DateTime       @default(now())
+  updated_at         DateTime
+  access_tier        AccessTier     @default(FREE)
+  email_verified_at  DateTime?
+  image              String?
+  subscription_end   DateTime?
+  accounts           accounts[]
+  orders             orders[]
+  posts              posts[]
+  saved_routes       saved_routes[]
+  sessions           sessions[]
+}
+
+model verification_tokens {
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
-  @@map("verification_tokens")
 }
 
-// Route Comparison saved routes
-model SavedRoute {
-  id        Int      @id @default(autoincrement())
-  userId    Int      @map("user_id")
-  name      String
-  routeData Json     @map("route_data")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@map("saved_routes")
-}
-
-// ============================================
-// CONTENT
-// ============================================
-
-model Post {
-  id            Int       @id @default(autoincrement())
-  wpId          Int?      @unique @map("wp_id") // Original WordPress ID
-  title         String
-  slug          String    @unique
-  content       String    @db.Text
-  excerpt       String?   @db.Text
-  featuredImage String?   @map("featured_image")
-  status        String    @default("published")
-  postType      String    @default("post") @map("post_type")
-  readTime      Int       @default(5) @map("read_time")
-  authorId      Int?      @map("author_id")
-  createdAt     DateTime  @default(now()) @map("created_at")
-  updatedAt     DateTime  @updatedAt @map("updated_at")
-  publishedAt   DateTime? @map("published_at")
-  meta          Json      @default("{}")
-
-  author User?      @relation(fields: [authorId], references: [id])
-  terms  PostTerm[]
-  media  Media[]
-
-  @@index([status, postType])
-  @@index([createdAt])
-  @@map("posts")
-}
-
-model Term {
-  id          Int        @id @default(autoincrement())
-  name        String
-  slug        String     @unique
-  taxonomy    String     // 'category' or 'tag'
-  description String?
-
-  posts PostTerm[]
-
-  @@index([taxonomy])
-  @@map("terms")
-}
-
-model PostTerm {
-  postId Int @map("post_id")
-  termId Int @map("term_id")
-
-  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
-  term Term @relation(fields: [termId], references: [id], onDelete: Cascade)
-
-  @@id([postId, termId])
-  @@map("post_terms")
-}
-
-model Media {
-  id        Int      @id @default(autoincrement())
-  filename  String
-  url       String
-  altText   String?  @map("alt_text")
-  mimeType  String?  @map("mime_type")
-  sizeBytes Int?     @map("size_bytes")
-  width     Int?
-  height    Int?
-  postId    Int?     @map("post_id")
-  createdAt DateTime @default(now()) @map("created_at")
-
-  post Post? @relation(fields: [postId], references: [id])
-
-  @@map("media")
-}
-
-// ============================================
-// RACES
-// ============================================
-
-model Race {
-  id          Int      @id @default(autoincrement())
-  date        DateTime @db.Date
-  event       String
-  type        String?
-  distanceKm  Decimal? @map("distance_km") @db.Decimal(10, 3)
-  timeHms     String?  @map("time_hms")
-  timeSeconds Int?     @map("time_seconds")
-  elevation   Int?
-  position    String?
-  terrain     String?
-  videoUrl    String?  @map("video_url")
-  stravaUrl   String?  @map("strava_url")
-  resultsUrl  String?  @map("results_url")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
-
-  @@index([date])
-  @@index([type])
-  @@map("races")
-}
-
-// ============================================
-// FILMS
-// ============================================
-
-model Film {
-  id              Int      @id @default(autoincrement())
-  title           String
-  slug            String   @unique
-  description     String?
-  youtubeId       String?  @map("youtube_id")
-  vimeoId         String?  @map("vimeo_id")
-  thumbnailUrl    String?  @map("thumbnail_url")
-  durationSeconds Int?     @map("duration_seconds")
-  year            Int?
-  awards          String[]
-  featured        Boolean  @default(false)
-  createdAt       DateTime @default(now()) @map("created_at")
-
-  @@map("films")
-}
-
-// ============================================
-// SHOP
-// ============================================
-
-model Product {
-  id                Int      @id @default(autoincrement())
-  name              String
-  slug              String   @unique
-  description       String?
-  priceCents        Int      @map("price_cents")
-  comparePriceCents Int?     @map("compare_price_cents")
-  currency          String   @default("GBP")
-  images            String[]
-  category          String?
-  inventoryCount    Int      @default(0) @map("inventory_count")
-  isDigital         Boolean  @default(false) @map("is_digital")
-  stripePriceId     String?  @map("stripe_price_id")
-  status            String   @default("active")
-  createdAt         DateTime @default(now()) @map("created_at")
-  updatedAt         DateTime @updatedAt @map("updated_at")
-
-  @@index([status])
-  @@index([category])
-  @@map("products")
-}
-
-model Order {
-  id              Int      @id @default(autoincrement())
-  userId          Int?     @map("user_id")
-  stripeSessionId String?  @map("stripe_session_id")
-  status          String   @default("pending")
-  totalCents      Int      @map("total_cents")
-  currency        String   @default("GBP")
-  shippingAddress Json?    @map("shipping_address")
-  items           Json
-  createdAt       DateTime @default(now()) @map("created_at")
-  updatedAt       DateTime @updatedAt @map("updated_at")
-
-  user User? @relation(fields: [userId], references: [id])
-
-  @@index([userId])
-  @@index([status])
-  @@map("orders")
-}
-
-// ============================================
-// SETTINGS
-// ============================================
-
-model Setting {
-  key       String   @id
-  value     Json
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("settings")
-}
-
-// ============================================
-// RUNNING CALCULATORS
-// ============================================
-
-model AgeGradingFactor {
-  id           Int     @id @default(autoincrement())
-  gender       String  // 'men' or 'women'
-  event        String  // e.g., '5km', '10km', 'marathon'
-  openRecord   Decimal @map("open_record") @db.Decimal(10, 4) // World record time in seconds
-  age          Int     // Age from 30-110
-  factor       Decimal @db.Decimal(6, 4) // Factor to apply (e.g., 0.9999)
-
-  @@unique([gender, event, age])
-  @@index([gender, event])
-  @@map("age_grading_factors")
-}
-
-// ============================================
-// HOW FAST AM I - ATHLETE LOOKUP CACHE
-// ============================================
-
-model ParkrunAthlete {
-  id                   Int      @id @default(autoincrement())
-  athleteId            String   @unique @map("athlete_id")
-  name                 String
-  totalRuns            Int      @map("total_runs")
-  bestTimeSeconds      Int?     @map("best_time_seconds")
-  averageTimeSeconds   Int?     @map("average_time_seconds")
-  typicalAvgSeconds    Int?     @map("typical_avg_seconds")
-  recentAvgSeconds     Int?     @map("recent_avg_seconds")
-  avgAgeGrade          Decimal? @map("avg_age_grade") @db.Decimal(5, 2)
-  recentAvgAgeGrade    Decimal? @map("recent_avg_age_grade") @db.Decimal(5, 2)
-  pbDate               String?  @map("pb_date")
-  pbEvent              String?  @map("pb_event")
-  pbAge                String?  @map("pb_age")
-  trend                String?  // 'improving', 'stable', 'declining'
-  trendMessage         String?  @map("trend_message")
-  outlierCount         Int      @default(0) @map("outlier_count")
-  normalRunCount       Int      @default(0) @map("normal_run_count")
-  recentResultsJson    Json?    @map("recent_results_json") // Last 10 runs
-  lookupCount          Int      @default(1) @map("lookup_count")
-  createdAt            DateTime @default(now()) @map("created_at")
-  updatedAt            DateTime @updatedAt @map("updated_at")
-  lastLookupAt         DateTime @default(now()) @map("last_lookup_at")
-
-  @@index([athleteId])
-  @@index([lastLookupAt])
-  @@map("parkrun_athletes")
-}
-
-model Po10Athlete {
-  id                 Int      @id @default(autoincrement())
-  athleteId          String   @unique @map("athlete_id")
-  name               String
-  club               String?
-  gender             String?  // 'male' or 'female'
-  ageGroup           String?  @map("age_group")
-  pbsJson            Json?    @map("pbs_json") // PBs by distance
-  overallPercentile  Decimal? @map("overall_percentile") @db.Decimal(5, 2)
-  overallAgeGrade    Decimal? @map("overall_age_grade") @db.Decimal(5, 2)
-  overallAbilityLevel String? @map("overall_ability_level")
-  lookupCount        Int      @default(1) @map("lookup_count")
-  createdAt          DateTime @default(now()) @map("created_at")
-  updatedAt          DateTime @updatedAt @map("updated_at")
-  lastLookupAt       DateTime @default(now()) @map("last_lookup_at")
-
-  @@index([athleteId])
-  @@index([lastLookupAt])
-  @@map("po10_athletes")
-}
-
-model AthleteLookup {
-  id          Int      @id @default(autoincrement())
-  source      String   // 'parkrun' or 'po10'
-  athleteId   String   @map("athlete_id")
-  athleteName String?  @map("athlete_name")
-  lookupAt    DateTime @default(now()) @map("lookup_at")
-  ipAddress   String?  @map("ip_address")
-
-  @@index([source, athleteId])
-  @@index([lookupAt])
-  @@map("athlete_lookups")
+enum AccessTier {
+  FREE
+  PREMIUM
+  PRO
 }

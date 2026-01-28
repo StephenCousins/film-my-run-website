@@ -156,29 +156,29 @@ export default function HowFastAmIPage() {
       case 'declining':
         return <TrendingDown className="w-5 h-5 text-red-500" />;
       default:
-        return <Minus className="w-5 h-5 text-zinc-500" />;
+        return <Minus className="w-5 h-5 text-muted" />;
     }
   };
 
   const getAbilityColor = (level: string) => {
     switch (level) {
       case 'elite':
-        return 'text-purple-400 bg-purple-500/10 border-purple-500/30';
+        return 'text-purple-500 dark:text-purple-400 bg-purple-500/10 border-purple-500/30';
       case 'advanced':
-        return 'text-blue-400 bg-blue-500/10 border-blue-500/30';
+        return 'text-blue-500 dark:text-blue-400 bg-blue-500/10 border-blue-500/30';
       case 'intermediate':
-        return 'text-green-400 bg-green-500/10 border-green-500/30';
+        return 'text-green-500 dark:text-green-400 bg-green-500/10 border-green-500/30';
       case 'novice':
-        return 'text-yellow-400 bg-yellow-500/10 border-yellow-500/30';
+        return 'text-yellow-500 dark:text-yellow-400 bg-yellow-500/10 border-yellow-500/30';
       default:
-        return 'text-zinc-400 bg-zinc-500/10 border-zinc-500/30';
+        return 'text-secondary bg-surface-tertiary border-border';
     }
   };
 
   return (
     <>
       <Header />
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero Section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Video Background */}
@@ -190,8 +190,8 @@ export default function HowFastAmIPage() {
               playsInline
               className="absolute inset-0 w-full h-full object-cover"
             >
-              <source src="/videos/fast-running.webm" type="video/webm" />
-              <source src="/videos/fast-running.mp4" type="video/mp4" />
+              <source src="https://images.filmmyrun.co.uk/videos/fast-running.webm" type="video/webm" />
+              <source src="https://images.filmmyrun.co.uk/videos/fast-running.mp4" type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950" />
           </div>
@@ -211,7 +211,7 @@ export default function HowFastAmIPage() {
                 How Fast Are You?
               </h1>
 
-              <p className="text-lg text-zinc-300 max-w-2xl mx-auto">
+              <p className="text-lg text-zinc-300 max-w-2xl mx-auto dark:text-zinc-300">
                 Find out how your running compares to others. Enter your parkrun or Power of 10 athlete ID
                 to see your percentile ranking, trends, and comparisons.
               </p>
@@ -224,16 +224,16 @@ export default function HowFastAmIPage() {
           <div className="container">
             <div className="max-w-xl mx-auto">
               {/* Tool Card */}
-              <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 sm:p-8">
+              <div className="bg-surface rounded-2xl border border-border p-6 sm:p-8">
                 {/* Tabs */}
                 <div className="flex justify-center mb-6">
-                  <div className="inline-flex bg-zinc-800 rounded-xl p-1">
+                  <div className="inline-flex bg-surface-secondary rounded-xl p-1">
                     <button
                       onClick={() => { setActiveTab('parkrun'); setError(null); }}
                       className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                         activeTab === 'parkrun'
-                          ? 'bg-orange-500 text-white'
-                          : 'text-zinc-400 hover:text-white'
+                          ? 'bg-brand text-white'
+                          : 'text-muted hover:text-foreground'
                       }`}
                     >
                       parkrun
@@ -242,8 +242,8 @@ export default function HowFastAmIPage() {
                       onClick={() => { setActiveTab('po10'); setError(null); }}
                       className={`px-6 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                         activeTab === 'po10'
-                          ? 'bg-orange-500 text-white'
-                          : 'text-zinc-400 hover:text-white'
+                          ? 'bg-brand text-white'
+                          : 'text-muted hover:text-foreground'
                       }`}
                     >
                       Power of 10
@@ -260,13 +260,13 @@ export default function HowFastAmIPage() {
                       onChange={(e) => setAthleteId(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                       placeholder={activeTab === 'parkrun' ? 'Enter parkrun ID (e.g., 123456)' : 'Enter Power of 10 ID'}
-                      className="w-full px-4 py-3.5 bg-zinc-800 border border-zinc-700 rounded-xl text-white placeholder-zinc-500 focus:outline-none focus:border-orange-500 transition-colors"
+                      className="input w-full py-3.5"
                     />
                   </div>
                   <button
                     onClick={handleSearch}
                     disabled={isLoading}
-                    className="px-6 py-3.5 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className="btn-primary px-6 py-3.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
                     {isLoading ? (
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -280,7 +280,7 @@ export default function HowFastAmIPage() {
                 </div>
 
                 {/* Help text */}
-                <p className="text-sm text-zinc-500 mt-4 flex items-center justify-center gap-1">
+                <p className="text-sm text-muted mt-4 flex items-center justify-center gap-1">
                   <Info className="w-4 h-4" />
                   {activeTab === 'parkrun'
                     ? 'Find your ID on your parkrun profile page'
@@ -317,12 +317,12 @@ export default function HowFastAmIPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6"
+                  className="bg-surface rounded-2xl border border-border p-6"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h2 className="text-2xl font-bold text-white">{parkrunData.athlete.name}</h2>
-                      <p className="text-zinc-400">parkrun ID: {parkrunData.athlete.athleteId}</p>
+                      <h2 className="text-2xl font-bold text-foreground">{parkrunData.athlete.name}</h2>
+                      <p className="text-muted">parkrun ID: {parkrunData.athlete.athleteId}</p>
                     </div>
                     {parkrunData.comparison && (
                       <span className={`px-4 py-2 rounded-full text-sm font-medium border ${getAbilityColor(parkrunData.comparison.abilityLevel)}`}>
@@ -332,11 +332,11 @@ export default function HowFastAmIPage() {
                   </div>
 
                   {parkrunData.comparison && (
-                    <p className="text-lg text-zinc-300">{parkrunData.comparison.ratingMessage}</p>
+                    <p className="text-lg text-secondary">{parkrunData.comparison.ratingMessage}</p>
                   )}
 
                   {parkrunData.stale && parkrunData.warning && (
-                    <div className="mt-4 text-sm text-yellow-400 bg-yellow-500/10 rounded-lg px-4 py-2">
+                    <div className="mt-4 text-sm text-yellow-600 dark:text-yellow-400 bg-yellow-500/10 rounded-lg px-4 py-2">
                       Using cached data: {parkrunData.warning}
                     </div>
                   )}
@@ -375,31 +375,31 @@ export default function HowFastAmIPage() {
                 {/* Trend & Age Grade */}
                 {parkrunData.athlete.stats && (
                   <div className="grid lg:grid-cols-2 gap-4">
-                    <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
+                    <div className="bg-surface rounded-xl border border-border p-6">
                       <div className="flex items-center gap-3 mb-3">
                         {getTrendIcon(parkrunData.athlete.stats.trend)}
-                        <h3 className="text-lg font-semibold text-white">Performance Trend</h3>
+                        <h3 className="text-lg font-semibold text-foreground">Performance Trend</h3>
                       </div>
-                      <p className="text-zinc-400">{parkrunData.athlete.stats.trendMessage}</p>
+                      <p className="text-muted">{parkrunData.athlete.stats.trendMessage}</p>
                       {parkrunData.athlete.stats.recentAvgTime && (
-                        <p className="text-sm text-zinc-500 mt-2">
+                        <p className="text-sm text-muted mt-2">
                           Recent average: {parkrunData.athlete.stats.recentAvgTime}
                         </p>
                       )}
                     </div>
 
                     {parkrunData.athlete.stats.avgAgeGrade && (
-                      <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
+                      <div className="bg-surface rounded-xl border border-border p-6">
                         <div className="flex items-center gap-3 mb-3">
-                          <Users className="w-5 h-5 text-orange-500" />
-                          <h3 className="text-lg font-semibold text-white">Age Grading</h3>
+                          <Users className="w-5 h-5 text-brand" />
+                          <h3 className="text-lg font-semibold text-foreground">Age Grading</h3>
                         </div>
                         <div className="flex items-baseline gap-2">
-                          <span className="text-3xl font-bold text-white">{parkrunData.athlete.stats.avgAgeGrade}%</span>
-                          <span className="text-zinc-500">average</span>
+                          <span className="text-3xl font-bold text-foreground">{parkrunData.athlete.stats.avgAgeGrade}%</span>
+                          <span className="text-muted">average</span>
                         </div>
                         {parkrunData.athlete.stats.recentAvgAgeGrade && (
-                          <p className="text-sm text-zinc-500 mt-2">
+                          <p className="text-sm text-muted mt-2">
                             Recent: {parkrunData.athlete.stats.recentAvgAgeGrade}%
                           </p>
                         )}
@@ -410,16 +410,16 @@ export default function HowFastAmIPage() {
 
                 {/* Comparisons */}
                 {parkrunData.comparison && (
-                  <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-6">
-                    <h3 className="text-lg font-semibold text-white mb-4">How You Compare</h3>
+                  <div className="bg-surface rounded-xl border border-border p-6">
+                    <h3 className="text-lg font-semibold text-foreground mb-4">How You Compare</h3>
                     <div className="space-y-3">
                       {parkrunData.comparison.parkrunComparisons.map((comp, i) => (
-                        <div key={i} className="flex items-center justify-between py-2 border-b border-zinc-800 last:border-0">
+                        <div key={i} className="flex items-center justify-between py-2 border-b border-border last:border-0">
                           <div>
-                            <p className="text-white">{comp.name}</p>
-                            <p className="text-sm text-zinc-500">{comp.benchmarkTime}</p>
+                            <p className="text-foreground">{comp.name}</p>
+                            <p className="text-sm text-muted">{comp.benchmarkTime}</p>
                           </div>
-                          <span className={`font-mono ${comp.faster ? 'text-green-400' : 'text-red-400'}`}>
+                          <span className={`font-mono ${comp.faster ? 'text-green-500 dark:text-green-400' : 'text-red-500 dark:text-red-400'}`}>
                             {comp.faster ? '-' : '+'}{comp.differenceStr}
                           </span>
                         </div>
@@ -430,14 +430,14 @@ export default function HowFastAmIPage() {
 
                 {/* Recent Results */}
                 {parkrunData.athlete.recentResults && parkrunData.athlete.recentResults.length > 0 && (
-                  <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
-                    <div className="px-6 py-4 border-b border-zinc-800">
-                      <h3 className="text-lg font-semibold text-white">Recent Runs</h3>
+                  <div className="bg-surface rounded-xl border border-border overflow-hidden">
+                    <div className="px-6 py-4 border-b border-border">
+                      <h3 className="text-lg font-semibold text-foreground">Recent Runs</h3>
                     </div>
                     <div className="overflow-x-auto">
                       <table className="w-full">
                         <thead>
-                          <tr className="text-left text-zinc-500 text-sm border-b border-zinc-800">
+                          <tr className="text-left text-muted text-sm border-b border-border">
                             <th className="px-6 py-3">Date</th>
                             <th className="px-6 py-3">Event</th>
                             <th className="px-6 py-3">Time</th>
@@ -446,16 +446,16 @@ export default function HowFastAmIPage() {
                         </thead>
                         <tbody>
                           {parkrunData.athlete.recentResults.map((result, i) => (
-                            <tr key={i} className="border-b border-zinc-800/50 last:border-0">
-                              <td className="px-6 py-3 text-zinc-400">{result.runDate}</td>
-                              <td className="px-6 py-3 text-white">{result.event}</td>
+                            <tr key={i} className="border-b border-border/50 last:border-0">
+                              <td className="px-6 py-3 text-muted">{result.runDate}</td>
+                              <td className="px-6 py-3 text-foreground">{result.event}</td>
                               <td className="px-6 py-3">
-                                <span className={`font-mono ${result.pb ? 'text-green-400 font-bold' : 'text-white'}`}>
+                                <span className={`font-mono ${result.pb ? 'text-green-500 dark:text-green-400 font-bold' : 'text-foreground'}`}>
                                   {result.time}
                                   {result.pb && ' PB'}
                                 </span>
                               </td>
-                              <td className="px-6 py-3 text-zinc-400">{result.position}</td>
+                              <td className="px-6 py-3 text-muted">{result.position}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -477,22 +477,22 @@ export default function HowFastAmIPage() {
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6"
+                  className="bg-surface rounded-2xl border border-border p-6"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div>
-                      <h2 className="text-2xl font-bold text-white">{po10Data.athlete.name}</h2>
-                      <div className="flex items-center gap-3 text-zinc-400 mt-1">
+                      <h2 className="text-2xl font-bold text-foreground">{po10Data.athlete.name}</h2>
+                      <div className="flex items-center gap-3 text-muted mt-1">
                         {po10Data.athlete.club && <span>{po10Data.athlete.club}</span>}
                         {po10Data.athlete.ageGroup && (
                           <>
-                            <span className="text-zinc-600">•</span>
+                            <span className="text-border">•</span>
                             <span>{po10Data.athlete.ageGroup}</span>
                           </>
                         )}
                         {po10Data.athlete.gender && (
                           <>
-                            <span className="text-zinc-600">•</span>
+                            <span className="text-border">•</span>
                             <span className="capitalize">{po10Data.athlete.gender}</span>
                           </>
                         )}
@@ -503,32 +503,32 @@ export default function HowFastAmIPage() {
                     </span>
                   </div>
 
-                  <p className="text-lg text-zinc-300">{po10Data.stats.ratingMessage}</p>
+                  <p className="text-lg text-secondary">{po10Data.stats.ratingMessage}</p>
 
                   <div className="mt-4 flex items-center gap-2">
-                    <Award className="w-5 h-5 text-orange-500" />
-                    <span className="text-white font-semibold">Overall Percentile:</span>
-                    <span className="text-orange-400 font-mono">Top {Math.round(100 - po10Data.stats.overallPercentile)}%</span>
+                    <Award className="w-5 h-5 text-brand" />
+                    <span className="text-foreground font-semibold">Overall Percentile:</span>
+                    <span className="text-brand font-mono">Top {Math.round(100 - po10Data.stats.overallPercentile)}%</span>
                   </div>
                 </motion.div>
 
                 {/* PBs by Distance */}
-                <div className="bg-zinc-900 rounded-xl border border-zinc-800 overflow-hidden">
-                  <div className="px-6 py-4 border-b border-zinc-800">
-                    <h3 className="text-lg font-semibold text-white">Personal Bests</h3>
+                <div className="bg-surface rounded-xl border border-border overflow-hidden">
+                  <div className="px-6 py-4 border-b border-border">
+                    <h3 className="text-lg font-semibold text-foreground">Personal Bests</h3>
                   </div>
-                  <div className="divide-y divide-zinc-800">
+                  <div className="divide-y divide-border">
                     {po10Data.stats.distances.map((dist) => (
                       <div key={dist.distance} className="px-6 py-4 flex items-center justify-between">
                         <div className="flex items-center gap-4">
-                          <div className="w-24 text-zinc-400">{dist.distanceName}</div>
-                          <div className="font-mono text-xl text-white">{dist.time}</div>
+                          <div className="w-24 text-muted">{dist.distanceName}</div>
+                          <div className="font-mono text-xl text-foreground">{dist.time}</div>
                         </div>
                         <div className="flex items-center gap-4">
                           <span className={`px-3 py-1 rounded-full text-xs font-medium border ${getAbilityColor(dist.abilityLevel)}`}>
                             {dist.abilityLevel}
                           </span>
-                          <span className="text-zinc-400 text-sm w-24 text-right">
+                          <span className="text-muted text-sm w-24 text-right">
                             Top {Math.round(100 - dist.percentile)}%
                           </span>
                         </div>
@@ -546,11 +546,11 @@ export default function HowFastAmIPage() {
           <section className="py-16">
             <div className="container">
               <div className="max-w-md mx-auto text-center">
-                <div className="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Search className="w-10 h-10 text-zinc-600" />
+                <div className="w-20 h-20 bg-surface-secondary rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Search className="w-10 h-10 text-muted" />
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-2">Search for an Athlete</h3>
-                <p className="text-zinc-400">
+                <h3 className="text-xl font-semibold text-foreground mb-2">Search for an Athlete</h3>
+                <p className="text-muted">
                   Enter a {activeTab === 'parkrun' ? 'parkrun' : 'Power of 10'} athlete ID above to see
                   their performance analysis.
                 </p>
@@ -576,13 +576,13 @@ function StatCard({
   subValue?: string;
 }) {
   return (
-    <div className="bg-zinc-900 rounded-xl border border-zinc-800 p-4">
+    <div className="bg-surface rounded-xl border border-border p-4">
       <div className="flex items-center gap-2 mb-2">
         {icon}
-        <span className="text-sm text-zinc-400">{label}</span>
+        <span className="text-sm text-muted">{label}</span>
       </div>
-      <p className="text-2xl font-bold text-white font-mono">{value}</p>
-      {subValue && <p className="text-sm text-zinc-500 mt-1">{subValue}</p>}
+      <p className="text-2xl font-bold text-foreground font-mono">{value}</p>
+      {subValue && <p className="text-sm text-muted mt-1">{subValue}</p>}
     </div>
   );
 }

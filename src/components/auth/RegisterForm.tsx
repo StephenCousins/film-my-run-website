@@ -85,12 +85,12 @@ export default function RegisterForm() {
 
   return (
     <div className="w-full max-w-md mx-auto">
-      <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl border border-zinc-200 dark:border-zinc-800 p-8">
+      <div className="bg-surface rounded-2xl shadow-xl border border-border p-8">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-display font-bold text-zinc-900 dark:text-white">
+          <h1 className="text-2xl font-display font-bold text-foreground">
             Create an account
           </h1>
-          <p className="text-zinc-600 dark:text-zinc-400 mt-2">
+          <p className="text-secondary mt-2">
             Join Film My Run to access all features
           </p>
         </div>
@@ -106,7 +106,7 @@ export default function RegisterForm() {
           type="button"
           onClick={handleGoogleSignIn}
           disabled={isLoading}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded-lg text-zinc-700 dark:text-zinc-300 font-medium hover:bg-zinc-50 dark:hover:bg-zinc-700 transition-colors disabled:opacity-50"
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-surface border border-border rounded-lg text-secondary font-medium hover:bg-surface-secondary transition-colors disabled:opacity-50"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
             <path
@@ -131,10 +131,10 @@ export default function RegisterForm() {
 
         <div className="relative my-6">
           <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-zinc-200 dark:border-zinc-700" />
+            <div className="w-full border-t border-border" />
           </div>
           <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white dark:bg-zinc-900 text-zinc-500">
+            <span className="px-4 bg-surface text-muted">
               or sign up with email
             </span>
           </div>
@@ -145,12 +145,12 @@ export default function RegisterForm() {
           <div>
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+              className="block text-sm font-medium text-secondary mb-1.5"
             >
               Name
             </label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
               <input
                 id="name"
                 type="text"
@@ -159,7 +159,7 @@ export default function RegisterForm() {
                 placeholder="Your name"
                 required
                 minLength={2}
-                className="w-full pl-10 pr-4 py-3 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                className="input w-full pl-10 py-3"
               />
             </div>
           </div>
@@ -167,12 +167,12 @@ export default function RegisterForm() {
           <div>
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+              className="block text-sm font-medium text-secondary mb-1.5"
             >
               Email
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
               <input
                 id="email"
                 type="email"
@@ -180,7 +180,7 @@ export default function RegisterForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="your@email.com"
                 required
-                className="w-full pl-10 pr-4 py-3 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                className="input w-full pl-10 py-3"
               />
             </div>
           </div>
@@ -188,12 +188,12 @@ export default function RegisterForm() {
           <div>
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1.5"
+              className="block text-sm font-medium text-secondary mb-1.5"
             >
               Password
             </label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-zinc-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
               <input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
@@ -201,12 +201,12 @@ export default function RegisterForm() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Create a password"
                 required
-                className="w-full pl-10 pr-12 py-3 bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-lg text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                className="input w-full pl-10 pr-12 py-3"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-foreground"
               >
                 {showPassword ? (
                   <EyeOff className="w-5 h-5" />
@@ -227,7 +227,7 @@ export default function RegisterForm() {
                       className={`flex items-center gap-2 text-xs ${
                         met
                           ? 'text-green-600 dark:text-green-400'
-                          : 'text-zinc-500'
+                          : 'text-muted'
                       }`}
                     >
                       {met ? (
@@ -246,7 +246,7 @@ export default function RegisterForm() {
           <button
             type="submit"
             disabled={isLoading || !allRequirementsMet}
-            className="w-full py-3 bg-orange-500 text-white font-semibold rounded-lg hover:bg-orange-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2 mt-6"
+            className="btn-primary w-full py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 mt-6"
           >
             {isLoading ? (
               <>
@@ -259,23 +259,23 @@ export default function RegisterForm() {
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-zinc-600 dark:text-zinc-400">
+        <p className="mt-6 text-center text-sm text-secondary">
           Already have an account?{' '}
           <Link
             href="/login"
-            className="text-orange-500 hover:text-orange-600 font-medium"
+            className="text-brand hover:text-brand-hover font-medium"
           >
             Sign in
           </Link>
         </p>
 
-        <p className="mt-4 text-center text-xs text-zinc-500">
+        <p className="mt-4 text-center text-xs text-muted">
           By creating an account, you agree to our{' '}
-          <Link href="/terms" className="underline hover:text-orange-500">
+          <Link href="/terms" className="underline hover:text-brand">
             Terms of Service
           </Link>{' '}
           and{' '}
-          <Link href="/privacy" className="underline hover:text-orange-500">
+          <Link href="/privacy" className="underline hover:text-brand">
             Privacy Policy
           </Link>
         </p>

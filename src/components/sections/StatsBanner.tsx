@@ -126,12 +126,12 @@ function StatCard({ value, suffix, label, description, index }: StatCardProps) {
         </div>
 
         {/* Label */}
-        <div className="font-display text-lg font-semibold text-zinc-900 dark:text-white mb-1">
+        <div className="font-display text-lg font-semibold text-foreground mb-1">
           {label}
         </div>
 
         {/* Description */}
-        <div className="text-sm text-zinc-500 dark:text-zinc-400">
+        <div className="text-sm text-muted">
           {description}
         </div>
       </div>
@@ -193,7 +193,7 @@ export default function StatsBanner() {
   return (
     <section
       ref={sectionRef}
-      className="relative py-16 lg:py-20 bg-zinc-100/50 dark:bg-zinc-900/50 overflow-hidden"
+      className="relative py-16 lg:py-20 bg-surface-secondary/50 overflow-hidden"
       style={{ position: 'relative', zIndex: 1 }}
     >
       {/* Subtle background pattern */}
@@ -209,10 +209,10 @@ export default function StatsBanner() {
       <div className="container relative">
         {/* Section header */}
         <div className="text-center mb-12">
-          <h2 className="font-display text-3xl sm:text-4xl font-bold text-zinc-900 dark:text-white mb-3">
+          <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-3">
             By The Numbers
           </h2>
-          <p className="text-zinc-600 dark:text-zinc-400 max-w-lg mx-auto">
+          <p className="text-secondary max-w-lg mx-auto">
             Over a decade of capturing running stories and building tools for the community.
           </p>
         </div>

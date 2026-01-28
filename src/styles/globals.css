@@ -277,3 +277,142 @@
 .gsap-reveal.is-revealed {
   visibility: visible;
 }
+
+/* ============================================
+   ENHANCED BLOG POST STYLES
+   ============================================ */
+
+/* TL;DR Summary Box */
+.tldr-box {
+  @apply bg-gradient-to-br from-brand/10 to-orange-500/5;
+  @apply border-l-4 border-brand;
+  @apply p-6 rounded-r-2xl mb-12;
+}
+
+.tldr-box h4 {
+  @apply font-display text-sm uppercase tracking-widest text-brand mb-3;
+}
+
+.tldr-box p {
+  @apply text-lg text-foreground leading-relaxed mb-0;
+}
+
+/* Pull Quotes */
+.pull-quote {
+  @apply my-16 py-8 px-4 text-center;
+  @apply border-t border-b border-border;
+}
+
+.pull-quote p {
+  @apply font-display text-2xl md:text-3xl lg:text-4xl font-bold;
+  @apply text-foreground leading-tight mb-4;
+}
+
+.pull-quote cite {
+  @apply text-sm text-muted not-italic;
+}
+
+/* Race Timeline */
+.race-timeline {
+  @apply my-12 p-6 bg-surface-secondary rounded-2xl;
+}
+
+.race-timeline h4 {
+  @apply font-display text-lg font-semibold mb-4 text-foreground;
+}
+
+.timeline-item {
+  @apply flex items-start gap-4 py-3 border-b border-border last:border-0;
+}
+
+.timeline-marker {
+  @apply flex-shrink-0 w-12 h-12 rounded-full;
+  @apply bg-brand/10 text-brand;
+  @apply flex items-center justify-center;
+  @apply font-mono text-sm font-bold;
+}
+
+.timeline-content {
+  @apply flex-1;
+}
+
+.timeline-content h5 {
+  @apply font-semibold text-foreground;
+}
+
+.timeline-content p {
+  @apply text-sm text-muted mt-1 mb-0;
+}
+
+/* Stats Grid */
+.stats-grid {
+  @apply grid grid-cols-2 md:grid-cols-4 gap-4 my-12;
+}
+
+.stat-item {
+  @apply bg-surface-secondary p-4 rounded-xl text-center;
+}
+
+.stat-item .value {
+  @apply font-mono text-2xl md:text-3xl font-bold text-brand;
+}
+
+.stat-item .label {
+  @apply text-xs uppercase tracking-wide text-muted mt-1;
+}
+
+/* Chapter Navigation */
+.chapter-nav {
+  @apply sticky top-24 hidden xl:block;
+  @apply p-4 bg-surface rounded-xl border border-border;
+}
+
+.chapter-nav h4 {
+  @apply text-xs uppercase tracking-widest text-muted mb-4;
+}
+
+.chapter-nav a {
+  @apply block py-2 text-sm text-secondary;
+  @apply hover:text-brand transition-colors;
+  @apply border-l-2 border-transparent pl-3;
+}
+
+.chapter-nav a.active {
+  @apply text-brand border-brand;
+}
+
+/* Image Gallery */
+.image-gallery {
+  @apply grid grid-cols-2 gap-4 my-8;
+}
+
+.image-gallery.single {
+  @apply grid-cols-1;
+}
+
+.image-gallery figure {
+  @apply m-0 rounded-xl overflow-hidden;
+}
+
+.image-gallery img {
+  @apply w-full h-full object-cover;
+}
+
+/* Full Width Image */
+.full-width-image {
+  @apply -mx-4 md:-mx-8 lg:-mx-16 my-12;
+}
+
+.full-width-image img {
+  @apply w-full h-auto;
+}
+
+/* Elevation Profile Placeholder */
+.elevation-profile {
+  @apply my-12 p-6 bg-surface-secondary rounded-2xl;
+  @apply h-48 flex items-center justify-center;
+}
+
+.elevation-profile span {
+  @apply text-muted text-sm;
+}

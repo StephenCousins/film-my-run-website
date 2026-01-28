@@ -91,7 +91,7 @@ function VideoModal({ isOpen, onClose, film }: VideoModalProps) {
         <div className="mt-4 text-white">
           <h3 className="font-display text-xl font-bold">{film.title}</h3>
           {film.subtitle && (
-            <p className="text-zinc-400 italic">{film.subtitle}</p>
+            <p className="text-zinc-300 italic">{film.subtitle}</p>
           )}
         </div>
       </div>
@@ -113,7 +113,7 @@ function FilmCard({ film, onPlay, featured = false }: FilmCardProps) {
   return (
     <article
       className={cn(
-        'group relative overflow-hidden rounded-2xl bg-zinc-900 cursor-pointer',
+        'group relative overflow-hidden rounded-2xl bg-surface-secondary cursor-pointer',
         featured ? 'aspect-[16/9]' : 'aspect-video'
       )}
       onClick={() => onPlay(film)}
@@ -225,7 +225,7 @@ function LoadingSkeleton() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {[...Array(6)].map((_, i) => (
-        <div key={i} className="aspect-video bg-zinc-800 rounded-2xl animate-pulse" />
+        <div key={i} className="aspect-video bg-surface-secondary rounded-2xl animate-pulse" />
       ))}
     </div>
   );
@@ -272,20 +272,20 @@ export default function FilmsPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero section */}
         <section className="py-16 lg:py-24">
           <div className="container">
             <div className="max-w-3xl">
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
                 Ultra Race Films
               </h1>
-              <p className="text-lg text-zinc-400">
+              <p className="text-lg text-secondary">
                 Documentary-style race films capturing the spirit of ultra running.
                 From alpine adventures to British classics, these are my ultra marathon journeys.
               </p>
               {!isLoading && films.length > 0 && (
-                <p className="text-sm text-zinc-500 mt-4">
+                <p className="text-sm text-muted mt-4">
                   {films.length} films from my ultra running adventures
                 </p>
               )}
@@ -307,10 +307,10 @@ export default function FilmsPage() {
           <section className="py-12 lg:py-16">
             <div className="container">
               <div className="text-center py-16">
-                <p className="text-zinc-500">{error}</p>
+                <p className="text-muted">{error}</p>
                 <button
                   onClick={() => window.location.reload()}
-                  className="mt-4 px-6 py-2 bg-orange-500 text-white rounded-full hover:bg-orange-600 transition-colors"
+                  className="mt-4 px-6 py-2 bg-brand text-white rounded-full hover:bg-brand-hover transition-colors"
                 >
                   Try again
                 </button>
@@ -323,7 +323,7 @@ export default function FilmsPage() {
         {!isLoading && !error && featuredFilm && (
           <section className="py-12 lg:py-16">
             <div className="container">
-              <span className="text-orange-500 text-sm font-semibold uppercase tracking-wider mb-4 block">
+              <span className="text-brand text-sm font-semibold uppercase tracking-wider mb-4 block">
                 Latest Film
               </span>
               <FilmCard
@@ -339,7 +339,7 @@ export default function FilmsPage() {
         {!isLoading && !error && regularFilms.length > 0 && (
           <section className="py-12 lg:py-16">
             <div className="container">
-              <h2 className="font-display text-2xl font-bold text-white mb-8">
+              <h2 className="font-display text-2xl font-bold text-foreground mb-8">
                 All Films
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -360,26 +360,26 @@ export default function FilmsPage() {
           <section className="py-12 lg:py-16">
             <div className="container">
               <div className="text-center py-16">
-                <p className="text-zinc-500">No films available yet.</p>
+                <p className="text-muted">No films available yet.</p>
               </div>
             </div>
           </section>
         )}
 
         {/* CTA section */}
-        <section className="py-16 lg:py-24 border-t border-zinc-800">
+        <section className="py-16 lg:py-24 border-t border-border">
           <div className="container">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
+              <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 Want Your Race Filmed?
               </h2>
-              <p className="text-zinc-400 mb-8">
+              <p className="text-secondary mb-8">
                 POV race footage, event coverage, or documentary projects.
                 Let's capture your running story.
               </p>
               <Link
                 href="/services"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
+                className="btn-primary inline-flex items-center gap-2 px-8 py-4 rounded-full"
               >
                 View Services
               </Link>

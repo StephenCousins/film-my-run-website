@@ -55,7 +55,7 @@ function ContactForm() {
         <div>
           <label
             htmlFor="name"
-            className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+            className="block text-sm font-medium text-foreground mb-2"
           >
             Name
           </label>
@@ -64,14 +64,14 @@ function ContactForm() {
             id="name"
             name="name"
             required
-            className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+            className="input"
             placeholder="Your name"
           />
         </div>
         <div>
           <label
             htmlFor="email"
-            className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+            className="block text-sm font-medium text-foreground mb-2"
           >
             Email
           </label>
@@ -80,7 +80,7 @@ function ContactForm() {
             id="email"
             name="email"
             required
-            className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+            className="input"
             placeholder="you@example.com"
           />
         </div>
@@ -90,7 +90,7 @@ function ContactForm() {
       <div>
         <label
           htmlFor="subject"
-          className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+          className="block text-sm font-medium text-foreground mb-2"
         >
           Subject
         </label>
@@ -98,7 +98,7 @@ function ContactForm() {
           id="subject"
           name="subject"
           required
-          className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+          className="input"
         >
           <option value="">Select a topic...</option>
           <option value="race-filming">Race Filming Inquiry</option>
@@ -115,30 +115,30 @@ function ContactForm() {
         <div>
           <label
             htmlFor="event-name"
-            className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+            className="block text-sm font-medium text-foreground mb-2"
           >
-            Event Name <span className="text-zinc-500">(optional)</span>
+            Event Name <span className="text-muted">(optional)</span>
           </label>
           <input
             type="text"
             id="event-name"
             name="event-name"
-            className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+            className="input"
             placeholder="e.g., London Marathon"
           />
         </div>
         <div>
           <label
             htmlFor="event-date"
-            className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+            className="block text-sm font-medium text-foreground mb-2"
           >
-            Event Date <span className="text-zinc-500">(optional)</span>
+            Event Date <span className="text-muted">(optional)</span>
           </label>
           <input
             type="date"
             id="event-date"
             name="event-date"
-            className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors"
+            className="input"
           />
         </div>
       </div>
@@ -147,7 +147,7 @@ function ContactForm() {
       <div>
         <label
           htmlFor="message"
-          className="block text-sm font-medium text-zinc-900 dark:text-white mb-2"
+          className="block text-sm font-medium text-foreground mb-2"
         >
           Message
         </label>
@@ -156,7 +156,7 @@ function ContactForm() {
           name="message"
           required
           rows={6}
-          className="w-full px-4 py-3 bg-zinc-100 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-xl text-zinc-900 dark:text-white placeholder:text-zinc-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-colors resize-none"
+          className="input resize-none"
           placeholder="Tell us about your project or question..."
         />
       </div>
@@ -164,7 +164,7 @@ function ContactForm() {
       {/* Submit */}
       <button
         type="submit"
-        className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
+        className="btn-primary w-full sm:w-auto"
       >
         <Send className="w-5 h-5" />
         Send Message
@@ -182,13 +182,13 @@ export default function ContactPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-white dark:bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="/images/films/utmb.jpg"
+              src="https://images.filmmyrun.co.uk/films/utmb.jpg"
               alt="Mountain running"
               fill
               className="object-cover"
@@ -216,7 +216,7 @@ export default function ContactPage() {
         </section>
 
         {/* Contact reasons */}
-        <section className="py-12 bg-white dark:bg-zinc-950 border-b border-zinc-200 dark:border-zinc-800">
+        <section className="py-12 bg-background border-b border-border">
           <div className="container">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {contactReasons.map((reason) => {
@@ -225,15 +225,15 @@ export default function ContactPage() {
                   <Link
                     key={reason.title}
                     href={reason.href}
-                    className="group p-6 bg-zinc-50 dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-zinc-800 hover:border-orange-500/50 transition-all"
+                    className="group p-6 bg-surface-secondary rounded-2xl border border-border hover:border-brand/50 transition-all"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-orange-500/10 flex items-center justify-center mb-4 group-hover:bg-orange-500 group-hover:text-white transition-colors">
-                      <Icon className="w-6 h-6 text-orange-500 group-hover:text-white transition-colors" />
+                    <div className="w-12 h-12 rounded-xl bg-brand/10 flex items-center justify-center mb-4 group-hover:bg-brand group-hover:text-white transition-colors">
+                      <Icon className="w-6 h-6 text-brand group-hover:text-white transition-colors" />
                     </div>
-                    <h3 className="font-display text-lg font-semibold text-zinc-900 dark:text-white mb-1 group-hover:text-orange-500 transition-colors">
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-1 group-hover:text-brand transition-colors">
                       {reason.title}
                     </h3>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="text-sm text-secondary">
                       {reason.description}
                     </p>
                   </Link>
@@ -244,15 +244,15 @@ export default function ContactPage() {
         </section>
 
         {/* Form & Info section */}
-        <section id="form" className="py-16 lg:py-24 bg-white dark:bg-zinc-950">
+        <section id="form" className="py-16 lg:py-24 bg-background">
           <div className="container">
             <div className="grid lg:grid-cols-12 gap-12 lg:gap-20">
               {/* Form */}
               <div className="lg:col-span-7">
-                <h2 className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mb-2">
+                <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-2">
                   Send a Message
                 </h2>
-                <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+                <p className="text-secondary mb-8">
                   Fill out the form below and I'll get back to you within 24 hours.
                 </p>
 
@@ -263,19 +263,19 @@ export default function ContactPage() {
               <div className="lg:col-span-5">
                 <div className="lg:sticky lg:top-28 space-y-8">
                   {/* Direct contact */}
-                  <div className="p-6 bg-zinc-50 dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-transparent">
-                    <h3 className="font-display text-lg font-semibold text-zinc-900 dark:text-white mb-4">
+                  <div className="p-6 bg-surface-secondary rounded-2xl border border-border">
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4">
                       Direct Contact
                     </h3>
                     <div className="space-y-4">
                       <a
                         href="mailto:hello@filmmyrun.co.uk"
-                        className="flex items-center gap-3 text-zinc-600 dark:text-zinc-400 hover:text-orange-500 transition-colors"
+                        className="flex items-center gap-3 text-secondary hover:text-brand transition-colors"
                       >
                         <Mail className="w-5 h-5" />
                         hello@filmmyrun.co.uk
                       </a>
-                      <div className="flex items-center gap-3 text-zinc-600 dark:text-zinc-400">
+                      <div className="flex items-center gap-3 text-secondary">
                         <MapPin className="w-5 h-5" />
                         United Kingdom
                       </div>
@@ -283,8 +283,8 @@ export default function ContactPage() {
                   </div>
 
                   {/* Social media */}
-                  <div className="p-6 bg-zinc-50 dark:bg-zinc-900 rounded-2xl border border-zinc-200 dark:border-transparent">
-                    <h3 className="font-display text-lg font-semibold text-zinc-900 dark:text-white mb-4">
+                  <div className="p-6 bg-surface-secondary rounded-2xl border border-border">
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4">
                       Follow Along
                     </h3>
                     <div className="flex gap-3">
@@ -292,38 +292,38 @@ export default function ContactPage() {
                         href="https://instagram.com/filmmyrun"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 bg-zinc-200 dark:bg-zinc-800 rounded-xl hover:bg-orange-500 hover:text-white transition-colors group"
+                        className="p-3 bg-surface-tertiary rounded-xl hover:bg-brand hover:text-white transition-colors group"
                         aria-label="Instagram"
                       >
-                        <Instagram className="w-5 h-5 text-zinc-600 dark:text-zinc-400 group-hover:text-white transition-colors" />
+                        <Instagram className="w-5 h-5 text-secondary group-hover:text-white transition-colors" />
                       </a>
                       <a
                         href="https://youtube.com/@filmmyrun"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 bg-zinc-200 dark:bg-zinc-800 rounded-xl hover:bg-orange-500 hover:text-white transition-colors group"
+                        className="p-3 bg-surface-tertiary rounded-xl hover:bg-brand hover:text-white transition-colors group"
                         aria-label="YouTube"
                       >
-                        <Youtube className="w-5 h-5 text-zinc-600 dark:text-zinc-400 group-hover:text-white transition-colors" />
+                        <Youtube className="w-5 h-5 text-secondary group-hover:text-white transition-colors" />
                       </a>
                       <a
                         href="https://twitter.com/filmmyrun"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-3 bg-zinc-200 dark:bg-zinc-800 rounded-xl hover:bg-orange-500 hover:text-white transition-colors group"
+                        className="p-3 bg-surface-tertiary rounded-xl hover:bg-brand hover:text-white transition-colors group"
                         aria-label="Twitter"
                       >
-                        <Twitter className="w-5 h-5 text-zinc-600 dark:text-zinc-400 group-hover:text-white transition-colors" />
+                        <Twitter className="w-5 h-5 text-secondary group-hover:text-white transition-colors" />
                       </a>
                     </div>
                   </div>
 
                   {/* Response time */}
-                  <div className="p-6 bg-orange-500/10 rounded-2xl border border-orange-500/20">
-                    <h3 className="font-display text-lg font-semibold text-orange-400 mb-2">
+                  <div className="p-6 bg-brand/10 rounded-2xl border border-brand/20">
+                    <h3 className="font-display text-lg font-semibold text-brand mb-2">
                       Quick Response
                     </h3>
-                    <p className="text-orange-300 text-sm">
+                    <p className="text-secondary text-sm">
                       I typically respond within 24 hours. For urgent filming inquiries,
                       please mention the date in your message.
                     </p>
@@ -335,13 +335,13 @@ export default function ContactPage() {
         </section>
 
         {/* FAQ teaser */}
-        <section className="py-16 bg-zinc-100 dark:bg-zinc-900">
+        <section className="py-16 bg-surface-secondary">
           <div className="container">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-display text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-white mb-4">
+              <h2 className="font-display text-2xl sm:text-3xl font-bold text-foreground mb-4">
                 Frequently Asked Questions
               </h2>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-8">
+              <p className="text-secondary mb-8">
                 Before reaching out, you might find your answer in our FAQ section.
               </p>
 
@@ -362,12 +362,12 @@ export default function ContactPage() {
                 ].map((faq, index) => (
                   <div
                     key={index}
-                    className="p-4 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800"
+                    className="p-4 bg-surface rounded-xl border border-border"
                   >
-                    <h4 className="font-semibold text-zinc-900 dark:text-white mb-2">
+                    <h4 className="font-semibold text-foreground mb-2">
                       {faq.q}
                     </h4>
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    <p className="text-sm text-secondary">
                       {faq.a}
                     </p>
                   </div>

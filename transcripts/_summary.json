@@ -1,0 +1,465 @@
+{
+  "generated": "2026-01-27T15:57:44.168273",
+  "total_races": 76,
+  "results": {
+    "success": [],
+    "failed": [
+      {
+        "race": "Purbeck Marathon",
+        "date": "18/09/2016",
+        "video": "https://youtu.be/Y9r4oyXs0fI",
+        "video_id": "Y9r4oyXs0fI",
+        "error": "Transcripts disabled for this video"
+      },
+      {
+        "race": "Three Forts Challenge",
+        "date": "01/05/2022",
+        "video": "https://youtu.be/aoXWcw0aebc",
+        "video_id": "aoXWcw0aebc",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=aoXWcw0aebc! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Guernsey GU36",
+        "date": "15/05/2022",
+        "video": " https://youtu.be/5L1Ak-0W-9w",
+        "video_id": "5L1Ak-0W-9w",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=5L1Ak-0W-9w! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "UTS 50k",
+        "date": "01/07/2022",
+        "video": "https://youtu.be/v1lZHK5O-2M",
+        "video_id": "v1lZHK5O-2M",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=v1lZHK5O-2M! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Montane Lakeland 100",
+        "date": "29/07/2022",
+        "video": "https://youtu.be/nS3RkFthCjQ",
+        "video_id": "nS3RkFthCjQ",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=nS3RkFthCjQ! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Ben Nevis Ultra",
+        "date": "18/09/2022",
+        "video": "https://youtu.be/tSco2FEgtGQ",
+        "video_id": "tSco2FEgtGQ",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=tSco2FEgtGQ! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Berlin Marathon",
+        "date": "25/09/2022",
+        "video": "https://youtu.be/LVNUEfnaef4",
+        "video_id": "LVNUEfnaef4",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=LVNUEfnaef4! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "London Marathon",
+        "date": "02/10/2022",
+        "video": "https://youtu.be/RWBi6nP2_-g",
+        "video_id": "RWBi6nP2_-g",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=RWBi6nP2_-g! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Beachy Head Marathon",
+        "date": "22/10/2022",
+        "video": "https://youtu.be/OMm2s5Krn0g",
+        "video_id": "OMm2s5Krn0g",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=OMm2s5Krn0g! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Steyning Stinger",
+        "date": "05/03/2023",
+        "video": "https://youtu.be/ts8g5c7MeTQ",
+        "video_id": "ts8g5c7MeTQ",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=ts8g5c7MeTQ! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Paris Marathon",
+        "date": "02/04/2023",
+        "video": "https://youtu.be/EJnq66b8EMI",
+        "video_id": "EJnq66b8EMI",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=EJnq66b8EMI! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Manchester Marathon",
+        "date": "16/04/2023",
+        "video": "https://youtu.be/GJ7ZWyh_8s4",
+        "video_id": "GJ7ZWyh_8s4",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=GJ7ZWyh_8s4! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Thames Path 100",
+        "date": "06/05/2023",
+        "video": "https://youtu.be/GmH6tYCGGto",
+        "video_id": "GmH6tYCGGto",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=GmH6tYCGGto! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "South Downs Way 100",
+        "date": "10/06/2023",
+        "video": "https://youtu.be/y_-_S8F1RT8",
+        "video_id": "y_-_S8F1RT8",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=y_-_S8F1RT8! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "North Downs Way 100",
+        "date": "05/08/2023",
+        "video": "https://youtu.be/zBW2N6W010Q",
+        "video_id": "zBW2N6W010Q",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=zBW2N6W010Q! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "UTMB 100",
+        "date": "01/09/2023",
+        "video": "https://youtu.be/wlqxTfR0HIY",
+        "video_id": "wlqxTfR0HIY",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=wlqxTfR0HIY! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Autumn 100",
+        "date": "14/10/2023",
+        "video": " https://youtu.be/8_QjIg1mtvM",
+        "video_id": "8_QjIg1mtvM",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=8_QjIg1mtvM! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Beachy Head Marathon",
+        "date": "21/10/2023",
+        "video": "https://youtu.be/bb4sqyBMsgY",
+        "video_id": "bb4sqyBMsgY",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=bb4sqyBMsgY! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Steyning Stinger",
+        "date": "03/03/2024",
+        "video": "https://youtu.be/0jkqW2K9tWo",
+        "video_id": "0jkqW2K9tWo",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=0jkqW2K9tWo! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Brighton Marathon",
+        "date": "07/04/2024",
+        "video": "https://youtu.be/9bJeRe8yhX0",
+        "video_id": "9bJeRe8yhX0",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=9bJeRe8yhX0! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "London Marathon",
+        "date": "21/04/2024",
+        "video": "https://youtu.be/ekiELeLWe-k",
+        "video_id": "ekiELeLWe-k",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=ekiELeLWe-k! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Cape Wrath Ultra Day 2",
+        "date": "20/05/2024",
+        "video": "https://youtu.be/Tvl8hEidEUY",
+        "video_id": "Tvl8hEidEUY",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=Tvl8hEidEUY! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Cape Wrath Ultra Day 3",
+        "date": "21/05/2024",
+        "video": "https://youtu.be/y_t_e5BU48k",
+        "video_id": "y_t_e5BU48k",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=y_t_e5BU48k! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Cape Wrath Ultra Day 5",
+        "date": "23/05/2024",
+        "video": "https://youtu.be/ZEmt4terw3g",
+        "video_id": "ZEmt4terw3g",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=ZEmt4terw3g! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Cape Wrath Ultra Day 6",
+        "date": "24/05/2024",
+        "video": "https://youtu.be/JftuLQAt8zk",
+        "video_id": "JftuLQAt8zk",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=JftuLQAt8zk! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Cape Wrath Ultra Day 7",
+        "date": "25/05/2024",
+        "video": "https://youtu.be/3tiOL2ber9w",
+        "video_id": "3tiOL2ber9w",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=3tiOL2ber9w! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "South Downs Way 100",
+        "date": "08/06/2024",
+        "video": "https://youtu.be/aYOvx3-r3aI",
+        "video_id": "aYOvx3-r3aI",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=aYOvx3-r3aI! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Race to the Stones",
+        "date": "13/07/2024",
+        "video": "https://youtu.be/-EwLYHW27WE",
+        "video_id": "-EwLYHW27WE",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=-EwLYHW27WE! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "UTMB - OCC",
+        "date": "29/08/2024",
+        "video": "https://youtu.be/tNg1-W54KCA",
+        "video_id": "tNg1-W54KCA",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=tNg1-W54KCA! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Winter on the Downs",
+        "date": "07/12/2024",
+        "video": "https://youtu.be/hh_1YGIeW8k",
+        "video_id": "hh_1YGIeW8k",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=hh_1YGIeW8k! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Transgrancanaria Classic",
+        "date": "21/02/2025",
+        "video": "https://youtu.be/903vvAwkNjo",
+        "video_id": "903vvAwkNjo",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=903vvAwkNjo! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Brighton Marathon",
+        "date": "06/04/2025",
+        "video": "https://youtu.be/y09TMlAfN9w",
+        "video_id": "y09TMlAfN9w",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=y09TMlAfN9w! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Manchester Marathon",
+        "date": "27/04/2025",
+        "video": "https://youtu.be/CQS1L18B3QU",
+        "video_id": "CQS1L18B3QU",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=CQS1L18B3QU! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Ridgeway Challenge",
+        "date": "31/05/2025",
+        "video": "https://youtu.be/ZsRYukBhiEE",
+        "video_id": "ZsRYukBhiEE",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=ZsRYukBhiEE! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Race to the King",
+        "date": "21/06/2025",
+        "video": "https://youtu.be/DEWQO7utnbk",
+        "video_id": "DEWQO7utnbk",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=DEWQO7utnbk! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Race to the Stones",
+        "date": "12/07/2025",
+        "video": "https://youtu.be/vRZkcZk4lJo",
+        "video_id": "vRZkcZk4lJo",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=vRZkcZk4lJo! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      },
+      {
+        "race": "Hurtwood 50k",
+        "date": "07/12/2025",
+        "video": "https://youtu.be/JEHOhO-AVso",
+        "video_id": "JEHOhO-AVso",
+        "error": "\nCould not retrieve a transcript for the video https://www.youtube.com/watch?v=JEHOhO-AVso! This is most likely caused by:\n\nYouTube is blocking requests from your IP. This usually is due to one of the following reasons:\n- You have done too many requests and your IP has been blocked by YouTube\n- You are doing requests from an IP belonging to a cloud provider (like AWS, Google Cloud Platform, Azure, etc.). Unfortunately, most IPs from cloud providers are blocked by YouTube.\n\nWays to work around this are explained in the \"Working around IP bans\" section of the README (https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).\n\n\nIf you are sure that the described cause is not responsible for this error and that a transcript should be retrievable, please create an issue at https://github.com/jdepoix/youtube-transcript-api/issues. Please add which version of youtube_transcript_api you are using and provide the information needed to replicate the error. Also make sure that there are no open issues which already describe your problem!"
+      }
+    ],
+    "skipped": [
+      {
+        "race": "Three Forts Challenge",
+        "date": "03/05/2015",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/03-05-2015_three-forts-challenge.txt"
+      },
+      {
+        "race": "Phoenix Breakfast Run",
+        "date": "15/02/2016",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/15-02-2016_phoenix-breakfast-run.txt"
+      },
+      {
+        "race": "Weald Ultra 50k",
+        "date": "29/05/2016",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/29-05-2016_weald-ultra-50k.txt"
+      },
+      {
+        "race": "Bad Cow Marathon",
+        "date": "21/08/2016",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/21-08-2016_bad-cow-marathon.txt"
+      },
+      {
+        "race": "Dorchester Marathon",
+        "date": "28/05/2017",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/28-05-2017_dorchester-marathon.txt"
+      },
+      {
+        "race": "Atlantic Coast Challenge Day 1",
+        "date": "06/10/2017",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/06-10-2017_atlantic-coast-challenge-day-1.txt"
+      },
+      {
+        "race": "Atlantic Coast Challenge Day 2",
+        "date": "07/10/2017",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/07-10-2017_atlantic-coast-challenge-day-2.txt"
+      },
+      {
+        "race": "Atlantic Coast Challenge Day 3",
+        "date": "08/10/2017",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/08-10-2017_atlantic-coast-challenge-day-3.txt"
+      },
+      {
+        "race": "Southend Pier Marathon",
+        "date": "11/03/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/11-03-2018_southend-pier-marathon.txt"
+      },
+      {
+        "race": "Paris Marathon",
+        "date": "08/04/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/08-04-2018_paris-marathon.txt"
+      },
+      {
+        "race": "Three Forts Challenge",
+        "date": "06/05/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/06-05-2018_three-forts-challenge.txt"
+      },
+      {
+        "race": "South Downs Way 100",
+        "date": "09/06/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/09-06-2018_south-downs-way-100.txt"
+      },
+      {
+        "race": "Marathon Madness Day 5",
+        "date": "29/06/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/29-06-2018_marathon-madness-day-5.txt"
+      },
+      {
+        "race": "RAT Plague",
+        "date": "11/08/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/11-08-2018_rat-plague.txt"
+      },
+      {
+        "race": "UTMB - CCC",
+        "date": "31/08/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/31-08-2018_utmb-ccc.txt"
+      },
+      {
+        "race": "Crafty Fox Marathon",
+        "date": "08/09/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/08-09-2018_crafty-fox-marathon.txt"
+      },
+      {
+        "race": "Purbeck Marathon",
+        "date": "16/09/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/16-09-2018_purbeck-marathon.txt"
+      },
+      {
+        "race": "Beachy Head Marathon",
+        "date": "27/10/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/27-10-2018_beachy-head-marathon.txt"
+      },
+      {
+        "race": "Mouth to Mouth Marathon",
+        "date": "02/12/2018",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/02-12-2018_mouth-to-mouth-marathon.txt"
+      },
+      {
+        "race": "Arc of Attrition 100",
+        "date": "01/02/2019",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/01-02-2019_arc-of-attrition-100.txt"
+      },
+      {
+        "race": "Guernsey GU36",
+        "date": "19/05/2019",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/19-05-2019_guernsey-gu36.txt"
+      },
+      {
+        "race": "Tenerife Bluetrail",
+        "date": "07/06/2019",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/07-06-2019_tenerife-bluetrail.txt"
+      },
+      {
+        "race": "1066 Ultramarathon",
+        "date": "07/07/2019",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/07-07-2019_1066-ultramarathon.txt"
+      },
+      {
+        "race": "Run Jurassic Ultra",
+        "date": "28/09/2019",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/28-09-2019_run-jurassic-ultra.txt"
+      },
+      {
+        "race": "Gun 31 Guernsey",
+        "date": "17/11/2019",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/17-11-2019_gun-31-guernsey.txt"
+      },
+      {
+        "race": "Centurion CROC 100",
+        "date": "30/05/2020",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/30-05-2020_centurion-croc-100.txt"
+      },
+      {
+        "race": "Vanguard Way Marathon",
+        "date": "02/08/2020",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/02-08-2020_vanguard-way-marathon.txt"
+      },
+      {
+        "race": "Bewl Water Marathon",
+        "date": "19/09/2020",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/19-09-2020_bewl-water-marathon.txt"
+      },
+      {
+        "race": "Virtual London",
+        "date": "04/10/2020",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/04-10-2020_virtual-london.txt"
+      },
+      {
+        "race": "Goodwood Marathon",
+        "date": "06/12/2020",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/06-12-2020_goodwood-marathon.txt"
+      },
+      {
+        "race": "Serpent Trail 100k",
+        "date": "03/07/2021",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/03-07-2021_serpent-trail-100k.txt"
+      },
+      {
+        "race": "Val D'Aran",
+        "date": "09/07/2021",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/09-07-2021_val-daran.txt"
+      },
+      {
+        "race": "Larmer Tree Marathon",
+        "date": "31/07/2021",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/31-07-2021_larmer-tree-marathon.txt"
+      },
+      {
+        "race": "TDS Bourg Saint Mauritz",
+        "date": "24/08/2021",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/24-08-2021_tds-bourg-saint-mauritz.txt"
+      },
+      {
+        "race": "Paris Marathon",
+        "date": "17/10/2021",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/17-10-2021_paris-marathon.txt"
+      },
+      {
+        "race": "Sunrise Ultra",
+        "date": "11/12/2021",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/11-12-2021_sunrise-ultra.txt"
+      },
+      {
+        "race": "Dark Star River Marathon",
+        "date": "06/01/2022",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/06-01-2022_dark-star-river-marathon.txt"
+      },
+      {
+        "race": "Transgrancanaria Classic",
+        "date": "04/03/2022",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/04-03-2022_transgrancanaria-classic.txt"
+      },
+      {
+        "race": "Paris Marathon",
+        "date": "03/04/2022",
+        "file": "/Users/stephencousins/Documents/GitHub/Film-My-Run-Website/new-site/transcripts/03-04-2022_paris-marathon.txt"
+      }
+    ]
+  }
+}

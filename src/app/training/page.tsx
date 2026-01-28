@@ -145,7 +145,7 @@ const testimonials: Testimonial[] = [
   {
     id: '1',
     name: 'Sarah Mitchell',
-    image: '/images/testimonials/sarah.jpg',
+    image: 'https://images.filmmyrun.co.uk/testimonials/sarah.jpg',
     role: 'First-time marathoner',
     quote:
       'The personalized plan took me from barely running 5K to completing my first marathon. The pacing guidance was spot-on.',
@@ -154,7 +154,7 @@ const testimonials: Testimonial[] = [
   {
     id: '2',
     name: 'James Cooper',
-    image: '/images/testimonials/james.jpg',
+    image: 'https://images.filmmyrun.co.uk/testimonials/james.jpg',
     role: 'Sub-3 chaser',
     quote:
       'After years of plateauing, the structured approach helped me finally break 3 hours. The workout variety kept me engaged.',
@@ -163,7 +163,7 @@ const testimonials: Testimonial[] = [
   {
     id: '3',
     name: 'Emma Thompson',
-    image: '/images/testimonials/emma.jpg',
+    image: 'https://images.filmmyrun.co.uk/testimonials/emma.jpg',
     role: 'Ultra runner',
     quote:
       'Adapting the training around my busy schedule was seamless. The app understood that life happens and adjusted accordingly.',

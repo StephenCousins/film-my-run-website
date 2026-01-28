@@ -31,6 +31,12 @@ const nextConfig: NextConfig = {
         hostname: '*.gravatar.com',
         pathname: '/**',
       },
+      // Strava photos (cloudfront CDN)
+      {
+        protocol: 'https',
+        hostname: 'dgtzuqphqg23d.cloudfront.net',
+        pathname: '/**',
+      },
     ],
   },
 
