@@ -35,6 +35,40 @@ This file provides guidance to Claude Code when working with this repository.
 
 ---
 
+## Code Conventions
+
+### Prisma / Database Naming
+
+**CRITICAL: The Prisma schema uses snake_case for ALL model and field names.**
+
+Before writing any database code, check `prisma/schema.prisma` for correct names.
+
+| Type | Convention | Examples |
+|------|------------|----------|
+| **Models** | snake_case, plural | `users`, `posts`, `accounts`, `sessions`, `races` |
+| **Fields** | snake_case | `user_id`, `access_tier`, `featured_image`, `published_at`, `created_at` |
+| **Relations** | snake_case, matches model | `users` (not `user`), `post_terms` (not `terms`) |
+| **Compound keys** | snake_case with underscores | `provider_provider_account_id` |
+
+**When returning data to frontend:**
+- Database access: use snake_case (`post.featured_image`)
+- Returned object properties: use camelCase (`featuredImage: post.featured_image`)
+
+```typescript
+// CORRECT
+const post = await prisma.posts.findUnique({ where: { slug } });
+return {
+  featuredImage: post.featured_image,  // snake_case from DB, camelCase in return
+  publishedAt: post.published_at,
+};
+
+// WRONG - will cause build errors
+const post = await prisma.post.findUnique({ where: { slug } });  // model is 'posts' not 'post'
+return { featuredImage: post.featuredImage };  // field is 'featured_image'
+```
+
+---
+
 ## Design System
 
 ### Brand Colors
