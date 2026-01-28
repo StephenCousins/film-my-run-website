@@ -112,9 +112,9 @@ async function main() {
         title: 'Arc of Attrition 100 | 2019',
         content: arcContent,
         excerpt: "The Arc of Attrition has a way of testing you before you've even started. Snow chaos, marble-sized hailstones, navigation errors in the dark - this is the story of my third attempt at Britain's most brutal 100-miler.",
-        featuredImage: '/images/blog/2019/arc-of-attrition-coastal-path.jpg',
-        readTime: 10,
-        publishedAt: new Date('2019-02-01'),
+        featured_image: '/images/blog/2019/arc-of-attrition-coastal-path.jpg',
+        read_time: 10,
+        published_at: new Date('2019-02-01'),
       },
     });
     console.log('Post updated!');
@@ -125,18 +125,18 @@ async function main() {
         slug: 'arc-of-attrition-100-2019',
         content: arcContent,
         excerpt: "The Arc of Attrition has a way of testing you before you've even started. Snow chaos, marble-sized hailstones, navigation errors in the dark - this is the story of my third attempt at Britain's most brutal 100-miler.",
-        featuredImage: '/images/blog/2019/arc-of-attrition-coastal-path.jpg',
+        featured_image: '/images/blog/2019/arc-of-attrition-coastal-path.jpg',
         status: 'published',
-        postType: 'post',
-        readTime: 10,
-        publishedAt: new Date('2019-02-01'),
+        post_type: 'post',
+        read_time: 10,
+        published_at: new Date('2019-02-01'),
       },
     });
 
     await prisma.post_terms.create({
       data: {
-        postId: post.id,
-        termId: category.id,
+        post_id: post.id,
+        term_id: category.id,
       },
     });
 

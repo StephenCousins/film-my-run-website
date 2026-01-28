@@ -193,7 +193,7 @@ async function migrate() {
   // STEP 4: Extract term taxonomy (category vs tag)
   // ============================================
   console.log('Extracting term taxonomy...');
-  const termTaxonomy = new Map<number, { termId: number; taxonomy: string }>();
+  const termTaxonomy = new Map<number, { term_id: number; taxonomy: string }>();
 
   // Match term_taxonomy patterns
   const taxSection = sql.substring(
@@ -209,7 +209,7 @@ async function migrate() {
     const values = parseTuple(match);
     if (values.length >= 3) {
       termTaxonomy.set(parseInt(values[0]), {
-        termId: parseInt(values[1]),
+        term_id: parseInt(values[1]),
         taxonomy: values[2],
       });
     }
@@ -317,7 +317,7 @@ async function migrate() {
   for (const post of posts) {
     try {
       // Get featured image URL
-      let featuredImage: string | null = null;
+      let featured_image: string | null = null;
       const thumbnailId = thumbnailMap.get(post.ID);
       if (thumbnailId) {
         featuredImage = attachmentUrls.get(thumbnailId) || null;
@@ -329,18 +329,18 @@ async function migrate() {
       // Create post
       const created = await prisma.posts.create({
         data: {
-          wpId: post.ID,
+          wp_id: post.ID,
           title: post.post_title,
           slug: post.post_name,
           content: post.post_content,
           excerpt: post.post_excerpt || null,
-          featuredImage: featuredImage,
+          featured_image: featuredImage,
           status: 'published',
-          postType: 'post',
-          readTime: readTime,
-          publishedAt: new Date(post.post_date),
-          createdAt: new Date(post.post_date),
-          updatedAt: new Date(post.post_modified),
+          post_type: 'post',
+          read_time: readTime,
+          published_at: new Date(post.post_date),
+          created_at: new Date(post.post_date),
+          updated_at: new Date(post.post_modified),
         },
       });
 
@@ -374,8 +374,8 @@ async function migrate() {
       try {
         await prisma.post_terms.create({
           data: {
-            postId: newPostId,
-            termId: newTermId,
+            post_id: newPostId,
+            term_id: newTermId,
           },
         });
         relationCount++;
@@ -398,7 +398,7 @@ async function migrate() {
 
   // List posts with featured images
   const postsWithImages = await prisma.posts.count({
-    where: { featuredImage: { not: null } },
+    where: { featured_image: { not: null } },
   });
   console.log(`Posts with featured images: ${postsWithImages}`);
 }
