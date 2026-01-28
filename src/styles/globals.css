@@ -381,30 +381,72 @@
   @apply text-brand border-brand;
 }
 
-/* Image Gallery */
+/* Image Gallery - Side by side */
 .image-gallery {
-  @apply grid grid-cols-2 gap-4 my-8;
-}
-
-.image-gallery.single {
-  @apply grid-cols-1;
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-4 my-10;
 }
 
 .image-gallery figure {
-  @apply m-0 rounded-xl overflow-hidden;
+  @apply m-0 rounded-2xl overflow-hidden shadow-lg;
+  @apply bg-zinc-900;
 }
 
 .image-gallery img {
-  @apply w-full h-full object-cover;
+  @apply w-full aspect-[4/3] object-cover;
+  @apply transition-transform duration-500 hover:scale-105;
 }
 
-/* Full Width Image */
+.image-gallery figcaption {
+  @apply px-4 py-3 text-sm text-zinc-400 italic;
+}
+
+/* Race Photo - Single image with style */
+.race-photo {
+  @apply my-10 rounded-2xl overflow-hidden;
+  @apply shadow-xl shadow-black/20;
+  @apply border border-zinc-800;
+}
+
+.race-photo img {
+  @apply w-full h-auto;
+}
+
+.race-photo figcaption {
+  @apply px-5 py-4 bg-zinc-900/80 backdrop-blur-sm;
+  @apply text-sm text-zinc-300 italic;
+  @apply border-t border-zinc-800;
+}
+
+/* Photo Float - Image floated to side */
+.photo-float-right {
+  @apply float-right ml-6 mb-4 w-full sm:w-1/2 lg:w-2/5;
+  @apply rounded-xl overflow-hidden shadow-lg;
+  @apply border border-zinc-800;
+}
+
+.photo-float-left {
+  @apply float-left mr-6 mb-4 w-full sm:w-1/2 lg:w-2/5;
+  @apply rounded-xl overflow-hidden shadow-lg;
+  @apply border border-zinc-800;
+}
+
+.photo-float-right img,
+.photo-float-left img {
+  @apply w-full h-auto;
+}
+
+.photo-float-right figcaption,
+.photo-float-left figcaption {
+  @apply px-4 py-2 bg-zinc-900 text-xs text-zinc-400 italic;
+}
+
+/* Legacy full-width - now contained */
 .full-width-image {
-  @apply -mx-4 md:-mx-8 lg:-mx-16 my-12;
+  @apply my-10;
 }
 
 .full-width-image img {
-  @apply w-full h-auto;
+  @apply w-full h-auto rounded-2xl;
 }
 
 /* Elevation Profile Placeholder */
