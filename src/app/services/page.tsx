@@ -89,8 +89,8 @@ export default function ServicesPage() {
               playsInline
               className="absolute inset-0 w-full h-full object-cover"
             >
-              <source src="https://images.filmmyrun.co.uk/videos/services-hero.mp4" type="video/mp4" />
-              <source src="https://images.filmmyrun.co.uk/videos/services-hero.webm" type="video/webm" />
+              <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/services-hero.mp4" type="video/mp4" />
+              <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/services-hero.webm" type="video/webm" />
             </video>
             {/* Gradient overlays */}
             <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-950/60 to-zinc-950" />
@@ -176,7 +176,7 @@ export default function ServicesPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="https://images.filmmyrun.co.uk/services-cta.jpg"
+              src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services-cta.jpg"
               alt="Stephen Cousins filming at a trail running event"
               fill
               className="object-cover"

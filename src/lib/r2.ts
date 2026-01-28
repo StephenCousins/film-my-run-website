@@ -8,7 +8,7 @@ const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID;
 const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID;
 const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY;
 const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME || 'filmmyrun-images';
-const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || 'https://images.filmmyrun.co.uk';
+const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL || 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev';
 
 // Validate required environment variables
 function validateConfig() {
@@ -121,7 +121,7 @@ export function getR2Url(key: string): string {
 /**
  * Convert a local /images/ or /videos/ path to an R2 URL
  * @param localPath - Path like "/images/blog/2018/photo.jpg"
- * @returns R2 URL like "https://images.filmmyrun.co.uk/blog/2018/photo.jpg"
+ * @returns R2 URL like "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/2018/photo.jpg"
  */
 export function localPathToR2Url(localPath: string): string {
   // Remove leading /images/ or /videos/ prefix

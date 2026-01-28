@@ -188,7 +188,7 @@ export default function ContactPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="https://images.filmmyrun.co.uk/films/utmb.jpg"
+              src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/films/utmb.jpg"
               alt="Mountain running"
               fill
               className="object-cover"

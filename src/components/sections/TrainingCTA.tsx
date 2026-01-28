@@ -123,7 +123,7 @@ export default function TrainingCTA() {
       <div className="training-bg absolute inset-0 scale-110">
         <div className="absolute inset-0 bg-zinc-950">
           <Image
-            src="https://images.filmmyrun.co.uk/training-bg.svg"
+            src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/training-bg.svg"
             alt="Runner training"
             fill
             className="object-cover opacity-40"

@@ -22,6 +22,10 @@ import { S3Client, PutObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s
 import * as fs from 'fs';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 // Get directory name in ESM
 const __filename = fileURLToPath(import.meta.url);

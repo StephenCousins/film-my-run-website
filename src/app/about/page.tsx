@@ -58,7 +58,7 @@ export default function AboutPage() {
           {/* Background */}
           <div className="absolute inset-0 bg-zinc-950">
             <Image
-              src="https://images.filmmyrun.co.uk/about-hero.jpg"
+              src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about-hero.jpg"
               alt="Running in the mountains"
               fill
               className="object-cover opacity-40"
@@ -107,7 +107,7 @@ export default function AboutPage() {
               {/* Image */}
               <div className="relative aspect-[4/5] rounded-2xl overflow-hidden">
                 <Image
-                  src="https://images.filmmyrun.co.uk/about/stephen.jpg"
+                  src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about/stephen.jpg"
                   alt="Stephen Cousins"
                   fill
                   className="object-cover"

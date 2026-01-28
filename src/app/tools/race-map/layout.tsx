@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Race Map | Film My Run',
     description: 'Visualize race routes with elevation profiles and markers.',
-    images: ['https://images.filmmyrun.co.uk/og/race-map-og.jpg'],
+    images: ['https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/og/race-map-og.jpg'],
   },
 };
 

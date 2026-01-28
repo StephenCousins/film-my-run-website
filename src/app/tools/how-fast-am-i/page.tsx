@@ -190,8 +190,8 @@ export default function HowFastAmIPage() {
               playsInline
               className="absolute inset-0 w-full h-full object-cover"
             >
-              <source src="https://images.filmmyrun.co.uk/videos/fast-running.webm" type="video/webm" />
-              <source src="https://images.filmmyrun.co.uk/videos/fast-running.mp4" type="video/mp4" />
+              <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/fast-running.webm" type="video/webm" />
+              <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/fast-running.mp4" type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950" />
           </div>

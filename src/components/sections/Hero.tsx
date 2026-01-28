@@ -140,11 +140,11 @@ export default function Hero() {
             'absolute inset-0 w-full h-full object-cover transition-opacity duration-1000',
             isLoaded ? 'opacity-100' : 'opacity-0'
           )}
-          poster="https://images.filmmyrun.co.uk/hero/hero-main.jpg"
+          poster="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/hero/hero-main.jpg"
         >
           {/* Videos hosted on Cloudflare R2 */}
-          <source src="https://images.filmmyrun.co.uk/videos/hero-loop.mp4" type="video/mp4" />
-          <source src="https://images.filmmyrun.co.uk/videos/hero-loop.webm" type="video/webm" />
+          <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/hero-loop.mp4" type="video/mp4" />
+          <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/hero-loop.webm" type="video/webm" />
         </video>
 
         {/* Fallback image while loading */}
@@ -154,7 +154,7 @@ export default function Hero() {
             isLoaded ? 'opacity-0' : 'opacity-100'
           )}
           style={{
-            backgroundImage: 'url(https://images.filmmyrun.co.uk/hero/hero-main.jpg)',
+            backgroundImage: 'url(https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/hero/hero-main.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}

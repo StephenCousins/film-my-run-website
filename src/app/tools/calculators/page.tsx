@@ -378,7 +378,7 @@ export default function CalculatorsPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="https://images.filmmyrun.co.uk/hero/hero-trail.jpg"
+              src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/hero/hero-trail.jpg"
               alt="Trail running"
               fill
               className="object-cover"
@@ -451,7 +451,7 @@ export default function CalculatorsPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="https://images.filmmyrun.co.uk/hero/running-tools-bg.jpg"
+              src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/hero/running-tools-bg.jpg"
               alt="Runners on trail"
               fill
               className="object-cover"

@@ -50,7 +50,7 @@ interface RelatedPost {
 // Default author info
 const defaultAuthor = {
   name: 'Stephen Cousins',
-  avatar: 'https://images.filmmyrun.co.uk/about/stephen-avatar.svg',
+  avatar: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about/stephen-avatar.svg',
   bio: 'Runner, filmmaker, and tool builder. Documenting every mile since 2011.',
 };
 
