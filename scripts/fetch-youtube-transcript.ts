@@ -25,7 +25,7 @@ async function main() {
     console.log('Usage: npx tsx scripts/fetch-youtube-transcript.ts <post-id>');
     console.log('\nFetching list of posts with YouTube videos...\n');
 
-    const posts = await prisma.post.findMany({
+    const posts = await prisma.posts.findMany({
       select: {
         id: true,
         title: true,
@@ -51,7 +51,7 @@ async function main() {
   }
 
   // Fetch specific post
-  const post = await prisma.post.findUnique({
+  const post = await prisma.posts.findUnique({
     where: { id: parseInt(postId) },
     select: {
       id: true,

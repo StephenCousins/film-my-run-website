@@ -53,7 +53,7 @@ async function main() {
   console.log(`Found ${transcripts.length} transcript files\n`);
 
   // Get all posts
-  const posts = await prisma.post.findMany({
+  const posts = await prisma.posts.findMany({
     select: {
       id: true,
       title: true,

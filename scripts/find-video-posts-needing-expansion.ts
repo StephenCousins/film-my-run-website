@@ -1,7 +1,7 @@
 import prisma from '../src/lib/db';
 
 async function main() {
-  const posts = await prisma.post.findMany({
+  const posts = await prisma.posts.findMany({
     select: {
       id: true,
       title: true,
