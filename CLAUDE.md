@@ -18,6 +18,28 @@ This file provides guidance to Claude Code when working with this repository.
 
 ---
 
+## ⚠️ MANDATORY: Blog Post Writing Instructions
+
+**If you are asked to write a blog post, you MUST read the instructions file FIRST.**
+
+```
+BLOG-WRITING-INSTRUCTIONS.md (in this folder)
+```
+
+**DO NOT SKIP THIS STEP.** Previous Claude Code sessions failed because they did not read or follow these instructions. The instructions explain:
+
+- How to use ALL available resources (transcripts, Strava data, photos, research, screenshots)
+- How to learn and replicate Stephen's writing style
+- Why you must NEVER copy transcripts verbatim
+- The exact structure and format required for blog posts
+- Quality checklist to verify before submitting
+
+**The transcript is ONE source of many. It tells you what happened - your job is to WRITE about it in Stephen's voice using original prose.**
+
+Related project tracking: `BLOG-POST-PROJECT.md`
+
+---
+
 ## Tech Stack
 
 | Layer | Technology | Rationale |
@@ -390,6 +412,23 @@ npm run lint
 
 ### Adding a Blog Post (Claude Workflow)
 
+**⚠️ STOP: Read `BLOG-WRITING-INSTRUCTIONS.md` before writing any blog post.**
+
+For races with video footage that need blog posts written:
+1. Claude MUST first read the blog writing instructions
+2. Claude MUST study 2-3 existing blog posts to learn Stephen's writing style
+3. Claude MUST gather ALL available resources:
+   - Transcript (`/transcripts/`)
+   - Strava activity data (WebFetch the Strava URL)
+   - Strava embed code (`/data/strava-embeds.json`)
+   - Race screenshots (`/screenshots/` at project root)
+   - Centurion RD reports (`/data/centurion-reports/`)
+   - Race research (`/data/race-research/`)
+4. Claude writes ORIGINAL prose in Stephen's voice - NEVER copying the transcript
+5. Claude includes all required media (photos, Strava embed, screenshot, YouTube embed)
+6. Claude verifies against the quality checklist before submitting
+
+For posts where Stephen provides content directly:
 1. Stephen provides: Title, content (markdown), images
 2. Claude:
    - Optimizes images and uploads to R2
@@ -408,11 +447,69 @@ npm run lint
 
 ## Key Technical Notes
 
-### Image Handling
-- All images stored in Cloudflare R2
-- URL pattern: `https://images.filmmyrun.co.uk/{year}/{filename}`
-- Automatic WebP conversion via Cloudflare
-- Responsive images with srcset
+### Image Handling - Cloudflare R2
+
+**⚠️ CRITICAL: All images must use the R2 public URL. Never use relative paths or the old WordPress URL.**
+
+**R2 Public URL:** `https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev`
+
+#### URL Patterns
+
+| Image Type | URL Pattern | Example |
+|------------|-------------|---------|
+| **New blog images** | `{R2_URL}/blog/{year}/{filename}` | `https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/2025/race-name-01.jpg` |
+| **Migrated WordPress images** | `{R2_URL}/wp-uploads/{year}/{month}/{filename}` | `https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2021/01/arms-out.jpg` |
+| **Site assets** | `{R2_URL}/{path}` | `https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about/stephen.jpg` |
+
+#### Setting Image Paths for Blog Posts
+
+When creating or updating blog posts in the database:
+
+```typescript
+// ✅ CORRECT - Full R2 URL
+featured_image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/2025/race-name-01.jpg'
+
+// ❌ WRONG - Relative path (will break)
+featured_image: '/images/blog/2025/race-name-01.jpg'
+
+// ❌ WRONG - Old WordPress URL (will break when old site is removed)
+featured_image: 'https://filmmyrun.co.uk/wp-content/uploads/2025/01/image.jpg'
+```
+
+#### In HTML Content
+
+```html
+<!-- ✅ CORRECT -->
+<figure>
+  <img src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/2025/race-photo.jpg" alt="Description" />
+  <figcaption>Caption here</figcaption>
+</figure>
+
+<!-- ❌ WRONG -->
+<img src="/images/blog/2025/race-photo.jpg" />
+```
+
+#### Uploading New Images to R2
+
+1. Place images in `public/images/` locally with proper folder structure
+2. Run the migration script: `node scripts/migrate-images-to-r2.mjs`
+3. Use the R2 URL in your database/content
+
+Or upload manually via Cloudflare dashboard and use the resulting URL.
+
+#### Environment Variables (for scripts)
+
+```
+R2_ACCOUNT_ID=b98afe6a570b46e01a6352f32c02d035
+R2_ACCESS_KEY_ID=<from Cloudflare>
+R2_SECRET_ACCESS_KEY=<from Cloudflare>
+R2_BUCKET_NAME=filmmyrun-images
+R2_PUBLIC_URL=https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev
+```
+
+#### Future: Custom Domain
+
+When DNS is moved to Cloudflare, the R2 bucket can be connected to `images.filmmyrun.co.uk`. At that point, do a find/replace in the database and codebase to update URLs.
 
 ### Animation Performance
 - Use GSAP for scroll animations (hardware accelerated)
@@ -529,4 +626,4 @@ Stephen is not a professional coder. When making changes:
 
 ---
 
-*Last updated: January 23, 2026*
+*Last updated: January 28, 2026*
