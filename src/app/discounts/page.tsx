@@ -20,7 +20,7 @@ const discounts = [
     discount: 'Exclusive Discount',
     description: "I have been a NoblePro ambassador for many years now and treadmill running remains an important part of my weekly running regime. NoblePro make the most affordable and best value smart treadmills on the market today allowing you to connect to third party apps like Zwift or MyWhoosh without the need for any other equipment.",
     url: 'https://zwift.run/noblepro',
-    image: 'https://filmmyrun.co.uk/wp-content/uploads/2025/06/IMG_2508-scaled.png',
+    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2025/06/IMG_2508-scaled.png',
     category: 'Equipment',
   },
   {
@@ -30,7 +30,7 @@ const discounts = [
     discount: 'Exclusive Discount',
     description: "We fell in love with these shirts when we saw our friend Oriel wearing one at a backyard ultra event a few years ago. Since then we have developed a great relationship with this quirky, fun loving company who create amazing looking and great fitting tech shirts for running.",
     url: 'https://flyingburrito.eu',
-    image: 'https://filmmyrun.co.uk/wp-content/uploads/2025/06/IMG_1324-scaled.jpg',
+    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2025/06/IMG_1324-scaled.jpg',
     category: 'Apparel',
   },
   {
@@ -40,7 +40,7 @@ const discounts = [
     discount: '15% Off',
     description: "I have been using Enertor insoles for over 6 years and I put them in almost all my running shoes and even my every day walking shoes. They provide not only comfort but great support allowing you to recover faster, reduce the risk of injury and keep moving for longer.",
     url: 'https://enertor.com',
-    image: 'https://filmmyrun.co.uk/wp-content/uploads/2025/06/IMG_1304-2-scaled.jpg',
+    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2025/06/IMG_1304-2-scaled.jpg',
     category: 'Equipment',
   },
   {
@@ -50,7 +50,7 @@ const discounts = [
     discount: '15% Off',
     description: "I am famously not a fan of gels. However, Protein Rebel's recipe is simple and doesn't upset my stomach. Plus the collagen, magnesium and protein powders provide an easy way to supplement your diet with recovery and muscle building nutrients.",
     url: 'https://www.proteinrebel.com',
-    image: 'https://filmmyrun.co.uk/wp-content/uploads/2025/06/IMG_1707-scaled.jpg',
+    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2025/06/IMG_1707-scaled.jpg',
     category: 'Nutrition',
   },
 ];
@@ -158,7 +158,7 @@ export default function DiscountsPage() {
           {/* Background image */}
           <div className="absolute inset-0">
             <Image
-              src="https://filmmyrun.co.uk/wp-content/uploads/2020/03/transgrancanaria2020-12054-scaled.jpg"
+              src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2020/03/transgrancanaria2020-12054-scaled.jpg"
               alt="Running background"
               fill
               className="object-cover object-bottom"
