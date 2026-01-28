@@ -85,12 +85,12 @@ async function main() {
   console.log('Adding Arc of Attrition blog post...');
 
   // Check if category exists
-  let category = await prisma.term.findFirst({
+  let category = await prisma.terms.findFirst({
     where: { slug: 'race-reports', taxonomy: 'category' },
   });
 
   if (!category) {
-    category = await prisma.term.create({
+    category = await prisma.terms.create({
       data: {
         name: 'Race Reports',
         slug: 'race-reports',
@@ -100,13 +100,13 @@ async function main() {
   }
 
   // Check if post already exists
-  const existing = await prisma.post.findUnique({
+  const existing = await prisma.posts.findUnique({
     where: { slug: 'arc-of-attrition-100-2019' },
   });
 
   if (existing) {
     console.log('Post already exists, updating...');
-    await prisma.post.update({
+    await prisma.posts.update({
       where: { slug: 'arc-of-attrition-100-2019' },
       data: {
         title: 'Arc of Attrition 100 | 2019',
@@ -119,7 +119,7 @@ async function main() {
     });
     console.log('Post updated!');
   } else {
-    const post = await prisma.post.create({
+    const post = await prisma.posts.create({
       data: {
         title: 'Arc of Attrition 100 | 2019',
         slug: 'arc-of-attrition-100-2019',
@@ -133,7 +133,7 @@ async function main() {
       },
     });
 
-    await prisma.postTerm.create({
+    await prisma.post_terms.create({
       data: {
         postId: post.id,
         termId: category.id,

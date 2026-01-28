@@ -276,10 +276,10 @@ async function migrate() {
   // STEP 7: Clear existing data and migrate
   // ============================================
   console.log('Clearing existing data...');
-  await prisma.postTerm.deleteMany();
+  await prisma.post_terms.deleteMany();
   await prisma.media.deleteMany();
-  await prisma.post.deleteMany();
-  await prisma.term.deleteMany();
+  await prisma.posts.deleteMany();
+  await prisma.terms.deleteMany();
   console.log('Existing data cleared.\n');
 
   // Migrate terms
@@ -291,7 +291,7 @@ async function migrate() {
       const term = terms.get(termId);
       if (term && !termIdMap.has(termId)) {
         try {
-          const created = await prisma.term.upsert({
+          const created = await prisma.terms.upsert({
             where: { slug: term.slug },
             update: {},
             create: {
@@ -327,7 +327,7 @@ async function migrate() {
       const readTime = calculateReadTime(post.post_content);
 
       // Create post
-      const created = await prisma.post.create({
+      const created = await prisma.posts.create({
         data: {
           wpId: post.ID,
           title: post.post_title,
@@ -372,7 +372,7 @@ async function migrate() {
       const newTermId = termIdMap.get(taxData.termId)!;
 
       try {
-        await prisma.postTerm.create({
+        await prisma.post_terms.create({
           data: {
             postId: newPostId,
             termId: newTermId,
@@ -397,7 +397,7 @@ async function migrate() {
   console.log(`Relationships created: ${relationCount}`);
 
   // List posts with featured images
-  const postsWithImages = await prisma.post.count({
+  const postsWithImages = await prisma.posts.count({
     where: { featuredImage: { not: null } },
   });
   console.log(`Posts with featured images: ${postsWithImages}`);
