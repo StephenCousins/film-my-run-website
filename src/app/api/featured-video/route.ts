@@ -52,10 +52,10 @@ function getDayOfYear(): number {
 export async function GET() {
   try {
     // Fetch Ultra races with video URLs from 2018 onwards
-    const races = await prisma.race.findMany({
+    const races = await prisma.races.findMany({
       where: {
         type: 'Ultra',
-        videoUrl: {
+        video_url: {
           not: null,
         },
         date: {
@@ -80,11 +80,11 @@ export async function GET() {
     const race = races[selectedIndex];
 
     // Extract YouTube video ID
-    const videoId = extractYouTubeId(race.videoUrl || '');
+    const videoId = extractYouTubeId(race.video_url || '');
 
     if (!videoId) {
       // Fallback to first race with valid video ID
-      const validRace = races.find(r => extractYouTubeId(r.videoUrl || ''));
+      const validRace = races.find(r => extractYouTubeId(r.video_url || ''));
       if (!validRace) {
         return NextResponse.json(
           { ok: false, error: 'No valid video URLs found' },
@@ -101,15 +101,15 @@ export async function GET() {
       video: {
         title: race.event,
         subtitle: race.type || 'Ultra Marathon',
-        description: `Experience the challenge of ${race.event}${race.distanceKm ? ` - ${Number(race.distanceKm)}km` : ''} of incredible trail running.`,
-        videoId: extractYouTubeId(race.videoUrl || ''),
-        thumbnail: `https://img.youtube.com/vi/${extractYouTubeId(race.videoUrl || '')}/hqdefault.jpg`,
+        description: `Experience the challenge of ${race.event}${race.distance_km ? ` - ${Number(race.distance_km)}km` : ''} of incredible trail running.`,
+        videoId: extractYouTubeId(race.video_url || ''),
+        thumbnail: `https://img.youtube.com/vi/${extractYouTubeId(race.video_url || '')}/hqdefault.jpg`,
         year,
         location: race.terrain || 'Trail',
         stats: {
-          distance: race.distanceKm ? `${Number(race.distanceKm)}km` : 'N/A',
+          distance: race.distance_km ? `${Number(race.distance_km)}km` : 'N/A',
           elevation: race.elevation ? `${race.elevation.toLocaleString()}m` : 'N/A',
-          time: race.timeHms || 'N/A',
+          time: race.time_hms || 'N/A',
         },
         // Include all videos count for context
         totalVideos: races.length,

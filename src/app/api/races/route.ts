@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 export async function GET() {
   try {
     // Fetch all races ordered by date descending
-    const races = await prisma.race.findMany({
+    const races = await prisma.races.findMany({
       orderBy: {
         date: 'desc',
       },
@@ -18,25 +18,25 @@ export async function GET() {
       date: race.date?.toISOString().split('T')[0] || null,
       event: race.event,
       type: race.type,
-      distanceKm: race.distanceKm ? Number(race.distanceKm) : null,
-      timeHms: race.timeHms,
-      secs: race.timeSeconds,
+      distance_km: race.distance_km ? Number(race.distance_km) : null,
+      time_hms: race.time_hms,
+      secs: race.time_seconds,
       elev: race.elevation,
       pos: race.position,
       terrain: race.terrain,
-      video: race.videoUrl,
-      strava: race.stravaUrl,
-      results: race.resultsUrl,
+      video: race.video_url,
+      strava: race.strava_url,
+      results: race.results_url,
     }));
 
     // Get top 10 fastest marathons (by time_seconds, ascending)
-    const marathons = await prisma.race.findMany({
+    const marathons = await prisma.races.findMany({
       where: {
         type: 'Marathon',
-        timeSeconds: { not: null },
+        time_seconds: { not: null },
       },
       orderBy: {
-        timeSeconds: 'asc',
+        time_seconds: 'asc',
       },
       take: 10,
     });
@@ -46,19 +46,19 @@ export async function GET() {
       date: race.date?.toISOString().split('T')[0] || null,
       event: race.event,
       type: race.type,
-      distanceKm: race.distanceKm ? Number(race.distanceKm) : null,
-      timeHms: race.timeHms,
-      secs: race.timeSeconds,
+      distance_km: race.distance_km ? Number(race.distance_km) : null,
+      time_hms: race.time_hms,
+      secs: race.time_seconds,
     }));
 
     // Get top 10 longest ultras (by time_seconds, descending - longest time means longest race)
-    const ultras = await prisma.race.findMany({
+    const ultras = await prisma.races.findMany({
       where: {
         type: 'Ultra',
-        timeSeconds: { not: null },
+        time_seconds: { not: null },
       },
       orderBy: {
-        timeSeconds: 'desc',
+        time_seconds: 'desc',
       },
       take: 10,
     });
@@ -68,9 +68,9 @@ export async function GET() {
       date: race.date?.toISOString().split('T')[0] || null,
       event: race.event,
       type: race.type,
-      distanceKm: race.distanceKm ? Number(race.distanceKm) : null,
-      timeHms: race.timeHms,
-      secs: race.timeSeconds,
+      distance_km: race.distance_km ? Number(race.distance_km) : null,
+      time_hms: race.time_hms,
+      secs: race.time_seconds,
     }));
 
     // Get unique years from race dates

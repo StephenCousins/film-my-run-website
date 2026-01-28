@@ -47,17 +47,17 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Please enter your email and password');
         }
 
-        const user = await prisma.user.findUnique({
+        const user = await prisma.users.findUnique({
           where: { email: credentials.email },
         });
 
-        if (!user || !user.passwordHash) {
+        if (!user || !user.password_hash) {
           throw new Error('No account found with this email');
         }
 
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
-          user.passwordHash
+          user.password_hash
         );
 
         if (!isPasswordValid) {
@@ -69,7 +69,7 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.name,
           image: user.image,
-          accessTier: user.accessTier,
+          accessTier: user.access_tier,
         };
       },
     }),
@@ -92,13 +92,13 @@ export const authOptions: NextAuthOptions = {
 
       // For OAuth users, fetch the access tier from DB
       if (account?.provider === 'google' && token.email) {
-        const dbUser = await prisma.user.findUnique({
+        const dbUser = await prisma.users.findUnique({
           where: { email: token.email },
-          select: { id: true, accessTier: true },
+          select: { id: true, access_tier: true },
         });
         if (dbUser) {
           token.id = dbUser.id.toString();
-          token.accessTier = dbUser.accessTier;
+          token.accessTier = dbUser.access_tier;
         }
       }
 

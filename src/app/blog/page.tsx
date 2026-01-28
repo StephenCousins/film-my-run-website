@@ -33,7 +33,7 @@ interface Post {
   slug: string;
   excerpt: string;
   featuredImage: string | null;
-  publishedAt: string;
+  published_at: string;
   readTime: number;
   category: {
     name: string;
@@ -52,18 +52,18 @@ interface Category {
 // ============================================
 
 async function getPosts() {
-  const posts = await prisma.post.findMany({
+  const posts = await prisma.posts.findMany({
     where: {
       status: 'published',
-      postType: 'post',
+      post_type: 'post',
     },
     orderBy: {
-      publishedAt: 'desc',
+      published_at: 'desc',
     },
     include: {
-      terms: {
+      post_terms: {
         include: {
-          term: true,
+          terms: true,
         },
       },
     },
@@ -71,18 +71,18 @@ async function getPosts() {
 
   return posts.map((post) => {
     // Find the first category term, or default
-    const categoryTerm = post.terms.find((pt) => pt.term.taxonomy === 'category');
+    const categoryTerm = post.post_terms.find((pt) => pt.terms.taxonomy === 'category');
 
     return {
       id: post.id.toString(),
       title: post.title,
       slug: post.slug,
       excerpt: post.excerpt || post.content.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
-      featuredImage: post.featuredImage,
-      publishedAt: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
-      readTime: post.readTime,
+      featuredImage: post.featured_image,
+      published_at: post.published_at?.toISOString() || post.created_at.toISOString(),
+      readTime: post.read_time,
       category: categoryTerm
-        ? { name: categoryTerm.term.name, slug: categoryTerm.term.slug }
+        ? { name: categoryTerm.terms.name, slug: categoryTerm.terms.slug }
         : { name: 'Running', slug: 'running' },
     };
   });
@@ -151,7 +151,7 @@ function PostCard({ post, featured = false }: { post: Post; featured?: boolean }
           <div className="flex items-center gap-4 text-xs text-muted mb-3">
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
-              {new Date(post.publishedAt).toLocaleDateString('en-GB', {
+              {new Date(post.published_at).toLocaleDateString('en-GB', {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',

@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
   try {
     // If all params provided, return specific factor
     if (gender && event && age) {
-      const factor = await prisma.ageGradingFactor.findUnique({
+      const factor = await prisma.age_grading_factors.findUnique({
         where: {
           gender_event_age: {
             gender,
@@ -29,13 +29,13 @@ export async function GET(request: NextRequest) {
         event: factor.event,
         age: factor.age,
         factor: Number(factor.factor),
-        openRecord: Number(factor.openRecord),
+        openRecord: Number(factor.open_record),
       });
     }
 
     // If gender and event provided, return all ages for that event
     if (gender && event) {
-      const factors = await prisma.ageGradingFactor.findMany({
+      const factors = await prisma.age_grading_factors.findMany({
         where: { gender, event },
         orderBy: { age: 'asc' },
       });
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Event not found' }, { status: 404 });
       }
 
-      const openRecord = Number(factors[0].openRecord);
+      const openRecord = Number(factors[0].open_record);
       const ageFactors: Record<string, number> = {};
 
       factors.forEach((f) => {
@@ -60,11 +60,11 @@ export async function GET(request: NextRequest) {
     }
 
     // Otherwise, return list of available events
-    const events = await prisma.ageGradingFactor.findMany({
+    const events = await prisma.age_grading_factors.findMany({
       select: {
         gender: true,
         event: true,
-        openRecord: true,
+        open_record: true,
       },
       distinct: ['gender', 'event'],
       orderBy: [{ gender: 'asc' }, { event: 'asc' }],
@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
       }
       grouped[e.gender].push({
         event: e.event,
-        openRecord: Number(e.openRecord),
+        openRecord: Number(e.open_record),
       });
     });
 

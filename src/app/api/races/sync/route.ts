@@ -70,15 +70,15 @@ interface RaceInput {
   date?: string;
   event: string;
   type?: string;
-  distanceKm?: number;
-  timeHms?: string;
-  timeSeconds?: number;
+  distance_km?: number;
+  time_hms?: string;
+  time_seconds?: number;
   elevation?: number;
   position?: string;
   terrain?: string;
-  videoUrl?: string;
-  stravaUrl?: string;
-  resultsUrl?: string;
+  video_url?: string;
+  strava_url?: string;
+  results_url?: string;
 }
 
 // POST /api/races/sync - Bulk import races
@@ -99,11 +99,11 @@ export async function POST(request: NextRequest) {
     const result = await prisma.$transaction(async (tx) => {
       // If replace mode, clear existing data
       if (mode === 'replace') {
-        await tx.race.deleteMany({});
+        await tx.races.deleteMany({});
       }
 
       // Insert new races
-      const created = await tx.race.createMany({
+      const created = await tx.races.createMany({
         data: races
           .filter((race) => race.event) // Ensure event is present
           .map((race) => {
@@ -112,15 +112,16 @@ export async function POST(request: NextRequest) {
               date: date || new Date(), // Default to now if no date
               event: race.event,
               type: race.type || null,
-              distanceKm: race.distanceKm || null,
-              timeHms: race.timeHms || null,
-              timeSeconds: race.timeSeconds || parseTimeToSeconds(race.timeHms || null),
+              distance_km: race.distance_km || null,
+              time_hms: race.time_hms || null,
+              time_seconds: race.time_seconds || parseTimeToSeconds(race.time_hms || null),
               elevation: race.elevation || null,
               position: race.position || null,
               terrain: race.terrain || null,
-              videoUrl: extractUrl(race.videoUrl || null),
-              stravaUrl: extractUrl(race.stravaUrl || null),
-              resultsUrl: extractUrl(race.resultsUrl || null),
+              video_url: extractUrl(race.video_url || null),
+              strava_url: extractUrl(race.strava_url || null),
+              results_url: extractUrl(race.results_url || null),
+              updated_at: new Date(),
             };
           }),
       });
@@ -149,7 +150,7 @@ export async function DELETE(request: NextRequest) {
   }
 
   try {
-    const result = await prisma.race.deleteMany({});
+    const result = await prisma.races.deleteMany({});
 
     return NextResponse.json({
       ok: true,

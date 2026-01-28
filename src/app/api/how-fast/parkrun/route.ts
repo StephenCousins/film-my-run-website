@@ -25,7 +25,7 @@ interface ParkrunResult {
   runNumber: string;
   position: string;
   time: string;
-  timeSeconds: number | null;
+  time_seconds: number | null;
   ageGrade: string | null;
   pb: boolean;
 }
@@ -39,21 +39,21 @@ interface AthleteStats {
   worstTime: string;
   medianSeconds: number;
   medianTime: string;
-  totalRuns: number;
-  pbEvent: string;
-  pbDate: string;
-  pbAge: string;
-  outlierCount: number;
-  normalRunCount: number;
-  typicalAvgSeconds: number;
+  total_runs: number;
+  pb_event: string;
+  pb_date: string;
+  pb_age: string;
+  outlier_count: number;
+  normal_run_count: number;
+  typical_avg_seconds: number;
   typicalAvgTime: string;
-  recentAvgSeconds: number | null;
+  recent_avg_seconds: number | null;
   recentAvgTime: string | null;
   trend: string;
-  trendMessage: string;
+  trend_message: string;
   trendDiffSeconds: number;
-  avgAgeGrade: number | null;
-  recentAvgAgeGrade: number | null;
+  avg_age_grade: number | null;
+  recent_avg_age_grade: number | null;
 }
 
 // Validate athlete ID
@@ -80,8 +80,8 @@ function validateAthleteId(id: string): { valid: boolean; error?: string; saniti
 }
 
 // Fetch HTML from parkrun (with optional ScraperAPI proxy)
-async function fetchParkrunPage(athleteId: string): Promise<string> {
-  const targetUrl = `${PARKRUN_BASE_URL}/${athleteId}/all/`;
+async function fetchParkrunPage(athlete_id: string): Promise<string> {
+  const targetUrl = `${PARKRUN_BASE_URL}/${athlete_id}/all/`;
 
   let fetchUrl = targetUrl;
 
@@ -100,7 +100,7 @@ async function fetchParkrunPage(athleteId: string): Promise<string> {
   }
 
   if (response.status === 404) {
-    throw new Error(`Athlete ID ${athleteId} not found.`);
+    throw new Error(`Athlete ID ${athlete_id} not found.`);
   }
 
   if (!response.ok) {
@@ -111,7 +111,7 @@ async function fetchParkrunPage(athleteId: string): Promise<string> {
 }
 
 // Parse the athlete page HTML
-function parseAthletePage(html: string, athleteId: string): {
+function parseAthletePage(html: string, athlete_id: string): {
   name: string;
   results: ParkrunResult[];
   error?: string;
@@ -159,16 +159,16 @@ function parseAthletePage(html: string, athleteId: string): {
 
     if (cells.length >= 5) {
       const time = $(cells[4]).text().trim();
-      const timeSeconds = parseTimeToSeconds(time);
+      const time_seconds = parseTimeToSeconds(time);
 
-      if (timeSeconds) {
+      if (time_seconds) {
         results.push({
           event: $(cells[0]).text().trim(),
           runDate: $(cells[1]).text().trim(),
           runNumber: $(cells[2]).text().trim(),
           position: $(cells[3]).text().trim(),
           time,
-          timeSeconds,
+          time_seconds,
           ageGrade: cells.length > 5 ? $(cells[5]).text().trim() : null,
           pb: $(row).text().includes('PB') || $(row).text().includes('New PB!'),
         });
@@ -183,7 +183,7 @@ function parseAthletePage(html: string, athleteId: string): {
 function calculateStats(results: ParkrunResult[]): AthleteStats | null {
   if (!results.length) return null;
 
-  const times = results.map(r => r.timeSeconds).filter((t): t is number => t !== null);
+  const times = results.map(r => r.time_seconds).filter((t): t is number => t !== null);
 
   if (!times.length) return null;
 
@@ -200,50 +200,50 @@ function calculateStats(results: ParkrunResult[]): AthleteStats | null {
 
   // Find PB and worst run
   const pbRun = results.reduce((best, r) =>
-    (r.timeSeconds && (!best.timeSeconds || r.timeSeconds < best.timeSeconds)) ? r : best
+    (r.time_seconds && (!best.time_seconds || r.time_seconds < best.time_seconds)) ? r : best
   );
   const worstRun = results.reduce((worst, r) =>
-    (r.timeSeconds && (!worst.timeSeconds || r.timeSeconds > worst.timeSeconds)) ? r : worst
+    (r.time_seconds && (!worst.time_seconds || r.time_seconds > worst.time_seconds)) ? r : worst
   );
 
   // Outlier detection (times > 1.5x median)
   const outlierThreshold = medianSeconds * 1.5;
-  const normalRuns = results.filter(r => r.timeSeconds && r.timeSeconds <= outlierThreshold);
-  const outliers = results.filter(r => r.timeSeconds && r.timeSeconds > outlierThreshold);
+  const normalRuns = results.filter(r => r.time_seconds && r.time_seconds <= outlierThreshold);
+  const outliers = results.filter(r => r.time_seconds && r.time_seconds > outlierThreshold);
 
   // Typical stats (excluding outliers)
-  const normalTimes = normalRuns.map(r => r.timeSeconds).filter((t): t is number => t !== null);
-  const typicalAvgSeconds = normalTimes.length > 0
+  const normalTimes = normalRuns.map(r => r.time_seconds).filter((t): t is number => t !== null);
+  const typical_avg_seconds = normalTimes.length > 0
     ? Math.round(normalTimes.reduce((a, b) => a + b, 0) / normalTimes.length)
     : avgSeconds;
 
   // Recent form (last 20 runs, excluding outliers)
   const recentRuns = results.slice(0, 20);
-  const recentNormal = recentRuns.filter(r => r.timeSeconds && r.timeSeconds <= outlierThreshold);
-  const recentTimes = recentNormal.map(r => r.timeSeconds).filter((t): t is number => t !== null);
-  const recentAvgSeconds = recentTimes.length > 0
+  const recentNormal = recentRuns.filter(r => r.time_seconds && r.time_seconds <= outlierThreshold);
+  const recentTimes = recentNormal.map(r => r.time_seconds).filter((t): t is number => t !== null);
+  const recent_avg_seconds = recentTimes.length > 0
     ? Math.round(recentTimes.reduce((a, b) => a + b, 0) / recentTimes.length)
     : null;
 
   // Historical (runs older than last 20)
   const olderRuns = results.slice(20);
-  const olderNormal = olderRuns.filter(r => r.timeSeconds && r.timeSeconds <= outlierThreshold);
-  const olderTimes = olderNormal.map(r => r.timeSeconds).filter((t): t is number => t !== null);
+  const olderNormal = olderRuns.filter(r => r.time_seconds && r.time_seconds <= outlierThreshold);
+  const olderTimes = olderNormal.map(r => r.time_seconds).filter((t): t is number => t !== null);
   const olderAvgSeconds = olderTimes.length > 0
     ? Math.round(olderTimes.reduce((a, b) => a + b, 0) / olderTimes.length)
     : null;
 
   // Trend analysis
-  const trend = calculateTrend(recentAvgSeconds, olderAvgSeconds, medianSeconds);
+  const trend = calculateTrend(recent_avg_seconds, olderAvgSeconds, medianSeconds);
 
   // Calculate PB age
-  const pbAge = calculateTimeAgo(pbRun.runDate);
+  const pb_age = calculateTimeAgo(pbRun.runDate);
 
   // Age grades
   const ageGrades = results
     .map(r => r.ageGrade ? parseFloat(r.ageGrade.replace('%', '')) : null)
     .filter((ag): ag is number => ag !== null && !isNaN(ag));
-  const avgAgeGrade = ageGrades.length > 0
+  const avg_age_grade = ageGrades.length > 0
     ? Math.round((ageGrades.reduce((a, b) => a + b, 0) / ageGrades.length) * 10) / 10
     : null;
 
@@ -251,7 +251,7 @@ function calculateStats(results: ParkrunResult[]): AthleteStats | null {
   const recentAgeGrades = recentNormal.slice(0, 10)
     .map(r => r.ageGrade ? parseFloat(r.ageGrade.replace('%', '')) : null)
     .filter((ag): ag is number => ag !== null && !isNaN(ag));
-  const recentAvgAgeGrade = recentAgeGrades.length > 0
+  const recent_avg_age_grade = recentAgeGrades.length > 0
     ? Math.round((recentAgeGrades.reduce((a, b) => a + b, 0) / recentAgeGrades.length) * 10) / 10
     : null;
 
@@ -264,21 +264,21 @@ function calculateStats(results: ParkrunResult[]): AthleteStats | null {
     worstTime: secondsToTimeStr(worstSeconds),
     medianSeconds,
     medianTime: secondsToTimeStr(medianSeconds),
-    totalRuns: results.length,
-    pbEvent: pbRun.event,
-    pbDate: pbRun.runDate,
-    pbAge,
-    outlierCount: outliers.length,
-    normalRunCount: normalRuns.length,
-    typicalAvgSeconds,
-    typicalAvgTime: secondsToTimeStr(typicalAvgSeconds),
-    recentAvgSeconds,
-    recentAvgTime: recentAvgSeconds ? secondsToTimeStr(recentAvgSeconds) : null,
+    total_runs: results.length,
+    pb_event: pbRun.event,
+    pb_date: pbRun.runDate,
+    pb_age,
+    outlier_count: outliers.length,
+    normal_run_count: normalRuns.length,
+    typical_avg_seconds,
+    typicalAvgTime: secondsToTimeStr(typical_avg_seconds),
+    recent_avg_seconds,
+    recentAvgTime: recent_avg_seconds ? secondsToTimeStr(recent_avg_seconds) : null,
     trend: trend.direction,
-    trendMessage: trend.message,
+    trend_message: trend.message,
     trendDiffSeconds: trend.diffSeconds,
-    avgAgeGrade,
-    recentAvgAgeGrade,
+    avg_age_grade,
+    recent_avg_age_grade,
   };
 }
 
@@ -352,10 +352,10 @@ function calculateTimeAgo(dateStr: string): string {
 
 // Main handler
 export async function GET(request: NextRequest) {
-  const athleteId = request.nextUrl.searchParams.get('id');
+  const athlete_id = request.nextUrl.searchParams.get('id');
 
   // Validate
-  const validation = validateAthleteId(athleteId || '');
+  const validation = validateAthleteId(athlete_id || '');
   if (!validation.valid) {
     return NextResponse.json({ ok: false, error: validation.error }, { status: 400 });
   }
@@ -364,36 +364,36 @@ export async function GET(request: NextRequest) {
 
   try {
     // Check cache first
-    const cached = await prisma.parkrunAthlete.findUnique({
-      where: { athleteId: id },
+    const cached = await prisma.parkrun_athletes.findUnique({
+      where: { athlete_id: id },
     });
 
     const cacheAge = cached
-      ? (Date.now() - new Date(cached.updatedAt).getTime()) / (1000 * 60 * 60)
+      ? (Date.now() - new Date(cached.updated_at).getTime()) / (1000 * 60 * 60)
       : Infinity;
 
     // Return cached if fresh enough
     if (cached && cacheAge < CACHE_HOURS) {
       // Update lookup count
-      await prisma.parkrunAthlete.update({
-        where: { athleteId: id },
+      await prisma.parkrun_athletes.update({
+        where: { athlete_id: id },
         data: {
-          lookupCount: { increment: 1 },
-          lastLookupAt: new Date(),
+          lookup_count: { increment: 1 },
+          last_lookup_at: new Date(),
         },
       });
 
       // Log lookup
-      await prisma.athleteLookup.create({
+      await prisma.athlete_lookups.create({
         data: {
           source: 'parkrun',
-          athleteId: id,
-          athleteName: cached.name,
+          athlete_id: id,
+          athlete_name: cached.name,
         },
       });
 
       const comparison = getFullComparison(
-        cached.typicalAvgSeconds || cached.averageTimeSeconds || 0,
+        cached.typical_avg_seconds || cached.average_time_seconds || 0,
         undefined,
         undefined,
         '5k'
@@ -404,28 +404,28 @@ export async function GET(request: NextRequest) {
         cached: true,
         athlete: {
           name: cached.name,
-          athleteId: id,
-          totalRuns: cached.totalRuns,
+          athlete_id: id,
+          total_runs: cached.total_runs,
           stats: {
-            bestSeconds: cached.bestTimeSeconds,
-            bestTime: cached.bestTimeSeconds ? secondsToTimeStr(cached.bestTimeSeconds) : null,
-            averageSeconds: cached.averageTimeSeconds,
-            averageTime: cached.averageTimeSeconds ? secondsToTimeStr(cached.averageTimeSeconds) : null,
-            typicalAvgSeconds: cached.typicalAvgSeconds,
-            typicalAvgTime: cached.typicalAvgSeconds ? secondsToTimeStr(cached.typicalAvgSeconds) : null,
-            recentAvgSeconds: cached.recentAvgSeconds,
-            recentAvgTime: cached.recentAvgSeconds ? secondsToTimeStr(cached.recentAvgSeconds) : null,
-            pbEvent: cached.pbEvent,
-            pbDate: cached.pbDate,
-            pbAge: cached.pbAge,
+            bestSeconds: cached.best_time_seconds,
+            bestTime: cached.best_time_seconds ? secondsToTimeStr(cached.best_time_seconds) : null,
+            averageSeconds: cached.average_time_seconds,
+            averageTime: cached.average_time_seconds ? secondsToTimeStr(cached.average_time_seconds) : null,
+            typical_avg_seconds: cached.typical_avg_seconds,
+            typicalAvgTime: cached.typical_avg_seconds ? secondsToTimeStr(cached.typical_avg_seconds) : null,
+            recent_avg_seconds: cached.recent_avg_seconds,
+            recentAvgTime: cached.recent_avg_seconds ? secondsToTimeStr(cached.recent_avg_seconds) : null,
+            pb_event: cached.pb_event,
+            pb_date: cached.pb_date,
+            pb_age: cached.pb_age,
             trend: cached.trend,
-            trendMessage: cached.trendMessage,
-            avgAgeGrade: cached.avgAgeGrade ? Number(cached.avgAgeGrade) : null,
-            recentAvgAgeGrade: cached.recentAvgAgeGrade ? Number(cached.recentAvgAgeGrade) : null,
-            outlierCount: cached.outlierCount,
-            normalRunCount: cached.normalRunCount,
+            trend_message: cached.trend_message,
+            avg_age_grade: cached.avg_age_grade ? Number(cached.avg_age_grade) : null,
+            recent_avg_age_grade: cached.recent_avg_age_grade ? Number(cached.recent_avg_age_grade) : null,
+            outlier_count: cached.outlier_count,
+            normal_run_count: cached.normal_run_count,
           },
-          recentResults: cached.recentResultsJson,
+          recentResults: cached.recent_results_json,
         },
         comparison,
       });
@@ -445,8 +445,8 @@ export async function GET(request: NextRequest) {
           warning: parseError,
           athlete: {
             name: cached.name,
-            athleteId: id,
-            totalRuns: cached.totalRuns,
+            athlete_id: id,
+            total_runs: cached.total_runs,
           },
         });
       }
@@ -464,67 +464,69 @@ export async function GET(request: NextRequest) {
     }
 
     // Save to cache
-    await prisma.parkrunAthlete.upsert({
-      where: { athleteId: id },
+    await prisma.parkrun_athletes.upsert({
+      where: { athlete_id: id },
       create: {
-        athleteId: id,
+        athlete_id: id,
         name,
-        totalRuns: results.length,
-        bestTimeSeconds: stats.bestSeconds,
-        averageTimeSeconds: stats.averageSeconds,
-        typicalAvgSeconds: stats.typicalAvgSeconds,
-        recentAvgSeconds: stats.recentAvgSeconds,
-        avgAgeGrade: stats.avgAgeGrade,
-        recentAvgAgeGrade: stats.recentAvgAgeGrade,
-        pbDate: stats.pbDate,
-        pbEvent: stats.pbEvent,
-        pbAge: stats.pbAge,
+        total_runs: results.length,
+        best_time_seconds: stats.bestSeconds,
+        average_time_seconds: stats.averageSeconds,
+        typical_avg_seconds: stats.typical_avg_seconds,
+        recent_avg_seconds: stats.recent_avg_seconds,
+        avg_age_grade: stats.avg_age_grade,
+        recent_avg_age_grade: stats.recent_avg_age_grade,
+        pb_date: stats.pb_date,
+        pb_event: stats.pb_event,
+        pb_age: stats.pb_age,
         trend: stats.trend,
-        trendMessage: stats.trendMessage,
-        outlierCount: stats.outlierCount,
-        normalRunCount: stats.normalRunCount,
-        recentResultsJson: JSON.parse(JSON.stringify(results.slice(0, 10))),
+        trend_message: stats.trend_message,
+        outlier_count: stats.outlier_count,
+        normal_run_count: stats.normal_run_count,
+        recent_results_json: JSON.parse(JSON.stringify(results.slice(0, 10))),
+        updated_at: new Date(),
       },
       update: {
         name,
-        totalRuns: results.length,
-        bestTimeSeconds: stats.bestSeconds,
-        averageTimeSeconds: stats.averageSeconds,
-        typicalAvgSeconds: stats.typicalAvgSeconds,
-        recentAvgSeconds: stats.recentAvgSeconds,
-        avgAgeGrade: stats.avgAgeGrade,
-        recentAvgAgeGrade: stats.recentAvgAgeGrade,
-        pbDate: stats.pbDate,
-        pbEvent: stats.pbEvent,
-        pbAge: stats.pbAge,
+        total_runs: results.length,
+        best_time_seconds: stats.bestSeconds,
+        average_time_seconds: stats.averageSeconds,
+        typical_avg_seconds: stats.typical_avg_seconds,
+        recent_avg_seconds: stats.recent_avg_seconds,
+        avg_age_grade: stats.avg_age_grade,
+        recent_avg_age_grade: stats.recent_avg_age_grade,
+        pb_date: stats.pb_date,
+        pb_event: stats.pb_event,
+        pb_age: stats.pb_age,
         trend: stats.trend,
-        trendMessage: stats.trendMessage,
-        outlierCount: stats.outlierCount,
-        normalRunCount: stats.normalRunCount,
-        recentResultsJson: JSON.parse(JSON.stringify(results.slice(0, 10))),
-        lookupCount: { increment: 1 },
-        lastLookupAt: new Date(),
+        trend_message: stats.trend_message,
+        outlier_count: stats.outlier_count,
+        normal_run_count: stats.normal_run_count,
+        recent_results_json: JSON.parse(JSON.stringify(results.slice(0, 10))),
+        lookup_count: { increment: 1 },
+        last_lookup_at: new Date(),
+        updated_at: new Date(),
       },
     });
 
     // Log lookup
-    await prisma.athleteLookup.create({
+    await prisma.athlete_lookups.create({
       data: {
         source: 'parkrun',
-        athleteId: id,
-        athleteName: name,
+        athlete_id: id,
+        athlete_name: name,
       },
     });
 
-    const comparison = getFullComparison(stats.typicalAvgSeconds, undefined, undefined, '5k');
+    const comparison = getFullComparison(stats.typical_avg_seconds, undefined, undefined, '5k');
 
     return NextResponse.json({
       ok: true,
       cached: false,
       athlete: {
         name,
-        athleteId: id,
-        totalRuns: results.length,
+        athlete_id: id,
+        total_runs: results.length,
         stats,
         recentResults: results.slice(0, 10),
       },
@@ -534,8 +536,8 @@ export async function GET(request: NextRequest) {
     console.error('Parkrun scraper error:', error);
 
     // Try to return stale cache if available
-    const cached = await prisma.parkrunAthlete.findUnique({
-      where: { athleteId: id },
+    const cached = await prisma.parkrun_athletes.findUnique({
+      where: { athlete_id: id },
     }).catch(() => null);
 
     if (cached) {
@@ -546,8 +548,8 @@ export async function GET(request: NextRequest) {
         warning: error instanceof Error ? error.message : 'Failed to fetch fresh data',
         athlete: {
           name: cached.name,
-          athleteId: id,
-          totalRuns: cached.totalRuns,
+          athlete_id: id,
+          total_runs: cached.total_runs,
         },
       });
     }

@@ -16,7 +16,7 @@ interface BlogPost {
   excerpt: string;
   slug: string;
   featuredImage: string | null;
-  publishedAt: string;
+  published_at: string;
   readTime: number;
   category: {
     name: string;
@@ -69,7 +69,7 @@ function PostCard({ post, featured = false }: PostCardProps) {
           <div className="flex items-center gap-4 text-xs text-muted mb-3">
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
-              {new Date(post.publishedAt).toLocaleDateString('en-GB', {
+              {new Date(post.published_at).toLocaleDateString('en-GB', {
                 day: 'numeric',
                 month: 'short',
                 year: 'numeric',

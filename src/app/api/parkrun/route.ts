@@ -227,7 +227,7 @@ function buildAchievements(
 
   speedMilestones.forEach(milestone => {
     const earned = metadata.personalBest <= milestone.time;
-    const pbDate = earned
+    const pb_date = earned
       ? pbProgression.find(p => p.time_seconds <= milestone.time)?.date
       : undefined;
 
@@ -237,7 +237,7 @@ function buildAchievements(
       description: `Run a parkrun in under ${milestone.time / 60} minutes`,
       icon: milestone.icon,
       earned,
-      earnedDate: pbDate,
+      earnedDate: pb_date,
       category: 'speed',
     });
   });

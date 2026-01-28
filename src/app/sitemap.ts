@@ -26,19 +26,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // TODO: Add dynamic blog posts from database
-  // const posts = await prisma.post.findMany({ select: { slug: true, updatedAt: true } });
+  // const posts = await prisma.posts.findMany({ select: { slug: true, updated_at: true } });
   // const blogRoutes = posts.map((post) => ({
   //   url: `${baseUrl}/blog/${post.slug}`,
-  //   lastModified: post.updatedAt,
+  //   lastModified: post.updated_at,
   //   changeFrequency: 'monthly' as const,
   //   priority: 0.7,
   // }));
 
   // TODO: Add dynamic shop products from database
-  // const products = await prisma.product.findMany({ select: { slug: true, updatedAt: true } });
+  // const products = await prisma.products.findMany({ select: { slug: true, updated_at: true } });
   // const shopRoutes = products.map((product) => ({
   //   url: `${baseUrl}/shop/${product.slug}`,
-  //   lastModified: product.updatedAt,
+  //   lastModified: product.updated_at,
   //   changeFrequency: 'weekly' as const,
   //   priority: 0.6,
   // }));

@@ -21,7 +21,7 @@ interface Post {
   content: string;
   excerpt: string;
   featuredImage: string | null;
-  publishedAt: string;
+  published_at: string;
   readTime: number;
   category: {
     name: string;
@@ -59,12 +59,12 @@ const defaultAuthor = {
 // ============================================
 
 async function getPostBySlug(slug: string) {
-  const post = await prisma.post.findUnique({
+  const post = await prisma.posts.findUnique({
     where: { slug },
     include: {
-      terms: {
+      post_terms: {
         include: {
-          term: true,
+          terms: true,
         },
       },
     },
@@ -72,10 +72,10 @@ async function getPostBySlug(slug: string) {
 
   if (!post) return null;
 
-  const categoryTerm = post.terms.find((pt) => pt.term.taxonomy === 'category');
-  const tags = post.terms.map((pt) => ({
-    name: pt.term.name,
-    slug: pt.term.slug,
+  const categoryTerm = post.post_terms.find((pt) => pt.terms.taxonomy === 'category');
+  const tags = post.post_terms.map((pt) => ({
+    name: pt.terms.name,
+    slug: pt.terms.slug,
   }));
 
   return {
@@ -84,11 +84,11 @@ async function getPostBySlug(slug: string) {
     slug: post.slug,
     content: post.content,
     excerpt: post.excerpt || post.content.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
-    featuredImage: post.featuredImage,
-    publishedAt: post.publishedAt?.toISOString() || post.createdAt.toISOString(),
-    readTime: post.readTime,
+    featuredImage: post.featured_image,
+    publishedAt: post.published_at?.toISOString() || post.created_at.toISOString(),
+    readTime: post.read_time,
     category: categoryTerm
-      ? { name: categoryTerm.term.name, slug: categoryTerm.term.slug }
+      ? { name: categoryTerm.terms.name, slug: categoryTerm.terms.slug }
       : { name: 'Running', slug: 'running' },
     tags: tags.length > 0 ? tags : [{ name: 'Running', slug: 'running' }],
     author: defaultAuthor,
@@ -96,34 +96,34 @@ async function getPostBySlug(slug: string) {
 }
 
 async function getRelatedPosts(currentSlug: string): Promise<RelatedPost[]> {
-  const posts = await prisma.post.findMany({
+  const posts = await prisma.posts.findMany({
     where: {
       slug: { not: currentSlug },
       status: 'published',
-      postType: 'post',
+      post_type: 'post',
     },
-    orderBy: { publishedAt: 'desc' },
+    orderBy: { published_at: 'desc' },
     take: 3,
     include: {
-      terms: {
+      post_terms: {
         include: {
-          term: true,
+          terms: true,
         },
       },
     },
   });
 
   return posts.map((post) => {
-    const categoryTerm = post.terms.find((pt) => pt.term.taxonomy === 'category');
+    const categoryTerm = post.post_terms.find((pt) => pt.terms.taxonomy === 'category');
 
     return {
       id: post.id.toString(),
       title: post.title,
       slug: post.slug,
-      featuredImage: post.featuredImage,
-      readTime: post.readTime,
+      featuredImage: post.featured_image,
+      readTime: post.read_time,
       category: categoryTerm
-        ? { name: categoryTerm.term.name, slug: categoryTerm.term.slug }
+        ? { name: categoryTerm.terms.name, slug: categoryTerm.terms.slug }
         : { name: 'Running', slug: 'running' },
     };
   });

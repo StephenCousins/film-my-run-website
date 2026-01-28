@@ -25,10 +25,10 @@ function extractYouTubeId(url: string): string | null {
 export async function GET() {
   try {
     // Fetch Ultra races with video URLs from 2018 onwards
-    const races = await prisma.race.findMany({
+    const races = await prisma.races.findMany({
       where: {
         type: 'Ultra',
-        videoUrl: {
+        video_url: {
           not: null,
         },
         date: {
@@ -43,7 +43,7 @@ export async function GET() {
     // Transform to films format
     const films = races
       .map((race) => {
-        const videoId = extractYouTubeId(race.videoUrl || '');
+        const videoId = extractYouTubeId(race.video_url || '');
         if (!videoId) return null;
 
         const year = race.date ? new Date(race.date).getFullYear().toString() : null;
@@ -52,15 +52,15 @@ export async function GET() {
           id: race.id.toString(),
           title: race.event,
           subtitle: 'Ultra Marathon',
-          description: `Experience the challenge of ${race.event}${race.distanceKm ? ` - ${Number(race.distanceKm)}km` : ''} of incredible trail running.`,
+          description: `Experience the challenge of ${race.event}${race.distance_km ? ` - ${Number(race.distance_km)}km` : ''} of incredible trail running.`,
           thumbnail: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
           videoId,
           year,
           location: race.terrain || 'Trail',
           stats: {
-            distance: race.distanceKm ? `${Number(race.distanceKm)}km` : null,
+            distance: race.distance_km ? `${Number(race.distance_km)}km` : null,
             elevation: race.elevation ? `${race.elevation.toLocaleString()}m` : null,
-            time: race.timeHms || null,
+            time: race.time_hms || null,
           },
         };
       })

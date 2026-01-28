@@ -49,9 +49,9 @@ interface PB {
 
 interface Po10Data {
   name: string;
-  athleteId: string;
+  athlete_id: string;
   club: string | null;
-  ageGroup: string | null;
+  age_group: string | null;
   gender: 'male' | 'female' | null;
   pbs: Record<string, PB>;
   error?: string;
@@ -81,8 +81,8 @@ function validateAthleteId(id: string): { valid: boolean; error?: string; saniti
 }
 
 // Fetch and parse athlete page
-async function fetchPo10Page(athleteId: string): Promise<Po10Data> {
-  const url = `${PO10_BASE_URL}?athleteid=${athleteId}`;
+async function fetchPo10Page(athlete_id: string): Promise<Po10Data> {
+  const url = `${PO10_BASE_URL}?athleteid=${athlete_id}`;
 
   const response = await fetch(url, {
     headers: HEADERS,
@@ -94,10 +94,10 @@ async function fetchPo10Page(athleteId: string): Promise<Po10Data> {
   }
 
   const html = await response.text();
-  return parsePo10Page(html, athleteId);
+  return parsePo10Page(html, athlete_id);
 }
 
-function parsePo10Page(html: string, athleteId: string): Po10Data {
+function parsePo10Page(html: string, athlete_id: string): Po10Data {
   const $ = cheerio.load(html);
 
   // Get athlete name
@@ -122,10 +122,10 @@ function parsePo10Page(html: string, athleteId: string): Po10Data {
     gender = genderMatch[1].toLowerCase() as 'male' | 'female';
   }
 
-  let ageGroup: string | null = null;
-  const ageGroupMatch = pageText.match(/Age Group:(V?\d+|SEN|U\d+)/);
-  if (ageGroupMatch) {
-    ageGroup = ageGroupMatch[1];
+  let age_group: string | null = null;
+  const age_groupMatch = pageText.match(/Age Group:(V?\d+|SEN|U\d+)/);
+  if (age_groupMatch) {
+    age_group = age_groupMatch[1];
   }
 
   // Extract PBs
@@ -159,9 +159,9 @@ function parsePo10Page(html: string, athleteId: string): Po10Data {
 
   return {
     name,
-    athleteId,
+    athlete_id,
     club,
-    ageGroup,
+    age_group,
     gender,
     pbs,
   };
@@ -171,7 +171,7 @@ function parsePo10Page(html: string, athleteId: string): Po10Data {
 function calculateOverallStats(
   pbs: Record<string, PB>,
   gender: 'male' | 'female' | null,
-  ageGroup: string | null
+  age_group: string | null
 ) {
   const results: {
     distance: string;
@@ -184,15 +184,15 @@ function calculateOverallStats(
 
   // Estimate age from age group
   let estimatedAge = 35;
-  if (ageGroup) {
-    const match = ageGroup.match(/V?(\d+)/);
+  if (age_group) {
+    const match = age_group.match(/V?(\d+)/);
     if (match) {
       estimatedAge = parseInt(match[1]);
-      if (ageGroup.startsWith('V')) {
+      if (age_group.startsWith('V')) {
         // Vet categories - V40, V50, etc.
         estimatedAge = parseInt(match[1]);
       }
-    } else if (ageGroup === 'SEN') {
+    } else if (age_group === 'SEN') {
       estimatedAge = 30;
     }
   }
@@ -215,7 +215,7 @@ function calculateOverallStats(
 
   // Calculate overall percentile (average of all distances)
   const percentiles = results.map(r => r.percentile);
-  const overallPercentile = percentiles.length > 0
+  const overall_percentile = percentiles.length > 0
     ? Math.round((percentiles.reduce((a, b) => a + b, 0) / percentiles.length) * 10) / 10
     : 0;
 
@@ -228,18 +228,18 @@ function calculateOverallStats(
 
   return {
     distances: results,
-    overallPercentile,
-    overallAbilityLevel: overallAbility,
-    ratingMessage: getRatingMessage(overallPercentile),
+    overall_percentile,
+    overall_ability_level: overallAbility,
+    ratingMessage: getRatingMessage(overall_percentile),
   };
 }
 
 // Main handler
 export async function GET(request: NextRequest) {
-  const athleteId = request.nextUrl.searchParams.get('id');
+  const athlete_id = request.nextUrl.searchParams.get('id');
 
   // Validate
-  const validation = validateAthleteId(athleteId || '');
+  const validation = validateAthleteId(athlete_id || '');
   if (!validation.valid) {
     return NextResponse.json({ ok: false, error: validation.error }, { status: 400 });
   }
@@ -248,39 +248,39 @@ export async function GET(request: NextRequest) {
 
   try {
     // Check cache first
-    const cached = await prisma.po10Athlete.findUnique({
-      where: { athleteId: id },
+    const cached = await prisma.po10_athletes.findUnique({
+      where: { athlete_id: id },
     });
 
     const cacheAge = cached
-      ? (Date.now() - new Date(cached.updatedAt).getTime()) / (1000 * 60 * 60)
+      ? (Date.now() - new Date(cached.updated_at).getTime()) / (1000 * 60 * 60)
       : Infinity;
 
     // Return cached if fresh enough
     if (cached && cacheAge < CACHE_HOURS) {
       // Update lookup count
-      await prisma.po10Athlete.update({
-        where: { athleteId: id },
+      await prisma.po10_athletes.update({
+        where: { athlete_id: id },
         data: {
-          lookupCount: { increment: 1 },
-          lastLookupAt: new Date(),
+          lookup_count: { increment: 1 },
+          last_lookup_at: new Date(),
         },
       });
 
       // Log lookup
-      await prisma.athleteLookup.create({
+      await prisma.athlete_lookups.create({
         data: {
           source: 'po10',
-          athleteId: id,
-          athleteName: cached.name,
+          athlete_id: id,
+          athlete_name: cached.name,
         },
       });
 
-      const pbs = (cached.pbsJson as unknown as Record<string, PB>) || {};
+      const pbs = (cached.pbs_json as unknown as Record<string, PB>) || {};
       const stats = calculateOverallStats(
         pbs,
         cached.gender as 'male' | 'female' | null,
-        cached.ageGroup
+        cached.age_group
       );
 
       return NextResponse.json({
@@ -288,9 +288,9 @@ export async function GET(request: NextRequest) {
         cached: true,
         athlete: {
           name: cached.name,
-          athleteId: id,
+          athlete_id: id,
           club: cached.club,
-          ageGroup: cached.ageGroup,
+          age_group: cached.age_group,
           gender: cached.gender,
           pbs,
         },
@@ -310,7 +310,7 @@ export async function GET(request: NextRequest) {
           warning: data.error,
           athlete: {
             name: cached.name,
-            athleteId: id,
+            athlete_id: id,
             club: cached.club,
           },
         });
@@ -322,41 +322,43 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ ok: false, error: 'No personal bests found for this athlete' }, { status: 404 });
     }
 
-    const stats = calculateOverallStats(data.pbs, data.gender, data.ageGroup);
+    const stats = calculateOverallStats(data.pbs, data.gender, data.age_group);
 
     // Save to cache
-    const pbsJsonValue = JSON.parse(JSON.stringify(data.pbs));
-    await prisma.po10Athlete.upsert({
-      where: { athleteId: id },
+    const pbs_jsonValue = JSON.parse(JSON.stringify(data.pbs));
+    await prisma.po10_athletes.upsert({
+      where: { athlete_id: id },
       create: {
-        athleteId: id,
+        athlete_id: id,
         name: data.name,
         club: data.club,
         gender: data.gender,
-        ageGroup: data.ageGroup,
-        pbsJson: pbsJsonValue,
-        overallPercentile: stats.overallPercentile,
-        overallAbilityLevel: stats.overallAbilityLevel,
+        age_group: data.age_group,
+        pbs_json: pbs_jsonValue,
+        overall_percentile: stats.overall_percentile,
+        overall_ability_level: stats.overall_ability_level,
+        updated_at: new Date(),
       },
       update: {
         name: data.name,
         club: data.club,
         gender: data.gender,
-        ageGroup: data.ageGroup,
-        pbsJson: pbsJsonValue,
-        overallPercentile: stats.overallPercentile,
-        overallAbilityLevel: stats.overallAbilityLevel,
-        lookupCount: { increment: 1 },
-        lastLookupAt: new Date(),
+        age_group: data.age_group,
+        pbs_json: pbs_jsonValue,
+        overall_percentile: stats.overall_percentile,
+        overall_ability_level: stats.overall_ability_level,
+        lookup_count: { increment: 1 },
+        last_lookup_at: new Date(),
+        updated_at: new Date(),
       },
     });
 
     // Log lookup
-    await prisma.athleteLookup.create({
+    await prisma.athlete_lookups.create({
       data: {
         source: 'po10',
-        athleteId: id,
-        athleteName: data.name,
+        athlete_id: id,
+        athlete_name: data.name,
       },
     });
 
@@ -370,8 +372,8 @@ export async function GET(request: NextRequest) {
     console.error('Power of 10 scraper error:', error);
 
     // Try to return stale cache
-    const cached = await prisma.po10Athlete.findUnique({
-      where: { athleteId: id },
+    const cached = await prisma.po10_athletes.findUnique({
+      where: { athlete_id: id },
     }).catch(() => null);
 
     if (cached) {
@@ -382,7 +384,7 @@ export async function GET(request: NextRequest) {
         warning: error instanceof Error ? error.message : 'Failed to fetch fresh data',
         athlete: {
           name: cached.name,
-          athleteId: id,
+          athlete_id: id,
           club: cached.club,
         },
       });
