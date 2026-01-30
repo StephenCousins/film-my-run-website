@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Video, Users, Sparkles, ArrowRight, Check } from 'lucide-react';
+import { Video, Users, Mic, ArrowRight, Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // ============================================
@@ -18,11 +18,11 @@ const services = [
     features: [
       'Multi-camera coverage',
       'Drone footage available',
-      'Same-day highlights',
+      'POV footage',
       'Full race edit delivery',
     ],
     image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services/race-filming.jpg',
-    href: '/services/filming',
+    href: '/services/pov-race-coverage',
     color: 'from-orange-500 to-red-500',
   },
   {
@@ -31,26 +31,26 @@ const services = [
     icon: Users,
     features: [
       'Live streaming',
-      'Promotional videos',
+      'Interviews',
       'Participant photos',
       'Social media content',
     ],
-    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services/event-coverage.jpg',
-    href: '/services/events',
+    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services/social-media.png',
+    href: '/services/social-media-coverage',
     color: 'from-blue-500 to-purple-500',
   },
   {
-    title: 'Custom Projects',
-    description: 'Bespoke video projects for brands, clubs, and individuals. Tell your unique running story.',
-    icon: Sparkles,
+    title: 'Master of Ceremonies',
+    description: 'Professional race commentary and MC services. Keeping runners informed, motivated, and entertained.',
+    icon: Mic,
     features: [
-      'Documentary style',
-      'Brand partnerships',
-      'Club promos',
-      'Personal stories',
+      'Live runner interviews',
+      'Race updates & information',
+      'Sponsor announcements',
+      'Start line energy & finish line welcomes',
     ],
-    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services/custom.jpg',
-    href: '/services/custom',
+    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services/commentating.jpg',
+    href: '/services/master-of-ceremonies',
     color: 'from-emerald-500 to-teal-500',
   },
 ];
