@@ -217,6 +217,10 @@ Before writing, outline:
 - Direct quotes except at truly dramatic moments
 - YouTube-speak or vlog language
 
+### Words to NEVER Use
+
+- **"brutal"** - overused and clichéd. Use alternatives like: relentless, unforgiving, punishing, soul-destroying, a proper slog, had me questioning my life choices
+
 ### Section Headers
 
 **GOOD:** "The Wheels Come Off", "Into the Mountains", "Sunrise and Suffering", "When the Quads Give Up"
