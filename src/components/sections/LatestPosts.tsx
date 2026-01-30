@@ -4,7 +4,6 @@ import { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
-import { blogPosts } from '@/data/blog-posts';
 
 // ============================================
 // TYPES
@@ -107,10 +106,10 @@ function PostCard({ post, featured = false }: PostCardProps) {
 // ============================================
 
 interface LatestPostsProps {
-  posts?: BlogPost[];
+  posts: BlogPost[];
 }
 
-export default function LatestPosts({ posts = blogPosts }: LatestPostsProps) {
+export default function LatestPosts({ posts }: LatestPostsProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   // Initialize GSAP animations with pop-out effect
