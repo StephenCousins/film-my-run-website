@@ -21,7 +21,7 @@ const services = [
       'POV footage',
       'Full race edit delivery',
     ],
-    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services/race-filming.jpg',
+    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services/race-filming-new.jpg',
     href: '/services/pov-race-coverage',
     color: 'from-orange-500 to-red-500',
   },
@@ -50,6 +50,7 @@ const services = [
       'Start line energy & finish line welcomes',
     ],
     image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services/commentating.jpg',
+    imagePosition: 'top',
     href: '/services/master-of-ceremonies',
     color: 'from-emerald-500 to-teal-500',
   },
@@ -82,7 +83,10 @@ function ServiceCard({ service, index }: ServiceCardProps) {
             src={service.image}
             alt={service.title}
             fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
+            className={cn(
+              "object-cover transition-transform duration-700 group-hover:scale-105",
+              service.imagePosition === 'top' && "object-top"
+            )}
           />
         </div>
         <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
