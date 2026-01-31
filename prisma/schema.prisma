@@ -25,6 +25,21 @@ model accounts {
   @@unique([provider, provider_account_id])
 }
 
+model articles {
+  id          Int      @id @default(autoincrement())
+  guid        String   @unique // Unique identifier from RSS feed
+  title       String
+  link        String
+  description String?
+  pub_date    DateTime
+  source      String   // e.g., "iRunFar", "UltraRunning Magazine"
+  category    String?
+  created_at  DateTime @default(now())
+
+  @@index([pub_date])
+  @@index([source])
+}
+
 model age_grading_factors {
   id          Int     @id @default(autoincrement())
   gender      String
