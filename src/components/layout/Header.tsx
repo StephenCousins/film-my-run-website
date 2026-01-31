@@ -36,6 +36,7 @@ const navigation = [
       { name: 'Master of Ceremonies', href: '/services/master-of-ceremonies' },
     ],
   },
+  { name: 'News', href: '/news' },
   { name: 'Shop', href: '/shop' },
   { name: 'Live', href: '/live' },
   { name: 'Contact', href: '/contact' },
