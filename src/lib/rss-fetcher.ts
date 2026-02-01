@@ -97,29 +97,52 @@ const RSS_FEEDS = [
 ];
 
 /**
+ * Check if URL is a valid image (not a video embed)
+ */
+function isValidImageUrl(url: string): boolean {
+  if (!url) return false;
+
+  const invalidPatterns = [
+    /youtube\.com/i,
+    /youtu\.be/i,
+    /vimeo\.com/i,
+    /player\./i,
+    /embed/i,
+    /\.mp4$/i,
+    /\.webm$/i,
+    /\.mov$/i,
+  ];
+
+  return !invalidPatterns.some(pattern => pattern.test(url));
+}
+
+/**
  * Extract image URL from RSS item using various methods
  */
 function extractImageUrl(item: CustomItem): string | null {
   // Method 1: media:content (most common)
-  if (item['media:content']?.$?.url) {
+  if (item['media:content']?.$?.url && isValidImageUrl(item['media:content'].$.url)) {
     return item['media:content'].$.url;
   }
 
   // Method 2: media:thumbnail
-  if (item['media:thumbnail']?.$?.url) {
+  if (item['media:thumbnail']?.$?.url && isValidImageUrl(item['media:thumbnail'].$.url)) {
     return item['media:thumbnail'].$.url;
   }
 
   // Method 3: enclosure (for podcasts/media feeds)
-  if (item.enclosure?.url && item.enclosure.type?.startsWith('image/')) {
+  if (item.enclosure?.url && item.enclosure.type?.startsWith('image/') && isValidImageUrl(item.enclosure.url)) {
     return item.enclosure.url;
   }
 
   // Method 4: Extract first image from content:encoded or content
   const contentToSearch = item['content:encoded'] || item.content || '';
-  const imgMatch = contentToSearch.match(/<img[^>]+src=["']([^"']+)["']/i);
-  if (imgMatch?.[1]) {
-    return imgMatch[1];
+  const imgMatches = contentToSearch.matchAll(/<img[^>]+src=["']([^"']+)["']/gi);
+
+  for (const match of imgMatches) {
+    if (match[1] && isValidImageUrl(match[1])) {
+      return match[1];
+    }
   }
 
   return null;
