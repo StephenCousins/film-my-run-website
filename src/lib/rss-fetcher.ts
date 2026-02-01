@@ -89,17 +89,6 @@ const RSS_FEEDS = [
     url: 'https://runabc.co.uk/feeds/scotland-news',
     category: 'running',
   },
-  // Podcasts (show notes)
-  {
-    name: 'Trail Runner Nation',
-    url: 'https://trailrunnernation.libsyn.com/rss',
-    category: 'podcast',
-  },
-  {
-    name: 'Some Work All Play',
-    url: 'https://anchor.fm/s/9abbbe4/podcast/rss',
-    category: 'podcast',
-  },
 ];
 
 /**
@@ -291,8 +280,7 @@ const CATEGORY_PRIORITY: Record<string, number> = {
   trail: 1,
   ultra: 1,
   running: 2,
-  podcast: 3,
-  athletics: 4,
+  athletics: 3,
 };
 
 export async function getArticles(days: number = 14, limit: number = 50) {

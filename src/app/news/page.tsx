@@ -76,9 +76,6 @@ const sourceColors: Record<string, string> = {
   'Canadian Running': 'bg-red-500/20 text-red-400 border-red-500/30',
   'RunABC South': 'bg-sky-500/20 text-sky-400 border-sky-500/30',
   'RunABC Scotland': 'bg-teal-500/20 text-teal-400 border-teal-500/30',
-  // Podcasts (priority 3)
-  'Trail Runner Nation': 'bg-violet-500/20 text-violet-400 border-violet-500/30',
-  'Some Work All Play': 'bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30',
   // Athletics (priority 4)
   'LetsRun': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
   'Athletics Weekly': 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
