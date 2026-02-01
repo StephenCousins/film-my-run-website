@@ -68,21 +68,20 @@ async function getArticles(): Promise<Article[]> {
 // ============================================
 
 const sourceColors: Record<string, string> = {
-  // Trail & Ultra
+  // Trail & Ultra (priority 1)
   'iRunFar': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
   'UltraRunning Magazine': 'bg-purple-500/20 text-purple-400 border-purple-500/30',
   'Trail Runner Magazine': 'bg-green-500/20 text-green-400 border-green-500/30',
-  // General Running
+  // General Running (priority 2)
   'Canadian Running': 'bg-red-500/20 text-red-400 border-red-500/30',
-  'LetsRun': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-  "Runner's World UK": 'bg-rose-500/20 text-rose-400 border-rose-500/30',
-  // UK Athletics & Regional
-  'Athletics Weekly': 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
   'RunABC South': 'bg-sky-500/20 text-sky-400 border-sky-500/30',
   'RunABC Scotland': 'bg-teal-500/20 text-teal-400 border-teal-500/30',
-  // Podcasts
+  // Podcasts (priority 3)
   'Trail Runner Nation': 'bg-violet-500/20 text-violet-400 border-violet-500/30',
   'Some Work All Play': 'bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30',
+  // Athletics (priority 4)
+  'LetsRun': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+  'Athletics Weekly': 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
 };
 
 function getSourceColor(source: string): string {

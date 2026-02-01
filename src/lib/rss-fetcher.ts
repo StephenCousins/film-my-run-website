@@ -71,12 +71,7 @@ const RSS_FEEDS = [
   {
     name: 'LetsRun',
     url: 'https://www.letsrun.com/feed/',
-    category: 'running',
-  },
-  {
-    name: "Runner's World UK",
-    url: 'https://www.runnersworld.com/uk/rss/all.xml/',
-    category: 'running',
+    category: 'athletics',
   },
   // UK-specific
   {
@@ -290,17 +285,41 @@ export async function fetchAndStoreArticles(): Promise<{
   return { fetched: totalFetched, stored: totalStored, errors };
 }
 
+// Category priority for sorting (lower = higher priority)
+const CATEGORY_PRIORITY: Record<string, number> = {
+  trail: 1,
+  ultra: 1,
+  running: 2,
+  podcast: 3,
+  athletics: 4,
+};
+
 export async function getArticles(days: number = 14, limit: number = 50) {
   const since = new Date();
   since.setDate(since.getDate() - days);
 
-  return prisma.articles.findMany({
+  const articles = await prisma.articles.findMany({
     where: {
       pub_date: { gte: since },
     },
     orderBy: {
       pub_date: 'desc',
     },
-    take: limit,
+    take: limit * 2, // Fetch more to allow for sorting
   });
+
+  // Sort by category priority first, then by date
+  const sorted = articles.sort((a, b) => {
+    const priorityA = CATEGORY_PRIORITY[a.category || 'running'] || 5;
+    const priorityB = CATEGORY_PRIORITY[b.category || 'running'] || 5;
+
+    if (priorityA !== priorityB) {
+      return priorityA - priorityB;
+    }
+
+    // Same priority - sort by date (newest first)
+    return new Date(b.pub_date).getTime() - new Date(a.pub_date).getTime();
+  });
+
+  return sorted.slice(0, limit);
 }
