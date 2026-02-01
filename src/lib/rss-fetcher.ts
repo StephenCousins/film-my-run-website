@@ -62,6 +62,16 @@ const RSS_FEEDS = [
     url: 'https://www.trailrunnermag.com/feed/',
     category: 'trail',
   },
+  {
+    name: 'Freetrail',
+    url: 'https://freetrail.com/feed/',
+    category: 'trail',
+  },
+  {
+    name: 'Trail Sisters',
+    url: 'https://trailsisters.net/feed/',
+    category: 'trail',
+  },
   // General Running
   {
     name: 'Canadian Running',
