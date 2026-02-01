@@ -103,17 +103,36 @@ function isValidImageUrl(url: string): boolean {
   if (!url) return false;
 
   const invalidPatterns = [
-    /youtube\.com/i,
-    /youtu\.be/i,
-    /vimeo\.com/i,
+    /youtube\.com\/embed/i,
+    /youtube\.com\/watch/i,
+    /youtu\.be\//i,
+    /vimeo\.com\/\d/i,
     /player\./i,
-    /embed/i,
     /\.mp4$/i,
     /\.webm$/i,
     /\.mov$/i,
   ];
 
   return !invalidPatterns.some(pattern => pattern.test(url));
+}
+
+/**
+ * Extract YouTube video ID from various URL formats
+ */
+function extractYouTubeId(content: string): string | null {
+  const patterns = [
+    /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/i,
+    /youtube\.com\/watch\?v=([a-zA-Z0-9_-]{11})/i,
+    /youtu\.be\/([a-zA-Z0-9_-]{11})/i,
+  ];
+
+  for (const pattern of patterns) {
+    const match = content.match(pattern);
+    if (match?.[1]) {
+      return match[1];
+    }
+  }
+  return null;
 }
 
 /**
@@ -143,6 +162,12 @@ function extractImageUrl(item: CustomItem): string | null {
     if (match[1] && isValidImageUrl(match[1])) {
       return match[1];
     }
+  }
+
+  // Method 5: If content has YouTube embed, use YouTube thumbnail
+  const youtubeId = extractYouTubeId(contentToSearch);
+  if (youtubeId) {
+    return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
   }
 
   return null;
