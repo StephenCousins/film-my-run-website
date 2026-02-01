@@ -240,8 +240,9 @@ export async function fetchAndStoreArticles(): Promise<{
           const imageUrl = extractImageUrl(item) || SOURCE_PLACEHOLDERS[feed.name] || null;
           const description = cleanDescription(item.contentSnippet || item.content);
 
+          // Use link as unique identifier (more stable than guid which varies between feeds)
           await prisma.articles.upsert({
-            where: { guid: item.guid || item.link },
+            where: { guid: item.link },
             update: {
               title: item.title,
               description,
@@ -249,7 +250,7 @@ export async function fetchAndStoreArticles(): Promise<{
               pub_date: pubDate,
             },
             create: {
-              guid: item.guid || item.link,
+              guid: item.link,
               title: item.title,
               link: item.link,
               description,
