@@ -31,6 +31,7 @@ interface Article {
   title: string;
   link: string;
   description: string;
+  imageUrl: string | null;
   pubDate: string;
   source: string;
   category: string;
@@ -51,6 +52,7 @@ async function getArticles(): Promise<Article[]> {
       title: article.title,
       link: article.link,
       description: article.description || '',
+      imageUrl: article.image_url,
       pubDate: article.pub_date.toISOString(),
       source: article.source,
       category: article.category || 'trail',
@@ -66,12 +68,21 @@ async function getArticles(): Promise<Article[]> {
 // ============================================
 
 const sourceColors: Record<string, string> = {
+  // Trail & Ultra
   'iRunFar': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
   'UltraRunning Magazine': 'bg-purple-500/20 text-purple-400 border-purple-500/30',
   'Trail Runner Magazine': 'bg-green-500/20 text-green-400 border-green-500/30',
+  // General Running
   'Canadian Running': 'bg-red-500/20 text-red-400 border-red-500/30',
-  'Mud and Routes': 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-  'Trail Running Magazine': 'bg-teal-500/20 text-teal-400 border-teal-500/30',
+  'LetsRun': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
+  "Runner's World UK": 'bg-rose-500/20 text-rose-400 border-rose-500/30',
+  // UK Athletics & Regional
+  'Athletics Weekly': 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
+  'RunABC South': 'bg-sky-500/20 text-sky-400 border-sky-500/30',
+  'RunABC Scotland': 'bg-teal-500/20 text-teal-400 border-teal-500/30',
+  // Podcasts
+  'Trail Runner Nation': 'bg-violet-500/20 text-violet-400 border-violet-500/30',
+  'Some Work All Play': 'bg-fuchsia-500/20 text-fuchsia-400 border-fuchsia-500/30',
 };
 
 function getSourceColor(source: string): string {
@@ -93,58 +104,85 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
         featured && 'lg:col-span-2'
       )}
     >
-      <a 
-        href={article.link} 
-        target="_blank" 
-        rel="noopener noreferrer" 
-        className="block h-full p-5 lg:p-6"
+      <a
+        href={article.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(
+          'block h-full',
+          article.imageUrl && featured ? 'flex flex-col lg:flex-row' : ''
+        )}
       >
-        {/* Header with source and date */}
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <span className={cn(
-            'px-3 py-1 text-xs font-medium rounded-full border',
-            getSourceColor(article.source)
+        {/* Thumbnail */}
+        {article.imageUrl && (
+          <div className={cn(
+            'relative overflow-hidden bg-zinc-800',
+            featured
+              ? 'h-48 lg:h-auto lg:w-2/5 lg:min-h-[280px]'
+              : 'h-40'
           )}>
-            {article.source}
-          </span>
-          <div className="flex items-center gap-2">
-            {isRecent && (
-              <span className="px-2 py-0.5 bg-brand/20 text-brand text-xs font-medium rounded-full">
-                New
-              </span>
-            )}
-            <span className="flex items-center gap-1 text-xs text-muted">
-              <Calendar className="w-3 h-3" />
-              {pubDate.toLocaleDateString('en-GB', {
-                day: 'numeric',
-                month: 'short',
-              })}
-            </span>
+            <img
+              src={article.imageUrl}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
           </div>
-        </div>
-
-        {/* Title */}
-        <h2 className={cn(
-          'font-display font-semibold text-foreground group-hover:text-brand transition-colors mb-3',
-          featured ? 'text-xl lg:text-2xl' : 'text-lg'
-        )}>
-          {article.title}
-        </h2>
-
-        {/* Description */}
-        {article.description && (
-          <p className={cn(
-            'text-secondary line-clamp-3 mb-4',
-            featured ? 'text-base' : 'text-sm'
-          )}>
-            {article.description}
-          </p>
         )}
 
-        {/* Read more */}
-        <div className="flex items-center gap-1 text-brand font-medium text-sm group-hover:gap-2 transition-all">
-          Read Article
-          <ExternalLink className="w-3.5 h-3.5" />
+        <div className={cn(
+          'p-5 lg:p-6 flex flex-col',
+          article.imageUrl && featured ? 'lg:w-3/5' : '',
+          !article.imageUrl ? 'h-full' : 'flex-1'
+        )}>
+          {/* Header with source and date */}
+          <div className="flex items-center justify-between gap-3 mb-4">
+            <span className={cn(
+              'px-3 py-1 text-xs font-medium rounded-full border',
+              getSourceColor(article.source)
+            )}>
+              {article.source}
+            </span>
+            <div className="flex items-center gap-2">
+              {isRecent && (
+                <span className="px-2 py-0.5 bg-brand/20 text-brand text-xs font-medium rounded-full">
+                  New
+                </span>
+              )}
+              <span className="flex items-center gap-1 text-xs text-muted">
+                <Calendar className="w-3 h-3" />
+                {pubDate.toLocaleDateString('en-GB', {
+                  day: 'numeric',
+                  month: 'short',
+                })}
+              </span>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h2 className={cn(
+            'font-display font-semibold text-foreground group-hover:text-brand transition-colors mb-3',
+            featured ? 'text-xl lg:text-2xl' : 'text-lg'
+          )}>
+            {article.title}
+          </h2>
+
+          {/* Description */}
+          {article.description && (
+            <p className={cn(
+              'text-secondary line-clamp-3 mb-4 flex-1',
+              featured ? 'text-base' : 'text-sm'
+            )}>
+              {article.description}
+            </p>
+          )}
+
+          {/* Read more */}
+          <div className="flex items-center gap-1 text-brand font-medium text-sm group-hover:gap-2 transition-all mt-auto">
+            Read Article
+            <ExternalLink className="w-3.5 h-3.5" />
+          </div>
         </div>
       </a>
     </article>

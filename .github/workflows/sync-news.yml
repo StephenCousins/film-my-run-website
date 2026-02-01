@@ -1,0 +1,30 @@
+name: Sync News Articles
+
+on:
+  schedule:
+    # Run daily at 6am UTC
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Trigger news sync
+        run: |
+          response=$(curl -s -w "\n%{http_code}" "${{ secrets.SITE_URL }}/api/news/sync?secret=${{ secrets.CRON_SECRET }}")
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "Response: $body"
+          echo "HTTP Status: $http_code"
+
+          if [ "$http_code" != "200" ]; then
+            echo "Sync failed with status $http_code"
+            exit 1
+          fi
+
+          echo "Sync completed successfully"

@@ -1,7 +1,41 @@
 import prisma from './db';
+import Parser from 'rss-parser';
+
+// Custom parser with media extensions
+type CustomFeed = {
+  title: string;
+  link: string;
+  description: string;
+};
+
+type CustomItem = {
+  title: string;
+  link: string;
+  pubDate: string;
+  content: string;
+  contentSnippet: string;
+  guid: string;
+  isoDate: string;
+  // Media extensions - various ways feeds include images
+  'media:content'?: { $: { url: string } };
+  'media:thumbnail'?: { $: { url: string } };
+  enclosure?: { url: string; type?: string };
+  'content:encoded'?: string;
+};
+
+const parser: Parser<CustomFeed, CustomItem> = new Parser({
+  customFields: {
+    item: [
+      ['media:content', 'media:content'],
+      ['media:thumbnail', 'media:thumbnail'],
+      ['content:encoded', 'content:encoded'],
+    ],
+  },
+});
 
 // RSS Feed sources
 const RSS_FEEDS = [
+  // Trail & Ultra
   {
     name: 'iRunFar',
     url: 'https://www.irunfar.com/feed',
@@ -17,67 +51,110 @@ const RSS_FEEDS = [
     url: 'https://www.trailrunnermag.com/feed/',
     category: 'trail',
   },
+  // General Running
   {
     name: 'Canadian Running',
     url: 'https://runningmagazine.ca/feed/',
     category: 'running',
   },
   {
-    name: 'Trail Running Magazine',
-    url: 'https://www.trailrunningmag.co.uk/feed/',
-    category: 'trail',
+    name: 'LetsRun',
+    url: 'https://www.letsrun.com/feed/',
+    category: 'running',
+  },
+  {
+    name: "Runner's World UK",
+    url: 'https://www.runnersworld.com/uk/rss/all.xml/',
+    category: 'running',
+  },
+  // UK-specific
+  {
+    name: 'Athletics Weekly',
+    url: 'https://athleticsweekly.com/feed/',
+    category: 'athletics',
+  },
+  {
+    name: 'RunABC South',
+    url: 'https://runabc.co.uk/feeds/south-news',
+    category: 'running',
+  },
+  {
+    name: 'RunABC Scotland',
+    url: 'https://runabc.co.uk/feeds/scotland-news',
+    category: 'running',
+  },
+  // Podcasts (show notes)
+  {
+    name: 'Trail Runner Nation',
+    url: 'https://trailrunnernation.libsyn.com/rss',
+    category: 'podcast',
+  },
+  {
+    name: 'Some Work All Play',
+    url: 'https://anchor.fm/s/9abbbe4/podcast/rss',
+    category: 'podcast',
   },
 ];
 
-interface RSSItem {
-  title: string;
-  link: string;
-  description?: string;
-  pubDate: string;
-  guid?: string;
-}
-
-// Simple XML parser for RSS feeds
-function parseRSS(xml: string): RSSItem[] {
-  const items: RSSItem[] = [];
-
-  // Extract all <item> blocks
-  const itemMatches = xml.match(/<item>([\s\S]*?)<\/item>/gi);
-  if (!itemMatches) return items;
-
-  for (const itemXml of itemMatches) {
-    const getTag = (tag: string): string => {
-      // Handle CDATA sections
-      const cdataMatch = itemXml.match(new RegExp(`<${tag}><!\\[CDATA\\[([\\s\\S]*?)\\]\\]><\\/${tag}>`, 'i'));
-      if (cdataMatch) return cdataMatch[1].trim();
-
-      // Handle regular content
-      const match = itemXml.match(new RegExp(`<${tag}>([\\s\\S]*?)<\\/${tag}>`, 'i'));
-      return match ? match[1].trim() : '';
-    };
-
-    const title = getTag('title');
-    const link = getTag('link');
-    const pubDate = getTag('pubDate');
-
-    if (title && link && pubDate) {
-      items.push({
-        title,
-        link,
-        description: getTag('description')?.replace(/<[^>]*>/g, '').substring(0, 500) || undefined,
-        pubDate,
-        guid: getTag('guid') || link,
-      });
-    }
+/**
+ * Extract image URL from RSS item using various methods
+ */
+function extractImageUrl(item: CustomItem): string | null {
+  // Method 1: media:content (most common)
+  if (item['media:content']?.$?.url) {
+    return item['media:content'].$.url;
   }
 
-  return items;
+  // Method 2: media:thumbnail
+  if (item['media:thumbnail']?.$?.url) {
+    return item['media:thumbnail'].$.url;
+  }
+
+  // Method 3: enclosure (for podcasts/media feeds)
+  if (item.enclosure?.url && item.enclosure.type?.startsWith('image/')) {
+    return item.enclosure.url;
+  }
+
+  // Method 4: Extract first image from content:encoded or content
+  const contentToSearch = item['content:encoded'] || item.content || '';
+  const imgMatch = contentToSearch.match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (imgMatch?.[1]) {
+    return imgMatch[1];
+  }
+
+  return null;
+}
+
+/**
+ * Clean description text - remove HTML tags and truncate
+ */
+function cleanDescription(text: string | undefined, maxLength = 300): string | undefined {
+  if (!text) return undefined;
+
+  // Remove HTML tags
+  const cleaned = text
+    .replace(/<[^>]*>/g, '')
+    .replace(/&nbsp;/g, ' ')
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  if (cleaned.length <= maxLength) return cleaned;
+
+  // Truncate at word boundary
+  const truncated = cleaned.substring(0, maxLength);
+  const lastSpace = truncated.lastIndexOf(' ');
+  return (lastSpace > 0 ? truncated.substring(0, lastSpace) : truncated) + '...';
 }
 
 export async function fetchAndStoreArticles(): Promise<{
   fetched: number;
   stored: number;
-  errors: string[]
+  errors: string[];
 }> {
   let totalFetched = 0;
   let totalStored = 0;
@@ -85,43 +162,38 @@ export async function fetchAndStoreArticles(): Promise<{
 
   for (const feed of RSS_FEEDS) {
     try {
-      const response = await fetch(feed.url, {
-        headers: {
-          'User-Agent': 'FilmMyRun/1.0 (News Aggregator)',
-        },
-      });
+      const feedData = await parser.parseURL(feed.url);
+      totalFetched += feedData.items.length;
 
-      if (!response.ok) {
-        errors.push(`${feed.name}: HTTP ${response.status}`);
-        continue;
-      }
-
-      const xml = await response.text();
-      const items = parseRSS(xml);
-      totalFetched += items.length;
-
-      // Store each article (upsert to avoid duplicates)
-      for (const item of items) {
+      for (const item of feedData.items) {
         try {
-          const pubDate = new Date(item.pubDate);
+          const pubDate = item.isoDate ? new Date(item.isoDate) : new Date(item.pubDate);
 
           // Skip articles older than 30 days
           const thirtyDaysAgo = new Date();
           thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
           if (pubDate < thirtyDaysAgo) continue;
 
+          // Skip if missing required fields
+          if (!item.title || !item.link) continue;
+
+          const imageUrl = extractImageUrl(item);
+          const description = cleanDescription(item.contentSnippet || item.content);
+
           await prisma.articles.upsert({
             where: { guid: item.guid || item.link },
             update: {
               title: item.title,
-              description: item.description,
+              description,
+              image_url: imageUrl,
               pub_date: pubDate,
             },
             create: {
               guid: item.guid || item.link,
               title: item.title,
               link: item.link,
-              description: item.description,
+              description,
+              image_url: imageUrl,
               pub_date: pubDate,
               source: feed.name,
               category: feed.category,
@@ -129,11 +201,14 @@ export async function fetchAndStoreArticles(): Promise<{
           });
           totalStored++;
         } catch (err) {
-          // Duplicate or other error - skip
+          // Log individual item errors but continue processing
+          console.error(`Error storing article from ${feed.name}:`, err);
         }
       }
     } catch (err) {
-      errors.push(`${feed.name}: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      const errorMsg = `${feed.name}: ${err instanceof Error ? err.message : 'Unknown error'}`;
+      errors.push(errorMsg);
+      console.error('Feed fetch error:', errorMsg);
     }
   }
 
