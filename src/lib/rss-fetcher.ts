@@ -17,7 +17,10 @@ type CustomItem = {
   guid: string;
   isoDate: string;
   // Media extensions - various ways feeds include images
-  'media:content'?: { $: { url: string } };
+  'media:content'?: {
+    $: { url: string };
+    'media:thumbnail'?: [{ $: { url: string } }];
+  };
   'media:thumbnail'?: { $: { url: string } };
   enclosure?: { url: string; type?: string };
   'content:encoded'?: string;
@@ -139,22 +142,28 @@ function extractYouTubeId(content: string): string | null {
  * Extract image URL from RSS item using various methods
  */
 function extractImageUrl(item: CustomItem): string | null {
-  // Method 1: media:content (most common)
+  // Method 1: media:thumbnail nested inside media:content (LetsRun style)
+  const nestedThumbnail = item['media:content']?.['media:thumbnail']?.[0]?.$?.url;
+  if (nestedThumbnail && isValidImageUrl(nestedThumbnail)) {
+    return nestedThumbnail;
+  }
+
+  // Method 2: media:content direct URL (if it's an image)
   if (item['media:content']?.$?.url && isValidImageUrl(item['media:content'].$.url)) {
     return item['media:content'].$.url;
   }
 
-  // Method 2: media:thumbnail
+  // Method 3: media:thumbnail at root level
   if (item['media:thumbnail']?.$?.url && isValidImageUrl(item['media:thumbnail'].$.url)) {
     return item['media:thumbnail'].$.url;
   }
 
-  // Method 3: enclosure (for podcasts/media feeds)
+  // Method 4: enclosure (for podcasts/media feeds)
   if (item.enclosure?.url && item.enclosure.type?.startsWith('image/') && isValidImageUrl(item.enclosure.url)) {
     return item.enclosure.url;
   }
 
-  // Method 4: Extract first image from content:encoded or content
+  // Method 5: Extract first image from content:encoded or content
   const contentToSearch = item['content:encoded'] || item.content || '';
   const imgMatches = contentToSearch.matchAll(/<img[^>]+src=["']([^"']+)["']/gi);
 
@@ -164,7 +173,7 @@ function extractImageUrl(item: CustomItem): string | null {
     }
   }
 
-  // Method 5: If content has YouTube embed, use YouTube thumbnail
+  // Method 6: If content has YouTube embed, use YouTube thumbnail
   const youtubeId = extractYouTubeId(contentToSearch);
   if (youtubeId) {
     return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
