@@ -36,6 +36,14 @@ const parser: Parser<CustomFeed, CustomItem> = new Parser({
   },
 });
 
+// Placeholder images for sources without images in their RSS
+// TODO: Replace with custom branded images in R2
+const SOURCE_PLACEHOLDERS: Record<string, string> = {
+  'Athletics Weekly': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=80', // Track athletics
+  'RunABC South': 'https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=800&q=80', // Running
+  'RunABC Scotland': 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&q=80', // Scottish landscape run
+};
+
 // RSS Feed sources
 const RSS_FEEDS = [
   // Trail & Ultra
@@ -234,7 +242,7 @@ export async function fetchAndStoreArticles(): Promise<{
           // Skip if missing required fields
           if (!item.title || !item.link) continue;
 
-          const imageUrl = extractImageUrl(item);
+          const imageUrl = extractImageUrl(item) || SOURCE_PLACEHOLDERS[feed.name] || null;
           const description = cleanDescription(item.contentSnippet || item.content);
 
           await prisma.articles.upsert({
