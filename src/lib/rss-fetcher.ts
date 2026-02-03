@@ -39,9 +39,10 @@ const parser: Parser<CustomFeed, CustomItem> = new Parser({
 // Placeholder images for sources without images in their RSS
 // TODO: Replace with custom branded images in R2
 const SOURCE_PLACEHOLDERS: Record<string, string> = {
-  'Athletics Weekly': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=80', // Track athletics
+'Athletics Weekly': 'https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=800&q=80', // Track athletics
   'RunABC South': 'https://images.unsplash.com/photo-1571008887538-b36bb32f4571?w=800&q=80', // Running
   'RunABC Scotland': 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=800&q=80', // Scottish landscape run
+  'LetsRun': 'https://images.unsplash.com/photo-1461896836934-bd45ba4d36e1?w=800&q=80', // Track running
 };
 
 // RSS Feed sources
@@ -51,11 +52,6 @@ const RSS_FEEDS = [
     name: 'iRunFar',
     url: 'https://www.irunfar.com/feed',
     category: 'trail',
-  },
-  {
-    name: 'UltraRunning Magazine',
-    url: 'https://www.ultrarunning.com/feed/',
-    category: 'ultra',
   },
   {
     name: 'Trail Runner Magazine',

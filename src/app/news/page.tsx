@@ -70,8 +70,7 @@ async function getArticles(): Promise<Article[]> {
 const sourceColors: Record<string, string> = {
   // Trail & Ultra (priority 1)
   'iRunFar': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  'UltraRunning Magazine': 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-  'Trail Runner Magazine': 'bg-green-500/20 text-green-400 border-green-500/30',
+'Trail Runner Magazine': 'bg-green-500/20 text-green-400 border-green-500/30',
   'Freetrail': 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
   'Trail Sisters': 'bg-pink-500/20 text-pink-400 border-pink-500/30',
   // General Running (priority 2)
