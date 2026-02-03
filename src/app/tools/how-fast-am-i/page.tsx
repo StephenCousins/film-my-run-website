@@ -259,7 +259,7 @@ export default function HowFastAmIPage() {
                       value={athleteId}
                       onChange={(e) => setAthleteId(e.target.value)}
                       onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                      placeholder={activeTab === 'parkrun' ? 'Enter parkrun ID (e.g., 123456)' : 'Enter Power of 10 ID'}
+                      placeholder={activeTab === 'parkrun' ? 'Enter parkrun ID (e.g., 123456)' : 'Enter Power of 10 athlete ID (UUID)'}
                       className="input w-full py-3.5"
                     />
                   </div>
@@ -284,7 +284,7 @@ export default function HowFastAmIPage() {
                   <Info className="w-4 h-4" />
                   {activeTab === 'parkrun'
                     ? 'Find your ID on your parkrun profile page'
-                    : 'Find your ID on thepowerof10.info'}
+                    : 'Find your ID on earlyaccess.myathletics.uk'}
                 </p>
               </div>
             </div>

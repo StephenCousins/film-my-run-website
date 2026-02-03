@@ -11,7 +11,7 @@ import {
 
 export const dynamic = 'force-dynamic';
 
-const PO10_BASE_URL = 'https://www.thepowerof10.info/athletes/profile.aspx';
+const PO10_BASE_URL = 'https://earlyaccess.myathletics.uk/Home/Athlete';
 const CACHE_HOURS = 6;
 
 const HEADERS = {
@@ -20,15 +20,19 @@ const HEADERS = {
   'Accept-Language': 'en-GB,en;q=0.9',
 };
 
-// Distance mappings
+// Distance mappings — maps new PO10 event names to our internal keys
 const DISTANCE_MAP: Record<string, string> = {
   '5K': '5k',
   '5000': '5k',
   '10K': '10k',
   '10000': '10k',
+  '10 Miles': '10m',
   '10M': '10m',
+  'Half Marathon': 'half',
   'HM': 'half',
+  'Marathon': 'marathon',
   'Mar': 'marathon',
+  '20 Miles': '20m',
   '20M': '20m',
 };
 
@@ -57,32 +61,44 @@ interface Po10Data {
   error?: string;
 }
 
-// Validate athlete ID
+// UUID regex for new PO10 athlete IDs
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// Validate athlete ID (accepts new UUID format)
 function validateAthleteId(id: string): { valid: boolean; error?: string; sanitized?: string } {
   if (!id) {
     return { valid: false, error: 'Please enter a Power of 10 athlete ID' };
   }
 
-  const sanitized = id.trim();
+  const sanitized = id.trim().toLowerCase();
 
   if (!sanitized) {
     return { valid: false, error: 'Please enter a Power of 10 athlete ID' };
   }
 
-  if (!/^\d+$/.test(sanitized)) {
-    return { valid: false, error: 'Power of 10 ID should contain only numbers' };
-  }
-
-  if (sanitized.length > 10) {
-    return { valid: false, error: 'Power of 10 ID is too long' };
+  if (!UUID_REGEX.test(sanitized)) {
+    return { valid: false, error: 'Power of 10 ID should be a UUID (e.g. c24cb315-536c-458c-af1f-4b45d89e919e)' };
   }
 
   return { valid: true, sanitized };
 }
 
+// Events we care about for ranking/comparisons
+const TARGET_EVENTS = new Set(Object.keys(DISTANCE_MAP));
+
+/**
+ * Convert a raw PO10 performance value to seconds.
+ * Short events (5K, 10K, etc.) are stored in centiseconds.
+ * Long events (half marathon, marathon, etc.) are stored in seconds.
+ * Heuristic: values > 36000 are centiseconds, otherwise seconds.
+ */
+function po10ValueToSeconds(raw: number): number {
+  return raw > 36000 ? raw / 100 : raw;
+}
+
 // Fetch and parse athlete page
 async function fetchPo10Page(athlete_id: string): Promise<Po10Data> {
-  const url = `${PO10_BASE_URL}?athleteid=${athlete_id}`;
+  const url = `${PO10_BASE_URL}/${athlete_id}`;
 
   const response = await fetch(url, {
     headers: HEADERS,
@@ -99,63 +115,91 @@ async function fetchPo10Page(athlete_id: string): Promise<Po10Data> {
 
 function parsePo10Page(html: string, athlete_id: string): Po10Data {
   const $ = cheerio.load(html);
-
-  // Get athlete name
-  let name = 'Unknown';
-  const h2 = $('h2').first();
-  if (h2.length) {
-    name = h2.text().trim();
-  }
-
-  // Get club, gender, age group from page text
   const pageText = $.text();
 
-  let club: string | null = null;
-  const clubMatch = pageText.match(/Club:([A-Za-z0-9 ]+?)(?:Gender:|County:|$)/);
-  if (clubMatch) {
-    club = clubMatch[1].trim();
+  // Name: <div class="name">First</div> <div class="surname">Last</div>
+  let name = 'Unknown';
+  const firstName = $('div.name').first().text().trim();
+  const surname = $('div.surname').first().text().trim();
+  if (firstName && surname) {
+    name = `${firstName} ${surname}`;
+  } else if (firstName) {
+    name = firstName;
   }
 
+  // Club: <a> tag linking to /Home/Club/
+  let club: string | null = null;
+  const clubLink = $('a[href*="/Home/Club/"]').first();
+  if (clubLink.length) {
+    club = clubLink.text().trim();
+  }
+
+  // Gender and age group from page text
   let gender: 'male' | 'female' | null = null;
-  const genderMatch = pageText.match(/Gender:(Male|Female)/);
+  const genderMatch = pageText.match(/Sex\s*[:\s]*(Men|Women|Male|Female)/i);
   if (genderMatch) {
-    gender = genderMatch[1].toLowerCase() as 'male' | 'female';
+    const g = genderMatch[1].toLowerCase();
+    gender = (g === 'men' || g === 'male') ? 'male' : 'female';
   }
 
   let age_group: string | null = null;
-  const age_groupMatch = pageText.match(/Age Group:(V?\d+|SEN|U\d+)/);
-  if (age_groupMatch) {
-    age_group = age_groupMatch[1];
+  const ageMatch = pageText.match(/Age Group\s*[:\s]*(V?\d+|SEN|U\d+)/i);
+  if (ageMatch) {
+    age_group = ageMatch[1];
   }
 
-  // Extract PBs
+  // Extract PBs from JavaScript variables embedded in the page.
+  // The new PO10 site stores per-event performance arrays:
+  //   var dataEventName{N} = 'Marathon';
+  //   var dataValues{N} = [13405,12499,...,10737,...];
+  // The true all-time PB is the minimum of dataValues{N}.
+  // Multiple indices can share the same event name (different categories).
+  // We take the best (lowest) across all indices per event.
+
   const pbs: Record<string, PB> = {};
-  const targetEvents = ['5K', '10K', '10M', 'HM', 'Mar', '5000', '10000', '20M'];
 
-  $('tr').each((_, row) => {
-    const cells = $(row).find('td');
-    if (cells.length >= 2) {
-      const event = $(cells[0]).text().trim();
+  // Extract event names
+  const eventNameRegex = /var\s+dataEventName(\d+)\s*=\s*'([^']+)'/g;
+  const eventNames: Record<string, string> = {};
+  let match;
+  while ((match = eventNameRegex.exec(html)) !== null) {
+    eventNames[match[1]] = match[2];
+  }
 
-      if (targetEvents.includes(event)) {
-        const pbText = $(cells[1]).text().trim();
-        const pbSeconds = parseTimeToSeconds(pbText);
-
-        if (pbSeconds) {
-          const normalizedEvent = DISTANCE_MAP[event] || event.toLowerCase();
-
-          // Only keep if better than existing
-          if (!pbs[normalizedEvent] || pbSeconds < pbs[normalizedEvent].seconds) {
-            pbs[normalizedEvent] = {
-              time: pbText,
-              seconds: pbSeconds,
-              timeFormatted: secondsToTimeStr(pbSeconds),
-            };
-          }
-        }
-      }
+  // Extract performance arrays and find minimum per index
+  const dataValuesRegex = /var\s+dataValues(\d+)\s*=\s*\[([^\]]+)\]/g;
+  const minValues: Record<string, number> = {};
+  while ((match = dataValuesRegex.exec(html)) !== null) {
+    const idx = match[1];
+    const values = match[2].split(',').map(v => parseInt(v.trim(), 10)).filter(v => !isNaN(v) && v > 0);
+    if (values.length > 0) {
+      minValues[idx] = Math.min(...values);
     }
-  });
+  }
+
+  // Process each event index
+  for (const idx of Object.keys(eventNames)) {
+    const eventName = eventNames[idx];
+    const rawValue = minValues[idx];
+    if (rawValue === undefined) continue;
+
+    // Only process events we can rank
+    if (!TARGET_EVENTS.has(eventName)) continue;
+
+    const normalizedEvent = DISTANCE_MAP[eventName];
+    if (!normalizedEvent) continue;
+
+    const seconds = po10ValueToSeconds(rawValue);
+
+    // Only keep the best PB per distance
+    if (!pbs[normalizedEvent] || seconds < pbs[normalizedEvent].seconds) {
+      pbs[normalizedEvent] = {
+        time: secondsToTimeStr(seconds),
+        seconds,
+        timeFormatted: secondsToTimeStr(seconds),
+      };
+    }
+  }
 
   return {
     name,
