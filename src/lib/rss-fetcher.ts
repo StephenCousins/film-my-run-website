@@ -239,26 +239,49 @@ export async function fetchAndStoreArticles(): Promise<{
           const imageUrl = extractImageUrl(item) || SOURCE_PLACEHOLDERS[feed.name] || null;
           const description = cleanDescription(item.contentSnippet || item.content);
 
-          // Use link as unique identifier (more stable than guid which varies between feeds)
-          await prisma.articles.upsert({
-            where: { guid: item.link },
-            update: {
+          // Prefer the full permalink (item.link) over the short guid (item.guid)
+          // Some feeds first return ?p=123 then later the full slug URL
+          const articleLink = item.link || item.guid;
+          const articleGuid = item.guid || item.link;
+
+          // Check if an article with the same title+source already exists
+          // This catches duplicates where the URL changed between syncs
+          const existing = await prisma.articles.findFirst({
+            where: {
               title: item.title,
-              description,
-              image_url: imageUrl,
-              pub_date: pubDate,
-            },
-            create: {
-              guid: item.link,
-              title: item.title,
-              link: item.link,
-              description,
-              image_url: imageUrl,
-              pub_date: pubDate,
               source: feed.name,
-              category: feed.category,
             },
           });
+
+          if (existing) {
+            // Update the existing record (prefer the full permalink URL)
+            const bestLink = articleLink.includes('?p=') ? (existing.link.includes('?p=') ? articleLink : existing.link) : articleLink;
+            const bestGuid = bestLink;
+            await prisma.articles.update({
+              where: { id: existing.id },
+              data: {
+                guid: bestGuid,
+                link: bestLink,
+                description,
+                image_url: imageUrl,
+                pub_date: pubDate,
+              },
+            });
+          } else {
+            // New article - insert it
+            await prisma.articles.create({
+              data: {
+                guid: articleGuid,
+                title: item.title,
+                link: articleLink,
+                description,
+                image_url: imageUrl,
+                pub_date: pubDate,
+                source: feed.name,
+                category: feed.category,
+              },
+            });
+          }
           totalStored++;
         } catch (err) {
           // Log individual item errors but continue processing
