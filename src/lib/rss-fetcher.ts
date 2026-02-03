@@ -45,6 +45,29 @@ const SOURCE_PLACEHOLDERS: Record<string, string> = {
   'LetsRun': 'https://images.unsplash.com/photo-1461896836934-bd45ba4d36e1?w=800&q=80', // Track running
 };
 
+// Keywords for filtering broad feeds (matched case-insensitively against title + description)
+const RUNNING_KEYWORDS = [
+  'marathon', 'running', 'runner', 'run ', 'runs ', 'ran ',
+  'ultra', 'trail', 'cross country', 'cross-country',
+  'parkrun', 'half marathon', 'half-marathon',
+  '5k', '10k', '5,000m', '10,000m', '5000m', '10000m',
+  'steeplechase', 'mile ', 'miler', '1500m', '800m', '3000m',
+  'relay', 'distance', 'endurance',
+  'london marathon', 'boston marathon', 'chicago marathon',
+  'great north run', 'comrades',
+];
+
+/**
+ * Check if an article matches keyword filters.
+ * Returns true if no keywords are configured (no filtering needed)
+ * or if any keyword is found in the title or description.
+ */
+function matchesKeywords(title: string, description: string, keywords?: string[]): boolean {
+  if (!keywords) return true;
+  const text = `${title} ${description}`.toLowerCase();
+  return keywords.some((kw) => text.includes(kw.toLowerCase()));
+}
+
 // RSS Feed sources
 const RSS_FEEDS = [
   // Trail & Ultra
@@ -90,11 +113,12 @@ const RSS_FEEDS = [
     url: 'https://runabc.co.uk/feeds/scotland-news',
     category: 'running',
   },
-  // Athletics
+  // Athletics (keyword-filtered — BBC's feed is broad)
   {
     name: 'BBC Sport',
     url: 'https://feeds.bbci.co.uk/sport/athletics/rss.xml',
     category: 'athletics',
+    keywords: RUNNING_KEYWORDS,
   },
 ];
 
@@ -232,6 +256,10 @@ export async function fetchAndStoreArticles(): Promise<{
 
           // Skip if missing required fields
           if (!item.title || !item.link) continue;
+
+          // Skip articles that don't match keyword filters (for broad feeds like BBC)
+          const snippetText = item.contentSnippet || item.content || '';
+          if (!matchesKeywords(item.title, snippetText, feed.keywords)) continue;
 
           const imageUrl = extractImageUrl(item) || SOURCE_PLACEHOLDERS[feed.name] || null;
           const description = cleanDescription(item.contentSnippet || item.content);
