@@ -63,11 +63,6 @@ const RSS_FEEDS = [
     url: 'https://freetrail.com/feed/',
     category: 'trail',
   },
-  {
-    name: 'Trail Sisters',
-    url: 'https://trailsisters.net/feed/',
-    category: 'trail',
-  },
   // General Running
   {
     name: 'Canadian Running',
@@ -94,6 +89,12 @@ const RSS_FEEDS = [
     name: 'RunABC Scotland',
     url: 'https://runabc.co.uk/feeds/scotland-news',
     category: 'running',
+  },
+  // Athletics
+  {
+    name: 'BBC Sport',
+    url: 'https://feeds.bbci.co.uk/sport/athletics/rss.xml',
+    category: 'athletics',
   },
 ];
 

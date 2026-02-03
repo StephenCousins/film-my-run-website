@@ -72,7 +72,6 @@ const sourceColors: Record<string, string> = {
   'iRunFar': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
 'Trail Runner Magazine': 'bg-green-500/20 text-green-400 border-green-500/30',
   'Freetrail': 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-  'Trail Sisters': 'bg-pink-500/20 text-pink-400 border-pink-500/30',
   // General Running (priority 2)
   'Canadian Running': 'bg-red-500/20 text-red-400 border-red-500/30',
   'RunABC South': 'bg-sky-500/20 text-sky-400 border-sky-500/30',
@@ -80,10 +79,28 @@ const sourceColors: Record<string, string> = {
   // Athletics (priority 4)
   'LetsRun': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
   'Athletics Weekly': 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
+  'BBC Sport': 'bg-rose-500/20 text-rose-400 border-rose-500/30',
 };
 
 function getSourceColor(source: string): string {
   return sourceColors[source] || 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
+}
+
+// Left accent border colors for no-image cards
+const sourceAccentBorders: Record<string, string> = {
+  'iRunFar': 'border-l-blue-500',
+  'Trail Runner Magazine': 'border-l-green-500',
+  'Freetrail': 'border-l-emerald-500',
+  'Canadian Running': 'border-l-red-500',
+  'RunABC South': 'border-l-sky-500',
+  'RunABC Scotland': 'border-l-teal-500',
+  'LetsRun': 'border-l-orange-500',
+  'Athletics Weekly': 'border-l-indigo-500',
+  'BBC Sport': 'border-l-rose-500',
+};
+
+function getSourceAccentBorder(source: string): string {
+  return sourceAccentBorders[source] || 'border-l-zinc-500';
 }
 
 // ============================================
@@ -93,7 +110,84 @@ function getSourceColor(source: string): string {
 function ArticleCard({ article, featured = false }: { article: Article; featured?: boolean }) {
   const pubDate = new Date(article.pubDate);
   const isRecent = Date.now() - pubDate.getTime() < 24 * 60 * 60 * 1000; // Less than 24h old
+  const hasImage = !!article.imageUrl;
 
+  // No-image card variant: text-only with left accent border
+  if (!hasImage) {
+    return (
+      <article
+        className={cn(
+          'group relative bg-surface rounded-2xl overflow-hidden border border-border/50 transition-all duration-300 hover:-translate-y-1',
+          'shadow-sm hover:shadow-lg hover:shadow-brand/5 hover:border-brand/30',
+          'border-l-4',
+          getSourceAccentBorder(article.source),
+          featured && 'lg:col-span-2'
+        )}
+      >
+        <a
+          href={article.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block h-full"
+        >
+          <div className="p-5 lg:p-6 flex flex-col flex-1 h-full">
+            {/* New badge */}
+            {isRecent && (
+              <div className="mb-3">
+                <span className="px-2.5 py-1 bg-brand text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
+                  New
+                </span>
+              </div>
+            )}
+
+            {/* Source and date row */}
+            <div className="flex items-center gap-3 mb-3">
+              <span className={cn(
+                'px-3 py-1 text-xs font-medium rounded-full border',
+                getSourceColor(article.source)
+              )}>
+                {article.source}
+              </span>
+              <span className="flex items-center gap-1.5 text-xs text-muted">
+                <Calendar className="w-3 h-3" />
+                {pubDate.toLocaleDateString('en-GB', {
+                  day: 'numeric',
+                  month: 'short',
+                  year: 'numeric',
+                })}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h2 className={cn(
+              'font-display font-semibold text-foreground group-hover:text-brand transition-colors duration-200 mb-3 leading-snug',
+              featured ? 'text-xl lg:text-2xl' : 'text-base lg:text-lg'
+            )}>
+              {article.title}
+            </h2>
+
+            {/* Description - more visible since no image takes space */}
+            {article.description && (
+              <p className={cn(
+                'text-secondary leading-relaxed mb-4 flex-1',
+                featured ? 'text-sm lg:text-base line-clamp-5' : 'text-sm line-clamp-3'
+              )}>
+                {article.description}
+              </p>
+            )}
+
+            {/* Read more */}
+            <div className="flex items-center gap-1.5 text-brand font-medium text-sm group-hover:gap-2.5 transition-all duration-200 mt-auto pt-2">
+              Read Article
+              <ExternalLink className="w-3.5 h-3.5" />
+            </div>
+          </div>
+        </a>
+      </article>
+    );
+  }
+
+  // Standard card with image
   return (
     <article
       className={cn(
@@ -108,51 +202,35 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
         rel="noopener noreferrer"
         className={cn(
           'block h-full',
-          article.imageUrl && featured ? 'flex flex-col lg:flex-row' : ''
+          featured ? 'flex flex-col lg:flex-row' : ''
         )}
       >
         {/* Thumbnail */}
-        {article.imageUrl ? (
-          <div className={cn(
-            'relative overflow-hidden bg-zinc-800',
-            featured
-              ? 'h-52 lg:h-auto lg:w-2/5 lg:min-h-[300px]'
-              : 'h-44'
-          )}>
-            <img
-              src={article.imageUrl}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-              loading="lazy"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-            {isRecent && (
-              <div className="absolute top-3 left-3">
-                <span className="px-2.5 py-1 bg-brand text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
-                  New
-                </span>
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className={cn(
-            'relative overflow-hidden bg-gradient-to-br from-zinc-800 to-zinc-900 flex items-center justify-center',
-            featured ? 'h-52 lg:h-auto lg:w-2/5 lg:min-h-[300px]' : 'h-32'
-          )}>
-            <Newspaper className="w-10 h-10 text-zinc-600" />
-            {isRecent && (
-              <div className="absolute top-3 left-3">
-                <span className="px-2.5 py-1 bg-brand text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
-                  New
-                </span>
-              </div>
-            )}
-          </div>
-        )}
+        <div className={cn(
+          'relative overflow-hidden bg-zinc-800',
+          featured
+            ? 'h-52 lg:h-auto lg:w-2/5 lg:min-h-[300px]'
+            : 'h-44'
+        )}>
+          <img
+            src={article.imageUrl!}
+            alt=""
+            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+          {isRecent && (
+            <div className="absolute top-3 left-3">
+              <span className="px-2.5 py-1 bg-brand text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
+                New
+              </span>
+            </div>
+          )}
+        </div>
 
         <div className={cn(
           'p-5 lg:p-6 flex flex-col',
-          article.imageUrl && featured ? 'lg:w-3/5 lg:py-8' : '',
+          featured ? 'lg:w-3/5 lg:py-8' : '',
           'flex-1'
         )}>
           {/* Source and date row */}
