@@ -45,7 +45,7 @@ import { getArticles as fetchArticles } from '@/lib/rss-fetcher';
 
 async function getArticles(): Promise<Article[]> {
   try {
-    const articles = await fetchArticles(14, 50);
+    const articles = await fetchArticles(14, 100);
 
     return articles.map((article) => ({
       id: article.id.toString(),
