@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Race Day Planner - Pacing & Nutrition Calculator</title>
+    
+    <!-- Primary Meta Tags -->
+    <meta name="description" content="Free race day pacing and nutrition calculator for runners. Generate personalized split times and gel schedules for any distance from 5K to 100 miles.">
+    <meta name="keywords" content="race pacing calculator, marathon nutrition, gel timing, running pace calculator, ultra running, race day planning">
+    <meta name="author" content="Film My Run">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Race Day Planner - Free Pacing & Nutrition Calculator">
+    <meta property="og:description" content="Create your personalized race day strategy with smart pacing splits and nutrition timing. Works for 5K to 100 miles.">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Race Day Planner - Free Pacing & Nutrition Calculator">
+    <meta property="twitter:description" content="Create your personalized race day strategy with smart pacing splits and nutrition timing.">
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏃 Race Day Planner</h1>
+            <p class="subtitle">Create your personalized pacing and nutrition strategy</p>
+        </header>
+
+        <main>
+            <section class="input-section">
+                <h2>Course Preset (Optional)</h2>
+                
+                <div class="form-group">
+                    <label for="coursePreset">Select a Race</label>
+                    <select id="coursePreset">
+                        <option value="">-- Custom / Manual Entry --</option>
+                        <optgroup label="Marathons">
+                            <option value="london-marathon">London Marathon</option>
+                            <option value="berlin-marathon">Berlin Marathon</option>
+                            <option value="manchester-marathon">Manchester Marathon</option>
+                            <option value="brighton-marathon">Brighton Marathon</option>
+                            <option value="paris-marathon">Paris Marathon</option>
+                        </optgroup>
+                        <optgroup label="Ultras (Centurion)">
+                            <option value="sdw100">South Downs Way 100</option>
+                            <option value="centurion-ndw100">North Downs Way 100</option>
+                        </optgroup>
+                    </select>
+                    <small class="help-text">Pre-fills distance, elevation, aid stations, and adds course-specific tips</small>
+                </div>
+
+                <h2>Race Details</h2>
+                
+                <div class="form-group">
+                    <label for="raceDistance">Race Distance</label>
+                    <select id="raceDistance">
+                        <option value="5">5K</option>
+                        <option value="10">10K</option>
+                        <option value="21.0975" selected>Half Marathon</option>
+                        <option value="42.195">Marathon</option>
+                        <option value="50">50K</option>
+                        <option value="80.467">50 Miles</option>
+                        <option value="100">100K</option>
+                        <option value="160.934">100 Miles</option>
+                        <option value="custom">Custom Distance</option>
+                    </select>
+                </div>
+
+                <div class="form-group hidden" id="customDistanceGroup">
+                    <label for="customDistance">Custom Distance (km)</label>
+                    <input type="number" id="customDistance" placeholder="Enter distance in km" step="0.1">
+                </div>
+
+                <div class="form-group">
+                    <label for="targetTime">Target Finish Time</label>
+                    <div class="time-inputs">
+                        <input type="number" id="targetHours" min="0" max="48" placeholder="HH" value="1">
+                        <span>:</span>
+                        <input type="number" id="targetMinutes" min="0" max="59" placeholder="MM" value="45">
+                        <span>:</span>
+                        <input type="number" id="targetSeconds" min="0" max="59" placeholder="SS" value="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="units">Display Units</label>
+                    <select id="units">
+                        <option value="km">Kilometers</option>
+                        <option value="mi">Miles</option>
+                    </select>
+                </div>
+
+                <h2>Elevation Profile (Optional)</h2>
+                
+                <div class="form-group">
+                    <label for="elevationGain">Total Elevation Gain</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="elevationGain" placeholder="0" value="0" min="0">
+                        <select id="elevationUnit">
+                            <option value="m">meters</option>
+                            <option value="ft">feet</option>
+                        </select>
+                    </div>
+                </div>
+
+                <h2>Nutrition Settings</h2>
+                
+                <div class="form-group">
+                    <label for="bodyWeight">Body Weight</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="bodyWeight" placeholder="70" value="70" min="30" max="200">
+                        <select id="weightUnit">
+                            <option value="kg">kg</option>
+                            <option value="lb">lbs</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="carbsPerHour">Target Carbs per Hour</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="carbsPerHour" placeholder="60" value="60" min="30" max="120">
+                        <span class="unit-label">grams</span>
+                    </div>
+                    <small class="help-text">Recommended: 30-60g/hr for &lt;3hrs, 60-90g/hr for longer races</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="gelCarbs">Carbs per Gel/Serving</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="gelCarbs" placeholder="25" value="25" min="15" max="50">
+                        <span class="unit-label">grams</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="caffeineStrategy">Caffeine Strategy</label>
+                    <select id="caffeineStrategy">
+                        <option value="none">No caffeine</option>
+                        <option value="start">At start only</option>
+                        <option value="late" selected>Save for final third</option>
+                        <option value="throughout">Throughout race</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="pacingStrategy">Pacing Strategy</label>
+                    <select id="pacingStrategy">
+                        <option value="even" selected>Even pacing</option>
+                        <option value="negative">Negative split (faster second half)</option>
+                        <option value="conservative">Conservative (bank time early)</option>
+                    </select>
+                    <small class="help-text">Negative splits work best for experienced marathoners</small>
+                </div>
+
+                <h2>Aid Stations (Optional - for Ultras)</h2>
+                
+                <div class="form-group">
+                    <label for="aidStationInterval">Aid Station Interval</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="aidStationInterval" placeholder="5" value="5" min="1" max="30">
+                        <span class="unit-label">km</span>
+                    </div>
+                    <small class="help-text">Leave at 5km for typical race, or enter specific interval</small>
+                </div>
+
+                <button type="button" id="generatePlan" class="btn-primary">Generate Race Plan</button>
+            </section>
+
+            <section class="output-section hidden" id="outputSection">
+                <div class="output-header">
+                    <h2>Your Race Day Plan</h2>
+                    <div class="output-actions">
+                        <button type="button" id="printPlan" class="btn-secondary">🖨️ Print Race Card</button>
+                        <button type="button" id="copyPlan" class="btn-secondary">📋 Copy to Clipboard</button>
+                        <button type="button" id="sharePlan" class="btn-secondary">🔗 Share Plan</button>
+                    </div>
+                </div>
+
+                <div class="summary-cards">
+                    <div class="summary-card">
+                        <span class="card-label">Target Pace</span>
+                        <span class="card-value" id="targetPace">--</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-label">Total Gels</span>
+                        <span class="card-value" id="totalGels">--</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-label">Total Carbs</span>
+                        <span class="card-value" id="totalCarbs">--</span>
+                    </div>
+                    <div class="summary-card">
+                        <span class="card-label">Caffeine Timing</span>
+                        <span class="card-value" id="caffeineTiming">--</span>
+                    </div>
+                </div>
+
+                <div class="plan-table-container">
+                    <h3>Split & Nutrition Schedule</h3>
+                    <table class="plan-table" id="planTable">
+                        <thead>
+                            <tr>
+                                <th>Distance</th>
+                                <th>Split Time</th>
+                                <th>Elapsed Time</th>
+                                <th>Target Pace</th>
+                                <th>Nutrition</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody id="planTableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="nutrition-summary">
+                    <h3>Nutrition Checklist</h3>
+                    <div id="nutritionChecklist" class="checklist"></div>
+                </div>
+
+                <div class="race-tips">
+                    <h3>Race Day Tips</h3>
+                    <div id="raceTips" class="tips-list"></div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>Built for runners, by runners. No account needed. Free forever.</p>
+            <p class="disclaimer">Always test your nutrition strategy in training before race day.</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
