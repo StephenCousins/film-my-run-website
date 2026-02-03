@@ -272,8 +272,8 @@ function calculateOverallStats(
 
   return {
     distances: results,
-    overall_percentile,
-    overall_ability_level: overallAbility,
+    overallPercentile: overall_percentile,
+    overallAbilityLevel: overallAbility,
     ratingMessage: getRatingMessage(overall_percentile),
   };
 }
@@ -332,9 +332,9 @@ export async function GET(request: NextRequest) {
         cached: true,
         athlete: {
           name: cached.name,
-          athlete_id: id,
+          athleteId: id,
           club: cached.club,
-          age_group: cached.age_group,
+          ageGroup: cached.age_group,
           gender: cached.gender,
           pbs,
         },
@@ -354,7 +354,7 @@ export async function GET(request: NextRequest) {
           warning: data.error,
           athlete: {
             name: cached.name,
-            athlete_id: id,
+            athleteId: id,
             club: cached.club,
           },
         });
@@ -379,8 +379,8 @@ export async function GET(request: NextRequest) {
         gender: data.gender,
         age_group: data.age_group,
         pbs_json: pbs_jsonValue,
-        overall_percentile: stats.overall_percentile,
-        overall_ability_level: stats.overall_ability_level,
+        overall_percentile: stats.overallPercentile,
+        overall_ability_level: stats.overallAbilityLevel,
         updated_at: new Date(),
       },
       update: {
@@ -389,8 +389,8 @@ export async function GET(request: NextRequest) {
         gender: data.gender,
         age_group: data.age_group,
         pbs_json: pbs_jsonValue,
-        overall_percentile: stats.overall_percentile,
-        overall_ability_level: stats.overall_ability_level,
+        overall_percentile: stats.overallPercentile,
+        overall_ability_level: stats.overallAbilityLevel,
         lookup_count: { increment: 1 },
         last_lookup_at: new Date(),
         updated_at: new Date(),
@@ -409,7 +409,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({
       ok: true,
       cached: false,
-      athlete: data,
+      athlete: {
+        name: data.name,
+        athleteId: data.athlete_id,
+        club: data.club,
+        ageGroup: data.age_group,
+        gender: data.gender,
+        pbs: data.pbs,
+      },
       stats,
     });
   } catch (error) {
@@ -428,7 +435,7 @@ export async function GET(request: NextRequest) {
         warning: error instanceof Error ? error.message : 'Failed to fetch fresh data',
         athlete: {
           name: cached.name,
-          athlete_id: id,
+          athleteId: id,
           club: cached.club,
         },
       });
