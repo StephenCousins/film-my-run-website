@@ -44,11 +44,11 @@ const tools = [
     users: '28K+',
   },
   {
-    name: 'Race Dashboard',
-    description: 'Track and analyze all your race results in one place',
-    icon: BarChart3,
+    name: 'Route Comparison',
+    description: 'Compare race routes side by side with elevation and distance',
+    icon: Map,
     color: 'from-green-500 to-green-600',
-    href: '/races',
+    href: '/tools/route-comparison',
     users: '45K+',
   },
   {
@@ -60,11 +60,11 @@ const tools = [
     users: '60K+',
   },
   {
-    name: 'Race Map',
-    description: 'Visualize race routes with elevation and key markers',
-    icon: Map,
+    name: 'Training Plan App',
+    description: 'Personalized marathon training plans tailored to your goals',
+    icon: BarChart3,
     color: 'from-red-500 to-red-600',
-    href: '/tools/race-map',
+    href: '/training',
     users: '22K+',
   },
   {
