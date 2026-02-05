@@ -49,7 +49,7 @@ const services = [
       'Sponsor announcements',
       'Start line energy & finish line welcomes',
     ],
-    image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services/commentating.jpg',
+    image: '/images/IMG_0706.JPG',
     imagePosition: 'top',
     href: '/services/master-of-ceremonies',
     color: 'from-emerald-500 to-teal-500',
