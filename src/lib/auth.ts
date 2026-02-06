@@ -116,7 +116,8 @@ export const authOptions: NextAuthOptions = {
     async createUser({ user }) {
       // New users get FREE tier by default
       // This is handled by the Prisma schema default
-      console.log('New user created:', user.email);
+      // User creation logged without PII
+      console.log('New user created:', user.id);
     },
   },
 };
