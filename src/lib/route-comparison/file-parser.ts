@@ -330,7 +330,6 @@ export async function parseFIT(
       mode: 'list',
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     fitParser.parse(arrayBuffer, (error: string | undefined, data: any) => {
       if (error) {
         reject(new Error(error));
