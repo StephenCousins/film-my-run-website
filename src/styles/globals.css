@@ -12,6 +12,9 @@
 
 @layer base {
   :root {
+    /* ========== TAB BAR ========== */
+    --tab-bar-height: 4rem;
+
     /* ========== BRAND ========== */
     --color-brand: 248 140 0;           /* #f88c00 - Primary orange */
     --color-brand-hover: 234 88 12;     /* #ea580c - Hover state */
@@ -252,6 +255,11 @@
   /* Aspect ratios */
   .aspect-video-tall {
     aspect-ratio: 9/16;
+  }
+
+  /* Safe area padding for mobile tab bar */
+  .pb-safe-tab {
+    padding-bottom: calc(var(--tab-bar-height) + env(safe-area-inset-bottom, 0px));
   }
 }
 

@@ -125,7 +125,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen min-h-[700px] w-full overflow-hidden"
+      className="relative h-screen min-h-[600px] lg:min-h-[700px] w-full overflow-hidden"
     >
       {/* Video Background */}
       <div className="absolute inset-0">
@@ -192,17 +192,17 @@ export default function Hero() {
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4">
               <Link
                 href="/films"
-                className="hero-cta group inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-all hover:scale-105"
+                className="hero-cta group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-all hover:scale-105"
               >
                 <Play className="w-5 h-5 fill-current" />
                 Watch Films
               </Link>
               <Link
                 href="/tools/calculators"
-                className="hero-cta inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-all hover:scale-105"
+                className="hero-cta inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-all hover:scale-105"
               >
                 Running Tools
               </Link>
@@ -214,7 +214,7 @@ export default function Hero() {
       {/* Sound toggle */}
       <button
         onClick={toggleMute}
-        className="absolute bottom-8 right-8 p-3 bg-black/30 backdrop-blur-sm rounded-full border border-white/10 text-white hover:bg-black/50 transition-colors z-10"
+        className="absolute bottom-24 lg:bottom-8 right-8 p-3 bg-black/30 backdrop-blur-sm rounded-full border border-white/10 text-white hover:bg-black/50 transition-colors z-10"
         aria-label={isMuted ? 'Unmute video' : 'Mute video'}
       >
         {isMuted ? (
@@ -225,7 +225,7 @@ export default function Hero() {
       </button>
 
       {/* Scroll indicator */}
-      <div className="hero-scroll absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60">
+      <div className="hero-scroll absolute bottom-24 lg:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60">
         <span className="text-xs uppercase tracking-widest">Scroll</span>
         <ChevronDown className="w-5 h-5 animate-bounce" />
       </div>

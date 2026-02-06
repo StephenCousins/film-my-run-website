@@ -156,7 +156,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-surface-secondary">
+    <footer className="bg-surface-secondary pb-20 lg:pb-0">
       {/* Main footer content */}
       <div className="container py-16 lg:py-20">
         {/* Top row: Brand + Newsletter */}

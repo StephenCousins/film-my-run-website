@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import UserMenu from '@/components/auth/UserMenu';
@@ -150,125 +150,10 @@ function DesktopNavItem({ item, isActive }: NavItemProps) {
 }
 
 // ============================================
-// MOBILE NAV
-// ============================================
-
-interface MobileNavProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-function MobileNav({ isOpen, onClose }: MobileNavProps) {
-  const pathname = usePathname();
-
-  // Prevent scroll when menu is open
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
-
-  return (
-    <>
-      {/* Backdrop */}
-      <div
-        className={cn(
-          'fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity duration-300',
-          isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        )}
-        onClick={onClose}
-      />
-
-      {/* Menu */}
-      <div
-        className={cn(
-          'fixed inset-y-0 right-0 w-full max-w-sm bg-background z-50 lg:hidden',
-          'transform transition-transform duration-300 ease-out-expo',
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        )}
-      >
-        <div className="flex items-center justify-between p-4 border-b border-border">
-          <Logo />
-          <button
-            onClick={onClose}
-            className="p-2 rounded-full hover:bg-surface-secondary text-secondary hover:text-foreground"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        </div>
-
-        <nav className="p-4 space-y-1">
-          {navigation.map((item) => {
-            const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-            const hasChildren = 'children' in item && item.children;
-
-            return (
-              <div key={item.name}>
-                <Link
-                  href={item.href}
-                  onClick={onClose}
-                  className={cn(
-                    'block px-4 py-3 rounded-lg text-base font-medium transition-colors',
-                    isActive
-                      ? 'text-brand bg-brand-muted'
-                      : 'text-secondary hover:bg-surface-secondary'
-                  )}
-                >
-                  {item.name}
-                </Link>
-
-                {hasChildren && (
-                  <div className="ml-4 mt-1 space-y-1">
-                    {item.children?.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        onClick={onClose}
-                        className="block px-4 py-2 text-sm text-muted hover:text-brand"
-                      >
-                        {child.name}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </nav>
-
-        {/* Bottom section */}
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border space-y-4">
-          {/* Theme toggle */}
-          <div className="flex items-center justify-between px-4">
-            <span className="text-sm text-secondary">Theme</span>
-            <ThemeToggle variant="dropdown" />
-          </div>
-
-          {/* Shop CTA */}
-          <Link
-            href="/shop"
-            onClick={onClose}
-            className="block w-full py-3 text-center bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
-          >
-            Shop Now
-          </Link>
-        </div>
-      </div>
-    </>
-  );
-}
-
-// ============================================
 // MAIN HEADER COMPONENT
 // ============================================
 
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
@@ -281,11 +166,6 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileMenuOpen(false);
-  }, [pathname]);
-
   return (
     <header
       className={cn(
@@ -296,7 +176,7 @@ export default function Header() {
       )}
     >
       <div className="container">
-        <nav className="flex items-center justify-between h-16 lg:h-20">
+        <nav className="flex items-center justify-between h-14 lg:h-20">
           {/* Logo */}
           <Logo />
 
@@ -312,26 +192,17 @@ export default function Header() {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
-            <ThemeToggle />
+            <div className="hidden lg:block">
+              <ThemeToggle />
+            </div>
 
             {/* User Menu - Desktop */}
             <div className="hidden lg:block">
               <UserMenu />
             </div>
-
-            {/* Mobile menu button */}
-            <button
-              className="lg:hidden p-2 rounded-full hover:bg-surface-secondary text-secondary hover:text-foreground"
-              onClick={() => setMobileMenuOpen(true)}
-            >
-              <Menu className="w-6 h-6" />
-            </button>
           </div>
         </nav>
       </div>
-
-      {/* Mobile Navigation */}
-      <MobileNav isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
     </header>
   );
 }

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
+import MobileTabBar from '@/components/layout/MobileTabBar';
 import '@/styles/globals.css';
 
 // Fonts
@@ -120,10 +121,11 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="font-sans transition-colors">
+      <body className="font-sans transition-colors pb-16 lg:pb-0">
         <AuthProvider>
           <ThemeProvider>
             {children}
+            <MobileTabBar />
           </ThemeProvider>
         </AuthProvider>
       </body>

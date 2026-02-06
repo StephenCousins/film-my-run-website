@@ -178,89 +178,126 @@ export default function ToolsShowcase() {
   const translateX = -scrollProgress * maxTranslate;
 
   return (
-    <div
-      ref={sectionRef}
-      className="relative bg-surface-secondary"
-      style={{
-        height: '200vh',
-        zIndex: 50,
-      }}
-    >
-      {/* Sticky container */}
-      <div
-        className="sticky top-0 h-screen overflow-hidden bg-surface-secondary"
-        style={{ zIndex: 50 }}
-      >
-        {/* Background */}
-        <div className="absolute inset-0 bg-surface-secondary" />
-
-        {/* Content */}
-        <div className="relative h-full flex items-center">
-          {/* Left side - Header */}
-          <div className="absolute lg:relative left-0 top-0 w-full lg:w-[450px] p-8 lg:p-16 lg:flex-shrink-0 z-20 bg-surface-secondary">
-            <div className="max-w-sm">
-              <span className="text-brand text-sm font-bold uppercase tracking-wider">
-                Free Tools
-              </span>
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mt-3 mb-6 leading-tight">
-                Built for
-                <br />
-                <span className="text-brand">Runners</span>
-              </h2>
-              <p className="text-secondary text-lg mb-8 leading-relaxed">
-                Powerful calculators and tools used by over 250,000 runners every week.
-                All free, no signup required.
-              </p>
-              <Link
-                href="/tools/calculators"
-                className="btn-primary"
-              >
-                Explore All Tools
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </div>
-
-          {/* Right side - Scrolling cards */}
-          <div className="flex-1 overflow-hidden pt-[300px] lg:pt-0">
-            {/* Mobile: Vertical stack */}
-            <div className="lg:hidden px-4 pb-8 space-y-4">
-              {tools.map((tool, index) => (
-                <ToolCard key={tool.name} tool={tool} index={index} />
-              ))}
-            </div>
-
-            {/* Desktop: Horizontal scroll */}
-            <div
-              ref={cardsRef}
-              className="hidden lg:flex items-center gap-8 pl-[500px] pr-[200px]"
-              style={{
-                transform: `translateX(${translateX}px)`,
-                transition: 'transform 0.1s ease-out',
-              }}
-            >
-              {tools.map((tool, index) => (
-                <ToolCard key={tool.name} tool={tool} index={index} />
-              ))}
-            </div>
-          </div>
+    <>
+      {/* ========== MOBILE LAYOUT (< lg) ========== */}
+      <div className="lg:hidden bg-surface-secondary py-16 relative overflow-hidden">
+        {/* Header */}
+        <div className="px-6 mb-8">
+          <span className="text-brand text-sm font-bold uppercase tracking-wider">
+            Free Tools
+          </span>
+          <h2 className="font-display text-4xl font-bold text-foreground mt-3 mb-4 leading-tight">
+            Built for <span className="text-brand">Runners</span>
+          </h2>
+          <p className="text-secondary text-base mb-6 leading-relaxed">
+            Powerful calculators and tools used by over 250,000 runners every week.
+            All free, no signup required.
+          </p>
         </div>
 
-        {/* Scroll progress indicator */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex items-center gap-2">
-          <div className="w-32 h-1 bg-border rounded-full overflow-hidden">
-            <div
-              className="h-full bg-brand transition-all duration-100"
-              style={{ width: `${scrollProgress * 100}%` }}
-            />
-          </div>
-          <span className="text-muted text-sm">Scroll</span>
+        {/* Horizontal snap-scroll cards */}
+        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-6 pb-4 scrollbar-hide">
+          {tools.map((tool, index) => (
+            <div key={tool.name} className="snap-start flex-shrink-0">
+              <ToolCard tool={tool} index={index} />
+            </div>
+          ))}
+          {/* End spacer */}
+          <div className="flex-shrink-0 w-2" />
+        </div>
+
+        {/* CTA */}
+        <div className="px-6 mt-6">
+          <Link
+            href="/tools/calculators"
+            className="btn-primary"
+          >
+            Explore All Tools
+            <ArrowRight className="w-5 h-5" />
+          </Link>
         </div>
 
         {/* Decorative elements */}
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-info/10 rounded-full blur-3xl pointer-events-none" />
       </div>
-    </div>
+
+      {/* ========== DESKTOP LAYOUT (>= lg) ========== */}
+      <div
+        ref={sectionRef}
+        className="relative bg-surface-secondary hidden lg:block"
+        style={{
+          height: '200vh',
+          zIndex: 50,
+        }}
+      >
+        {/* Sticky container */}
+        <div
+          className="sticky top-0 h-screen overflow-hidden bg-surface-secondary"
+          style={{ zIndex: 50 }}
+        >
+          {/* Background */}
+          <div className="absolute inset-0 bg-surface-secondary" />
+
+          {/* Content */}
+          <div className="relative h-full flex items-center">
+            {/* Left side - Header */}
+            <div className="relative w-[450px] p-16 flex-shrink-0 z-20 bg-surface-secondary">
+              <div className="max-w-sm">
+                <span className="text-brand text-sm font-bold uppercase tracking-wider">
+                  Free Tools
+                </span>
+                <h2 className="font-display text-5xl lg:text-6xl font-bold text-foreground mt-3 mb-6 leading-tight">
+                  Built for
+                  <br />
+                  <span className="text-brand">Runners</span>
+                </h2>
+                <p className="text-secondary text-lg mb-8 leading-relaxed">
+                  Powerful calculators and tools used by over 250,000 runners every week.
+                  All free, no signup required.
+                </p>
+                <Link
+                  href="/tools/calculators"
+                  className="btn-primary"
+                >
+                  Explore All Tools
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Right side - Scrolling cards */}
+            <div className="flex-1 overflow-hidden">
+              <div
+                ref={cardsRef}
+                className="flex items-center gap-8 pl-[500px] pr-[200px]"
+                style={{
+                  transform: `translateX(${translateX}px)`,
+                  transition: 'transform 0.1s ease-out',
+                }}
+              >
+                {tools.map((tool, index) => (
+                  <ToolCard key={tool.name} tool={tool} index={index} />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Scroll progress indicator */}
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2">
+            <div className="w-32 h-1 bg-border rounded-full overflow-hidden">
+              <div
+                className="h-full bg-brand transition-all duration-100"
+                style={{ width: `${scrollProgress * 100}%` }}
+              />
+            </div>
+            <span className="text-muted text-sm">Scroll</span>
+          </div>
+
+          {/* Decorative elements */}
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand/10 rounded-full blur-3xl pointer-events-none" />
+          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-info/10 rounded-full blur-3xl pointer-events-none" />
+        </div>
+      </div>
+    </>
   );
 }
