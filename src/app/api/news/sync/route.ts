@@ -1,16 +1,22 @@
 import { NextResponse } from 'next/server';
 import { fetchAndStoreArticles } from '@/lib/rss-fetcher';
 
-// Secret key to protect the endpoint (set in environment)
-const CRON_SECRET = process.env.CRON_SECRET;
-
 export async function GET(request: Request) {
-  // Verify the request is authorized (for cron jobs)
-  const { searchParams } = new URL(request.url);
-  const secret = searchParams.get('secret');
+  // Always require CRON_SECRET — fail if not configured
+  const cronSecret = process.env.CRON_SECRET;
+  if (!cronSecret) {
+    console.error('CRON_SECRET not configured');
+    return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
+  }
 
-  // Allow if no secret is set (dev mode) or if secret matches
-  if (CRON_SECRET && secret !== CRON_SECRET) {
+  // Accept secret via Authorization header (preferred) or query param (legacy)
+  const authHeader = request.headers.get('authorization');
+  const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
+  const { searchParams } = new URL(request.url);
+  const querySecret = searchParams.get('secret');
+  const providedSecret = bearerToken || querySecret;
+
+  if (!providedSecret || providedSecret !== cronSecret) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
@@ -26,7 +32,7 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error('Error syncing news:', error);
     return NextResponse.json(
-      { error: 'Failed to sync news', details: error instanceof Error ? error.message : 'Unknown error' },
+      { error: 'Failed to sync news' },
       { status: 500 }
     );
   }

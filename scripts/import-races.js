@@ -3,7 +3,7 @@
  */
 const { PrismaClient } = require('@prisma/client');
 
-const DASHBOARD_API = 'https://film-my-run-dashboard-production.up.railway.app/api/data';
+const DASHBOARD_API = process.env.DASHBOARD_API_URL || 'https://film-my-run-dashboard-production.up.railway.app/api/data';
 
 async function main() {
   const prisma = new PrismaClient();

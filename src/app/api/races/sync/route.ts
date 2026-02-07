@@ -1,9 +1,12 @@
+import crypto from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/db';
 
-// Verify API key
+const MAX_RACES_PER_REQUEST = 1000;
+
+// Verify API key with timing-safe comparison
 function verifyApiKey(request: NextRequest): boolean {
-  const apiKey = request.headers.get('X-API-Key');
+  const apiKey = request.headers.get('X-API-Key') || '';
   const expectedKey = process.env.SYNC_API_KEY;
 
   if (!expectedKey) {
@@ -11,31 +14,36 @@ function verifyApiKey(request: NextRequest): boolean {
     return false;
   }
 
-  return apiKey === expectedKey;
+  if (apiKey.length !== expectedKey.length) return false;
+  return crypto.timingSafeEqual(Buffer.from(apiKey), Buffer.from(expectedKey));
 }
 
 // Parse date string to Date object
 function parseDate(dateStr: string | null): Date | null {
   if (!dateStr) return null;
 
+  let parsed: Date | null = null;
+
   // Try YYYY-MM-DD format
   if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
-    return new Date(dateStr);
+    parsed = new Date(dateStr);
   }
 
   // Try DD/MM/YYYY format
-  if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+  if (!parsed && /^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
     const [day, month, year] = dateStr.split('/');
-    return new Date(`${year}-${month}-${day}`);
+    parsed = new Date(`${year}-${month}-${day}`);
   }
 
   // Try DD-MM-YYYY format
-  if (/^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
+  if (!parsed && /^\d{2}-\d{2}-\d{4}$/.test(dateStr)) {
     const [day, month, year] = dateStr.split('-');
-    return new Date(`${year}-${month}-${day}`);
+    parsed = new Date(`${year}-${month}-${day}`);
   }
 
-  return null;
+  // Reject Invalid Date
+  if (parsed && isNaN(parsed.getTime())) return null;
+  return parsed;
 }
 
 // Parse time string to seconds
@@ -95,6 +103,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'races must be an array' }, { status: 400 });
     }
 
+    if (races.length > MAX_RACES_PER_REQUEST) {
+      return NextResponse.json(
+        { error: `Too many races (max ${MAX_RACES_PER_REQUEST})` },
+        { status: 400 }
+      );
+    }
+
     // Use transaction for atomicity
     const result = await prisma.$transaction(async (tx) => {
       // If replace mode, clear existing data
@@ -108,14 +123,19 @@ export async function POST(request: NextRequest) {
           .filter((race) => race.event) // Ensure event is present
           .map((race) => {
             const date = parseDate(race.date || null);
+            const distKm = typeof race.distance_km === 'number' && isFinite(race.distance_km) && race.distance_km >= 0
+              ? race.distance_km : null;
+            const elevation = typeof race.elevation === 'number' && isFinite(race.elevation) && race.elevation >= 0
+              ? race.elevation : null;
+            const timeSecs = race.time_seconds ?? parseTimeToSeconds(race.time_hms || null);
             return {
-              date: date || new Date(), // Default to now if no date
+              date: date || new Date(),
               event: race.event,
               type: race.type || null,
-              distance_km: race.distance_km || null,
+              distance_km: distKm,
               time_hms: race.time_hms || null,
-              time_seconds: race.time_seconds || parseTimeToSeconds(race.time_hms || null),
-              elevation: race.elevation || null,
+              time_seconds: typeof timeSecs === 'number' && isFinite(timeSecs) && timeSecs >= 0 ? timeSecs : null,
+              elevation,
               position: race.position || null,
               terrain: race.terrain || null,
               video_url: extractUrl(race.video_url || null),

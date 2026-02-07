@@ -81,7 +81,7 @@ export async function GET() {
     const responseText = await response.text();
     const data = parseGoogleSheetsResponse(responseText);
 
-    if (!data.table || !Array.isArray(data.table.rows)) {
+    if (!data || typeof data !== 'object' || !data.table || !Array.isArray(data.table.rows)) {
       throw new Error('Invalid data structure from Google Sheets');
     }
 

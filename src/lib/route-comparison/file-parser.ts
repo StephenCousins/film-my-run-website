@@ -361,7 +361,8 @@ export async function parseFIT(
         const lng = record.position_long as number | undefined;
 
         if (lat !== undefined && lng !== undefined) {
-          if (!isNaN(lat) && !isNaN(lng) && lat !== 0 && lng !== 0) {
+          const coordResult = validateCoordinate(lat, lng);
+          if (coordResult.valid) {
             coordinates.push({ lat, lng });
             elevations.push(
               (record.enhanced_altitude as number) ??
