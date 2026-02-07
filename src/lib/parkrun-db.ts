@@ -41,14 +41,12 @@ function getPool(): Pool {
 
   const pool = new Pool({
     connectionString,
-    max: 10,
+    max: 20,
     idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 2000,
+    connectionTimeoutMillis: 5000,
   });
 
-  if (process.env.NODE_ENV !== 'production') {
-    globalForPool.parkrunPool = pool;
-  }
+  globalForPool.parkrunPool = pool;
 
   return pool;
 }

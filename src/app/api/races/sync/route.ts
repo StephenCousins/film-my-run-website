@@ -1,6 +1,6 @@
 import crypto from 'node:crypto';
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/lib/db';
+import { prisma } from '@/lib/db';
 
 const MAX_RACES_PER_REQUEST = 1000;
 

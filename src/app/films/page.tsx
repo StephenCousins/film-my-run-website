@@ -124,7 +124,6 @@ function FilmCard({ film, onPlay, featured = false }: FilmCardProps) {
         alt={film.title}
         fill
         className="object-cover transition-transform duration-700 group-hover:scale-105"
-        unoptimized
       />
 
       {/* Overlay */}

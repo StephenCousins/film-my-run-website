@@ -15,11 +15,15 @@ export function parseTimeToSeconds(timeStr: string): number | null {
   const parts = cleaned.split(':');
 
   try {
+    let result: number;
     if (parts.length === 2) {
-      return parseInt(parts[0]) * 60 + parseInt(parts[1]);
+      result = parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
     } else if (parts.length === 3) {
-      return parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]);
+      result = parseInt(parts[0], 10) * 3600 + parseInt(parts[1], 10) * 60 + parseInt(parts[2], 10);
+    } else {
+      return null;
     }
+    return isNaN(result) ? null : result;
   } catch {
     return null;
   }

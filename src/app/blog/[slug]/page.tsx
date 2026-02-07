@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Calendar, Clock, ArrowLeft, Twitter, Facebook, Linkedin, Tag, ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import prisma from '@/lib/db';
+import { prisma } from '@/lib/db';
 
 // Force dynamic rendering - fetch data at runtime, not build time
 export const dynamic = 'force-dynamic';

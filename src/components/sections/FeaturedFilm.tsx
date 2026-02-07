@@ -350,7 +350,6 @@ export default function FeaturedFilm() {
                     alt={video.title}
                     fill
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    unoptimized // YouTube thumbnails are external
                   />
                 </div>
 

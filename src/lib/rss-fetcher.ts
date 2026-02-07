@@ -1,4 +1,4 @@
-import prisma from './db';
+import { prisma } from './db';
 import Parser from 'rss-parser';
 
 // Custom parser with media extensions
@@ -122,24 +122,24 @@ const RSS_FEEDS = [
   },
 ];
 
+// Pre-compiled patterns for image URL validation (avoids regex recompilation per call)
+const INVALID_IMAGE_PATTERNS = [
+  /youtube\.com\/embed/i,
+  /youtube\.com\/watch/i,
+  /youtu\.be\//i,
+  /vimeo\.com\/\d/i,
+  /player\./i,
+  /\.mp4$/i,
+  /\.webm$/i,
+  /\.mov$/i,
+];
+
 /**
  * Check if URL is a valid image (not a video embed)
  */
 function isValidImageUrl(url: string): boolean {
   if (!url) return false;
-
-  const invalidPatterns = [
-    /youtube\.com\/embed/i,
-    /youtube\.com\/watch/i,
-    /youtu\.be\//i,
-    /vimeo\.com\/\d/i,
-    /player\./i,
-    /\.mp4$/i,
-    /\.webm$/i,
-    /\.mov$/i,
-  ];
-
-  return !invalidPatterns.some(pattern => pattern.test(url));
+  return !INVALID_IMAGE_PATTERNS.some(pattern => pattern.test(url));
 }
 
 /**

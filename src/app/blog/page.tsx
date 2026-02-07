@@ -5,7 +5,7 @@ import { Calendar, Clock, ArrowRight, Search, Filter, BookOpen } from 'lucide-re
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
-import prisma from '@/lib/db';
+import { prisma } from '@/lib/db';
 
 // Force dynamic rendering - fetch data at runtime, not build time
 export const dynamic = 'force-dynamic';

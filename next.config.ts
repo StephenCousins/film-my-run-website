@@ -44,6 +44,18 @@ const nextConfig: NextConfig = {
         hostname: 'dgtzuqphqg23d.cloudfront.net',
         pathname: '/**',
       },
+      // YouTube thumbnails (film cards)
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+        pathname: '/vi/**',
+      },
+      // Unsplash (RSS feed placeholder images)
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
+      },
     ],
   },
 

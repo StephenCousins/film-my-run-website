@@ -17,7 +17,7 @@ import {
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CustomCursor from '@/components/animations/CustomCursor';
-import prisma from '@/lib/db';
+import { prisma } from '@/lib/db';
 
 // Force dynamic rendering - fetch data at runtime, not build time
 export const dynamic = 'force-dynamic';
