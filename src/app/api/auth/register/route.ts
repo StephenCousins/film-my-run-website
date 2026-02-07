@@ -8,10 +8,11 @@ const registerSchema = z.object({
   email: z.string().email('Invalid email address'),
   password: z
     .string()
-    .min(8, 'Password must be at least 8 characters')
+    .min(10, 'Password must be at least 10 characters')
     .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
     .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-    .regex(/[0-9]/, 'Password must contain at least one number'),
+    .regex(/[0-9]/, 'Password must contain at least one number')
+    .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
 });
 
 export async function POST(request: NextRequest) {
@@ -29,22 +30,22 @@ export async function POST(request: NextRequest) {
 
     const { name, email, password } = result.data;
 
-    // Check if user already exists
+    // Check if user already exists — use generic message to prevent email enumeration
     const existingUser = await prisma.users.findUnique({
       where: { email },
     });
 
     if (existingUser) {
       return NextResponse.json(
-        { error: 'An account with this email already exists' },
-        { status: 400 }
+        { message: 'If this email is available, your account has been created. Check your email.' },
+        { status: 200 }
       );
     }
 
     // Hash password and create user
     const passwordHash = await hashPassword(password);
 
-    const user = await prisma.users.create({
+    await prisma.users.create({
       data: {
         name,
         email,
@@ -52,25 +53,11 @@ export async function POST(request: NextRequest) {
         access_tier: 'FREE',
         updated_at: new Date(),
       },
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        access_tier: true,
-        created_at: true,
-      },
     });
 
     return NextResponse.json(
-      {
-        message: 'Account created successfully',
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-        },
-      },
-      { status: 201 }
+      { message: 'If this email is available, your account has been created. Check your email.' },
+      { status: 200 }
     );
   } catch (error) {
     console.error('Registration error:', error);

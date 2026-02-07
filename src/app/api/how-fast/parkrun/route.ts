@@ -87,6 +87,8 @@ async function fetchParkrunPage(athlete_id: string): Promise<string> {
 
   if (SCRAPER_API_KEY) {
     // Use ScraperAPI to bypass IP blocks on cloud servers
+    // Pass API key via URL params (ScraperAPI only supports this method)
+    // Key is server-side only — never exposed to client
     fetchUrl = `http://api.scraperapi.com?api_key=${SCRAPER_API_KEY}&url=${encodeURIComponent(targetUrl)}&render=false`;
   }
 

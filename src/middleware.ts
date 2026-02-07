@@ -40,10 +40,18 @@ export async function middleware(request: NextRequest) {
   }
 
   // Get session token
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  });
+  let token;
+  try {
+    token = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
+    });
+  } catch {
+    // JWT verification failed — treat as unauthenticated
+    const loginUrl = new URL('/login', request.url);
+    loginUrl.searchParams.set('callbackUrl', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
 
   // Redirect to login if not authenticated
   if (!token) {
@@ -53,7 +61,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Check tier requirements
-  const userTier = token.accessTier as string;
+  const userTier = typeof token.accessTier === 'string' ? token.accessTier : 'FREE';
   const tierHierarchy: Record<string, number> = {
     FREE: 1,
     PREMIUM: 2,

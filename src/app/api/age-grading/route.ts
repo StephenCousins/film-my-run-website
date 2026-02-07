@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
+const VALID_GENDERS = ['M', 'F'];
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const gender = searchParams.get('gender');
@@ -8,6 +10,24 @@ export async function GET(request: NextRequest) {
   const age = searchParams.get('age');
 
   try {
+    // Validate gender if provided
+    if (gender && !VALID_GENDERS.includes(gender)) {
+      return NextResponse.json({ error: 'Invalid gender (use M or F)' }, { status: 400 });
+    }
+
+    // Validate event if provided (alphanumeric, spaces, slashes — e.g. "5K", "Half Marathon", "100mi")
+    if (event && !/^[A-Za-z0-9 /.()-]+$/.test(event)) {
+      return NextResponse.json({ error: 'Invalid event name' }, { status: 400 });
+    }
+
+    // Validate age if provided
+    if (age !== null && age !== undefined) {
+      const parsedAge = parseInt(age, 10);
+      if (isNaN(parsedAge) || parsedAge < 5 || parsedAge > 120) {
+        return NextResponse.json({ error: 'Invalid age (5-120)' }, { status: 400 });
+      }
+    }
+
     // If all params provided, return specific factor
     if (gender && event && age) {
       const factor = await prisma.age_grading_factors.findUnique({
