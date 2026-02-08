@@ -524,10 +524,14 @@ When DNS is moved to Cloudflare, the R2 bucket can be connected to `images.filmm
 - All components must support both modes
 
 ### SEO
-- Dynamic meta tags per page
-- Open Graph images auto-generated
-- Structured data for articles and products
-- Sitemap auto-generated
+- **Page-level metadata** on all pages via layout.tsx files (title, description, keywords, OG tags)
+- **Homepage** has explicit metadata export with canonical URL
+- **Blog posts** have dynamic `generateMetadata` with canonical URLs (`alternates.canonical`)
+- **Sitemap** (`src/app/sitemap.ts`) covers 25 static routes + all published blog posts, with per-page priorities
+- **robots.txt** (`src/app/robots.ts`) disallows `/api/`, `/admin/`, `/_next/`, `/login`, `/register`
+- **JSON-LD structured data** on all pages (Organization, WebSite, Article, BreadcrumbList)
+- **Open Graph & Twitter Card** tags on all pages
+- Root layout uses `metadataBase` and title template (`%s | Film My Run`)
 
 ### Sentry
 - `@sentry/nextjs` v9 is installed for error monitoring
