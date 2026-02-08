@@ -136,6 +136,7 @@ export default withSentryConfig(nextConfig, {
   // Suppresses source map upload logs during build
   silent: true,
   // Disable source map upload (no auth token needed)
-  disableServerWebpackPlugin: true,
-  disableClientWebpackPlugin: true,
+  sourcemaps: {
+    disable: true,
+  },
 });
