@@ -168,9 +168,9 @@ These 37 races have videos but transcripts couldn't be downloaded due to IP bloc
 | Status | Date | Race | Distance | Time | Transcript | Strava |
 |--------|------|------|----------|------|------------|--------|
 | [x] | 28/05/2017 | Dorchester Marathon | 26.2mi | 04:41:41 | ✅ | [Link](https://www.strava.com/activities/1009882616) |
-| [T] | 06/10/2017 | Atlantic Coast Challenge Day 1 | 26.2mi | 04:49:00 | ✅ | [Link](https://www.strava.com/activities/1217791516) |
-| [T] | 07/10/2017 | Atlantic Coast Challenge Day 2 | 26.2mi | 04:51:22 | ✅ | [Link](https://www.strava.com/activities/1219026570) |
-| [T] | 08/10/2017 | Atlantic Coast Challenge Day 3 | 26.2mi | 06:29:48 | ✅ | [Link](https://www.strava.com/activities/1221431431) |
+| [x] | 06/10/2017 | Atlantic Coast Challenge Day 1 | 26.2mi | 04:49:00 | ✅ | [Link](https://www.strava.com/activities/1217791516) |
+| [x] | 07/10/2017 | Atlantic Coast Challenge Day 2 | 26.2mi | 04:51:22 | ✅ | [Link](https://www.strava.com/activities/1219026570) |
+| [x] | 08/10/2017 | Atlantic Coast Challenge Day 3 | 26.2mi | 06:29:48 | ✅ | [Link](https://www.strava.com/activities/1221431431) |
 
 ---
 
