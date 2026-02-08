@@ -529,6 +529,18 @@ When DNS is moved to Cloudflare, the R2 bucket can be connected to `images.filmm
 - Structured data for articles and products
 - Sitemap auto-generated
 
+### Sentry
+- `@sentry/nextjs` v9 is installed for error monitoring
+- Config in `next.config.ts` (wraps with `withSentryConfig`, source map upload disabled via `sourcemaps.disable`)
+- Server-side init in `src/instrumentation.ts` (register function + `onRequestError` hook using `Sentry.captureRequestError`)
+- Client-side init in `sentry.client.config.ts`
+- Requires `SENTRY_DSN` (server) and `NEXT_PUBLIC_SENTRY_DSN` (client) env vars in Railway
+- **Note:** Sentry v9 removed `disableServerWebpackPlugin`/`disableClientWebpackPlugin` — use `sourcemaps.disable` instead
+
+### Deployment
+- Railway auto-deploys on push to main
+- **Important:** After adding dependencies, always run `npm install` to regenerate `package-lock.json` before pushing — Railway uses `npm ci` which requires the lock file to be in sync
+
 ---
 
 ## File Organization
@@ -626,4 +638,4 @@ Stephen is not a professional coder. When making changes:
 
 ---
 
-*Last updated: January 28, 2026*
+*Last updated: February 8, 2026*
