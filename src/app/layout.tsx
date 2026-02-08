@@ -122,6 +122,48 @@ export default function RootLayout({
         />
       </head>
       <body className="font-sans transition-colors pb-16 lg:pb-0">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@graph': [
+                {
+                  '@type': 'Organization',
+                  '@id': 'https://filmmyrun.co.uk/#organization',
+                  name: 'Film My Run',
+                  url: 'https://filmmyrun.co.uk',
+                  logo: {
+                    '@type': 'ImageObject',
+                    url: 'https://filmmyrun.co.uk/og-image.jpg',
+                  },
+                  description:
+                    'Award-winning documentary filmmaker, ultra-marathoner, and creator of running tools.',
+                  founder: {
+                    '@type': 'Person',
+                    name: 'Stephen Cousins',
+                  },
+                  sameAs: [
+                    'https://www.youtube.com/@filmmyrun',
+                    'https://www.instagram.com/filmmyrun',
+                    'https://www.strava.com/athletes/filmmyrun',
+                  ],
+                },
+                {
+                  '@type': 'WebSite',
+                  '@id': 'https://filmmyrun.co.uk/#website',
+                  url: 'https://filmmyrun.co.uk',
+                  name: 'Film My Run',
+                  description:
+                    'Race reports, training insights, and tools for runners.',
+                  publisher: {
+                    '@id': 'https://filmmyrun.co.uk/#organization',
+                  },
+                },
+              ],
+            }),
+          }}
+        />
         <AuthProvider>
           <ThemeProvider>
             {children}

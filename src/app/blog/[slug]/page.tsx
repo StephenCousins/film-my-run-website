@@ -86,6 +86,7 @@ async function getPostBySlug(slug: string) {
     excerpt: post.excerpt || post.content.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
     featuredImage: post.featured_image,
     publishedAt: post.published_at?.toISOString() || post.created_at.toISOString(),
+    updatedAt: post.updated_at.toISOString(),
     readTime: post.read_time,
     category: categoryTerm
       ? { name: categoryTerm.terms.name, slug: categoryTerm.terms.slug }
@@ -154,6 +155,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: post.title,
       description: post.excerpt,
+      type: 'article',
+      publishedTime: post.publishedAt,
+      modifiedTime: post.updatedAt,
+      authors: [post.author.name],
       images: post.featuredImage ? [post.featuredImage] : [],
     },
   };
@@ -217,8 +222,64 @@ export default async function BlogPostPage({ params }: PageProps) {
   const relatedPosts = await getRelatedPosts(slug);
   const postUrl = `https://filmmyrun.co.uk/blog/${post.slug}`;
 
+  const articleJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt,
+    image: post.featuredImage || undefined,
+    datePublished: post.publishedAt,
+    dateModified: post.updatedAt,
+    author: {
+      '@type': 'Person',
+      name: post.author.name,
+      url: 'https://filmmyrun.co.uk/about',
+    },
+    publisher: {
+      '@id': 'https://filmmyrun.co.uk/#organization',
+    },
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': postUrl,
+    },
+    keywords: post.tags.map((t) => t.name).join(', '),
+  };
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      {
+        '@type': 'ListItem',
+        position: 1,
+        name: 'Home',
+        item: 'https://filmmyrun.co.uk',
+      },
+      {
+        '@type': 'ListItem',
+        position: 2,
+        name: 'Blog',
+        item: 'https://filmmyrun.co.uk/blog',
+      },
+      {
+        '@type': 'ListItem',
+        position: 3,
+        name: post.title,
+        item: postUrl,
+      },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
 
       <main className="pt-20 lg:pt-24">
