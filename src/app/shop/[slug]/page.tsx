@@ -149,8 +149,52 @@ export default function ProductPage() {
   const [quantity, setQuantity] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
 
+  const productJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    description: product.description,
+    image: product.images[0],
+    url: `https://filmmyrun.co.uk/shop/${product.slug}`,
+    brand: { '@type': 'Brand', name: 'Film My Run' },
+    offers: {
+      '@type': 'Offer',
+      price: product.price.toFixed(2),
+      priceCurrency: 'GBP',
+      availability: product.inStock
+        ? 'https://schema.org/InStock'
+        : 'https://schema.org/OutOfStock',
+      url: `https://filmmyrun.co.uk/shop/${product.slug}`,
+    },
+    aggregateRating: product.reviews > 0
+      ? {
+          '@type': 'AggregateRating',
+          ratingValue: product.rating,
+          reviewCount: product.reviews,
+        }
+      : undefined,
+  };
+
+  const shopBreadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+      { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://filmmyrun.co.uk/shop' },
+      { '@type': 'ListItem', position: 3, name: product.name, item: `https://filmmyrun.co.uk/shop/${product.slug}` },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(shopBreadcrumbJsonLd) }}
+      />
       <Header />
 
       <main className="pt-20 lg:pt-24 bg-zinc-950">

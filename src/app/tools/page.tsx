@@ -101,9 +101,43 @@ const calculatorTools = [
 // TOOLS PAGE
 // ============================================
 
+const webAppJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'Film My Run Running Tools',
+  url: 'https://filmmyrun.co.uk/tools',
+  description:
+    'Free running tools used by 250,000+ runners every week. Pace calculators, parkrun statistics, race visualization, and more.',
+  applicationCategory: 'SportsApplication',
+  operatingSystem: 'Any',
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'GBP',
+  },
+  creator: { '@id': 'https://filmmyrun.co.uk/#organization' },
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://filmmyrun.co.uk/tools' },
+  ],
+};
+
 export default function ToolsPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(webAppJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
 
       <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">

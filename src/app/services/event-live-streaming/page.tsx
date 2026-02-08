@@ -98,9 +98,38 @@ const eventTypes = [
 // MAIN PAGE
 // ============================================
 
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Event Live Streaming',
+  description: 'Professional live streaming for running events. Multi-camera coverage, expert commentary, and multi-platform distribution to YouTube, Facebook, and your website.',
+  url: 'https://filmmyrun.co.uk/services/event-live-streaming',
+  provider: { '@id': 'https://filmmyrun.co.uk/#organization' },
+  areaServed: { '@type': 'Place', name: 'United Kingdom' },
+  serviceType: 'Live Streaming Production',
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.co.uk/services' },
+    { '@type': 'ListItem', position: 3, name: 'Event Live Streaming', item: 'https://filmmyrun.co.uk/services/event-live-streaming' },
+  ],
+};
+
 export default function EventLiveStreamingPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
       <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}

@@ -47,9 +47,43 @@ const awards = [
 // ABOUT PAGE
 // ============================================
 
+const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Stephen Cousins',
+  url: 'https://filmmyrun.co.uk/about',
+  image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about/stephen.jpg',
+  jobTitle: 'Documentary Filmmaker & Ultra Runner',
+  description:
+    'Award-winning documentary filmmaker, ultra-marathoner, and creator of running tools used by 250,000+ runners weekly.',
+  sameAs: [
+    'https://www.youtube.com/@filmmyrun',
+    'https://www.instagram.com/filmmyrun',
+    'https://www.strava.com/athletes/filmmyrun',
+  ],
+  worksFor: { '@id': 'https://filmmyrun.co.uk/#organization' },
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'About', item: 'https://filmmyrun.co.uk/about' },
+  ],
+};
+
 export default function AboutPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
 
       <main className="pt-20 lg:pt-24 bg-background">

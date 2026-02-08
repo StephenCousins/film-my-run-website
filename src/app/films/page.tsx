@@ -234,6 +234,24 @@ function LoadingSkeleton() {
 // FILMS PAGE
 // ============================================
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'Films', item: 'https://filmmyrun.co.uk/films' },
+  ],
+};
+
+const collectionJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Ultra Race Films',
+  description: 'Documentary-style race films capturing the spirit of ultra running.',
+  url: 'https://filmmyrun.co.uk/films',
+  creator: { '@id': 'https://filmmyrun.co.uk/#organization' },
+};
+
 export default function FilmsPage() {
   const [films, setFilms] = useState<Film[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -269,6 +287,14 @@ export default function FilmsPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionJsonLd) }}
+      />
       <Header />
 
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">

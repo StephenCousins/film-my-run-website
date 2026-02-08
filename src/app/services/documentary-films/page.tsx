@@ -186,11 +186,40 @@ function CaseStudyCard({
 // MAIN PAGE
 // ============================================
 
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Documentary Film Production',
+  description: 'Award-winning documentary filmmaking specialising in trail and ultra running. Compelling storytelling with professional cinematography.',
+  url: 'https://filmmyrun.co.uk/services/documentary-films',
+  provider: { '@id': 'https://filmmyrun.co.uk/#organization' },
+  areaServed: { '@type': 'Place', name: 'United Kingdom' },
+  serviceType: 'Documentary Film Production',
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.co.uk/services' },
+    { '@type': 'ListItem', position: 3, name: 'Documentary Films', item: 'https://filmmyrun.co.uk/services/documentary-films' },
+  ],
+};
+
 export default function DocumentaryFilmsPage() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
       <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}

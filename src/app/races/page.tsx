@@ -394,6 +394,15 @@ function MobileRaceCard({ race }: RaceRowProps) {
 // MAIN PAGE COMPONENT
 // ============================================
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'Races', item: 'https://filmmyrun.co.uk/races' },
+  ],
+};
+
 export default function RacesPage() {
   const searchParams = useSearchParams();
   const [data, setData] = useState<ApiResponse | null>(null);
@@ -575,6 +584,10 @@ export default function RacesPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
 
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">

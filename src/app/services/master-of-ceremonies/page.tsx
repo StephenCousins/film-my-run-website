@@ -73,9 +73,38 @@ const eventTypes = [
 // MAIN PAGE
 // ============================================
 
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'Master of Ceremonies',
+  description: 'Professional MC services for running events. Pre-race briefings, start line energy, finish line welcomes, and presentation ceremonies.',
+  url: 'https://filmmyrun.co.uk/services/master-of-ceremonies',
+  provider: { '@id': 'https://filmmyrun.co.uk/#organization' },
+  areaServed: { '@type': 'Place', name: 'United Kingdom' },
+  serviceType: 'Event MC Services',
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.co.uk/services' },
+    { '@type': 'ListItem', position: 3, name: 'Master of Ceremonies', item: 'https://filmmyrun.co.uk/services/master-of-ceremonies' },
+  ],
+};
+
 export default function MasterOfCeremoniesPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
       <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}

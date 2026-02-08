@@ -216,11 +216,40 @@ function RaceCard({
 // MAIN PAGE
 // ============================================
 
+const serviceJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: 'POV Race Coverage',
+  description: 'Authentic first-person race footage filmed while competing. Professional 4K video capturing the course, atmosphere, and runner experience.',
+  url: 'https://filmmyrun.co.uk/services/pov-race-coverage',
+  provider: { '@id': 'https://filmmyrun.co.uk/#organization' },
+  areaServed: { '@type': 'Place', name: 'United Kingdom' },
+  serviceType: 'Video Production',
+};
+
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.co.uk/services' },
+    { '@type': 'ListItem', position: 3, name: 'POV Race Coverage', item: 'https://filmmyrun.co.uk/services/pov-race-coverage' },
+  ],
+};
+
 export default function POVRaceCoveragePage() {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero */}
