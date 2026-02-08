@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
 import { ThemeProvider } from '@/contexts/ThemeContext';
 import { AuthProvider } from '@/contexts/AuthContext';
 import MobileTabBar from '@/components/layout/MobileTabBar';
+import Analytics from '@/components/Analytics';
 import '@/styles/globals.css';
 
 // Fonts
@@ -168,6 +169,7 @@ export default function RootLayout({
           <ThemeProvider>
             {children}
             <MobileTabBar />
+            <Analytics />
           </ThemeProvider>
         </AuthProvider>
       </body>

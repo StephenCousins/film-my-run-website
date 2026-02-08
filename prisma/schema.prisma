@@ -295,6 +295,39 @@ model verification_tokens {
   @@unique([identifier, token])
 }
 
+model page_views {
+  id         Int      @id @default(autoincrement())
+  path       String
+  referrer   String?
+  user_agent String?
+  session_id String?
+  browser    String?
+  device     String?
+  os         String?
+  country    String?
+  duration   Int?
+  created_at DateTime @default(now())
+
+  @@index([path])
+  @@index([created_at])
+  @@index([session_id])
+  @@index([device])
+  @@index([country])
+}
+
+model click_events {
+  id           Int      @id @default(autoincrement())
+  element_id   String
+  element_text String?
+  target_url   String?
+  path         String
+  session_id   String?
+  created_at   DateTime @default(now())
+
+  @@index([element_id])
+  @@index([created_at])
+}
+
 enum AccessTier {
   FREE
   PREMIUM
