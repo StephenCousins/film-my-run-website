@@ -4,6 +4,7 @@
  * See HOMEPAGE_CONCEPT.md for detailed wireframes and animations.
  */
 
+import { Metadata } from 'next';
 import {
   Hero,
   StatsBanner,
@@ -18,6 +19,31 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CustomCursor from '@/components/animations/CustomCursor';
 import { prisma } from '@/lib/db';
+
+export const metadata: Metadata = {
+  title: 'Film My Run | Documentary Filmmaker & Ultra Runner',
+  description:
+    'Award-winning documentary filmmaker, ultra-marathoner, and creator of free running tools. Race reports, marathon training plans, running calculators, and more.',
+  keywords: [
+    'film my run',
+    'running blog',
+    'documentary filmmaker',
+    'ultra marathon',
+    'race reports',
+    'running tools',
+    'marathon training',
+  ],
+  openGraph: {
+    title: 'Film My Run | Documentary Filmmaker & Ultra Runner',
+    description:
+      'Award-winning documentary filmmaker, ultra-marathoner, and creator of free running tools.',
+    url: 'https://filmmyrun.co.uk',
+    images: ['/og-image.jpg'],
+  },
+  alternates: {
+    canonical: 'https://filmmyrun.co.uk',
+  },
+};
 
 // Force dynamic rendering - fetch data at runtime, not build time
 export const dynamic = 'force-dynamic';

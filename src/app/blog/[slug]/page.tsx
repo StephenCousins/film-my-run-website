@@ -152,6 +152,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: `${post.title} | Film My Run`,
     description: post.excerpt,
+    alternates: {
+      canonical: `https://filmmyrun.co.uk/blog/${slug}`,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt,
