@@ -57,6 +57,7 @@
     "stripe": "^14.x",
     "tailwind-merge": "^2.x",
     "youtube-transcript": "^1.2.1",
+    "@sentry/nextjs": "^9.5.0",
     "zod": "^3.x"
   },
   "devDependencies": {
