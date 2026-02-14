@@ -4,14 +4,14 @@ import { z } from 'zod';
 
 const payloadSchema = z.object({
   subject: z.string().min(1).max(200),
-  news: z.array(z.object({ title: z.string(), url: z.string().url(), source: z.string() })).optional(),
-  blogPost: z.object({ title: z.string(), url: z.string().url(), excerpt: z.string(), imageUrl: z.string().url().optional() }).optional(),
-  videoOfTheWeek: z.object({ title: z.string(), url: z.string().url(), description: z.string(), thumbnailUrl: z.string().url().optional() }).optional(),
+  news: z.array(z.object({ title: z.string(), url: z.string().url(), source: z.string(), imageUrl: z.string().url().optional(), description: z.string().optional() })).optional(),
+  blogPost: z.object({ title: z.string(), url: z.string().url(), snippet: z.string(), imageUrl: z.string().url().optional() }).optional(),
+  videoOfTheWeek: z.object({ title: z.string(), url: z.string().url(), description: z.string(), thumbnailUrl: z.string().url() }).optional(),
   appOfTheWeek: z.object({ name: z.string(), url: z.string().url(), description: z.string() }).optional(),
   sessionOfTheWeek: z.object({ title: z.string(), description: z.string() }).optional(),
-  trainingTip: z.object({ text: z.string() }).optional(),
-  scienceSection: z.object({ text: z.string() }).optional(),
-  nutritionTip: z.object({ text: z.string() }).optional(),
+  trainingTip: z.object({ text: z.string(), citation: z.string().optional() }).optional(),
+  scienceSection: z.object({ text: z.string(), citation: z.string().optional() }).optional(),
+  nutritionTip: z.object({ text: z.string(), citation: z.string().optional() }).optional(),
   fromTheArchives: z.object({ title: z.string(), url: z.string().url(), description: z.string() }).optional(),
   whatsNew: z.object({ text: z.string() }).optional(),
 });

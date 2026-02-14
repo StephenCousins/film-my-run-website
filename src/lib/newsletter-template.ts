@@ -1,13 +1,13 @@
 export interface NewsletterPayload {
   subject: string;
-  news?: { title: string; url: string; source: string }[];
-  blogPost?: { title: string; url: string; excerpt: string; imageUrl?: string };
-  videoOfTheWeek?: { title: string; url: string; description: string; thumbnailUrl?: string };
+  news?: { title: string; url: string; source: string; imageUrl?: string; description?: string }[];
+  blogPost?: { title: string; url: string; snippet: string; imageUrl?: string };
+  videoOfTheWeek?: { title: string; url: string; description: string; thumbnailUrl: string };
   appOfTheWeek?: { name: string; url: string; description: string };
   sessionOfTheWeek?: { title: string; description: string };
-  trainingTip?: { text: string };
-  scienceSection?: { text: string };
-  nutritionTip?: { text: string };
+  trainingTip?: { text: string; citation?: string };
+  scienceSection?: { text: string; citation?: string };
+  nutritionTip?: { text: string; citation?: string };
   fromTheArchives?: { title: string; url: string; description: string };
   whatsNew?: { text: string };
 }
@@ -33,18 +33,36 @@ function sectionHeading(title: string): string {
 }
 
 function renderNews(items: NonNullable<NewsletterPayload['news']>): string {
-  const links = items
-    .map(
-      (item) => `
+  const cards = items
+    .map((item) => {
+      const image = item.imageUrl
+        ? `<td style="width: 80px; padding-right: 14px;" valign="top">
+            <a href="${item.url}"><img src="${item.imageUrl}" alt="" width="80" height="54" style="border-radius: 6px; display: block; object-fit: cover; width: 80px; height: 54px;" /></a>
+           </td>`
+        : '';
+
+      const description = item.description
+        ? `<p style="margin: 4px 0 0; color: ${SECONDARY_TEXT}; font-size: 13px; line-height: 1.5;">${item.description}</p>`
+        : '';
+
+      return `
       <tr>
-        <td style="padding: 8px 0;">
-          <a href="${item.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 15px; font-weight: 600; line-height: 1.4;">
-            ${item.title}
-          </a>
-          <span style="color: ${MUTED_TEXT}; font-size: 12px; margin-left: 8px;">${item.source}</span>
+        <td style="padding: 10px 0; border-bottom: 1px solid ${BORDER};">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+            <tr>
+              ${image}
+              <td valign="top">
+                <a href="${item.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 15px; font-weight: 600; line-height: 1.4;">
+                  ${item.title}
+                </a>
+                <span style="color: ${MUTED_TEXT}; font-size: 12px; margin-left: 6px;">${item.source}</span>
+                ${description}
+              </td>
+            </tr>
+          </table>
         </td>
-      </tr>`
-    )
+      </tr>`;
+    })
     .join('');
 
   return `
@@ -52,7 +70,7 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>): string {
     <tr>
       <td>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-          ${links}
+          ${cards}
         </table>
       </td>
     </tr>`;
@@ -60,7 +78,7 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>): string {
 
 function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): string {
   const image = post.imageUrl
-    ? `<tr><td style="padding-bottom: 12px;"><img src="${post.imageUrl}" alt="${post.title}" width="100%" style="border-radius: 8px; display: block; max-width: 100%;" /></td></tr>`
+    ? `<tr><td style="padding-bottom: 16px;"><a href="${post.url}"><img src="${post.imageUrl}" alt="${post.title}" width="100%" style="border-radius: 8px; display: block; max-width: 100%;" /></a></td></tr>`
     : '';
 
   return `
@@ -71,11 +89,13 @@ function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): strin
           ${image}
           <tr>
             <td>
-              <a href="${post.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 17px; font-weight: 700; line-height: 1.3;">
+              <a href="${post.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 18px; font-weight: 700; line-height: 1.3;">
                 ${post.title}
               </a>
-              <p style="margin: 8px 0 12px; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.5;">${post.excerpt}</p>
-              <a href="${post.url}" style="color: ${BRAND_ORANGE}; font-size: 14px; font-weight: 600; text-decoration: none;">Read more &rarr;</a>
+              <div style="margin: 12px 0 16px; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.65;">
+                ${post.snippet}
+              </div>
+              <a href="${post.url}" style="display: inline-block; padding: 10px 24px; background-color: ${BRAND_ORANGE}; color: ${WHITE}; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 999px;">Read the full post &rarr;</a>
             </td>
           </tr>
         </table>
@@ -84,22 +104,25 @@ function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): strin
 }
 
 function renderVideo(video: NonNullable<NewsletterPayload['videoOfTheWeek']>): string {
-  const thumbnail = video.thumbnailUrl
-    ? `<tr><td style="padding-bottom: 12px;"><a href="${video.url}"><img src="${video.thumbnailUrl}" alt="${video.title}" width="100%" style="border-radius: 8px; display: block; max-width: 100%;" /></a></td></tr>`
-    : '';
-
   return `
     ${sectionHeading('Video of the Week')}
     <tr>
       <td>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-          ${thumbnail}
+          <tr>
+            <td style="padding-bottom: 14px; position: relative;">
+              <a href="${video.url}">
+                <img src="${video.thumbnailUrl}" alt="${video.title}" width="100%" style="border-radius: 8px; display: block; max-width: 100%;" />
+              </a>
+            </td>
+          </tr>
           <tr>
             <td>
-              <a href="${video.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 16px; font-weight: 700;">
+              <a href="${video.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 16px; font-weight: 700; line-height: 1.3;">
                 ${video.title}
               </a>
-              <p style="margin: 8px 0 0; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.5;">${video.description}</p>
+              <p style="margin: 8px 0 14px; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.6;">${video.description}</p>
+              <a href="${video.url}" style="color: ${BRAND_ORANGE}; font-size: 14px; font-weight: 600; text-decoration: none;">Watch on YouTube &rarr;</a>
             </td>
           </tr>
         </table>
@@ -127,6 +150,23 @@ function renderSession(session: NonNullable<NewsletterPayload['sessionOfTheWeek'
       <td style="padding: 16px; background-color: ${LIGHT_BG}; border-radius: 8px;">
         <strong style="color: ${DARK_TEXT}; font-size: 15px;">${session.title}</strong>
         <p style="margin: 8px 0 0; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.5;">${session.description}</p>
+      </td>
+    </tr>`;
+}
+
+function renderCitedSection(title: string, text: string, citation?: string): string {
+  const cite = citation
+    ? `<p style="margin: 12px 0 0; color: ${MUTED_TEXT}; font-size: 12px; font-style: italic; line-height: 1.4;">Source: ${citation}</p>`
+    : '';
+
+  return `
+    ${sectionHeading(title)}
+    <tr>
+      <td style="padding: 16px; background-color: ${LIGHT_BG}; border-radius: 8px;">
+        <div style="color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.65;">
+          ${text}
+        </div>
+        ${cite}
       </td>
     </tr>`;
 }
@@ -165,9 +205,9 @@ export function buildNewsletterHtml(
   if (payload.videoOfTheWeek) sections.push(renderVideo(payload.videoOfTheWeek));
   if (payload.appOfTheWeek) sections.push(renderAppOfTheWeek(payload.appOfTheWeek));
   if (payload.sessionOfTheWeek) sections.push(renderSession(payload.sessionOfTheWeek));
-  if (payload.trainingTip) sections.push(renderTextSection('Training Tip', payload.trainingTip.text));
-  if (payload.scienceSection) sections.push(renderTextSection('What Does the Science Say?', payload.scienceSection.text));
-  if (payload.nutritionTip) sections.push(renderTextSection('Nutrition Tip', payload.nutritionTip.text));
+  if (payload.trainingTip) sections.push(renderCitedSection('Training Tip', payload.trainingTip.text, payload.trainingTip.citation));
+  if (payload.scienceSection) sections.push(renderCitedSection('What Does the Science Say?', payload.scienceSection.text, payload.scienceSection.citation));
+  if (payload.nutritionTip) sections.push(renderCitedSection('Nutrition Tip', payload.nutritionTip.text, payload.nutritionTip.citation));
   if (payload.fromTheArchives) sections.push(renderArchives(payload.fromTheArchives));
   if (payload.whatsNew) sections.push(renderTextSection("What's New", payload.whatsNew.text));
 
