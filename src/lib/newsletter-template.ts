@@ -1,5 +1,6 @@
 export interface NewsletterPayload {
   subject: string;
+  intro?: string;
   news?: { title: string; url: string; source: string; imageUrl?: string; description?: string }[];
   blogPost?: { title: string; url: string; snippet: string; imageUrl?: string };
   videoOfTheWeek?: { title: string; url: string; description: string; thumbnailUrl: string };
@@ -218,6 +219,15 @@ export function buildNewsletterHtml(
   baseUrl: string
 ): string {
   const sections: string[] = [];
+
+  // Welcome intro
+  const intro = payload.intro || "Welcome to this week's Film My Run newsletter. Here's what's been happening in the world of trail and ultra running, plus training tips, videos, and more from the blog.";
+  sections.push(`
+    <tr>
+      <td style="padding: 24px 0 8px; color: ${SECONDARY_TEXT}; font-size: 15px; line-height: 1.65;">
+        ${intro}
+      </td>
+    </tr>`);
 
   if (payload.news?.length) sections.push(renderNews(payload.news, `${baseUrl}/news`));
   if (payload.blogPost) sections.push(renderBlogPost(payload.blogPost));
