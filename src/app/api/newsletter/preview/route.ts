@@ -38,7 +38,8 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = result.data as NewsletterPayload;
-    const html = buildNewsletterHtml(payload, '#unsubscribe-preview');
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.co.uk';
+    const html = buildNewsletterHtml(payload, '#unsubscribe-preview', baseUrl);
 
     return new NextResponse(html, {
       headers: { 'Content-Type': 'text/html; charset=utf-8' },

@@ -82,7 +82,8 @@ export async function POST(request: NextRequest) {
         subject: payload.subject,
         html: buildNewsletterHtml(
           payload,
-          sub.token === 'admin' ? '#' : `${baseUrl}/api/newsletter/unsubscribe?token=${sub.token}`
+          sub.token === 'admin' ? '#' : `${baseUrl}/api/newsletter/unsubscribe?token=${sub.token}`,
+          baseUrl
         ),
       }));
 

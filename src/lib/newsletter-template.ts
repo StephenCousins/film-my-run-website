@@ -32,12 +32,12 @@ function sectionHeading(title: string): string {
     </tr>`;
 }
 
-function renderNews(items: NonNullable<NewsletterPayload['news']>): string {
+function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: string): string {
   const cards = items
     .map((item) => {
       const image = item.imageUrl
         ? `<td style="width: 80px; padding-right: 14px;" valign="top">
-            <a href="${item.url}"><img src="${item.imageUrl}" alt="" width="80" height="54" style="border-radius: 6px; display: block; object-fit: cover; width: 80px; height: 54px;" /></a>
+            <a href="${newsPageUrl}"><img src="${item.imageUrl}" alt="" width="80" height="54" style="border-radius: 6px; display: block; object-fit: cover; width: 80px; height: 54px;" /></a>
            </td>`
         : '';
 
@@ -52,9 +52,9 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>): string {
             <tr>
               ${image}
               <td valign="top">
-                <a href="${item.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 15px; font-weight: 600; line-height: 1.4;">
+                <span style="color: ${DARK_TEXT}; font-size: 15px; font-weight: 600; line-height: 1.4;">
                   ${item.title}
-                </a>
+                </span>
                 <span style="color: ${MUTED_TEXT}; font-size: 12px; margin-left: 6px;">${item.source}</span>
                 ${description}
               </td>
@@ -71,6 +71,13 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>): string {
       <td>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
           ${cards}
+        </table>
+        <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top: 16px;">
+          <tr>
+            <td>
+              <a href="${newsPageUrl}" style="display: inline-block; padding: 10px 24px; background-color: ${BRAND_ORANGE}; color: ${WHITE}; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 999px;">Read all stories on Film My Run &rarr;</a>
+            </td>
+          </tr>
         </table>
       </td>
     </tr>`;
@@ -207,11 +214,12 @@ function renderArchives(item: NonNullable<NewsletterPayload['fromTheArchives']>)
 
 export function buildNewsletterHtml(
   payload: NewsletterPayload,
-  unsubscribeUrl: string
+  unsubscribeUrl: string,
+  baseUrl: string
 ): string {
   const sections: string[] = [];
 
-  if (payload.news?.length) sections.push(renderNews(payload.news));
+  if (payload.news?.length) sections.push(renderNews(payload.news, `${baseUrl}/news`));
   if (payload.blogPost) sections.push(renderBlogPost(payload.blogPost));
   if (payload.videoOfTheWeek) sections.push(renderVideo(payload.videoOfTheWeek));
   if (payload.appOfTheWeek) sections.push(renderAppOfTheWeek(payload.appOfTheWeek));
