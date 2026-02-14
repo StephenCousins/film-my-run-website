@@ -2,11 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { Resend } from 'resend';
 import { buildNewsletterHtml, type NewsletterPayload } from '@/lib/newsletter-template';
+import { getAllParkruns } from '@/lib/parkrun-db';
 import { z } from 'zod';
 
 const payloadSchema = z.object({
   subject: z.string().min(1).max(200),
   intro: z.string().optional(),
+  parkrun: z.object({ text: z.string() }).optional(),
   news: z.array(z.object({ title: z.string(), url: z.string().url(), source: z.string(), imageUrl: z.string().url().optional(), description: z.string().optional() })).optional(),
   blogPost: z.object({ title: z.string(), url: z.string().url(), snippet: z.string(), imageUrl: z.string().url().optional() }).optional(),
   videoOfTheWeek: z.object({ title: z.string(), url: z.string().url(), description: z.string(), thumbnailUrl: z.string().url() }).optional(),
@@ -18,6 +20,12 @@ const payloadSchema = z.object({
   fromTheArchives: z.object({ title: z.string(), url: z.string().url(), description: z.string(), imageUrl: z.string().url().optional() }).optional(),
   whatsNew: z.object({ text: z.string() }).optional(),
 });
+
+function ordinalSuffix(n: number): string {
+  const s = ['th', 'st', 'nd', 'rd'];
+  const v = n % 100;
+  return s[(v - 20) % 10] || s[v] || s[0];
+}
 
 function verifyAuth(request: NextRequest): boolean {
   const cronSecret = process.env.CRON_SECRET;
@@ -63,6 +71,34 @@ export async function POST(request: NextRequest) {
           description: a.description || undefined,
           imageUrl: a.image_url || undefined,
         }));
+      }
+    }
+
+    // Auto-populate parkrun from the parkrun database if not provided
+    if (!payload.parkrun) {
+      try {
+        const allRuns = await getAllParkruns();
+        if (allRuns.length > 0) {
+          const latest = allRuns[0]; // sorted by date DESC
+          const runDate = new Date(latest.date);
+          const daysSince = Math.round((Date.now() - runDate.getTime()) / (1000 * 60 * 60 * 24));
+          if (daysSince <= 9 && !isNaN(runDate.getTime())) {
+            // Convert time like "28:47" to natural language
+            const timeParts = latest.time_formatted.split(':');
+            const mins = parseInt(timeParts[0], 10);
+            const secs = parseInt(timeParts[1], 10);
+            const timeText = secs > 0 ? `${mins} minutes ${secs} seconds` : `${mins} minutes`;
+
+            let text = `This week I ran ${latest.event} parkrun, finishing in ${timeText}`;
+            if (latest.position) {
+              text += ` in ${latest.position}${ordinalSuffix(latest.position)} place`;
+            }
+            text += '.';
+            payload.parkrun = { text };
+          }
+        }
+      } catch (e) {
+        console.warn('Could not auto-populate parkrun:', e);
       }
     }
 

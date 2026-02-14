@@ -9,6 +9,7 @@ export interface NewsletterPayload {
   trainingTip?: { text: string; citation?: string };
   scienceSection?: { text: string; citation?: string };
   nutritionTip?: { text: string; citation?: string };
+  parkrun?: { text: string };
   fromTheArchives?: { title: string; url: string; description: string; imageUrl?: string };
   whatsNew?: { text: string };
 }
@@ -179,6 +180,16 @@ function renderCitedSection(title: string, text: string, citation?: string): str
     </tr>`;
 }
 
+function renderParkrun(parkrun: NonNullable<NewsletterPayload['parkrun']>): string {
+  return `
+    ${sectionHeading('parkrun')}
+    <tr>
+      <td style="color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.65;">
+        ${parkrun.text}
+      </td>
+    </tr>`;
+}
+
 function renderTextSection(title: string, text: string): string {
   return `
     ${sectionHeading(title)}
@@ -230,6 +241,7 @@ export function buildNewsletterHtml(
     </tr>`);
   }
 
+  if (payload.parkrun) sections.push(renderParkrun(payload.parkrun));
   if (payload.news?.length) sections.push(renderNews(payload.news, `${baseUrl}/news`));
   if (payload.blogPost) sections.push(renderBlogPost(payload.blogPost));
   if (payload.videoOfTheWeek) sections.push(renderVideo(payload.videoOfTheWeek));
