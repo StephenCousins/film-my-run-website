@@ -241,10 +241,10 @@ export function buildNewsletterHtml(
     </tr>`);
   }
 
-  if (payload.parkrun) sections.push(renderParkrun(payload.parkrun));
   if (payload.news?.length) sections.push(renderNews(payload.news, `${baseUrl}/news`));
   if (payload.blogPost) sections.push(renderBlogPost(payload.blogPost));
   if (payload.videoOfTheWeek) sections.push(renderVideo(payload.videoOfTheWeek));
+  if (payload.parkrun) sections.push(renderParkrun(payload.parkrun));
   if (payload.appOfTheWeek) sections.push(renderAppOfTheWeek(payload.appOfTheWeek));
   if (payload.sessionOfTheWeek) sections.push(renderSession(payload.sessionOfTheWeek));
   if (payload.trainingTip) sections.push(renderCitedSection('Training Tip', payload.trainingTip.text, payload.trainingTip.citation));
