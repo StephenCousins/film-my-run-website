@@ -224,6 +224,34 @@ function renderArchives(item: NonNullable<NewsletterPayload['fromTheArchives']>)
     </tr>`;
 }
 
+export function wrapWithApprovalBanner(html: string, approveUrl: string): string {
+  const banner = `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #fef3c7; border: 2px solid #f59e0b;">
+      <tr>
+        <td align="center" style="padding: 24px 16px;">
+          <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
+            <tr>
+              <td align="center" style="padding: 20px 24px; background-color: #fffbeb; border-radius: 8px;">
+                <p style="margin: 0 0 8px; font-size: 20px; font-weight: 700; color: #92400e; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                  DRAFT — Review this newsletter
+                </p>
+                <p style="margin: 0 0 20px; font-size: 14px; color: #a16207; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                  This email was sent only to you for review.
+                </p>
+                <a href="${approveUrl}" style="display: inline-block; padding: 14px 32px; background-color: #16a34a; color: #ffffff; font-size: 16px; font-weight: 700; text-decoration: none; border-radius: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+                  Approve &amp; Send to All Subscribers
+                </a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>`;
+
+  // Insert the banner right after <body...>
+  return html.replace(/(<body[^>]*>)/, `$1${banner}`);
+}
+
 export function buildNewsletterHtml(
   payload: NewsletterPayload,
   unsubscribeUrl: string,
