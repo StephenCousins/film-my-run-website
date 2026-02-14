@@ -8,7 +8,7 @@ export interface NewsletterPayload {
   trainingTip?: { text: string; citation?: string };
   scienceSection?: { text: string; citation?: string };
   nutritionTip?: { text: string; citation?: string };
-  fromTheArchives?: { title: string; url: string; description: string };
+  fromTheArchives?: { title: string; url: string; description: string; imageUrl?: string };
   whatsNew?: { text: string };
 }
 
@@ -182,14 +182,25 @@ function renderTextSection(title: string, text: string): string {
 }
 
 function renderArchives(item: NonNullable<NewsletterPayload['fromTheArchives']>): string {
+  const image = item.imageUrl
+    ? `<tr><td style="padding-bottom: 12px;"><a href="${item.url}"><img src="${item.imageUrl}" alt="${item.title}" width="100%" style="border-radius: 8px; display: block; max-width: 100%;" /></a></td></tr>`
+    : '';
+
   return `
     ${sectionHeading('From the Archives')}
     <tr>
       <td style="padding: 16px; background-color: ${LIGHT_BG}; border-radius: 8px; border-left: 3px solid ${BRAND_ORANGE};">
-        <a href="${item.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 15px; font-weight: 700;">
-          ${item.title}
-        </a>
-        <p style="margin: 8px 0 0; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.5;">${item.description}</p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          ${image}
+          <tr>
+            <td>
+              <a href="${item.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 15px; font-weight: 700;">
+                ${item.title}
+              </a>
+              <p style="margin: 8px 0 0; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.5;">${item.description}</p>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>`;
 }
@@ -242,13 +253,16 @@ export function buildNewsletterHtml(
 
           <!-- Header -->
           <tr>
-            <td style="padding: 32px 32px 24px; background-color: ${DARK_TEXT}; border-radius: 12px 12px 0 0;" align="center">
+            <td style="padding: 32px 32px 24px; background-color: ${BRAND_ORANGE}; border-radius: 12px 12px 0 0;" align="center">
               <table role="presentation" cellpadding="0" cellspacing="0">
                 <tr>
                   <td align="center">
-                    <svg width="36" height="36" viewBox="0 0 24 24" fill="${BRAND_ORANGE}" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/>
-                    </svg>
+                    <!-- Three runners logo -->
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td style="padding: 0 1px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="${WHITE}" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></td>
+                      <td style="padding: 0 1px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="${WHITE}" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></td>
+                      <td style="padding: 0 1px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="${WHITE}" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></td>
+                    </tr></table>
                   </td>
                 </tr>
                 <tr>
@@ -256,7 +270,7 @@ export function buildNewsletterHtml(
                     <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: ${WHITE}; letter-spacing: -0.5px;">
                       Film My Run
                     </h1>
-                    <p style="margin: 4px 0 0; font-size: 13px; color: ${MUTED_TEXT}; text-transform: uppercase; letter-spacing: 1px;">
+                    <p style="margin: 4px 0 0; font-size: 13px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px;">
                       Newsletter &bull; ${today}
                     </p>
                   </td>

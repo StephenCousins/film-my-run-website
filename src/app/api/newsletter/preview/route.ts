@@ -12,7 +12,7 @@ const payloadSchema = z.object({
   trainingTip: z.object({ text: z.string(), citation: z.string().optional() }).optional(),
   scienceSection: z.object({ text: z.string(), citation: z.string().optional() }).optional(),
   nutritionTip: z.object({ text: z.string(), citation: z.string().optional() }).optional(),
-  fromTheArchives: z.object({ title: z.string(), url: z.string().url(), description: z.string() }).optional(),
+  fromTheArchives: z.object({ title: z.string(), url: z.string().url(), description: z.string(), imageUrl: z.string().url().optional() }).optional(),
   whatsNew: z.object({ text: z.string() }).optional(),
 });
 
