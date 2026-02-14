@@ -328,6 +328,26 @@ model click_events {
   @@index([created_at])
 }
 
+model newsletter_subscribers {
+  id              Int       @id @default(autoincrement())
+  email           String    @unique
+  status          String    @default("active") // active | unsubscribed
+  token           String    @unique // for unsubscribe links
+  subscribed_at   DateTime  @default(now())
+  unsubscribed_at DateTime?
+
+  @@index([status])
+  @@index([email])
+}
+
+model newsletter_issues {
+  id              Int      @id @default(autoincrement())
+  subject         String
+  content         Json // the full JSON payload that was sent
+  recipient_count Int
+  sent_at         DateTime @default(now())
+}
+
 enum AccessTier {
   FREE
   PREMIUM

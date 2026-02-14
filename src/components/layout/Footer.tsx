@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Instagram, Youtube, Twitter, Mail, MapPin, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import NewsletterForm from '@/components/newsletter/NewsletterForm';
 
 // ============================================
 // FOOTER DATA
@@ -90,36 +91,6 @@ function FooterLogo() {
 }
 
 // ============================================
-// NEWSLETTER FORM
-// ============================================
-
-function NewsletterForm() {
-  return (
-    <div className="max-w-md">
-      <h3 className="font-display text-lg font-semibold text-foreground mb-2">
-        Stay in the loop
-      </h3>
-      <p className="text-secondary text-sm mb-4">
-        Get race updates, new tools, and exclusive content delivered to your inbox.
-      </p>
-      <form className="flex gap-2">
-        <input
-          type="email"
-          placeholder="your@email.com"
-          className="flex-1 px-4 py-2.5 bg-surface border border-border rounded-full text-foreground placeholder:text-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
-        />
-        <button
-          type="submit"
-          className="px-6 py-2.5 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-colors whitespace-nowrap"
-        >
-          Subscribe
-        </button>
-      </form>
-    </div>
-  );
-}
-
-// ============================================
 // LINK COLUMN
 // ============================================
 
@@ -187,7 +158,13 @@ export default function Footer() {
           </div>
 
           {/* Newsletter */}
-          <NewsletterForm />
+          <NewsletterForm
+            variant="inline"
+            theme="light"
+            heading="Stay in the loop"
+            description="Get race updates, new tools, and exclusive content delivered to your inbox."
+            className="max-w-md"
+          />
         </div>
 
         {/* Bottom row: Link columns spread evenly */}

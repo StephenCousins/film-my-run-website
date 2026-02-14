@@ -4,6 +4,7 @@ import { RefreshCw, Newspaper } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsContent from '@/components/news/NewsContent';
+import NewsletterForm from '@/components/newsletter/NewsletterForm';
 
 // Force dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -138,19 +139,11 @@ export default async function NewsPage() {
                 Get the best trail and ultra running stories delivered to your inbox
                 every week. No spam, just the news that matters.
               </p>
-              <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  className="flex-1 px-5 py-3 bg-white/10 border border-white/15 rounded-full text-white placeholder:text-zinc-500 focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand backdrop-blur-sm"
-                />
-                <button
-                  type="submit"
-                  className="px-7 py-3 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-colors whitespace-nowrap shadow-lg shadow-brand/20"
-                >
-                  Subscribe
-                </button>
-              </form>
+              <NewsletterForm
+                variant="inline"
+                theme="glass"
+                className="max-w-md mx-auto"
+              />
             </div>
           </div>
         </section>

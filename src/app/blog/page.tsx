@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, Clock, ArrowRight, Search, Filter, BookOpen } from 'lucide-react';
 import Header from '@/components/layout/Header';
+import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
 import { prisma } from '@/lib/db';
@@ -349,19 +350,11 @@ export default async function BlogPage() {
                 Get the latest race reports, training tips, and running stories delivered
                 straight to your inbox.
               </p>
-              <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  className="flex-1 px-4 py-3 bg-surface border border-border rounded-full text-foreground placeholder:text-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand"
-                />
-                <button
-                  type="submit"
-                  className="px-6 py-3 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-colors whitespace-nowrap"
-                >
-                  Subscribe
-                </button>
-              </form>
+              <NewsletterForm
+                variant="inline"
+                theme="light"
+                className="max-w-md mx-auto"
+              />
             </div>
           </div>
         </section>

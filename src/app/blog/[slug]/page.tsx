@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Calendar, Clock, ArrowLeft, Twitter, Facebook, Linkedin, Tag, ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import { prisma } from '@/lib/db';
 
 // Force dynamic rendering - fetch data at runtime, not build time
@@ -490,25 +491,12 @@ export default async function BlogPostPage({ params }: PageProps) {
 
                   {/* Newsletter */}
                   <div className="p-6 bg-zinc-900 rounded-2xl">
-                    <h3 className="font-display text-lg font-semibold text-white mb-2">
-                      Subscribe
-                    </h3>
-                    <p className="text-zinc-400 text-sm mb-4">
-                      Get new posts delivered to your inbox.
-                    </p>
-                    <form className="space-y-3">
-                      <input
-                        type="email"
-                        placeholder="your@email.com"
-                        className="w-full px-4 py-2.5 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm placeholder:text-zinc-500 focus:outline-none focus:border-orange-500"
-                      />
-                      <button
-                        type="submit"
-                        className="w-full py-2.5 bg-orange-500 text-white text-sm font-semibold rounded-lg hover:bg-orange-600 transition-colors"
-                      >
-                        Subscribe
-                      </button>
-                    </form>
+                    <NewsletterForm
+                      variant="stacked"
+                      theme="dark"
+                      heading="Subscribe"
+                      description="Get new posts delivered to your inbox."
+                    />
                   </div>
                 </div>
               </aside>
