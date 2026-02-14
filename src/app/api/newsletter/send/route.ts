@@ -45,6 +45,26 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = result.data as NewsletterPayload;
+
+    // Auto-populate news from the articles table if not provided
+    if (!payload.news || payload.news.length === 0) {
+      const recentArticles = await prisma.articles.findMany({
+        orderBy: { pub_date: 'desc' },
+        take: 5,
+        select: { title: true, link: true, source: true, description: true, image_url: true },
+      });
+
+      if (recentArticles.length > 0) {
+        payload.news = recentArticles.map((a) => ({
+          title: a.title,
+          url: a.link,
+          source: a.source,
+          description: a.description || undefined,
+          imageUrl: a.image_url || undefined,
+        }));
+      }
+    }
+
     const resend = new Resend(resendKey);
 
     // Fetch all active subscribers
