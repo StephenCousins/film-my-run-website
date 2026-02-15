@@ -366,10 +366,10 @@ const R2_URL = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev';
 
 function renderSponsors(): string {
   const sponsors = [
-    { name: 'NoblePro', url: 'https://noble-pro.com', logo: `${R2_URL}/newsletter/sponsors/noblepro-logo.png`, width: 120 },
-    { name: 'Enertor', url: 'https://enertor.com', logo: `${R2_URL}/newsletter/sponsors/enertor-logo.png`, width: 100 },
-    { name: 'Protein Rebel', url: 'https://proteinrebel.com', logo: `${R2_URL}/newsletter/sponsors/protein-rebel-logo.png`, width: 90 },
-    { name: 'Flying Burrito', url: 'https://flyingburrito.eu', logo: `${R2_URL}/newsletter/sponsors/flying-burrito-logo.png`, width: 60 },
+    { name: 'NoblePro', url: 'https://noble-pro.com', logo: `${R2_URL}/newsletter/sponsors/noblepro-logo.png`, width: 140 },
+    { name: 'Enertor', url: 'https://enertor.com', logo: `${R2_URL}/newsletter/sponsors/enertor-logo.png`, width: 130 },
+    { name: 'Protein Rebel', url: 'https://proteinrebel.com', logo: `${R2_URL}/newsletter/sponsors/protein-rebel-logo.png`, width: 55 },
+    { name: 'Flying Burrito', url: 'https://flyingburrito.eu', logo: `${R2_URL}/newsletter/sponsors/flying-burrito-logo.png`, width: 80 },
   ];
 
   const cells = sponsors
