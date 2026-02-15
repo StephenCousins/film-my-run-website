@@ -362,19 +362,23 @@ function renderWhatsNew(text: string): string {
   </td></tr>`;
 }
 
+const R2_URL = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev';
+
 function renderSponsors(): string {
   const sponsors = [
-    { name: 'NoblePro', url: 'https://noble-pro.com' },
-    { name: 'Enertor', url: 'https://enertor.com' },
-    { name: 'Protein Rebel', url: 'https://proteinrebel.com' },
-    { name: 'Flying Burrito', url: 'https://flyingburrito.co.uk' },
+    { name: 'NoblePro', url: 'https://noble-pro.com', logo: `${R2_URL}/newsletter/sponsors/noblepro-logo.png`, width: 120 },
+    { name: 'Enertor', url: 'https://enertor.com', logo: `${R2_URL}/newsletter/sponsors/enertor-logo.png`, width: 100 },
+    { name: 'Protein Rebel', url: 'https://proteinrebel.com', logo: `${R2_URL}/newsletter/sponsors/protein-rebel-logo.png`, width: 90 },
+    { name: 'Flying Burrito', url: 'https://flyingburrito.eu', logo: `${R2_URL}/newsletter/sponsors/flying-burrito-logo.png`, width: 60 },
   ];
 
   const cells = sponsors
     .map(
       (s) =>
-        `<td width="25%" align="center" style="padding:14px 4px;">
-          <a href="${s.url}" style="font-family:${SANS};font-size:13px;font-weight:700;color:${SLATE};text-decoration:none;">${s.name}</a>
+        `<td width="25%" align="center" valign="middle" style="padding:14px 8px;">
+          <a href="${s.url}" style="text-decoration:none;">
+            <img src="${s.logo}" alt="${s.name}" width="${s.width}" style="display:inline-block;width:${s.width}px;max-width:100%;height:auto;border:0;" />
+          </a>
         </td>`
     )
     .join('');
