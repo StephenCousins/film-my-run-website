@@ -14,50 +14,153 @@ export interface NewsletterPayload {
   whatsNew?: { text: string };
 }
 
-const BRAND_ORANGE = '#f88c00';
-const DARK_TEXT = '#18181b';
-const SECONDARY_TEXT = '#52525b';
-const MUTED_TEXT = '#a1a1aa';
-const LIGHT_BG = '#fafafa';
+// ── Brand palette ──
+const ORANGE = '#f88c00';
+const ORANGE_DARK = '#e07800';
+const DARK = '#18181b';
+const CHARCOAL = '#27272a';
+const BODY_TEXT = '#3f3f46';
+const SECONDARY = '#52525b';
+const MUTED = '#a1a1aa';
+const LIGHT_BG = '#f4f4f5';
 const WHITE = '#ffffff';
 const BORDER = '#e4e4e7';
 
-function sectionHeading(title: string): string {
+// ── Helpers ──
+
+/** Full-width section wrapper with optional background colour */
+function section(bg: string, content: string, extraStyle = ''): string {
   return `
     <tr>
-      <td style="padding: 32px 0 12px 0;">
-        <h2 style="margin: 0; font-size: 18px; font-weight: 700; color: ${BRAND_ORANGE}; text-transform: uppercase; letter-spacing: 0.5px;">
-          ${title}
-        </h2>
-        <div style="margin-top: 8px; height: 2px; width: 40px; background-color: ${BRAND_ORANGE};"></div>
+      <td style="background-color: ${bg}; ${extraStyle}">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="padding: 40px 32px;">
+              ${content}
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>`;
 }
 
+function sectionLabel(label: string): string {
+  return `<p style="margin: 0 0 6px; font-size: 11px; font-weight: 700; color: ${ORANGE}; text-transform: uppercase; letter-spacing: 2px;">${label}</p>`;
+}
+
+function heading(text: string, size = 24): string {
+  return `<h2 style="margin: 0 0 16px; font-size: ${size}px; font-weight: 800; color: ${DARK}; line-height: 1.25; letter-spacing: -0.3px;">${text}</h2>`;
+}
+
+function headingLight(text: string, size = 24): string {
+  return `<h2 style="margin: 0 0 16px; font-size: ${size}px; font-weight: 800; color: ${WHITE}; line-height: 1.25; letter-spacing: -0.3px;">${text}</h2>`;
+}
+
+function ctaButton(url: string, text: string, style: 'solid' | 'outline' = 'solid'): string {
+  if (style === 'outline') {
+    return `<a href="${url}" style="display: inline-block; padding: 14px 32px; border: 2px solid ${ORANGE}; color: ${ORANGE}; font-size: 14px; font-weight: 700; text-decoration: none; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">${text}</a>`;
+  }
+  return `<a href="${url}" style="display: inline-block; padding: 14px 32px; background-color: ${ORANGE}; color: ${WHITE}; font-size: 14px; font-weight: 700; text-decoration: none; border-radius: 6px; text-transform: uppercase; letter-spacing: 0.5px;">${text}</a>`;
+}
+
+function dividerLine(): string {
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="padding: 0; height: 1px; background-color: ${BORDER};"></td></tr></table>`;
+}
+
+// ── Section renderers ──
+
+function renderIntro(text: string): string {
+  return section(WHITE, `
+    <p style="margin: 0; font-size: 16px; line-height: 1.7; color: ${BODY_TEXT};">
+      ${text}
+    </p>
+  `);
+}
+
+function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): string {
+  const image = post.imageUrl
+    ? `<tr>
+        <td style="padding: 0;">
+          <a href="${post.url}">
+            <img src="${post.imageUrl}" alt="${post.title}" width="600" style="display: block; width: 100%; max-width: 600px; height: auto;" />
+          </a>
+        </td>
+      </tr>`
+    : '';
+
+  return `
+    <tr>
+      <td style="background-color: ${WHITE};">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          ${image}
+          <tr>
+            <td style="padding: 28px 32px 40px;">
+              ${sectionLabel('Latest Blog Post')}
+              <h2 style="margin: 0 0 14px; font-size: 28px; font-weight: 800; line-height: 1.2; letter-spacing: -0.5px;">
+                <a href="${post.url}" style="color: ${DARK}; text-decoration: none;">${post.title}</a>
+              </h2>
+              <p style="margin: 0 0 24px; font-size: 15px; line-height: 1.7; color: ${SECONDARY};">
+                ${post.snippet}
+              </p>
+              ${ctaButton(post.url, 'Read the Full Post &rarr;')}
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>`;
+}
+
+function renderVideo(video: NonNullable<NewsletterPayload['videoOfTheWeek']>): string {
+  return section(DARK, `
+    ${sectionLabel('Video of the Week')}
+    ${headingLight(video.title)}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="padding: 0 0 20px; position: relative;">
+          <a href="${video.url}" style="text-decoration: none;">
+            <img src="${video.thumbnailUrl}" alt="${video.title}" width="536" style="display: block; width: 100%; max-width: 536px; height: auto; border-radius: 8px;" />
+            <!--[if !mso]><!-->
+            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 64px; height: 64px; background-color: ${ORANGE}; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+              <div style="width: 0; height: 0; border-top: 12px solid transparent; border-bottom: 12px solid transparent; border-left: 20px solid ${WHITE}; margin-left: 4px;"></div>
+            </div>
+            <!--<![endif]-->
+          </a>
+        </td>
+      </tr>
+    </table>
+    <p style="margin: 0 0 20px; font-size: 15px; line-height: 1.7; color: rgba(255,255,255,0.7);">${video.description}</p>
+    ${ctaButton(video.url, 'Watch on YouTube &rarr;')}
+  `, 'border-radius: 0;');
+}
+
 function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: string): string {
   const cards = items
-    .map((item) => {
+    .map((item, i) => {
       const image = item.imageUrl
-        ? `<td style="width: 80px; padding-right: 14px;" valign="top">
-            <a href="${newsPageUrl}"><img src="${item.imageUrl}" alt="" width="80" height="54" style="border-radius: 6px; display: block; object-fit: cover; width: 80px; height: 54px;" /></a>
+        ? `<td style="width: 100px; padding-right: 16px;" valign="top">
+            <a href="${newsPageUrl}"><img src="${item.imageUrl}" alt="" width="100" height="68" style="border-radius: 6px; display: block; object-fit: cover; width: 100px; height: 68px;" /></a>
            </td>`
         : '';
 
       const description = item.description
-        ? `<p style="margin: 4px 0 0; color: ${SECONDARY_TEXT}; font-size: 13px; line-height: 1.5;">${item.description}</p>`
+        ? `<p style="margin: 6px 0 0; color: ${SECONDARY}; font-size: 13px; line-height: 1.55;">${item.description}</p>`
+        : '';
+
+      const border = i < items.length - 1
+        ? `border-bottom: 1px solid ${BORDER};`
         : '';
 
       return `
       <tr>
-        <td style="padding: 10px 0; border-bottom: 1px solid ${BORDER};">
+        <td style="padding: 16px 0; ${border}">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
             <tr>
               ${image}
               <td valign="top">
-                <span style="color: ${DARK_TEXT}; font-size: 15px; font-weight: 600; line-height: 1.4;">
+                <a href="${newsPageUrl}" style="color: ${DARK}; text-decoration: none; font-size: 15px; font-weight: 700; line-height: 1.35;">
                   ${item.title}
-                </span>
-                <span style="color: ${MUTED_TEXT}; font-size: 12px; margin-left: 6px;">${item.source}</span>
+                </a>
+                <span style="color: ${MUTED}; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-left: 8px;">${item.source}</span>
                 ${description}
               </td>
             </tr>
@@ -67,161 +170,131 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
     })
     .join('');
 
-  return `
-    ${sectionHeading('Trail & Ultra News')}
-    <tr>
-      <td>
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-          ${cards}
-        </table>
-        <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top: 16px;">
-          <tr>
-            <td>
-              <a href="${newsPageUrl}" style="display: inline-block; padding: 10px 24px; background-color: ${BRAND_ORANGE}; color: ${WHITE}; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 999px;">Read all stories on Film My Run &rarr;</a>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>`;
-}
-
-function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): string {
-  const image = post.imageUrl
-    ? `<tr><td style="padding-bottom: 16px;"><a href="${post.url}"><img src="${post.imageUrl}" alt="${post.title}" width="100%" style="border-radius: 8px; display: block; max-width: 100%;" /></a></td></tr>`
-    : '';
-
-  return `
-    ${sectionHeading('Latest Blog Post')}
-    <tr>
-      <td>
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-          ${image}
-          <tr>
-            <td>
-              <a href="${post.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 18px; font-weight: 700; line-height: 1.3;">
-                ${post.title}
-              </a>
-              <div style="margin: 12px 0 16px; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.65;">
-                ${post.snippet}
-              </div>
-              <a href="${post.url}" style="display: inline-block; padding: 10px 24px; background-color: ${BRAND_ORANGE}; color: ${WHITE}; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 999px;">Read the full post &rarr;</a>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>`;
-}
-
-function renderVideo(video: NonNullable<NewsletterPayload['videoOfTheWeek']>): string {
-  return `
-    ${sectionHeading('Video of the Week')}
-    <tr>
-      <td>
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-          <tr>
-            <td style="padding-bottom: 14px; position: relative;">
-              <a href="${video.url}">
-                <img src="${video.thumbnailUrl}" alt="${video.title}" width="100%" style="border-radius: 8px; display: block; max-width: 100%;" />
-              </a>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <a href="${video.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 16px; font-weight: 700; line-height: 1.3;">
-                ${video.title}
-              </a>
-              <p style="margin: 8px 0 14px; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.6;">${video.description}</p>
-              <a href="${video.url}" style="color: ${BRAND_ORANGE}; font-size: 14px; font-weight: 600; text-decoration: none;">Watch on YouTube &rarr;</a>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>`;
-}
-
-function renderAppOfTheWeek(app: NonNullable<NewsletterPayload['appOfTheWeek']>): string {
-  return `
-    ${sectionHeading('Tool / App of the Week')}
-    <tr>
-      <td style="padding: 16px; background-color: ${LIGHT_BG}; border-radius: 8px;">
-        <a href="${app.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 16px; font-weight: 700;">
-          ${app.name}
-        </a>
-        <p style="margin: 8px 0 0; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.5;">${app.description}</p>
-      </td>
-    </tr>`;
-}
-
-function renderSession(session: NonNullable<NewsletterPayload['sessionOfTheWeek']>): string {
-  return `
-    ${sectionHeading('Session of the Week')}
-    <tr>
-      <td style="padding: 16px; background-color: ${LIGHT_BG}; border-radius: 8px;">
-        <strong style="color: ${DARK_TEXT}; font-size: 15px;">${session.title}</strong>
-        <p style="margin: 8px 0 0; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.5;">${session.description}</p>
-      </td>
-    </tr>`;
-}
-
-function renderCitedSection(title: string, text: string, citation?: string): string {
-  const cite = citation
-    ? `<p style="margin: 12px 0 0; color: ${MUTED_TEXT}; font-size: 12px; font-style: italic; line-height: 1.4;">Source: ${citation}</p>`
-    : '';
-
-  return `
-    ${sectionHeading(title)}
-    <tr>
-      <td style="padding: 16px; background-color: ${LIGHT_BG}; border-radius: 8px;">
-        <div style="color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.65;">
-          ${text}
-        </div>
-        ${cite}
-      </td>
-    </tr>`;
+  return section(WHITE, `
+    ${sectionLabel('Trail & Ultra News')}
+    ${heading('This Week in Running')}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      ${cards}
+    </table>
+    <table role="presentation" cellpadding="0" cellspacing="0" style="margin-top: 24px;">
+      <tr><td>${ctaButton(newsPageUrl, 'All Stories on Film My Run &rarr;', 'outline')}</td></tr>
+    </table>
+  `);
 }
 
 function renderParkrun(parkrun: NonNullable<NewsletterPayload['parkrun']>): string {
-  return `
-    ${sectionHeading('parkrun')}
-    <tr>
-      <td style="color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.65;">
-        ${parkrun.text}
-      </td>
-    </tr>`;
+  return section(LIGHT_BG, `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="border-left: 4px solid ${ORANGE}; padding-left: 20px;">
+          ${sectionLabel('parkrun')}
+          <p style="margin: 0; font-size: 15px; line-height: 1.7; color: ${BODY_TEXT};">
+            ${parkrun.text}
+          </p>
+        </td>
+      </tr>
+    </table>
+  `);
 }
 
-function renderTextSection(title: string, text: string): string {
+function renderAppOfTheWeek(app: NonNullable<NewsletterPayload['appOfTheWeek']>): string {
+  return section(WHITE, `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="background-color: ${LIGHT_BG}; border-radius: 10px; padding: 28px;">
+          ${sectionLabel('Tool / App of the Week')}
+          <h3 style="margin: 0 0 10px; font-size: 20px; font-weight: 800; color: ${DARK};">
+            <a href="${app.url}" style="color: ${DARK}; text-decoration: none;">${app.name}</a>
+          </h3>
+          <p style="margin: 0 0 18px; color: ${SECONDARY}; font-size: 14px; line-height: 1.65;">${app.description}</p>
+          <a href="${app.url}" style="color: ${ORANGE}; font-size: 14px; font-weight: 700; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px;">Check it out &rarr;</a>
+        </td>
+      </tr>
+    </table>
+  `);
+}
+
+function renderSession(session: NonNullable<NewsletterPayload['sessionOfTheWeek']>): string {
+  return section(WHITE, `
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="background-color: ${LIGHT_BG}; border-radius: 10px; padding: 28px;">
+          ${sectionLabel('Session of the Week')}
+          <h3 style="margin: 0 0 10px; font-size: 20px; font-weight: 800; color: ${DARK};">${session.title}</h3>
+          <p style="margin: 0; color: ${SECONDARY}; font-size: 14px; line-height: 1.65;">${session.description}</p>
+        </td>
+      </tr>
+    </table>
+  `);
+}
+
+function renderTipCard(label: string, title: string, text: string, accentColor: string, citation?: string): string {
+  const cite = citation
+    ? `<p style="margin: 16px 0 0; color: ${MUTED}; font-size: 12px; font-style: italic; line-height: 1.45;">Source: ${citation}</p>`
+    : '';
+
   return `
-    ${sectionHeading(title)}
-    <tr>
-      <td style="color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.6;">
-        ${text}
-      </td>
-    </tr>`;
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td style="border-left: 4px solid ${accentColor}; padding-left: 20px;">
+          ${sectionLabel(label)}
+          ${heading(title, 20)}
+          <p style="margin: 0; color: ${BODY_TEXT}; font-size: 15px; line-height: 1.7;">
+            ${text}
+          </p>
+          ${cite}
+        </td>
+      </tr>
+    </table>`;
+}
+
+function renderTrainingTip(tip: NonNullable<NewsletterPayload['trainingTip']>): string {
+  return section(LIGHT_BG, renderTipCard('Training Tip', 'Train Smarter', tip.text, ORANGE, tip.citation));
+}
+
+function renderScience(sci: NonNullable<NewsletterPayload['scienceSection']>): string {
+  return section(WHITE, renderTipCard('Science', 'What Does the Science Say?', sci.text, '#3b82f6', sci.citation));
+}
+
+function renderNutrition(nut: NonNullable<NewsletterPayload['nutritionTip']>): string {
+  return section(LIGHT_BG, renderTipCard('Nutrition', 'Fuel Your Runs', nut.text, '#22c55e', nut.citation));
 }
 
 function renderArchives(item: NonNullable<NewsletterPayload['fromTheArchives']>): string {
   const image = item.imageUrl
-    ? `<tr><td style="padding-bottom: 12px;"><a href="${item.url}"><img src="${item.imageUrl}" alt="${item.title}" width="100%" style="border-radius: 8px; display: block; max-width: 100%;" /></a></td></tr>`
+    ? `<tr>
+        <td style="padding-bottom: 16px;">
+          <a href="${item.url}"><img src="${item.imageUrl}" alt="${item.title}" width="536" style="display: block; width: 100%; max-width: 536px; height: auto; border-radius: 8px;" /></a>
+        </td>
+      </tr>`
     : '';
 
-  return `
-    ${sectionHeading('From the Archives')}
-    <tr>
-      <td style="padding: 16px; background-color: ${LIGHT_BG}; border-radius: 8px; border-left: 3px solid ${BRAND_ORANGE};">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-          ${image}
-          <tr>
-            <td>
-              <a href="${item.url}" style="color: ${DARK_TEXT}; text-decoration: none; font-size: 15px; font-weight: 700;">
-                ${item.title}
-              </a>
-              <p style="margin: 8px 0 0; color: ${SECONDARY_TEXT}; font-size: 14px; line-height: 1.5;">${item.description}</p>
-            </td>
-          </tr>
-        </table>
-      </td>
-    </tr>`;
+  return section(WHITE, `
+    ${sectionLabel('From the Archives')}
+    ${heading('Worth Another Look')}
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+      ${image}
+      <tr>
+        <td>
+          <a href="${item.url}" style="color: ${DARK}; text-decoration: none; font-size: 18px; font-weight: 700; line-height: 1.3;">
+            ${item.title}
+          </a>
+          <p style="margin: 10px 0 20px; color: ${SECONDARY}; font-size: 14px; line-height: 1.65;">${item.description}</p>
+          ${ctaButton(item.url, 'Read Again &rarr;', 'outline')}
+        </td>
+      </tr>
+    </table>
+  `);
+}
+
+function renderWhatsNew(text: string): string {
+  return section(LIGHT_BG, `
+    ${sectionLabel("What's New")}
+    ${heading('On the Site')}
+    <p style="margin: 0; color: ${BODY_TEXT}; font-size: 15px; line-height: 1.7;">
+      ${text}
+    </p>
+  `);
 }
 
 export function wrapWithApprovalBanner(html: string, approveUrl: string): string {
@@ -248,7 +321,6 @@ export function wrapWithApprovalBanner(html: string, approveUrl: string): string
       </tr>
     </table>`;
 
-  // Insert the banner right after <body...>
   return html.replace(/(<body[^>]*>)/, `$1${banner}`);
 }
 
@@ -259,27 +331,35 @@ export function buildNewsletterHtml(
 ): string {
   const sections: string[] = [];
 
-  // Welcome intro
-  if (payload.intro) {
-    sections.push(`
-    <tr>
-      <td style="padding: 24px 0 8px; color: ${SECONDARY_TEXT}; font-size: 15px; line-height: 1.65;">
-        ${payload.intro}
-      </td>
-    </tr>`);
-  }
+  // Intro
+  if (payload.intro) sections.push(renderIntro(payload.intro));
 
-  if (payload.news?.length) sections.push(renderNews(payload.news, `${baseUrl}/news`));
+  // Hero feature: blog post with full-width image
   if (payload.blogPost) sections.push(renderBlogPost(payload.blogPost));
+
+  // Video on dark background
   if (payload.videoOfTheWeek) sections.push(renderVideo(payload.videoOfTheWeek));
+
+  // News
+  if (payload.news?.length) sections.push(renderNews(payload.news, `${baseUrl}/news`));
+
+  // Parkrun
   if (payload.parkrun) sections.push(renderParkrun(payload.parkrun));
+
+  // Tools & sessions in cards
   if (payload.appOfTheWeek) sections.push(renderAppOfTheWeek(payload.appOfTheWeek));
   if (payload.sessionOfTheWeek) sections.push(renderSession(payload.sessionOfTheWeek));
-  if (payload.trainingTip) sections.push(renderCitedSection('Training Tip', payload.trainingTip.text, payload.trainingTip.citation));
-  if (payload.scienceSection) sections.push(renderCitedSection('What Does the Science Say?', payload.scienceSection.text, payload.scienceSection.citation));
-  if (payload.nutritionTip) sections.push(renderCitedSection('Nutrition Tip', payload.nutritionTip.text, payload.nutritionTip.citation));
+
+  // Tips with coloured accents — alternating bg
+  if (payload.trainingTip) sections.push(renderTrainingTip(payload.trainingTip));
+  if (payload.scienceSection) sections.push(renderScience(payload.scienceSection));
+  if (payload.nutritionTip) sections.push(renderNutrition(payload.nutritionTip));
+
+  // Archives
   if (payload.fromTheArchives) sections.push(renderArchives(payload.fromTheArchives));
-  if (payload.whatsNew) sections.push(renderTextSection("What's New", payload.whatsNew.text));
+
+  // What's new
+  if (payload.whatsNew) sections.push(renderWhatsNew(payload.whatsNew.text));
 
   const today = new Date().toLocaleDateString('en-GB', {
     weekday: 'long',
@@ -303,34 +383,48 @@ export function buildNewsletterHtml(
     </xml>
   </noscript>
   <![endif]-->
+  <style>
+    @media only screen and (max-width: 620px) {
+      .email-container { width: 100% !important; }
+      .stack-col { display: block !important; width: 100% !important; }
+      .mobile-pad { padding-left: 20px !important; padding-right: 20px !important; }
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: ${LIGHT_BG}; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+<body style="margin: 0; padding: 0; background-color: ${LIGHT_BG}; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+
+  <!-- Preheader (hidden preview text) -->
+  <div style="display: none; max-height: 0; overflow: hidden; mso-hide: all;">
+    ${payload.intro || payload.subject}
+    ${'&zwnj;&nbsp;'.repeat(30)}
+  </div>
+
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: ${LIGHT_BG};">
     <tr>
-      <td align="center" style="padding: 24px 16px;">
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
+      <td align="center" style="padding: 16px 0;">
+        <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; background-color: ${WHITE};">
 
-          <!-- Header -->
+          <!-- ══════ HEADER ══════ -->
           <tr>
-            <td style="padding: 32px 32px 24px; background-color: ${BRAND_ORANGE}; border-radius: 12px 12px 0 0;" align="center">
-              <table role="presentation" cellpadding="0" cellspacing="0">
+            <td style="background-color: ${DARK}; padding: 36px 32px 32px;" align="center">
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
-                  <td align="center">
-                    <!-- Three runners logo -->
-                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-                      <td style="padding: 0 1px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="${WHITE}" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></td>
-                      <td style="padding: 0 1px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="${WHITE}" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></td>
-                      <td style="padding: 0 1px;"><svg width="28" height="28" viewBox="0 0 24 24" fill="${WHITE}" xmlns="http://www.w3.org/2000/svg"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z"/></svg></td>
-                    </tr></table>
+                  <td align="center" style="padding-bottom: 16px;">
+                    <!-- Orange accent bar -->
+                    <div style="width: 48px; height: 4px; background-color: ${ORANGE}; border-radius: 2px;"></div>
                   </td>
                 </tr>
                 <tr>
-                  <td align="center" style="padding-top: 12px;">
-                    <h1 style="margin: 0; font-size: 24px; font-weight: 700; color: ${WHITE}; letter-spacing: -0.5px;">
-                      Film My Run
+                  <td align="center">
+                    <h1 style="margin: 0; font-size: 28px; font-weight: 800; color: ${WHITE}; letter-spacing: 3px; text-transform: uppercase;">
+                      FILM MY RUN
                     </h1>
-                    <p style="margin: 4px 0 0; font-size: 13px; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px;">
-                      Newsletter &bull; ${today}
+                  </td>
+                </tr>
+                <tr>
+                  <td align="center" style="padding-top: 10px;">
+                    <p style="margin: 0; font-size: 12px; color: ${ORANGE}; text-transform: uppercase; letter-spacing: 2px; font-weight: 600;">
+                      Weekly Newsletter &bull; ${today}
                     </p>
                   </td>
                 </tr>
@@ -338,32 +432,46 @@ export function buildNewsletterHtml(
             </td>
           </tr>
 
-          <!-- Body -->
-          <tr>
-            <td style="padding: 8px 32px 32px; background-color: ${WHITE};">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                ${sections.join('')}
-              </table>
-            </td>
-          </tr>
+          <!-- ══════ SECTIONS ══════ -->
+          ${sections.join('')}
 
-          <!-- Footer -->
+          <!-- ══════ FOOTER ══════ -->
           <tr>
-            <td style="padding: 24px 32px; background-color: ${LIGHT_BG}; border-top: 1px solid ${BORDER}; border-radius: 0 0 12px 12px;" align="center">
-              <table role="presentation" cellpadding="0" cellspacing="0">
+            <td style="background-color: ${DARK}; padding: 40px 32px;" align="center">
+              <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
+                <!-- Orange accent -->
                 <tr>
-                  <td align="center" style="padding-bottom: 16px;">
-                    <a href="https://instagram.com/filmmyrun" style="color: ${MUTED_TEXT}; text-decoration: none; font-size: 13px; margin: 0 8px;">Instagram</a>
-                    <a href="https://youtube.com/@filmmyrun" style="color: ${MUTED_TEXT}; text-decoration: none; font-size: 13px; margin: 0 8px;">YouTube</a>
-                    <a href="https://twitter.com/filmmyrun" style="color: ${MUTED_TEXT}; text-decoration: none; font-size: 13px; margin: 0 8px;">Twitter</a>
+                  <td align="center" style="padding-bottom: 24px;">
+                    <div style="width: 48px; height: 4px; background-color: ${ORANGE}; border-radius: 2px;"></div>
                   </td>
                 </tr>
+                <!-- Brand -->
+                <tr>
+                  <td align="center" style="padding-bottom: 20px;">
+                    <p style="margin: 0; font-size: 18px; font-weight: 800; color: ${WHITE}; letter-spacing: 2px; text-transform: uppercase;">Film My Run</p>
+                  </td>
+                </tr>
+                <!-- Social links -->
+                <tr>
+                  <td align="center" style="padding-bottom: 24px;">
+                    <a href="https://youtube.com/@filmmyrun" style="display: inline-block; padding: 8px 14px; margin: 0 4px; background-color: ${CHARCOAL}; color: rgba(255,255,255,0.8); font-size: 12px; font-weight: 600; text-decoration: none; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">YouTube</a>
+                    <a href="https://instagram.com/filmmyrun" style="display: inline-block; padding: 8px 14px; margin: 0 4px; background-color: ${CHARCOAL}; color: rgba(255,255,255,0.8); font-size: 12px; font-weight: 600; text-decoration: none; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Instagram</a>
+                    <a href="https://twitter.com/filmmyrun" style="display: inline-block; padding: 8px 14px; margin: 0 4px; background-color: ${CHARCOAL}; color: rgba(255,255,255,0.8); font-size: 12px; font-weight: 600; text-decoration: none; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.5px;">Twitter</a>
+                  </td>
+                </tr>
+                <!-- Divider -->
+                <tr>
+                  <td style="padding: 0 0 20px;">
+                    <div style="height: 1px; background-color: ${CHARCOAL};"></div>
+                  </td>
+                </tr>
+                <!-- Unsubscribe -->
                 <tr>
                   <td align="center">
-                    <p style="margin: 0; color: ${MUTED_TEXT}; font-size: 12px; line-height: 1.5;">
-                      You received this email because you subscribed to the Film My Run newsletter.
+                    <p style="margin: 0; color: rgba(255,255,255,0.4); font-size: 12px; line-height: 1.6;">
+                      You received this because you subscribed to the Film My Run newsletter.
                       <br />
-                      <a href="${unsubscribeUrl}" style="color: ${MUTED_TEXT}; text-decoration: underline;">Unsubscribe</a>
+                      <a href="${unsubscribeUrl}" style="color: rgba(255,255,255,0.5); text-decoration: underline;">Unsubscribe</a>
                     </p>
                   </td>
                 </tr>
