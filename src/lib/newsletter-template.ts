@@ -51,7 +51,7 @@ const MSO_TABLE = 'border-collapse:collapse;border-spacing:0;mso-table-lspace:0p
 function svgDivider(fromBg: string, toBg: string, dir: 'ltr' | 'rtl' = 'ltr', baseUrl: string): string {
   const strip = (c: string) => c.replace('#', '');
   // v= cache-buster — bump when divider dimensions/design change
-  const url = `${baseUrl}/api/newsletter/divider?from=${strip(fromBg)}&to=${strip(toBg)}&dir=${dir}&v=3`;
+  const url = `${baseUrl}/api/newsletter/divider?from=${strip(fromBg)}&to=${strip(toBg)}&dir=${dir}&v=4`;
   return `<tr><td style="padding:0;font-size:0;line-height:0;"><img src="${url}" alt="" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;" /></td></tr>`;
 }
 

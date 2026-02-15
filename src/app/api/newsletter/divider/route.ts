@@ -26,10 +26,10 @@ export async function GET(request: NextRequest) {
     return new NextResponse('Invalid color', { status: 400 });
   }
 
-  // Render at 2x resolution for retina clarity. Height of 80px (160 at 2x)
-  // gives the diagonal dividers enough visual impact in email clients.
+  // Render at 2x resolution for retina clarity. Height of 120px (240 at 2x)
+  // ensures dividers stay prominent even when Gmail scales the email down.
   const W = 1200;
-  const H = 160;
+  const H = 240;
 
   let svg: string;
   if (dir === 'rtl') {
