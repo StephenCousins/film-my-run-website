@@ -43,23 +43,15 @@ const MSO_TABLE = 'border-collapse:collapse;border-spacing:0;mso-table-lspace:0p
  * SVG-based diagonal divider — creates a visible diagonal line with an orange
  * triangle sweeping across the section transition.
  *
+ * Uses a hosted API route instead of data: URIs because Gmail strips data: URIs.
+ *
  * dir='ltr': Orange triangle grows from bottom-left
  * dir='rtl': Orange triangle grows from top-right
  */
-function svgDivider(fromBg: string, toBg: string, dir: 'ltr' | 'rtl' = 'ltr'): string {
-  // Encode colors for SVG data URI
-  const enc = (c: string) => c.replace('#', '%23');
-
-  let svg: string;
-  if (dir === 'ltr') {
-    // Diagonal from top-right to bottom-left; orange triangle on bottom-left
-    svg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 50' preserveAspectRatio='none'%3E%3Cpolygon points='0,0 600,0 600,50' fill='${enc(fromBg)}'/%3E%3Cpolygon points='0,0 0,50 600,50' fill='${enc(toBg)}'/%3E%3Cpolygon points='0,0 300,50 0,50' fill='${enc(ORANGE)}'/%3E%3C/svg%3E`;
-  } else {
-    // Diagonal from top-left to bottom-right; orange triangle on top-right
-    svg = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 50' preserveAspectRatio='none'%3E%3Cpolygon points='0,0 600,0 0,50' fill='${enc(fromBg)}'/%3E%3Cpolygon points='600,0 600,50 0,50' fill='${enc(toBg)}'/%3E%3Cpolygon points='300,0 600,0 600,50' fill='${enc(ORANGE)}'/%3E%3C/svg%3E`;
-  }
-
-  return `<tr><td style="padding:0;font-size:0;line-height:0;"><img src="${svg}" alt="" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;" /></td></tr>`;
+function svgDivider(fromBg: string, toBg: string, dir: 'ltr' | 'rtl' = 'ltr', baseUrl: string): string {
+  const strip = (c: string) => c.replace('#', '');
+  const url = `${baseUrl}/api/newsletter/divider?from=${strip(fromBg)}&to=${strip(toBg)}&dir=${dir}`;
+  return `<tr><td style="padding:0;font-size:0;line-height:0;"><img src="${url}" alt="" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;" /></td></tr>`;
 }
 
 /** Thin horizontal rule within a section */
@@ -79,38 +71,20 @@ function ctaButton(url: string, label: string, variant: 'orange' | 'ghost-dark' 
 }
 
 /**
- * Wraps an image URL in a container with angular orange triangle overlays.
- * cornerPosition determines where the main orange triangle appears.
+ * Email-safe image with an orange accent border.
+ *
+ * Gmail strips position:absolute/relative, so CSS triangle overlays
+ * are invisible. Instead we use a 4px orange bottom border for brand accent.
  */
 function angularImage(
   imageUrl: string,
   alt: string,
   linkUrl: string,
   width: number,
-  corner: 'bottom-right' | 'bottom-left' | 'top-right' = 'bottom-right',
-  extraOverlay?: string
 ): string {
-  // CSS border-triangle technique for each corner position
-  let triangle = '';
-  switch (corner) {
-    case 'bottom-right':
-      triangle = `<div style="position:absolute;bottom:0;right:0;width:0;height:0;border-style:solid;border-width:0 0 120px 180px;border-color:transparent transparent ${ORANGE} transparent;opacity:0.85;"></div>`;
-      break;
-    case 'bottom-left':
-      triangle = `<div style="position:absolute;bottom:0;left:0;width:0;height:0;border-style:solid;border-width:100px 0 0 160px;border-color:transparent transparent transparent ${ORANGE};opacity:0.85;"></div>`;
-      break;
-    case 'top-right':
-      triangle = `<div style="position:absolute;top:0;right:0;width:0;height:0;border-style:solid;border-width:0 140px 90px 0;border-color:transparent ${ORANGE} transparent transparent;opacity:0.8;"></div>`;
-      break;
-  }
-
-  return `<div style="position:relative;display:block;overflow:hidden;border-radius:6px;">
-    <a href="${linkUrl}" style="text-decoration:none;">
-      <img src="${imageUrl}" alt="${alt}" width="${width}" style="display:block;width:100%;max-width:${width}px;height:auto;border:0;" />
-    </a>
-    ${triangle}
-    ${extraOverlay || ''}
-  </div>`;
+  return `<a href="${linkUrl}" style="text-decoration:none;display:block;">
+    <img src="${imageUrl}" alt="${alt}" width="${width}" style="display:block;width:100%;max-width:${width}px;height:auto;border:0;border-bottom:4px solid ${ORANGE};" />
+  </a>`;
 }
 
 
@@ -127,17 +101,9 @@ function renderIntro(text: string): string {
 }
 
 function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): string {
-  // Full-width image with angular overlay on bottom-right + white accent on top-left
   const image = post.imageUrl
     ? `<tr><td style="padding:0;font-size:0;line-height:0;">
-        ${angularImage(
-          post.imageUrl,
-          post.title,
-          post.url,
-          600,
-          'bottom-right',
-          `<div style="position:absolute;top:0;left:0;width:0;height:0;border-style:solid;border-width:60px 100px 0 0;border-color:${WHITE} transparent transparent transparent;opacity:0.6;"></div>`
-        )}
+        ${angularImage(post.imageUrl, post.title, post.url, 600)}
       </td></tr>`
     : '';
 
@@ -168,9 +134,6 @@ function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): strin
 }
 
 function renderVideo(video: NonNullable<NewsletterPayload['videoOfTheWeek']>): string {
-  // Angular overlay on bottom-left with PLAY label inside it
-  const playOverlay = `<div style="position:absolute;bottom:12px;left:14px;font-family:${SANS};font-size:11px;font-weight:700;color:${WHITE};letter-spacing:1px;text-transform:uppercase;">&#9654; PLAY</div>`;
-
   return `<tr><td style="background:${LIGHT_GREY};padding:36px 48px 44px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr><td style="padding-bottom:16px;">
@@ -181,7 +144,7 @@ function renderVideo(video: NonNullable<NewsletterPayload['videoOfTheWeek']>): s
         <p style="margin:6px 0 0;font-family:${SANS};font-size:13px;font-weight:500;color:${SILVER};">${video.description}</p>
       </td></tr>
       <tr><td style="padding-bottom:28px;font-size:0;line-height:0;">
-        ${angularImage(video.thumbnailUrl, video.title, video.url, 504, 'bottom-left', playOverlay)}
+        ${angularImage(video.thumbnailUrl, video.title, video.url, 504)}
       </td></tr>
       <tr><td>${ctaButton(video.url, 'Watch Now')}</td></tr>
     </table>
@@ -191,10 +154,9 @@ function renderVideo(video: NonNullable<NewsletterPayload['videoOfTheWeek']>): s
 function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: string): string {
   const [first, ...rest] = items;
 
-  // First item: featured with image + angular overlay on top-right
   const firstImage = first.imageUrl
     ? `<tr><td style="padding-bottom:20px;font-size:0;line-height:0;">
-        ${angularImage(first.imageUrl, '', newsPageUrl, 504, 'top-right')}
+        ${angularImage(first.imageUrl, '', newsPageUrl, 504)}
       </td></tr>`
     : '';
 
@@ -355,10 +317,9 @@ function renderTips(tips: TipItem[]): string {
 }
 
 function renderArchives(item: NonNullable<NewsletterPayload['fromTheArchives']>): string {
-  // Image with angular overlay on bottom-right
   const image = item.imageUrl
     ? `<tr><td style="padding-bottom:20px;font-size:0;line-height:0;">
-        ${angularImage(item.imageUrl, item.title, item.url, 504, 'bottom-right')}
+        ${angularImage(item.imageUrl, item.title, item.url, 504)}
       </td></tr>`
     : '';
 
@@ -524,7 +485,7 @@ export function buildNewsletterHtml(
 
   for (const block of blocks) {
     // Always insert an SVG diagonal divider between sections
-    body.push(svgDivider(prevBg, block.bg, dir));
+    body.push(svgDivider(prevBg, block.bg, dir, baseUrl));
     dir = dir === 'ltr' ? 'rtl' : 'ltr';
     body.push(block.html);
     prevBg = block.bg;
