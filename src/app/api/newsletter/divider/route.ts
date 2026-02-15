@@ -26,10 +26,10 @@ export async function GET(request: NextRequest) {
     return new NextResponse('Invalid color', { status: 400 });
   }
 
-  // Render at 2x resolution (1200x100) for retina clarity, then the
-  // <img width="600"> in the email scales it down to look crisp.
+  // Render at 2x resolution for retina clarity. Height of 80px (160 at 2x)
+  // gives the diagonal dividers enough visual impact in email clients.
   const W = 1200;
-  const H = 100;
+  const H = 160;
 
   let svg: string;
   if (dir === 'rtl') {
