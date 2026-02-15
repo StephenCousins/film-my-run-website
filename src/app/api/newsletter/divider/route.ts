@@ -26,11 +26,16 @@ export async function GET(request: NextRequest) {
     return new NextResponse('Invalid color', { status: 400 });
   }
 
+  // Render at 2x resolution (1200x100) for retina clarity, then the
+  // <img width="600"> in the email scales it down to look crisp.
+  const W = 1200;
+  const H = 100;
+
   let svg: string;
   if (dir === 'rtl') {
-    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="50" viewBox="0 0 600 50"><polygon points="0,0 600,0 0,50" fill="#${from}"/><polygon points="600,0 600,50 0,50" fill="#${to}"/><polygon points="300,0 600,0 600,50" fill="#${accent}"/></svg>`;
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><polygon points="0,0 ${W},0 0,${H}" fill="#${from}"/><polygon points="${W},0 ${W},${H} 0,${H}" fill="#${to}"/><polygon points="${W / 2},0 ${W},0 ${W},${H}" fill="#${accent}"/></svg>`;
   } else {
-    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="50" viewBox="0 0 600 50"><polygon points="0,0 600,0 600,50" fill="#${from}"/><polygon points="0,0 0,50 600,50" fill="#${to}"/><polygon points="0,0 300,50 0,50" fill="#${accent}"/></svg>`;
+    svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><polygon points="0,0 ${W},0 ${W},${H}" fill="#${from}"/><polygon points="0,0 0,${H} ${W},${H}" fill="#${to}"/><polygon points="0,0 ${W / 2},${H} 0,${H}" fill="#${accent}"/></svg>`;
   }
 
   const png = await sharp(Buffer.from(svg)).png().toBuffer();
