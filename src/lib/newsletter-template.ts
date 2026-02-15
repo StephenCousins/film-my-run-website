@@ -16,16 +16,17 @@ export interface NewsletterPayload {
 
 // ── Palette ──
 const ORANGE = '#f88c00';
-const ORANGE_LIGHT = '#ffa733';
-const INK = '#0a0a0a';
-const CHARCOAL = '#1a1a1a';
-const SLATE = '#3d3d3d';
-const GREY = '#6b6b6b';
-const SILVER = '#999999';
+const ORANGE_LIGHT = '#ffad33';
+const DEEP = '#2d2926';          // warm dark charcoal — NOT black
+const DEEP_MID = '#3d3835';      // slightly lighter variant
+const SLATE = '#4a4541';
+const GREY = '#6b6560';
+const SILVER = '#9e9893';
 const CREAM = '#faf8f5';
 const WARM_WHITE = '#f5f2ed';
 const WHITE = '#ffffff';
 const RULE = '#e0dbd3';
+const OUTER_BG = '#d6d1c9';
 
 // ── Fonts ──
 const SERIF = "Georgia, 'Times New Roman', Times, serif";
@@ -45,10 +46,40 @@ function badge(text: string): string {
 function ctaButton(url: string, label: string, variant: 'orange' | 'dark' | 'ghost' = 'orange'): string {
   const styles: Record<string, string> = {
     orange: `background-color: ${ORANGE}; color: ${WHITE}; border: 2px solid ${ORANGE};`,
-    dark: `background-color: ${INK}; color: ${WHITE}; border: 2px solid ${INK};`,
+    dark: `background-color: ${DEEP}; color: ${WHITE}; border: 2px solid ${DEEP};`,
     ghost: `background-color: transparent; color: ${ORANGE}; border: 2px solid ${ORANGE};`,
   };
   return `<table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="border-radius: 4px; ${styles[variant]}"><a href="${url}" style="display: inline-block; padding: 14px 36px; font-family: ${SANS}; font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; text-decoration: none; color: ${variant === 'ghost' ? ORANGE : WHITE};">${label}</a></td></tr></table>`;
+}
+
+/** Decorative angular divider — two-tone chevron stripe */
+function angledDivider(): string {
+  return `
+    <tr>
+      <td style="padding: 0; font-size: 0; line-height: 0; height: 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="height: 4px; background-color: ${ORANGE}; font-size: 0; line-height: 0;" width="120">&nbsp;</td>
+            <td style="height: 4px; background-color: ${RULE}; font-size: 0; line-height: 0;">&nbsp;</td>
+          </tr>
+        </table>
+      </td>
+    </tr>`;
+}
+
+/** Thin accent rule — orange left, fading to warm grey */
+function accentRule(): string {
+  return `
+    <tr>
+      <td style="padding: 0; font-size: 0; line-height: 0;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td style="height: 2px; background-color: ${ORANGE}; font-size: 0; line-height: 0;" width="80">&nbsp;</td>
+            <td style="height: 2px; background-color: ${WARM_WHITE}; font-size: 0; line-height: 0;">&nbsp;</td>
+          </tr>
+        </table>
+      </td>
+    </tr>`;
 }
 
 // ── Section renderers ──
@@ -95,8 +126,8 @@ function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): strin
                 </tr>
                 <tr>
                   <td style="padding-bottom: 16px;">
-                    <a href="${post.url}" style="text-decoration: none; color: ${INK};">
-                      <h2 style="margin: 0; font-family: ${SERIF}; font-size: 32px; font-weight: 700; line-height: 1.2; color: ${INK};">
+                    <a href="${post.url}" style="text-decoration: none; color: ${DEEP};">
+                      <h2 style="margin: 0; font-family: ${SERIF}; font-size: 32px; font-weight: 700; line-height: 1.2; color: ${DEEP};">
                         ${post.title}
                       </h2>
                     </a>
@@ -123,7 +154,7 @@ function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): strin
 function renderVideo(video: NonNullable<NewsletterPayload['videoOfTheWeek']>): string {
   return `
     <tr>
-      <td style="background-color: ${INK}; padding: 44px 40px 48px;">
+      <td style="background-color: ${DEEP}; padding: 44px 40px 48px;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
           <tr>
             <td style="padding-bottom: 20px;">${badge('Video of the Week')}</td>
@@ -193,8 +224,8 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
                     </td>
                   </tr>
                 </table>
-                <a href="${newsPageUrl}" style="text-decoration: none; color: ${INK};">
-                  <span style="font-family: ${SERIF}; font-size: 17px; font-weight: 700; line-height: 1.35; color: ${INK};">${item.title}</span>
+                <a href="${newsPageUrl}" style="text-decoration: none; color: ${DEEP};">
+                  <span style="font-family: ${SERIF}; font-size: 17px; font-weight: 700; line-height: 1.35; color: ${DEEP};">${item.title}</span>
                 </a>
                 ${desc}
               </td>
@@ -216,7 +247,7 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
           </tr>
           <tr>
             <td style="padding-bottom: 28px;">
-              <h2 style="margin: 0; font-family: ${SERIF}; font-size: 28px; font-weight: 700; color: ${INK}; line-height: 1.2;">This Week in Running</h2>
+              <h2 style="margin: 0; font-family: ${SERIF}; font-size: 28px; font-weight: 700; color: ${DEEP}; line-height: 1.2;">This Week in Running</h2>
             </td>
           </tr>
           <tr>
@@ -280,7 +311,7 @@ function renderAppOfTheWeek(app: NonNullable<NewsletterPayload['appOfTheWeek']>)
                 <tr>
                   <td style="padding-bottom: 12px;">
                     <a href="${app.url}" style="text-decoration: none;">
-                      <h3 style="margin: 0; font-family: ${SERIF}; font-size: 22px; font-weight: 700; color: ${INK}; line-height: 1.3;">${app.name}</h3>
+                      <h3 style="margin: 0; font-family: ${SERIF}; font-size: 22px; font-weight: 700; color: ${DEEP}; line-height: 1.3;">${app.name}</h3>
                     </a>
                   </td>
                 </tr>
@@ -317,7 +348,7 @@ function renderSession(session: NonNullable<NewsletterPayload['sessionOfTheWeek'
                 </tr>
                 <tr>
                   <td style="padding-bottom: 12px;">
-                    <h3 style="margin: 0; font-family: ${SERIF}; font-size: 22px; font-weight: 700; color: ${INK}; line-height: 1.3;">${session.title}</h3>
+                    <h3 style="margin: 0; font-family: ${SERIF}; font-size: 22px; font-weight: 700; color: ${DEEP}; line-height: 1.3;">${session.title}</h3>
                   </td>
                 </tr>
                 <tr>
@@ -406,14 +437,14 @@ function renderArchives(item: NonNullable<NewsletterPayload['fromTheArchives']>)
           </tr>
           <tr>
             <td style="padding-bottom: 24px;">
-              <h2 style="margin: 0; font-family: ${SERIF}; font-size: 24px; font-weight: 700; color: ${INK}; line-height: 1.25;">Worth Another Look</h2>
+              <h2 style="margin: 0; font-family: ${SERIF}; font-size: 24px; font-weight: 700; color: ${DEEP}; line-height: 1.25;">Worth Another Look</h2>
             </td>
           </tr>
           ${image}
           <tr>
             <td style="padding-bottom: 12px;">
               <a href="${item.url}" style="text-decoration: none;">
-                <span style="font-family: ${SERIF}; font-size: 20px; font-weight: 700; line-height: 1.3; color: ${INK};">${item.title}</span>
+                <span style="font-family: ${SERIF}; font-size: 20px; font-weight: 700; line-height: 1.3; color: ${DEEP};">${item.title}</span>
               </a>
             </td>
           </tr>
@@ -442,12 +473,52 @@ function renderWhatsNew(text: string): string {
           </tr>
           <tr>
             <td style="padding-bottom: 20px;">
-              <h2 style="margin: 0; font-family: ${SERIF}; font-size: 24px; font-weight: 700; color: ${INK}; line-height: 1.25;">On the Site</h2>
+              <h2 style="margin: 0; font-family: ${SERIF}; font-size: 24px; font-weight: 700; color: ${DEEP}; line-height: 1.25;">On the Site</h2>
             </td>
           </tr>
           <tr>
             <td>
               <p style="margin: 0; font-family: ${SANS}; font-size: 15px; line-height: 1.7; color: ${GREY};">${text}</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>`;
+}
+
+function renderSponsors(): string {
+  const sponsors = [
+    { name: 'NoblePro', url: 'https://noble-pro.com' },
+    { name: 'Enertor', url: 'https://enertor.com' },
+    { name: 'Protein Rebel', url: 'https://proteinrebel.com' },
+    { name: 'Flying Burrito', url: 'https://flyingburrito.co.uk' },
+  ];
+
+  const sponsorCells = sponsors
+    .map(
+      (s) =>
+        `<td style="padding: 10px 16px;" align="center" valign="middle">
+          <a href="${s.url}" style="font-family: ${SANS}; font-size: 13px; font-weight: 700; color: ${SLATE}; text-decoration: none; letter-spacing: 0.3px; white-space: nowrap;">${s.name}</a>
+        </td>`
+    )
+    .join('');
+
+  return `
+    <tr>
+      <td style="background-color: ${WARM_WHITE}; padding: 36px 40px 40px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          <tr>
+            <td align="center" style="padding-bottom: 20px;">
+              <span style="font-family: ${SANS}; font-size: 11px; font-weight: 700; color: ${SILVER}; text-transform: uppercase; letter-spacing: 2px;">Thanks to Our Sponsors</span>
+            </td>
+          </tr>
+          <tr>
+            <td align="center">
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  ${sponsorCells}
+                </tr>
+              </table>
             </td>
           </tr>
         </table>
@@ -485,7 +556,8 @@ export function wrapWithApprovalBanner(html: string, approveUrl: string): string
 export function buildNewsletterHtml(
   payload: NewsletterPayload,
   unsubscribeUrl: string,
-  baseUrl: string
+  baseUrl: string,
+  viewInBrowserUrl?: string
 ): string {
   const sections: string[] = [];
 
@@ -508,6 +580,10 @@ export function buildNewsletterHtml(
     month: 'long',
     year: 'numeric',
   });
+
+  const viewLink = viewInBrowserUrl
+    ? `<a href="${viewInBrowserUrl}" style="color: ${SILVER}; text-decoration: underline;">View this email in your browser</a>`
+    : '';
 
   return `<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
@@ -535,16 +611,28 @@ export function buildNewsletterHtml(
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #d6d1c9; font-family: ${SANS}; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+<body style="margin: 0; padding: 0; background-color: ${OUTER_BG}; font-family: ${SANS}; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
 
   <!-- Preheader -->
   <div style="display: none; max-height: 0; overflow: hidden; mso-hide: all; font-size: 0;">
     ${payload.intro || payload.subject}${'&#847; &zwnj; &nbsp;'.repeat(40)}
   </div>
 
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #d6d1c9;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: ${OUTER_BG};">
     <tr>
-      <td align="center" style="padding: 24px 16px;">
+      <td align="center" style="padding: 16px 16px 0;">
+
+        <!-- View in browser -->
+        ${viewLink ? `<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%;">
+          <tr>
+            <td align="center" style="padding: 10px 0 16px;">
+              <span style="font-family: ${SANS}; font-size: 11px; color: ${SILVER};">
+                ${viewLink}
+              </span>
+            </td>
+          </tr>
+        </table>` : ''}
+
         <table role="presentation" class="email-wrap" width="600" cellpadding="0" cellspacing="0" style="max-width: 600px; width: 100%; border-collapse: separate;">
 
           <!-- ══ THICK ORANGE TOP BAR ══ -->
@@ -554,7 +642,7 @@ export function buildNewsletterHtml(
 
           <!-- ══ HEADER ══ -->
           <tr>
-            <td style="background-color: ${INK}; padding: 40px 40px 36px;" align="center">
+            <td style="background-color: ${DEEP}; padding: 40px 40px 36px;" align="center">
               <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td align="center" style="padding-bottom: 14px;">
@@ -564,7 +652,7 @@ export function buildNewsletterHtml(
                   </td>
                 </tr>
                 <tr>
-                  <td align="center" style="padding-bottom: 0;">
+                  <td align="center">
                     <table role="presentation" cellpadding="0" cellspacing="0">
                       <tr>
                         <td style="padding: 0 12px;">
@@ -578,15 +666,22 @@ export function buildNewsletterHtml(
             </td>
           </tr>
 
+          <!-- Angular accent below header -->
+          ${angledDivider()}
+
           <!-- ══ SECTIONS ══ -->
           ${sections.join(`
           <!-- section divider -->
-          <tr><td style="height: 2px; background-color: ${RULE}; font-size: 0; line-height: 0;">&nbsp;</td></tr>`)}
+          ${accentRule()}`)}
+
+          <!-- ══ SPONSORS ══ -->
+          ${accentRule()}
+          ${renderSponsors()}
 
           <!-- ══ FOOTER ══ -->
-          <tr><td style="height: 2px; background-color: ${ORANGE}; font-size: 0; line-height: 0;">&nbsp;</td></tr>
+          <tr><td style="height: 3px; background-color: ${ORANGE}; font-size: 0; line-height: 0;">&nbsp;</td></tr>
           <tr>
-            <td style="background-color: ${INK}; padding: 40px;" align="center">
+            <td style="background-color: ${DEEP}; padding: 40px;" align="center">
               <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td align="center" style="padding-bottom: 20px;">
@@ -598,9 +693,9 @@ export function buildNewsletterHtml(
                     <table role="presentation" cellpadding="0" cellspacing="0">
                       <tr>
                         <td style="padding: 0 10px;"><a href="https://youtube.com/@filmmyrun" style="font-family: ${SANS}; font-size: 11px; font-weight: 600; color: ${SILVER}; text-decoration: none; text-transform: uppercase; letter-spacing: 1px;">YouTube</a></td>
-                        <td style="color: ${SLATE}; font-size: 11px;">&#8226;</td>
+                        <td style="color: ${DEEP_MID}; font-size: 11px;">&#8226;</td>
                         <td style="padding: 0 10px;"><a href="https://instagram.com/filmmyrun" style="font-family: ${SANS}; font-size: 11px; font-weight: 600; color: ${SILVER}; text-decoration: none; text-transform: uppercase; letter-spacing: 1px;">Instagram</a></td>
-                        <td style="color: ${SLATE}; font-size: 11px;">&#8226;</td>
+                        <td style="color: ${DEEP_MID}; font-size: 11px;">&#8226;</td>
                         <td style="padding: 0 10px;"><a href="https://twitter.com/filmmyrun" style="font-family: ${SANS}; font-size: 11px; font-weight: 600; color: ${SILVER}; text-decoration: none; text-transform: uppercase; letter-spacing: 1px;">Twitter</a></td>
                       </tr>
                     </table>
@@ -609,7 +704,7 @@ export function buildNewsletterHtml(
                 <tr>
                   <td style="padding-bottom: 24px;">
                     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                      <tr><td style="height: 1px; background-color: ${CHARCOAL}; font-size: 0;">&nbsp;</td></tr>
+                      <tr><td style="height: 1px; background-color: ${DEEP_MID}; font-size: 0;">&nbsp;</td></tr>
                     </table>
                   </td>
                 </tr>

@@ -75,7 +75,8 @@ export async function POST(request: NextRequest) {
 
     // Build the newsletter HTML for admin preview
     const approveUrl = `${baseUrl}/api/newsletter/approve?token=${approveToken}`;
-    const newsletterHtml = buildNewsletterHtml(payload, '#', baseUrl);
+    const viewInBrowserUrl = `${baseUrl}/api/newsletter/view/${issue.id}`;
+    const newsletterHtml = buildNewsletterHtml(payload, '#', baseUrl, viewInBrowserUrl);
     const adminHtml = wrapWithApprovalBanner(newsletterHtml, approveUrl);
 
     // Send only to admin for review

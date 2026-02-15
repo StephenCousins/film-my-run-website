@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/db';
-import { getAllParkruns, getVenueCoordinates } from '@/lib/parkrun-db';
+import { getAllParkruns, getVenueCoordinates, getMetadata, formatTime } from '@/lib/parkrun-db';
 import type { NewsletterPayload } from '@/lib/newsletter-template';
 
 const WMO_DESCRIPTIONS: Record<number, string> = {
@@ -357,6 +357,26 @@ async function autoPopulateParkrun(
       text += ` in ${latest.position}${ordinalSuffix(latest.position)} place`;
     }
     text += '. We\'ll get the video out soon!';
+
+    // Append aggregate stats
+    try {
+      const meta = await getMetadata();
+      const avgSeconds = allRuns.length > 0
+        ? Math.round(allRuns.reduce((sum, r) => sum + r.time_seconds, 0) / allRuns.length)
+        : 0;
+      const avgFormatted = avgSeconds > 0 ? formatTime(avgSeconds) : null;
+
+      const parts: string[] = [];
+      if (meta.totalParkruns > 0) parts.push(`${meta.totalParkruns} parkruns in total`);
+      if (meta.uniqueVenues > 0) parts.push(`at ${meta.uniqueVenues} different venues`);
+      if (avgFormatted) parts.push(`with an average finish time of ${avgFormatted}`);
+
+      if (parts.length > 0) {
+        text += ` That brings me to ${parts.join(' ')}.`;
+      }
+    } catch {
+      // Stats are a nice-to-have — don't fail the whole section
+    }
 
     payload.parkrun = { text };
   } catch (e) {
