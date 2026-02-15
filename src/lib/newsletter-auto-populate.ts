@@ -358,27 +358,24 @@ async function autoPopulateParkrun(
     }
     text += '. We\'ll get the video out soon!';
 
-    // Append aggregate stats
+    // Gather aggregate stats as structured data
+    let totalRuns: number | undefined;
+    let venues: number | undefined;
+    let avgTime: string | undefined;
     try {
       const meta = await getMetadata();
       const avgSeconds = allRuns.length > 0
         ? Math.round(allRuns.reduce((sum, r) => sum + r.time_seconds, 0) / allRuns.length)
         : 0;
-      const avgFormatted = avgSeconds > 0 ? formatTime(avgSeconds) : null;
 
-      const parts: string[] = [];
-      if (meta.totalParkruns > 0) parts.push(`${meta.totalParkruns} parkruns in total`);
-      if (meta.uniqueVenues > 0) parts.push(`at ${meta.uniqueVenues} different venues`);
-      if (avgFormatted) parts.push(`with an average finish time of ${avgFormatted}`);
-
-      if (parts.length > 0) {
-        text += ` That brings me to ${parts.join(' ')}.`;
-      }
+      if (meta.totalParkruns > 0) totalRuns = meta.totalParkruns;
+      if (meta.uniqueVenues > 0) venues = meta.uniqueVenues;
+      if (avgSeconds > 0) avgTime = formatTime(avgSeconds);
     } catch {
       // Stats are a nice-to-have — don't fail the whole section
     }
 
-    payload.parkrun = { text };
+    payload.parkrun = { text, totalRuns, venues, avgTime };
   } catch (e) {
     console.warn('Could not auto-populate parkrun:', e);
   }
