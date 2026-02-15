@@ -9,7 +9,8 @@ export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;
     const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10) || 1);
-    const limit = Math.min(MAX_LIMIT, Math.max(1, parseInt(searchParams.get('limit') || '0', 10) || 0));
+    const rawLimit = parseInt(searchParams.get('limit') || '0', 10) || 0;
+    const limit = rawLimit > 0 ? Math.min(MAX_LIMIT, rawLimit) : 0;
     const usePagination = limit > 0;
 
     // Fetch races ordered by date descending (with optional pagination)
