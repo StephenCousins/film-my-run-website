@@ -180,23 +180,30 @@ export default function ToolsShowcase() {
   return (
     <>
       {/* ========== MOBILE LAYOUT (< lg) ========== */}
-      <div className="lg:hidden bg-surface-secondary py-16 relative overflow-hidden">
+      <div className="lg:hidden py-16 relative overflow-hidden">
+        {/* Background image */}
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: 'url(/images/hero/running-tools-bg.jpg)' }}
+        />
+        <div className="absolute inset-0 bg-black/75" />
+
         {/* Header */}
-        <div className="px-6 mb-8">
+        <div className="relative px-6 mb-8">
           <span className="text-brand text-sm font-bold uppercase tracking-wider">
             Free Tools
           </span>
-          <h2 className="font-display text-4xl font-bold text-foreground mt-3 mb-4 leading-tight">
+          <h2 className="font-display text-4xl font-bold text-white mt-3 mb-4 leading-tight">
             Built for <span className="text-brand">Runners</span>
           </h2>
-          <p className="text-secondary text-base mb-6 leading-relaxed">
+          <p className="text-zinc-300 text-base mb-6 leading-relaxed">
             Powerful calculators and tools used by over 250,000 runners every week.
             All free, no signup required.
           </p>
         </div>
 
         {/* Horizontal snap-scroll cards */}
-        <div className="flex gap-4 overflow-x-auto snap-x snap-mandatory px-6 pb-4 scrollbar-hide">
+        <div className="relative flex gap-4 overflow-x-auto snap-x snap-mandatory px-6 pb-4 scrollbar-hide">
           {tools.map((tool, index) => (
             <div key={tool.name} className="snap-start flex-shrink-0">
               <ToolCard tool={tool} index={index} />
@@ -207,7 +214,7 @@ export default function ToolsShowcase() {
         </div>
 
         {/* CTA */}
-        <div className="px-6 mt-6">
+        <div className="relative px-6 mt-6">
           <Link
             href="/tools/calculators"
             className="btn-primary"
@@ -216,15 +223,12 @@ export default function ToolsShowcase() {
             <ArrowRight className="w-5 h-5" />
           </Link>
         </div>
-
-        {/* Decorative elements */}
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand/10 rounded-full blur-3xl pointer-events-none" />
       </div>
 
       {/* ========== DESKTOP LAYOUT (>= lg) ========== */}
       <div
         ref={sectionRef}
-        className="relative bg-surface-secondary hidden lg:block"
+        className="relative hidden lg:block"
         style={{
           height: '200vh',
           zIndex: 50,
@@ -232,26 +236,30 @@ export default function ToolsShowcase() {
       >
         {/* Sticky container */}
         <div
-          className="sticky top-0 h-screen overflow-hidden bg-surface-secondary"
+          className="sticky top-0 h-screen overflow-hidden"
           style={{ zIndex: 50 }}
         >
-          {/* Background */}
-          <div className="absolute inset-0 bg-surface-secondary" />
+          {/* Background image */}
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: 'url(/images/hero/running-tools-bg.jpg)' }}
+          />
+          <div className="absolute inset-0 bg-black/75" />
 
           {/* Content */}
           <div className="relative h-full flex items-center">
             {/* Left side - Header */}
-            <div className="relative w-[450px] p-16 flex-shrink-0 z-20 bg-surface-secondary">
+            <div className="relative w-[450px] p-16 flex-shrink-0 z-20">
               <div className="max-w-sm">
                 <span className="text-brand text-sm font-bold uppercase tracking-wider">
                   Free Tools
                 </span>
-                <h2 className="font-display text-5xl lg:text-6xl font-bold text-foreground mt-3 mb-6 leading-tight">
+                <h2 className="font-display text-5xl lg:text-6xl font-bold text-white mt-3 mb-6 leading-tight">
                   Built for
                   <br />
                   <span className="text-brand">Runners</span>
                 </h2>
-                <p className="text-secondary text-lg mb-8 leading-relaxed">
+                <p className="text-zinc-300 text-lg mb-8 leading-relaxed">
                   Powerful calculators and tools used by over 250,000 runners every week.
                   All free, no signup required.
                 </p>
@@ -284,18 +292,14 @@ export default function ToolsShowcase() {
 
           {/* Scroll progress indicator */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2">
-            <div className="w-32 h-1 bg-border rounded-full overflow-hidden">
+            <div className="w-32 h-1 bg-white/20 rounded-full overflow-hidden">
               <div
                 className="h-full bg-brand transition-all duration-100"
                 style={{ width: `${scrollProgress * 100}%` }}
               />
             </div>
-            <span className="text-muted text-sm">Scroll</span>
+            <span className="text-zinc-400 text-sm">Scroll</span>
           </div>
-
-          {/* Decorative elements */}
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-brand/10 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-info/10 rounded-full blur-3xl pointer-events-none" />
         </div>
       </div>
     </>
