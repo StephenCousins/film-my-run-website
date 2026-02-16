@@ -218,7 +218,7 @@ export default function MasterOfCeremoniesPage() {
               alt="MC at a running event"
               className="absolute inset-0 w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-zinc-950/80" />
+            <div className="absolute inset-0 bg-zinc-950/60" />
           </div>
           <div className="container relative">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
