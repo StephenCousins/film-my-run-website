@@ -16,6 +16,8 @@ interface LiveStreamInfo {
 const YOUTUBE_API_KEY = 'AIzaSyDIigYN5zLvMFLpyAgaSzmFRrMnAOUqVdc';
 const CHANNEL_ID = 'UCvc-1cdDnoYjvSFwE69l8JQ';
 const CHANNEL_URL = 'https://www.youtube.com/channel/UCvc-1cdDnoYjvSFwE69l8JQ';
+const PLAYLIST_ID = 'PL-0wK3qvwvVEvnbGKYgn72T-nUA-JENWp';
+const PLAYLIST_EMBED_URL = `https://www.youtube.com/embed/videoseries?list=${PLAYLIST_ID}&autoplay=1&mute=1`;
 
 export default function LivePage() {
   const [streamInfo, setStreamInfo] = useState<LiveStreamInfo>({ type: 'none' });
@@ -252,62 +254,78 @@ export default function LivePage() {
                       <ExternalLink className="w-4 h-4" />
                     </a>
                   </div>
+
+                  {/* Playlist while waiting */}
+                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
+                    <div className="px-6 py-4 bg-zinc-800/50 border-b border-zinc-800">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Tv className="w-5 h-5 text-zinc-400" />
+                          <span className="text-white font-medium">Watch while you wait</span>
+                        </div>
+                        <span className="text-zinc-500 text-sm">Muted by default</span>
+                      </div>
+                    </div>
+                    <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                      <iframe
+                        className="absolute inset-0 w-full h-full"
+                        src={PLAYLIST_EMBED_URL}
+                        title="Film My Run — Recent Videos"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      />
+                    </div>
+                  </div>
                 </div>
               )}
 
-              {/* No Live Stream - Show Channel */}
+              {/* No Live Stream - Auto-playing Playlist */}
               {!isLoading && !error && streamInfo.type === 'none' && (
-                <div className="space-y-8">
-                  {/* Channel Embed */}
+                <div className="space-y-6">
                   <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
                     <div className="px-6 py-4 bg-zinc-800/50 border-b border-zinc-800">
-                      <div className="flex items-center gap-3">
-                        <Tv className="w-5 h-5 text-zinc-400" />
-                        <span className="text-white font-medium">Virtual Film My Run Channel</span>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <Tv className="w-5 h-5 text-zinc-400" />
+                          <span className="text-white font-medium">Film My Run — Recent Videos</span>
+                        </div>
+                        <span className="text-zinc-500 text-sm">Muted by default</span>
                       </div>
                     </div>
 
                     <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                       <iframe
                         className="absolute inset-0 w-full h-full"
-                        src="https://www.youtube.com/embed?listType=user_uploads&list=UCvc-1cdDnoYjvSFwE69l8JQ"
-                        title="Virtual Film My Run Channel"
+                        src={PLAYLIST_EMBED_URL}
+                        title="Film My Run — Recent Videos"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                       />
                     </div>
                   </div>
 
-                  {/* Info Card */}
-                  <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800 text-center">
-                    <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <Radio className="w-8 h-8 text-zinc-500" />
-                    </div>
-                    <h2 className="font-display text-xl font-semibold text-white mb-3">
-                      No Live Stream Right Now
-                    </h2>
-                    <p className="text-zinc-400 mb-6 max-w-md mx-auto">
-                      Check out recent videos from the Virtual Film My Run Channel above, or subscribe to get notified when we go live.
-                    </p>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                      <a
-                        href={CHANNEL_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-colors"
-                      >
-                        <Youtube className="w-5 h-5" />
-                        Subscribe to Channel
-                        <ExternalLink className="w-4 h-4" />
-                      </a>
-                      <Link
-                        href="/films"
-                        className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 text-white font-semibold rounded-full hover:bg-zinc-700 transition-colors"
-                      >
-                        Watch Race Films
-                        <ArrowRight className="w-4 h-4" />
-                      </Link>
-                    </div>
+                  <p className="text-zinc-500 text-sm text-center">
+                    No live stream right now — enjoy recent videos
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <a
+                      href={CHANNEL_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-red-500 text-white font-semibold rounded-full hover:bg-red-600 transition-colors"
+                    >
+                      <Youtube className="w-5 h-5" />
+                      Subscribe to Channel
+                      <ExternalLink className="w-4 h-4" />
+                    </a>
+                    <Link
+                      href="/films"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 text-white font-semibold rounded-full hover:bg-zinc-700 transition-colors"
+                    >
+                      Watch Race Films
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
                   </div>
                 </div>
               )}
