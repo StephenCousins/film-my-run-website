@@ -255,11 +255,16 @@ export default function POVRaceCoveragePage() {
         {/* Hero */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           <div className="absolute inset-0">
-            <img
-              src={`https://img.youtube.com/vi/${pastRaces[0].id}/hqdefault.jpg`}
-              alt="POV Race Coverage"
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
               className="absolute inset-0 w-full h-full object-cover"
-            />
+              poster="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/pov-hero-poster.jpg"
+            >
+              <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/pov-hero.mp4" type="video/mp4" />
+            </video>
             <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/90 via-zinc-950/80 to-zinc-950" />
           </div>
 
