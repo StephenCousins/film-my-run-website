@@ -140,7 +140,7 @@ export default function Hero() {
             'absolute inset-0 w-full h-full object-cover transition-opacity duration-1000',
             isLoaded ? 'opacity-100' : 'opacity-0'
           )}
-          poster="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/hero/hero-main.jpg"
+          poster="/images/hero/transgrancanaria2020.jpg"
         >
           {/* Videos hosted on Cloudflare R2 */}
           <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/hero-loop.mp4" type="video/mp4" />
@@ -154,7 +154,7 @@ export default function Hero() {
             isLoaded ? 'opacity-0' : 'opacity-100'
           )}
           style={{
-            backgroundImage: 'url(https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/hero/hero-main.jpg)',
+            backgroundImage: 'url(/images/hero/transgrancanaria2020.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
