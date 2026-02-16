@@ -140,7 +140,7 @@ export default function LivePage() {
         {/* Content Section */}
         <section className="py-12 lg:py-16">
           <div className="container">
-            <div className="max-w-4xl mx-auto">
+            <div className={`mx-auto ${streamInfo.type === 'live' ? 'max-w-7xl' : 'max-w-4xl'}`}>
 
               {/* Loading State */}
               {isLoading && (
@@ -167,29 +167,43 @@ export default function LivePage() {
                 </div>
               )}
 
-              {/* Live Stream */}
+              {/* Live Stream + Chat */}
               {!isLoading && !error && streamInfo.type === 'live' && streamInfo.videoId && (
                 <div className="space-y-6">
-                  <div className="bg-zinc-900 rounded-2xl border border-red-500/50 overflow-hidden">
-                    {/* Live Badge */}
-                    <div className="flex items-center justify-between px-6 py-4 bg-red-500/10 border-b border-red-500/30">
-                      <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-2 px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">
-                          <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                          LIVE
-                        </span>
-                        <span className="text-white font-medium">{streamInfo.title}</span>
+                  {/* Live Badge */}
+                  <div className="flex items-center gap-3">
+                    <span className="flex items-center gap-2 px-3 py-1 bg-red-500 text-white text-sm font-bold rounded-full">
+                      <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
+                      LIVE
+                    </span>
+                    <span className="text-white font-medium">{streamInfo.title}</span>
+                  </div>
+
+                  {/* Video + Chat side by side */}
+                  <div className="flex flex-col lg:flex-row gap-4">
+                    {/* Video Player */}
+                    <div className="flex-1 bg-zinc-900 rounded-2xl border border-red-500/50 overflow-hidden">
+                      <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                        <iframe
+                          className="absolute inset-0 w-full h-full"
+                          src={`https://www.youtube.com/embed/${streamInfo.videoId}?autoplay=1&mute=1`}
+                          title="Live Stream"
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        />
                       </div>
                     </div>
 
-                    {/* Video Player */}
-                    <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                    {/* Live Chat */}
+                    <div className="lg:w-[380px] bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
+                      <div className="px-4 py-3 bg-zinc-800/50 border-b border-zinc-800">
+                        <span className="text-white text-sm font-medium">Live Chat</span>
+                      </div>
                       <iframe
-                        className="absolute inset-0 w-full h-full"
-                        src={`https://www.youtube.com/embed/${streamInfo.videoId}?autoplay=1&mute=1`}
-                        title="Live Stream"
+                        className="w-full h-[400px] lg:h-[calc(100%-44px)]"
+                        src={`https://www.youtube.com/live_chat?v=${streamInfo.videoId}&embed_domain=${typeof window !== 'undefined' ? window.location.hostname : 'filmmyrun.co.uk'}`}
+                        title="Live Chat"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
                       />
                     </div>
                   </div>
