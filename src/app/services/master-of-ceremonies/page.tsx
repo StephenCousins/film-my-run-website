@@ -109,10 +109,18 @@ export default function MasterOfCeremoniesPage() {
       <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
         {/* Hero */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-amber-900/20 via-zinc-950 to-orange-900/20" />
           <div className="absolute inset-0">
-            <div className="absolute top-1/3 left-1/3 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-1/3 right-1/3 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl" />
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+              poster="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/mc-hero-poster.jpg"
+            >
+              <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/mc-hero.mp4" type="video/mp4" />
+            </video>
+            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/50 to-zinc-950" />
           </div>
 
           <div className="container relative">
