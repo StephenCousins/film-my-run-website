@@ -14,7 +14,7 @@ interface AgeGradingResult {
 
 export function AgeGradingCalculator() {
   const [age, setAge] = useState('40');
-  const [gender, setGender] = useState<'men' | 'women'>('men');
+  const [gender, setGender] = useState<'M' | 'F'>('M');
   const [event, setEvent] = useState('5000m');
   const [time, setTime] = useState({ hours: '0', minutes: '25', seconds: '0' });
   const [result, setResult] = useState<AgeGradingResult | null>(null);
@@ -111,11 +111,11 @@ export function AgeGradingCalculator() {
             </label>
             <select
               value={gender}
-              onChange={(e) => setGender(e.target.value as 'men' | 'women')}
+              onChange={(e) => setGender(e.target.value as 'M' | 'F')}
               className="w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500"
             >
-              <option value="men">Male</option>
-              <option value="women">Female</option>
+              <option value="M">Male</option>
+              <option value="F">Female</option>
             </select>
           </div>
         </div>
