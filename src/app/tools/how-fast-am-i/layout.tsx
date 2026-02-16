@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'How Fast Am I?',
+  alternates: { canonical: 'https://filmmyrun.co.uk/tools/how-fast-am-i' },
   description:
     'Find out how your running pace compares to other runners. Enter your race time to see your percentile ranking across 5K, 10K, half marathon, and marathon distances.',
   keywords: [

@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Marathon Training Plans',
+  alternates: { canonical: 'https://filmmyrun.co.uk/training' },
   description:
     'Personalised marathon and half marathon training plans built around your schedule and fitness level. Structured programmes with pacing guidance from an experienced ultra-runner.',
   keywords: [

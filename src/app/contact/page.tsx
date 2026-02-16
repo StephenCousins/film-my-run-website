@@ -11,7 +11,14 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Contact | Film My Run',
+  alternates: { canonical: 'https://filmmyrun.co.uk/contact' },
   description: 'Get in touch for race filming, event coverage, collaborations, or just to say hello. We\'d love to hear from you.',
+  keywords: [
+    'contact Film My Run',
+    'race filming enquiry',
+    'event coverage booking',
+    'running filmmaker contact',
+  ],
   openGraph: {
     title: 'Contact | Film My Run',
     description: 'Get in touch for race filming, event coverage, or collaborations.',
@@ -177,9 +184,22 @@ function ContactForm() {
 // CONTACT PAGE
 // ============================================
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'Contact', item: 'https://filmmyrun.co.uk/contact' },
+  ],
+};
+
 export default function ContactPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
 
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">

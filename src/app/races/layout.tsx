@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Race Dashboard',
+  alternates: { canonical: 'https://filmmyrun.co.uk/races' },
   description:
     'Track and analyze all race results. 174 races, 94 marathons, 80 ultras - explore the complete race history with times, positions, and analysis.',
   keywords: [

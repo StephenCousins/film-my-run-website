@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Shop',
+  alternates: { canonical: 'https://filmmyrun.co.uk/shop' },
   description:
     'Gear designed by runners, for runners. Quality equipment tested on trails and roads around the world. Running caps, vests, apparel, and accessories.',
   keywords: [

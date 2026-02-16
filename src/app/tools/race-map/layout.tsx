@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Race Map',
+  alternates: { canonical: 'https://filmmyrun.co.uk/tools/race-map' },
   description:
     'Visualize race routes with elevation profiles, distance markers, and key waypoints. Upload a GPX file or explore sample routes from famous races.',
   keywords: [

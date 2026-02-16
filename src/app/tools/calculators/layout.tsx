@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Running Calculators',
+  alternates: { canonical: 'https://filmmyrun.co.uk/tools/calculators' },
   description:
     'Free running calculators used by 250,000+ runners every week. Pace calculator, race predictor, splits calculator, age grading, VO2 max estimator, and more.',
   keywords: [

@@ -17,7 +17,15 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Blog | Film My Run',
+  alternates: { canonical: 'https://filmmyrun.co.uk/blog' },
   description: 'Running stories, race reports, gear reviews, and training insights from 15 years of running and filming.',
+  keywords: [
+    'running blog',
+    'race reports',
+    'ultra running stories',
+    'trail running blog',
+    'marathon race report',
+  ],
   openGraph: {
     title: 'Blog | Film My Run',
     description: 'Running stories, race reports, gear reviews, and training insights.',
@@ -221,6 +229,15 @@ function CategoryFilter({ categories, activeSlug = 'all' }: { categories: Catego
 // BLOG PAGE
 // ============================================
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://filmmyrun.co.uk/blog' },
+  ],
+};
+
 export default async function BlogPage() {
   // Fetch posts from database
   const posts = await getPosts();
@@ -228,6 +245,10 @@ export default async function BlogPage() {
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
 
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">

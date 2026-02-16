@@ -16,7 +16,15 @@ export const revalidate = 3600; // Revalidate every hour
 
 export const metadata: Metadata = {
   title: 'Trail & Ultra Running News',
+  alternates: { canonical: 'https://filmmyrun.co.uk/news' },
   description: 'The latest news from the world of trail and ultra running. Curated stories from trusted sources, updated daily.',
+  keywords: [
+    'trail running news',
+    'ultra running news',
+    'running news',
+    'UTMB news',
+    'trail race results',
+  ],
   openGraph: {
     title: 'Trail & Ultra Running News | Film My Run',
     description: 'The latest news from the world of trail and ultra running.',
@@ -68,11 +76,24 @@ async function getArticles(): Promise<Article[]> {
 // NEWS PAGE
 // ============================================
 
+const breadcrumbJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
+    { '@type': 'ListItem', position: 2, name: 'News', item: 'https://filmmyrun.co.uk/news' },
+  ],
+};
+
 export default async function NewsPage() {
   const articles = await getArticles();
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <Header />
 
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">

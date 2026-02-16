@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Blog',
+  alternates: { canonical: 'https://filmmyrun.co.uk/blog' },
   description:
     'Race reports, training insights, gear reviews, and stories from 15 years of running. From marathons to ultras, trails to roads.',
   keywords: [

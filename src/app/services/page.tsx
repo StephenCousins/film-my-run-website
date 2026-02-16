@@ -7,7 +7,19 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Services',
+  alternates: { canonical: 'https://filmmyrun.co.uk/services' },
   description: 'POV race footage, award-winning documentaries, MC services, and live streaming for trail and ultra running events.',
+  keywords: [
+    'race filming services',
+    'running event coverage',
+    'race MC',
+    'event live streaming',
+    'running documentary',
+  ],
+  openGraph: {
+    title: 'Services | Film My Run',
+    description: 'POV race footage, documentaries, MC services, and live streaming for running events.',
+  },
 };
 
 const services = [

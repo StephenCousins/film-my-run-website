@@ -19,6 +19,7 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Running Tools',
+  alternates: { canonical: 'https://filmmyrun.co.uk/tools' },
   description:
     'Free running tools used by 250,000+ runners every week. Pace calculators, parkrun statistics, race visualization, and more.',
   openGraph: {

@@ -11,7 +11,15 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'About | Film My Run',
+  alternates: { canonical: 'https://filmmyrun.co.uk/about' },
   description: 'The story behind Film My Run - runner, filmmaker, and tool builder since 2011. Creating content and tools for the running community.',
+  keywords: [
+    'Stephen Cousins',
+    'Film My Run',
+    'ultra runner',
+    'running filmmaker',
+    'documentary filmmaker runner',
+  ],
   openGraph: {
     title: 'About | Film My Run',
     description: 'Runner, filmmaker, and tool builder since 2011.',

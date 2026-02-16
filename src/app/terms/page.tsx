@@ -4,6 +4,7 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
+  alternates: { canonical: 'https://filmmyrun.co.uk/terms' },
   description: 'Terms of Service for Film My Run website and services.',
 };
 

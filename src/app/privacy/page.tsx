@@ -4,6 +4,7 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
+  alternates: { canonical: 'https://filmmyrun.co.uk/privacy' },
   description: 'Privacy Policy for Film My Run website and services.',
 };
 

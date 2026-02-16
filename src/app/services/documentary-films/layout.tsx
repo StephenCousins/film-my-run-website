@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Documentary Films',
+  alternates: { canonical: 'https://filmmyrun.co.uk/services/documentary-films' },
   description:
     'Award-winning documentary films capturing the stories behind running events, ultra-marathons, and the running community. Professional filmmaking for races and events.',
   keywords: [
