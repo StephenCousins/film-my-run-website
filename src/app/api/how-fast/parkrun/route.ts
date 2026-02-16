@@ -127,22 +127,32 @@ function parseAthletePage(html: string, athlete_id: string): {
     name = h2.text().trim().replace(/\s*-\s*All Results.*/, '');
   }
 
-  // Find the results table
+  // Find the "All Results" table — look for a table whose caption contains "All"
+  // and "Results", or whose headers include Event + Time
   let resultsTable: ReturnType<typeof $> | null = null;
 
-  $('table#results').each((_, table) => {
-    const firstRow = $(table).find('tr').first();
-    const headers = firstRow.find('th, td').map((_, el) => $(el).text().trim()).get();
-
-    if (headers.includes('Event') && headers.includes('Time')) {
+  $('table').each((_, table) => {
+    const caption = $(table).find('caption').text().trim().toLowerCase();
+    if (caption.includes('all') && caption.includes('result')) {
       resultsTable = $(table);
       return false; // Break
     }
   });
 
-  // Fallback to sortable table
+  // Fallback: find table with Event + Time headers
   if (!resultsTable) {
-    resultsTable = $('table.sortable').first();
+    $('table').each((_, table) => {
+      const headers = $(table).find('thead th').map((_, el) => $(el).text().trim()).get();
+      if (headers.includes('Event') && headers.includes('Time')) {
+        resultsTable = $(table);
+        return false;
+      }
+    });
+  }
+
+  // Last resort: sortable table
+  if (!resultsTable) {
+    resultsTable = $('table.sortable').last();
   }
 
   if (!resultsTable || !resultsTable.length) {
