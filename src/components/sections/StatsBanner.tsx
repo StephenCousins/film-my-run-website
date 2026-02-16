@@ -21,13 +21,13 @@ const stats = [
     description: 'Documenting since 2011',
   },
   {
-    value: 250,
+    value: 50,
     suffix: 'K',
     label: 'Weekly Users',
     description: 'Using our tools',
   },
   {
-    value: 1,
+    value: 7,
     suffix: 'M+',
     label: 'Video Views',
     description: 'Across all platforms',
