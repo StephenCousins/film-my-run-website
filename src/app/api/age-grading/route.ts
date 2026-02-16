@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
-const VALID_GENDERS = ['M', 'F'];
+const VALID_GENDERS = ['men', 'women'];
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   try {
     // Validate gender if provided
     if (gender && !VALID_GENDERS.includes(gender)) {
-      return NextResponse.json({ error: 'Invalid gender (use M or F)' }, { status: 400 });
+      return NextResponse.json({ error: 'Invalid gender (use men or women)' }, { status: 400 });
     }
 
     // Validate event if provided (alphanumeric, spaces, slashes — e.g. "5K", "Half Marathon", "100mi")
