@@ -282,11 +282,11 @@ export default function MasterOfCeremoniesPage() {
             <div className="max-w-3xl mx-auto text-center">
               <PartyPopper className="w-12 h-12 text-amber-400 mx-auto mb-6" />
               <blockquote className="font-display text-2xl lg:text-3xl font-bold text-white mb-6">
-                "The finish line atmosphere was incredible. Runners were saying it was the best
-                welcome they'd ever had."
+                "To hear Stephen's voice on the mic as I approached the finish line was amazing
+                and then for him to shout my name to the crowd was awesome, I'll never forget it"
               </blockquote>
               <p className="text-zinc-400">
-                — Race Director feedback
+                — Runner Feedback
               </p>
             </div>
           </div>
