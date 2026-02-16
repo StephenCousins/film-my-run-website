@@ -94,25 +94,25 @@ function VideoModal({ isOpen, onClose, videoId, title }: VideoModalProps) {
 
 function LoadingSkeleton() {
   return (
-    <section className="section bg-surface-secondary">
+    <section className="section bg-zinc-900 dark:bg-zinc-950">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Content skeleton */}
           <div className="order-2 lg:order-1 animate-pulse">
-            <div className="h-6 w-32 bg-border rounded-full mb-6" />
-            <div className="h-12 w-3/4 bg-border rounded mb-4" />
-            <div className="h-6 w-1/2 bg-border rounded mb-6" />
-            <div className="h-20 w-full bg-border rounded mb-8" />
-            <div className="h-24 w-full bg-border rounded mb-8" />
+            <div className="h-6 w-32 bg-white/10 rounded-full mb-6" />
+            <div className="h-12 w-3/4 bg-white/10 rounded mb-4" />
+            <div className="h-6 w-1/2 bg-white/10 rounded mb-6" />
+            <div className="h-20 w-full bg-white/10 rounded mb-8" />
+            <div className="h-24 w-full bg-white/10 rounded mb-8" />
             <div className="flex gap-4">
-              <div className="h-12 w-36 bg-border rounded-full" />
-              <div className="h-12 w-36 bg-border rounded-full" />
+              <div className="h-12 w-36 bg-white/10 rounded-full" />
+              <div className="h-12 w-36 bg-white/10 rounded-full" />
             </div>
           </div>
 
           {/* Thumbnail skeleton */}
           <div className="order-1 lg:order-2">
-            <div className="aspect-video bg-border rounded-2xl animate-pulse" />
+            <div className="aspect-video bg-white/10 rounded-2xl animate-pulse" />
           </div>
         </div>
       </div>
@@ -243,7 +243,7 @@ export default function FeaturedFilm() {
     <>
       <section
         ref={sectionRef}
-        className="section bg-surface-secondary"
+        className="section bg-zinc-900 dark:bg-zinc-950"
         style={{ position: 'relative', zIndex: 1 }}
       >
         <div className="container">
@@ -258,22 +258,22 @@ export default function FeaturedFilm() {
               </div>
 
               {/* Title */}
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-4">
+              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
                 {video.title}
               </h2>
 
               {/* Subtitle */}
-              <p className="text-xl text-secondary italic mb-6">
+              <p className="text-xl text-zinc-300 italic mb-6">
                 {video.subtitle}
               </p>
 
               {/* Description */}
-              <p className="text-secondary leading-relaxed mb-8 max-w-lg">
+              <p className="text-zinc-400 leading-relaxed mb-8 max-w-lg">
                 {video.description}
               </p>
 
               {/* Meta info */}
-              <div className="flex flex-wrap gap-6 mb-8 text-sm text-muted">
+              <div className="flex flex-wrap gap-6 mb-8 text-sm text-zinc-500">
                 {video.year && (
                   <div className="flex items-center gap-2">
                     <Calendar className="w-4 h-4" />
@@ -287,21 +287,21 @@ export default function FeaturedFilm() {
               </div>
 
               {/* Stats */}
-              <div className="film-stats grid grid-cols-3 gap-4 p-4 bg-surface rounded-xl border border-border mb-8">
+              <div className="film-stats grid grid-cols-3 gap-4 p-4 bg-white/5 rounded-xl border border-white/10 mb-8">
                 <div className="film-stat text-center">
                   <div className="font-mono text-xl font-bold text-brand">
                     {video.stats.distance}
                   </div>
-                  <div className="text-xs text-muted uppercase tracking-wider flex items-center justify-center gap-1">
+                  <div className="text-xs text-zinc-500 uppercase tracking-wider flex items-center justify-center gap-1">
                     <Route className="w-3 h-3" />
                     Distance
                   </div>
                 </div>
-                <div className="film-stat text-center border-x border-border">
+                <div className="film-stat text-center border-x border-white/10">
                   <div className="font-mono text-xl font-bold text-brand">
                     {video.stats.elevation}
                   </div>
-                  <div className="text-xs text-muted uppercase tracking-wider flex items-center justify-center gap-1">
+                  <div className="text-xs text-zinc-500 uppercase tracking-wider flex items-center justify-center gap-1">
                     <Mountain className="w-3 h-3" />
                     Elevation
                   </div>
@@ -310,7 +310,7 @@ export default function FeaturedFilm() {
                   <div className="font-mono text-xl font-bold text-brand">
                     {video.stats.time}
                   </div>
-                  <div className="text-xs text-muted uppercase tracking-wider flex items-center justify-center gap-1">
+                  <div className="text-xs text-zinc-500 uppercase tracking-wider flex items-center justify-center gap-1">
                     <Timer className="w-3 h-3" />
                     Time
                   </div>
@@ -328,7 +328,7 @@ export default function FeaturedFilm() {
                 </button>
                 <Link
                   href="/films"
-                  className="inline-flex items-center gap-2 px-6 py-3 text-foreground font-medium hover:text-brand transition-colors group"
+                  className="inline-flex items-center gap-2 px-6 py-3 text-zinc-300 font-medium hover:text-brand transition-colors group"
                 >
                   Browse All Films
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
