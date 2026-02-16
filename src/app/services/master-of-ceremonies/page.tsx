@@ -10,10 +10,10 @@ import Footer from '@/components/layout/Footer';
 // ============================================
 
 const stats = [
-  { label: 'Events MC\'d', value: '150+', icon: Mic },
-  { label: 'Runners Welcomed Home', value: '50K+', icon: Users },
-  { label: 'Years on the Mic', value: '10+', icon: Clock },
-  { label: 'Presentation Ceremonies', value: '200+', icon: Trophy },
+  { label: 'Events MC\'d', value: '50+', icon: Mic },
+  { label: 'Runners Welcomed Home', value: '10K+', icon: Users },
+  { label: 'Years on the Mic', value: '7+', icon: Clock },
+  { label: 'Presentation Ceremonies', value: '20+', icon: Trophy },
 ];
 
 const services = [
@@ -137,6 +137,7 @@ export default function MasterOfCeremoniesPage() {
               <p className="text-lg text-zinc-300 mb-8 max-w-2xl">
                 From the nervous energy of the start line to the emotion of welcoming home your
                 final finisher, a great MC transforms a race into an unforgettable experience.
+                I've been the voice at some of the UK's most prestigious trail and ultra events.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4">
