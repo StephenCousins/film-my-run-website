@@ -222,7 +222,7 @@ export default function MasterOfCeremoniesPage() {
           </div>
           <div className="container relative">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
+              <div className="lg:order-2">
                 <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
                   Why Runners Remember the MC
                 </h2>
@@ -247,7 +247,7 @@ export default function MasterOfCeremoniesPage() {
                 </div>
               </div>
 
-              <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800">
+              <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800 lg:order-1">
                 <h3 className="font-display text-xl font-semibold text-white mb-6">
                   Events I Cover
                 </h3>
