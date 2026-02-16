@@ -157,8 +157,8 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ ok: false, error: 'No results found for this athlete' }, { status: 404 });
     }
 
-    // Store all results
-    const newCount = await storeNewResults(id, results);
+    // Store all results (passes name so athlete row can be created if needed)
+    const newCount = await storeNewResults(id, results, name);
     console.log(`[Parkrun] Stored ${newCount} new results for athlete ${id}`);
 
     // Recalculate PBs

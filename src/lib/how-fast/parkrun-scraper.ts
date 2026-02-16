@@ -195,7 +195,8 @@ export function parseParkrunDate(dateStr: string): Date | null {
 // Store new results with skipDuplicates
 export async function storeNewResults(
   athlete_id: string,
-  scrapedResults: ParkrunResult[]
+  scrapedResults: ParkrunResult[],
+  athleteName?: string
 ): Promise<number> {
   const data = scrapedResults
     .filter(r => r.time_seconds !== null)
@@ -213,6 +214,19 @@ export async function storeNewResults(
     }));
 
   if (data.length === 0) return 0;
+
+  // Ensure athlete row exists before inserting results (foreign key constraint)
+  const existing = await prisma.parkrun_athletes.findUnique({ where: { athlete_id } });
+  if (!existing) {
+    await prisma.parkrun_athletes.create({
+      data: {
+        athlete_id,
+        name: athleteName || 'Unknown',
+        total_runs: 0,
+        updated_at: new Date(),
+      },
+    });
+  }
 
   const result = await prisma.parkrun_results.createMany({
     data,

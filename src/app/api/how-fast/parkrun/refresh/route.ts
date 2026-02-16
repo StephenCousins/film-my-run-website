@@ -37,8 +37,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: false, error: 'No results found' }, { status: 404 });
     }
 
-    // Store new results (skipDuplicates)
-    const newCount = await storeNewResults(id, results);
+    // Store new results (skipDuplicates, passes name for athlete row creation)
+    const newCount = await storeNewResults(id, results, name);
 
     // If new results found, recalculate PBs and stats
     if (newCount > 0) {
