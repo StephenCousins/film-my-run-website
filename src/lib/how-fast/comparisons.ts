@@ -200,9 +200,43 @@ const PERCENTILE_THRESHOLDS_MARATHON: [number, number][] = [
   [21600, 10],   // Sub-6:00: Top 90%
 ];
 
+const PERCENTILE_THRESHOLDS_10M: [number, number][] = [
+  [2880, 99.9],  // Sub-48: Top 0.1%
+  [3300, 99],    // Sub-55: Top 1%
+  [3600, 97],    // Sub-60: Top 3%
+  [3900, 93],    // Sub-65: Top 7%
+  [4200, 90],    // Sub-70: Top 10%
+  [4500, 80],    // Sub-75: Top 20%
+  [4800, 70],    // Sub-80: Top 30%
+  [5100, 60],    // Sub-85: Top 40%
+  [5400, 50],    // Sub-90: Median
+  [6000, 35],    // Sub-100: Top 65%
+  [6600, 20],    // Sub-110: Top 80%
+  [7200, 10],    // Sub-120: Top 90%
+  [7800, 5],     // Sub-130: Top 95%
+];
+
+const PERCENTILE_THRESHOLDS_20M: [number, number][] = [
+  [6600, 99.9],  // Sub-1:50: Top 0.1%
+  [7800, 99],    // Sub-2:10: Top 1%
+  [8400, 97],    // Sub-2:20: Top 3%
+  [9000, 93],    // Sub-2:30: Top 7%
+  [9600, 90],    // Sub-2:40: Top 10%
+  [10200, 80],   // Sub-2:50: Top 20%
+  [10800, 70],   // Sub-3:00: Top 30%
+  [11700, 55],   // Sub-3:15: Top 45%
+  [12600, 50],   // Sub-3:30: Median
+  [13500, 35],   // Sub-3:45: Top 65%
+  [14400, 20],   // Sub-4:00: Top 80%
+  [16200, 10],   // Sub-4:30: Top 90%
+  [18000, 5],    // Sub-5:00: Top 95%
+];
+
 const PERCENTILE_MAPS: Record<string, [number, number][]> = {
   '5k': PERCENTILE_THRESHOLDS_5K,
   '10k': PERCENTILE_THRESHOLDS_10K,
+  '10m': PERCENTILE_THRESHOLDS_10M,
+  '20m': PERCENTILE_THRESHOLDS_20M,
   half: PERCENTILE_THRESHOLDS_HALF,
   marathon: PERCENTILE_THRESHOLDS_MARATHON,
 };
@@ -222,21 +256,33 @@ export function getPercentile(timeSeconds: number, distance: string = '5k'): num
 export function getAbilityLevel(
   timeSeconds: number,
   age: number = 30,
-  gender: 'male' | 'female' = 'male'
+  gender: 'male' | 'female' = 'male',
+  distance: string = '5k'
 ): string {
-  const timesTable = gender === 'male' ? MALE_5K_TIMES : FEMALE_5K_TIMES;
-  const ages = Object.keys(timesTable).map(Number).sort((a, b) => a - b);
+  // For 5K, use the detailed age-graded tables
+  if (distance === '5k') {
+    const timesTable = gender === 'male' ? MALE_5K_TIMES : FEMALE_5K_TIMES;
+    const ages = Object.keys(timesTable).map(Number).sort((a, b) => a - b);
 
-  const closestAge = ages.reduce((prev, curr) =>
-    Math.abs(curr - age) < Math.abs(prev - age) ? curr : prev
-  );
+    const closestAge = ages.reduce((prev, curr) =>
+      Math.abs(curr - age) < Math.abs(prev - age) ? curr : prev
+    );
 
-  const thresholds = timesTable[closestAge];
+    const thresholds = timesTable[closestAge];
 
-  if (timeSeconds <= thresholds.elite) return 'elite';
-  if (timeSeconds <= thresholds.advanced) return 'advanced';
-  if (timeSeconds <= thresholds.intermediate) return 'intermediate';
-  if (timeSeconds <= thresholds.novice) return 'novice';
+    if (timeSeconds <= thresholds.elite) return 'elite';
+    if (timeSeconds <= thresholds.advanced) return 'advanced';
+    if (timeSeconds <= thresholds.intermediate) return 'intermediate';
+    if (timeSeconds <= thresholds.novice) return 'novice';
+    return 'beginner';
+  }
+
+  // For other distances, derive ability from percentile thresholds
+  const percentile = getPercentile(timeSeconds, distance);
+  if (percentile >= 97) return 'elite';
+  if (percentile >= 90) return 'advanced';
+  if (percentile >= 70) return 'intermediate';
+  if (percentile >= 50) return 'novice';
   return 'beginner';
 }
 
@@ -335,7 +381,7 @@ export function getFullComparison(
   const percentile = getPercentile(timeSeconds, distance);
   const effectiveAge = age || 35;
   const effectiveGender = gender || 'male';
-  const ability = getAbilityLevel(timeSeconds, effectiveAge, effectiveGender);
+  const ability = getAbilityLevel(timeSeconds, effectiveAge, effectiveGender, distance);
   const distanceComparison = compareToDistanceAverage(timeSeconds, distance, effectiveGender);
 
   return {

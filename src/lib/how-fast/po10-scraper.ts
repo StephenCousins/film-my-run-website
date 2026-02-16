@@ -210,7 +210,7 @@ export function calculateOverallStats(
 
   for (const [distance, pb] of Object.entries(pbs)) {
     const percentile = getPercentile(pb.seconds, distance);
-    const abilityLevel = getAbilityLevel(pb.seconds, estimatedAge, effectiveGender);
+    const abilityLevel = getAbilityLevel(pb.seconds, estimatedAge, effectiveGender, distance);
 
     results.push({
       distance,
