@@ -112,31 +112,69 @@ model orders {
 }
 
 model parkrun_athletes {
-  id                   Int      @id @default(autoincrement())
-  athlete_id           String   @unique
+  id                   Int       @id @default(autoincrement())
+  athlete_id           String    @unique
   name                 String
   total_runs           Int
   best_time_seconds    Int?
   average_time_seconds Int?
   typical_avg_seconds  Int?
   recent_avg_seconds   Int?
-  avg_age_grade        Decimal? @db.Decimal(5, 2)
-  recent_avg_age_grade Decimal? @db.Decimal(5, 2)
+  avg_age_grade        Decimal?  @db.Decimal(5, 2)
+  recent_avg_age_grade Decimal?  @db.Decimal(5, 2)
   pb_date              String?
   pb_event             String?
   pb_age               String?
   trend                String?
   trend_message        String?
-  outlier_count        Int      @default(0)
-  normal_run_count     Int      @default(0)
+  outlier_count        Int       @default(0)
+  normal_run_count     Int       @default(0)
   recent_results_json  Json?
-  lookup_count         Int      @default(1)
-  created_at           DateTime @default(now())
+  lookup_count         Int       @default(1)
+  results_scraped_at   DateTime?
+  created_at           DateTime  @default(now())
   updated_at           DateTime
-  last_lookup_at       DateTime @default(now())
+  last_lookup_at       DateTime  @default(now())
+
+  results parkrun_results[]
 
   @@index([athlete_id])
   @@index([last_lookup_at])
+}
+
+model parkrun_results {
+  id              Int       @id @default(autoincrement())
+  athlete_id      String
+  event           String
+  run_date        String    // DD/MM/YYYY as scraped
+  run_date_parsed DateTime?
+  run_number      String?
+  position        String?
+  time_seconds    Int
+  time_display    String
+  age_grade       String?
+  pb              Boolean   @default(false)
+  created_at      DateTime  @default(now())
+
+  athlete parkrun_athletes @relation(fields: [athlete_id], references: [athlete_id], onDelete: Cascade)
+
+  @@unique([athlete_id, event, run_date])
+  @@index([athlete_id])
+  @@index([athlete_id, run_date_parsed])
+}
+
+model scraper_alerts {
+  id           Int      @id @default(autoincrement())
+  source       String   // parkrun | po10
+  alert_type   String   // missing_table | missing_headers | date_format_changed | etc.
+  details      String
+  html_snippet String?
+  resolved     Boolean  @default(false)
+  notified     Boolean  @default(false)
+  created_at   DateTime @default(now())
+
+  @@index([source, resolved])
+  @@index([created_at])
 }
 
 model po10_athletes {

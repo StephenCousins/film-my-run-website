@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   Activity,
@@ -15,19 +15,25 @@ import {
   Users,
   AlertCircle,
   Info,
-  ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  RefreshCw,
+  X,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 type Tab = 'parkrun' | 'po10';
 
+const STORAGE_KEY = 'howfast_last_search';
+
 interface ParkrunResult {
   event: string;
   runDate: string;
   time: string;
-  timeSeconds: number;
+  time_seconds: number;
   position: string;
+  ageGrade?: string | null;
   pb: boolean;
 }
 
@@ -35,6 +41,7 @@ interface ParkrunData {
   ok: boolean;
   cached?: boolean;
   stale?: boolean;
+  needsRefresh?: boolean;
   warning?: string;
   error?: string;
   athlete?: {
@@ -58,6 +65,7 @@ interface ParkrunData {
       normalRunCount: number;
     };
     recentResults?: ParkrunResult[];
+    allResults?: ParkrunResult[];
   };
   comparison?: {
     percentile: number;
@@ -81,6 +89,7 @@ interface Po10PB {
 interface Po10Data {
   ok: boolean;
   cached?: boolean;
+  needsRefresh?: boolean;
   error?: string;
   athlete?: {
     name: string;
@@ -111,43 +120,125 @@ export default function HowFastAmIPage() {
   const [error, setError] = useState<string | null>(null);
   const [parkrunData, setParkrunData] = useState<ParkrunData | null>(null);
   const [po10Data, setPo10Data] = useState<Po10Data | null>(null);
+  const [showAllResults, setShowAllResults] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshResult, setRefreshResult] = useState<string | null>(null);
 
-  const handleSearch = async () => {
-    if (!athleteId.trim()) {
-      setError('Please enter an athlete ID');
-      return;
-    }
-
+  const doSearch = useCallback(async (tab: Tab, id: string) => {
     setIsLoading(true);
     setError(null);
 
     try {
-      const endpoint = activeTab === 'parkrun'
-        ? `/api/how-fast/parkrun?id=${athleteId.trim()}`
-        : `/api/how-fast/po10?id=${athleteId.trim()}`;
+      const endpoint = tab === 'parkrun'
+        ? `/api/how-fast/parkrun?id=${id}`
+        : `/api/how-fast/po10?id=${id}`;
 
       const response = await fetch(endpoint);
       const data = await response.json();
 
       if (!data.ok) {
         setError(data.error || 'Failed to fetch data');
-        if (activeTab === 'parkrun') setParkrunData(null);
+        if (tab === 'parkrun') setParkrunData(null);
         else setPo10Data(null);
       } else {
-        if (activeTab === 'parkrun') {
+        if (tab === 'parkrun') {
           setParkrunData(data);
           setPo10Data(null);
         } else {
           setPo10Data(data);
           setParkrunData(null);
         }
+
+        // Save to localStorage
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({ tab, id }));
+        } catch {}
+
+        // Trigger background refresh if needed
+        if (data.needsRefresh) {
+          backgroundRefresh(tab, id);
+        }
       }
-    } catch (err) {
+    } catch {
       setError('Failed to connect to server');
     } finally {
       setIsLoading(false);
     }
+  }, []);
+
+  const backgroundRefresh = async (tab: Tab, id: string) => {
+    setIsRefreshing(true);
+    setRefreshResult(null);
+
+    try {
+      const endpoint = tab === 'parkrun'
+        ? '/api/how-fast/parkrun/refresh'
+        : '/api/how-fast/po10/refresh';
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+
+      const data = await response.json();
+
+      if (data.ok) {
+        if (tab === 'parkrun' && data.newResults > 0) {
+          setRefreshResult(`Found ${data.newResults} new result${data.newResults > 1 ? 's' : ''}!`);
+          // Re-fetch to get updated data
+          doSearch(tab, id);
+        } else if (tab === 'parkrun') {
+          setRefreshResult('All results up to date');
+        } else {
+          setRefreshResult('Data refreshed');
+          doSearch(tab, id);
+        }
+      }
+    } catch {
+      // Silently fail background refresh
+    } finally {
+      setIsRefreshing(false);
+      // Clear refresh message after 5 seconds
+      setTimeout(() => setRefreshResult(null), 5000);
+    }
   };
+
+  const handleSearch = () => {
+    if (!athleteId.trim()) {
+      setError('Please enter an athlete ID');
+      return;
+    }
+    setShowAllResults(false);
+    doSearch(activeTab, athleteId.trim());
+  };
+
+  const handleClearSearch = () => {
+    setAthleteId('');
+    setParkrunData(null);
+    setPo10Data(null);
+    setError(null);
+    setShowAllResults(false);
+    setRefreshResult(null);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {}
+  };
+
+  // Auto-fetch from localStorage on mount
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        const { tab, id } = JSON.parse(saved);
+        if (tab && id) {
+          setActiveTab(tab);
+          setAthleteId(id);
+          doSearch(tab, id);
+        }
+      }
+    } catch {}
+  }, [doSearch]);
 
   const getTrendIcon = (trend: string) => {
     switch (trend) {
@@ -174,6 +265,9 @@ export default function HowFastAmIPage() {
         return 'text-secondary bg-surface-tertiary border-border';
     }
   };
+
+  const allResults = parkrunData?.athlete?.allResults || [];
+  const displayedResults = showAllResults ? allResults : (parkrunData?.athlete?.recentResults || []);
 
   return (
     <>
@@ -279,17 +373,54 @@ export default function HowFastAmIPage() {
                   </button>
                 </div>
 
-                {/* Help text */}
-                <p className="text-sm text-muted mt-4 flex items-center justify-center gap-1">
-                  <Info className="w-4 h-4" />
-                  {activeTab === 'parkrun'
-                    ? 'Find your ID on your parkrun profile page'
-                    : 'Find your ID on earlyaccess.myathletics.uk'}
-                </p>
+                {/* Help text / Clear link */}
+                <div className="flex items-center justify-center gap-4 mt-4">
+                  <p className="text-sm text-muted flex items-center gap-1">
+                    <Info className="w-4 h-4" />
+                    {activeTab === 'parkrun'
+                      ? 'Find your ID on your parkrun profile page'
+                      : 'Find your ID on earlyaccess.myathletics.uk'}
+                  </p>
+                  {(parkrunData || po10Data) && (
+                    <button
+                      onClick={handleClearSearch}
+                      className="text-sm text-muted hover:text-foreground flex items-center gap-1 transition-colors"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                      Clear
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </section>
+
+        {/* Background Refresh Indicator */}
+        {(isRefreshing || refreshResult) && (
+          <section className="pb-4">
+            <div className="container">
+              <div className="max-w-4xl mx-auto">
+                {isRefreshing && (
+                  <div className="flex items-center justify-center gap-2 text-sm text-muted">
+                    <RefreshCw className="w-4 h-4 animate-spin" />
+                    <span>Checking for new results...</span>
+                  </div>
+                )}
+                {refreshResult && !isRefreshing && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex items-center justify-center gap-2 text-sm text-green-500 dark:text-green-400"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    <span>{refreshResult}</span>
+                  </motion.div>
+                )}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* Error State */}
         {error && (
@@ -428,11 +559,31 @@ export default function HowFastAmIPage() {
                   </div>
                 )}
 
-                {/* Recent Results */}
-                {parkrunData.athlete.recentResults && parkrunData.athlete.recentResults.length > 0 && (
+                {/* Results Table */}
+                {displayedResults.length > 0 && (
                   <div className="bg-surface rounded-xl border border-border overflow-hidden">
-                    <div className="px-6 py-4 border-b border-border">
-                      <h3 className="text-lg font-semibold text-foreground">Recent Runs</h3>
+                    <div className="px-6 py-4 border-b border-border flex items-center justify-between">
+                      <h3 className="text-lg font-semibold text-foreground">
+                        {showAllResults ? `All ${allResults.length} Runs` : 'Recent Runs'}
+                      </h3>
+                      {allResults.length > 10 && (
+                        <button
+                          onClick={() => setShowAllResults(!showAllResults)}
+                          className="text-sm text-brand hover:text-brand/80 flex items-center gap-1 transition-colors"
+                        >
+                          {showAllResults ? (
+                            <>
+                              Show recent only
+                              <ChevronUp className="w-4 h-4" />
+                            </>
+                          ) : (
+                            <>
+                              Show all {allResults.length} results
+                              <ChevronDown className="w-4 h-4" />
+                            </>
+                          )}
+                        </button>
+                      )}
                     </div>
                     <div className="overflow-x-auto">
                       <table className="w-full">
@@ -445,7 +596,7 @@ export default function HowFastAmIPage() {
                           </tr>
                         </thead>
                         <tbody>
-                          {parkrunData.athlete.recentResults.map((result, i) => (
+                          {displayedResults.map((result, i) => (
                             <tr key={i} className="border-b border-border/50 last:border-0">
                               <td className="px-6 py-3 text-muted">{result.runDate}</td>
                               <td className="px-6 py-3 text-foreground">{result.event}</td>
