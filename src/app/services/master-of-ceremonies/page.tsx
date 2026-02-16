@@ -210,8 +210,16 @@ export default function MasterOfCeremoniesPage() {
         </section>
 
         {/* What Makes Great MC */}
-        <section className="py-16 lg:py-24 bg-zinc-900/30">
-          <div className="container">
+        <section className="relative py-16 lg:py-24 overflow-hidden">
+          <div className="absolute inset-0">
+            <img
+              src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/services/robbie-simpson.jpg"
+              alt="MC at a running event"
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-zinc-950/80" />
+          </div>
+          <div className="container relative">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
