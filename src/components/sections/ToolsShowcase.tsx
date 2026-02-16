@@ -180,7 +180,7 @@ export default function ToolsShowcase() {
   return (
     <>
       {/* ========== MOBILE LAYOUT (< lg) ========== */}
-      <div className="lg:hidden bg-background py-16 relative overflow-hidden">
+      <div className="lg:hidden bg-surface-secondary py-16 relative overflow-hidden">
         {/* Header */}
         <div className="px-6 mb-8">
           <span className="text-brand text-sm font-bold uppercase tracking-wider">
@@ -224,7 +224,7 @@ export default function ToolsShowcase() {
       {/* ========== DESKTOP LAYOUT (>= lg) ========== */}
       <div
         ref={sectionRef}
-        className="relative bg-background hidden lg:block"
+        className="relative bg-surface-secondary hidden lg:block"
         style={{
           height: '200vh',
           zIndex: 50,
@@ -232,16 +232,16 @@ export default function ToolsShowcase() {
       >
         {/* Sticky container */}
         <div
-          className="sticky top-0 h-screen overflow-hidden bg-background"
+          className="sticky top-0 h-screen overflow-hidden bg-surface-secondary"
           style={{ zIndex: 50 }}
         >
           {/* Background */}
-          <div className="absolute inset-0 bg-background" />
+          <div className="absolute inset-0 bg-surface-secondary" />
 
           {/* Content */}
           <div className="relative h-full flex items-center">
             {/* Left side - Header */}
-            <div className="relative w-[450px] p-16 flex-shrink-0 z-20 bg-background">
+            <div className="relative w-[450px] p-16 flex-shrink-0 z-20 bg-surface-secondary">
               <div className="max-w-sm">
                 <span className="text-brand text-sm font-bold uppercase tracking-wider">
                   Free Tools
