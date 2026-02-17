@@ -94,7 +94,7 @@ function VideoModal({ isOpen, onClose, videoId, title }: VideoModalProps) {
 
 function LoadingSkeleton() {
   return (
-    <section className="section bg-zinc-900 dark:bg-zinc-950">
+    <section className="section bg-gradient-to-b from-zinc-800 via-zinc-900 to-zinc-950">
       <div className="container">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Content skeleton */}
@@ -243,7 +243,7 @@ export default function FeaturedFilm() {
     <>
       <section
         ref={sectionRef}
-        className="section bg-zinc-900 dark:bg-zinc-950"
+        className="section bg-gradient-to-b from-zinc-800 via-zinc-900 to-zinc-950"
         style={{ position: 'relative', zIndex: 1 }}
       >
         <div className="container">
