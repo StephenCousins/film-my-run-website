@@ -9,9 +9,9 @@ import { cn } from '@/lib/utils';
 
 const stats = [
   {
-    value: 500,
+    value: 900,
     suffix: '+',
-    label: 'Races Filmed',
+    label: 'Running Films',
     description: 'From parkruns to ultras',
   },
   {
