@@ -253,12 +253,12 @@ export default function FeaturedFilm() {
               {/* Tag */}
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand/10 rounded-full border border-brand/20 mb-6">
                 <span className="text-brand text-sm font-medium">
-                  Featured Film ({video.currentIndex}/{video.totalVideos})
+                  Featured Film
                 </span>
               </div>
 
               {/* Title */}
-              <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4">
+              <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold text-white mb-4">
                 {video.title}
               </h2>
 
