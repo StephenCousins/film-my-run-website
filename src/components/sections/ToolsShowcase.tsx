@@ -92,7 +92,7 @@ function ToolCard({ tool, index }: ToolCardProps) {
   return (
     <Link
       href={tool.href}
-      className="tool-card card-interactive p-6 w-[320px] flex-shrink-0"
+      className="tool-card card-interactive p-6 w-[280px] sm:w-[320px] flex-shrink-0"
     >
       {/* Icon */}
       <div
@@ -180,7 +180,7 @@ export default function ToolsShowcase() {
   return (
     <>
       {/* ========== MOBILE LAYOUT (< lg) ========== */}
-      <div className="lg:hidden py-16 relative overflow-hidden">
+      <div className="lg:hidden py-16 relative overflow-x-clip">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -203,14 +203,14 @@ export default function ToolsShowcase() {
         </div>
 
         {/* Horizontal snap-scroll cards */}
-        <div className="relative flex gap-4 overflow-x-auto snap-x snap-mandatory px-6 pb-4 scrollbar-hide">
+        <div className="relative flex gap-4 overflow-x-auto snap-x snap-mandatory pl-6 pb-4 scrollbar-hide">
           {tools.map((tool, index) => (
             <div key={tool.name} className="snap-start flex-shrink-0">
               <ToolCard tool={tool} index={index} />
             </div>
           ))}
-          {/* End spacer */}
-          <div className="flex-shrink-0 w-2" />
+          {/* End spacer — compensates for right padding lost in overflow scroll */}
+          <div className="flex-shrink-0 w-6" />
         </div>
 
         {/* CTA */}
