@@ -27,8 +27,8 @@ export async function GET(request: NextRequest) {
       date: race.date?.toISOString().split('T')[0] || null,
       event: race.event,
       type: race.type,
-      distance_km: race.distance_km ? Number(race.distance_km) : null,
-      time_hms: race.time_hms,
+      distanceKm: race.distance_km ? Number(race.distance_km) : null,
+      timeHms: race.time_hms,
       secs: race.time_seconds,
       elev: race.elevation,
       pos: race.position,
@@ -55,8 +55,8 @@ export async function GET(request: NextRequest) {
       date: race.date?.toISOString().split('T')[0] || null,
       event: race.event,
       type: race.type,
-      distance_km: race.distance_km ? Number(race.distance_km) : null,
-      time_hms: race.time_hms,
+      distanceKm: race.distance_km ? Number(race.distance_km) : null,
+      timeHms: race.time_hms,
       secs: race.time_seconds,
     }));
 
@@ -77,8 +77,8 @@ export async function GET(request: NextRequest) {
       date: race.date?.toISOString().split('T')[0] || null,
       event: race.event,
       type: race.type,
-      distance_km: race.distance_km ? Number(race.distance_km) : null,
-      time_hms: race.time_hms,
+      distanceKm: race.distance_km ? Number(race.distance_km) : null,
+      timeHms: race.time_hms,
       secs: race.time_seconds,
     }));
 
