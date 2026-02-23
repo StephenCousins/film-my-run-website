@@ -701,29 +701,16 @@ export default function RacesPage() {
         </section>
 
         {/* Filters */}
-        <section className="py-6 bg-surface-secondary border-y border-border sticky top-16 lg:top-20 z-30">
+        <section className="py-3 bg-surface-secondary border-y border-border sticky top-16 lg:top-20 z-30">
           <div className="container">
-            {/* Active Filter Indicator */}
-            {activeFilterLabel && (
-              <div className="mb-4 flex items-center gap-2">
-                <span className="text-sm text-muted">Filtering:</span>
-                <span className="px-3 py-1 bg-brand/20 text-brand text-sm rounded-full flex items-center gap-2">
-                  {activeFilterLabel}
-                  <button onClick={resetFilters} className="hover:text-brand-hover">
-                    <X className="w-4 h-4" />
-                  </button>
-                </span>
-              </div>
-            )}
-
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-2">
               <select
                 value={yearFilter}
                 onChange={(e) => {
                   setYearFilter(e.target.value);
                   setActiveFilterLabel(e.target.value ? `Year ${e.target.value}` : null);
                 }}
-                className="input"
+                className="w-auto px-3 py-2 text-sm bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
               >
                 <option value="">All Years</option>
                 {data?.years.map((year) => (
@@ -739,7 +726,7 @@ export default function RacesPage() {
                   setTypeFilter(e.target.value);
                   if (!e.target.value) setActiveFilterLabel(null);
                 }}
-                className="input"
+                className="w-auto px-3 py-2 text-sm bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
               >
                 <option value="">All Types</option>
                 <option value="Marathon">Marathon</option>
@@ -749,7 +736,7 @@ export default function RacesPage() {
               <select
                 value={terrainFilter}
                 onChange={(e) => setTerrainFilter(e.target.value)}
-                className="input"
+                className="w-auto px-3 py-2 text-sm bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
               >
                 <option value="">All Surfaces</option>
                 <option value="Road">Road</option>
@@ -765,37 +752,49 @@ export default function RacesPage() {
                     DISTANCE_CATEGORIES[e.target.value as keyof typeof DISTANCE_CATEGORIES];
                   setActiveFilterLabel(cat?.label || null);
                 }}
-                className="input"
+                className="w-auto px-3 py-2 text-sm bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
               >
                 <option value="">All Distances</option>
-                <option value="100mile">100 Mile (146-190km)</option>
-                <option value="100km">100km (86-145km)</option>
-                <option value="50mile">50 Mile (70-85km)</option>
-                <option value="50km">50km (45-69km)</option>
-                <option value="marathon">Marathon (42-44km)</option>
+                <option value="100mile">100 Mile</option>
+                <option value="100km">100km</option>
+                <option value="50mile">50 Mile</option>
+                <option value="50km">50km</option>
+                <option value="marathon">Marathon</option>
               </select>
 
-              <div className="relative flex-1 min-w-[200px]">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+              <div className="relative flex-1 min-w-[160px]">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                 <input
                   type="text"
                   value={searchFilter}
                   onChange={(e) => setSearchFilter(e.target.value)}
-                  placeholder="Search race name..."
-                  className="input w-full pl-10"
+                  placeholder="Search..."
+                  className="w-full px-3 py-2 pl-8 text-sm bg-surface-tertiary border border-border rounded-lg text-foreground placeholder:text-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
                 />
               </div>
 
-              <button
-                onClick={resetFilters}
-                className="px-4 py-2 bg-surface border border-border text-secondary rounded-lg hover:bg-surface-secondary transition-colors text-sm"
-              >
-                Reset
-              </button>
-            </div>
+              {activeFilterLabel && (
+                <span className="px-2.5 py-1.5 bg-brand/20 text-brand text-xs font-medium rounded-full flex items-center gap-1.5">
+                  {activeFilterLabel}
+                  <button onClick={resetFilters} className="hover:text-brand-hover">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              )}
 
-            <div className="mt-4 text-sm text-muted">
-              Showing {filteredRaces.length} result{filteredRaces.length !== 1 ? 's' : ''}
+              <span className="text-xs text-muted whitespace-nowrap">
+                {filteredRaces.length} result{filteredRaces.length !== 1 ? 's' : ''}
+              </span>
+
+              {(yearFilter || typeFilter || terrainFilter || distanceFilter || searchFilter) && (
+                <button
+                  onClick={resetFilters}
+                  className="px-3 py-1.5 text-xs text-secondary hover:text-foreground transition-colors"
+                  title="Reset all filters"
+                >
+                  Reset
+                </button>
+              )}
             </div>
           </div>
         </section>
