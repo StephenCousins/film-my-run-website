@@ -23,6 +23,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.77.0",
     "@auth/prisma-adapter": "^2.11.1",
     "@aws-sdk/client-s3": "^3.x",
     "@gsap/react": "^2.x",

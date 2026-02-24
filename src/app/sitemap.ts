@@ -57,8 +57,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Database may not be available during build
   }
 
+  // Dynamic news stories
+  let newsRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const stories = await prisma.news_stories.findMany({
+      where: { status: 'published' },
+      select: { slug: true, updated_at: true },
+    });
+    newsRoutes = stories.map((story) => ({
+      url: `${baseUrl}/news/${story.slug}`,
+      lastModified: story.updated_at,
+      changeFrequency: 'weekly' as const,
+      priority: 0.6,
+    }));
+  } catch {
+    // Database may not be available during build
+  }
+
   return [
     ...staticRoutes,
     ...blogRoutes,
+    ...newsRoutes,
   ];
 }

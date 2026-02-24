@@ -44,6 +44,7 @@ interface Article {
   pubDate: string;
   source: string;
   category: string;
+  isOriginal?: boolean;
 }
 
 // ============================================
@@ -51,21 +52,53 @@ interface Article {
 // ============================================
 
 import { getArticles as fetchArticles } from '@/lib/rss-fetcher';
+import { prisma } from '@/lib/db';
+
+async function getOriginalStories(): Promise<Article[]> {
+  try {
+    const stories = await prisma.news_stories.findMany({
+      where: { status: 'published' },
+      orderBy: [{ priority: 'asc' }, { published_at: 'desc' }],
+    });
+
+    return stories.map((story) => ({
+      id: `fmr-${story.id}`,
+      title: story.title,
+      link: `/news/${story.slug}`,
+      description: story.excerpt,
+      imageUrl: story.image_url,
+      pubDate: story.published_at?.toISOString() || story.created_at.toISOString(),
+      source: 'Film My Run',
+      category: 'trail',
+      isOriginal: true,
+    }));
+  } catch (error) {
+    console.error('Error fetching original stories:', error);
+    return [];
+  }
+}
 
 async function getArticles(): Promise<Article[]> {
   try {
-    const articles = await fetchArticles(14, 100);
+    const [rssArticles, originalStories] = await Promise.all([
+      fetchArticles(14, 100).then((articles) =>
+        articles.map((article) => ({
+          id: article.id.toString(),
+          title: article.title,
+          link: article.link,
+          description: article.description || '',
+          imageUrl: article.image_url,
+          pubDate: article.pub_date.toISOString(),
+          source: article.source,
+          category: article.category || 'trail',
+        }))
+      ),
+      getOriginalStories(),
+    ]);
 
-    return articles.map((article) => ({
-      id: article.id.toString(),
-      title: article.title,
-      link: article.link,
-      description: article.description || '',
-      imageUrl: article.image_url,
-      pubDate: article.pub_date.toISOString(),
-      source: article.source,
-      category: article.category || 'trail',
-    }));
+    // Merge: original stories first, then RSS articles by date
+    const merged = [...originalStories, ...rssArticles];
+    return merged;
   } catch (error) {
     console.error('Error fetching articles:', error);
     return [];
@@ -146,7 +179,7 @@ export default async function NewsPage() {
 
         {/* Newsletter CTA */}
         <section className="relative py-16 lg:py-24 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-zinc-900 via-zinc-900 to-zinc-800" />
+          <div className="absolute inset-0 bg-gradient-to-br from-surface via-surface to-surface-secondary" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(248,140,0,0.08),_transparent_60%)]" />
           <div className="container relative">
             <div className="max-w-2xl mx-auto text-center">
@@ -156,7 +189,7 @@ export default async function NewsPage() {
               <h2 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
                 Weekly News Digest
               </h2>
-              <p className="text-zinc-400 mb-8 leading-relaxed">
+              <p className="text-muted mb-8 leading-relaxed">
                 Get the best trail and ultra running stories delivered to your inbox
                 every week. No spam, just the news that matters.
               </p>

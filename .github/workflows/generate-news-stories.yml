@@ -1,0 +1,33 @@
+name: Generate News Stories
+
+on:
+  schedule:
+    # Monday 8pm UTC — iRunFar publishes Monday morning US time
+    - cron: '0 20 * * 1'
+  workflow_dispatch:
+    # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Generate news stories from iRunFar TWIR
+        run: |
+          response=$(curl -s -w "\n%{http_code}" \
+            -X POST \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            "${{ secrets.SITE_URL }}/api/news/generate")
+          http_code=$(echo "$response" | tail -n1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "Response: $body"
+          echo "HTTP Status: $http_code"
+
+          if [ "$http_code" != "200" ]; then
+            echo "Generation failed with status $http_code"
+            exit 1
+          fi
+
+          echo "News story generation completed successfully"

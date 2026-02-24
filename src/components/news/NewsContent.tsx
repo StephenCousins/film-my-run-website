@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { Calendar, ExternalLink, Newspaper } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -17,6 +18,7 @@ interface Article {
   pubDate: string;
   source: string;
   category: string;
+  isOriginal?: boolean;
 }
 
 // ============================================
@@ -24,6 +26,7 @@ interface Article {
 // ============================================
 
 const sourceColors: Record<string, string> = {
+  'Film My Run': 'bg-[#f88c00]/20 text-[#f88c00] border-[#f88c00]/30',
   'iRunFar': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
   'Trail Runner Magazine': 'bg-green-500/20 text-green-400 border-green-500/30',
   'Freetrail': 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
@@ -40,6 +43,7 @@ function getSourceColor(source: string): string {
 }
 
 const sourceAccentBorders: Record<string, string> = {
+  'Film My Run': 'border-l-[#f88c00]',
   'iRunFar': 'border-l-blue-500',
   'Trail Runner Magazine': 'border-l-green-500',
   'Freetrail': 'border-l-emerald-500',
@@ -59,10 +63,49 @@ function getSourceAccentBorder(source: string): string {
 // ARTICLE CARD COMPONENT
 // ============================================
 
+function CardWrapper({ article, children, className }: { article: Article; children: React.ReactNode; className?: string }) {
+  if (article.isOriginal) {
+    return (
+      <Link href={article.link} className={className}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <a href={article.link} target="_blank" rel="noopener noreferrer" className={className}>
+      {children}
+    </a>
+  );
+}
+
 function ArticleCard({ article, featured = false }: { article: Article; featured?: boolean }) {
   const pubDate = new Date(article.pubDate);
   const isRecent = Date.now() - pubDate.getTime() < 24 * 60 * 60 * 1000;
   const hasImage = !!article.imageUrl;
+
+  const badges = (
+    <div className="flex items-center gap-3 mb-3">
+      <span className={cn(
+        'px-3 py-1 text-xs font-medium rounded-full border',
+        getSourceColor(article.source)
+      )}>
+        {article.source}
+      </span>
+      {article.isOriginal && (
+        <span className="px-2.5 py-1 bg-[#f88c00] text-white text-xs font-bold rounded-md uppercase tracking-wide">
+          FMR Original
+        </span>
+      )}
+      <span className="flex items-center gap-1.5 text-xs text-muted">
+        <Calendar className="w-3 h-3" />
+        {pubDate.toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+        })}
+      </span>
+    </div>
+  );
 
   if (!hasImage) {
     return (
@@ -75,12 +118,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
           featured && 'lg:col-span-2'
         )}
       >
-        <a
-          href={article.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block h-full"
-        >
+        <CardWrapper article={article} className="block h-full">
           <div className="p-5 lg:p-6 flex flex-col flex-1 h-full">
             {isRecent && (
               <div className="mb-3">
@@ -90,22 +128,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
               </div>
             )}
 
-            <div className="flex items-center gap-3 mb-3">
-              <span className={cn(
-                'px-3 py-1 text-xs font-medium rounded-full border',
-                getSourceColor(article.source)
-              )}>
-                {article.source}
-              </span>
-              <span className="flex items-center gap-1.5 text-xs text-muted">
-                <Calendar className="w-3 h-3" />
-                {pubDate.toLocaleDateString('en-GB', {
-                  day: 'numeric',
-                  month: 'short',
-                  year: 'numeric',
-                })}
-              </span>
-            </div>
+            {badges}
 
             <h2 className={cn(
               'font-display font-semibold text-foreground group-hover:text-brand transition-colors duration-200 mb-3 leading-snug',
@@ -124,11 +147,11 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
             )}
 
             <div className="flex items-center gap-1.5 text-brand font-medium text-sm group-hover:gap-2.5 transition-all duration-200 mt-auto pt-2">
-              Read Article
-              <ExternalLink className="w-3.5 h-3.5" />
+              {article.isOriginal ? 'Read Story' : 'Read Article'}
+              {!article.isOriginal && <ExternalLink className="w-3.5 h-3.5" />}
             </div>
           </div>
-        </a>
+        </CardWrapper>
       </article>
     );
   }
@@ -141,10 +164,8 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
         featured && 'lg:col-span-2'
       )}
     >
-      <a
-        href={article.link}
-        target="_blank"
-        rel="noopener noreferrer"
+      <CardWrapper
+        article={article}
         className={cn(
           'block h-full',
           featured ? 'flex flex-col lg:flex-row' : ''
@@ -170,6 +191,13 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
               </span>
             </div>
           )}
+          {article.isOriginal && (
+            <div className="absolute top-3 right-3">
+              <span className="px-2.5 py-1 bg-[#f88c00] text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
+                FMR Original
+              </span>
+            </div>
+          )}
         </div>
 
         <div className={cn(
@@ -177,22 +205,7 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
           featured ? 'lg:w-3/5 lg:py-8' : '',
           'flex-1'
         )}>
-          <div className="flex items-center gap-3 mb-3">
-            <span className={cn(
-              'px-3 py-1 text-xs font-medium rounded-full border',
-              getSourceColor(article.source)
-            )}>
-              {article.source}
-            </span>
-            <span className="flex items-center gap-1.5 text-xs text-muted">
-              <Calendar className="w-3 h-3" />
-              {pubDate.toLocaleDateString('en-GB', {
-                day: 'numeric',
-                month: 'short',
-                year: 'numeric',
-              })}
-            </span>
-          </div>
+          {badges}
 
           <h2 className={cn(
             'font-display font-semibold text-foreground group-hover:text-brand transition-colors duration-200 mb-3 leading-snug',
@@ -211,11 +224,11 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
           )}
 
           <div className="flex items-center gap-1.5 text-brand font-medium text-sm group-hover:gap-2.5 transition-all duration-200 mt-auto pt-2">
-            Read Article
-            <ExternalLink className="w-3.5 h-3.5" />
+            {article.isOriginal ? 'Read Story' : 'Read Article'}
+            {!article.isOriginal && <ExternalLink className="w-3.5 h-3.5" />}
           </div>
         </div>
-      </a>
+      </CardWrapper>
     </article>
   );
 }
