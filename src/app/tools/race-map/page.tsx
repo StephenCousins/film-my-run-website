@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { useTheme } from '@/contexts/ThemeContext';
 import { extractActivityId, extractYear } from '@/lib/race-map/mapUtils';
 import type { Race, Routes, Filters } from '@/lib/race-map/types';
 import { cn } from '@/lib/utils';
@@ -28,10 +29,10 @@ const RaceMapView = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex items-center justify-center h-full bg-zinc-900 rounded-2xl">
+      <div className="flex items-center justify-center h-full bg-surface rounded-2xl">
         <div className="text-center">
-          <Loader2 className="w-8 h-8 text-orange-500 animate-spin mx-auto mb-3" />
-          <p className="text-zinc-400 text-sm">Loading map...</p>
+          <Loader2 className="w-8 h-8 text-brand animate-spin mx-auto mb-3" />
+          <p className="text-muted text-sm">Loading map...</p>
         </div>
       </div>
     ),
@@ -58,7 +59,7 @@ function StatCard({ title, value, icon, color = 'orange' }: StatCardProps) {
   };
 
   return (
-    <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+    <div className="bg-surface rounded-xl p-4 border border-border">
       <div className="flex items-center gap-3">
         <div
           className={cn(
@@ -69,8 +70,8 @@ function StatCard({ title, value, icon, color = 'orange' }: StatCardProps) {
           {icon}
         </div>
         <div>
-          <div className="text-2xl font-bold text-white">{value}</div>
-          <div className="text-xs text-zinc-400">{title}</div>
+          <div className="text-2xl font-bold text-foreground">{value}</div>
+          <div className="text-xs text-muted">{title}</div>
         </div>
       </div>
     </div>
@@ -93,40 +94,40 @@ function SelectedRaceDetails({ race, onClose }: SelectedRaceDetailsProps) {
   };
 
   return (
-    <div className="p-3 border-b border-zinc-800 bg-orange-500/5">
+    <div className="p-3 border-b border-border bg-brand/5">
       <div className="flex items-center justify-between mb-2">
-        <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-wide">Selected Race</h3>
+        <h3 className="text-xs font-semibold text-muted uppercase tracking-wide">Selected Race</h3>
         <button
           onClick={onClose}
-          className="p-1 rounded hover:bg-zinc-800 text-zinc-500 hover:text-white transition-colors"
+          className="p-1 rounded hover:bg-surface-secondary text-muted hover:text-foreground transition-colors"
         >
           <X className="w-3.5 h-3.5" />
         </button>
       </div>
 
-      <h4 className="text-sm font-semibold text-orange-500 mb-1">{race.name}</h4>
-      <p className="text-xs text-zinc-500 mb-3">{race.date}</p>
+      <h4 className="text-sm font-semibold text-brand mb-1">{race.name}</h4>
+      <p className="text-xs text-muted mb-3">{race.date}</p>
 
       <div className="space-y-1.5 mb-3">
         <div className="flex justify-between text-xs">
-          <span className="text-zinc-500">Distance</span>
-          <span className="text-white font-mono">{formatDistance(race.distance)}</span>
+          <span className="text-muted">Distance</span>
+          <span className="text-foreground font-mono">{formatDistance(race.distance)}</span>
         </div>
         <div className="flex justify-between text-xs">
-          <span className="text-zinc-500">Time</span>
-          <span className="text-white font-mono">{race.time || '—'}</span>
+          <span className="text-muted">Time</span>
+          <span className="text-foreground font-mono">{race.time || '—'}</span>
         </div>
         <div className="flex justify-between text-xs">
-          <span className="text-zinc-500">Elevation</span>
-          <span className="text-white font-mono">{race.elevation ? `${race.elevation}m` : '—'}</span>
+          <span className="text-muted">Elevation</span>
+          <span className="text-foreground font-mono">{race.elevation ? `${race.elevation}m` : '—'}</span>
         </div>
         <div className="flex justify-between text-xs">
-          <span className="text-zinc-500">Position</span>
-          <span className="text-white font-mono">{race.position || '—'}</span>
+          <span className="text-muted">Position</span>
+          <span className="text-foreground font-mono">{race.position || '—'}</span>
         </div>
         <div className="flex justify-between text-xs">
-          <span className="text-zinc-500">Type</span>
-          <span className="text-white">{race.type} • {race.terrain}</span>
+          <span className="text-muted">Type</span>
+          <span className="text-foreground">{race.type} • {race.terrain}</span>
         </div>
       </div>
 
@@ -137,7 +138,7 @@ function SelectedRaceDetails({ race, onClose }: SelectedRaceDetailsProps) {
               href={race.strava}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-orange-500 text-white text-xs font-medium rounded-md hover:bg-orange-600 transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-brand text-white text-xs font-medium rounded-md hover:bg-brand-hover transition-colors"
             >
               <ExternalLink className="w-3 h-3" /> Strava
             </a>
@@ -147,7 +148,7 @@ function SelectedRaceDetails({ race, onClose }: SelectedRaceDetailsProps) {
               href={race.video}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-zinc-800 text-zinc-300 text-xs font-medium rounded-md hover:bg-zinc-700 transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-surface-tertiary text-secondary text-xs font-medium rounded-md hover:bg-border transition-colors"
             >
               <Play className="w-3 h-3" /> Video
             </a>
@@ -157,7 +158,7 @@ function SelectedRaceDetails({ race, onClose }: SelectedRaceDetailsProps) {
               href={race.report}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-zinc-800 text-zinc-300 text-xs font-medium rounded-md hover:bg-zinc-700 transition-colors"
+              className="inline-flex items-center gap-1 px-2.5 py-1.5 bg-surface-tertiary text-secondary text-xs font-medium rounded-md hover:bg-border transition-colors"
             >
               <FileText className="w-3 h-3" /> Report
             </a>
@@ -189,25 +190,25 @@ function RaceListItem({ race, isSelected, onClick }: RaceListItemProps) {
       className={cn(
         'p-2.5 rounded-lg border cursor-pointer transition-all',
         isSelected
-          ? 'border-orange-500 bg-orange-500/10'
-          : 'border-zinc-800 hover:border-zinc-700 bg-zinc-950'
+          ? 'border-brand bg-brand/10'
+          : 'border-border hover:border-border-secondary bg-surface-secondary'
       )}
       onClick={onClick}
     >
       <div className="flex items-start justify-between gap-2 mb-1">
-        <span className="text-xs font-medium text-white leading-tight line-clamp-1">{race.name}</span>
+        <span className="text-xs font-medium text-foreground leading-tight line-clamp-1">{race.name}</span>
         <span
           className={cn(
             'px-1.5 py-0.5 text-[10px] font-semibold rounded uppercase flex-shrink-0',
             race.type === 'Ultra'
-              ? 'bg-orange-500/20 text-orange-400'
-              : 'bg-blue-500/20 text-blue-400'
+              ? 'bg-orange-500/20 text-orange-600 dark:text-orange-400'
+              : 'bg-blue-500/20 text-blue-600 dark:text-blue-400'
           )}
         >
           {race.type || 'Race'}
         </span>
       </div>
-      <div className="flex items-center gap-2 text-[11px] text-zinc-500">
+      <div className="flex items-center gap-2 text-[11px] text-muted">
         <span>{race.date}</span>
         <span>•</span>
         <span>{formatDistance(race.distance)}</span>
@@ -221,6 +222,7 @@ function RaceListItem({ race, isSelected, onClick }: RaceListItemProps) {
 // ============================================
 
 export default function RaceMapPage() {
+  const { resolvedTheme } = useTheme();
   const [races, setRaces] = useState<Race[]>([]);
   const [routes, setRoutes] = useState<Routes>({});
   const [selectedRace, setSelectedRace] = useState<Race | null>(null);
@@ -349,11 +351,11 @@ export default function RaceMapPage() {
     return (
       <>
         <Header />
-        <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+        <main className="pt-20 lg:pt-24 bg-background min-h-screen">
           <div className="container py-20">
             <div className="flex items-center justify-center gap-3">
-              <Loader2 className="w-6 h-6 text-orange-500 animate-spin" />
-              <span className="text-zinc-400">Loading race map...</span>
+              <Loader2 className="w-6 h-6 text-brand animate-spin" />
+              <span className="text-muted">Loading race map...</span>
             </div>
           </div>
         </main>
@@ -366,20 +368,20 @@ export default function RaceMapPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero */}
-        <section className="py-8 lg:py-12 border-b border-zinc-800">
+        <section className="py-8 lg:py-12 border-b border-border">
           <div className="container">
             <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
               <div>
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-orange-500/10 text-orange-500 rounded-full text-sm font-medium mb-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-brand/10 text-brand rounded-full text-sm font-medium mb-4">
                   <Map className="w-4 h-4" />
                   Visualization Tool
                 </div>
-                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-2">
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-2">
                   Race Map
                 </h1>
-                <p className="text-zinc-400 max-w-xl">
+                <p className="text-secondary max-w-xl">
                   Every marathon and ultra I&apos;ve run, visualized on a single map. Click any route to see race details.
                 </p>
               </div>
@@ -416,7 +418,7 @@ export default function RaceMapPage() {
         </section>
 
         {/* Filters Bar */}
-        <section className="py-4 bg-zinc-900 border-b border-zinc-800 sticky top-16 lg:top-20 z-30">
+        <section className="py-4 bg-surface-secondary border-b border-border sticky top-16 lg:top-20 z-30">
           <div className="container">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-4">
@@ -425,8 +427,8 @@ export default function RaceMapPage() {
                   className={cn(
                     'flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors',
                     showFilters || activeFiltersCount > 0
-                      ? 'bg-orange-500 text-white'
-                      : 'bg-zinc-800 text-zinc-300 hover:bg-zinc-700'
+                      ? 'bg-brand text-white'
+                      : 'bg-surface-tertiary text-secondary hover:bg-border'
                   )}
                 >
                   <Filter className="w-4 h-4" />
@@ -438,15 +440,15 @@ export default function RaceMapPage() {
                   )}
                 </button>
 
-                <span className="text-sm text-zinc-400">
-                  Showing <span className="text-white font-medium">{filteredRaces.length}</span> races
+                <span className="text-sm text-muted">
+                  Showing <span className="text-foreground font-medium">{filteredRaces.length}</span> races
                 </span>
               </div>
 
               {selectedRace && (
                 <button
                   onClick={() => setSelectedRace(null)}
-                  className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800 text-zinc-300 rounded-lg text-sm hover:bg-zinc-700 transition-colors"
+                  className="flex items-center gap-2 px-3 py-1.5 bg-surface-tertiary text-secondary rounded-lg text-sm hover:bg-border transition-colors"
                 >
                   <X className="w-4 h-4" />
                   Clear selection
@@ -456,57 +458,57 @@ export default function RaceMapPage() {
 
             {/* Filter Options */}
             {showFilters && (
-              <div className="mt-4 pt-4 border-t border-zinc-800 flex flex-wrap items-center gap-4">
+              <div className="mt-4 pt-4 border-t border-border flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-3">
-                  <label className="flex items-center gap-2 text-sm text-zinc-300 cursor-pointer">
+                  <label className="flex items-center gap-2 text-sm text-secondary cursor-pointer">
                     <input
                       type="checkbox"
                       checked={filters.showMarathons}
                       onChange={(e) => handleFilterChange('showMarathons', e.target.checked)}
-                      className="w-4 h-4 rounded border-zinc-600 text-orange-500 focus:ring-orange-500 focus:ring-offset-zinc-900"
+                      className="w-4 h-4 rounded border-border text-brand focus:ring-brand"
                     />
                     Marathons
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-zinc-300 cursor-pointer">
+                  <label className="flex items-center gap-2 text-sm text-secondary cursor-pointer">
                     <input
                       type="checkbox"
                       checked={filters.showUltras}
                       onChange={(e) => handleFilterChange('showUltras', e.target.checked)}
-                      className="w-4 h-4 rounded border-zinc-600 text-orange-500 focus:ring-orange-500 focus:ring-offset-zinc-900"
+                      className="w-4 h-4 rounded border-border text-brand focus:ring-brand"
                     />
                     Ultras
                   </label>
                 </div>
 
-                <div className="w-px h-6 bg-zinc-700" />
+                <div className="w-px h-6 bg-border" />
 
                 <div className="flex items-center gap-3">
-                  <label className="flex items-center gap-2 text-sm text-zinc-300 cursor-pointer">
+                  <label className="flex items-center gap-2 text-sm text-secondary cursor-pointer">
                     <input
                       type="checkbox"
                       checked={filters.showRoad}
                       onChange={(e) => handleFilterChange('showRoad', e.target.checked)}
-                      className="w-4 h-4 rounded border-zinc-600 text-orange-500 focus:ring-orange-500 focus:ring-offset-zinc-900"
+                      className="w-4 h-4 rounded border-border text-brand focus:ring-brand"
                     />
                     Road
                   </label>
-                  <label className="flex items-center gap-2 text-sm text-zinc-300 cursor-pointer">
+                  <label className="flex items-center gap-2 text-sm text-secondary cursor-pointer">
                     <input
                       type="checkbox"
                       checked={filters.showTrail}
                       onChange={(e) => handleFilterChange('showTrail', e.target.checked)}
-                      className="w-4 h-4 rounded border-zinc-600 text-orange-500 focus:ring-orange-500 focus:ring-offset-zinc-900"
+                      className="w-4 h-4 rounded border-border text-brand focus:ring-brand"
                     />
                     Trail
                   </label>
                 </div>
 
-                <div className="w-px h-6 bg-zinc-700" />
+                <div className="w-px h-6 bg-border" />
 
                 <select
                   value={filters.year}
                   onChange={(e) => handleFilterChange('year', e.target.value)}
-                  className="px-3 py-1.5 bg-zinc-800 border border-zinc-700 rounded-lg text-white text-sm focus:outline-none focus:ring-1 focus:ring-orange-500"
+                  className="px-3 py-1.5 bg-surface-tertiary border border-border rounded-lg text-foreground text-sm focus:outline-none focus:ring-1 focus:ring-brand"
                 >
                   <option value="all">All Years</option>
                   {years.map((year) => (
@@ -526,7 +528,7 @@ export default function RaceMapPage() {
                       year: 'all',
                     })
                   }
-                  className="text-sm text-zinc-400 hover:text-orange-500 transition-colors"
+                  className="text-sm text-muted hover:text-brand transition-colors"
                 >
                   Reset
                 </button>
@@ -541,25 +543,26 @@ export default function RaceMapPage() {
             <div className="grid lg:grid-cols-3 gap-6">
               {/* Map */}
               <div className="lg:col-span-2">
-                <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden h-[500px] lg:h-[600px]">
+                <div className="bg-surface rounded-2xl border border-border overflow-hidden h-[500px] lg:h-[600px]">
                   <RaceMapView
                     races={filteredRaces}
                     routes={filteredRoutes}
                     selectedRace={selectedRace}
                     onRaceSelect={handleRaceSelect}
+                    isDark={resolvedTheme === 'dark'}
                   />
                 </div>
               </div>
 
               {/* Race List */}
               <div className="lg:col-span-1">
-                <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden h-[500px] lg:h-[600px] flex flex-col">
-                  <div className="p-3 border-b border-zinc-800 flex items-center justify-between flex-shrink-0">
-                    <h2 className="text-xs font-semibold text-zinc-400 uppercase tracking-wide flex items-center gap-1.5">
-                      <MapPin className="w-3.5 h-3.5 text-orange-500" />
+                <div className="bg-surface rounded-2xl border border-border overflow-hidden h-[500px] lg:h-[600px] flex flex-col">
+                  <div className="p-3 border-b border-border flex items-center justify-between flex-shrink-0">
+                    <h2 className="text-xs font-semibold text-muted uppercase tracking-wide flex items-center gap-1.5">
+                      <MapPin className="w-3.5 h-3.5 text-brand" />
                       Race List
                     </h2>
-                    <span className="text-xs text-zinc-500">{filteredRaces.length} races</span>
+                    <span className="text-xs text-muted">{filteredRaces.length} races</span>
                   </div>
 
                   {/* Selected Race Details */}
@@ -573,7 +576,7 @@ export default function RaceMapPage() {
                   {/* Race List Items */}
                   <div className="p-2 space-y-1.5 overflow-y-auto flex-1">
                     {filteredRaces.length === 0 ? (
-                      <p className="text-center text-zinc-500 py-8 text-xs">
+                      <p className="text-center text-muted py-8 text-xs">
                         No races match your filters
                       </p>
                     ) : (

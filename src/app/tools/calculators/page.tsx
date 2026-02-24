@@ -384,7 +384,7 @@ export default function CalculatorsPage() {
               className="object-cover"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[rgb(var(--color-background))]" />
           </div>
 
           <div className="container relative">
@@ -456,7 +456,7 @@ export default function CalculatorsPage() {
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/90 via-zinc-900/85 to-zinc-950/90" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-[rgb(var(--color-background))]/80" />
           </div>
 
           <div className="container relative">

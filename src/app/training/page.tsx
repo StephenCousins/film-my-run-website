@@ -189,7 +189,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
         'relative rounded-2xl p-8 transition-all duration-300',
         plan.highlighted
           ? 'bg-orange-500 text-white scale-105 shadow-2xl shadow-orange-500/30'
-          : 'bg-zinc-900 border border-zinc-800 hover:border-orange-500/50'
+          : 'bg-surface border border-border hover:border-orange-500/50'
       )}
     >
       {/* Badge */}
@@ -212,7 +212,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
       <h3
         className={cn(
           'font-display text-xl font-bold mb-2',
-          plan.highlighted ? 'text-white' : 'text-white'
+          plan.highlighted ? 'text-white' : 'text-foreground'
         )}
       >
         {plan.name}
@@ -231,7 +231,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
         <span
           className={cn(
             'text-sm ml-1',
-            plan.highlighted ? 'text-white/80' : 'text-zinc-500'
+            plan.highlighted ? 'text-white/80' : 'text-muted'
           )}
         >
           {plan.period}
@@ -242,7 +242,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
       <p
         className={cn(
           'text-sm mb-6',
-          plan.highlighted ? 'text-white/90' : 'text-zinc-400'
+          plan.highlighted ? 'text-white/90' : 'text-secondary'
         )}
       >
         {plan.description}
@@ -261,7 +261,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
             <span
               className={cn(
                 'text-sm',
-                plan.highlighted ? 'text-white/90' : 'text-zinc-300'
+                plan.highlighted ? 'text-white/90' : 'text-secondary'
               )}
             >
               {feature}
@@ -275,7 +275,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
         className={cn(
           'w-full py-3 font-semibold rounded-full transition-all',
           plan.highlighted
-            ? 'bg-white text-orange-500 hover:bg-zinc-100'
+            ? 'bg-white text-orange-500 hover:bg-surface-tertiary'
             : 'bg-orange-500 text-white hover:bg-orange-600'
         )}
       >
@@ -291,7 +291,7 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
 
 function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
   return (
-    <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+    <div className="bg-surface rounded-2xl border border-border p-6">
       {/* Stars */}
       <div className="flex gap-1 mb-4">
         {[...Array(5)].map((_, i) => (
@@ -300,7 +300,7 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
       </div>
 
       {/* Quote */}
-      <p className="text-zinc-300 mb-6 leading-relaxed">
+      <p className="text-secondary mb-6 leading-relaxed">
         "{testimonial.quote}"
       </p>
 
@@ -312,17 +312,17 @@ function TestimonialCard({ testimonial }: { testimonial: Testimonial }) {
 
       {/* Author */}
       <div className="flex items-center gap-3">
-        <div className="w-12 h-12 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+        <div className="w-12 h-12 rounded-full bg-surface-secondary overflow-hidden">
           {/* Placeholder for avatar */}
-          <div className="w-full h-full flex items-center justify-center text-zinc-400">
+          <div className="w-full h-full flex items-center justify-center text-muted">
             <Users className="w-6 h-6" />
           </div>
         </div>
         <div>
-          <div className="font-medium text-white">
+          <div className="font-medium text-foreground">
             {testimonial.name}
           </div>
-          <div className="text-sm text-zinc-500">{testimonial.role}</div>
+          <div className="text-sm text-muted">{testimonial.role}</div>
         </div>
       </div>
     </div>
@@ -365,13 +365,13 @@ export default function TrainingPage() {
                 </span>
               </div>
 
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
                 Train Smarter.
                 <br />
                 <span className="text-orange-500">Race Faster.</span>
               </h1>
 
-              <p className="text-lg lg:text-xl text-zinc-400 mb-8 max-w-2xl mx-auto">
+              <p className="text-lg lg:text-xl text-secondary mb-8 max-w-2xl mx-auto">
                 Personalized marathon and half-marathon training plans powered by AI.
                 Join 50,000+ runners who've achieved their goals with our proven methodology.
               </p>
@@ -385,7 +385,7 @@ export default function TrainingPage() {
                   Start Free Trial
                   <ArrowRight className="w-5 h-5" />
                 </Link>
-                <button className="inline-flex items-center gap-2 px-8 py-4 border border-zinc-700 rounded-full hover:border-orange-500 transition-colors group">
+                <button className="inline-flex items-center gap-2 px-8 py-4 border border-border-secondary rounded-full hover:border-orange-500 transition-colors group">
                   <Play className="w-5 h-5 text-orange-500" />
                   <span className="group-hover:text-orange-500 transition-colors">
                     Watch Demo
@@ -394,12 +394,12 @@ export default function TrainingPage() {
               </div>
 
               {/* Social proof */}
-              <div className="flex items-center justify-center gap-6 mt-12 pt-8 border-t border-zinc-800">
+              <div className="flex items-center justify-center gap-6 mt-12 pt-8 border-t border-border">
                 <div className="flex -space-x-2">
                   {[1, 2, 3, 4, 5].map((i) => (
                     <div
                       key={i}
-                      className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-2 border-white dark:border-zinc-950"
+                      className="w-10 h-10 rounded-full bg-gradient-to-br from-orange-400 to-orange-600 border-2 border-surface"
                     />
                   ))}
                 </div>
@@ -408,11 +408,11 @@ export default function TrainingPage() {
                     {[1, 2, 3, 4, 5].map((i) => (
                       <Star key={i} className="w-4 h-4 text-amber-400 fill-amber-400" />
                     ))}
-                    <span className="text-sm font-medium text-white ml-1">
+                    <span className="text-sm font-medium text-foreground ml-1">
                       4.9
                     </span>
                   </div>
-                  <div className="text-sm text-zinc-500">from 2,500+ reviews</div>
+                  <div className="text-sm text-muted">from 2,500+ reviews</div>
                 </div>
               </div>
             </div>
@@ -420,7 +420,7 @@ export default function TrainingPage() {
         </section>
 
         {/* Stats */}
-        <section className="py-12 bg-zinc-900 dark:bg-zinc-950">
+        <section className="py-12 bg-surface-secondary">
           <div className="container">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat) => (
@@ -428,7 +428,7 @@ export default function TrainingPage() {
                   <div className="font-mono text-3xl lg:text-4xl font-bold text-orange-500 mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-sm text-zinc-400">{stat.label}</div>
+                  <div className="text-sm text-secondary">{stat.label}</div>
                 </div>
               ))}
             </div>
@@ -436,14 +436,14 @@ export default function TrainingPage() {
         </section>
 
         {/* Features */}
-        <section className="py-20 lg:py-32 bg-zinc-950">
+        <section className="py-20 lg:py-32 bg-background">
           <div className="container">
             <div className="text-center mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 Everything You Need to
                 <span className="text-orange-500"> Reach Your Goal</span>
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-secondary max-w-2xl mx-auto">
                 Our comprehensive training platform adapts to your life, not the other way around.
               </p>
             </div>
@@ -454,15 +454,15 @@ export default function TrainingPage() {
                 return (
                   <div
                     key={feature.title}
-                    className="group p-6 bg-zinc-900 rounded-2xl hover:bg-orange-500 transition-all duration-300"
+                    className="group p-6 bg-surface rounded-2xl hover:bg-orange-500 transition-all duration-300"
                   >
                     <div className="w-12 h-12 rounded-xl bg-orange-500/10 group-hover:bg-white/20 flex items-center justify-center mb-4 transition-colors">
                       <Icon className="w-6 h-6 text-orange-500 group-hover:text-white transition-colors" />
                     </div>
-                    <h3 className="font-display text-lg font-bold text-white group-hover:text-white mb-2 transition-colors">
+                    <h3 className="font-display text-lg font-bold text-foreground group-hover:text-white mb-2 transition-colors">
                       {feature.title}
                     </h3>
-                    <p className="text-zinc-400 group-hover:text-white/80 transition-colors">
+                    <p className="text-secondary group-hover:text-white/80 transition-colors">
                       {feature.description}
                     </p>
                   </div>
@@ -473,16 +473,16 @@ export default function TrainingPage() {
         </section>
 
         {/* App preview */}
-        <section className="py-20 lg:py-32 bg-zinc-900 overflow-hidden">
+        <section className="py-20 lg:py-32 bg-surface-secondary overflow-hidden">
           <div className="container">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-6">
+                <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-6">
                   Your Personal Coach,
                   <br />
                   <span className="text-orange-500">Always Available</span>
                 </h2>
-                <p className="text-lg text-zinc-400 mb-8">
+                <p className="text-lg text-secondary mb-8">
                   The Marathon Plan App combines years of coaching expertise with modern AI
                   to deliver personalized training that adapts to your progress, schedule, and goals.
                 </p>
@@ -496,7 +496,7 @@ export default function TrainingPage() {
                   ].map((item) => (
                     <li key={item} className="flex items-center gap-3">
                       <CheckCircle2 className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                      <span className="text-zinc-300">{item}</span>
+                      <span className="text-secondary">{item}</span>
                     </li>
                   ))}
                 </ul>
@@ -514,8 +514,8 @@ export default function TrainingPage() {
               <div className="relative">
                 <div className="relative mx-auto w-64 lg:w-80">
                   {/* Phone frame */}
-                  <div className="relative bg-zinc-900 rounded-[3rem] p-3 shadow-2xl">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-zinc-900 rounded-b-2xl" />
+                  <div className="relative bg-surface rounded-[3rem] p-3 shadow-2xl">
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-surface rounded-b-2xl" />
                     <div className="aspect-[9/19] bg-gradient-to-br from-orange-500/20 to-purple-500/20 rounded-[2.5rem] overflow-hidden">
                       {/* App screen placeholder */}
                       <div className="h-full flex flex-col p-4">
@@ -554,13 +554,13 @@ export default function TrainingPage() {
         </section>
 
         {/* Testimonials */}
-        <section className="py-20 lg:py-32 bg-zinc-950">
+        <section className="py-20 lg:py-32 bg-background">
           <div className="container">
             <div className="text-center mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 Trusted by <span className="text-orange-500">Thousands</span> of Runners
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto">
+              <p className="text-lg text-secondary max-w-2xl mx-auto">
                 See what our community has achieved with personalized training.
               </p>
             </div>
@@ -574,25 +574,25 @@ export default function TrainingPage() {
         </section>
 
         {/* Pricing */}
-        <section id="pricing" className="py-20 lg:py-32 bg-zinc-900">
+        <section id="pricing" className="py-20 lg:py-32 bg-surface-secondary">
           <div className="container">
             <div className="text-center mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mb-4">
+              <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
                 Simple, <span className="text-orange-500">Transparent</span> Pricing
               </h2>
-              <p className="text-lg text-zinc-400 max-w-2xl mx-auto mb-8">
+              <p className="text-lg text-secondary max-w-2xl mx-auto mb-8">
                 Start with a 14-day free trial. No credit card required.
               </p>
 
               {/* Billing toggle */}
-              <div className="inline-flex items-center gap-4 p-1 bg-zinc-800 rounded-full shadow-sm">
+              <div className="inline-flex items-center gap-4 p-1 bg-surface-tertiary rounded-full shadow-sm">
                 <button
                   onClick={() => setBillingPeriod('monthly')}
                   className={cn(
                     'px-6 py-2 rounded-full text-sm font-medium transition-all',
                     billingPeriod === 'monthly'
                       ? 'bg-orange-500 text-white'
-                      : 'text-zinc-400 hover:text-orange-500'
+                      : 'text-muted hover:text-brand'
                   )}
                 >
                   Monthly
@@ -603,7 +603,7 @@ export default function TrainingPage() {
                     'px-6 py-2 rounded-full text-sm font-medium transition-all',
                     billingPeriod === 'annual'
                       ? 'bg-orange-500 text-white'
-                      : 'text-zinc-400 hover:text-orange-500'
+                      : 'text-muted hover:text-brand'
                   )}
                 >
                   Annual
@@ -620,7 +620,7 @@ export default function TrainingPage() {
 
             {/* Guarantee */}
             <div className="mt-12 text-center">
-              <div className="inline-flex items-center gap-2 text-zinc-400">
+              <div className="inline-flex items-center gap-2 text-muted">
                 <Lock className="w-4 h-4" />
                 <span className="text-sm">30-day money-back guarantee. Cancel anytime.</span>
               </div>
@@ -629,7 +629,7 @@ export default function TrainingPage() {
         </section>
 
         {/* Final CTA */}
-        <section className="py-20 lg:py-32 bg-zinc-900 dark:bg-black relative overflow-hidden">
+        <section className="py-20 lg:py-32 bg-surface-secondary relative overflow-hidden">
           {/* Background pattern */}
           <div
             className="absolute inset-0 opacity-10"
@@ -642,12 +642,12 @@ export default function TrainingPage() {
           <div className="container relative">
             <div className="max-w-3xl mx-auto text-center">
               <Heart className="w-12 h-12 text-orange-500 mx-auto mb-6" />
-              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
                 Ready to Transform
                 <br />
                 Your Running?
               </h2>
-              <p className="text-lg text-zinc-400 mb-8">
+              <p className="text-lg text-secondary mb-8">
                 Join the Film My Run community and start training with purpose.
                 Your marathon goals are closer than you think.
               </p>

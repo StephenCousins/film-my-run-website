@@ -126,10 +126,10 @@ function RouteComparisonContent() {
       <div className="flex-1 flex items-center justify-center p-8">
         <div className="max-w-lg w-full">
           <div className="text-center mb-8">
-            <h2 className="text-xl font-display font-semibold text-zinc-900 dark:text-white mb-2">
+            <h2 className="text-xl font-display font-semibold text-foreground mb-2">
               Get Started
             </h2>
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-muted">
               Upload your GPX or FIT files to compare routes, analyze splits, and
               view elevation profiles.
             </p>
@@ -143,7 +143,7 @@ function RouteComparisonContent() {
   return (
     <div className="flex-1 flex flex-col lg:flex-row">
       {/* Sidebar */}
-      <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900/50">
+      <div className="w-full lg:w-80 border-b lg:border-b-0 lg:border-r border-border bg-surface-secondary">
         <RouteList />
       </div>
 
@@ -151,14 +151,14 @@ function RouteComparisonContent() {
       <div className="flex-1 flex flex-col overflow-hidden">
         {selectedRoutes.length === 0 ? (
           <div className="h-full flex items-center justify-center p-8">
-            <p className="text-zinc-600 dark:text-zinc-400">
+            <p className="text-muted">
               Select a route from the sidebar to view details
             </p>
           </div>
         ) : (
           <>
             {/* Tab bar */}
-            <div className="flex items-center border-b border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-900/50 px-4 overflow-x-auto">
+            <div className="flex items-center border-b border-border bg-surface px-4 overflow-x-auto">
               <div className="flex items-center gap-1 flex-1">
                 {TABS.map((tab) => (
                   <button
@@ -166,8 +166,8 @@ function RouteComparisonContent() {
                     onClick={() => setActiveTab(tab.id)}
                     className={`flex items-center gap-1.5 px-3 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap ${
                       activeTab === tab.id
-                        ? 'border-orange-500 text-orange-600 dark:text-orange-400'
-                        : 'border-transparent text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300'
+                        ? 'border-brand text-brand'
+                        : 'border-transparent text-muted hover:text-secondary'
                     }`}
                   >
                     <tab.icon className="w-4 h-4" />
@@ -177,7 +177,7 @@ function RouteComparisonContent() {
               </div>
               <button
                 onClick={handleExportCSV}
-                className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-zinc-500 hover:text-zinc-700 dark:hover:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 rounded-lg transition-colors ml-2"
+                className="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-muted hover:text-secondary hover:bg-surface-secondary rounded-lg transition-colors ml-2"
                 title="Export to CSV"
               >
                 <Download className="w-3.5 h-3.5" />
@@ -206,12 +206,12 @@ function RouteComparisonContent() {
               )}
 
               {activeTab === 'splits' && (
-                <div className="bg-white dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-                  <div className="p-4 border-b border-zinc-200 dark:border-zinc-700">
-                    <h3 className="font-display font-semibold text-zinc-900 dark:text-white">
+                <div className="bg-surface rounded-xl border border-border overflow-hidden">
+                  <div className="p-4 border-b border-border">
+                    <h3 className="font-display font-semibold text-foreground">
                       1km Splits
                     </h3>
-                    <p className="text-xs text-zinc-500 mt-1">
+                    <p className="text-xs text-muted mt-1">
                       Pace per kilometre{referenceRoute ? ` — gaps vs ${referenceRoute.displayName}` : ''}
                     </p>
                   </div>
@@ -225,11 +225,11 @@ function RouteComparisonContent() {
 
               {activeTab === 'gaps' && (
                 <div className="space-y-6">
-                  <div className="bg-white dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 p-4">
-                    <h3 className="font-display font-semibold text-zinc-900 dark:text-white mb-1">
+                  <div className="bg-surface rounded-xl border border-border p-4">
+                    <h3 className="font-display font-semibold text-foreground mb-1">
                       Time Gap Analysis
                     </h3>
-                    <p className="text-xs text-zinc-500 mb-4">
+                    <p className="text-xs text-muted mb-4">
                       Time difference vs reference route at each distance point.
                       {referenceRoute
                         ? ` Reference: ${referenceRoute.displayName}`
@@ -247,11 +247,11 @@ function RouteComparisonContent() {
               )}
 
               {activeTab === 'segments' && (
-                <div className="bg-white dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 p-4">
-                  <h3 className="font-display font-semibold text-zinc-900 dark:text-white mb-1">
+                <div className="bg-surface rounded-xl border border-border p-4">
+                  <h3 className="font-display font-semibold text-foreground mb-1">
                     Segment Analysis
                   </h3>
-                  <p className="text-xs text-zinc-500 mb-4">
+                  <p className="text-xs text-muted mb-4">
                     Compare specific distance ranges across routes
                   </p>
                   <SegmentAnalysis
@@ -333,8 +333,8 @@ function OverviewTab({
 
       {/* Map and Elevation */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 p-4">
-          <h3 className="font-display font-semibold text-zinc-900 dark:text-white mb-3">
+        <div className="bg-surface rounded-xl border border-border p-4">
+          <h3 className="font-display font-semibold text-foreground mb-3">
             Map View
           </h3>
           <div className="h-[350px] rounded-lg overflow-hidden">
@@ -346,8 +346,8 @@ function OverviewTab({
           </div>
         </div>
 
-        <div className="bg-white dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 p-4">
-          <h3 className="font-display font-semibold text-zinc-900 dark:text-white mb-3">
+        <div className="bg-surface rounded-xl border border-border p-4">
+          <h3 className="font-display font-semibold text-foreground mb-3">
             Elevation Profile
           </h3>
           <div className="h-[350px]">
@@ -357,34 +357,34 @@ function OverviewTab({
       </div>
 
       {/* Comparison table */}
-      <div className="bg-white dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 overflow-hidden">
-        <div className="p-4 border-b border-zinc-200 dark:border-zinc-700">
-          <h3 className="font-display font-semibold text-zinc-900 dark:text-white">
+      <div className="bg-surface rounded-xl border border-border overflow-hidden">
+        <div className="p-4 border-b border-border">
+          <h3 className="font-display font-semibold text-foreground">
             Route Comparison
           </h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-zinc-50 dark:bg-zinc-800">
+            <thead className="bg-surface-secondary">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-muted uppercase tracking-wider">
                   Route
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">
                   Distance
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">
                   Duration
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">
                   Elev. Gain
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-zinc-500 uppercase tracking-wider">
+                <th className="px-4 py-3 text-right text-xs font-medium text-muted uppercase tracking-wider">
                   Avg Pace
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-700">
+            <tbody className="divide-y divide-border">
               {selectedRoutes.map((route) => {
                 const validPaces = route.paces.filter(
                   (p): p is number => p !== null && p > 0 && p < 20
@@ -399,7 +399,7 @@ function OverviewTab({
                     key={route.id}
                     className={
                       route.id === referenceRouteId
-                        ? 'bg-orange-50 dark:bg-orange-900/10'
+                        ? 'bg-brand-muted'
                         : ''
                     }
                   >
@@ -409,26 +409,26 @@ function OverviewTab({
                           className="w-3 h-3 rounded-full flex-shrink-0"
                           style={{ backgroundColor: route.color }}
                         />
-                        <span className="text-sm font-medium text-zinc-900 dark:text-white">
+                        <span className="text-sm font-medium text-foreground">
                           {route.displayName}
                         </span>
                         {route.id === referenceRouteId && (
-                          <span className="px-1.5 py-0.5 bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 text-xs font-medium rounded">
+                          <span className="px-1.5 py-0.5 bg-brand-muted text-brand text-xs font-medium rounded">
                             REF
                           </span>
                         )}
                       </div>
                     </td>
-                    <td className="px-4 py-3 text-right text-sm text-zinc-600 dark:text-zinc-400">
+                    <td className="px-4 py-3 text-right text-sm text-muted">
                       {formatDistance(route.stats.distance)}
                     </td>
-                    <td className="px-4 py-3 text-right text-sm text-zinc-600 dark:text-zinc-400">
+                    <td className="px-4 py-3 text-right text-sm text-muted">
                       {formatDuration(route.stats.duration)}
                     </td>
-                    <td className="px-4 py-3 text-right text-sm text-zinc-600 dark:text-zinc-400">
+                    <td className="px-4 py-3 text-right text-sm text-muted">
                       {formatElevation(route.stats.elevationGain)}
                     </td>
-                    <td className="px-4 py-3 text-right text-sm text-zinc-600 dark:text-zinc-400">
+                    <td className="px-4 py-3 text-right text-sm text-muted">
                       {formatPace(avgPace)}
                     </td>
                   </tr>
@@ -456,8 +456,8 @@ function ChartsTab({
   return (
     <div className="space-y-6">
       {/* Elevation */}
-      <div className="bg-white dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 p-4">
-        <h3 className="font-display font-semibold text-zinc-900 dark:text-white mb-3">
+      <div className="bg-surface rounded-xl border border-border p-4">
+        <h3 className="font-display font-semibold text-foreground mb-3">
           Elevation Profile
         </h3>
         <div className="h-[300px]">
@@ -466,9 +466,9 @@ function ChartsTab({
       </div>
 
       {/* Metric chart with selector */}
-      <div className="bg-white dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 p-4">
+      <div className="bg-surface rounded-xl border border-border p-4">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="font-display font-semibold text-zinc-900 dark:text-white">
+          <h3 className="font-display font-semibold text-foreground">
             Metric Comparison
           </h3>
           <div className="flex gap-1">
@@ -478,8 +478,8 @@ function ChartsTab({
                 onClick={() => setSelectedMetric(opt.id)}
                 className={`px-2.5 py-1 text-xs font-medium rounded-lg transition-colors ${
                   selectedMetric === opt.id
-                    ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400'
-                    : 'text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800'
+                    ? 'bg-brand-muted text-brand'
+                    : 'text-muted hover:bg-surface-secondary'
                 }`}
               >
                 {opt.label}
@@ -506,7 +506,7 @@ function InsightsTab({ selectedRoutes }: { selectedRoutes: import('@/lib/route-c
   if (!insightRoute) {
     return (
       <div className="flex items-center justify-center py-8">
-        <p className="text-zinc-500 text-sm">Select a route to view insights</p>
+        <p className="text-muted text-sm">Select a route to view insights</p>
       </div>
     );
   }
@@ -522,8 +522,8 @@ function InsightsTab({ selectedRoutes }: { selectedRoutes: import('@/lib/route-c
               onClick={() => setSelectedInsightRouteIdx(idx)}
               className={`flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg border transition-colors ${
                 idx === selectedInsightRouteIdx
-                  ? 'border-orange-500 bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400'
-                  : 'border-zinc-200 dark:border-zinc-700 text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800'
+                  ? 'border-brand bg-brand-muted text-brand'
+                  : 'border-border text-muted hover:bg-surface-secondary'
               }`}
             >
               <div
@@ -553,17 +553,17 @@ function StatCard({
   subtitle: string;
 }) {
   return (
-    <div className="bg-white dark:bg-zinc-800/50 rounded-xl border border-zinc-200 dark:border-zinc-700 p-4">
+    <div className="bg-surface rounded-xl border border-border p-4">
       <div className="flex items-center gap-2 mb-2">
-        <Icon className="w-4 h-4 text-orange-500" />
-        <span className="text-xs text-zinc-500 uppercase tracking-wider">
+        <Icon className="w-4 h-4 text-brand" />
+        <span className="text-xs text-muted uppercase tracking-wider">
           {label}
         </span>
       </div>
-      <p className="text-xl font-display font-bold text-zinc-900 dark:text-white">
+      <p className="text-xl font-display font-bold text-foreground">
         {value}
       </p>
-      <p className="text-xs text-zinc-500 mt-1">{subtitle}</p>
+      <p className="text-xs text-muted mt-1">{subtitle}</p>
     </div>
   );
 }
@@ -574,13 +574,13 @@ export default function RouteComparisonPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen pt-20 bg-white dark:bg-zinc-950">
+      <main className="min-h-screen pt-20 bg-background">
         <div className="container py-6">
           <div className="mb-6">
-            <h1 className="text-3xl font-display font-bold text-zinc-900 dark:text-white">
+            <h1 className="text-3xl font-display font-bold text-foreground">
               Route Comparison
             </h1>
-            <p className="text-zinc-600 dark:text-zinc-400 mt-1">
+            <p className="text-muted mt-1">
               Compare your running routes, analyze splits, and track your progress
             </p>
           </div>
@@ -594,7 +594,7 @@ export default function RouteComparisonPage() {
           <LoginPrompt feature="Route Comparison" />
         ) : (
           <div className="container pb-8">
-            <div className="bg-zinc-50 dark:bg-zinc-900 rounded-xl border border-zinc-200 dark:border-zinc-700 min-h-[600px] flex flex-col">
+            <div className="bg-surface-secondary rounded-xl border border-border min-h-[600px] flex flex-col">
               <RouteComparisonProvider>
                 <RouteComparisonContent />
               </RouteComparisonProvider>

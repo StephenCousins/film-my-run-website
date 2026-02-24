@@ -98,7 +98,7 @@ export default function AboutPage() {
         {/* Hero section */}
         <section className="relative py-24 lg:py-32 overflow-hidden">
           {/* Background */}
-          <div className="absolute inset-0 bg-zinc-950">
+          <div className="absolute inset-0 bg-background">
             <Image
               src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about-hero.jpg"
               alt="Running in the mountains"
@@ -106,8 +106,8 @@ export default function AboutPage() {
               className="object-cover opacity-40"
               priority
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950 via-zinc-950/80 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[rgb(var(--color-background))] via-[rgb(var(--color-background))]/80 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--color-background))] via-transparent to-transparent" />
           </div>
 
           <div className="container relative">

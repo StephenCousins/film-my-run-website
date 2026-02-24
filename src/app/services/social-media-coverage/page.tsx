@@ -73,10 +73,10 @@ export default function SocialMediaCoveragePage() {
   return (
     <>
       <Header />
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-zinc-950 to-pink-900/20" />
+          <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-background to-pink-900/20" />
           <div className="absolute inset-0">
             <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl" />
             <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl" />
@@ -89,11 +89,11 @@ export default function SocialMediaCoveragePage() {
                 <span className="text-purple-300 text-sm font-medium">For Race Directors</span>
               </div>
 
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
                 Your Event Deserves to Go Viral
               </h1>
 
-              <p className="text-lg text-zinc-300 mb-8 max-w-2xl">
+              <p className="text-lg text-secondary mb-8 max-w-2xl">
                 Professional social media content captured and delivered while your race is still
                 happening. Reels, stories, and clips that showcase your event to thousands of
                 potential future runners.
@@ -113,7 +113,7 @@ export default function SocialMediaCoveragePage() {
         </section>
 
         {/* Stats Bar */}
-        <section className="border-y border-zinc-800 bg-zinc-900/50">
+        <section className="border-y border-border bg-surface-secondary">
           <div className="container py-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat) => {
@@ -123,8 +123,8 @@ export default function SocialMediaCoveragePage() {
                     <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/10 mb-3">
                       <Icon className="w-6 h-6 text-purple-400" />
                     </div>
-                    <p className="font-display text-3xl font-bold text-white">{stat.value}</p>
-                    <p className="text-zinc-400 text-sm">{stat.label}</p>
+                    <p className="font-display text-3xl font-bold text-foreground">{stat.value}</p>
+                    <p className="text-secondary text-sm">{stat.label}</p>
                   </div>
                 );
               })}
@@ -136,10 +136,10 @@ export default function SocialMediaCoveragePage() {
         <section className="py-16 lg:py-24">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                 Social Media Sells Out Races
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-secondary">
                 Runners scroll Instagram looking for their next adventure. When your event shows
                 up with incredible content, you're not just sharing memories—you're filling next year's start line.
               </p>
@@ -151,7 +151,7 @@ export default function SocialMediaCoveragePage() {
                   <p className="font-display text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
                     {item.stat}
                   </p>
-                  <p className="text-zinc-400 text-sm">{item.label}</p>
+                  <p className="text-secondary text-sm">{item.label}</p>
                 </div>
               ))}
             </div>
@@ -159,13 +159,13 @@ export default function SocialMediaCoveragePage() {
         </section>
 
         {/* Content Types */}
-        <section className="py-16 lg:py-24 bg-zinc-900/30">
+        <section className="py-16 lg:py-24 bg-surface-secondary">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                 Content That Captures the Moment
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-secondary">
                 From start gun to final finisher, I create scroll-stopping content that
                 shows the world what makes your event special.
               </p>
@@ -177,15 +177,15 @@ export default function SocialMediaCoveragePage() {
                 return (
                   <div
                     key={type.title}
-                    className="bg-zinc-900 rounded-xl p-6 border border-zinc-800 hover:border-purple-500/50 transition-all"
+                    className="bg-surface rounded-xl p-6 border border-border hover:border-purple-500/50 transition-all"
                   >
                     <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center mb-4">
                       <Icon className="w-6 h-6 text-purple-400" />
                     </div>
-                    <h3 className="font-display font-semibold text-white mb-2">
+                    <h3 className="font-display font-semibold text-foreground mb-2">
                       {type.title}
                     </h3>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-secondary text-sm">
                       {type.description}
                     </p>
                   </div>
@@ -200,10 +200,10 @@ export default function SocialMediaCoveragePage() {
           <div className="container">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+                <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                   Same-Day Content Delivery
                 </h2>
-                <p className="text-zinc-400 mb-8">
+                <p className="text-secondary mb-8">
                   The best time to post race content is while the excitement is still fresh.
                   I edit on-site and deliver reels before your runners have even uploaded
                   their own finish line selfies.
@@ -213,14 +213,14 @@ export default function SocialMediaCoveragePage() {
                   {deliverables.map((item) => (
                     <div key={item} className="flex items-start gap-3">
                       <CheckCircle className="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5" />
-                      <span className="text-zinc-300 text-sm">{item}</span>
+                      <span className="text-secondary text-sm">{item}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800">
-                <h3 className="font-display text-xl font-semibold text-white mb-6">
+              <div className="bg-surface rounded-2xl p-8 border border-border">
+                <h3 className="font-display text-xl font-semibold text-foreground mb-6">
                   The Timeline
                 </h3>
                 <div className="space-y-6">
@@ -235,8 +235,8 @@ export default function SocialMediaCoveragePage() {
                         <span className="text-purple-400 text-xs font-semibold uppercase">{item.time}</span>
                       </div>
                       <div>
-                        <h4 className="font-semibold text-white">{item.title}</h4>
-                        <p className="text-zinc-400 text-sm">{item.desc}</p>
+                        <h4 className="font-semibold text-foreground">{item.title}</h4>
+                        <p className="text-muted text-sm">{item.desc}</p>
                       </div>
                     </div>
                   ))}
@@ -247,14 +247,14 @@ export default function SocialMediaCoveragePage() {
         </section>
 
         {/* CTA */}
-        <section className="py-16 lg:py-24 border-t border-zinc-800">
+        <section className="py-16 lg:py-24 border-t border-border">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
               <Star className="w-12 h-12 text-purple-400 mx-auto mb-6" />
-              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                 Make Your Event Unmissable
               </h2>
-              <p className="text-zinc-400 mb-8 max-w-xl mx-auto">
+              <p className="text-muted mb-8 max-w-xl mx-auto">
                 Let's create content that has runners hitting the register button.
                 Get in touch to discuss your event.
               </p>
@@ -268,7 +268,7 @@ export default function SocialMediaCoveragePage() {
                 </Link>
                 <Link
                   href="/services"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-800 text-white font-semibold rounded-full hover:bg-zinc-700 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-surface-secondary text-foreground font-semibold rounded-full hover:bg-surface-tertiary transition-colors"
                 >
                   View All Services
                 </Link>

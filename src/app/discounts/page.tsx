@@ -73,7 +73,7 @@ function DiscountCard({ deal, index }: { deal: typeof discounts[0]; index: numbe
   const isEven = index % 2 === 0;
 
   return (
-    <div className={`grid lg:grid-cols-2 gap-8 lg:gap-16 items-center py-16 lg:py-24 ${index > 0 ? 'border-t border-zinc-800' : ''}`}>
+    <div className={`grid lg:grid-cols-2 gap-8 lg:gap-16 items-center py-16 lg:py-24 ${index > 0 ? 'border-t border-border' : ''}`}>
       {/* Image */}
       <div className={`relative aspect-[4/3] rounded-2xl overflow-hidden ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
         <Image
@@ -84,7 +84,7 @@ function DiscountCard({ deal, index }: { deal: typeof discounts[0]; index: numbe
         />
         {/* Category badge */}
         <div className="absolute top-4 left-4">
-          <span className="px-3 py-1.5 bg-orange-500 text-white text-xs font-semibold rounded-full">
+          <span className="px-3 py-1.5 bg-brand text-white text-xs font-semibold rounded-full">
             {deal.category}
           </span>
         </div>
@@ -93,34 +93,34 @@ function DiscountCard({ deal, index }: { deal: typeof discounts[0]; index: numbe
       {/* Content */}
       <div className={isEven ? 'lg:order-1' : 'lg:order-2'}>
         {/* Discount badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-orange-500/10 rounded-full border border-orange-500/20 mb-4">
-          <Percent className="w-4 h-4 text-orange-500" />
-          <span className="text-orange-500 text-sm font-bold">{deal.discount}</span>
+        <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand/10 rounded-full border border-brand/20 mb-4">
+          <Percent className="w-4 h-4 text-brand" />
+          <span className="text-brand text-sm font-bold">{deal.discount}</span>
         </div>
 
         {/* Brand name */}
-        <h2 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
+        <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4">
           {deal.brand}
         </h2>
 
         {/* Description */}
-        <p className="text-zinc-400 leading-relaxed mb-6">
+        <p className="text-secondary leading-relaxed mb-6">
           {deal.description}
         </p>
 
         {/* Code box (if applicable) */}
         {deal.code && (
-          <div className="flex items-center gap-3 p-4 bg-zinc-800/50 rounded-xl border border-zinc-700 mb-6">
+          <div className="flex items-center gap-3 p-4 bg-surface-secondary rounded-xl border border-border mb-6">
             <div className="flex-1">
-              <span className="text-xs text-zinc-500 uppercase tracking-wider block mb-1">Discount Code</span>
-              <code className="text-white font-mono text-xl font-bold">{deal.code}</code>
+              <span className="text-xs text-muted uppercase tracking-wider block mb-1">Discount Code</span>
+              <code className="text-foreground font-mono text-xl font-bold">{deal.code}</code>
             </div>
             <button
               onClick={copyCode}
               className={`p-3 rounded-lg transition-all ${
                 copied
                   ? 'bg-green-500 text-white'
-                  : 'bg-zinc-700 text-zinc-300 hover:bg-orange-500 hover:text-white'
+                  : 'bg-surface-tertiary text-secondary hover:bg-brand hover:text-white'
               }`}
               title="Copy code"
             >
@@ -134,7 +134,7 @@ function DiscountCard({ deal, index }: { deal: typeof discounts[0]; index: numbe
           href={deal.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-all hover:scale-105"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-all hover:scale-105"
         >
           {deal.code ? 'Shop Now' : 'Get Your Discount'}
           <ExternalLink className="w-4 h-4" />
@@ -152,7 +152,7 @@ export default function DiscountsPage() {
   return (
     <>
       <Header />
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero Section */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           {/* Background image */}
@@ -163,14 +163,14 @@ export default function DiscountsPage() {
               fill
               className="object-cover object-bottom"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/70 to-zinc-950" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/70 to-[rgb(var(--color-background))]" />
           </div>
 
           <div className="container relative">
             <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
-                <Tag className="w-4 h-4 text-orange-500" />
-                <span className="text-orange-400 text-sm font-medium">Exclusive Partner Deals</span>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-brand/20 backdrop-blur-sm rounded-full border border-brand/30 mb-6">
+                <Tag className="w-4 h-4 text-brand" />
+                <span className="text-brand text-sm font-medium">Exclusive Partner Deals</span>
               </div>
 
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
@@ -195,19 +195,19 @@ export default function DiscountsPage() {
         </section>
 
         {/* Partner CTA */}
-        <section className="py-16 lg:py-24 border-t border-zinc-800">
+        <section className="py-16 lg:py-24 border-t border-border">
           <div className="container">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                 Want to Partner with Film My Run?
               </h2>
-              <p className="text-zinc-400 mb-8">
+              <p className="text-secondary mb-8">
                 If you have a product or service that would benefit the running community,
                 I'd love to hear from you.
               </p>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white text-zinc-900 font-semibold rounded-full hover:bg-orange-500 hover:text-white transition-all"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-surface-tertiary text-foreground font-semibold rounded-full hover:bg-brand hover:text-white transition-all"
               >
                 Get in Touch
               </Link>

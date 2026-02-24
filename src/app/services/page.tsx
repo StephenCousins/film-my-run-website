@@ -139,8 +139,8 @@ export default function ServicesPage() {
               <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/services-hero.webm" type="video/webm" />
             </video>
             {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-950/60 to-zinc-950" />
-            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/50 via-transparent to-zinc-950/50" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[rgb(var(--color-background))]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50" />
           </div>
 
           <div className="container relative">
@@ -227,7 +227,7 @@ export default function ServicesPage() {
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/70 via-50% to-zinc-950 to-85%" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 via-50% to-[rgb(var(--color-background))] to-85%" />
           </div>
 
           <div className="container relative">

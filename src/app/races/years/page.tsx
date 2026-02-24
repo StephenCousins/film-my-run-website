@@ -79,8 +79,8 @@ function StatCard({ title, value, icon, onClick, color = 'orange', active }: Sta
     <button
       onClick={onClick}
       className={cn(
-        'bg-zinc-900 rounded-2xl p-6 border transition-all text-left w-full group',
-        active ? 'border-orange-500' : 'border-zinc-800 hover:border-orange-500/50'
+        'bg-surface rounded-2xl p-6 border transition-all text-left w-full group',
+        active ? 'border-orange-500' : 'border-border hover:border-orange-500/50'
       )}
     >
       <div className="flex items-start justify-between mb-4">
@@ -96,12 +96,12 @@ function StatCard({ title, value, icon, onClick, color = 'orange', active }: Sta
       <div
         className={cn(
           'text-3xl font-bold mb-1 transition-colors',
-          active ? 'text-orange-500' : 'text-white group-hover:text-orange-500'
+          active ? 'text-orange-500' : 'text-foreground group-hover:text-orange-500'
         )}
       >
         {value}
       </div>
-      <div className="text-sm text-zinc-400">{title}</div>
+      <div className="text-sm text-muted">{title}</div>
     </button>
   );
 }
@@ -120,10 +120,10 @@ function SubStatCard({ title, value, onClick }: SubStatCardProps) {
   return (
     <button
       onClick={onClick}
-      className="bg-zinc-900/50 rounded-xl p-4 border border-zinc-800 hover:border-orange-500/50 transition-all text-left w-full"
+      className="bg-surface-secondary rounded-xl p-4 border border-border hover:border-orange-500/50 transition-all text-left w-full"
     >
-      <div className="text-2xl font-bold text-white mb-1">{value}</div>
-      <div className="text-xs text-zinc-400">{title}</div>
+      <div className="text-2xl font-bold text-foreground mb-1">{value}</div>
+      <div className="text-xs text-muted">{title}</div>
     </button>
   );
 }
@@ -140,14 +140,14 @@ function YearCard({ stats }: YearCardProps) {
   return (
     <Link
       href={`/races?year=${stats.year}`}
-      className="bg-zinc-900 rounded-2xl border border-zinc-800 hover:border-orange-500/50 transition-all overflow-hidden group"
+      className="bg-surface rounded-2xl border border-border hover:border-orange-500/50 transition-all overflow-hidden group"
     >
       {/* Header */}
-      <div className="p-6 border-b border-zinc-800 flex items-center justify-between">
-        <div className="text-3xl font-bold text-white group-hover:text-orange-500 transition-colors">
+      <div className="p-6 border-b border-border flex items-center justify-between">
+        <div className="text-3xl font-bold text-foreground group-hover:text-orange-500 transition-colors">
           {stats.year}
         </div>
-        <div className="text-sm text-zinc-400">
+        <div className="text-sm text-muted">
           {stats.raceCount} race{stats.raceCount !== 1 ? 's' : ''}
         </div>
       </div>
@@ -156,65 +156,65 @@ function YearCard({ stats }: YearCardProps) {
       <div className="p-6 space-y-4">
         {/* Longest Distance */}
         <div>
-          <div className="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+          <div className="flex items-center gap-2 text-xs text-muted mb-1">
             <Ruler className="w-3 h-3" />
             Longest Distance
           </div>
-          <div className="text-lg font-medium text-white">
+          <div className="text-lg font-medium text-foreground">
             {stats.longestRace?.distanceKm
               ? `${stats.longestRace.distanceKm.toFixed(1)} km`
               : '—'}
           </div>
           {stats.longestRace && (
-            <div className="text-xs text-zinc-500 truncate">{stats.longestRace.event}</div>
+            <div className="text-xs text-muted truncate">{stats.longestRace.event}</div>
           )}
         </div>
 
         {/* Fastest Time */}
         <div>
-          <div className="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+          <div className="flex items-center gap-2 text-xs text-muted mb-1">
             <Timer className="w-3 h-3" />
             Fastest Time
           </div>
-          <div className="text-lg font-medium text-white">
+          <div className="text-lg font-medium text-foreground">
             {stats.fastestRace?.timeHms || '—'}
           </div>
           {stats.fastestRace && (
-            <div className="text-xs text-zinc-500 truncate">{stats.fastestRace.event}</div>
+            <div className="text-xs text-muted truncate">{stats.fastestRace.event}</div>
           )}
         </div>
 
         {/* Most Elevation */}
         <div>
-          <div className="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+          <div className="flex items-center gap-2 text-xs text-muted mb-1">
             <Mountain className="w-3 h-3" />
             Most Elevation
           </div>
-          <div className="text-lg font-medium text-white">
+          <div className="text-lg font-medium text-foreground">
             {stats.biggestElevRace?.elev ? `${stats.biggestElevRace.elev} m` : '—'}
           </div>
           {stats.biggestElevRace?.elev && (
-            <div className="text-xs text-zinc-500 truncate">{stats.biggestElevRace.event}</div>
+            <div className="text-xs text-muted truncate">{stats.biggestElevRace.event}</div>
           )}
         </div>
 
         {/* Breakdown */}
         <div>
-          <div className="flex items-center gap-2 text-xs text-zinc-500 mb-1">
+          <div className="flex items-center gap-2 text-xs text-muted mb-1">
             <MapPin className="w-3 h-3" />
             Breakdown
           </div>
           <div className="flex items-center gap-3">
             <span className="text-sm">
               <span className="text-blue-400 font-medium">{stats.marathonCount}</span>
-              <span className="text-zinc-500 ml-1">
+              <span className="text-muted ml-1">
                 Marathon{stats.marathonCount !== 1 ? 's' : ''}
               </span>
             </span>
-            <span className="text-zinc-600">•</span>
+            <span className="text-muted">•</span>
             <span className="text-sm">
               <span className="text-orange-400 font-medium">{stats.ultraCount}</span>
-              <span className="text-zinc-500 ml-1">Ultra{stats.ultraCount !== 1 ? 's' : ''}</span>
+              <span className="text-muted ml-1">Ultra{stats.ultraCount !== 1 ? 's' : ''}</span>
             </span>
           </div>
         </div>
@@ -338,11 +338,11 @@ export default function YearsPage() {
     return (
       <>
         <Header />
-        <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+        <main className="pt-20 lg:pt-24 bg-background min-h-screen">
           <div className="container py-20">
             <div className="flex items-center justify-center gap-3">
               <Loader2 className="w-6 h-6 text-orange-500 animate-spin" />
-              <span className="text-zinc-400">Loading race data...</span>
+              <span className="text-secondary">Loading race data...</span>
             </div>
           </div>
         </main>
@@ -355,7 +355,7 @@ export default function YearsPage() {
     return (
       <>
         <Header />
-        <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+        <main className="pt-20 lg:pt-24 bg-background min-h-screen">
           <div className="container py-20">
             <div className="text-center">
               <p className="text-red-400 mb-4">Error loading data: {error}</p>
@@ -377,14 +377,14 @@ export default function YearsPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero */}
         <section className="py-12 lg:py-16">
           <div className="container">
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-4">
               Racing Year by Year
             </h1>
-            <p className="text-lg text-zinc-400 max-w-2xl">
+            <p className="text-lg text-secondary max-w-2xl">
               Explore racing history organized by year. Click any year card to view all races from
               that year.
             </p>

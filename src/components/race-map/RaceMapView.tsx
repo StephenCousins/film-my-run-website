@@ -22,9 +22,10 @@ interface RaceMapViewProps {
   routes: Routes;
   selectedRace: Race | null;
   onRaceSelect: (race: Race | null) => void;
+  isDark?: boolean;
 }
 
-export function RaceMapView({ races, routes, selectedRace, onRaceSelect }: RaceMapViewProps) {
+export function RaceMapView({ races, routes, selectedRace, onRaceSelect, isDark = true }: RaceMapViewProps) {
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: config.googleMapsApiKey,
@@ -111,10 +112,10 @@ export function RaceMapView({ races, routes, selectedRace, onRaceSelect }: RaceM
 
   if (!isLoaded) {
     return (
-      <div className="flex items-center justify-center h-full bg-zinc-900">
+      <div className="flex items-center justify-center h-full bg-surface">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-          <p className="text-zinc-400">Loading map...</p>
+          <div className="w-12 h-12 border-4 border-brand border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-muted">Loading map...</p>
         </div>
       </div>
     );
@@ -131,14 +132,14 @@ export function RaceMapView({ races, routes, selectedRace, onRaceSelect }: RaceM
         streetViewControl: false,
         mapTypeControl: true,
         fullscreenControl: true,
-        styles: darkMapStyle,
+        styles: isDark ? darkMapStyle : [],
       }}
     >
       {/* Reset zoom button */}
       {selectedRace && (
         <button
           onClick={resetZoom}
-          className="absolute top-3 right-3 px-4 py-2 bg-zinc-800 border-2 border-orange-500 rounded-lg text-orange-500 font-semibold text-sm hover:bg-orange-500 hover:text-white transition-colors z-10"
+          className="absolute top-3 right-3 px-4 py-2 bg-white dark:bg-zinc-800 border-2 border-brand rounded-lg text-brand font-semibold text-sm hover:bg-brand hover:text-white transition-colors z-10 shadow-md"
         >
           🗺️ View All Routes
         </button>

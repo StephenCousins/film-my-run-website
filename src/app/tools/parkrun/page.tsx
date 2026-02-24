@@ -105,7 +105,7 @@ function Section({
           <div className="p-2 rounded-xl bg-green-500/10">
             <Icon className="w-5 h-5 text-green-500" />
           </div>
-          <h2 className="font-display text-2xl font-bold text-white">{title}</h2>
+          <h2 className="font-display text-2xl font-bold text-foreground">{title}</h2>
         </div>
         {children}
       </div>
@@ -146,11 +146,11 @@ export default function ParkrunPage() {
     return (
       <>
         <Header />
-        <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
+        <main className="pt-20 lg:pt-24 min-h-screen bg-background">
           <div className="container py-20">
             <div className="flex flex-col items-center justify-center">
               <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mb-4" />
-              <p className="text-zinc-400">Loading your parkrun stats...</p>
+              <p className="text-secondary">Loading your parkrun stats...</p>
             </div>
           </div>
         </main>
@@ -164,14 +164,14 @@ export default function ParkrunPage() {
     return (
       <>
         <Header />
-        <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
+        <main className="pt-20 lg:pt-24 min-h-screen bg-background">
           <div className="container py-20">
             <div className="flex flex-col items-center justify-center text-center max-w-md mx-auto">
               <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center mb-4">
                 <AlertCircle className="w-8 h-8 text-red-500" />
               </div>
-              <h2 className="text-xl font-bold text-white mb-2">Unable to load data</h2>
-              <p className="text-zinc-400 mb-6">{error || 'Something went wrong'}</p>
+              <h2 className="text-xl font-bold text-foreground mb-2">Unable to load data</h2>
+              <p className="text-secondary mb-6">{error || 'Something went wrong'}</p>
               <button
                 onClick={() => window.location.reload()}
                 className="px-6 py-3 bg-green-500 text-white font-medium rounded-xl hover:bg-green-600 transition-colors"
@@ -200,7 +200,7 @@ export default function ParkrunPage() {
     <>
       <Header />
 
-      <main className="pt-20 lg:pt-24 min-h-screen bg-zinc-950">
+      <main className="pt-20 lg:pt-24 min-h-screen bg-background">
         {/* ==================== HERO SECTION ==================== */}
         <section className="relative py-16 lg:py-24 overflow-hidden">
           {/* Video background */}
@@ -216,8 +216,8 @@ export default function ParkrunPage() {
               <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/parkrun-hero.webm" type="video/webm" />
             </video>
             {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/70 via-zinc-950/60 to-zinc-950" />
-            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/50 via-transparent to-zinc-950/50" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[rgb(var(--color-background))]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50" />
           </div>
 
           <div className="container relative">
@@ -271,9 +271,9 @@ export default function ParkrunPage() {
             {/* Sub stats */}
             <div className="flex items-center justify-center gap-8 flex-wrap">
               <SubStat label="First Run" value={data.metadata.firstParkrunDate} />
-              <div className="w-px h-8 bg-zinc-700" />
+              <div className="w-px h-8 bg-border" />
               <SubStat label="Last Run" value={data.metadata.lastParkrunDate} />
-              <div className="w-px h-8 bg-zinc-700 hidden sm:block" />
+              <div className="w-px h-8 bg-border hidden sm:block" />
               <SubStat label="PB Date" value={data.metadata.personalBestDate} />
             </div>
           </div>
@@ -281,19 +281,19 @@ export default function ParkrunPage() {
 
         {/* ==================== ALL RUNS ==================== */}
         <Section id="recent" title="All Runs" icon={Clock}>
-          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
-            <div className="max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+          <div className="bg-surface rounded-2xl border border-border overflow-hidden">
+            <div className="max-h-[500px] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-400 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
               <RecentRunsTable runs={data.parkruns} />
             </div>
-            <div className="px-4 py-3 bg-zinc-800/50 border-t border-zinc-800 text-center">
-              <span className="text-sm text-zinc-400">{data.parkruns.length} total runs</span>
+            <div className="px-4 py-3 bg-surface-tertiary border-t border-border text-center">
+              <span className="text-sm text-secondary">{data.parkruns.length} total runs</span>
             </div>
           </div>
         </Section>
 
         {/* ==================== PROGRESS CHART ==================== */}
-        <Section id="progress" title="Performance Over Time" icon={TrendingUp} className="bg-zinc-900/50">
-          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+        <Section id="progress" title="Performance Over Time" icon={TrendingUp} className="bg-surface-secondary">
+          <div className="bg-surface rounded-2xl border border-border p-6">
             <PaceChart
               parkruns={data.parkruns}
               personalBest={data.metadata.personalBest}
@@ -308,11 +308,11 @@ export default function ParkrunPage() {
         />
 
         {/* ==================== VENUES ==================== */}
-        <Section id="venues" title="Venues Visited" icon={MapPin} className="bg-zinc-900/50">
+        <Section id="venues" title="Venues Visited" icon={MapPin} className="bg-surface-secondary">
           {/* Stats header */}
           <div className="flex items-center justify-between mb-6">
-            <p className="text-zinc-400">
-              <span className="text-2xl font-bold text-white">{data.metadata.uniqueVenues}</span>
+            <p className="text-secondary">
+              <span className="text-2xl font-bold text-foreground">{data.metadata.uniqueVenues}</span>
               {' '}different parkruns visited
             </p>
           </div>
@@ -325,7 +325,7 @@ export default function ParkrunPage() {
           )}
 
           {/* Scrolling venue cards */}
-          <div className="flex gap-3 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
+          <div className="flex gap-3 overflow-x-auto pb-4 -mx-4 px-4 scrollbar-thin scrollbar-thumb-zinc-400 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent">
             {data.venues.map((venue, index) => (
               <VenueCardCompact
                 key={venue.event}
@@ -339,28 +339,28 @@ export default function ParkrunPage() {
 
         {/* ==================== AGE CATEGORY ==================== */}
         <Section id="positions" title="Age Category Positions" icon={Users}>
-          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
+          <div className="bg-surface rounded-2xl border border-border p-6">
             <AgeCategoryChart stats={data.ageCategoryStats} />
           </div>
         </Section>
 
         {/* ==================== ACHIEVEMENTS ==================== */}
-        <Section id="achievements" title="Achievements" icon={Award} className="bg-zinc-900/50">
+        <Section id="achievements" title="Achievements" icon={Award} className="bg-surface-secondary">
           <div className="grid lg:grid-cols-3 gap-8">
             {/* PB Progression */}
             <div className="lg:col-span-1">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Trophy className="w-5 h-5 text-amber-500" />
                 PB Timeline
               </h3>
-              <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent pr-2">
+              <div className="max-h-[300px] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-400 dark:scrollbar-thumb-zinc-700 scrollbar-track-transparent pr-2">
                 <PBProgression pbs={[...data.pbProgression].reverse()} />
               </div>
             </div>
 
             {/* Streaks */}
             <div className="lg:col-span-1">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Flame className="w-5 h-5 text-orange-500" />
                 Streaks
               </h3>
@@ -369,19 +369,19 @@ export default function ParkrunPage() {
 
             {/* Quick achievements summary */}
             <div className="lg:col-span-1">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+              <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-purple-500" />
                 Quick Stats
               </h3>
               <div className="space-y-3">
-                <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
-                  <p className="text-zinc-400 text-sm">Achievements Earned</p>
-                  <p className="text-2xl font-bold text-white">
+                <div className="bg-surface rounded-xl p-4 border border-border">
+                  <p className="text-secondary text-sm">Achievements Earned</p>
+                  <p className="text-2xl font-bold text-foreground">
                     {data.achievements.filter(a => a.earned).length} / {data.achievements.length}
                   </p>
                 </div>
-                <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
-                  <p className="text-zinc-400 text-sm">PBs Set</p>
+                <div className="bg-surface rounded-xl p-4 border border-border">
+                  <p className="text-secondary text-sm">PBs Set</p>
                   <p className="text-2xl font-bold text-green-400">{data.pbProgression.length}</p>
                 </div>
               </div>
@@ -390,7 +390,7 @@ export default function ParkrunPage() {
 
           {/* Achievement badges grid */}
           <div className="mt-8">
-            <h3 className="text-lg font-semibold text-white mb-4">All Achievements</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-4">All Achievements</h3>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
               {data.achievements.map((achievement, index) => (
                 <AchievementBadge
@@ -416,7 +416,7 @@ export default function ParkrunPage() {
         </Section>
 
         {/* ==================== UK RANKINGS ==================== */}
-        <Section id="rankings" title="UK parkrun Rankings" icon={Globe} className="bg-zinc-900/50">
+        <Section id="rankings" title="UK parkrun Rankings" icon={Globe} className="bg-surface-secondary">
           <RankingsSearch />
         </Section>
       </main>

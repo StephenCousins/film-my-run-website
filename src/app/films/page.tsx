@@ -91,7 +91,7 @@ function VideoModal({ isOpen, onClose, film }: VideoModalProps) {
         <div className="mt-4 text-white">
           <h3 className="font-display text-xl font-bold">{film.title}</h3>
           {film.subtitle && (
-            <p className="text-zinc-300 italic">{film.subtitle}</p>
+            <p className="text-secondary italic">{film.subtitle}</p>
           )}
         </div>
       </div>
@@ -146,7 +146,7 @@ function FilmCard({ film, onPlay, featured = false }: FilmCardProps) {
       {/* Content */}
       <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6">
         {/* Year & Location */}
-        <div className="flex items-center gap-3 text-xs text-zinc-400 mb-2">
+        <div className="flex items-center gap-3 text-xs text-muted mb-2">
           {film.year && (
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
@@ -169,7 +169,7 @@ function FilmCard({ film, onPlay, featured = false }: FilmCardProps) {
 
         {/* Subtitle */}
         {film.subtitle && (
-          <p className="text-zinc-300 text-sm italic mb-2">{film.subtitle}</p>
+          <p className="text-secondary text-sm italic mb-2">{film.subtitle}</p>
         )}
 
         {/* Description */}

@@ -179,12 +179,12 @@ function ShareButtons({ url, title }: { url: string; title: string }) {
 
   return (
     <div className="flex items-center gap-2">
-      <span className="text-sm text-zinc-500 dark:text-zinc-400 mr-2">Share:</span>
+      <span className="text-sm text-muted mr-2">Share:</span>
       <a
         href={`https://twitter.com/intent/tweet?url=${encodedUrl}&text=${encodedTitle}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-full bg-zinc-800 hover:bg-blue-500 hover:text-white transition-colors"
+        className="p-2 rounded-full bg-surface-tertiary hover:bg-blue-500 hover:text-white transition-colors"
         aria-label="Share on Twitter"
       >
         <Twitter className="w-4 h-4" />
@@ -193,7 +193,7 @@ function ShareButtons({ url, title }: { url: string; title: string }) {
         href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-full bg-zinc-800 hover:bg-blue-600 hover:text-white transition-colors"
+        className="p-2 rounded-full bg-surface-tertiary hover:bg-blue-600 hover:text-white transition-colors"
         aria-label="Share on Facebook"
       >
         <Facebook className="w-4 h-4" />
@@ -202,7 +202,7 @@ function ShareButtons({ url, title }: { url: string; title: string }) {
         href={`https://www.linkedin.com/shareArticle?mini=true&url=${encodedUrl}&title=${encodedTitle}`}
         target="_blank"
         rel="noopener noreferrer"
-        className="p-2 rounded-full bg-zinc-800 hover:bg-blue-700 hover:text-white transition-colors"
+        className="p-2 rounded-full bg-surface-tertiary hover:bg-blue-700 hover:text-white transition-colors"
         aria-label="Share on LinkedIn"
       >
         <Linkedin className="w-4 h-4" />
@@ -290,7 +290,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         {/* Hero */}
         <section className="relative">
           {/* Featured image */}
-          <div className="relative h-[40vh] lg:h-[60vh] bg-zinc-900">
+          <div className="relative h-[40vh] lg:h-[60vh] bg-surface">
             {post.featuredImage ? (
               <Image
                 src={post.featuredImage}
@@ -304,21 +304,21 @@ export default async function BlogPostPage({ params }: PageProps) {
                 <span className="text-9xl opacity-20">🏃</span>
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[rgb(var(--color-background))] via-black/50 to-black/70" />
           </div>
 
           {/* Title overlay */}
           <div className="container relative -mt-32 lg:-mt-48 z-10">
             <div className="max-w-4xl">
               {/* Breadcrumb */}
-              <nav className="flex items-center gap-2 text-sm text-zinc-400 mb-4">
-                <Link href="/blog" className="hover:text-orange-500 transition-colors">
+              <nav className="flex items-center gap-2 text-sm text-muted mb-4">
+                <Link href="/blog" className="hover:text-brand transition-colors">
                   Blog
                 </Link>
                 <ChevronRight className="w-4 h-4" />
                 <Link
                   href={`/blog/category/${post.category.slug}`}
-                  className="hover:text-orange-500 transition-colors"
+                  className="hover:text-brand transition-colors"
                 >
                   {post.category.name}
                 </Link>
@@ -333,14 +333,14 @@ export default async function BlogPostPage({ params }: PageProps) {
               </Link>
 
               {/* Title */}
-              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6 leading-tight">
+              <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">
                 {post.title}
               </h1>
 
               {/* Meta */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-zinc-400">
+              <div className="flex flex-wrap items-center gap-4 text-sm text-muted">
                 <div className="flex items-center gap-2">
-                  <div className="w-10 h-10 rounded-full bg-zinc-700 overflow-hidden">
+                  <div className="w-10 h-10 rounded-full bg-surface-tertiary overflow-hidden">
                     {post.author.avatar && (
                       <Image
                         src={post.author.avatar}
@@ -371,7 +371,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         </section>
 
         {/* Content */}
-        <section className="py-12 lg:py-16 bg-zinc-950">
+        <section className="py-12 lg:py-16 bg-background">
           <div className="container">
             <div className="grid lg:grid-cols-12 gap-12">
               {/* Main content */}
@@ -382,24 +382,24 @@ export default async function BlogPostPage({ params }: PageProps) {
                     prose-headings:font-display prose-headings:font-bold
                     prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-6
                     prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-4
-                    prose-p:text-zinc-700 dark:prose-p:text-zinc-300 prose-p:leading-relaxed
+                    prose-p:text-secondary prose-p:leading-relaxed
                     prose-a:text-orange-500 prose-a:no-underline hover:prose-a:underline
-                    prose-blockquote:border-l-orange-500 prose-blockquote:bg-zinc-900 prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:rounded-r-xl
-                    prose-ul:space-y-2 prose-li:text-zinc-700 dark:prose-li:text-zinc-300
-                    prose-strong:text-zinc-900 dark:prose-strong:text-white
+                    prose-blockquote:border-l-orange-500 prose-blockquote:bg-surface prose-blockquote:py-1 prose-blockquote:px-6 prose-blockquote:rounded-r-xl
+                    prose-ul:space-y-2 prose-li:text-secondary
+                    prose-strong:text-foreground
                     prose-img:rounded-xl"
                   dangerouslySetInnerHTML={{ __html: post.content }}
                 />
 
                 {/* Tags */}
-                <div className="mt-12 pt-8 border-t border-zinc-800">
+                <div className="mt-12 pt-8 border-t border-border">
                   <div className="flex flex-wrap items-center gap-2">
-                    <Tag className="w-4 h-4 text-zinc-400" />
+                    <Tag className="w-4 h-4 text-muted" />
                     {post.tags.map((tag) => (
                       <Link
                         key={tag.slug}
                         href={`/blog/tag/${tag.slug}`}
-                        className="px-3 py-1 bg-zinc-800 text-zinc-300 text-sm rounded-full hover:bg-orange-500/10 hover:text-orange-500 transition-colors"
+                        className="px-3 py-1 bg-surface-tertiary text-secondary text-sm rounded-full hover:bg-brand/10 hover:text-brand transition-colors"
                       >
                         {tag.name}
                       </Link>
@@ -408,14 +408,14 @@ export default async function BlogPostPage({ params }: PageProps) {
                 </div>
 
                 {/* Share */}
-                <div className="mt-8 pt-8 border-t border-zinc-800">
+                <div className="mt-8 pt-8 border-t border-border">
                   <ShareButtons url={postUrl} title={post.title} />
                 </div>
 
                 {/* Author bio */}
-                <div className="mt-12 p-6 bg-zinc-900 rounded-2xl">
+                <div className="mt-12 p-6 bg-surface rounded-2xl">
                   <div className="flex items-start gap-4">
-                    <div className="w-16 h-16 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full bg-surface-tertiary overflow-hidden flex-shrink-0">
                       {post.author.avatar && (
                         <Image
                           src={post.author.avatar}
@@ -427,10 +427,10 @@ export default async function BlogPostPage({ params }: PageProps) {
                       )}
                     </div>
                     <div>
-                      <h3 className="font-display font-semibold text-white mb-1">
+                      <h3 className="font-display font-semibold text-foreground mb-1">
                         {post.author.name}
                       </h3>
-                      <p className="text-zinc-400 text-sm">
+                      <p className="text-muted text-sm">
                         {post.author.bio}
                       </p>
                     </div>
@@ -444,7 +444,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   {/* Back to blog */}
                   <Link
                     href="/blog"
-                    className="inline-flex items-center gap-2 text-zinc-400 hover:text-orange-500 transition-colors"
+                    className="inline-flex items-center gap-2 text-muted hover:text-brand transition-colors"
                   >
                     <ArrowLeft className="w-4 h-4" />
                     Back to Blog
@@ -452,7 +452,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
                   {/* Related posts */}
                   <div>
-                    <h3 className="font-display text-lg font-semibold text-white mb-4">
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-4">
                       Related Posts
                     </h3>
                     <div className="space-y-4">
@@ -462,7 +462,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                           href={`/blog/${relatedPost.slug}`}
                           className="group flex gap-4"
                         >
-                          <div className="w-20 h-20 rounded-lg bg-zinc-800 overflow-hidden flex-shrink-0">
+                          <div className="w-20 h-20 rounded-lg bg-surface-tertiary overflow-hidden flex-shrink-0">
                             {relatedPost.featuredImage && (
                               <Image
                                 src={relatedPost.featuredImage}
@@ -477,10 +477,10 @@ export default async function BlogPostPage({ params }: PageProps) {
                             <span className="text-xs text-orange-500 font-medium">
                               {relatedPost.category.name}
                             </span>
-                            <h4 className="font-medium text-white group-hover:text-orange-500 transition-colors line-clamp-2 text-sm mt-1">
+                            <h4 className="font-medium text-foreground group-hover:text-brand transition-colors line-clamp-2 text-sm mt-1">
                               {relatedPost.title}
                             </h4>
-                            <span className="text-xs text-zinc-500 mt-1 block">
+                            <span className="text-xs text-muted mt-1 block">
                               {relatedPost.readTime} min read
                             </span>
                           </div>
@@ -490,7 +490,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                   </div>
 
                   {/* Newsletter */}
-                  <div className="p-6 bg-zinc-900 rounded-2xl">
+                  <div className="p-6 bg-surface rounded-2xl">
                     <NewsletterForm
                       variant="stacked"
                       theme="dark"

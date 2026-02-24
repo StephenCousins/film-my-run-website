@@ -265,7 +265,7 @@ export default function POVRaceCoveragePage() {
             >
               <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/pov-hero.mp4" type="video/mp4" />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/50 to-zinc-950" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[rgb(var(--color-background))]" />
           </div>
 
           <div className="container relative">

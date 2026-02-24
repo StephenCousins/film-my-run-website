@@ -106,7 +106,7 @@ export default function MasterOfCeremoniesPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <Header />
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero */}
         <section className="relative py-20 lg:py-32 overflow-hidden">
           <div className="absolute inset-0">
@@ -120,7 +120,7 @@ export default function MasterOfCeremoniesPage() {
             >
               <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/mc-hero.mp4" type="video/mp4" />
             </video>
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/60 via-zinc-950/50 to-zinc-950" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-[rgb(var(--color-background))]" />
           </div>
 
           <div className="container relative">
@@ -154,7 +154,7 @@ export default function MasterOfCeremoniesPage() {
         </section>
 
         {/* Stats Bar */}
-        <section className="border-y border-zinc-800 bg-zinc-900/50">
+        <section className="border-y border-border bg-surface-secondary">
           <div className="container py-8">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat) => {
@@ -164,8 +164,8 @@ export default function MasterOfCeremoniesPage() {
                     <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/10 mb-3">
                       <Icon className="w-6 h-6 text-amber-400" />
                     </div>
-                    <p className="font-display text-3xl font-bold text-white">{stat.value}</p>
-                    <p className="text-zinc-400 text-sm">{stat.label}</p>
+                    <p className="font-display text-3xl font-bold text-foreground">{stat.value}</p>
+                    <p className="text-secondary text-sm">{stat.label}</p>
                   </div>
                 );
               })}
@@ -177,10 +177,10 @@ export default function MasterOfCeremoniesPage() {
         <section className="py-16 lg:py-24">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center mb-12">
-              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                 More Than Just Announcements
               </h2>
-              <p className="text-zinc-400">
+              <p className="text-secondary">
                 An MC sets the tone for your entire event. I bring energy when it's needed,
                 respect for the achievement, and a genuine love for the sport.
               </p>
@@ -192,15 +192,15 @@ export default function MasterOfCeremoniesPage() {
                 return (
                   <div
                     key={service.title}
-                    className="bg-zinc-900 rounded-xl p-6 border border-zinc-800 hover:border-amber-500/50 transition-all"
+                    className="bg-surface rounded-xl p-6 border border-border hover:border-amber-500/50 transition-all"
                   >
                     <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center mb-4">
                       <Icon className="w-6 h-6 text-amber-400" />
                     </div>
-                    <h3 className="font-display font-semibold text-white mb-2">
+                    <h3 className="font-display font-semibold text-foreground mb-2">
                       {service.title}
                     </h3>
-                    <p className="text-zinc-400 text-sm">
+                    <p className="text-secondary text-sm">
                       {service.description}
                     </p>
                   </div>
@@ -218,7 +218,7 @@ export default function MasterOfCeremoniesPage() {
               alt="MC at a running event"
               className="absolute inset-0 w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-zinc-950/60" />
+            <div className="absolute inset-0 bg-black/50" />
           </div>
           <div className="container relative">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -247,21 +247,21 @@ export default function MasterOfCeremoniesPage() {
                 </div>
               </div>
 
-              <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800 lg:order-1">
-                <h3 className="font-display text-xl font-semibold text-white mb-6">
+              <div className="bg-surface rounded-2xl p-8 border border-border lg:order-1">
+                <h3 className="font-display text-xl font-semibold text-foreground mb-6">
                   Events I Cover
                 </h3>
                 <div className="grid sm:grid-cols-2 gap-3">
                   {eventTypes.map((event) => (
                     <div key={event} className="flex items-center gap-3">
                       <CheckCircle className="w-5 h-5 text-amber-400 flex-shrink-0" />
-                      <span className="text-zinc-300 text-sm">{event}</span>
+                      <span className="text-secondary text-sm">{event}</span>
                     </div>
                   ))}
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-zinc-800">
-                  <p className="text-zinc-400 text-sm mb-4">
+                <div className="mt-8 pt-6 border-t border-border">
+                  <p className="text-secondary text-sm mb-4">
                     Available across the UK and internationally for destination races.
                   </p>
                   <Link
@@ -281,11 +281,11 @@ export default function MasterOfCeremoniesPage() {
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
               <PartyPopper className="w-12 h-12 text-amber-400 mx-auto mb-6" />
-              <blockquote className="font-display text-2xl lg:text-3xl font-bold text-white mb-6">
+              <blockquote className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-6">
                 "To hear Stephen's voice on the mic as I approached the finish line was amazing
                 and then for him to shout my name to the crowd was awesome, I'll never forget it"
               </blockquote>
-              <p className="text-zinc-400">
+              <p className="text-secondary">
                 — Runner Feedback
               </p>
             </div>
@@ -293,14 +293,14 @@ export default function MasterOfCeremoniesPage() {
         </section>
 
         {/* CTA */}
-        <section className="py-16 lg:py-24 border-t border-zinc-800">
+        <section className="py-16 lg:py-24 border-t border-border">
           <div className="container">
             <div className="max-w-3xl mx-auto text-center">
               <Star className="w-12 h-12 text-amber-400 mx-auto mb-6" />
-              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white mb-4">
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                 Let's Make Your Event Unforgettable
               </h2>
-              <p className="text-zinc-400 mb-8 max-w-xl mx-auto">
+              <p className="text-secondary mb-8 max-w-xl mx-auto">
                 Get in touch to discuss your event. I'd love to hear about what you're
                 planning and how I can help create an amazing atmosphere.
               </p>
@@ -314,7 +314,7 @@ export default function MasterOfCeremoniesPage() {
                 </Link>
                 <Link
                   href="/services"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-zinc-800 text-white font-semibold rounded-full hover:bg-zinc-700 transition-colors"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-surface-tertiary text-foreground font-semibold rounded-full hover:bg-border transition-colors"
                 >
                   View All Services
                 </Link>

@@ -97,7 +97,7 @@ export default function LivePage() {
   return (
     <>
       <Header />
-      <main className="pt-20 lg:pt-24 bg-zinc-950 min-h-screen">
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         {/* Hero Section with Video Background */}
         <section className="relative py-24 lg:py-32 overflow-hidden">
           {/* Video background */}
@@ -113,8 +113,8 @@ export default function LivePage() {
               <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/live-hero.webm" type="video/webm" />
             </video>
             {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-b from-zinc-950/80 via-zinc-950/60 to-zinc-950" />
-            <div className="absolute inset-0 bg-gradient-to-r from-zinc-950/50 via-transparent to-zinc-950/50" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-[rgb(var(--color-background))]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50" />
           </div>
 
           <div className="container relative">
@@ -144,16 +144,16 @@ export default function LivePage() {
 
               {/* Loading State */}
               {isLoading && (
-                <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800 text-center">
+                <div className="bg-surface rounded-2xl p-8 border border-border text-center">
                   <div className="w-12 h-12 border-4 border-red-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                  <p className="text-zinc-400">Checking for live streams...</p>
+                  <p className="text-muted">Checking for live streams...</p>
                 </div>
               )}
 
               {/* Error State */}
               {error && !isLoading && (
-                <div className="bg-zinc-900 rounded-2xl p-8 border border-zinc-800 text-center">
-                  <p className="text-zinc-400 mb-4">{error}</p>
+                <div className="bg-surface rounded-2xl p-8 border border-border text-center">
+                  <p className="text-muted mb-4">{error}</p>
                   <a
                     href={CHANNEL_URL}
                     target="_blank"
@@ -176,13 +176,13 @@ export default function LivePage() {
                       <span className="w-2 h-2 bg-white rounded-full animate-pulse" />
                       LIVE
                     </span>
-                    <span className="text-white font-medium">{streamInfo.title}</span>
+                    <span className="text-foreground font-medium">{streamInfo.title}</span>
                   </div>
 
                   {/* Video + Chat side by side */}
                   <div className="flex flex-col lg:flex-row gap-4">
                     {/* Video Player */}
-                    <div className="flex-1 bg-zinc-900 rounded-2xl border border-red-500/50 overflow-hidden">
+                    <div className="flex-1 bg-surface rounded-2xl border border-red-500/50 overflow-hidden">
                       <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
                         <iframe
                           className="absolute inset-0 w-full h-full"
@@ -195,9 +195,9 @@ export default function LivePage() {
                     </div>
 
                     {/* Live Chat */}
-                    <div className="lg:w-[380px] bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
-                      <div className="px-4 py-3 bg-zinc-800/50 border-b border-zinc-800">
-                        <span className="text-white text-sm font-medium">Live Chat</span>
+                    <div className="lg:w-[380px] bg-surface rounded-2xl border border-border overflow-hidden">
+                      <div className="px-4 py-3 bg-surface-secondary border-b border-border">
+                        <span className="text-foreground text-sm font-medium">Live Chat</span>
                       </div>
                       <iframe
                         className="w-full h-[400px] lg:h-[calc(100%-44px)]"
@@ -226,18 +226,18 @@ export default function LivePage() {
               {/* Upcoming Stream */}
               {!isLoading && !error && streamInfo.type === 'upcoming' && streamInfo.videoId && (
                 <div className="space-y-6">
-                  <div className="bg-zinc-900 rounded-2xl border border-orange-500/50 overflow-hidden">
+                  <div className="bg-surface rounded-2xl border border-brand/50 overflow-hidden">
                     {/* Upcoming Badge */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 bg-orange-500/10 border-b border-orange-500/30">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 bg-brand/10 border-b border-brand/30">
                       <div className="flex items-center gap-3">
-                        <span className="flex items-center gap-2 px-3 py-1 bg-orange-500 text-white text-sm font-bold rounded-full">
+                        <span className="flex items-center gap-2 px-3 py-1 bg-brand text-white text-sm font-bold rounded-full">
                           <Calendar className="w-4 h-4" />
                           UPCOMING
                         </span>
-                        <span className="text-white font-medium">{streamInfo.title}</span>
+                        <span className="text-foreground font-medium">{streamInfo.title}</span>
                       </div>
                       {streamInfo.scheduledStart && (
-                        <div className="flex items-center gap-2 text-orange-400 text-sm">
+                        <div className="flex items-center gap-2 text-brand text-sm">
                           <Clock className="w-4 h-4" />
                           {formatScheduledTime(streamInfo.scheduledStart)}
                         </div>
@@ -261,7 +261,7 @@ export default function LivePage() {
                       href={`https://www.youtube.com/watch?v=${streamInfo.videoId}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 text-orange-400 hover:text-orange-300 transition-colors"
+                      className="inline-flex items-center gap-2 text-brand hover:text-brand-hover transition-colors"
                     >
                       <Youtube className="w-5 h-5" />
                       Set Reminder on YouTube
@@ -270,14 +270,14 @@ export default function LivePage() {
                   </div>
 
                   {/* Playlist while waiting */}
-                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
-                    <div className="px-6 py-4 bg-zinc-800/50 border-b border-zinc-800">
+                  <div className="bg-surface rounded-2xl border border-border overflow-hidden">
+                    <div className="px-6 py-4 bg-surface-secondary border-b border-border">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <Tv className="w-5 h-5 text-zinc-400" />
-                          <span className="text-white font-medium">Watch while you wait</span>
+                          <Tv className="w-5 h-5 text-muted" />
+                          <span className="text-foreground font-medium">Watch while you wait</span>
                         </div>
-                        <span className="text-zinc-500 text-sm">Muted by default</span>
+                        <span className="text-muted text-sm">Muted by default</span>
                       </div>
                     </div>
                     <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
@@ -296,14 +296,14 @@ export default function LivePage() {
               {/* No Live Stream - Auto-playing Playlist */}
               {!isLoading && !error && streamInfo.type === 'none' && (
                 <div className="space-y-6">
-                  <div className="bg-zinc-900 rounded-2xl border border-zinc-800 overflow-hidden">
-                    <div className="px-6 py-4 bg-zinc-800/50 border-b border-zinc-800">
+                  <div className="bg-surface rounded-2xl border border-border overflow-hidden">
+                    <div className="px-6 py-4 bg-surface-secondary border-b border-border">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
-                          <Tv className="w-5 h-5 text-zinc-400" />
-                          <span className="text-white font-medium">Film My Run — Recent Videos</span>
+                          <Tv className="w-5 h-5 text-muted" />
+                          <span className="text-foreground font-medium">Film My Run — Recent Videos</span>
                         </div>
-                        <span className="text-zinc-500 text-sm">Muted by default</span>
+                        <span className="text-muted text-sm">Muted by default</span>
                       </div>
                     </div>
 
@@ -318,7 +318,7 @@ export default function LivePage() {
                     </div>
                   </div>
 
-                  <p className="text-zinc-500 text-sm text-center">
+                  <p className="text-muted text-sm text-center">
                     No live stream right now — enjoy recent videos
                   </p>
 
@@ -335,7 +335,7 @@ export default function LivePage() {
                     </a>
                     <Link
                       href="/films"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-zinc-800 text-white font-semibold rounded-full hover:bg-zinc-700 transition-colors"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-surface-tertiary text-foreground font-semibold rounded-full hover:bg-border transition-colors"
                     >
                       Watch Race Films
                       <ArrowRight className="w-4 h-4" />
@@ -346,19 +346,19 @@ export default function LivePage() {
 
               {/* About Section */}
               <div className="mt-16 grid md:grid-cols-2 gap-6">
-                <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
-                  <h3 className="font-display text-lg font-semibold text-white mb-3">
+                <div className="bg-surface rounded-2xl p-6 border border-border">
+                  <h3 className="font-display text-lg font-semibold text-foreground mb-3">
                     What is Virtual Film My Run?
                   </h3>
-                  <p className="text-zinc-400 text-sm leading-relaxed">
+                  <p className="text-secondary text-sm leading-relaxed">
                     Virtual Film My Run features live treadmill running sessions, training streams, and interactive content. Join the community and run along from anywhere in the world.
                   </p>
                 </div>
-                <div className="bg-zinc-900 rounded-2xl p-6 border border-zinc-800">
-                  <h3 className="font-display text-lg font-semibold text-white mb-3">
+                <div className="bg-surface rounded-2xl p-6 border border-border">
+                  <h3 className="font-display text-lg font-semibold text-foreground mb-3">
                     Get Notified
                   </h3>
-                  <p className="text-zinc-400 text-sm leading-relaxed mb-4">
+                  <p className="text-secondary text-sm leading-relaxed mb-4">
                     Subscribe to the YouTube channel and turn on notifications to never miss a live stream.
                   </p>
                   <a
