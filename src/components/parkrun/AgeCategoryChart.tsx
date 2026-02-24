@@ -61,11 +61,11 @@ export function AgeCategoryChart({ stats }: AgeCategoryChartProps) {
 
     const data = payload[0].payload;
     return (
-      <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-2 shadow-xl">
-        <p className="text-white font-medium">
+      <div className="bg-surface border border-border rounded-lg p-2 shadow-xl">
+        <p className="text-foreground font-medium">
           Position {data.position}
         </p>
-        <p className="text-zinc-400 text-sm">
+        <p className="text-muted text-sm">
           {data.count} time{data.count !== 1 ? 's' : ''}
         </p>
       </div>
@@ -117,7 +117,7 @@ export function AgeCategoryChart({ stats }: AgeCategoryChartProps) {
               ${stat.position === 1 ? 'bg-amber-500/20 border border-amber-500/30' :
                 stat.position === 2 ? 'bg-zinc-400/20 border border-zinc-400/30' :
                 stat.position === 3 ? 'bg-orange-700/20 border border-orange-700/30' :
-                'bg-zinc-800/50 border border-zinc-700/50'}
+                'bg-surface-tertiary/50 border border-border'}
             `}
           >
             <div className={`
@@ -125,11 +125,11 @@ export function AgeCategoryChart({ stats }: AgeCategoryChartProps) {
               ${stat.position === 1 ? 'text-amber-400' :
                 stat.position === 2 ? 'text-zinc-300' :
                 stat.position === 3 ? 'text-orange-400' :
-                'text-zinc-400'}
+                'text-muted'}
             `}>
               {stat.position === 1 ? '🥇' : stat.position === 2 ? '🥈' : stat.position === 3 ? '🥉' : stat.position}
             </div>
-            <div className="text-xs text-zinc-500">{stat.count}×</div>
+            <div className="text-xs text-muted">{stat.count}×</div>
           </motion.div>
         ))}
       </div>

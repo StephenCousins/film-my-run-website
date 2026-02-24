@@ -22,13 +22,13 @@ export function RecentRunsTable({ runs }: RecentRunsTableProps) {
     <div className="overflow-x-auto">
       <table className="w-full">
         <thead>
-          <tr className="border-b border-zinc-800">
-            <th className="text-left py-3 px-4 text-sm font-medium text-zinc-400">Date</th>
-            <th className="text-left py-3 px-4 text-sm font-medium text-zinc-400">Venue</th>
-            <th className="text-center py-3 px-4 text-sm font-medium text-zinc-400">Time</th>
-            <th className="text-center py-3 px-4 text-sm font-medium text-zinc-400">Position</th>
-            <th className="text-center py-3 px-4 text-sm font-medium text-zinc-400">PB</th>
-            <th className="text-right py-3 px-4 text-sm font-medium text-zinc-400"></th>
+          <tr className="border-b border-border">
+            <th className="text-left py-3 px-4 text-sm font-medium text-muted">Date</th>
+            <th className="text-left py-3 px-4 text-sm font-medium text-muted">Venue</th>
+            <th className="text-center py-3 px-4 text-sm font-medium text-muted">Time</th>
+            <th className="text-center py-3 px-4 text-sm font-medium text-muted">Position</th>
+            <th className="text-center py-3 px-4 text-sm font-medium text-muted">PB</th>
+            <th className="text-right py-3 px-4 text-sm font-medium text-muted"></th>
           </tr>
         </thead>
         <tbody>
@@ -38,27 +38,27 @@ export function RecentRunsTable({ runs }: RecentRunsTableProps) {
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="border-b border-zinc-800/50 hover:bg-zinc-800/30 transition-colors"
+              className="border-b border-border hover:bg-surface-tertiary transition-colors"
             >
               <td className="py-4 px-4">
-                <span className="text-sm text-zinc-300">{formatDate(run.date)}</span>
+                <span className="text-sm text-secondary">{formatDate(run.date)}</span>
               </td>
               <td className="py-4 px-4">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-4 h-4 text-green-500" />
-                  <span className="text-white font-medium">{run.event}</span>
+                  <span className="text-foreground font-medium">{run.event}</span>
                 </div>
               </td>
               <td className="py-4 px-4 text-center">
                 <div className="flex items-center justify-center gap-1">
-                  <Clock className="w-4 h-4 text-zinc-500" />
-                  <span className={`font-mono font-medium ${run.pb ? 'text-green-400' : 'text-white'}`}>
+                  <Clock className="w-4 h-4 text-muted" />
+                  <span className={`font-mono font-medium ${run.pb ? 'text-green-400' : 'text-foreground'}`}>
                     {run.time_formatted}
                   </span>
                 </div>
               </td>
               <td className="py-4 px-4 text-center">
-                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-zinc-800 text-sm font-medium text-zinc-300">
+                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-surface-tertiary text-sm font-medium text-secondary">
                   {run.position}
                 </span>
               </td>
@@ -72,7 +72,7 @@ export function RecentRunsTable({ runs }: RecentRunsTableProps) {
                   href={`https://www.parkrun.org.uk/${run.event.toLowerCase().replace(/\s+/g, '')}/results/weeklyresults/?runSeqNumber=${run.run_number}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-sm text-zinc-500 hover:text-green-400 transition-colors"
+                  className="inline-flex items-center gap-1 text-sm text-muted hover:text-green-400 transition-colors"
                 >
                   <ExternalLink className="w-4 h-4" />
                 </a>

@@ -27,8 +27,8 @@ export function AchievementBadge({ achievement, index }: AchievementBadgeProps) 
       className={`
         relative p-4 rounded-xl text-center transition-all
         ${achievement.earned
-          ? 'bg-zinc-900 border border-zinc-700 hover:border-green-500/50'
-          : 'bg-zinc-900/50 border border-zinc-800/50 opacity-50'
+          ? 'bg-surface border border-border hover:border-green-500/50'
+          : 'bg-surface/50 border border-border opacity-50'
         }
       `}
     >
@@ -37,19 +37,19 @@ export function AchievementBadge({ achievement, index }: AchievementBadgeProps) 
         text-3xl mb-2
         ${achievement.earned ? '' : 'grayscale'}
       `}>
-        {achievement.earned ? achievement.icon : <Lock className="w-8 h-8 mx-auto text-zinc-600" />}
+        {achievement.earned ? achievement.icon : <Lock className="w-8 h-8 mx-auto text-muted" />}
       </div>
 
       {/* Name */}
       <h4 className={`
         text-sm font-medium mb-1
-        ${achievement.earned ? 'text-white' : 'text-zinc-500'}
+        ${achievement.earned ? 'text-foreground' : 'text-muted'}
       `}>
         {achievement.name}
       </h4>
 
       {/* Description */}
-      <p className="text-xs text-zinc-500">{achievement.description}</p>
+      <p className="text-xs text-muted">{achievement.description}</p>
 
       {/* Earned date */}
       {achievement.earned && achievement.earnedDate && (
@@ -101,17 +101,17 @@ export function PBProgression({ pbs }: PBProgressionProps) {
             className="relative pl-10"
           >
             {/* Dot */}
-            <div className="absolute left-2 top-2 w-5 h-5 rounded-full bg-green-500 border-2 border-zinc-900 flex items-center justify-center">
+            <div className="absolute left-2 top-2 w-5 h-5 rounded-full bg-green-500 border-2 border-background flex items-center justify-center">
               <span className="text-xs">🏆</span>
             </div>
 
             {/* Content */}
-            <div className="bg-zinc-900 rounded-lg p-3 border border-zinc-800">
+            <div className="bg-surface rounded-lg p-3 border border-border">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-green-400 font-mono font-bold text-lg">
                   {formatTime(pb.time_seconds)}
                 </span>
-                <span className="text-xs text-zinc-500">
+                <span className="text-xs text-muted">
                   {new Date(pb.date).toLocaleDateString('en-GB', {
                     day: 'numeric',
                     month: 'short',
@@ -119,7 +119,7 @@ export function PBProgression({ pbs }: PBProgressionProps) {
                   })}
                 </span>
               </div>
-              <p className="text-sm text-zinc-400">{pb.venue}</p>
+              <p className="text-sm text-muted">{pb.venue}</p>
 
               {/* Improvement from previous PB */}
               {index < pbs.length - 1 && (
@@ -152,14 +152,14 @@ export function StreakDisplay({
   return (
     <div className="grid grid-cols-2 gap-4">
       {/* Current streak */}
-      <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
+      <div className="bg-surface rounded-xl p-4 border border-border">
         <div className="text-center">
           <div className="text-4xl mb-2">🔥</div>
-          <div className="text-3xl font-bold text-white font-mono">{currentStreak}</div>
-          <p className="text-sm text-zinc-400 mt-1">
+          <div className="text-3xl font-bold text-foreground font-mono">{currentStreak}</div>
+          <p className="text-sm text-muted mt-1">
             {currentStreak === 1 ? 'week' : 'weeks'}
           </p>
-          <p className="text-xs text-zinc-500 mt-2">Current streak</p>
+          <p className="text-xs text-muted mt-2">Current streak</p>
         </div>
       </div>
 
@@ -168,10 +168,10 @@ export function StreakDisplay({
         <div className="text-center">
           <div className="text-4xl mb-2">⭐</div>
           <div className="text-3xl font-bold text-amber-400 font-mono">{longestStreak}</div>
-          <p className="text-sm text-zinc-400 mt-1">
+          <p className="text-sm text-muted mt-1">
             {longestStreak === 1 ? 'week' : 'weeks'}
           </p>
-          <p className="text-xs text-zinc-500 mt-2">
+          <p className="text-xs text-muted mt-2">
             Best streak
             <br />
             <span className="text-amber-500/70">

@@ -1,6 +1,7 @@
 'use client';
 
 import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import { useTheme } from '@/contexts/ThemeContext';
 import 'leaflet/dist/leaflet.css';
 import type { VenueCoordinate } from '@/lib/parkrun-types';
 
@@ -9,6 +10,12 @@ interface VenueMapClientProps {
 }
 
 export function VenueMapClient({ venues }: VenueMapClientProps) {
+  const { resolvedTheme } = useTheme();
+
+  const tileUrl = resolvedTheme === 'dark'
+    ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+    : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
   // Center map on UK if no venues, otherwise calculate center
   const center = venues.length > 0
     ? {
@@ -35,7 +42,7 @@ export function VenueMapClient({ venues }: VenueMapClientProps) {
   };
 
   return (
-    <div className="h-[400px] rounded-xl overflow-hidden border border-zinc-800">
+    <div className="h-[400px] rounded-xl overflow-hidden border border-border">
       <MapContainer
         center={[center.lat, center.lng]}
         zoom={6}
@@ -44,7 +51,7 @@ export function VenueMapClient({ venues }: VenueMapClientProps) {
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          url={tileUrl}
         />
         {venues.map((venue) => (
           <CircleMarker
@@ -69,28 +76,28 @@ export function VenueMapClient({ venues }: VenueMapClientProps) {
       </MapContainer>
 
       {/* Legend */}
-      <div className="absolute bottom-4 left-4 bg-zinc-900/90 backdrop-blur-sm rounded-lg p-3 border border-zinc-700 z-[1000]">
-        <p className="text-xs text-zinc-400 mb-2 font-medium">Visit frequency</p>
+      <div className="absolute bottom-4 left-4 bg-surface/90 backdrop-blur-sm rounded-lg p-3 border border-border z-[1000]">
+        <p className="text-xs text-muted mb-2 font-medium">Visit frequency</p>
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-green-500" />
-            <span className="text-xs text-zinc-300">50+ visits</span>
+            <span className="text-xs text-secondary">50+ visits</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-blue-500" />
-            <span className="text-xs text-zinc-300">10-49 visits</span>
+            <span className="text-xs text-secondary">10-49 visits</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-purple-500" />
-            <span className="text-xs text-zinc-300">5-9 visits</span>
+            <span className="text-xs text-secondary">5-9 visits</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-amber-500" />
-            <span className="text-xs text-zinc-300">2-4 visits</span>
+            <span className="text-xs text-secondary">2-4 visits</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full bg-red-500" />
-            <span className="text-xs text-zinc-300">1 visit</span>
+            <span className="text-xs text-secondary">1 visit</span>
           </div>
         </div>
       </div>

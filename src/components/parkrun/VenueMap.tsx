@@ -20,8 +20,8 @@ export function VenueMap({ venues }: VenueMapProps) {
 
   if (!MapComponent) {
     return (
-      <div className="h-[400px] bg-zinc-900 rounded-xl border border-zinc-800 flex items-center justify-center">
-        <div className="text-zinc-500">Loading map...</div>
+      <div className="h-[400px] bg-surface rounded-xl border border-border flex items-center justify-center">
+        <div className="text-muted">Loading map...</div>
       </div>
     );
   }

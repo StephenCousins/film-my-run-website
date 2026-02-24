@@ -79,17 +79,17 @@ export function InsightsSection({
     const date = new Date(data.month + '-01');
 
     return (
-      <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-3 shadow-xl">
-        <p className="text-xs text-zinc-500 mb-2">
+      <div className="bg-surface border border-border rounded-lg p-3 shadow-xl">
+        <p className="text-xs text-muted mb-2">
           {date.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}
         </p>
         <div className="space-y-1">
           <p className="text-sm">
-            <span className="text-zinc-400">Monthly avg: </span>
-            <span className="text-white font-mono">{formatTime(data.average)}</span>
+            <span className="text-muted">Monthly avg: </span>
+            <span className="text-foreground font-mono">{formatTime(data.average)}</span>
           </p>
           <p className="text-sm">
-            <span className="text-zinc-400">Rolling avg: </span>
+            <span className="text-muted">Rolling avg: </span>
             <span className="text-blue-400 font-mono">{formatTime(data.rolling)}</span>
           </p>
         </div>
@@ -102,12 +102,12 @@ export function InsightsSection({
       {/* Key metrics row */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {/* Rolling average */}
-        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
-          <div className="flex items-center gap-2 text-zinc-400 mb-2">
+        <div className="bg-surface rounded-xl p-4 border border-border">
+          <div className="flex items-center gap-2 text-muted mb-2">
             <Timer className="w-4 h-4" />
             <span className="text-sm">12-Month Average</span>
           </div>
-          <p className="text-2xl font-bold text-white font-mono">
+          <p className="text-2xl font-bold text-foreground font-mono">
             {formatTime(rollingAverage)}
           </p>
         </div>
@@ -125,13 +125,13 @@ export function InsightsSection({
         </div>
 
         {/* Best season */}
-        <div className="bg-zinc-900 rounded-xl p-4 border border-zinc-800">
-          <div className="flex items-center gap-2 text-zinc-400 mb-2">
+        <div className="bg-surface rounded-xl p-4 border border-border">
+          <div className="flex items-center gap-2 text-muted mb-2">
             {seasonIcons[bestSeason]}
             <span className="text-sm">Best Season</span>
           </div>
-          <p className="text-2xl font-bold text-white">{seasonLabels[bestSeason]}</p>
-          <p className="text-xs text-zinc-500 mt-1">
+          <p className="text-2xl font-bold text-foreground">{seasonLabels[bestSeason]}</p>
+          <p className="text-xs text-muted mt-1">
             avg {formatTime(seasonalAverages[bestSeason])}
           </p>
         </div>
@@ -139,7 +139,7 @@ export function InsightsSection({
 
       {/* Rolling average chart */}
       <div>
-        <h4 className="text-sm text-zinc-400 mb-4">Performance Trend (Last 2 Years)</h4>
+        <h4 className="text-sm text-muted mb-4">Performance Trend (Last 2 Years)</h4>
         <div className="h-[200px]">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={rollingAverageData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
@@ -188,7 +188,7 @@ export function InsightsSection({
 
       {/* Seasonal comparison */}
       <div>
-        <h4 className="text-sm text-zinc-400 mb-4">Seasonal Performance</h4>
+        <h4 className="text-sm text-muted mb-4">Seasonal Performance</h4>
         <div className="grid grid-cols-4 gap-3">
           {(['winter', 'spring', 'summer', 'autumn'] as const).map((season) => {
             const isBest = season === bestSeason;
@@ -201,15 +201,15 @@ export function InsightsSection({
                   p-3 rounded-lg text-center
                   ${isBest
                     ? 'bg-gradient-to-b from-green-500/20 to-transparent border border-green-500/30'
-                    : 'bg-zinc-800/50'
+                    : 'bg-surface-tertiary/50'
                   }
                 `}
               >
-                <div className={`${isBest ? 'text-green-400' : 'text-zinc-400'}`}>
+                <div className={`${isBest ? 'text-green-400' : 'text-muted'}`}>
                   {seasonIcons[season]}
                 </div>
-                <p className="text-xs text-zinc-500 mt-1 capitalize">{season}</p>
-                <p className={`text-sm font-mono mt-1 ${isBest ? 'text-green-400' : 'text-white'}`}>
+                <p className="text-xs text-muted mt-1 capitalize">{season}</p>
+                <p className={`text-sm font-mono mt-1 ${isBest ? 'text-green-400' : 'text-foreground'}`}>
                   {seasonalAverages[season] > 0 ? formatTime(seasonalAverages[season]) : '-'}
                 </p>
               </motion.div>
@@ -220,7 +220,7 @@ export function InsightsSection({
 
       {/* Top 5 fastest venues */}
       <div>
-        <h4 className="text-sm text-zinc-400 mb-4">Fastest Venues (min. 3 visits)</h4>
+        <h4 className="text-sm text-muted mb-4">Fastest Venues (min. 3 visits)</h4>
         <div className="space-y-2">
           {fastestVenues.map((venue, index) => (
             <motion.div
@@ -228,21 +228,21 @@ export function InsightsSection({
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: index * 0.05 }}
-              className="flex items-center gap-3 p-3 bg-zinc-800/50 rounded-lg"
+              className="flex items-center gap-3 p-3 bg-surface-tertiary/50 rounded-lg"
             >
               <span className={`
                 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold
                 ${index === 0 ? 'bg-amber-500 text-black' :
                   index === 1 ? 'bg-zinc-400 text-black' :
                   index === 2 ? 'bg-orange-600 text-white' :
-                  'bg-zinc-700 text-zinc-300'}
+                  'bg-surface-tertiary text-secondary'}
               `}>
                 {index + 1}
               </span>
               <div className="flex-1 flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-green-500" />
-                <span className="text-white">{venue.event}</span>
-                <span className="text-xs text-zinc-500">({venue.visit_count} visits)</span>
+                <span className="text-foreground">{venue.event}</span>
+                <span className="text-xs text-muted">({venue.visit_count} visits)</span>
               </div>
               <span className="font-mono text-green-400">{venue.best_time_formatted}</span>
             </motion.div>

@@ -20,19 +20,19 @@ export function VenueCardCompact({ venue, index, isHome = false }: VenueCardComp
         flex-shrink-0 w-48 rounded-xl border p-3 transition-all hover:scale-[1.02]
         ${isHome
           ? 'bg-gradient-to-br from-green-500/20 to-green-600/5 border-green-500/30'
-          : 'bg-zinc-900 border-zinc-800 hover:border-zinc-700'
+          : 'bg-surface border-border hover:border-border'
         }
       `}
     >
       {/* Venue name */}
       <div className="flex items-start gap-2 mb-2">
         <MapPin className={`w-3.5 h-3.5 mt-0.5 flex-shrink-0 ${isHome ? 'text-green-400' : 'text-green-500'}`} />
-        <h3 className="text-sm text-white font-medium leading-tight line-clamp-2">{venue.event}</h3>
+        <h3 className="text-sm text-foreground font-medium leading-tight line-clamp-2">{venue.event}</h3>
       </div>
 
       {/* Stats */}
       <div className="flex items-center justify-between text-xs">
-        <div className="flex items-center gap-1 text-zinc-400">
+        <div className="flex items-center gap-1 text-muted">
           <Hash className="w-3 h-3" />
           <span>{venue.visit_count}</span>
         </div>

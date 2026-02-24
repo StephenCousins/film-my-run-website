@@ -77,12 +77,12 @@ export function YearByYearSection({ yearlyStats, cumulativeTotals }: YearByYearS
             <div className="p-2 rounded-xl bg-green-500/10">
               <Calendar className="w-5 h-5 text-green-500" />
             </div>
-            <h2 className="font-display text-2xl font-bold text-white">Year by Year</h2>
+            <h2 className="font-display text-2xl font-bold text-foreground">Year by Year</h2>
           </div>
 
           {/* Bar chart overview */}
-          <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6 mb-8">
-            <h3 className="text-sm text-zinc-400 mb-4">Runs per year</h3>
+          <div className="bg-surface rounded-2xl border border-border p-6 mb-8">
+            <h3 className="text-sm text-muted mb-4">Runs per year</h3>
             <YearBarChart yearlyStats={yearlyStats} />
           </div>
 
@@ -104,18 +104,18 @@ export function YearByYearSection({ yearlyStats, cumulativeTotals }: YearByYearS
 
   // Desktop: scroll-triggered horizontal scroll
   return (
-    <div id="years" className="bg-zinc-950">
+    <div id="years" className="bg-background">
       {/* Bar chart section - above the scroll */}
       <div className="container py-12 lg:py-16">
         <div className="flex items-center gap-3 mb-8">
           <div className="p-2 rounded-xl bg-green-500/10">
             <Calendar className="w-5 h-5 text-green-500" />
           </div>
-          <h2 className="font-display text-2xl font-bold text-white">Year by Year</h2>
+          <h2 className="font-display text-2xl font-bold text-foreground">Year by Year</h2>
         </div>
 
-        <div className="bg-zinc-900 rounded-2xl border border-zinc-800 p-6">
-          <h3 className="text-sm text-zinc-400 mb-4">Runs per year</h3>
+        <div className="bg-surface rounded-2xl border border-border p-6">
+          <h3 className="text-sm text-muted mb-4">Runs per year</h3>
           <YearBarChart yearlyStats={yearlyStats} />
         </div>
       </div>
@@ -131,20 +131,20 @@ export function YearByYearSection({ yearlyStats, cumulativeTotals }: YearByYearS
       >
         {/* Sticky container */}
         <div
-          className="sticky top-20 h-[calc(100vh-5rem)] overflow-hidden bg-zinc-950"
+          className="sticky top-20 h-[calc(100vh-5rem)] overflow-hidden bg-background"
           style={{ zIndex: 30 }}
         >
           {/* Content */}
           <div className="relative h-full flex items-center">
             {/* Left side - Header */}
-            <div className="absolute lg:relative left-0 top-0 w-full lg:w-[350px] p-8 lg:p-12 lg:flex-shrink-0 z-20 bg-zinc-950">
+            <div className="absolute lg:relative left-0 top-0 w-full lg:w-[350px] p-8 lg:p-12 lg:flex-shrink-0 z-20 bg-background">
               <div className="max-w-sm">
-                <h3 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4 leading-tight">
+                <h3 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4 leading-tight">
                   My parkrun
                   <br />
                   <span className="text-green-500">Journey</span>
                 </h3>
-                <p className="text-zinc-400 text-lg leading-relaxed">
+                <p className="text-muted text-lg leading-relaxed">
                   {yearlyStats.length} years of Saturday mornings, one run at a time.
                 </p>
               </div>
@@ -174,13 +174,13 @@ export function YearByYearSection({ yearlyStats, cumulativeTotals }: YearByYearS
 
           {/* Scroll progress indicator */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2 hidden lg:flex items-center gap-2">
-            <div className="w-32 h-1 bg-zinc-700 rounded-full overflow-hidden">
+            <div className="w-32 h-1 bg-surface-tertiary rounded-full overflow-hidden">
               <div
                 className="h-full bg-green-500 transition-all duration-100"
                 style={{ width: `${scrollProgress * 100}%` }}
               />
             </div>
-            <span className="text-zinc-500 text-sm">Scroll</span>
+            <span className="text-muted text-sm">Scroll</span>
           </div>
 
           {/* Decorative elements */}

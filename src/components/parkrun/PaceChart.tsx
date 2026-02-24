@@ -52,25 +52,25 @@ export function PaceChart({ parkruns, personalBest }: PaceChartProps) {
     const date = new Date(data.date);
 
     return (
-      <div className="bg-zinc-900 border border-zinc-700 rounded-lg p-3 shadow-xl">
-        <p className="text-xs text-zinc-500 mb-1">
+      <div className="bg-surface border border-border rounded-lg p-3 shadow-xl">
+        <p className="text-xs text-muted mb-1">
           {date.toLocaleDateString('en-GB', {
             day: 'numeric',
             month: 'short',
             year: 'numeric',
           })}
         </p>
-        <p className="text-white font-medium">{data.venue}</p>
+        <p className="text-foreground font-medium">{data.venue}</p>
         <div className="mt-2 space-y-1">
           <p className="text-sm">
-            <span className="text-zinc-400">Time: </span>
-            <span className={`font-mono ${data.pb ? 'text-green-400' : 'text-white'}`}>
+            <span className="text-muted">Time: </span>
+            <span className={`font-mono ${data.pb ? 'text-green-400' : 'text-foreground'}`}>
               {formatTime(data.time)}
               {data.pb && ' 🏆'}
             </span>
           </p>
           <p className="text-sm">
-            <span className="text-zinc-400">Avg: </span>
+            <span className="text-muted">Avg: </span>
             <span className="text-blue-400 font-mono">{formatTime(data.rollingAvg)}</span>
           </p>
         </div>
@@ -190,15 +190,15 @@ export function PaceChart({ parkruns, personalBest }: PaceChartProps) {
       <div className="flex items-center justify-center gap-6 mt-4">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full bg-green-500" />
-          <span className="text-sm text-zinc-400">Individual runs</span>
+          <span className="text-sm text-muted">Individual runs</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-8 h-0.5 bg-blue-500" />
-          <span className="text-sm text-zinc-400">10-run average</span>
+          <span className="text-sm text-muted">10-run average</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-8 h-0.5 bg-green-500 border-dashed border-t-2 border-green-500" style={{ borderStyle: 'dashed' }} />
-          <span className="text-sm text-zinc-400">Personal best</span>
+          <span className="text-sm text-muted">Personal best</span>
         </div>
       </div>
     </div>

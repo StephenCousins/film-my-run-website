@@ -25,21 +25,21 @@ export function ParkrunStatCard({
         relative overflow-hidden rounded-2xl p-6
         ${highlight
           ? 'bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/30'
-          : 'bg-zinc-900 border border-zinc-800'
+          : 'bg-surface border border-border'
         }
       `}
     >
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-sm text-zinc-400 mb-1">{label}</p>
-          <p className={`text-3xl font-bold font-mono ${highlight ? 'text-green-400' : 'text-white'}`}>
+          <p className="text-sm text-muted mb-1">{label}</p>
+          <p className={`text-3xl font-bold font-mono ${highlight ? 'text-green-400' : 'text-foreground'}`}>
             {value}
           </p>
           {subValue && (
-            <p className="text-xs text-zinc-500 mt-1">{subValue}</p>
+            <p className="text-xs text-muted mt-1">{subValue}</p>
           )}
         </div>
-        <div className={`p-3 rounded-xl ${highlight ? 'bg-green-500/20' : 'bg-zinc-800'}`}>
+        <div className={`p-3 rounded-xl ${highlight ? 'bg-green-500/20' : 'bg-surface-tertiary'}`}>
           {icon}
         </div>
       </div>
@@ -48,7 +48,7 @@ export function ParkrunStatCard({
       <div
         className={`
           absolute -bottom-8 -right-8 w-24 h-24 rounded-full blur-2xl
-          ${highlight ? 'bg-green-500/20' : 'bg-zinc-700/20'}
+          ${highlight ? 'bg-green-500/20' : 'bg-surface-tertiary/20'}
         `}
       />
     </motion.div>
@@ -64,8 +64,8 @@ interface SubStatProps {
 export function SubStat({ label, value }: SubStatProps) {
   return (
     <div className="text-center">
-      <p className="text-xs text-zinc-500 uppercase tracking-wider">{label}</p>
-      <p className="text-lg font-semibold text-zinc-300 font-mono">{value}</p>
+      <p className="text-xs text-muted uppercase tracking-wider">{label}</p>
+      <p className="text-lg font-semibold text-secondary font-mono">{value}</p>
     </div>
   );
 }
