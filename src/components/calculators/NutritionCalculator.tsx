@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 interface NutritionResult {
   totalTimeHours: number;
@@ -17,6 +18,7 @@ interface NutritionResult {
 }
 
 export function NutritionCalculator() {
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
   const [weight, setWeight] = useState('70');
   const [distance, setDistance] = useState('42.195');
   const [paceMin, setPaceMin] = useState('5');
@@ -206,7 +208,7 @@ export function NutritionCalculator() {
         </div>
 
         <button
-          onClick={calculateNutrition}
+          onClick={() => requireAuth(calculateNutrition)}
           className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors"
         >
           Calculate Nutrition Needs
@@ -349,6 +351,7 @@ export function NutritionCalculator() {
           </div>
         )}
       </div>
+      {LoginModal}
     </div>
   );
 }

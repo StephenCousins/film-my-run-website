@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 type ZoneMode = 'hr' | 'pace';
 
@@ -21,6 +22,7 @@ interface PaceZone {
 }
 
 export function TrainingZonesCalculator() {
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
   const [mode, setMode] = useState<ZoneMode>('hr');
 
   // HR mode inputs
@@ -177,7 +179,7 @@ export function TrainingZonesCalculator() {
             </div>
 
             <button
-              onClick={calculateHRZones}
+              onClick={() => requireAuth(calculateHRZones)}
               className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors"
             >
               Calculate Heart Rate Zones
@@ -220,7 +222,7 @@ export function TrainingZonesCalculator() {
             </div>
 
             <button
-              onClick={calculatePaceZones}
+              onClick={() => requireAuth(calculatePaceZones)}
               className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors"
             >
               Calculate Pace Zones
@@ -364,6 +366,7 @@ export function TrainingZonesCalculator() {
           </div>
         )}
       </div>
+      {LoginModal}
     </div>
   );
 }

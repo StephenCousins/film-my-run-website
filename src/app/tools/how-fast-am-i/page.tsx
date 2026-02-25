@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 type Tab = 'parkrun' | 'po10';
 
@@ -114,6 +115,7 @@ interface Po10Data {
 }
 
 export default function HowFastAmIPage() {
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'parkrun stats' });
   const [activeTab, setActiveTab] = useState<Tab>('parkrun');
   const [athleteId, setAthleteId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -352,13 +354,13 @@ export default function HowFastAmIPage() {
                       type="text"
                       value={athleteId}
                       onChange={(e) => setAthleteId(e.target.value)}
-                      onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                      onKeyDown={(e) => e.key === 'Enter' && requireAuth(handleSearch)}
                       placeholder={activeTab === 'parkrun' ? 'Enter parkrun ID (e.g., 123456)' : 'Enter Power of 10 athlete ID (UUID)'}
                       className="input w-full py-3.5"
                     />
                   </div>
                   <button
-                    onClick={handleSearch}
+                    onClick={() => requireAuth(handleSearch)}
                     disabled={isLoading}
                     className="btn-primary px-6 py-3.5 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
@@ -710,6 +712,7 @@ export default function HowFastAmIPage() {
           </section>
         )}
       </main>
+      {LoginModal}
       <Footer />
     </>
   );

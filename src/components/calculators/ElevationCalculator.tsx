@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import { formatTimeFromSeconds, getTimeInSeconds } from './utils';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export function ElevationCalculator() {
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
   const [distance, setDistance] = useState('21.0975');
   const [time, setTime] = useState({ hours: '1', minutes: '45', seconds: '0' });
   const [elevGain, setElevGain] = useState('500');
@@ -186,7 +188,7 @@ export function ElevationCalculator() {
         </div>
 
         <button
-          onClick={calculateElevation}
+          onClick={() => requireAuth(calculateElevation)}
           className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors"
         >
           Calculate Adjusted Time
@@ -270,6 +272,7 @@ export function ElevationCalculator() {
           </div>
         )}
       </div>
+      {LoginModal}
     </div>
   );
 }

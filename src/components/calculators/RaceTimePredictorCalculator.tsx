@@ -2,8 +2,10 @@
 
 import { useState } from 'react';
 import { formatTimeFromSeconds, getTimeInSeconds, standardDistances } from './utils';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 export function RaceTimePredictorCalculator() {
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
   const [mode, setMode] = useState<'quick' | 'advanced'>('quick');
 
   // Quick mode inputs
@@ -378,7 +380,7 @@ export function RaceTimePredictorCalculator() {
             </div>
 
             <button
-              onClick={calculateQuick}
+              onClick={() => requireAuth(calculateQuick)}
               className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors"
             >
               Predict Race Time
@@ -539,7 +541,7 @@ export function RaceTimePredictorCalculator() {
             </div>
 
             <button
-              onClick={calculateAdvanced}
+              onClick={() => requireAuth(calculateAdvanced)}
               className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors"
             >
               Calculate All Predictions
@@ -598,6 +600,7 @@ export function RaceTimePredictorCalculator() {
           </div>
         )}
       </div>
+      {LoginModal}
     </div>
   );
 }

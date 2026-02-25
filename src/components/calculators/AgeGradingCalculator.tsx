@@ -1,7 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { formatTimeFromSeconds, getTimeInSeconds, getAgeGradingClassification, ageGradingEvents } from './utils';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 interface AgeGradingResult {
   actualTime: string;
@@ -13,6 +14,7 @@ interface AgeGradingResult {
 }
 
 export function AgeGradingCalculator() {
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
   const [age, setAge] = useState('40');
   const [gender, setGender] = useState<'men' | 'women'>('men');
   const [event, setEvent] = useState('5000m');
@@ -186,7 +188,7 @@ export function AgeGradingCalculator() {
         )}
 
         <button
-          onClick={calculateAgeGrading}
+          onClick={() => requireAuth(calculateAgeGrading)}
           disabled={loading}
           className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors disabled:opacity-50"
         >
@@ -268,6 +270,7 @@ export function AgeGradingCalculator() {
           </div>
         )}
       </div>
+      {LoginModal}
     </div>
   );
 }

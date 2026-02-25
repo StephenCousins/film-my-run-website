@@ -2,10 +2,12 @@
 
 import { useState } from 'react';
 import { getVO2Classification, getTimeInSeconds } from './utils';
+import { useRequireAuth } from '@/hooks/useRequireAuth';
 
 type TestType = 'vdot' | 'cooper' | 'custom';
 
 export function VO2MaxCalculator() {
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
   const [testType, setTestType] = useState<TestType>('vdot');
   const [result, setResult] = useState<{
     vo2max: number;
@@ -315,7 +317,7 @@ export function VO2MaxCalculator() {
         )}
 
         <button
-          onClick={calculateVO2Max}
+          onClick={() => requireAuth(calculateVO2Max)}
           className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors"
         >
           Calculate VO2 Max
@@ -349,6 +351,7 @@ export function VO2MaxCalculator() {
           </div>
         )}
       </div>
+      {LoginModal}
     </div>
   );
 }
