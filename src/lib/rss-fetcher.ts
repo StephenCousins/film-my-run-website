@@ -57,6 +57,55 @@ const RUNNING_KEYWORDS = [
   'great north run', 'comrades',
 ];
 
+// Negative keywords — articles matching these are excluded (reviews, gear, training guides)
+const EXCLUDE_KEYWORDS = [
+  // Gear & product reviews
+  'review:', 'shoe review', 'gear review', 'product review',
+  'best shoes', 'best running shoes', 'best trail shoes',
+  'buying guide', 'gear guide', 'shoe roundup', 'shoe test',
+  'compared', 'vs.', ' vs ',
+  // Shopping / deals
+  'deals', 'sale', 'discount', 'coupon', 'black friday', 'prime day',
+  'price drop', 'save on', '% off',
+  // Training / how-to guides
+  'training plan', 'beginner guide', 'how to start running',
+  'couch to 5k', 'c25k',
+  'workout of the week', 'strength training for',
+  'yoga for runners', 'stretching routine', 'recovery routine',
+  'nutrition tips', 'what to eat', 'fueling guide',
+  'what to wear', 'race day checklist',
+  // Listicles / roundups that aren't news
+  'best running watches', 'best gps watch', 'best headphones',
+  'best running shorts', 'best running jacket',
+  'gift guide', 'gifts for runners',
+];
+
+// News-focused positive keywords for noisy general feeds
+const NEWS_KEYWORDS = [
+  // Race events & results
+  'race', 'races', 'results', 'wins', 'won', 'winner',
+  'record', 'course record', 'world record', 'national record',
+  'podium', 'finisher', 'dnf', 'dns',
+  // Championships & major events
+  'championship', 'championships', 'olympic', 'olympics',
+  'world athletics', 'diamond league', 'world major',
+  'commonwealth', 'european championship',
+  // Current affairs
+  'announced', 'cancelled', 'postponed', 'rescheduled',
+  'doping', 'banned', 'suspended', 'anti-doping',
+  'injury', 'injured', 'retirement', 'retires',
+  'qualifier', 'selection', 'team', 'squad',
+  'death', 'dies', 'tribute', 'memorial',
+  // Event-specific
+  'utmb', 'western states', 'comrades', 'boston',
+  'london marathon', 'chicago marathon', 'new york marathon',
+  'berlin marathon', 'tokyo marathon',
+  'great north run', 'parkrun',
+  // People & organisations
+  'kipchoge', 'ingebrigtsen', 'uk athletics', 'british athletics',
+  'iaaf', 'wada', 'usada',
+];
+
 /**
  * Check if an article matches keyword filters.
  * Returns true if no keywords are configured (no filtering needed)
@@ -68,57 +117,87 @@ function matchesKeywords(title: string, description: string, keywords?: string[]
   return keywords.some((kw) => text.includes(kw.toLowerCase()));
 }
 
+/**
+ * Check if an article should be excluded based on negative keywords.
+ * Only checks the TITLE — descriptions can contain incidental matches.
+ * Returns true if the article should be EXCLUDED.
+ */
+function shouldExclude(title: string): boolean {
+  const t = title.toLowerCase();
+  return EXCLUDE_KEYWORDS.some((kw) => t.includes(kw.toLowerCase()));
+}
+
 // RSS Feed sources
-const RSS_FEEDS = [
-  // Trail & Ultra
+// filterMode controls how articles are filtered:
+//   'none'         — no positive keyword filter (niche feeds that are already on-topic)
+//   'news'         — must match NEWS_KEYWORDS (general running magazines with lots of non-news)
+//   'running'      — must match RUNNING_KEYWORDS (very broad feeds like BBC Sport)
+// All feeds are subject to EXCLUDE_KEYWORDS regardless of filterMode.
+type FilterMode = 'none' | 'news' | 'running';
+
+const RSS_FEEDS: Array<{
+  name: string;
+  url: string;
+  category: string;
+  filterMode: FilterMode;
+}> = [
+  // Trail & Ultra — niche feeds, already mostly news/race-focused
   {
     name: 'iRunFar',
     url: 'https://www.irunfar.com/feed',
     category: 'trail',
+    filterMode: 'none',
   },
   {
     name: 'Trail Runner Magazine',
     url: 'https://www.trailrunnermag.com/feed/',
     category: 'trail',
+    filterMode: 'news',
   },
   {
     name: 'Freetrail',
     url: 'https://freetrail.com/feed/',
     category: 'trail',
+    filterMode: 'none',
   },
-  // General Running
+  // General Running — these publish lots of gear/training content, need news filtering
   {
     name: 'Canadian Running',
     url: 'https://runningmagazine.ca/feed/',
     category: 'running',
+    filterMode: 'news',
   },
   {
     name: 'LetsRun',
     url: 'https://www.letsrun.com/feed/',
     category: 'athletics',
+    filterMode: 'none',
   },
   // UK-specific
   {
     name: 'Athletics Weekly',
     url: 'https://athleticsweekly.com/feed/',
     category: 'athletics',
+    filterMode: 'none',
   },
   {
     name: 'RunABC South',
     url: 'https://runabc.co.uk/feeds/south-news',
     category: 'running',
+    filterMode: 'none',
   },
   {
     name: 'RunABC Scotland',
     url: 'https://runabc.co.uk/feeds/scotland-news',
     category: 'running',
+    filterMode: 'none',
   },
   // Athletics (keyword-filtered — BBC's feed is broad)
   {
     name: 'BBC Sport',
     url: 'https://feeds.bbci.co.uk/sport/athletics/rss.xml',
     category: 'athletics',
-    keywords: RUNNING_KEYWORDS,
+    filterMode: 'running',
   },
 ];
 
@@ -257,9 +336,13 @@ export async function fetchAndStoreArticles(): Promise<{
           // Skip if missing required fields
           if (!item.title || !item.link) continue;
 
-          // Skip articles that don't match keyword filters (for broad feeds like BBC)
+          // Exclude articles matching negative keywords (gear reviews, training guides, etc.)
+          if (shouldExclude(item.title)) continue;
+
+          // Apply positive keyword filter based on feed's filterMode
           const snippetText = item.contentSnippet || item.content || '';
-          if (!matchesKeywords(item.title, snippetText, feed.keywords)) continue;
+          if (feed.filterMode === 'running' && !matchesKeywords(item.title, snippetText, RUNNING_KEYWORDS)) continue;
+          if (feed.filterMode === 'news' && !matchesKeywords(item.title, snippetText, NEWS_KEYWORDS)) continue;
 
           const imageUrl = extractImageUrl(item) || SOURCE_PLACEHOLDERS[feed.name] || null;
           const description = cleanDescription(item.contentSnippet || item.content);
