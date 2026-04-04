@@ -77,6 +77,7 @@ model films {
   year             Int?
   awards           String[]
   featured         Boolean  @default(false)
+  meta             Json?    @default("{}")
   created_at       DateTime @default(now())
 }
 
