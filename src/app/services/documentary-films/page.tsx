@@ -11,10 +11,10 @@ import Footer from '@/components/layout/Footer';
 // ============================================
 
 const stats = [
-  { label: 'YouTube Subscribers', value: '15K+', icon: Users },
-  { label: 'Total Film Views', value: '100K+', icon: Eye },
-  { label: 'Festival Selections', value: '12', icon: Trophy },
-  { label: 'Social Reach', value: '50K+', icon: Share2 },
+  { label: 'YouTube Subscribers', value: '61K+', icon: Users },
+  { label: 'Total Film Views', value: '7.5M+', icon: Eye },
+  { label: 'Festival Selections', value: '8', icon: Film },
+  { label: 'Festival Awards', value: '1', icon: Trophy },
 ];
 
 const pastWork = [
