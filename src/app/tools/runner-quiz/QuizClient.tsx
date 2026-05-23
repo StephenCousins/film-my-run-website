@@ -136,22 +136,39 @@ function PlotSVG({ surL, disL }: { surL: number; disL: number }) {
 
   return (
     <svg className="w-full h-auto" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" aria-label="Your position on the runner map">
-      <rect x="50" y="40" width="150" height="150" className="fill-surface-secondary" opacity="0.6" />
-      <rect x="200" y="40" width="150" height="150" className="fill-surface-secondary" opacity="0.4" />
-      <rect x="50" y="190" width="150" height="150" className="fill-surface-secondary" opacity="0.4" />
-      <rect x="200" y="190" width="150" height="150" className="fill-surface-secondary" opacity="0.6" />
+      <defs>
+        <linearGradient id="q-tl" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stopColor="#f59e0b" stopOpacity="0.18" /><stop offset="100%" stopColor="#f59e0b" stopOpacity="0.06" /></linearGradient>
+        <linearGradient id="q-tr" x1="1" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#22c55e" stopOpacity="0.18" /><stop offset="100%" stopColor="#22c55e" stopOpacity="0.06" /></linearGradient>
+        <linearGradient id="q-bl" x1="0" y1="1" x2="1" y2="0"><stop offset="0%" stopColor="#3b82f6" stopOpacity="0.18" /><stop offset="100%" stopColor="#3b82f6" stopOpacity="0.06" /></linearGradient>
+        <linearGradient id="q-br" x1="1" y1="1" x2="0" y2="0"><stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.18" /><stop offset="100%" stopColor="#8b5cf6" stopOpacity="0.06" /></linearGradient>
+      </defs>
+
+      {/* Colored quadrants */}
+      <rect x="50" y="40" width="150" height="150" fill="url(#q-tl)" />
+      <rect x="200" y="40" width="150" height="150" fill="url(#q-tr)" />
+      <rect x="50" y="190" width="150" height="150" fill="url(#q-bl)" />
+      <rect x="200" y="190" width="150" height="150" fill="url(#q-br)" />
 
       <rect x="50" y="40" width="300" height="300" fill="none" className="stroke-foreground" strokeWidth="1.5" />
 
       <line x1="200" y1="40" x2="200" y2="340" className="stroke-foreground" strokeWidth="0.6" strokeDasharray="2 4" opacity="0.3" />
       <line x1="50" y1="190" x2="350" y2="190" className="stroke-foreground" strokeWidth="0.6" strokeDasharray="2 4" opacity="0.3" />
 
-      <text x="60" y="58" className="fill-muted" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="9" fontWeight="700" letterSpacing="1.5">MARATHON</text>
-      <text x="340" y="58" textAnchor="end" className="fill-muted" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="9" fontWeight="700" letterSpacing="1.5">TRAIL ULTRA</text>
-      <text x="60" y="333" className="fill-muted" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="9" fontWeight="700" letterSpacing="1.5">ROAD / TRACK</text>
-      <text x="340" y="333" textAnchor="end" className="fill-muted" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="9" fontWeight="700" letterSpacing="1.5">SKY / FELL</text>
+      {/* Quadrant labels */}
+      <text x="125" y="108" textAnchor="middle" fill="#f59e0b" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="9" fontWeight="800" letterSpacing="1.2" opacity="0.5">MARATHON</text>
+      <text x="125" y="120" textAnchor="middle" fill="#f59e0b" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="7" fontWeight="600" letterSpacing="1" opacity="0.35">TERRITORY</text>
 
-      <g opacity="0.25">
+      <text x="275" y="108" textAnchor="middle" fill="#22c55e" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="9" fontWeight="800" letterSpacing="1.2" opacity="0.5">TRAIL ULTRA</text>
+      <text x="275" y="120" textAnchor="middle" fill="#22c55e" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="7" fontWeight="600" letterSpacing="1" opacity="0.35">TERRITORY</text>
+
+      <text x="125" y="268" textAnchor="middle" fill="#3b82f6" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="9" fontWeight="800" letterSpacing="1.2" opacity="0.5">TRACK &amp; 5K</text>
+      <text x="125" y="280" textAnchor="middle" fill="#3b82f6" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="7" fontWeight="600" letterSpacing="1" opacity="0.35">TERRITORY</text>
+
+      <text x="275" y="268" textAnchor="middle" fill="#8b5cf6" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="9" fontWeight="800" letterSpacing="1.2" opacity="0.5">SKY &amp; FELL</text>
+      <text x="275" y="280" textAnchor="middle" fill="#8b5cf6" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="7" fontWeight="600" letterSpacing="1" opacity="0.35">TERRITORY</text>
+
+      {/* Ghost dots */}
+      <g opacity="0.2">
         <circle cx="95" cy="325" r="3" className="fill-foreground" />
         <circle cx="110" cy="145" r="3" className="fill-foreground" />
         <circle cx="305" cy="70" r="3" className="fill-foreground" />
@@ -160,11 +177,13 @@ function PlotSVG({ surL, disL }: { surL: number; disL: number }) {
         <circle cx="200" cy="190" r="3" className="fill-foreground" />
       </g>
 
+      {/* You marker */}
       <motion.g initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.6 }}>
         <text x={dotX} y={dotY < 75 ? dotY + 26 : dotY - 16} textAnchor="middle" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="14" fontWeight="900" className="fill-foreground" letterSpacing="1.5">YOU</text>
         <circle cx={dotX} cy={dotY} r="9" className="fill-brand stroke-foreground" strokeWidth="2.5" />
       </motion.g>
 
+      {/* Axis labels */}
       <text x="200" y="22" textAnchor="middle" className="fill-foreground" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="11" fontWeight="700" letterSpacing="3">ULTRA</text>
       <text x="200" y="360" textAnchor="middle" className="fill-foreground" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="11" fontWeight="700" letterSpacing="3">SPEED</text>
       <text x="28" y="194" textAnchor="middle" className="fill-foreground" fontFamily="var(--font-space-grotesk), sans-serif" fontSize="11" fontWeight="700" letterSpacing="3" transform="rotate(-90 28 194)">ROAD</text>
@@ -733,6 +752,51 @@ export default function QuizClient({ sharedResult }: QuizClientProps) {
                         {result.ideology.name}
                       </h2>
                       <p className="text-secondary text-lg leading-relaxed">{result.ideology.desc}</p>
+                    </div>
+                  </motion.div>
+                </div>
+              </section>
+
+              {/* Extended profile */}
+              <section className="py-8 lg:py-12">
+                <div className="container-narrow">
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                  >
+                    <p className="text-foreground text-lg leading-relaxed mb-8">
+                      {result.ideology.profile}
+                    </p>
+
+                    <div className="grid sm:grid-cols-2 gap-4 mb-8">
+                      <div className="card p-5">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-muted mb-3">Tell-tale signs</p>
+                        <ul className="space-y-2">
+                          {result.ideology.traits.map((trait) => (
+                            <li key={trait} className="flex items-start gap-2 text-sm text-secondary">
+                              <span className="text-brand mt-0.5 font-bold">&#x2022;</span>
+                              {trait}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div className="space-y-4">
+                        <div className="card p-5">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-muted mb-2">Runners you&apos;d admire</p>
+                          <p className="text-sm font-medium">{result.ideology.famous}</p>
+                        </div>
+                        <div className="card p-5">
+                          <p className="text-[10px] font-bold uppercase tracking-widest text-muted mb-2">Your ideal race</p>
+                          <p className="text-sm font-medium">{result.ideology.idealRace}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="border-l-4 border-brand pl-5 py-3 mb-4">
+                      <p className="font-display text-xl sm:text-2xl font-bold italic text-foreground">
+                        &ldquo;{result.ideology.mantra}&rdquo;
+                      </p>
                     </div>
                   </motion.div>
                 </div>

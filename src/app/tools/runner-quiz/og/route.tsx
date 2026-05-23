@@ -17,7 +17,7 @@ export async function GET(request: Request) {
       const [surfaceL, methodL, distanceL, spiritL] = parts;
       const ideology = findClosestIdeology(surfaceL, methodL, distanceL, spiritL);
       tribeName = ideology.name;
-      tribeDesc = ideology.desc;
+      tribeDesc = ideology.profile || ideology.desc;
       isResult = true;
     }
   }
