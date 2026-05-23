@@ -103,6 +103,13 @@ const AXIS_POLES: Record<Axis, [string, string]> = {
   spi: ['Compete', 'Connect'],
 };
 
+const AXIS_BACKGROUNDS: Record<Axis, string> = {
+  sur: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/hero/hero-trail.jpg',
+  met: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/hero/running-tools-bg.jpg',
+  dis: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/films/utmb.jpg',
+  spi: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about-hero.jpg',
+};
+
 // ============================================================
 // COMPONENTS
 // ============================================================
@@ -547,8 +554,29 @@ export default function RunnerQuizPage() {
 
           {/* ==================== QUIZ ==================== */}
           {phase === 'quiz' && (
-            <section className="py-8 lg:py-12">
-              <div className="container-narrow">
+            <section className="relative py-8 lg:py-12 min-h-[80vh] overflow-hidden">
+              {/* Axis-themed background image */}
+              <AnimatePresence>
+                <motion.div
+                  key={q.axis}
+                  className="absolute inset-0 z-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.8 }}
+                >
+                  <Image
+                    src={AXIS_BACKGROUNDS[q.axis]}
+                    alt=""
+                    fill
+                    className="object-cover"
+                    sizes="100vw"
+                  />
+                  <div className="absolute inset-0 bg-white/85 dark:bg-zinc-950/90" />
+                </motion.div>
+              </AnimatePresence>
+
+              <div className="container-narrow relative z-10">
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
