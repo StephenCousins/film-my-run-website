@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, RotateCcw, Download, Compass, Link2, Check } from 'lucide-react';
+import { ArrowRight, ArrowLeft, RotateCcw, Download, Compass, Link2, Check, Mail } from 'lucide-react';
 import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -379,6 +379,9 @@ export default function QuizClient({ sharedResult }: QuizClientProps) {
   const [shareUrl, setShareUrl] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [emailInput, setEmailInput] = useState('');
+  const [subscribeChecked, setSubscribeChecked] = useState(true);
+  const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const topRef = useRef<HTMLDivElement>(null);
 
   const scrollToTop = useCallback(() => {
@@ -476,6 +479,31 @@ export default function QuizClient({ sharedResult }: QuizClientProps) {
       document.body.removeChild(input);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
+  const handleEmailResults = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!result || emailStatus === 'sending') return;
+    setEmailStatus('sending');
+    try {
+      const res = await fetch('/api/runner-quiz/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: emailInput,
+          scores: result.scores,
+          subscribeNewsletter: subscribeChecked,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to send');
+      }
+      setEmailStatus('sent');
+    } catch {
+      setEmailStatus('error');
+      setTimeout(() => setEmailStatus('idle'), 3000);
     }
   };
 
@@ -798,6 +826,81 @@ export default function QuizClient({ sharedResult }: QuizClientProps) {
                         &ldquo;{result.ideology.mantra}&rdquo;
                       </p>
                     </div>
+
+                    {/* Email results capture */}
+                    {!isSharedView && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="mt-8"
+                      >
+                        <div className="card-elevated p-5 sm:p-6 relative overflow-hidden">
+                          <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-brand via-brand/50 to-transparent" />
+
+                          {emailStatus === 'sent' ? (
+                            <div className="text-center py-4">
+                              <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-500/10 mb-3">
+                                <Check className="w-6 h-6 text-green-500" />
+                              </div>
+                              <p className="font-display text-lg font-bold mb-1">Check your inbox</p>
+                              <p className="text-sm text-muted">
+                                Your results are on the way to {emailInput}
+                                {subscribeChecked && <span> &mdash; and you&apos;re on the mailing list.</span>}
+                              </p>
+                            </div>
+                          ) : (
+                            <>
+                              <div className="flex items-center gap-3 mb-4">
+                                <div className="w-10 h-10 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0">
+                                  <Mail className="w-5 h-5 text-brand" />
+                                </div>
+                                <div>
+                                  <p className="font-display font-bold text-sm">Get your results by email</p>
+                                  <p className="text-xs text-muted">A beautiful summary of your tribe, axes, and profile.</p>
+                                </div>
+                              </div>
+
+                              <form onSubmit={handleEmailResults}>
+                                <div className="flex gap-2 mb-3">
+                                  <input
+                                    type="email"
+                                    required
+                                    value={emailInput}
+                                    onChange={(e) => setEmailInput(e.target.value)}
+                                    placeholder="your@email.com"
+                                    className="flex-1 min-w-0 px-4 py-2.5 bg-surface border border-border rounded-full text-sm placeholder:text-muted focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
+                                  />
+                                  <button
+                                    type="submit"
+                                    disabled={emailStatus === 'sending'}
+                                    className="btn-primary text-sm px-5 whitespace-nowrap"
+                                  >
+                                    {emailStatus === 'sending' ? 'Sending...' : 'Send'}
+                                  </button>
+                                </div>
+
+                                <label className="flex items-start gap-2.5 cursor-pointer group">
+                                  <input
+                                    type="checkbox"
+                                    checked={subscribeChecked}
+                                    onChange={(e) => setSubscribeChecked(e.target.checked)}
+                                    className="mt-0.5 w-4 h-4 rounded border-border text-brand focus:ring-brand cursor-pointer accent-[rgb(var(--color-brand))]"
+                                  />
+                                  <span className="text-xs text-secondary leading-relaxed">
+                                    Also sign me up to the Film My Run mailing list &mdash; trail &amp; ultra running news, race reports, and new tools. No spam, unsubscribe any time.
+                                  </span>
+                                </label>
+
+                                {emailStatus === 'error' && (
+                                  <p className="text-xs text-red-500 mt-2">Something went wrong. Please try again.</p>
+                                )}
+                              </form>
+                            </>
+                          )}
+                        </div>
+                      </motion.div>
+                    )}
                   </motion.div>
                 </div>
               </section>
