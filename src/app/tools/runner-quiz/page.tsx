@@ -559,19 +559,13 @@ export default function RunnerQuizPage() {
               <AnimatePresence>
                 <motion.div
                   key={q.axis}
-                  className="absolute inset-0 z-0"
+                  className="absolute inset-0 z-0 bg-cover bg-center"
+                  style={{ backgroundImage: `url(${AXIS_BACKGROUNDS[q.axis]})` }}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.8 }}
                 >
-                  <Image
-                    src={AXIS_BACKGROUNDS[q.axis]}
-                    alt=""
-                    fill
-                    className="object-cover"
-                    sizes="100vw"
-                  />
                   <div className="absolute inset-0 bg-white/85 dark:bg-zinc-950/90" />
                 </motion.div>
               </AnimatePresence>
