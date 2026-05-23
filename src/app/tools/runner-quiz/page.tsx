@@ -1,8 +1,9 @@
 'use client';
 
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ArrowLeft, RotateCcw, Download, ChevronDown } from 'lucide-react';
+import { ArrowRight, ArrowLeft, RotateCcw, Download, Compass } from 'lucide-react';
+import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
@@ -448,222 +449,316 @@ export default function RunnerQuizPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-background pt-20 pb-12 md:pt-24">
-        <div ref={topRef} className="container-narrow">
+      <main className="min-h-screen bg-background pt-20 lg:pt-24">
+        <div ref={topRef} />
 
-          {/* ==================== WELCOME ==================== */}
-          {phase === 'welcome' && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="pt-8 md:pt-12"
-            >
-              <p className="text-brand text-xs font-bold uppercase tracking-[0.2em] mb-4">
-                A Runner&apos;s Ideology Quiz
-              </p>
-
-              <h1 className="font-display text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight leading-[0.92] mb-6">
-                What kind of runner are{' '}
-                <span className="text-brand italic font-normal">you</span>?
-              </h1>
-
-              <p className="text-lg text-secondary leading-relaxed mb-8 max-w-lg">
-                Where you run, how you train, what distance pulls you, and why you lace up at all. Find your running tribe in five minutes.
-              </p>
-
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-border rounded-xl overflow-hidden border border-border mb-8">
-                {[
-                  ['Questions', '32'],
-                  ['Time', '≈ 5 min'],
-                  ['Tribes', '16'],
-                  ['Entry Fee', '£0.00'],
-                ].map(([label, value]) => (
-                  <div key={label} className="bg-surface p-4">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted mb-1">{label}</p>
-                    <p className="font-display text-2xl font-bold">{value}</p>
-                  </div>
-                ))}
+        {/* ==================== WELCOME ==================== */}
+        {phase === 'welcome' && (
+          <>
+            {/* Hero with background image */}
+            <section className="relative py-24 lg:py-36 overflow-hidden">
+              <div className="absolute inset-0">
+                <Image
+                  src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/hero/hero-trail.jpg"
+                  alt="Runners on a trail"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[rgb(var(--color-background))]" />
               </div>
 
-              <button
-                onClick={startQuiz}
-                className="btn-primary w-full text-sm tracking-widest uppercase"
-              >
-                On Your Marks <ArrowRight className="w-4 h-4" />
-              </button>
-            </motion.div>
-          )}
+              <div className="container relative">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="max-w-2xl"
+                >
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
+                    <Compass className="w-4 h-4 text-orange-500" />
+                    <span className="text-orange-400 text-sm font-medium">Runner Ideology Quiz</span>
+                  </div>
+
+                  <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 leading-[0.95]">
+                    What kind of runner are{' '}
+                    <span className="text-brand italic font-normal">you</span>?
+                  </h1>
+
+                  <p className="text-lg text-zinc-300 max-w-xl">
+                    Where you run, how you train, what distance pulls you, and why you lace up at all. Find your running tribe in five minutes.
+                  </p>
+                </motion.div>
+              </div>
+            </section>
+
+            {/* Stats grid + CTA */}
+            <section className="py-12 lg:py-16">
+              <div className="container-narrow">
+                <motion.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.15 }}
+                >
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-px bg-border rounded-xl overflow-hidden border border-border mb-8">
+                    {[
+                      ['Questions', '32'],
+                      ['Time', '≈ 5 min'],
+                      ['Tribes', '21'],
+                      ['Entry Fee', '£0.00'],
+                    ].map(([label, value]) => (
+                      <div key={label} className="bg-surface p-4 sm:p-5">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-muted mb-1">{label}</p>
+                        <p className="font-display text-2xl sm:text-3xl font-bold">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+
+                  <p className="text-secondary text-center mb-8 max-w-md mx-auto">
+                    32 statements across four axes — <strong className="text-foreground">surface</strong>, <strong className="text-foreground">method</strong>, <strong className="text-foreground">distance</strong>, and <strong className="text-foreground">spirit</strong>. Rate each one and we&apos;ll find your tribe.
+                  </p>
+
+                  <button
+                    onClick={startQuiz}
+                    className="btn-primary w-full text-sm tracking-widest uppercase"
+                  >
+                    On Your Marks <ArrowRight className="w-4 h-4" />
+                  </button>
+
+                  {/* Axis preview cards */}
+                  <div className="grid grid-cols-2 gap-3 mt-10">
+                    {([
+                      { label: 'Surface', left: 'Road', right: 'Trail', color: 'brand', icon: '🛣️ ↔ 🌲' },
+                      { label: 'Method', left: 'Numbers', right: 'Feel', color: 'blue-500', icon: '📊 ↔ 🧘' },
+                      { label: 'Distance', left: 'Speed', right: 'Ultra', color: 'red-500', icon: '⚡ ↔ 🏔️' },
+                      { label: 'Spirit', left: 'Compete', right: 'Connect', color: 'amber-500', icon: '🏆 ↔ 🤝' },
+                    ]).map((axis) => (
+                      <div key={axis.label} className="card p-4 text-center">
+                        <p className="text-2xl mb-2">{axis.icon}</p>
+                        <p className="font-display font-bold text-sm uppercase tracking-wide mb-0.5">{axis.label}</p>
+                        <p className="text-xs text-muted">{axis.left} vs {axis.right}</p>
+                      </div>
+                    ))}
+                  </div>
+                </motion.div>
+              </div>
+            </section>
+          </>
+        )}
 
           {/* ==================== QUIZ ==================== */}
           {phase === 'quiz' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="pt-4 md:pt-8"
-            >
-              <div className="flex justify-between items-baseline mb-2 text-xs font-bold uppercase tracking-widest text-secondary">
-                <span>
-                  <span className="text-foreground">{currentIdx + 1}</span> / {QUESTIONS.length}
-                </span>
-                <span className="text-brand">{AXIS_LABELS[q.axis]}</span>
-              </div>
-
-              <div className="h-0.5 bg-surface-secondary rounded-full mb-10 overflow-hidden">
+            <section className="py-8 lg:py-12">
+              <div className="container-narrow">
                 <motion.div
-                  className="h-full bg-brand"
-                  animate={{ width: `${progressPct}%` }}
-                  transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
-                />
-              </div>
-
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentIdx}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.25 }}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
                 >
-                  <p className="text-xl sm:text-2xl font-semibold leading-snug mb-8 min-h-[80px]">
-                    {q.text}
-                  </p>
-
-                  <div className="flex flex-col gap-2.5">
-                    {OPTIONS.map((opt) => {
-                      const isSelected = answers[currentIdx] === opt.value;
-                      return (
-                        <button
-                          key={opt.value}
-                          onClick={() => selectOption(opt.value)}
-                          className={`
-                            flex items-center gap-3.5 w-full text-left px-4 py-3.5
-                            border rounded-xl text-[15px] font-medium
-                            transition-all duration-150
-                            ${isSelected
-                              ? 'bg-foreground text-background border-foreground'
-                              : 'bg-transparent border-border hover:bg-foreground hover:text-background hover:border-foreground'
-                            }
-                          `}
-                        >
-                          <span
-                            className={`
-                              w-3 h-3 rounded-full border-[1.5px] flex-shrink-0 transition-all
-                              ${isSelected
-                                ? 'bg-brand border-background'
-                                : 'border-current'
-                              }
-                            `}
+                  {/* Progress header */}
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="relative w-10 h-10">
+                        <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                          <circle cx="18" cy="18" r="15.5" fill="none" className="stroke-surface-secondary" strokeWidth="3" />
+                          <motion.circle
+                            cx="18" cy="18" r="15.5" fill="none"
+                            className="stroke-brand"
+                            strokeWidth="3"
+                            strokeLinecap="round"
+                            strokeDasharray={97.4}
+                            animate={{ strokeDashoffset: 97.4 - (progressPct / 100) * 97.4 }}
+                            transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
                           />
-                          {opt.label}
-                        </button>
-                      );
-                    })}
+                        </svg>
+                        <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-foreground">
+                          {currentIdx + 1}
+                        </span>
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold uppercase tracking-widest text-muted">
+                          Question {currentIdx + 1} of {QUESTIONS.length}
+                        </p>
+                        <p className="text-sm font-semibold text-brand">{AXIS_LABELS[q.axis]}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="h-0.5 bg-surface-secondary rounded-full mb-8 overflow-hidden">
+                    <motion.div
+                      className="h-full bg-brand"
+                      animate={{ width: `${progressPct}%` }}
+                      transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+                    />
+                  </div>
+
+                  {/* Question card */}
+                  <div className="card-elevated p-6 sm:p-8 mb-6">
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={currentIdx}
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -8 }}
+                        transition={{ duration: 0.25 }}
+                      >
+                        <p className="text-xl sm:text-2xl font-semibold leading-snug mb-8 min-h-[60px]">
+                          &ldquo;{q.text}&rdquo;
+                        </p>
+
+                        <div className="flex flex-col gap-2.5">
+                          {OPTIONS.map((opt) => {
+                            const isSelected = answers[currentIdx] === opt.value;
+                            return (
+                              <button
+                                key={opt.value}
+                                onClick={() => selectOption(opt.value)}
+                                className={`
+                                  flex items-center gap-3.5 w-full text-left px-4 py-3.5
+                                  border rounded-xl text-[15px] font-medium
+                                  transition-all duration-150
+                                  ${isSelected
+                                    ? 'bg-brand text-white border-brand'
+                                    : 'bg-transparent border-border hover:border-brand hover:bg-brand/5'
+                                  }
+                                `}
+                              >
+                                <span
+                                  className={`
+                                    w-3 h-3 rounded-full border-[1.5px] flex-shrink-0 transition-all
+                                    ${isSelected
+                                      ? 'bg-white border-white/50'
+                                      : 'border-current'
+                                    }
+                                  `}
+                                />
+                                {opt.label}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
+                    </AnimatePresence>
+                  </div>
+
+                  <div className="flex justify-between">
+                    <button
+                      onClick={goBack}
+                      disabled={currentIdx === 0}
+                      className="btn-ghost text-xs uppercase tracking-widest disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" /> Back
+                    </button>
+                    <button
+                      onClick={restart}
+                      className="btn-ghost text-xs uppercase tracking-widest"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5" /> Restart
+                    </button>
                   </div>
                 </motion.div>
-              </AnimatePresence>
-
-              <div className="flex justify-between mt-8">
-                <button
-                  onClick={goBack}
-                  disabled={currentIdx === 0}
-                  className="btn-ghost text-xs uppercase tracking-widest disabled:opacity-30 disabled:cursor-not-allowed"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5" /> Back
-                </button>
-                <button
-                  onClick={restart}
-                  className="btn-ghost text-xs uppercase tracking-widest"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" /> Restart
-                </button>
               </div>
-            </motion.div>
+            </section>
           )}
 
           {/* ==================== RESULTS ==================== */}
           {phase === 'results' && result && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4 }}
-              className="pt-4 md:pt-8"
-            >
-              {/* Tribe card */}
-              <div className="card-elevated p-6 sm:p-8 mb-10 relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-brand" />
-                <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted mt-2 mb-2">
-                  Your tribe
-                </p>
-                <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[0.95] mb-4">
-                  <span className="block text-brand italic font-normal text-lg sm:text-xl mb-1">The</span>
-                  {result.ideology.name}
-                </h2>
-                <p className="text-secondary leading-relaxed">{result.ideology.desc}</p>
-              </div>
-
-              {/* 2D Plot */}
-              <h3 className="font-display text-2xl font-bold mb-1">Your map</h3>
-              <p className="text-sm text-muted mb-5">Where you sit on the two most tribal axes — surface and distance.</p>
-
-              <div className="card-elevated p-3 sm:p-4 mb-10">
-                <PlotSVG surL={result.scores.surfaceL} disL={result.scores.distanceL} />
-              </div>
-
-              {/* Axis bars */}
-              <h3 className="font-display text-2xl font-bold mb-1">Your four axes</h3>
-              <p className="text-sm text-muted mb-6">Where your answers placed you on each dimension.</p>
-
-              <AxisBar axis="sur" leftPct={result.scores.surfaceL} />
-              <AxisBar axis="met" leftPct={result.scores.methodL} />
-              <AxisBar axis="dis" leftPct={result.scores.distanceL} />
-              <AxisBar axis="spi" leftPct={result.scores.spiritL} />
-
-              {/* Actions */}
-              <div className="flex flex-col gap-3 mt-8">
-                <button onClick={handleShare} disabled={isGenerating} className="btn-primary w-full text-sm tracking-widest uppercase">
-                  {isGenerating ? 'Building image…' : 'Save Result as Image'}
-                  <Download className="w-4 h-4" />
-                </button>
-                <button onClick={restart} className="btn-secondary w-full text-sm tracking-widest uppercase">
-                  <RotateCcw className="w-4 h-4" /> Run It Again
-                </button>
-              </div>
-
-              {/* Share preview */}
-              <AnimatePresence>
-                {shareUrl && (
+            <>
+              {/* Results hero */}
+              <section className="relative py-16 lg:py-24 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-brand/10 via-brand/5 to-transparent" />
+                <div className="container-narrow relative">
                   <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    className="mt-6 p-4 border border-dashed border-border rounded-xl text-center"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
                   >
-                    <p className="text-sm text-muted mb-3">
-                      <strong className="text-foreground">Long-press on mobile</strong> or right-click on desktop to save.
-                    </p>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={shareUrl}
-                      alt="Your runner tribe result card"
-                      className="w-full max-w-sm mx-auto border border-border rounded-lg mb-3"
-                    />
-                    <a
-                      href={shareUrl}
-                      download={`running-tribe-${result.ideology.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.png`}
-                      className="inline-block bg-brand text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-brand-hover transition-colors"
-                    >
-                      <Download className="w-3.5 h-3.5 inline mr-2" />
-                      Download PNG
-                    </a>
+                    <div className="card-elevated p-6 sm:p-8 relative overflow-hidden">
+                      <div className="absolute top-0 left-0 right-0 h-1.5 bg-brand" />
+                      <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted mt-2 mb-2">
+                        Your tribe
+                      </p>
+                      <h2 className="font-display text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight leading-[0.95] mb-4">
+                        <span className="block text-brand italic font-normal text-lg sm:text-xl mb-1">The</span>
+                        {result.ideology.name}
+                      </h2>
+                      <p className="text-secondary text-lg leading-relaxed">{result.ideology.desc}</p>
+                    </div>
                   </motion.div>
-                )}
-              </AnimatePresence>
+                </div>
+              </section>
 
-              <p className="text-xs text-muted leading-relaxed mt-8 pt-5 border-t border-border">
-                Adapted from the four-axis 8values framework — swapped politics for running tribes. The axes are intentionally playful; most runners drift across them depending on the day, the season, and what&apos;s coming up in the calendar. A starting point for a conversation, not a verdict.
-              </p>
-            </motion.div>
+              {/* Map + axes */}
+              <section className="py-8 lg:py-12">
+                <div className="container-narrow">
+                  <motion.div
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.15 }}
+                  >
+                    <h3 className="font-display text-2xl font-bold mb-1">Your map</h3>
+                    <p className="text-sm text-muted mb-5">Where you sit on the two most tribal axes — surface and distance.</p>
+
+                    <div className="card-elevated p-3 sm:p-4 mb-12">
+                      <PlotSVG surL={result.scores.surfaceL} disL={result.scores.distanceL} />
+                    </div>
+
+                    <h3 className="font-display text-2xl font-bold mb-1">Your four axes</h3>
+                    <p className="text-sm text-muted mb-6">Where your answers placed you on each dimension.</p>
+
+                    <div className="card-elevated p-5 sm:p-6 mb-8">
+                      <AxisBar axis="sur" leftPct={result.scores.surfaceL} />
+                      <AxisBar axis="met" leftPct={result.scores.methodL} />
+                      <AxisBar axis="dis" leftPct={result.scores.distanceL} />
+                      <AxisBar axis="spi" leftPct={result.scores.spiritL} />
+                    </div>
+
+                    {/* Actions */}
+                    <div className="flex flex-col gap-3">
+                      <button onClick={handleShare} disabled={isGenerating} className="btn-primary w-full text-sm tracking-widest uppercase">
+                        {isGenerating ? 'Building image…' : 'Save Result as Image'}
+                        <Download className="w-4 h-4" />
+                      </button>
+                      <button onClick={restart} className="btn-secondary w-full text-sm tracking-widest uppercase">
+                        <RotateCcw className="w-4 h-4" /> Run It Again
+                      </button>
+                    </div>
+
+                    {/* Share preview */}
+                    <AnimatePresence>
+                      {shareUrl && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          className="mt-6 p-4 border border-dashed border-border rounded-xl text-center"
+                        >
+                          <p className="text-sm text-muted mb-3">
+                            <strong className="text-foreground">Long-press on mobile</strong> or right-click on desktop to save.
+                          </p>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={shareUrl}
+                            alt="Your runner tribe result card"
+                            className="w-full max-w-sm mx-auto border border-border rounded-lg mb-3"
+                          />
+                          <a
+                            href={shareUrl}
+                            download={`running-tribe-${result.ideology.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')}.png`}
+                            className="inline-block bg-brand text-white px-5 py-2.5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-brand-hover transition-colors"
+                          >
+                            <Download className="w-3.5 h-3.5 inline mr-2" />
+                            Download PNG
+                          </a>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <p className="text-xs text-muted leading-relaxed mt-8 pt-5 border-t border-border">
+                      Adapted from the four-axis 8values framework — swapped politics for running tribes. The axes are intentionally playful; most runners drift across them depending on the day, the season, and what&apos;s coming up in the calendar. A starting point for a conversation, not a verdict.
+                    </p>
+                  </motion.div>
+                </div>
+              </section>
+            </>
           )}
-        </div>
       </main>
       <Footer />
     </>
