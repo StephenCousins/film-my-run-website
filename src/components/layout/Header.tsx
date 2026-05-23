@@ -19,6 +19,7 @@ const navigation = [
     children: [
       { name: 'Running Calculators', href: '/tools/calculators' },
       { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
+      { name: 'Runner Quiz', href: '/tools/runner-quiz' },
       { name: 'Route Comparison', href: '/tools/route-comparison' },
       { name: 'Training Plan App', href: '/training' },
       { name: 'Discount Codes', href: '/discounts' },
