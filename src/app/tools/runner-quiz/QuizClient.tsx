@@ -382,6 +382,7 @@ export default function QuizClient({ sharedResult }: QuizClientProps) {
   const [emailInput, setEmailInput] = useState('');
   const [subscribeChecked, setSubscribeChecked] = useState(true);
   const [emailStatus, setEmailStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const [stats, setStats] = useState<{ total: number; tribes: { name: string; count: number; pct: number }[] } | null>(null);
   const topRef = useRef<HTMLDivElement>(null);
 
   const scrollToTop = useCallback(() => {
@@ -441,12 +442,18 @@ export default function QuizClient({ sharedResult }: QuizClientProps) {
 
     const ideology = findClosestIdeology(surL, metL, disL, spiL);
 
-    setResult({
-      ideology,
-      scores: { surfaceL: surL, methodL: metL, distanceL: disL, spiritL: spiL },
-    });
+    const newScores = { surfaceL: surL, methodL: metL, distanceL: disL, spiritL: spiL };
+    setResult({ ideology, scores: newScores });
     setPhase('results');
     setTimeout(scrollToTop, 50);
+
+    fetch('/api/runner-quiz/results', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newScores),
+    }).then(() =>
+      fetch('/api/runner-quiz/results').then(r => r.json()).then(setStats)
+    ).catch(() => {});
   };
 
   const handleShare = async () => {
@@ -933,6 +940,47 @@ export default function QuizClient({ sharedResult }: QuizClientProps) {
                       <AxisBar axis="dis" leftPct={result.scores.distanceL} />
                       <AxisBar axis="spi" leftPct={result.scores.spiritL} />
                     </div>
+
+                    {/* Community stats */}
+                    {stats && stats.total > 1 && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 8 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.25 }}
+                        className="mb-8"
+                      >
+                        <h3 className="font-display text-2xl font-bold mb-1">The community</h3>
+                        <p className="text-sm text-muted mb-5">
+                          {stats.total.toLocaleString()} runners have taken this quiz. Here&apos;s how the tribes break down.
+                        </p>
+
+                        <div className="card-elevated p-5 sm:p-6">
+                          <div className="space-y-3">
+                            {stats.tribes.slice(0, 10).map((t) => {
+                              const isYou = t.name === result.ideology.name;
+                              return (
+                                <div key={t.name} className="flex items-center gap-3">
+                                  <span className={`text-sm font-medium w-36 sm:w-44 truncate ${isYou ? 'text-brand font-bold' : 'text-secondary'}`}>
+                                    {t.name} {isYou && '(you)'}
+                                  </span>
+                                  <div className="flex-1 h-5 bg-surface-secondary rounded-full overflow-hidden">
+                                    <motion.div
+                                      className={`h-full rounded-full ${isYou ? 'bg-brand' : 'bg-foreground/20'}`}
+                                      initial={{ width: 0 }}
+                                      animate={{ width: `${Math.max(t.pct, 2)}%` }}
+                                      transition={{ duration: 0.6, delay: 0.1 }}
+                                    />
+                                  </div>
+                                  <span className={`text-xs font-mono font-bold w-10 text-right ${isYou ? 'text-brand' : 'text-muted'}`}>
+                                    {t.pct}%
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </motion.div>
+                    )}
 
                     {/* Share buttons — shown when viewing OWN results */}
                     {!isSharedView && (

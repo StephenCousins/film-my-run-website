@@ -425,6 +425,19 @@ model news_stories {
   @@index([roundup_date])
 }
 
+model quiz_results {
+  id         Int      @id @default(autoincrement())
+  tribe      String
+  surface_l  Float
+  method_l   Float
+  distance_l Float
+  spirit_l   Float
+  created_at DateTime @default(now())
+
+  @@index([tribe])
+  @@index([created_at])
+}
+
 enum AccessTier {
   FREE
   PREMIUM
