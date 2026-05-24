@@ -7,10 +7,20 @@ import {
   updatePo10Summary,
   type PB,
 } from '@/lib/how-fast/po10-scraper';
+import { secondsToTimeStr } from '@/lib/how-fast/comparisons';
 
 export const dynamic = 'force-dynamic';
 
 const CACHE_HOURS = 6;
+
+function reformatPbs(pbs: Record<string, PB>): Record<string, PB> {
+  const fixed: Record<string, PB> = {};
+  for (const [key, pb] of Object.entries(pbs)) {
+    const formatted = secondsToTimeStr(pb.seconds);
+    fixed[key] = { ...pb, time: formatted, timeFormatted: formatted };
+  }
+  return fixed;
+}
 
 export async function GET(request: NextRequest) {
   const athlete_id = request.nextUrl.searchParams.get('id');
@@ -51,7 +61,7 @@ export async function GET(request: NextRequest) {
         },
       }).catch(() => {});
 
-      const pbs = (cached.pbs_json as unknown as Record<string, PB>) || {};
+      const pbs = reformatPbs((cached.pbs_json as unknown as Record<string, PB>) || {});
       const stats = calculateOverallStats(
         pbs,
         cached.gender as 'male' | 'female' | null,
@@ -136,7 +146,7 @@ export async function GET(request: NextRequest) {
     }).catch(() => null);
 
     if (cached) {
-      const pbs = (cached.pbs_json as unknown as Record<string, PB>) || {};
+      const pbs = reformatPbs((cached.pbs_json as unknown as Record<string, PB>) || {});
       const stats = Object.keys(pbs).length > 0
         ? calculateOverallStats(pbs, cached.gender as 'male' | 'female' | null, cached.age_group)
         : null;
