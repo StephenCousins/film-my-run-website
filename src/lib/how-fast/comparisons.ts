@@ -32,14 +32,15 @@ export function parseTimeToSeconds(timeStr: string): number | null {
 }
 
 export function secondsToTimeStr(seconds: number): string {
-  if (seconds >= 3600) {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
+  const total = Math.round(seconds);
+  if (total >= 3600) {
+    const hours = Math.floor(total / 3600);
+    const minutes = Math.floor((total % 3600) / 60);
+    const secs = total % 60;
     return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   } else {
-    const minutes = Math.floor(seconds / 60);
-    const secs = seconds % 60;
+    const minutes = Math.floor(total / 60);
+    const secs = total % 60;
     return `${minutes}:${secs.toString().padStart(2, '0')}`;
   }
 }
