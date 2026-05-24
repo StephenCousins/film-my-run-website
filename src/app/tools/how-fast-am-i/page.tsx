@@ -381,7 +381,7 @@ export default function HowFastAmIPage() {
                     <Info className="w-4 h-4" />
                     {activeTab === 'parkrun'
                       ? 'Find your ID on your parkrun profile page'
-                      : 'Find your ID on earlyaccess.myathletics.uk'}
+                      : 'Find your ID on powerof10.uk'}
                   </p>
                   {(parkrunData || po10Data) && (
                     <button

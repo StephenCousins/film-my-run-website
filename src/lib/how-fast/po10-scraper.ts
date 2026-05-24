@@ -9,7 +9,7 @@ import {
 } from '@/lib/how-fast/comparisons';
 import { checkPo10Structure } from '@/lib/how-fast/structure-monitor';
 
-const PO10_BASE_URL = 'https://earlyaccess.myathletics.uk/Home/Athlete';
+const PO10_BASE_URL = 'https://www.powerof10.uk/Home/Athlete';
 
 const HEADERS = {
   'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
