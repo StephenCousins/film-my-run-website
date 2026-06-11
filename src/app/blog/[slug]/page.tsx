@@ -7,6 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import { prisma } from '@/lib/db';
+import { sanitizeContent } from '@/lib/sanitize';
 
 export const dynamic = 'force-dynamic';
 
@@ -409,7 +410,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     prose-ul:space-y-2 prose-li:text-secondary
                     prose-strong:text-foreground
                     prose-img:rounded-xl"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeContent(post.content) }}
                 />
 
                 {/* Tags */}

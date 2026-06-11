@@ -4,14 +4,7 @@ export const metadata: Metadata = {
   title: 'Shop',
   alternates: { canonical: 'https://filmmyrun.co.uk/shop' },
   description:
-    'Gear designed by runners, for runners. Quality equipment tested on trails and roads around the world. Running caps, vests, apparel, and accessories.',
-  keywords: [
-    'running gear',
-    'running cap',
-    'running vest',
-    'trail running equipment',
-    'running accessories',
-  ],
+    'The Film My Run shop is coming soon. Running gear, apparel, and accessories designed by runners, for runners.',
   openGraph: {
     title: 'Shop | Film My Run',
     description: 'Gear designed by runners, for runners.',

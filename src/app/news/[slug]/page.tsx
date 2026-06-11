@@ -7,6 +7,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import { prisma } from '@/lib/db';
+import { sanitizeContent } from '@/lib/sanitize';
 
 export const dynamic = 'force-dynamic';
 
@@ -222,7 +223,7 @@ export default async function NewsStoryPage({ params }: PageProps) {
                     prose-p:text-secondary prose-p:leading-relaxed
                     prose-a:text-orange-500 prose-a:no-underline hover:prose-a:underline
                     prose-strong:text-foreground"
-                  dangerouslySetInnerHTML={{ __html: story.content }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeContent(story.content) }}
                 />
 
                 {/* Source attribution */}

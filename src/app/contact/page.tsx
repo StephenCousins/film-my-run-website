@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Mail, MapPin, Instagram, Youtube, Twitter, MessageSquare, Video, Users, Send } from 'lucide-react';
+import { Mail, MapPin, Instagram, Youtube, Twitter, MessageSquare, Video, Users } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import ContactForm from '@/components/contact/ContactForm';
 
 // ============================================
 // METADATA
@@ -49,136 +50,6 @@ const contactReasons = [
     href: '#form',
   },
 ];
-
-// ============================================
-// CONTACT FORM COMPONENT
-// ============================================
-
-function ContactForm() {
-  return (
-    <form className="space-y-6">
-      {/* Name & Email row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-foreground mb-2"
-          >
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            required
-            className="input"
-            placeholder="Your name"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-foreground mb-2"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            required
-            className="input"
-            placeholder="you@example.com"
-          />
-        </div>
-      </div>
-
-      {/* Subject */}
-      <div>
-        <label
-          htmlFor="subject"
-          className="block text-sm font-medium text-foreground mb-2"
-        >
-          Subject
-        </label>
-        <select
-          id="subject"
-          name="subject"
-          required
-          className="input"
-        >
-          <option value="">Select a topic...</option>
-          <option value="race-filming">Race Filming Inquiry</option>
-          <option value="event-coverage">Event Coverage</option>
-          <option value="collaboration">Brand Collaboration</option>
-          <option value="tools">Running Tools Question</option>
-          <option value="training">Marathon Training App</option>
-          <option value="other">Something Else</option>
-        </select>
-      </div>
-
-      {/* Event details (optional) */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
-          <label
-            htmlFor="event-name"
-            className="block text-sm font-medium text-foreground mb-2"
-          >
-            Event Name <span className="text-muted">(optional)</span>
-          </label>
-          <input
-            type="text"
-            id="event-name"
-            name="event-name"
-            className="input"
-            placeholder="e.g., London Marathon"
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="event-date"
-            className="block text-sm font-medium text-foreground mb-2"
-          >
-            Event Date <span className="text-muted">(optional)</span>
-          </label>
-          <input
-            type="date"
-            id="event-date"
-            name="event-date"
-            className="input"
-          />
-        </div>
-      </div>
-
-      {/* Message */}
-      <div>
-        <label
-          htmlFor="message"
-          className="block text-sm font-medium text-foreground mb-2"
-        >
-          Message
-        </label>
-        <textarea
-          id="message"
-          name="message"
-          required
-          rows={6}
-          className="input resize-none"
-          placeholder="Tell us about your project or question..."
-        />
-      </div>
-
-      {/* Submit */}
-      <button
-        type="submit"
-        className="btn-primary w-full sm:w-auto"
-      >
-        <Send className="w-5 h-5" />
-        Send Message
-      </button>
-    </form>
-  );
-}
 
 // ============================================
 // CONTACT PAGE
