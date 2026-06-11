@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
 };
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 // Fetch latest 4 posts from database
 async function getLatestPosts() {

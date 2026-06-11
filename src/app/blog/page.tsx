@@ -8,7 +8,7 @@ import Footer from '@/components/layout/Footer';
 import BlogPageClient from '@/components/blog/BlogPageClient';
 import { prisma } from '@/lib/db';
 
-export const revalidate = 300;
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Blog | Film My Run',

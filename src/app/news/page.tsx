@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 import NewsContent from '@/components/news/NewsContent';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic';
 
 // ============================================
 // METADATA
