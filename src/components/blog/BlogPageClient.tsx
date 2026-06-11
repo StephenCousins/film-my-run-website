@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { Calendar, Clock, ArrowRight, Search } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -109,7 +109,6 @@ export default function BlogPageClient({
   posts: Post[];
   categories: Category[];
 }) {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   const initialCategory = searchParams.get('category') || 'all';
@@ -119,6 +118,24 @@ export default function BlogPageClient({
   const [activeCategory, setActiveCategory] = useState(initialCategory);
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [currentPage, setCurrentPage] = useState(initialPage);
+  const urlTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const updateUrl = useCallback((category: string, page: number, q: string) => {
+    const params = new URLSearchParams();
+    if (category !== 'all') params.set('category', category);
+    if (page > 1) params.set('page', String(page));
+    if (q.trim()) params.set('q', q);
+    const qs = params.toString();
+    window.history.replaceState(null, '', `/blog${qs ? `?${qs}` : ''}`);
+  }, []);
+
+  useEffect(() => {
+    clearTimeout(urlTimeoutRef.current);
+    urlTimeoutRef.current = setTimeout(() => {
+      updateUrl(activeCategory, currentPage, searchQuery);
+    }, 300);
+    return () => clearTimeout(urlTimeoutRef.current);
+  }, [activeCategory, currentPage, searchQuery, updateUrl]);
 
   const filteredPosts = useMemo(() => {
     let result = posts;
@@ -146,30 +163,18 @@ export default function BlogPageClient({
     safePage * POSTS_PER_PAGE
   );
 
-  function updateUrl(category: string, page: number, q: string) {
-    const params = new URLSearchParams();
-    if (category !== 'all') params.set('category', category);
-    if (page > 1) params.set('page', String(page));
-    if (q.trim()) params.set('q', q);
-    const qs = params.toString();
-    router.replace(`/blog${qs ? `?${qs}` : ''}`, { scroll: false });
-  }
-
   function handleCategoryChange(slug: string) {
     setActiveCategory(slug);
     setCurrentPage(1);
-    updateUrl(slug, 1, searchQuery);
   }
 
   function handleSearch(value: string) {
     setSearchQuery(value);
     setCurrentPage(1);
-    updateUrl(activeCategory, 1, value);
   }
 
   function handlePageChange(page: number) {
     setCurrentPage(page);
-    updateUrl(activeCategory, page, searchQuery);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
