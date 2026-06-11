@@ -8,8 +8,7 @@ import Footer from '@/components/layout/Footer';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import { prisma } from '@/lib/db';
 
-// Force dynamic rendering - fetch data at runtime, not build time
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 // ============================================
 // TYPES
@@ -98,22 +97,45 @@ async function getPostBySlug(slug: string) {
 }
 
 async function getRelatedPosts(currentSlug: string): Promise<RelatedPost[]> {
-  const posts = await prisma.posts.findMany({
-    where: {
-      slug: { not: currentSlug },
-      status: 'published',
-      post_type: 'post',
-    },
-    orderBy: { published_at: 'desc' },
-    take: 3,
-    include: {
-      post_terms: {
-        include: {
-          terms: true,
-        },
-      },
+  const currentPost = await prisma.posts.findUnique({
+    where: { slug: currentSlug },
+    select: {
+      id: true,
+      post_terms: { select: { term_id: true } },
     },
   });
+
+  const termIds = currentPost?.post_terms.map((pt) => pt.term_id) ?? [];
+
+  let posts;
+  if (termIds.length > 0) {
+    posts = await prisma.posts.findMany({
+      where: {
+        slug: { not: currentSlug },
+        status: 'published',
+        post_type: 'post',
+        post_terms: { some: { term_id: { in: termIds } } },
+      },
+      orderBy: { published_at: 'desc' },
+      take: 3,
+      include: { post_terms: { include: { terms: true } } },
+    });
+  }
+
+  if (!posts || posts.length < 3) {
+    const existingSlugs = (posts ?? []).map((p) => p.slug);
+    const fallback = await prisma.posts.findMany({
+      where: {
+        slug: { notIn: [currentSlug, ...existingSlugs] },
+        status: 'published',
+        post_type: 'post',
+      },
+      orderBy: { published_at: 'desc' },
+      take: 3 - (posts?.length ?? 0),
+      include: { post_terms: { include: { terms: true } } },
+    });
+    posts = [...(posts ?? []), ...fallback];
+  }
 
   return posts.map((post) => {
     const categoryTerm = post.post_terms.find((pt) => pt.terms.taxonomy === 'category');
@@ -317,7 +339,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 </Link>
                 <ChevronRight className="w-4 h-4" />
                 <Link
-                  href={`/blog/category/${post.category.slug}`}
+                  href={`/blog?category=${post.category.slug}`}
                   className="hover:text-brand transition-colors"
                 >
                   {post.category.name}
@@ -326,7 +348,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
               {/* Category badge */}
               <Link
-                href={`/blog/category/${post.category.slug}`}
+                href={`/blog?category=${post.category.slug}`}
                 className="inline-block px-3 py-1.5 bg-orange-500 text-white text-xs font-semibold rounded-full mb-4 hover:bg-orange-600 transition-colors"
               >
                 {post.category.name}
@@ -398,7 +420,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                     {post.tags.map((tag) => (
                       <Link
                         key={tag.slug}
-                        href={`/blog/tag/${tag.slug}`}
+                        href={`/blog?category=${tag.slug}`}
                         className="px-3 py-1 bg-surface-tertiary text-secondary text-sm rounded-full hover:bg-brand/10 hover:text-brand transition-colors"
                       >
                         {tag.name}

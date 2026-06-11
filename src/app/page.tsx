@@ -45,8 +45,7 @@ export const metadata: Metadata = {
   },
 };
 
-// Force dynamic rendering - fetch data at runtime, not build time
-export const dynamic = 'force-dynamic';
+export const revalidate = 300;
 
 // Fetch latest 4 posts from database
 async function getLatestPosts() {
@@ -85,9 +84,16 @@ async function getLatestPosts() {
   });
 }
 
+async function getFilmCount() {
+  const count = await prisma.films.count();
+  return count;
+}
+
 export default async function HomePage() {
-  // Fetch latest posts from database
-  const latestPosts = await getLatestPosts();
+  const [latestPosts, filmCount] = await Promise.all([
+    getLatestPosts(),
+    getFilmCount(),
+  ]);
 
   return (
     <>
@@ -97,12 +103,12 @@ export default async function HomePage() {
       {/* Header */}
       <Header />
 
-      <main>
+      <main id="main-content">
         {/* Section 1: Hero with video background */}
         <Hero />
 
         {/* Section 2: Stats Banner with animated counters */}
-        <StatsBanner />
+        <StatsBanner filmCount={filmCount || 900} />
 
         {/* Section 3: Featured Film showcase */}
         <FeaturedFilm />

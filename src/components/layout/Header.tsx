@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ChevronDown } from 'lucide-react';
@@ -13,6 +13,16 @@ import UserMenu from '@/components/auth/UserMenu';
 // ============================================
 
 const navigation = [
+  {
+    name: 'Stories',
+    href: '/blog',
+    children: [
+      { name: 'Blog', href: '/blog' },
+      { name: 'Films', href: '/films' },
+      { name: 'Race Results', href: '/races' },
+      { name: 'About', href: '/about' },
+    ],
+  },
   {
     name: 'For Runners',
     href: '/tools/calculators',
@@ -39,7 +49,6 @@ const navigation = [
   },
   { name: 'News', href: '/news' },
   { name: 'Shop', href: '/shop' },
-  { name: 'Live', href: '/live' },
   { name: 'Contact', href: '/contact' },
 ];
 
@@ -50,7 +59,6 @@ const navigation = [
 function Logo() {
   return (
     <Link href="/" className="flex items-center gap-2 group">
-      {/* Three running figures icon */}
       <div className="flex gap-0.5">
         {[0, 1, 2].map((i) => (
           <svg
@@ -87,15 +95,49 @@ interface NavItemProps {
 function DesktopNavItem({ item, isActive }: NavItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = 'children' in item && item.children;
+  const closeTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const open = useCallback(() => {
+    clearTimeout(closeTimeout.current);
+    setIsOpen(true);
+  }, []);
+
+  const close = useCallback(() => {
+    closeTimeout.current = setTimeout(() => setIsOpen(false), 150);
+  }, []);
+
+  useEffect(() => {
+    return () => clearTimeout(closeTimeout.current);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') setIsOpen(false);
+    }
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen]);
 
   if (hasChildren) {
     return (
       <div
+        ref={containerRef}
         className="relative"
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
+        onMouseEnter={open}
+        onMouseLeave={close}
       >
         <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setIsOpen((prev) => !prev);
+            }
+          }}
+          aria-expanded={isOpen}
+          aria-haspopup="true"
           className={cn(
             'flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors',
             isActive
@@ -112,19 +154,21 @@ function DesktopNavItem({ item, isActive }: NavItemProps) {
           />
         </button>
 
-        {/* Dropdown */}
         <div
           className={cn(
             'absolute top-full left-0 pt-2 transition-all duration-200',
-            isOpen ? 'opacity-100 visible' : 'opacity-0 invisible'
+            isOpen ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
           )}
+          role="menu"
         >
           <div className="bg-surface rounded-xl shadow-xl border border-border py-2 min-w-[200px]">
             {item.children?.map((child) => (
               <Link
                 key={child.href}
                 href={child.href}
+                role="menuitem"
                 className="block px-4 py-2 text-sm text-secondary hover:text-brand hover:bg-surface-secondary"
+                onClick={() => setIsOpen(false)}
               >
                 {child.name}
               </Link>
@@ -158,12 +202,11 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
 
-  // Handle scroll
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -178,10 +221,8 @@ export default function Header() {
     >
       <div className="container">
         <nav className="flex items-center justify-between h-14 lg:h-20">
-          {/* Logo */}
           <Logo />
 
-          {/* Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
@@ -191,13 +232,10 @@ export default function Header() {
             })}
           </div>
 
-          {/* Right side */}
           <div className="flex items-center gap-3">
             <div className="hidden lg:block">
               <ThemeToggle />
             </div>
-
-            {/* User Menu - Desktop */}
             <div className="hidden lg:block">
               <UserMenu />
             </div>

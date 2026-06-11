@@ -8,7 +8,7 @@ import Footer from '@/components/layout/Footer';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import { prisma } from '@/lib/db';
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 // ============================================
 // DATA FETCHING

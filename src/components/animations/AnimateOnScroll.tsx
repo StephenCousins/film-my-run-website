@@ -101,26 +101,26 @@ export default function AnimateOnScroll({
     const element = ref.current;
     if (!element) return;
 
-    // Get variant configuration
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.set(element, variants[variant].to);
+      return;
+    }
+
     const variantConfig = variants[variant];
     let fromState = { ...variantConfig.from };
     const toState = { ...variantConfig.to };
 
-    // Apply custom distance if provided
     if (distance !== undefined) {
       if ('y' in fromState) fromState.y = Math.sign(fromState.y as number) * distance;
       if ('x' in fromState) fromState.x = Math.sign(fromState.x as number) * distance;
     }
 
-    // Apply custom scale if provided
     if (scale !== undefined && 'scale' in fromState) {
       fromState.scale = scale;
     }
 
-    // Set initial state
     gsap.set(element, fromState);
 
-    // Create animation
     const animation = gsap.to(element, {
       ...toState,
       duration,
@@ -183,12 +183,15 @@ export function StaggerContainer({
     const items = container.querySelectorAll(childSelector);
     if (items.length === 0) return;
 
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      gsap.set(items, variants[variant].to);
+      return;
+    }
+
     const variantConfig = variants[variant];
 
-    // Set initial state
     gsap.set(items, variantConfig.from);
 
-    // Create stagger animation
     const animation = gsap.to(items, {
       ...variantConfig.to,
       duration,
@@ -232,6 +235,8 @@ export function Parallax({ children, speed = 0.3, className }: ParallaxProps) {
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const animation = gsap.to(element, {
       y: () => `${speed * 100}%`,

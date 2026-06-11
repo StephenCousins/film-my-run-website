@@ -52,7 +52,7 @@ export const authOptions: NextAuthOptions = {
         });
 
         if (!user || !user.password_hash) {
-          throw new Error('No account found with this email');
+          throw new Error('Invalid email or password');
         }
 
         const isPasswordValid = await bcrypt.compare(
@@ -61,7 +61,7 @@ export const authOptions: NextAuthOptions = {
         );
 
         if (!isPasswordValid) {
-          throw new Error('Incorrect password');
+          throw new Error('Invalid email or password');
         }
 
         return {

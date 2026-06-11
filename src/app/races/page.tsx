@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Trophy,
@@ -405,17 +405,16 @@ const breadcrumbJsonLd = {
 
 export default function RacesPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const [data, setData] = useState<ApiResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Initialize filters from URL params
   const initialYear = searchParams.get('year') || '';
   const initialType = searchParams.get('type') || '';
   const initialTerrain = searchParams.get('terrain') || '';
   const initialDistance = searchParams.get('distance') || '';
 
-  // Filters
   const [yearFilter, setYearFilter] = useState(initialYear);
   const [typeFilter, setTypeFilter] = useState(initialType);
   const [terrainFilter, setTerrainFilter] = useState(initialTerrain);
@@ -430,6 +429,16 @@ export default function RacesPage() {
     }
     return null;
   });
+
+  const syncUrl = useCallback((year: string, type: string, terrain: string, distance: string) => {
+    const params = new URLSearchParams();
+    if (year) params.set('year', year);
+    if (type) params.set('type', type);
+    if (terrain) params.set('terrain', terrain);
+    if (distance) params.set('distance', distance);
+    const qs = params.toString();
+    router.replace(`/races${qs ? `?${qs}` : ''}`, { scroll: false });
+  }, [router]);
 
   // Fetch data
   useEffect(() => {
@@ -521,26 +530,38 @@ export default function RacesPage() {
     setDistanceFilter('');
     setSearchFilter('');
     setActiveFilterLabel(null);
+    syncUrl('', '', '', '');
   };
 
   const filterByType = (type: string, label: string) => {
-    resetFilters();
+    setYearFilter('');
     setTypeFilter(type);
+    setTerrainFilter('');
+    setDistanceFilter('');
+    setSearchFilter('');
     setActiveFilterLabel(label);
+    syncUrl('', type, '', '');
   };
 
   const filterByDistance = (category: string) => {
-    resetFilters();
+    setYearFilter('');
+    setTypeFilter('');
+    setTerrainFilter('');
     setDistanceFilter(category);
+    setSearchFilter('');
     const cat = DISTANCE_CATEGORIES[category as keyof typeof DISTANCE_CATEGORIES];
     setActiveFilterLabel(cat?.label || null);
+    syncUrl('', '', '', category);
   };
 
   const filterByCombo = (type: string, terrain: string, label: string) => {
-    resetFilters();
+    setYearFilter('');
     setTypeFilter(type);
     setTerrainFilter(terrain);
+    setDistanceFilter('');
+    setSearchFilter('');
     setActiveFilterLabel(label);
+    syncUrl('', type, terrain, '');
   };
 
   if (loading) {
@@ -707,8 +728,10 @@ export default function RacesPage() {
               <select
                 value={yearFilter}
                 onChange={(e) => {
-                  setYearFilter(e.target.value);
-                  setActiveFilterLabel(e.target.value ? `Year ${e.target.value}` : null);
+                  const v = e.target.value;
+                  setYearFilter(v);
+                  setActiveFilterLabel(v ? `Year ${v}` : null);
+                  syncUrl(v, typeFilter, terrainFilter, distanceFilter);
                 }}
                 className="w-auto px-3 py-2 text-sm bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
               >
@@ -723,8 +746,10 @@ export default function RacesPage() {
               <select
                 value={typeFilter}
                 onChange={(e) => {
-                  setTypeFilter(e.target.value);
-                  if (!e.target.value) setActiveFilterLabel(null);
+                  const v = e.target.value;
+                  setTypeFilter(v);
+                  if (!v) setActiveFilterLabel(null);
+                  syncUrl(yearFilter, v, terrainFilter, distanceFilter);
                 }}
                 className="w-auto px-3 py-2 text-sm bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
               >
@@ -735,7 +760,11 @@ export default function RacesPage() {
 
               <select
                 value={terrainFilter}
-                onChange={(e) => setTerrainFilter(e.target.value)}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  setTerrainFilter(v);
+                  syncUrl(yearFilter, typeFilter, v, distanceFilter);
+                }}
                 className="w-auto px-3 py-2 text-sm bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
               >
                 <option value="">All Surfaces</option>
@@ -747,10 +776,12 @@ export default function RacesPage() {
               <select
                 value={distanceFilter}
                 onChange={(e) => {
-                  setDistanceFilter(e.target.value);
+                  const v = e.target.value;
+                  setDistanceFilter(v);
                   const cat =
-                    DISTANCE_CATEGORIES[e.target.value as keyof typeof DISTANCE_CATEGORIES];
+                    DISTANCE_CATEGORIES[v as keyof typeof DISTANCE_CATEGORIES];
                   setActiveFilterLabel(cat?.label || null);
+                  syncUrl(yearFilter, typeFilter, terrainFilter, v);
                 }}
                 className="w-auto px-3 py-2 text-sm bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-brand focus:ring-1 focus:ring-brand transition-colors"
               >

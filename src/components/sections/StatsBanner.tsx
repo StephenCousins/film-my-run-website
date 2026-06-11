@@ -4,37 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 // ============================================
-// STATS DATA
-// ============================================
-
-const stats = [
-  {
-    value: 900,
-    suffix: '+',
-    label: 'Running Films',
-    description: 'From parkruns to ultras',
-  },
-  {
-    value: 15,
-    suffix: '',
-    label: 'Years Running',
-    description: 'Documenting since 2011',
-  },
-  {
-    value: 50,
-    suffix: 'K',
-    label: 'Weekly Users',
-    description: 'Using our tools',
-  },
-  {
-    value: 7,
-    suffix: 'M+',
-    label: 'Video Views',
-    description: 'Across all platforms',
-  },
-];
-
-// ============================================
 // ANIMATED COUNTER HOOK
 // ============================================
 
@@ -50,6 +19,13 @@ function useAnimatedCounter(
   useEffect(() => {
     if (!startOnView || hasStarted) return;
 
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      setCount(endValue);
+      setHasStarted(true);
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
@@ -64,10 +40,16 @@ function useAnimatedCounter(
     }
 
     return () => observer.disconnect();
-  }, [startOnView, hasStarted]);
+  }, [startOnView, hasStarted, endValue]);
 
   useEffect(() => {
     if (!hasStarted && startOnView) return;
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) {
+      setCount(endValue);
+      return;
+    }
 
     let startTime: number;
     let animationFrame: number;
@@ -76,7 +58,6 @@ function useAnimatedCounter(
       if (!startTime) startTime = timestamp;
       const progress = Math.min((timestamp - startTime) / duration, 1);
 
-      // Easing function (ease-out-expo)
       const easeOutExpo = 1 - Math.pow(2, -10 * progress);
       setCount(Math.floor(easeOutExpo * endValue));
 
@@ -115,22 +96,18 @@ function StatCard({ value, suffix, label, description, index }: StatCardProps) {
       ref={ref}
       className="stat-card relative group opacity-100"
     >
-      {/* Background glow on hover */}
       <div className="absolute inset-0 bg-gradient-to-b from-orange-500/0 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
 
       <div className="relative p-6 lg:p-8 text-center">
-        {/* Number */}
         <div className="font-mono text-4xl sm:text-5xl lg:text-6xl font-bold text-orange-500 mb-2 tracking-tight">
           {count}
           <span className="text-orange-400">{suffix}</span>
         </div>
 
-        {/* Label */}
         <div className="font-display text-lg font-semibold text-foreground mb-1">
           {label}
         </div>
 
-        {/* Description */}
         <div className="text-sm text-muted">
           {description}
         </div>
@@ -143,12 +120,53 @@ function StatCard({ value, suffix, label, description, index }: StatCardProps) {
 // STATS BANNER COMPONENT
 // ============================================
 
-export default function StatsBanner() {
+export interface StatsBannerProps {
+  filmCount?: number;
+  yearsRunning?: number;
+  weeklyUsers?: number;
+  videoViews?: number;
+}
+
+export default function StatsBanner({
+  filmCount = 900,
+  yearsRunning = 15,
+  weeklyUsers = 50,
+  videoViews = 7,
+}: StatsBannerProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Initialize GSAP scroll animation
+  const stats = [
+    {
+      value: filmCount,
+      suffix: '+',
+      label: 'Running Films',
+      description: 'From parkruns to ultras',
+    },
+    {
+      value: yearsRunning,
+      suffix: '',
+      label: 'Years Running',
+      description: 'Documenting since 2011',
+    },
+    {
+      value: weeklyUsers,
+      suffix: 'K',
+      label: 'Weekly Users',
+      description: 'Using our tools',
+    },
+    {
+      value: videoViews,
+      suffix: 'M+',
+      label: 'Video Views',
+      description: 'Across all platforms',
+    },
+  ];
+
   useEffect(() => {
-    let ctx: any;
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
+
+    let ctx: ReturnType<typeof import('gsap').gsap.context> | undefined;
 
     const initGSAP = async () => {
       try {
@@ -160,7 +178,6 @@ export default function StatsBanner() {
         if (!section) return;
 
         ctx = gsap.context(() => {
-          // Stagger animation for stat cards
           gsap.fromTo(
             section.querySelectorAll('.stat-card'),
             { opacity: 0, y: 30 },
@@ -178,8 +195,8 @@ export default function StatsBanner() {
             }
           );
         }, section);
-      } catch (error) {
-        console.warn('GSAP not loaded');
+      } catch {
+        // GSAP not available
       }
     };
 
@@ -196,7 +213,6 @@ export default function StatsBanner() {
       className="relative py-16 lg:py-20 bg-surface-secondary/50 overflow-hidden"
       style={{ position: 'relative', zIndex: 1 }}
     >
-      {/* Subtle background pattern */}
       <div className="absolute inset-0 opacity-5">
         <div
           className="absolute inset-0"
@@ -207,7 +223,6 @@ export default function StatsBanner() {
       </div>
 
       <div className="container relative">
-        {/* Section header */}
         <div className="text-center mb-12">
           <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-3">
             By The Numbers
@@ -217,14 +232,12 @@ export default function StatsBanner() {
           </p>
         </div>
 
-        {/* Stats grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           {stats.map((stat, index) => (
             <StatCard key={stat.label} {...stat} index={index} />
           ))}
         </div>
 
-        {/* Decorative elements */}
         <div className="absolute top-1/2 left-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
         <div className="absolute top-1/2 right-0 w-32 h-32 bg-orange-500/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2" />
       </div>

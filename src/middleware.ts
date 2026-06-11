@@ -71,13 +71,11 @@ export async function middleware(request: NextRequest) {
   const userTierLevel = tierHierarchy[userTier] || 0;
 
   if (isPro && userTierLevel < tierHierarchy.PRO) {
-    // Redirect to upgrade page
-    return NextResponse.redirect(new URL('/pricing?upgrade=pro', request.url));
+    return NextResponse.redirect(new URL('/training?upgrade=pro', request.url));
   }
 
   if (isPremium && userTierLevel < tierHierarchy.PREMIUM) {
-    // Redirect to upgrade page
-    return NextResponse.redirect(new URL('/pricing?upgrade=premium', request.url));
+    return NextResponse.redirect(new URL('/training?upgrade=premium', request.url));
   }
 
   // User is authenticated and has required tier

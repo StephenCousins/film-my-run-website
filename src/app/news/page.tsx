@@ -6,9 +6,7 @@ import Footer from '@/components/layout/Footer';
 import NewsContent from '@/components/news/NewsContent';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 
-// Force dynamic rendering
-export const dynamic = 'force-dynamic';
-export const revalidate = 3600; // Revalidate every hour
+export const revalidate = 3600;
 
 // ============================================
 // METADATA
