@@ -95,7 +95,7 @@ interface NavItemProps {
 function DesktopNavItem({ item, isActive }: NavItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = 'children' in item && item.children;
-  const closeTimeout = useRef<ReturnType<typeof setTimeout>>();
+  const closeTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const open = useCallback(() => {

@@ -107,23 +107,22 @@ async function getRelatedPosts(currentSlug: string): Promise<RelatedPost[]> {
 
   const termIds = currentPost?.post_terms.map((pt) => pt.term_id) ?? [];
 
-  let posts;
-  if (termIds.length > 0) {
-    posts = await prisma.posts.findMany({
-      where: {
-        slug: { not: currentSlug },
-        status: 'published',
-        post_type: 'post',
-        post_terms: { some: { term_id: { in: termIds } } },
-      },
-      orderBy: { published_at: 'desc' },
-      take: 3,
-      include: { post_terms: { include: { terms: true } } },
-    });
-  }
+  let posts = termIds.length > 0
+    ? await prisma.posts.findMany({
+        where: {
+          slug: { not: currentSlug },
+          status: 'published',
+          post_type: 'post',
+          post_terms: { some: { term_id: { in: termIds } } },
+        },
+        orderBy: { published_at: 'desc' },
+        take: 3,
+        include: { post_terms: { include: { terms: true } } },
+      })
+    : [];
 
-  if (!posts || posts.length < 3) {
-    const existingSlugs = (posts ?? []).map((p) => p.slug);
+  if (posts.length < 3) {
+    const existingSlugs = posts.map((p) => p.slug);
     const fallback = await prisma.posts.findMany({
       where: {
         slug: { notIn: [currentSlug, ...existingSlugs] },
@@ -131,10 +130,10 @@ async function getRelatedPosts(currentSlug: string): Promise<RelatedPost[]> {
         post_type: 'post',
       },
       orderBy: { published_at: 'desc' },
-      take: 3 - (posts?.length ?? 0),
+      take: 3 - posts.length,
       include: { post_terms: { include: { terms: true } } },
     });
-    posts = [...(posts ?? []), ...fallback];
+    posts = [...posts, ...fallback];
   }
 
   return posts.map((post) => {
