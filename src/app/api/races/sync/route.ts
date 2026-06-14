@@ -89,7 +89,32 @@ interface RaceInput {
   results_url?: string;
 }
 
+function buildRaceData(race: RaceInput) {
+  const date = parseDate(race.date || null);
+  const distKm = typeof race.distance_km === 'number' && isFinite(race.distance_km) && race.distance_km >= 0
+    ? race.distance_km : null;
+  const elevation = typeof race.elevation === 'number' && isFinite(race.elevation) && race.elevation >= 0
+    ? race.elevation : null;
+  const timeSecs = race.time_seconds ?? parseTimeToSeconds(race.time_hms || null);
+  return {
+    date: date || new Date(),
+    event: race.event,
+    type: race.type || null,
+    distance_km: distKm,
+    time_hms: race.time_hms || null,
+    time_seconds: typeof timeSecs === 'number' && isFinite(timeSecs) && timeSecs >= 0 ? timeSecs : null,
+    elevation,
+    position: race.position || null,
+    terrain: race.terrain || null,
+    video_url: extractUrl(race.video_url || null),
+    strava_url: extractUrl(race.strava_url || null),
+    results_url: extractUrl(race.results_url || null),
+    updated_at: new Date(),
+  };
+}
+
 // POST /api/races/sync - Bulk import races
+// Modes: "replace" (delete all + insert), "append" (insert only), "upsert" (update if event+date match, else insert)
 export async function POST(request: NextRequest) {
   if (!verifyApiKey(request)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -97,7 +122,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const { races, mode = 'append' } = body as { races: RaceInput[]; mode?: 'append' | 'replace' };
+    const { races, mode = 'append' } = body as { races: RaceInput[]; mode?: 'append' | 'replace' | 'upsert' };
 
     if (!Array.isArray(races)) {
       return NextResponse.json({ error: 'races must be an array' }, { status: 400 });
@@ -110,40 +135,44 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Use transaction for atomicity
+    const validRaces = races.filter((race) => race.event);
+
+    if (mode === 'upsert') {
+      let updated = 0;
+      let created = 0;
+
+      await prisma.$transaction(async (tx) => {
+        for (const race of validRaces) {
+          const data = buildRaceData(race);
+          const existing = await tx.races.findFirst({
+            where: { event: data.event, date: data.date },
+          });
+          if (existing) {
+            await tx.races.update({ where: { id: existing.id }, data });
+            updated++;
+          } else {
+            await tx.races.create({ data });
+            created++;
+          }
+        }
+      });
+
+      return NextResponse.json({
+        ok: true,
+        message: `Upserted ${validRaces.length} races (${created} created, ${updated} updated)`,
+        count: validRaces.length,
+        created,
+        updated,
+      });
+    }
+
     const result = await prisma.$transaction(async (tx) => {
-      // If replace mode, clear existing data
       if (mode === 'replace') {
         await tx.races.deleteMany({});
       }
 
-      // Insert new races
       const created = await tx.races.createMany({
-        data: races
-          .filter((race) => race.event) // Ensure event is present
-          .map((race) => {
-            const date = parseDate(race.date || null);
-            const distKm = typeof race.distance_km === 'number' && isFinite(race.distance_km) && race.distance_km >= 0
-              ? race.distance_km : null;
-            const elevation = typeof race.elevation === 'number' && isFinite(race.elevation) && race.elevation >= 0
-              ? race.elevation : null;
-            const timeSecs = race.time_seconds ?? parseTimeToSeconds(race.time_hms || null);
-            return {
-              date: date || new Date(),
-              event: race.event,
-              type: race.type || null,
-              distance_km: distKm,
-              time_hms: race.time_hms || null,
-              time_seconds: typeof timeSecs === 'number' && isFinite(timeSecs) && timeSecs >= 0 ? timeSecs : null,
-              elevation,
-              position: race.position || null,
-              terrain: race.terrain || null,
-              video_url: extractUrl(race.video_url || null),
-              strava_url: extractUrl(race.strava_url || null),
-              results_url: extractUrl(race.results_url || null),
-              updated_at: new Date(),
-            };
-          }),
+        data: validRaces.map(buildRaceData),
       });
 
       return created;
