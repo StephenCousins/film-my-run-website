@@ -13,9 +13,10 @@ export async function GET(req: NextRequest) {
   const search = searchParams.get('search');
 
   const where: Record<string, unknown> = {};
+  const andConditions: Record<string, unknown>[] = [];
 
   if (terrain && terrain !== 'all') {
-    where.OR = [{ terrain }, { terrain: 'both' }];
+    andConditions.push({ OR: [{ terrain }, { terrain: 'both' }] });
   }
   if (category) where.category = category;
   if (brand) where.brand = brand;
@@ -26,10 +27,15 @@ export async function GET(req: NextRequest) {
     };
   }
   if (search) {
-    where.OR = [
-      { brand: { contains: search, mode: 'insensitive' } },
-      { model: { contains: search, mode: 'insensitive' } },
-    ];
+    andConditions.push({
+      OR: [
+        { brand: { contains: search, mode: 'insensitive' } },
+        { model: { contains: search, mode: 'insensitive' } },
+      ],
+    });
+  }
+  if (andConditions.length > 0) {
+    where.AND = andConditions;
   }
 
   const orderBy =

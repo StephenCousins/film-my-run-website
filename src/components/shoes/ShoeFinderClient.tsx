@@ -2,8 +2,10 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, SlidersHorizontal, X, Star, ChevronDown } from 'lucide-react';
+import { Search, SlidersHorizontal, X, Star, ChevronDown, Plus } from 'lucide-react';
 import ShoeCard from './ShoeCard';
+import AddShoeModal from './AddShoeModal';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface ShoeReview {
   source: string;
@@ -61,9 +63,11 @@ const DROP_OPTIONS = [
 ];
 
 export default function ShoeFinderClient() {
+  const { isAuthenticated } = useAuth();
   const [shoes, setShoes] = useState<Shoe[]>([]);
   const [meta, setMeta] = useState<Meta>({ brands: [], categories: [], total: 0 });
   const [loading, setLoading] = useState(true);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   // Filters
   const [search, setSearch] = useState('');
@@ -163,6 +167,16 @@ export default function ShoeFinderClient() {
             </span>
           )}
         </button>
+
+        {isAuthenticated && (
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-orange-500 text-orange-500 bg-orange-50 dark:bg-orange-950/30 text-sm font-medium hover:bg-orange-100 dark:hover:bg-orange-950/50 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            Suggest a Shoe
+          </button>
+        )}
 
         {/* Sort */}
         <div className="relative">
@@ -356,6 +370,12 @@ export default function ShoeFinderClient() {
           )}
         </>
       )}
+
+      <AddShoeModal
+        isOpen={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onShoeAdded={fetchShoes}
+      />
     </div>
   );
 }
