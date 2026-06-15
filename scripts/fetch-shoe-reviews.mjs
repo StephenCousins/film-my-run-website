@@ -1,20 +1,22 @@
 #!/usr/bin/env node
-// Fetch review scores for shoes using Brave Search + regex extraction
-// Run: node scripts/fetch-shoe-reviews.mjs
+// Fetch review scores for shoes using Brave Search + Haiku
+// - Regex extracts explicit scores (fast, free)
+// - Haiku reads review text to infer scores where no number is present
+// Run: node --env-file=.env scripts/fetch-shoe-reviews.mjs
 // Options:
 //   --limit 10             only process first N shoes
 //   --slug hoka-clifton-9  only process one shoe by slug
 //   --stale-only           only refresh shoes not updated in last 30 days
 
 import { PrismaClient } from '@prisma/client';
+import Anthropic from '@anthropic-ai/sdk';
 
 const prisma = new PrismaClient();
+const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 const BRAVE_KEY = process.env.BRAVE_SEARCH_API_KEY;
 
-if (!BRAVE_KEY) {
-  console.error('Missing BRAVE_SEARCH_API_KEY env var');
-  process.exit(1);
-}
+if (!BRAVE_KEY) { console.error('Missing BRAVE_SEARCH_API_KEY'); process.exit(1); }
+if (!process.env.ANTHROPIC_API_KEY) { console.error('Missing ANTHROPIC_API_KEY'); process.exit(1); }
 
 const args = process.argv.slice(2);
 const limitArg = args.indexOf('--limit');
@@ -38,44 +40,73 @@ function identifySource(url) {
   return 'other';
 }
 
-function extractScore(text) {
+function extractExplicitScore(text) {
   if (!text) return null;
 
-  // "9.2/10" or "9.2 out of 10" or "score: 9.2"
   const outOf10 = text.match(/\b(\d(?:\.\d)?)\s*(?:\/\s*10|out of 10)/i);
   if (outOf10) {
-    const score = parseFloat(outOf10[1]);
-    if (score >= 0 && score <= 10) return score;
+    const s = parseFloat(outOf10[1]);
+    if (s >= 0 && s <= 10) return s;
   }
 
-  // RunRepeat style: "Score: 9.2" or "RunRepeat Score 9.2"
   const runrepeatScore = text.match(/(?:runrepeat\s+)?score[:\s]+(\d(?:\.\d)?)\b/i);
   if (runrepeatScore) {
-    const score = parseFloat(runrepeatScore[1]);
-    if (score >= 0 && score <= 10) return score;
+    const s = parseFloat(runrepeatScore[1]);
+    if (s >= 0 && s <= 10) return s;
   }
 
-  // "4.5/5" or "4.5 out of 5" — convert to /10
   const outOf5 = text.match(/\b(\d(?:\.\d)?)\s*(?:\/\s*5|out of 5)/i);
   if (outOf5) {
-    const score = parseFloat(outOf5[1]) * 2;
-    if (score >= 0 && score <= 10) return score;
+    const s = parseFloat(outOf5[1]) * 2;
+    if (s >= 0 && s <= 10) return s;
   }
 
-  // "88/100" or "88 out of 100" — convert to /10
   const outOf100 = text.match(/\b(\d{2,3})\s*(?:\/\s*100|out of 100)/i);
   if (outOf100) {
-    const score = parseFloat(outOf100[1]) / 10;
-    if (score >= 0 && score <= 10) return score;
+    const s = parseFloat(outOf100[1]) / 10;
+    if (s >= 0 && s <= 10) return s;
   }
 
-  // "★★★★½" or "4.5 stars"
   const stars = text.match(/(\d(?:\.\d)?)\s*stars?\b/i);
   if (stars) {
-    const score = parseFloat(stars[1]) * 2;
-    if (score >= 0 && score <= 10) return score;
+    const s = parseFloat(stars[1]) * 2;
+    if (s >= 0 && s <= 10) return s;
   }
 
+  return null;
+}
+
+async function inferScoreFromText(brand, model, reviewText) {
+  if (!reviewText || reviewText.length < 60) return null;
+
+  try {
+    const msg = await anthropic.messages.create({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 100,
+      messages: [{
+        role: 'user',
+        content: `You are scoring a running shoe review. Read the review snippet below and assign a score from 0.0 to 10.0 based on how positively the reviewer feels about the ${brand} ${model}.
+
+Scoring guide:
+9.5–10: Exceptional, best in class
+8.5–9.4: Excellent, highly recommended
+7.5–8.4: Good, recommended with minor caveats
+6.5–7.4: Decent, some notable issues
+5.0–6.4: Average or mixed feelings
+Below 5: Poor or not recommended
+
+Review snippet:
+"${reviewText.slice(0, 400)}"
+
+Reply with ONLY a single number like: 8.5`
+      }]
+    });
+
+    const score = parseFloat(msg.content[0].text.trim());
+    if (!isNaN(score) && score >= 0 && score <= 10) return score;
+  } catch {
+    // silently skip on API error
+  }
   return null;
 }
 
@@ -100,7 +131,7 @@ async function braveSearch(query) {
   }));
 }
 
-function extractReviewsFromResults(results) {
+async function extractReviews(brand, model, results) {
   const reviews = [];
   const seenSources = new Set();
 
@@ -109,7 +140,16 @@ function extractReviewsFromResults(results) {
     if (seenSources.has(source)) continue;
 
     const combined = `${result.title} ${result.description}`;
-    const score = extractScore(combined);
+
+    // Try regex first
+    let score = extractExplicitScore(combined);
+    let method = 'explicit';
+
+    // Fall back to Haiku text inference
+    if (score === null && result.description.length > 60) {
+      score = await inferScoreFromText(brand, model, result.description);
+      method = 'inferred';
+    }
 
     if (score !== null) {
       seenSources.add(source);
@@ -120,6 +160,7 @@ function extractReviewsFromResults(results) {
         user_score: null,
         user_count: null,
         summary: result.description.slice(0, 200) || null,
+        method,
       });
     }
   }
@@ -128,10 +169,7 @@ function extractReviewsFromResults(results) {
 }
 
 function calculateAvgScore(reviews) {
-  const scores = reviews
-    .filter(r => r.expert_score != null)
-    .map(r => r.expert_score);
-
+  const scores = reviews.filter(r => r.expert_score != null).map(r => r.expert_score);
   if (scores.length === 0) return null;
   const avg = scores.reduce((a, b) => a + b, 0) / scores.length;
   return Math.round(avg * 10) / 10;
@@ -140,7 +178,7 @@ function calculateAvgScore(reviews) {
 async function processShoe(shoe) {
   console.log(`\nProcessing: ${shoe.brand} ${shoe.model}`);
 
-  const query = `${shoe.brand} ${shoe.model} running shoe review score`;
+  const query = `${shoe.brand} ${shoe.model} running shoe review`;
   const results = await braveSearch(query);
 
   if (results.length === 0) {
@@ -148,14 +186,15 @@ async function processShoe(shoe) {
     return;
   }
 
-  const reviews = extractReviewsFromResults(results);
+  const reviews = await extractReviews(shoe.brand, shoe.model, results);
 
   if (reviews.length === 0) {
-    console.log('  No scores found in snippets');
+    console.log('  No scores found');
     return;
   }
 
-  console.log(`  Found ${reviews.length} score(s): ${reviews.map(r => `${r.source}=${r.expert_score}`).join(', ')}`);
+  const summary = reviews.map(r => `${r.source}=${r.expert_score}(${r.method})`).join(', ');
+  console.log(`  Found ${reviews.length} score(s): ${summary}`);
 
   for (const review of reviews) {
     await prisma.shoe_reviews.upsert({
