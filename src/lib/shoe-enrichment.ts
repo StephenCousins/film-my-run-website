@@ -1,7 +1,16 @@
 import Anthropic from '@anthropic-ai/sdk';
 
-const BRAVE_KEY = process.env.BRAVE_SEARCH_API_KEY!;
-const ANTHROPIC_KEY = process.env.ANTHROPIC_API_KEY!;
+function getBraveKey(): string {
+  const key = process.env.BRAVE_SEARCH_API_KEY;
+  if (!key) throw new Error('BRAVE_SEARCH_API_KEY is not set');
+  return key;
+}
+
+function getAnthropicKey(): string {
+  const key = process.env.ANTHROPIC_API_KEY;
+  if (!key) throw new Error('ANTHROPIC_API_KEY is not set');
+  return key;
+}
 
 // ── Version-aware utilities (ported from scripts/shoe-utils.mjs) ────
 
@@ -100,7 +109,7 @@ interface SearchResult {
 async function braveWebSearch(query: string, count = 8): Promise<SearchResult[]> {
   const url = `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=${count}&search_lang=en`;
   const res = await fetch(url, {
-    headers: { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': BRAVE_KEY },
+    headers: { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': getBraveKey() },
   });
   if (!res.ok) return [];
   const data = await res.json();
@@ -119,7 +128,7 @@ interface ImageSearchResult {
 async function braveImageSearch(query: string, count = 8): Promise<ImageSearchResult[]> {
   const url = `https://api.search.brave.com/res/v1/images/search?q=${encodeURIComponent(query)}&count=${count}&search_lang=en&safesearch=strict`;
   const res = await fetch(url, {
-    headers: { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': BRAVE_KEY },
+    headers: { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': getBraveKey() },
   });
   if (!res.ok) return [];
   const data = await res.json();
@@ -140,7 +149,7 @@ async function braveImageSearch(query: string, count = 8): Promise<ImageSearchRe
 // ── Claude helpers ──────────────────────────────────────────────────
 
 function getAnthropicClient(): Anthropic {
-  return new Anthropic({ apiKey: ANTHROPIC_KEY });
+  return new Anthropic({ apiKey: getAnthropicKey() });
 }
 
 // ── Parse shoe query ────────────────────────────────────────────────
