@@ -95,13 +95,25 @@ Look at each image carefully and reply with ONLY the number (1–${candidates.le
 }
 
 async function findImageForShoe(shoe) {
-  // Quoted query forces exact model name match in search results
-  const query = `"${shoe.brand} ${shoe.model}" running shoe`;
-  const candidates = await braveImageSearch(query);
+  // Pass 1: strict quoted search for exact model name
+  const strictQuery = `"${shoe.brand} ${shoe.model}" running shoe`;
+  let candidates = await braveImageSearch(strictQuery);
+
+  if (candidates.length > 0) {
+    console.log(`  Pass 1: ${candidates.length} candidates`);
+    const result = await pickBestImageWithVision(shoe.brand, shoe.model, candidates);
+    if (result) return result;
+    console.log(`  Pass 1 rejected — trying broader search...`);
+    await new Promise(r => setTimeout(r, 800));
+  }
+
+  // Pass 2: broader search — Opus still verifies strictly
+  const broadQuery = `${shoe.brand} ${shoe.model} running shoe product`;
+  candidates = await braveImageSearch(broadQuery);
 
   if (candidates.length === 0) return null;
 
-  console.log(`  Found ${candidates.length} candidates — asking Opus to verify...`);
+  console.log(`  Pass 2: ${candidates.length} candidates`);
   return pickBestImageWithVision(shoe.brand, shoe.model, candidates);
 }
 
