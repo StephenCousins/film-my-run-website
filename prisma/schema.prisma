@@ -438,6 +438,49 @@ model quiz_results {
   @@index([created_at])
 }
 
+model shoes {
+  id              Int            @id @default(autoincrement())
+  brand           String
+  model           String
+  slug            String         @unique
+  terrain         String         // 'road' | 'trail' | 'both'
+  category        String         // 'daily_trainer' | 'race' | 'long_run' | 'speed' | 'ultra' | 'stability' | 'max_cushion' | 'minimal'
+  drop_mm         Int?
+  weight_g        Int?
+  stack_height_mm Int?
+  price_gbp       Int?           // in pence
+  release_year    Int?
+  description     String?
+  image_url       String?
+  buy_url         String?
+  avg_score       Decimal?       @db.Decimal(4, 2)
+  review_count    Int            @default(0)
+  last_reviewed   DateTime?
+  created_at      DateTime       @default(now())
+  shoe_reviews    shoe_reviews[]
+
+  @@index([terrain])
+  @@index([brand])
+  @@index([avg_score])
+  @@index([category])
+}
+
+model shoe_reviews {
+  id           Int      @id @default(autoincrement())
+  shoe_id      Int
+  source       String   // 'runrepeat' | 'runners_world' | 'irunfar' | 'believe_in_run' | 'running_warehouse' | 'the_run_testers'
+  source_url   String?
+  expert_score Decimal? @db.Decimal(4, 2)
+  user_score   Decimal? @db.Decimal(4, 2)
+  user_count   Int?
+  summary      String?
+  fetched_at   DateTime @default(now())
+  shoes        shoes    @relation(fields: [shoe_id], references: [id], onDelete: Cascade)
+
+  @@unique([shoe_id, source])
+  @@index([shoe_id])
+}
+
 enum AccessTier {
   FREE
   PREMIUM

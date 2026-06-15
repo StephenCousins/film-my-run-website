@@ -9,6 +9,7 @@ import {
   Target,
   Gauge,
   ArrowRight,
+  Footprints,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -51,6 +52,16 @@ const tools = [
     icon: Users,
     color: 'from-green-500 to-green-600',
     stats: 'All parkrun events',
+    popular: true,
+  },
+  {
+    name: 'Shoe Finder',
+    description:
+      'Ranked running shoes for road and trail with aggregated scores from RunRepeat, Runner\'s World, iRunFar and more.',
+    href: '/tools/shoe-finder',
+    icon: Footprints,
+    color: 'from-teal-500 to-teal-600',
+    stats: '130+ shoes ranked',
     popular: true,
   },
   {
