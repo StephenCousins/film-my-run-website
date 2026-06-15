@@ -131,11 +131,19 @@ async function braveSearch(query) {
   }));
 }
 
+function resultMentionsExactModel(model, title, description) {
+  const text = `${title} ${description}`.toLowerCase();
+  return text.includes(model.toLowerCase());
+}
+
 async function extractReviews(brand, model, results) {
   const reviews = [];
   const seenSources = new Set();
 
   for (const result of results) {
+    // Skip results that don't mention this exact model — prevents X3 reviews being used for X2 etc.
+    if (!resultMentionsExactModel(model, result.title, result.description)) continue;
+
     const source = identifySource(result.url);
     if (seenSources.has(source)) continue;
 
@@ -178,7 +186,7 @@ function calculateAvgScore(reviews) {
 async function processShoe(shoe) {
   console.log(`\nProcessing: ${shoe.brand} ${shoe.model}`);
 
-  const query = `${shoe.brand} ${shoe.model} running shoe review`;
+  const query = `"${shoe.brand} ${shoe.model}" running shoe review`;
   const results = await braveSearch(query);
 
   if (results.length === 0) {

@@ -51,11 +51,18 @@ async function braveImageSearch(query) {
 async function pickBestImageWithVision(brand, model, candidates) {
   if (candidates.length === 0) return null;
 
-  // Build content array with all candidate thumbnails
   const content = [
     {
       type: 'text',
-      text: `I need to find the correct product image for the ${brand} ${model} running shoe. I'll show you ${candidates.length} candidate images. Pick the one that best shows the ${brand} ${model} as a clean product shot (ideally on a white/plain background showing the shoe clearly). Reply with ONLY the number of the best image (1–${candidates.length}), or 0 if none of them show the ${brand} ${model}.`,
+      text: `I need the correct product image for the ${brand} ${model} running shoe.
+
+CRITICAL RULES:
+- Version numbers matter. "${model}" is a specific version. If an image shows a different version (e.g. you need "Tecton X2" but the shoe says "Tecton X3"), reject it and reply 0.
+- Brand matters. Only accept images showing a ${brand} shoe.
+- Reject images showing a person wearing the shoe — product shots only.
+- If you are not confident the image shows exactly the ${brand} ${model}, reply 0.
+
+Look at each image carefully and reply with ONLY the number (1–${candidates.length}) of the image that correctly shows the ${brand} ${model}, or 0 if none are a confident match.`,
     },
   ];
 
@@ -88,7 +95,8 @@ async function pickBestImageWithVision(brand, model, candidates) {
 }
 
 async function findImageForShoe(shoe) {
-  const query = `${shoe.brand} ${shoe.model} running shoe`;
+  // Quoted query forces exact model name match in search results
+  const query = `"${shoe.brand} ${shoe.model}" running shoe`;
   const candidates = await braveImageSearch(query);
 
   if (candidates.length === 0) return null;
