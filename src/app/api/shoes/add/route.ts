@@ -1,5 +1,6 @@
 import { NextRequest } from 'next/server';
-import { getToken } from 'next-auth/jwt';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import {
   parseShoeQuery,
@@ -13,15 +14,15 @@ function streamLine(controller: ReadableStreamDefaultController, data: Record<st
 }
 
 export async function POST(req: NextRequest) {
-  const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET });
-  if (!token?.id) {
+  const session = await getServerSession(authOptions);
+  if (!session?.user?.id) {
     return new Response(JSON.stringify({ error: 'Sign in required' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const userId = parseInt(token.id as string);
+  const userId = parseInt(session.user.id);
 
   const body = await req.json().catch(() => null);
   const query = body?.query?.trim();
