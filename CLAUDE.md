@@ -631,6 +631,56 @@ When DNS is moved to Cloudflare, the R2 bucket can be connected to `images.filmm
 
 ---
 
+## Running Shoe Finder
+
+**Page:** `/tools/shoe-finder`
+**API:** `GET /api/shoes` — supports filters: `terrain`, `category`, `brand`, `sort`, `minDrop`, `maxDrop`, `search`
+
+### Database Tables
+- `shoes` — brand, model, slug, terrain, category, drop_mm, weight_g, stack_height_mm, price_gbp, release_year, description, image_url, buy_url, avg_score, review_count, last_reviewed
+- `shoe_reviews` — shoe_id, source, source_url, expert_score, user_score, user_count, summary, fetched_at
+- Unique constraint on `shoe_reviews`: `(shoe_id, source)`
+
+### Scripts
+
+All scripts require `.env` with `DATABASE_URL`, `BRAVE_SEARCH_API_KEY`, and `ANTHROPIC_API_KEY`.
+Run with: `node --env-file=.env scripts/<script>.mjs`
+
+| Script | Purpose | Key flags |
+|--------|---------|-----------|
+| `seed-shoes.mjs` | Import 123 curated shoes from `data/shoes-seed.json` | — |
+| `fetch-shoe-reviews.mjs` | Fetch review scores via Brave Search + Haiku (regex first, then text inference) | `--limit N`, `--slug <slug>`, `--stale-only` |
+| `fetch-shoe-images.mjs` | Fetch product images via Brave Image Search, verified by Opus 4.8 vision | `--limit N`, `--slug <slug>`, `--force` |
+| `cleanup-mismatched-reviews.mjs` | Remove review records where summary doesn't mention the exact shoe model | — |
+| `fix-shoe.mjs` | Clear and re-fetch image + reviews for one specific shoe | `--slug <slug>` |
+
+### Monthly Refresh Workflow
+```bash
+node --env-file=.env scripts/fetch-shoe-reviews.mjs --stale-only
+node --env-file=.env scripts/fetch-shoe-images.mjs --force
+node --env-file=.env scripts/cleanup-mismatched-reviews.mjs
+```
+
+### Image Matching Notes
+- Uses two-pass search: quoted exact query first, broader fallback second
+- Opus 4.8 vision verifies every image — checks version numbers strictly (e.g. Tecton X2 vs X3)
+- If no verified image found, `image_url` is set to null (shows placeholder)
+- Images are hotlinked from external sources — future improvement: migrate to R2
+- To fix a specific mismatched shoe: `node --env-file=.env scripts/fix-shoe.mjs --slug <slug>`
+
+### Review Score Notes
+- Brave Search finds review pages, regex extracts explicit scores (e.g. 9.2/10)
+- Where no explicit score exists, Haiku reads the review text and infers a score
+- Scores are normalised to 0–10 (5-star ratings doubled, percentages divided by 10)
+- Results filtered to only include pages that mention the exact shoe model name
+- Sources: runrepeat, runners_world, irunfar, believe_in_run, the_run_testers
+
+### Seed Data
+`data/shoes-seed.json` — 123 curated road and trail shoes across all major brands.
+To add more shoes: append entries to the JSON and re-run `seed-shoes.mjs` (skips existing slugs).
+
+---
+
 ## Owner Context
 
 Stephen is not a professional coder. When making changes:
@@ -642,4 +692,4 @@ Stephen is not a professional coder. When making changes:
 
 ---
 
-*Last updated: February 8, 2026*
+*Last updated: June 15, 2026*
