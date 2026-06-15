@@ -150,6 +150,10 @@ async function main() {
       console.log(`  ✓ ${imageUrl.slice(0, 80)}`);
       found++;
     } else {
+      // Clear any previously stored wrong image so placeholder shows instead
+      if (force) {
+        await prisma.shoes.update({ where: { id: shoe.id }, data: { image_url: null } });
+      }
       console.log(`  ✗ No matching image found`);
       failed++;
     }
