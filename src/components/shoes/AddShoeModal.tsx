@@ -166,7 +166,6 @@ export default function AddShoeModal({ isOpen, onClose, onShoeAdded }: AddShoeMo
               placeholder="e.g., Hoka Tecton X3"
               className="w-full px-4 py-2.5 rounded-xl border border-[#e4e4e7] dark:border-[#27272a] bg-white dark:bg-[#27272a] text-[#18181b] dark:text-[#fafafa] placeholder:text-[#a1a1aa] focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
               maxLength={100}
-              disabled={query.trim().length === 0}
             />
             {error && (
               <p className="mt-2 text-sm text-red-500 flex items-center gap-1.5">
