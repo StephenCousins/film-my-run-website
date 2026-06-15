@@ -123,14 +123,17 @@ async function braveImageSearch(query: string, count = 8): Promise<ImageSearchRe
   });
   if (!res.ok) return [];
   const data = await res.json();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return (data.results ?? [])
-    .map((r: any) => ({
-      fullUrl: r.properties?.url ?? null,
-      thumbnailUrl: r.thumbnail?.src ?? null,
-      pageUrl: r.url ?? '',
-      title: r.title ?? '',
-    }))
+  return ((data.results ?? []) as Record<string, unknown>[])
+    .map((r) => {
+      const props = r.properties as Record<string, string> | undefined;
+      const thumb = r.thumbnail as Record<string, string> | undefined;
+      return {
+        fullUrl: props?.url ?? null,
+        thumbnailUrl: thumb?.src ?? null,
+        pageUrl: (r.url as string) ?? '',
+        title: (r.title as string) ?? '',
+      };
+    })
     .filter((r: ImageSearchResult) => r.thumbnailUrl);
 }
 
