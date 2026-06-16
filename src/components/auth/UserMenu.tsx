@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-export default function UserMenu({ isScrolled = true }: { isScrolled?: boolean }) {
+export default function UserMenu({ isScrolled = true, isHeroPage = false }: { isScrolled?: boolean; isHeroPage?: boolean }) {
   const { user, status, signOut, hasAccess } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -60,7 +60,7 @@ export default function UserMenu({ isScrolled = true }: { isScrolled?: boolean }
           href="/login"
           className={cn(
             'px-4 py-2 text-sm font-medium transition-colors hover:text-orange-500',
-            isScrolled ? 'text-zinc-600 dark:text-zinc-300' : 'text-white/80'
+            !isScrolled && isHeroPage ? 'text-white/80' : isScrolled ? 'text-zinc-600 dark:text-zinc-300' : 'text-foreground'
           )}
         >
           Sign in
@@ -135,7 +135,7 @@ export default function UserMenu({ isScrolled = true }: { isScrolled?: boolean }
           className={cn(
             'w-4 h-4 transition-transform',
             isOpen && 'rotate-180',
-            isScrolled ? 'text-zinc-500' : 'text-white/60'
+            !isScrolled && isHeroPage ? 'text-white/60' : 'text-zinc-500'
           )}
         />
       </button>

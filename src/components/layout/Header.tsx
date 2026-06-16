@@ -53,11 +53,14 @@ const navigation = [
   { name: 'Contact', href: '/contact' },
 ];
 
+// Pages where the hero extends behind the header (no pt-20 gap)
+const HERO_PAGES = ['/'];
+
 // ============================================
 // LOGO COMPONENT
 // ============================================
 
-function Logo({ isScrolled }: { isScrolled: boolean }) {
+function Logo({ variant }: { variant: 'default' | 'hero' | 'scrolled' }) {
   return (
     <Link href="/" className="flex items-center gap-2 group">
       <div className="flex gap-0.5">
@@ -79,7 +82,7 @@ function Logo({ isScrolled }: { isScrolled: boolean }) {
       </div>
       <span className={cn(
         'font-display text-lg font-semibold transition-colors duration-300',
-        isScrolled ? 'text-foreground' : 'text-white'
+        variant === 'hero' ? 'text-white' : 'text-foreground'
       )}>
         Film My Run
       </span>
@@ -94,10 +97,10 @@ function Logo({ isScrolled }: { isScrolled: boolean }) {
 interface NavItemProps {
   item: typeof navigation[0];
   isActive: boolean;
-  isScrolled: boolean;
+  variant: 'default' | 'hero' | 'scrolled';
 }
 
-function DesktopNavItem({ item, isActive, isScrolled }: NavItemProps) {
+function DesktopNavItem({ item, isActive, variant }: NavItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = 'children' in item && item.children;
   const closeTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -125,6 +128,14 @@ function DesktopNavItem({ item, isActive, isScrolled }: NavItemProps) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen]);
 
+  const textClass = isActive
+    ? 'text-brand'
+    : variant === 'hero'
+      ? 'text-white/80 hover:text-white'
+      : variant === 'scrolled'
+        ? 'text-secondary hover:text-brand'
+        : 'text-foreground hover:text-brand';
+
   if (hasChildren) {
     return (
       <div
@@ -145,19 +156,14 @@ function DesktopNavItem({ item, isActive, isScrolled }: NavItemProps) {
           aria-haspopup="true"
           className={cn(
             'flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors duration-300',
-            isActive
-              ? 'text-brand'
-              : isScrolled
-                ? 'text-secondary hover:text-brand'
-                : 'text-white/80 hover:text-white'
+            textClass
           )}
         >
           {item.name}
           <ChevronDown
             className={cn(
               'w-4 h-4 transition-transform',
-              isOpen && 'rotate-180',
-              !isScrolled && !isActive && 'text-white/60'
+              isOpen && 'rotate-180'
             )}
           />
         </button>
@@ -192,11 +198,7 @@ function DesktopNavItem({ item, isActive, isScrolled }: NavItemProps) {
       href={item.href}
       className={cn(
         'px-3 py-2 text-sm font-medium transition-colors duration-300',
-        isActive
-          ? 'text-brand'
-          : isScrolled
-            ? 'text-secondary hover:text-brand'
-            : 'text-white/80 hover:text-white'
+        textClass
       )}
     >
       {item.name}
@@ -211,6 +213,7 @@ function DesktopNavItem({ item, isActive, isScrolled }: NavItemProps) {
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const pathname = usePathname();
+  const isHeroPage = HERO_PAGES.includes(pathname);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -219,6 +222,12 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const variant: 'default' | 'hero' | 'scrolled' = isScrolled
+    ? 'scrolled'
+    : isHeroPage
+      ? 'hero'
+      : 'default';
 
   return (
     <header
@@ -231,23 +240,23 @@ export default function Header() {
     >
       <div className="container">
         <nav className="flex items-center justify-between h-14 lg:h-20">
-          <Logo isScrolled={isScrolled} />
+          <Logo variant={variant} />
 
           <div className="hidden lg:flex items-center gap-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
               return (
-                <DesktopNavItem key={item.name} item={item} isActive={isActive} isScrolled={isScrolled} />
+                <DesktopNavItem key={item.name} item={item} isActive={isActive} variant={variant} />
               );
             })}
           </div>
 
           <div className="flex items-center gap-3">
             <div className="hidden lg:block">
-              <ThemeToggle isScrolled={isScrolled} />
+              <ThemeToggle isScrolled={isScrolled} isHeroPage={isHeroPage} />
             </div>
             <div className="hidden lg:block">
-              <UserMenu isScrolled={isScrolled} />
+              <UserMenu isScrolled={isScrolled} isHeroPage={isHeroPage} />
             </div>
           </div>
         </nav>
