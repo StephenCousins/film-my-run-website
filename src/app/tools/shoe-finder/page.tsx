@@ -20,54 +20,44 @@ export default function ShoeFinderPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#09090b]">
+      <main className="pt-20 lg:pt-24 min-h-screen bg-[#09090b]">
+        {/* Hero */}
+        <section className="relative py-20 lg:py-28 overflow-hidden">
+          {/* Video background */}
+          <div className="absolute inset-0">
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover"
+            >
+              <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/shoe-finder-hero.mp4" type="video/mp4" />
+            </video>
+            {/* Gradient overlays */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[#09090b]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50" />
+          </div>
 
-        {/* Hero — dark cinematic, matching main site */}
-        <section className="relative bg-[#09090b] text-white pt-24 pb-16 px-4 overflow-hidden">
-          {/* Subtle grid */}
-          <div
-            className="absolute inset-0 opacity-[0.025]"
-            style={{
-              backgroundImage:
-                'linear-gradient(#f88c00 1px, transparent 1px), linear-gradient(to right, #f88c00 1px, transparent 1px)',
-              backgroundSize: '72px 72px',
-            }}
-          />
-          {/* Radial glow */}
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-          {/* Bottom fade into content */}
-          <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-b from-transparent to-[#09090b]" />
+          <div className="container relative">
+            <div className="max-w-3xl mx-auto text-center">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
+                <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
+                <span className="text-orange-400 text-sm font-medium">130+ Shoes Ranked</span>
+              </div>
 
-          <div className="relative max-w-6xl mx-auto">
-            {/* Pill tag */}
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 rounded-full border border-orange-500/20 mb-8">
-              <span className="w-1.5 h-1.5 bg-orange-500 rounded-full animate-pulse" />
-              <span className="text-orange-400 text-sm font-medium tracking-wide">Running Tools</span>
-            </div>
-
-            <h1 className="font-display text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight mb-6">
-              Find Your<br />
-              <span className="text-orange-500">Perfect Shoe</span>
-            </h1>
-
-            <p className="text-zinc-400 text-lg max-w-2xl mb-10 leading-relaxed">
-              Review scores aggregated from RunRepeat, Runner&apos;s World, iRunFar and
-              Believe in the Run — ranked so you can find your next favourite shoe faster.
-            </p>
-
-            {/* Stats row */}
-            <div className="flex flex-wrap gap-10">
-              {[
-                ['124+', 'Shoes Ranked'],
-                ['5', 'Expert Sources'],
-                ['Road & Trail', 'All Terrain'],
-                ['Monthly', 'Updated'],
-              ].map(([value, label]) => (
-                <div key={label}>
-                  <div className="text-2xl font-bold font-mono text-white">{value}</div>
-                  <div className="text-xs text-zinc-500 mt-0.5 uppercase tracking-wider">{label}</div>
-                </div>
-              ))}
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
+                Running Shoe Finder
+              </h1>
+              <p className="text-zinc-300 text-lg max-w-2xl mx-auto drop-shadow-md">
+                Review scores aggregated from RunRepeat, Runner&apos;s World, iRunFar, Believe in the Run
+                and more — ranked so you can find your perfect shoe faster.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3 mt-6 text-sm">
+                <div className="bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 text-white/90 border border-white/10">Road &amp; Trail</div>
+                <div className="bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 text-white/90 border border-white/10">Expert Reviews</div>
+                <div className="bg-white/15 backdrop-blur-sm rounded-full px-4 py-1.5 text-white/90 border border-white/10">Updated Monthly</div>
+              </div>
             </div>
           </div>
         </section>
