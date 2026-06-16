@@ -48,8 +48,8 @@ export async function POST(req: NextRequest) {
       description: { contains: `[added by user ${userId}]` },
     },
   });
-  if (recentCount >= 5) {
-    return new Response(JSON.stringify({ error: 'Daily limit reached (5 shoes per day). Try again tomorrow.' }), {
+  if (recentCount >= 50) {
+    return new Response(JSON.stringify({ error: 'Daily limit reached (50 shoes per day). Try again tomorrow.' }), {
       status: 429,
       headers: { 'Content-Type': 'application/json' },
     });
