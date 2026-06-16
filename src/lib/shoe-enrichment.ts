@@ -314,8 +314,9 @@ export interface ReviewResult {
   summary: string | null;
 }
 
-export async function fetchReviewsForShoe(brand: string, model: string): Promise<ReviewResult[]> {
+export async function fetchReviewsForShoe(brand: string, model: string, onProgress?: (msg: string) => void): Promise<ReviewResult[]> {
   const primaryQuery = `"${brand} ${model}" running shoe review`;
+  onProgress?.(`Searching for reviews...`);
   const allResults = await braveWebSearch(primaryQuery);
   await sleep(1100);
 
@@ -338,17 +339,20 @@ export async function fetchReviewsForShoe(brand: string, model: string): Promise
 
     const needsVerify = isComparison || !urlMatch;
     if (needsVerify) {
+      onProgress?.(`Verifying ${source === 'other' ? new URL(result.url).hostname : source}...`);
       const { verified } = await claudeVerifyResult(brand, model, result);
       if (!verified) continue;
     }
 
     let score = extractExplicitScore(combined);
     if (score === null && result.description.length > 60) {
+      onProgress?.(`Extracting score from ${source === 'other' ? new URL(result.url).hostname : source}...`);
       score = await inferScoreFromText(brand, model, result.description);
     }
 
     if (score !== null) {
       seenSources.add(source);
+      onProgress?.(`Found review: ${source === 'other' ? new URL(result.url).hostname : source} (${score}/10)`);
       verifiedReviews.push({
         source,
         source_url: result.url,
@@ -538,12 +542,13 @@ export interface ImageResult {
   confidence: string;
 }
 
-export async function findImageForShoe(brand: string, model: string): Promise<ImageResult | null> {
+export async function findImageForShoe(brand: string, model: string, onProgress?: (msg: string) => void): Promise<ImageResult | null> {
   // Strategy 1: Product page scrape
   const brandDomain = BRAND_DOMAINS[brand];
   const allDomains = brandDomain ? [brandDomain, ...RETAILER_DOMAINS] : RETAILER_DOMAINS;
 
   for (const domain of allDomains) {
+    onProgress?.(`Searching ${domain}...`);
     const query = `site:${domain} "${brand} ${model}"`;
     const results = await braveWebSearch(query, 5);
     await sleep(1100);
@@ -562,6 +567,7 @@ export async function findImageForShoe(brand: string, model: string): Promise<Im
       const verification = verifyPageMatchesShoe(brand, model, result.url, result.title);
       if (!verification.match) continue;
 
+      onProgress?.(`Checking product page on ${domain}...`);
       const pageData = await fetchPageData(result.url);
       if (!pageData || pageData.images.length === 0) continue;
 
@@ -569,6 +575,7 @@ export async function findImageForShoe(brand: string, model: string): Promise<Im
         if (!isLikelyProductImage(img.url)) continue;
         const sizeCheck = await checkImageSize(img.url);
         if (!sizeCheck.ok) continue;
+        onProgress?.(`Verifying image...`);
         const visionResult = await visionConfirmProductShot(img.url);
         if (visionResult === false) continue;
         return {
@@ -582,6 +589,7 @@ export async function findImageForShoe(brand: string, model: string): Promise<Im
   }
 
   // Strategy 2: Image search with source verification
+  onProgress?.(`Trying image search...`);
   const imageResults = await braveImageSearch(`"${brand} ${model}" running shoe`);
   await sleep(1100);
 
@@ -595,6 +603,7 @@ export async function findImageForShoe(brand: string, model: string): Promise<Im
     if (!imgUrl || !isLikelyProductImage(imgUrl)) continue;
     const sizeCheck = await checkImageSize(imgUrl);
     if (!sizeCheck.ok) continue;
+    onProgress?.(`Verifying image candidate...`);
     const visionResult = await visionConfirmProductShot(imgUrl);
     if (visionResult === false) continue;
     return {

@@ -112,7 +112,13 @@ export default function AddShoeModal({ isOpen, onClose, onShoeAdded }: AddShoeMo
           if (!line.trim()) continue;
           try {
             const step = JSON.parse(line) as ProgressStep;
-            setSteps(prev => [...prev, step]);
+            setSteps(prev => {
+              const last = prev[prev.length - 1];
+              if (last && last.step === step.step && step.step !== 'complete' && step.step !== 'error' && step.step !== 'duplicate') {
+                return [...prev.slice(0, -1), step];
+              }
+              return [...prev, step];
+            });
 
             if (step.step === 'complete' && step.shoe) {
               setResult(step.shoe);

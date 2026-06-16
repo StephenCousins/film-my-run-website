@@ -104,7 +104,9 @@ export async function POST(req: NextRequest) {
         // Step 4: Fetch reviews
         streamLine(controller, { step: 'reviews', message: 'Fetching reviews...' });
 
-        const reviews = await fetchReviewsForShoe(parsed.brand, parsed.model);
+        const reviews = await fetchReviewsForShoe(parsed.brand, parsed.model, (msg) => {
+          streamLine(controller, { step: 'reviews', message: msg });
+        });
         let avgScore: number | null = null;
 
         if (reviews.length > 0) {
@@ -150,7 +152,9 @@ export async function POST(req: NextRequest) {
         // Step 5: Find image
         streamLine(controller, { step: 'image', message: 'Finding product image...' });
 
-        const imageResult = await findImageForShoe(parsed.brand, parsed.model);
+        const imageResult = await findImageForShoe(parsed.brand, parsed.model, (msg) => {
+          streamLine(controller, { step: 'image', message: msg });
+        });
         let imageUrl: string | null = null;
 
         if (imageResult) {
