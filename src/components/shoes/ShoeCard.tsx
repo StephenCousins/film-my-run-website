@@ -188,7 +188,7 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
                         </div>
                         {r.expertScore !== null && <ScoreBar score={r.expertScore} />}
                         {r.summary && (
-                          <p className="text-xs text-[#a1a1aa] mt-1 italic">{r.summary.replace(/<[^>]*>/g, '')}</p>
+                          <p className="text-xs text-[#a1a1aa] mt-1 italic line-clamp-2">{r.summary.replace(/<[^>]*>/g, '')}</p>
                         )}
                       </div>
                     ))}
