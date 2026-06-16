@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, SlidersHorizontal, X, Star, ChevronDown, Plus } from 'lucide-react';
 import ShoeCard from './ShoeCard';
 import AddShoeModal from './AddShoeModal';
+import LoginModal from '@/components/auth/LoginModal';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface ShoeReview {
@@ -68,6 +69,7 @@ export default function ShoeFinderClient() {
   const [meta, setMeta] = useState<Meta>({ brands: [], categories: [], total: 0 });
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   // Filters
   const [search, setSearch] = useState('');
@@ -168,15 +170,13 @@ export default function ShoeFinderClient() {
           )}
         </button>
 
-        {isAuthenticated && (
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-orange-500 text-orange-500 bg-orange-50 dark:bg-orange-950/30 text-sm font-medium hover:bg-orange-100 dark:hover:bg-orange-950/50 transition-colors"
-          >
-            <Plus className="w-4 h-4" />
-            Suggest a Shoe
-          </button>
-        )}
+        <button
+          onClick={() => isAuthenticated ? setShowAddModal(true) : setShowLoginModal(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-orange-500 text-orange-500 bg-orange-50 dark:bg-orange-950/30 text-sm font-medium hover:bg-orange-100 dark:hover:bg-orange-950/50 transition-colors"
+        >
+          <Plus className="w-4 h-4" />
+          Suggest a Shoe
+        </button>
 
         {/* Sort */}
         <div className="relative">
@@ -375,6 +375,11 @@ export default function ShoeFinderClient() {
         isOpen={showAddModal}
         onClose={() => setShowAddModal(false)}
         onShoeAdded={fetchShoes}
+      />
+      <LoginModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        feature="shoe suggestions"
       />
     </div>
   );
