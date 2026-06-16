@@ -118,9 +118,9 @@ export async function POST(req: NextRequest) {
         for (const shoe of discovered) {
           if (newShoesAdded >= MAX_NEW_SHOES) break;
 
-          const slug = shoeToSlug(shoe.brand, shoe.model);
-          const existing = await prisma.shoes.findUnique({ where: { slug } });
-          if (existing) {
+          const rawSlug = shoeToSlug(shoe.brand, shoe.model);
+          const rawExists = await prisma.shoes.findUnique({ where: { slug: rawSlug } });
+          if (rawExists) {
             streamLine(controller, { phase: 'discovery', message: `Skip: ${shoe.brand} ${shoe.model} (exists)` });
             continue;
           }
@@ -128,11 +128,18 @@ export async function POST(req: NextRequest) {
           streamLine(controller, { phase: 'discovery', message: `Adding: ${shoe.brand} ${shoe.model}...` });
           try {
             const parsed = await parseShoeQuery(`${shoe.brand} ${shoe.model}`);
+            const parsedSlug = shoeToSlug(parsed.brand, parsed.model);
+            const parsedExists = await prisma.shoes.findUnique({ where: { slug: parsedSlug } });
+            if (parsedExists) {
+              streamLine(controller, { phase: 'discovery', message: `Skip: ${parsed.brand} ${parsed.model} (exists after parse)` });
+              continue;
+            }
+
             const created = await prisma.shoes.create({
               data: {
                 brand: parsed.brand,
                 model: parsed.model,
-                slug: shoeToSlug(parsed.brand, parsed.model),
+                slug: parsedSlug,
                 terrain: parsed.terrain,
                 category: parsed.category,
                 drop_mm: parsed.drop_mm,
