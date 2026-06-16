@@ -7,10 +7,16 @@ import {
   shoeToSlug,
 } from '@/lib/shoe-enrichment';
 
-const MAX_NEW_SHOES_PER_RUN = 10;
+export const maxDuration = 300;
+
+const MAX_NEW_SHOES = 5;
 const STALE_DAYS = 30;
-const MAX_STALE_REFRESH = 20;
-const MAX_IMAGE_RETRY = 10;
+const MAX_STALE_REFRESH = 10;
+const MAX_IMAGE_RETRY = 5;
+
+function streamLine(controller: ReadableStreamDefaultController, data: Record<string, unknown>) {
+  controller.enqueue(new TextEncoder().encode(JSON.stringify(data) + '\n'));
+}
 
 interface DiscoveredShoe {
   brand: string;
@@ -29,23 +35,24 @@ async function discoverNewShoes(): Promise<DiscoveredShoe[]> {
     `best new running shoes ${month} ${year}`,
     `new trail running shoes ${year}`,
     `new road running shoes ${year}`,
-    `running shoe releases ${month} ${year}`,
   ];
 
   const allSnippets: string[] = [];
 
   for (const query of queries) {
     const url = `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=8&search_lang=en`;
-    const res = await fetch(url, {
-      headers: { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': braveKey },
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const results = data.web?.results ?? [];
-      for (const r of results) {
-        allSnippets.push(`${r.title ?? ''}\n${r.description ?? ''}`);
+    try {
+      const res = await fetch(url, {
+        headers: { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': braveKey },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const results = data.web?.results ?? [];
+        for (const r of results) {
+          allSnippets.push(`${r.title ?? ''}\n${r.description ?? ''}`);
+        }
       }
-    }
+    } catch { /* skip failed search */ }
     await sleep(1100);
   }
 
@@ -84,165 +91,6 @@ Rules:
   }
 }
 
-async function addNewShoe(brand: string, model: string): Promise<{ added: boolean; reason: string }> {
-  const slug = shoeToSlug(brand, model);
-  const existing = await prisma.shoes.findUnique({ where: { slug } });
-  if (existing) return { added: false, reason: 'already exists' };
-
-  try {
-    const parsed = await parseShoeQuery(`${brand} ${model}`);
-
-    const shoe = await prisma.shoes.create({
-      data: {
-        brand: parsed.brand,
-        model: parsed.model,
-        slug: shoeToSlug(parsed.brand, parsed.model),
-        terrain: parsed.terrain,
-        category: parsed.category,
-        drop_mm: parsed.drop_mm,
-        weight_g: parsed.weight_g,
-        stack_height_mm: parsed.stack_height_mm,
-        price_gbp: parsed.price_gbp,
-        release_year: parsed.release_year,
-        description: parsed.description ? `${parsed.description} [auto-discovered]` : '[auto-discovered]',
-      },
-    });
-
-    const reviews = await fetchReviewsForShoe(parsed.brand, parsed.model);
-    if (reviews.length > 0) {
-      for (const review of reviews) {
-        await prisma.shoe_reviews.upsert({
-          where: { shoe_id_source: { shoe_id: shoe.id, source: review.source } },
-          update: {
-            source_url: review.source_url,
-            expert_score: review.expert_score,
-            summary: review.summary,
-            fetched_at: new Date(),
-          },
-          create: {
-            shoe_id: shoe.id,
-            source: review.source,
-            source_url: review.source_url,
-            expert_score: review.expert_score,
-            summary: review.summary,
-          },
-        });
-      }
-      const scores = reviews.map(r => r.expert_score);
-      const avgScore = Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10;
-      await prisma.shoes.update({
-        where: { id: shoe.id },
-        data: { avg_score: avgScore, review_count: reviews.length, last_reviewed: new Date() },
-      });
-    }
-
-    const imageResult = await findImageForShoe(parsed.brand, parsed.model);
-    if (imageResult) {
-      await prisma.shoes.update({
-        where: { id: shoe.id },
-        data: { image_url: imageResult.url },
-      });
-    }
-
-    return { added: true, reason: `${reviews.length} reviews, ${imageResult ? 'image found' : 'no image'}` };
-  } catch (err) {
-    return { added: false, reason: err instanceof Error ? err.message : 'unknown error' };
-  }
-}
-
-async function refreshStaleReviews(): Promise<{ refreshed: number; updated: number }> {
-  const staleDate = new Date(Date.now() - STALE_DAYS * 24 * 60 * 60 * 1000);
-  const staleShoes = await prisma.shoes.findMany({
-    where: {
-      OR: [
-        { last_reviewed: null },
-        { last_reviewed: { lt: staleDate } },
-      ],
-    },
-    orderBy: { last_reviewed: 'asc' },
-    take: MAX_STALE_REFRESH,
-  });
-
-  let updated = 0;
-  for (const shoe of staleShoes) {
-    try {
-      const reviews = await fetchReviewsForShoe(shoe.brand, shoe.model);
-      if (reviews.length > 0) {
-        for (const review of reviews) {
-          await prisma.shoe_reviews.upsert({
-            where: { shoe_id_source: { shoe_id: shoe.id, source: review.source } },
-            update: {
-              source_url: review.source_url,
-              expert_score: review.expert_score,
-              summary: review.summary,
-              fetched_at: new Date(),
-            },
-            create: {
-              shoe_id: shoe.id,
-              source: review.source,
-              source_url: review.source_url,
-              expert_score: review.expert_score,
-              summary: review.summary,
-            },
-          });
-        }
-
-        const allReviews = await prisma.shoe_reviews.findMany({ where: { shoe_id: shoe.id } });
-        const scores = allReviews
-          .map(r => r.expert_score ? Number(r.expert_score) : null)
-          .filter((s): s is number => s !== null);
-        const avgScore = scores.length > 0
-          ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10
-          : null;
-
-        await prisma.shoes.update({
-          where: { id: shoe.id },
-          data: {
-            avg_score: avgScore,
-            review_count: allReviews.length,
-            last_reviewed: new Date(),
-          },
-        });
-        updated++;
-      } else {
-        await prisma.shoes.update({
-          where: { id: shoe.id },
-          data: { last_reviewed: new Date() },
-        });
-      }
-    } catch {
-      // skip this shoe, continue with others
-    }
-  }
-
-  return { refreshed: staleShoes.length, updated };
-}
-
-async function retryMissingImages(): Promise<{ attempted: number; found: number }> {
-  const shoesWithoutImages = await prisma.shoes.findMany({
-    where: { image_url: null },
-    take: MAX_IMAGE_RETRY,
-  });
-
-  let found = 0;
-  for (const shoe of shoesWithoutImages) {
-    try {
-      const imageResult = await findImageForShoe(shoe.brand, shoe.model);
-      if (imageResult) {
-        await prisma.shoes.update({
-          where: { id: shoe.id },
-          data: { image_url: imageResult.url },
-        });
-        found++;
-      }
-    } catch {
-      // skip, continue
-    }
-  }
-
-  return { attempted: shoesWithoutImages.length, found };
-}
-
 export async function POST(req: NextRequest) {
   const authHeader = req.headers.get('authorization');
   const expectedSecret = process.env.CRON_SECRET;
@@ -254,58 +102,154 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: 'API keys not configured' }, { status: 503 });
   }
 
-  const log: string[] = [];
-  const startTime = Date.now();
+  const stream = new ReadableStream({
+    async start(controller) {
+      const startTime = Date.now();
+      let newShoesAdded = 0;
+      let reviewsRefreshed = 0;
+      let imagesFound = 0;
 
-  try {
-    // Phase 1: Discover new shoes
-    log.push('Starting shoe discovery...');
-    const discovered = await discoverNewShoes();
-    log.push(`Found ${discovered.length} shoe mentions in search results`);
+      try {
+        // ── Phase 1: Discover new shoes ──
+        streamLine(controller, { phase: 'discovery', message: 'Searching for new shoe releases...' });
+        const discovered = await discoverNewShoes();
+        streamLine(controller, { phase: 'discovery', message: `Found ${discovered.length} shoe mentions` });
 
-    let added = 0;
-    for (const shoe of discovered) {
-      if (added >= MAX_NEW_SHOES_PER_RUN) {
-        log.push(`Hit max new shoes limit (${MAX_NEW_SHOES_PER_RUN})`);
-        break;
+        for (const shoe of discovered) {
+          if (newShoesAdded >= MAX_NEW_SHOES) break;
+
+          const slug = shoeToSlug(shoe.brand, shoe.model);
+          const existing = await prisma.shoes.findUnique({ where: { slug } });
+          if (existing) {
+            streamLine(controller, { phase: 'discovery', message: `Skip: ${shoe.brand} ${shoe.model} (exists)` });
+            continue;
+          }
+
+          streamLine(controller, { phase: 'discovery', message: `Adding: ${shoe.brand} ${shoe.model}...` });
+          try {
+            const parsed = await parseShoeQuery(`${shoe.brand} ${shoe.model}`);
+            const created = await prisma.shoes.create({
+              data: {
+                brand: parsed.brand,
+                model: parsed.model,
+                slug: shoeToSlug(parsed.brand, parsed.model),
+                terrain: parsed.terrain,
+                category: parsed.category,
+                drop_mm: parsed.drop_mm,
+                weight_g: parsed.weight_g,
+                stack_height_mm: parsed.stack_height_mm,
+                price_gbp: parsed.price_gbp,
+                release_year: parsed.release_year,
+                description: parsed.description ? `${parsed.description} [auto-discovered]` : '[auto-discovered]',
+              },
+            });
+
+            const reviews = await fetchReviewsForShoe(parsed.brand, parsed.model);
+            if (reviews.length > 0) {
+              for (const review of reviews) {
+                await prisma.shoe_reviews.upsert({
+                  where: { shoe_id_source: { shoe_id: created.id, source: review.source } },
+                  update: { source_url: review.source_url, expert_score: review.expert_score, summary: review.summary, fetched_at: new Date() },
+                  create: { shoe_id: created.id, source: review.source, source_url: review.source_url, expert_score: review.expert_score, summary: review.summary },
+                });
+              }
+              const scores = reviews.map(r => r.expert_score);
+              const avgScore = Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10;
+              await prisma.shoes.update({
+                where: { id: created.id },
+                data: { avg_score: avgScore, review_count: reviews.length, last_reviewed: new Date() },
+              });
+            }
+
+            const imageResult = await findImageForShoe(parsed.brand, parsed.model);
+            if (imageResult) {
+              await prisma.shoes.update({ where: { id: created.id }, data: { image_url: imageResult.url } });
+            }
+
+            newShoesAdded++;
+            streamLine(controller, { phase: 'discovery', message: `+ ${parsed.brand} ${parsed.model} (${reviews.length} reviews, ${imageResult ? 'image found' : 'no image'})` });
+          } catch (err) {
+            streamLine(controller, { phase: 'discovery', message: `Error adding ${shoe.brand} ${shoe.model}: ${err instanceof Error ? err.message : 'unknown'}` });
+          }
+        }
+
+        // ── Phase 2: Refresh stale reviews ──
+        streamLine(controller, { phase: 'reviews', message: 'Refreshing stale reviews...' });
+        const staleDate = new Date(Date.now() - STALE_DAYS * 24 * 60 * 60 * 1000);
+        const staleShoes = await prisma.shoes.findMany({
+          where: { OR: [{ last_reviewed: null }, { last_reviewed: { lt: staleDate } }] },
+          orderBy: { last_reviewed: 'asc' },
+          take: MAX_STALE_REFRESH,
+        });
+
+        for (const shoe of staleShoes) {
+          try {
+            const reviews = await fetchReviewsForShoe(shoe.brand, shoe.model);
+            if (reviews.length > 0) {
+              for (const review of reviews) {
+                await prisma.shoe_reviews.upsert({
+                  where: { shoe_id_source: { shoe_id: shoe.id, source: review.source } },
+                  update: { source_url: review.source_url, expert_score: review.expert_score, summary: review.summary, fetched_at: new Date() },
+                  create: { shoe_id: shoe.id, source: review.source, source_url: review.source_url, expert_score: review.expert_score, summary: review.summary },
+                });
+              }
+              const allReviews = await prisma.shoe_reviews.findMany({ where: { shoe_id: shoe.id } });
+              const scores = allReviews.map(r => r.expert_score ? Number(r.expert_score) : null).filter((s): s is number => s !== null);
+              const avgScore = scores.length > 0 ? Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10 : null;
+              await prisma.shoes.update({
+                where: { id: shoe.id },
+                data: { avg_score: avgScore, review_count: allReviews.length, last_reviewed: new Date() },
+              });
+              reviewsRefreshed++;
+              streamLine(controller, { phase: 'reviews', message: `Updated: ${shoe.brand} ${shoe.model} (${reviews.length} reviews)` });
+            } else {
+              await prisma.shoes.update({ where: { id: shoe.id }, data: { last_reviewed: new Date() } });
+            }
+          } catch {
+            streamLine(controller, { phase: 'reviews', message: `Error refreshing ${shoe.brand} ${shoe.model}` });
+          }
+        }
+
+        // ── Phase 3: Retry missing images ──
+        streamLine(controller, { phase: 'images', message: 'Retrying missing images...' });
+        const shoesWithoutImages = await prisma.shoes.findMany({
+          where: { image_url: null },
+          take: MAX_IMAGE_RETRY,
+        });
+
+        for (const shoe of shoesWithoutImages) {
+          try {
+            const imageResult = await findImageForShoe(shoe.brand, shoe.model);
+            if (imageResult) {
+              await prisma.shoes.update({ where: { id: shoe.id }, data: { image_url: imageResult.url } });
+              imagesFound++;
+              streamLine(controller, { phase: 'images', message: `Found image: ${shoe.brand} ${shoe.model}` });
+            }
+          } catch { /* skip */ }
+        }
+
+        // ── Summary ──
+        const duration = Math.round((Date.now() - startTime) / 1000);
+        streamLine(controller, {
+          phase: 'complete',
+          message: `Done in ${duration}s`,
+          summary: { newShoesAdded, reviewsRefreshed, imagesFound, durationSeconds: duration },
+        });
+      } catch (err) {
+        streamLine(controller, { phase: 'error', message: err instanceof Error ? err.message : 'unknown error' });
+      } finally {
+        controller.close();
       }
-      const result = await addNewShoe(shoe.brand, shoe.model);
-      if (result.added) {
-        log.push(`+ Added: ${shoe.brand} ${shoe.model} (${result.reason})`);
-        added++;
-      } else {
-        log.push(`  Skipped: ${shoe.brand} ${shoe.model} (${result.reason})`);
-      }
-    }
-    log.push(`Discovery complete: ${added} new shoes added`);
+    },
+  });
 
-    // Phase 2: Refresh stale reviews
-    log.push('Refreshing stale reviews...');
-    const reviewResult = await refreshStaleReviews();
-    log.push(`Reviews: checked ${reviewResult.refreshed} stale shoes, ${reviewResult.updated} had new/updated reviews`);
-
-    // Phase 3: Retry missing images
-    log.push('Retrying missing images...');
-    const imageResult = await retryMissingImages();
-    log.push(`Images: attempted ${imageResult.attempted}, found ${imageResult.found} new images`);
-
-    const duration = Math.round((Date.now() - startTime) / 1000);
-    log.push(`Completed in ${duration}s`);
-
-    return Response.json({
-      success: true,
-      summary: {
-        newShoesAdded: added,
-        reviewsRefreshed: reviewResult.updated,
-        imagesFound: imageResult.found,
-        durationSeconds: duration,
-      },
-      log,
-    });
-  } catch (err) {
-    log.push(`Error: ${err instanceof Error ? err.message : 'unknown'}`);
-    return Response.json({ success: false, log }, { status: 500 });
-  }
+  return new Response(stream, {
+    headers: {
+      'Content-Type': 'application/x-ndjson',
+      'Cache-Control': 'no-cache',
+      Connection: 'keep-alive',
+    },
+  });
 }
 
 function sleep(ms: number): Promise<void> {

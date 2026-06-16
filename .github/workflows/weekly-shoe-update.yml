@@ -13,26 +13,28 @@ jobs:
     steps:
       - name: Discover new shoes and refresh data
         run: |
-          response=$(curl -s -w "\n%{http_code}" -X POST \
+          echo "## Weekly Shoe Update" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          http_code=$(curl -s -o /tmp/shoe-update.ndjson -w "%{http_code}" -X POST \
             "${{ secrets.SITE_URL }}/api/shoes/weekly-update" \
             -H "Content-Type: application/json" \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             --max-time 600)
 
-          http_code=$(echo "$response" | tail -1)
-          body=$(echo "$response" | sed '$d')
-
           echo "Status: $http_code"
-          echo "Response: $body"
 
           if [ "$http_code" != "200" ]; then
             echo "::error::Shoe update failed with status $http_code"
+            echo "**Failed** with HTTP $http_code" >> $GITHUB_STEP_SUMMARY
+            cat /tmp/shoe-update.ndjson 2>/dev/null || true
             exit 1
           fi
 
-          # Extract summary for the job summary
-          echo "## Weekly Shoe Update" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo '```json' >> $GITHUB_STEP_SUMMARY
-          echo "$body" | python3 -m json.tool 2>/dev/null || echo "$body" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          while IFS= read -r line; do
+            message=$(echo "$line" | python3 -c "import sys,json; print(json.loads(sys.stdin.read()).get('message',''))" 2>/dev/null || echo "$line")
+            echo "$message"
+            echo "$message" >> $GITHUB_STEP_SUMMARY
+          done < /tmp/shoe-update.ndjson
           echo '```' >> $GITHUB_STEP_SUMMARY
