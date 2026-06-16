@@ -184,7 +184,7 @@ export default async function NewsPage() {
               <span className="inline-block px-3 py-1 bg-brand/15 text-brand text-xs font-semibold rounded-full uppercase tracking-wider mb-4">
                 Stay in the loop
               </span>
-              <h2 className="font-display text-3xl lg:text-4xl font-bold text-white mb-4">
+              <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4">
                 Weekly News Digest
               </h2>
               <p className="text-muted mb-8 leading-relaxed">
@@ -193,7 +193,7 @@ export default async function NewsPage() {
               </p>
               <NewsletterForm
                 variant="inline"
-                theme="glass"
+                theme="light"
                 className="max-w-md mx-auto"
               />
             </div>
