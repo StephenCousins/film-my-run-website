@@ -221,7 +221,7 @@ export default function AddShoeModal({ isOpen, onClose, onShoeAdded }: AddShoeMo
                       {result.brand} {result.model}
                     </p>
                     <p className="text-xs text-[#71717a]">
-                      {result.terrain} &middot; {result.category.replace(/_/g, ' ')}
+                      {result.terrain} &middot; {(result.category ?? '').replace(/_/g, ' ')}
                       {result.avgScore !== null && ` · ${result.avgScore}/10`}
                     </p>
                   </div>
