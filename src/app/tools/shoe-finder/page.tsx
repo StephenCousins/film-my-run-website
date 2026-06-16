@@ -3,16 +3,15 @@ import { Suspense } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ShoeFinderClient from '@/components/shoes/ShoeFinderClient';
-import ReviewVideos from '@/components/shoes/ReviewVideos';
 
 export const metadata: Metadata = {
   title: 'Running Shoe Finder',
   alternates: { canonical: 'https://filmmyrun.co.uk/tools/shoe-finder' },
   description:
-    "Find the best running shoes for trail and road. Aggregated review scores from RunRepeat, Runner's World, iRunFar and more — ranked to help you choose.",
+    'Find the best running shoes for trail and road. Aggregated review scores from RunRepeat, Runner\'s World, iRunFar and more — ranked to help you choose.',
   openGraph: {
     title: 'Running Shoe Finder | Film My Run',
-    description: "Ranked running shoes with aggregated scores from the world's top review sites.",
+    description: 'Ranked running shoes with aggregated scores from the world\'s top review sites.',
   },
 };
 
@@ -20,7 +19,7 @@ export default function ShoeFinderPage() {
   return (
     <>
       <Header />
-      <main className="pt-20 lg:pt-24 min-h-screen bg-[#09090b]">
+      <main className="pt-20 lg:pt-24 min-h-screen bg-background">
         {/* Hero */}
         <section className="relative py-20 lg:py-28 overflow-hidden">
           {/* Video background */}
@@ -35,7 +34,7 @@ export default function ShoeFinderPage() {
               <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/shoe-finder-hero.mp4" type="video/mp4" />
             </video>
             {/* Gradient overlays */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[#09090b]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-[rgb(var(--color-background))]" />
             <div className="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50" />
           </div>
 
@@ -62,20 +61,18 @@ export default function ShoeFinderPage() {
           </div>
         </section>
 
-        {/* Video review strip */}
-        <ReviewVideos />
-
-        {/* Shoe finder */}
+        {/* Main content */}
         <section className="max-w-6xl mx-auto px-4 py-10">
           <Suspense
             fallback={
-              <div className="text-center py-20 text-zinc-500">Loading shoes...</div>
+              <div className="text-center py-20 text-[#71717a] dark:text-[#71717a]">
+                Loading shoes...
+              </div>
             }
           >
             <ShoeFinderClient />
           </Suspense>
         </section>
-
       </main>
       <Footer />
     </>

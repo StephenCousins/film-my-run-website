@@ -126,18 +126,18 @@ export default function ShoeFinderClient() {
       {/* Search + controls bar */}
       <div className="flex flex-col sm:flex-row gap-3 mb-6">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 w-4 h-4" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#a1a1aa] w-4 h-4" />
           <input
             type="text"
             placeholder="Search brand or model..."
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#27272a] bg-[#18181b] text-[#fafafa] placeholder:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-orange-500/50 focus:border-orange-500/50 text-sm transition-colors"
+            className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#e4e4e7] dark:border-[#27272a] bg-white dark:bg-[#18181b] text-[#18181b] dark:text-[#fafafa] placeholder:text-[#a1a1aa] focus:outline-none focus:ring-2 focus:ring-orange-500 text-sm"
           />
         </div>
 
         {/* Terrain tabs */}
-        <div className="flex rounded-xl border border-[#27272a] overflow-hidden bg-[#18181b]">
+        <div className="flex rounded-xl border border-[#e4e4e7] dark:border-[#27272a] overflow-hidden bg-white dark:bg-[#18181b]">
           {['all', 'road', 'trail'].map(t => (
             <button
               key={t}
@@ -145,7 +145,7 @@ export default function ShoeFinderClient() {
               className={`px-4 py-2.5 text-sm font-medium capitalize transition-colors ${
                 terrain === t
                   ? 'bg-orange-500 text-white'
-                  : 'text-zinc-400 hover:bg-[#27272a] hover:text-zinc-200'
+                  : 'text-[#52525b] dark:text-[#a1a1aa] hover:bg-[#f4f4f5] dark:hover:bg-[#27272a]'
               }`}
             >
               {t === 'all' ? 'All' : t}
@@ -157,14 +157,14 @@ export default function ShoeFinderClient() {
           onClick={() => setShowFilters(f => !f)}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-colors ${
             showFilters || hasActiveFilters
-              ? 'border-orange-500/50 text-orange-400 bg-orange-500/10'
-              : 'border-[#27272a] text-zinc-400 bg-[#18181b] hover:bg-[#27272a]'
+              ? 'border-orange-500 text-orange-500 bg-orange-50 dark:bg-orange-950/30'
+              : 'border-[#e4e4e7] dark:border-[#27272a] text-[#52525b] dark:text-[#a1a1aa] bg-white dark:bg-[#18181b]'
           }`}
         >
           <SlidersHorizontal className="w-4 h-4" />
           Filters
           {hasActiveFilters && (
-            <span className="bg-orange-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center font-bold">
+            <span className="bg-orange-500 text-white rounded-full w-4 h-4 text-xs flex items-center justify-center">
               !
             </span>
           )}
@@ -172,7 +172,7 @@ export default function ShoeFinderClient() {
 
         <button
           onClick={() => isAuthenticated ? setShowAddModal(true) : setShowLoginModal(true)}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-orange-500/30 text-orange-400 bg-orange-500/10 text-sm font-medium hover:bg-orange-500/20 transition-colors"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-orange-500 text-orange-500 bg-orange-50 dark:bg-orange-950/30 text-sm font-medium hover:bg-orange-100 dark:hover:bg-orange-950/50 transition-colors"
         >
           <Plus className="w-4 h-4" />
           Suggest a Shoe
@@ -183,13 +183,13 @@ export default function ShoeFinderClient() {
           <select
             value={sort}
             onChange={e => setSort(e.target.value)}
-            className="appearance-none pl-3 pr-8 py-2.5 rounded-xl border border-[#27272a] bg-[#18181b] text-zinc-400 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 cursor-pointer"
+            className="appearance-none pl-3 pr-8 py-2.5 rounded-xl border border-[#e4e4e7] dark:border-[#27272a] bg-white dark:bg-[#18181b] text-[#52525b] dark:text-[#a1a1aa] text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer"
           >
             <option value="score">Top Rated</option>
             <option value="brand">Brand A–Z</option>
             <option value="newest">Newest First</option>
           </select>
-          <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 pointer-events-none" />
+          <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[#a1a1aa] pointer-events-none" />
         </div>
       </div>
 
@@ -202,63 +202,69 @@ export default function ShoeFinderClient() {
             exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden"
           >
-            <div className="bg-[#18181b] border border-[#27272a] rounded-xl p-4 mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-white dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] rounded-xl p-4 mb-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
               {/* Brand */}
               <div>
-                <label className="block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wide">
+                <label className="block text-xs font-medium text-[#52525b] dark:text-[#a1a1aa] mb-1.5">
                   Brand
                 </label>
                 <div className="relative">
                   <select
                     value={brand}
                     onChange={e => setBrand(e.target.value)}
-                    className="w-full appearance-none pl-3 pr-8 py-2 rounded-lg border border-[#27272a] bg-[#27272a] text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+                    className="w-full appearance-none pl-3 pr-8 py-2 rounded-lg border border-[#e4e4e7] dark:border-[#27272a] bg-white dark:bg-[#27272a] text-[#18181b] dark:text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
                     <option value="">All brands</option>
                     {meta.brands.map(b => (
-                      <option key={b} value={b}>{b}</option>
+                      <option key={b} value={b}>
+                        {b}
+                      </option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 pointer-events-none" />
+                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[#a1a1aa] pointer-events-none" />
                 </div>
               </div>
 
               {/* Category */}
               <div>
-                <label className="block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wide">
+                <label className="block text-xs font-medium text-[#52525b] dark:text-[#a1a1aa] mb-1.5">
                   Category
                 </label>
                 <div className="relative">
                   <select
                     value={category}
                     onChange={e => setCategory(e.target.value)}
-                    className="w-full appearance-none pl-3 pr-8 py-2 rounded-lg border border-[#27272a] bg-[#27272a] text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+                    className="w-full appearance-none pl-3 pr-8 py-2 rounded-lg border border-[#e4e4e7] dark:border-[#27272a] bg-white dark:bg-[#27272a] text-[#18181b] dark:text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
                     <option value="">All categories</option>
                     {meta.categories.map(c => (
-                      <option key={c} value={c}>{CATEGORY_LABELS[c] ?? c}</option>
+                      <option key={c} value={c}>
+                        {CATEGORY_LABELS[c] ?? c}
+                      </option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 pointer-events-none" />
+                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[#a1a1aa] pointer-events-none" />
                 </div>
               </div>
 
               {/* Drop */}
               <div>
-                <label className="block text-xs font-medium text-zinc-500 mb-1.5 uppercase tracking-wide">
+                <label className="block text-xs font-medium text-[#52525b] dark:text-[#a1a1aa] mb-1.5">
                   Heel-to-Toe Drop
                 </label>
                 <div className="relative">
                   <select
                     value={drop}
                     onChange={e => setDrop(e.target.value)}
-                    className="w-full appearance-none pl-3 pr-8 py-2 rounded-lg border border-[#27272a] bg-[#27272a] text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50"
+                    className="w-full appearance-none pl-3 pr-8 py-2 rounded-lg border border-[#e4e4e7] dark:border-[#27272a] bg-white dark:bg-[#27272a] text-[#18181b] dark:text-[#fafafa] text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
                   >
                     {DROP_OPTIONS.map(o => (
-                      <option key={o.value} value={o.value}>{o.label}</option>
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
                     ))}
                   </select>
-                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-600 pointer-events-none" />
+                  <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-[#a1a1aa] pointer-events-none" />
                 </div>
               </div>
             </div>
@@ -288,7 +294,7 @@ export default function ShoeFinderClient() {
           {search && <FilterPill label={`"${search}"`} onRemove={() => setSearch('')} />}
           <button
             onClick={clearFilters}
-            className="text-xs text-zinc-600 hover:text-zinc-300 underline transition-colors"
+            className="text-xs text-[#71717a] hover:text-[#18181b] dark:hover:text-[#fafafa] underline transition-colors"
           >
             Clear all
           </button>
@@ -297,16 +303,16 @@ export default function ShoeFinderClient() {
 
       {/* Results count */}
       <div className="flex items-center justify-between mb-6">
-        <p className="text-sm text-zinc-500">
+        <p className="text-sm text-[#71717a] dark:text-[#71717a]">
           {loading ? 'Loading...' : `${meta.total} shoes`}
           {scoredShoes.length > 0 && !loading && (
-            <span className="ml-1 text-zinc-600">({scoredShoes.length} rated)</span>
+            <span className="ml-1">({scoredShoes.length} with scores)</span>
           )}
         </p>
         {scoredShoes.length === 0 && !loading && (
-          <div className="flex items-center gap-1.5 text-xs text-amber-500">
+          <div className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
             <Star className="w-3.5 h-3.5" />
-            No scores yet
+            Run the review fetch script to populate scores
           </div>
         )}
       </div>
@@ -315,19 +321,22 @@ export default function ShoeFinderClient() {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 9 }).map((_, i) => (
-            <div key={i} className="h-72 rounded-2xl bg-[#18181b] animate-pulse" />
+            <div
+              key={i}
+              className="h-64 rounded-2xl bg-[#f4f4f5] dark:bg-[#27272a] animate-pulse"
+            />
           ))}
         </div>
       ) : shoes.length === 0 ? (
         <div className="text-center py-20">
-          <p className="text-zinc-500 mb-2">No shoes found</p>
+          <p className="text-[#71717a] dark:text-[#71717a] mb-2">No shoes found</p>
           <button onClick={clearFilters} className="text-orange-500 text-sm hover:underline">
             Clear filters
           </button>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <AnimatePresence mode="popLayout">
               {scoredShoes.map((shoe, i) => (
                 <motion.div
@@ -344,16 +353,15 @@ export default function ShoeFinderClient() {
             </AnimatePresence>
           </div>
 
+          {/* Unscored shoes section */}
           {unscoredShoes.length > 0 && (
-            <div className="mt-12">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="flex-1 h-px bg-[#27272a]" />
-                <span className="text-xs text-zinc-600 uppercase tracking-widest whitespace-nowrap">
-                  Awaiting scores ({unscoredShoes.length})
-                </span>
-                <div className="flex-1 h-px bg-[#27272a]" />
-              </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="mt-10">
+              <h2 className="text-sm font-medium text-[#71717a] dark:text-[#71717a] mb-4 flex items-center gap-2">
+                <span className="flex-1 h-px bg-[#e4e4e7] dark:bg-[#27272a]" />
+                Shoes awaiting review scores ({unscoredShoes.length})
+                <span className="flex-1 h-px bg-[#e4e4e7] dark:bg-[#27272a]" />
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 {unscoredShoes.map(shoe => (
                   <ShoeCard key={shoe.slug} shoe={shoe} rank={null} />
                 ))}
@@ -379,7 +387,7 @@ export default function ShoeFinderClient() {
 
 function FilterPill({ label, onRemove }: { label: string; onRemove: () => void }) {
   return (
-    <span className="inline-flex items-center gap-1.5 bg-orange-500/10 text-orange-400 border border-orange-500/25 rounded-full px-3 py-1 text-xs font-medium">
+    <span className="inline-flex items-center gap-1.5 bg-orange-50 dark:bg-orange-950/30 text-orange-700 dark:text-orange-400 border border-orange-200 dark:border-orange-800 rounded-full px-3 py-1 text-xs font-medium">
       {label}
       <button onClick={onRemove} className="hover:opacity-70 transition-opacity">
         <X className="w-3 h-3" />
