@@ -57,7 +57,7 @@ const navigation = [
 // LOGO COMPONENT
 // ============================================
 
-function Logo({ isTransparent }: { isTransparent: boolean }) {
+function Logo({ isScrolled }: { isScrolled: boolean }) {
   return (
     <Link href="/" className="flex items-center gap-2 group">
       <div className="flex gap-0.5">
@@ -79,7 +79,7 @@ function Logo({ isTransparent }: { isTransparent: boolean }) {
       </div>
       <span className={cn(
         'font-display text-lg font-semibold transition-colors duration-300',
-        isTransparent ? 'text-white' : 'text-foreground'
+        isScrolled ? 'text-foreground' : 'text-white'
       )}>
         Film My Run
       </span>
@@ -94,10 +94,10 @@ function Logo({ isTransparent }: { isTransparent: boolean }) {
 interface NavItemProps {
   item: typeof navigation[0];
   isActive: boolean;
-  isTransparent: boolean;
+  isScrolled: boolean;
 }
 
-function DesktopNavItem({ item, isActive, isTransparent }: NavItemProps) {
+function DesktopNavItem({ item, isActive, isScrolled }: NavItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = 'children' in item && item.children;
   const closeTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -147,16 +147,17 @@ function DesktopNavItem({ item, isActive, isTransparent }: NavItemProps) {
             'flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors duration-300',
             isActive
               ? 'text-brand'
-              : isTransparent
-                ? 'text-white/90 hover:text-white'
-                : 'text-secondary hover:text-brand'
+              : isScrolled
+                ? 'text-secondary hover:text-brand'
+                : 'text-white/80 hover:text-white'
           )}
         >
           {item.name}
           <ChevronDown
             className={cn(
               'w-4 h-4 transition-transform',
-              isOpen && 'rotate-180'
+              isOpen && 'rotate-180',
+              !isScrolled && !isActive && 'text-white/60'
             )}
           />
         </button>
@@ -193,9 +194,9 @@ function DesktopNavItem({ item, isActive, isTransparent }: NavItemProps) {
         'px-3 py-2 text-sm font-medium transition-colors duration-300',
         isActive
           ? 'text-brand'
-          : isTransparent
-            ? 'text-white/90 hover:text-white'
-            : 'text-secondary hover:text-brand'
+          : isScrolled
+            ? 'text-secondary hover:text-brand'
+            : 'text-white/80 hover:text-white'
       )}
     >
       {item.name}
@@ -230,23 +231,23 @@ export default function Header() {
     >
       <div className="container">
         <nav className="flex items-center justify-between h-14 lg:h-20">
-          <Logo isTransparent={!isScrolled} />
+          <Logo isScrolled={isScrolled} />
 
           <div className="hidden lg:flex items-center gap-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
               return (
-                <DesktopNavItem key={item.name} item={item} isActive={isActive} isTransparent={!isScrolled} />
+                <DesktopNavItem key={item.name} item={item} isActive={isActive} isScrolled={isScrolled} />
               );
             })}
           </div>
 
           <div className="flex items-center gap-3">
             <div className="hidden lg:block">
-              <ThemeToggle />
+              <ThemeToggle isScrolled={isScrolled} />
             </div>
             <div className="hidden lg:block">
-              <UserMenu />
+              <UserMenu isScrolled={isScrolled} />
             </div>
           </div>
         </nav>

@@ -8,12 +8,14 @@ interface ThemeToggleProps {
   className?: string;
   showLabel?: boolean;
   variant?: 'button' | 'dropdown';
+  isScrolled?: boolean;
 }
 
 export default function ThemeToggle({
   className,
   showLabel = false,
   variant = 'button',
+  isScrolled = true,
 }: ThemeToggleProps) {
   const { resolvedTheme, toggleTheme, theme, setTheme } = useTheme();
 
@@ -81,7 +83,7 @@ export default function ThemeToggle({
       {resolvedTheme === 'dark' ? (
         <Sun className="w-5 h-5 text-amber-500" />
       ) : (
-        <Moon className="w-5 h-5 text-zinc-400" />
+        <Moon className={cn('w-5 h-5', isScrolled ? 'text-zinc-400' : 'text-white/80')} />
       )}
       {showLabel && (
         <span className="text-sm text-zinc-600 dark:text-zinc-400">
