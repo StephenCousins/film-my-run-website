@@ -1,0 +1,38 @@
+name: Weekly Shoe Update
+
+on:
+  schedule:
+    # Every Sunday at 6:00 AM UK time (GMT)
+    - cron: '0 6 * * 0'
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  update-shoes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Discover new shoes and refresh data
+        run: |
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${{ secrets.SITE_URL }}/api/shoes/weekly-update" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            --max-time 600)
+
+          http_code=$(echo "$response" | tail -1)
+          body=$(echo "$response" | sed '$d')
+
+          echo "Status: $http_code"
+          echo "Response: $body"
+
+          if [ "$http_code" != "200" ]; then
+            echo "::error::Shoe update failed with status $http_code"
+            exit 1
+          fi
+
+          # Extract summary for the job summary
+          echo "## Weekly Shoe Update" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY
+          echo "$body" | python3 -m json.tool 2>/dev/null || echo "$body" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
