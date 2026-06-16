@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ExternalLink, Footprints } from 'lucide-react';
+import { ChevronDown, ExternalLink } from 'lucide-react';
 import type { Shoe } from './ShoeFinderClient';
+import ShoePlaceholder from './ShoePlaceholder';
 
 const CATEGORY_LABELS: Record<string, string> = {
   daily_trainer: 'Daily Trainer',
@@ -71,7 +72,7 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
             className="h-full w-full object-cover"
           />
         ) : (
-          <Footprints className="w-16 h-16 text-[#d4d4d8] dark:text-[#3f3f46]" strokeWidth={1} />
+          <ShoePlaceholder brand={shoe.brand} />
         )}
 
         {/* Rank badge */}
