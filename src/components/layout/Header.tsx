@@ -28,6 +28,7 @@ const navigation = [
     href: '/tools/calculators',
     children: [
       { name: 'Running Calculators', href: '/tools/calculators' },
+      { name: 'Shoe Finder', href: '/tools/shoe-finder' },
       { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
       { name: 'Runner Quiz', href: '/tools/runner-quiz' },
       { name: 'Route Comparison', href: '/tools/route-comparison' },
@@ -56,7 +57,7 @@ const navigation = [
 // LOGO COMPONENT
 // ============================================
 
-function Logo() {
+function Logo({ isTransparent }: { isTransparent: boolean }) {
   return (
     <Link href="/" className="flex items-center gap-2 group">
       <div className="flex gap-0.5">
@@ -76,7 +77,10 @@ function Logo() {
           </svg>
         ))}
       </div>
-      <span className="font-display text-lg font-semibold text-foreground">
+      <span className={cn(
+        'font-display text-lg font-semibold transition-colors duration-300',
+        isTransparent ? 'text-white' : 'text-foreground'
+      )}>
         Film My Run
       </span>
     </Link>
@@ -90,9 +94,10 @@ function Logo() {
 interface NavItemProps {
   item: typeof navigation[0];
   isActive: boolean;
+  isTransparent: boolean;
 }
 
-function DesktopNavItem({ item, isActive }: NavItemProps) {
+function DesktopNavItem({ item, isActive, isTransparent }: NavItemProps) {
   const [isOpen, setIsOpen] = useState(false);
   const hasChildren = 'children' in item && item.children;
   const closeTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
@@ -139,10 +144,12 @@ function DesktopNavItem({ item, isActive }: NavItemProps) {
           aria-expanded={isOpen}
           aria-haspopup="true"
           className={cn(
-            'flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors',
+            'flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors duration-300',
             isActive
               ? 'text-brand'
-              : 'text-secondary hover:text-brand'
+              : isTransparent
+                ? 'text-white/90 hover:text-white'
+                : 'text-secondary hover:text-brand'
           )}
         >
           {item.name}
@@ -183,10 +190,12 @@ function DesktopNavItem({ item, isActive }: NavItemProps) {
     <Link
       href={item.href}
       className={cn(
-        'px-3 py-2 text-sm font-medium transition-colors',
+        'px-3 py-2 text-sm font-medium transition-colors duration-300',
         isActive
           ? 'text-brand'
-          : 'text-secondary hover:text-brand'
+          : isTransparent
+            ? 'text-white/90 hover:text-white'
+            : 'text-secondary hover:text-brand'
       )}
     >
       {item.name}
@@ -221,13 +230,13 @@ export default function Header() {
     >
       <div className="container">
         <nav className="flex items-center justify-between h-14 lg:h-20">
-          <Logo />
+          <Logo isTransparent={!isScrolled} />
 
           <div className="hidden lg:flex items-center gap-1">
             {navigation.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
               return (
-                <DesktopNavItem key={item.name} item={item} isActive={isActive} />
+                <DesktopNavItem key={item.name} item={item} isActive={isActive} isTransparent={!isScrolled} />
               );
             })}
           </div>

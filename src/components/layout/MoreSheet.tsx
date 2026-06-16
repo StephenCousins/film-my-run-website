@@ -16,6 +16,7 @@ const sheetSections = [
     title: 'For Runners',
     links: [
       { name: 'Running Calculators', href: '/tools/calculators' },
+      { name: 'Shoe Finder', href: '/tools/shoe-finder' },
       { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
       { name: 'Route Comparison', href: '/tools/route-comparison' },
       { name: 'Training Plans', href: '/training' },
