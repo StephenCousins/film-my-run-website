@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 
 export async function GET(req: NextRequest) {
@@ -45,6 +47,9 @@ export async function GET(req: NextRequest) {
         ? [{ release_year: 'desc' as const }]
         : [{ avg_score: 'desc' as const }, { review_count: 'desc' as const }];
 
+  const session = await getServerSession(authOptions);
+  const userId = session?.user?.id ? parseInt(session.user.id) : null;
+
   const shoes = await prisma.shoes.findMany({
     where,
     orderBy,
@@ -59,36 +64,56 @@ export async function GET(req: NextRequest) {
           summary: true,
         },
       },
+      shoe_user_ratings: {
+        select: {
+          score: true,
+          user_id: true,
+        },
+      },
     },
   });
 
-  const data = shoes.map(s => ({
-    id: s.id,
-    brand: s.brand,
-    model: s.model,
-    slug: s.slug,
-    terrain: s.terrain,
-    category: s.category,
-    dropMm: s.drop_mm,
-    weightG: s.weight_g,
-    stackHeightMm: s.stack_height_mm,
-    priceGbp: s.price_gbp,
-    releaseYear: s.release_year,
-    description: s.description,
-    imageUrl: s.image_url,
-    buyUrl: s.buy_url,
-    avgScore: s.avg_score ? parseFloat(s.avg_score.toString()) : null,
-    reviewCount: s.review_count,
-    lastReviewed: s.last_reviewed,
-    reviews: s.shoe_reviews.map(r => ({
-      source: r.source,
-      sourceUrl: r.source_url,
-      expertScore: r.expert_score ? parseFloat(r.expert_score.toString()) : null,
-      userScore: r.user_score ? parseFloat(r.user_score.toString()) : null,
-      userCount: r.user_count,
-      summary: r.summary,
-    })),
-  }));
+  const data = shoes.map(s => {
+    const userRatings = s.shoe_user_ratings;
+    const userScores = userRatings.map(r => parseFloat(r.score.toString()));
+    const userAvg = userScores.length > 0
+      ? Math.round((userScores.reduce((a, b) => a + b, 0) / userScores.length) * 10) / 10
+      : null;
+    const myRating = userId
+      ? userRatings.find(r => r.user_id === userId)
+      : null;
+
+    return {
+      id: s.id,
+      brand: s.brand,
+      model: s.model,
+      slug: s.slug,
+      terrain: s.terrain,
+      category: s.category,
+      dropMm: s.drop_mm,
+      weightG: s.weight_g,
+      stackHeightMm: s.stack_height_mm,
+      priceGbp: s.price_gbp,
+      releaseYear: s.release_year,
+      description: s.description,
+      imageUrl: s.image_url,
+      buyUrl: s.buy_url,
+      avgScore: s.avg_score ? parseFloat(s.avg_score.toString()) : null,
+      reviewCount: s.review_count,
+      lastReviewed: s.last_reviewed,
+      reviews: s.shoe_reviews.map(r => ({
+        source: r.source,
+        sourceUrl: r.source_url,
+        expertScore: r.expert_score ? parseFloat(r.expert_score.toString()) : null,
+        userScore: r.user_score ? parseFloat(r.user_score.toString()) : null,
+        userCount: r.user_count,
+        summary: r.summary,
+      })),
+      userAvgScore: userAvg,
+      userRatingCount: userRatings.length,
+      myRating: myRating ? parseFloat(myRating.score.toString()) : null,
+    };
+  });
 
   // Build available brands/categories for filters
   const allShoes = await prisma.shoes.findMany({

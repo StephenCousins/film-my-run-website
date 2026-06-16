@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ExternalLink } from 'lucide-react';
 import type { Shoe } from './ShoeFinderClient';
 import ShoePlaceholder from './ShoePlaceholder';
+import UserRating from './UserRating';
 
 const CATEGORY_LABELS: Record<string, string> = {
   daily_trainer: 'Daily Trainer',
@@ -47,6 +48,9 @@ function ScoreBar({ score }: { score: number }) {
 
 export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | null }) {
   const [expanded, setExpanded] = useState(false);
+  const [myRating, setMyRating] = useState(shoe.myRating);
+  const [userAvgScore, setUserAvgScore] = useState(shoe.userAvgScore);
+  const [userRatingCount, setUserRatingCount] = useState(shoe.userRatingCount);
   const hasReviews = shoe.reviews.length > 0;
 
   const scoreColor =
@@ -114,6 +118,18 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
           )}
         </div>
         {shoe.avgScore !== null && <ScoreBar score={shoe.avgScore} />}
+
+        <UserRating
+          shoeId={shoe.id}
+          myRating={myRating}
+          userAvgScore={userAvgScore}
+          userRatingCount={userRatingCount}
+          onRated={(newMyRating, newUserAvg, newUserCount) => {
+            setMyRating(newMyRating);
+            setUserAvgScore(newUserAvg);
+            setUserRatingCount(newUserCount);
+          }}
+        />
 
         {/* Category + specs */}
         <div className="flex flex-wrap gap-1.5 mt-3">

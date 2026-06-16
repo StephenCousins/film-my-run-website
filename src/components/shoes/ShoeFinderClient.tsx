@@ -36,6 +36,9 @@ export interface Shoe {
   reviewCount: number;
   lastReviewed: string | null;
   reviews: ShoeReview[];
+  userAvgScore: number | null;
+  userRatingCount: number;
+  myRating: number | null;
 }
 
 interface Meta {
