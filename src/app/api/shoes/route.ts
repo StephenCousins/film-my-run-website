@@ -115,6 +115,15 @@ export async function GET(req: NextRequest) {
     };
   });
 
+  if (sort === 'user_rating') {
+    data.sort((a, b) => {
+      if (a.userAvgScore !== null && b.userAvgScore !== null) return b.userAvgScore - a.userAvgScore;
+      if (a.userAvgScore !== null) return -1;
+      if (b.userAvgScore !== null) return 1;
+      return (b.userRatingCount) - (a.userRatingCount);
+    });
+  }
+
   // Build available brands/categories for filters
   const allShoes = await prisma.shoes.findMany({
     select: { brand: true, category: true },

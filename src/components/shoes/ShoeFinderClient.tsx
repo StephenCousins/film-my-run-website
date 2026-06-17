@@ -189,6 +189,7 @@ export default function ShoeFinderClient() {
             className="appearance-none pl-3 pr-8 py-2.5 rounded-xl border border-[#e4e4e7] dark:border-[#27272a] bg-white dark:bg-[#18181b] text-[#52525b] dark:text-[#a1a1aa] text-sm focus:outline-none focus:ring-2 focus:ring-orange-500 cursor-pointer"
           >
             <option value="score">Top Rated</option>
+            <option value="user_rating">User Rating</option>
             <option value="brand">Brand A–Z</option>
             <option value="newest">Newest First</option>
           </select>
