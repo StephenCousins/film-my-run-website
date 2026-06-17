@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 
   const userId = parseInt(session.user.id);
 
-  if (!process.env.BRAVE_SEARCH_API_KEY || !process.env.ANTHROPIC_API_KEY) {
+  if (!process.env.ANTHROPIC_API_KEY || (!process.env.BRAVE_SEARCH_API_KEY && !process.env.SERPER_API_KEY)) {
     return new Response(JSON.stringify({ error: 'Shoe suggestion service is not configured' }), {
       status: 503,
       headers: { 'Content-Type': 'application/json' },

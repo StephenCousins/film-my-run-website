@@ -5,6 +5,7 @@ import {
   fetchReviewsForShoe,
   findImageForShoe,
   shoeToSlug,
+  webSearch,
 } from '@/lib/shoe-enrichment';
 
 export const maxDuration = 300;
@@ -24,7 +25,6 @@ interface DiscoveredShoe {
 }
 
 async function discoverNewShoes(): Promise<DiscoveredShoe[]> {
-  const braveKey = process.env.BRAVE_SEARCH_API_KEY!;
   const anthropicKey = process.env.ANTHROPIC_API_KEY!;
 
   const now = new Date();
@@ -40,17 +40,10 @@ async function discoverNewShoes(): Promise<DiscoveredShoe[]> {
   const allSnippets: string[] = [];
 
   for (const query of queries) {
-    const url = `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=8&search_lang=en`;
     try {
-      const res = await fetch(url, {
-        headers: { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': braveKey },
-      });
-      if (res.ok) {
-        const data = await res.json();
-        const results = data.web?.results ?? [];
-        for (const r of results) {
-          allSnippets.push(`${r.title ?? ''}\n${r.description ?? ''}`);
-        }
+      const results = await webSearch(query, 8);
+      for (const r of results) {
+        allSnippets.push(`${r.title}\n${r.description}`);
       }
     } catch { /* skip failed search */ }
     await sleep(1100);
@@ -98,8 +91,11 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!process.env.BRAVE_SEARCH_API_KEY || !process.env.ANTHROPIC_API_KEY) {
-    return Response.json({ error: 'API keys not configured' }, { status: 503 });
+  if (!process.env.ANTHROPIC_API_KEY) {
+    return Response.json({ error: 'ANTHROPIC_API_KEY not configured' }, { status: 503 });
+  }
+  if (!process.env.BRAVE_SEARCH_API_KEY && !process.env.SERPER_API_KEY) {
+    return Response.json({ error: 'No search API key configured (BRAVE_SEARCH_API_KEY or SERPER_API_KEY)' }, { status: 503 });
   }
 
   const stream = new ReadableStream({

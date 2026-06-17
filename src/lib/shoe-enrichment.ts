@@ -98,13 +98,75 @@ export function shoeToSlug(brand: string, model: string): string {
   return `${brand}-${model}`.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '');
 }
 
-// ── Brave Search ────────────────────────────────────────────────────
+// ── Search providers ────────────────────────────────────────────────
 
 interface SearchResult {
   title: string;
   url: string;
   description: string;
 }
+
+interface ImageSearchResult {
+  fullUrl: string | null;
+  thumbnailUrl: string | null;
+  pageUrl: string;
+  title: string;
+}
+
+function getSerperKey(): string | null {
+  return process.env.SERPER_API_KEY ?? null;
+}
+
+// ── Serper (Google results fallback) ────────────────────────────────
+
+async function serperWebSearch(query: string, count = 8): Promise<SearchResult[]> {
+  const key = getSerperKey();
+  if (!key) return [];
+  try {
+    const res = await fetch('https://google.serper.dev/search', {
+      method: 'POST',
+      headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q: query, num: count, gl: 'gb' }),
+    });
+    if (!res.ok) {
+      console.error(`Serper search failed (${res.status}): ${query}`);
+      return [];
+    }
+    const data = await res.json();
+    return (data.organic ?? []).map((r: Record<string, string>) => ({
+      title: r.title ?? '', url: r.link ?? '', description: r.snippet ?? '',
+    }));
+  } catch {
+    return [];
+  }
+}
+
+async function serperImageSearch(query: string, count = 8): Promise<ImageSearchResult[]> {
+  const key = getSerperKey();
+  if (!key) return [];
+  try {
+    const res = await fetch('https://google.serper.dev/images', {
+      method: 'POST',
+      headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q: query, num: count, gl: 'gb' }),
+    });
+    if (!res.ok) {
+      console.error(`Serper image search failed (${res.status}): ${query}`);
+      return [];
+    }
+    const data = await res.json();
+    return (data.images ?? []).map((r: Record<string, string>) => ({
+      fullUrl: r.imageUrl ?? null,
+      thumbnailUrl: r.thumbnailUrl ?? r.imageUrl ?? null,
+      pageUrl: r.link ?? '',
+      title: r.title ?? '',
+    })).filter((r: ImageSearchResult) => r.thumbnailUrl);
+  } catch {
+    return [];
+  }
+}
+
+// ── Brave Search (primary) ──────────────────────────────────────────
 
 async function braveWebSearch(query: string, count = 8): Promise<SearchResult[]> {
   const url = `https://api.search.brave.com/res/v1/web/search?q=${encodeURIComponent(query)}&count=${count}&search_lang=en`;
@@ -119,13 +181,6 @@ async function braveWebSearch(query: string, count = 8): Promise<SearchResult[]>
   return (data.web?.results ?? []).map((r: Record<string, string>) => ({
     title: r.title ?? '', url: r.url ?? '', description: r.description ?? '',
   }));
-}
-
-interface ImageSearchResult {
-  fullUrl: string | null;
-  thumbnailUrl: string | null;
-  pageUrl: string;
-  title: string;
 }
 
 async function braveImageSearch(query: string, count = 8): Promise<ImageSearchResult[]> {
@@ -152,6 +207,20 @@ async function braveImageSearch(query: string, count = 8): Promise<ImageSearchRe
     .filter((r: ImageSearchResult) => r.thumbnailUrl);
 }
 
+// ── Unified search (Brave → Serper fallback) ────────────────────────
+
+export async function webSearch(query: string, count = 8): Promise<SearchResult[]> {
+  const results = await braveWebSearch(query, count);
+  if (results.length > 0) return results;
+  return serperWebSearch(query, count);
+}
+
+async function imageSearch(query: string, count = 8): Promise<ImageSearchResult[]> {
+  const results = await braveImageSearch(query, count);
+  if (results.length > 0) return results;
+  return serperImageSearch(query, count);
+}
+
 // ── Claude helpers ──────────────────────────────────────────────────
 
 function getAnthropicClient(): Anthropic {
@@ -174,7 +243,7 @@ interface ParsedShoe {
 }
 
 export async function parseShoeQuery(query: string): Promise<ParsedShoe> {
-  const results = await braveWebSearch(`"${query}" running shoe specs`, 5);
+  const results = await webSearch(`"${query}" running shoe specs`, 5);
   const snippets = results.slice(0, 3).map(r => `${r.title}\n${r.description}`).join('\n\n');
 
   const anthropic = getAnthropicClient();
@@ -322,18 +391,18 @@ export interface ReviewResult {
 
 export async function fetchReviewsForShoe(brand: string, model: string, onProgress?: (msg: string) => void): Promise<ReviewResult[]> {
   onProgress?.(`Searching for reviews...`);
-  let allResults = await braveWebSearch(`"${brand} ${model}" running shoe review`);
+  let allResults = await webSearch(`"${brand} ${model}" running shoe review`);
   await sleep(1100);
 
   if (allResults.length === 0) {
     onProgress?.(`Broadening search...`);
-    allResults = await braveWebSearch(`${brand} ${model} review`);
+    allResults = await webSearch(`${brand} ${model} review`);
     await sleep(1100);
   }
 
   if (allResults.length === 0) {
     onProgress?.(`Trying model name only...`);
-    allResults = await braveWebSearch(`${model} running shoe review`);
+    allResults = await webSearch(`${model} running shoe review`);
     await sleep(1100);
   }
 
@@ -567,7 +636,7 @@ export async function findImageForShoe(brand: string, model: string, onProgress?
   for (const domain of allDomains) {
     onProgress?.(`Searching ${domain}...`);
     const query = `site:${domain} "${brand} ${model}"`;
-    const results = await braveWebSearch(query, 5);
+    const results = await webSearch(query, 5);
     await sleep(1100);
 
     results.sort((a, b) => {
@@ -613,7 +682,7 @@ export async function findImageForShoe(brand: string, model: string, onProgress?
 
   for (const imgQuery of imageQueries) {
     onProgress?.(`Trying image search...`);
-    const imageResults = await braveImageSearch(imgQuery);
+    const imageResults = await imageSearch(imgQuery);
     await sleep(1100);
 
     const verified = imageResults.filter((c: ImageSearchResult) => {
