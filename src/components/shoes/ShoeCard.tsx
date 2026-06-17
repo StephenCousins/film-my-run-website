@@ -48,6 +48,7 @@ function ScoreBar({ score }: { score: number }) {
 
 export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | null }) {
   const [expanded, setExpanded] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const [myRating, setMyRating] = useState(shoe.myRating);
   const [userAvgScore, setUserAvgScore] = useState(shoe.userAvgScore);
   const [userRatingCount, setUserRatingCount] = useState(shoe.userRatingCount);
@@ -68,12 +69,13 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
     <div className="bg-white dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] rounded-2xl overflow-hidden hover:border-orange-300 dark:hover:border-orange-800 transition-colors">
       {/* Image / placeholder */}
       <div className="relative bg-[#f4f4f5] dark:bg-[#27272a] h-40 flex items-center justify-center">
-        {shoe.imageUrl ? (
+        {shoe.imageUrl && !imgError ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={shoe.imageUrl}
             alt={`${shoe.brand} ${shoe.model}`}
             className="h-full w-full object-cover"
+            onError={() => setImgError(true)}
           />
         ) : (
           <ShoePlaceholder brand={shoe.brand} />

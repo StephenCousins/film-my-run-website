@@ -2,51 +2,99 @@
 
 export default function ShoePlaceholder({ brand }: { brand: string }) {
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-zinc-100 via-zinc-50 to-zinc-100 dark:from-zinc-800 dark:via-zinc-900 dark:to-zinc-800">
+    <div className="w-full h-full flex flex-col items-center justify-center bg-white dark:bg-[#1a1a1e] relative overflow-hidden">
+      {/* Subtle grid pattern */}
+      <div
+        className="absolute inset-0 opacity-[0.04] dark:opacity-[0.06]"
+        style={{
+          backgroundImage: 'radial-gradient(circle, #000 0.5px, transparent 0.5px)',
+          backgroundSize: '16px 16px',
+        }}
+      />
+
+      {/* Accent line */}
+      <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-orange-400 to-transparent opacity-40" />
+
       <svg
-        viewBox="0 0 120 60"
-        className="w-28 h-14 text-zinc-300 dark:text-zinc-600"
+        viewBox="0 0 160 80"
+        className="w-36 h-[72px] relative z-10"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        {/* Sole */}
+        {/* Shadow */}
+        <ellipse cx="80" cy="68" rx="48" ry="4" className="fill-zinc-200 dark:fill-zinc-700" opacity="0.5" />
+
+        {/* Outsole */}
         <path
-          d="M12 48 C12 48, 8 48, 6 46 C4 44, 4 42, 6 41 L18 38 C20 37.5, 24 37, 28 37 L90 37 C96 37, 100 38, 104 40 C108 42, 112 44, 114 45 C116 46, 116 48, 114 48 Z"
-          fill="currentColor"
+          d="M20 58 C16 58, 12 57, 10 55 C8 53, 9 51, 12 50 L30 46 C34 45, 40 44, 48 44 L110 44 C118 44, 124 45.5, 130 48 C136 50.5, 140 53, 142 54.5 C144 56, 143 58, 140 58 Z"
+          className="fill-zinc-700 dark:fill-zinc-400"
+          opacity="0.8"
+        />
+
+        {/* Midsole */}
+        <path
+          d="M18 52 C18 52, 24 48, 36 46.5 C48 45, 72 44.5, 96 45.5 C120 46.5, 132 49, 138 51.5"
+          className="stroke-zinc-400 dark:stroke-zinc-500"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          fill="none"
           opacity="0.5"
         />
-        {/* Upper */}
+
+        {/* Upper shoe body */}
         <path
-          d="M18 38 C18 38, 20 28, 24 24 C28 20, 34 17, 42 15 C50 13, 56 13, 62 14 C68 15, 72 17, 76 20 C80 23, 84 28, 88 33 C90 35, 91 36, 90 37 L28 37 C24 37, 20 37.5, 18 38 Z"
-          fill="currentColor"
-          opacity="0.35"
+          d="M28 46 C28 46, 30 34, 36 28 C42 22, 50 18, 60 16 C70 14, 78 14, 86 16 C94 18, 100 22, 106 28 C112 34, 116 40, 118 43 C119 44.5, 118 45, 116 45 L48 45 C42 45, 34 45.5, 28 46 Z"
+          className="fill-zinc-300 dark:fill-zinc-600"
+          opacity="0.5"
         />
-        {/* Collar */}
+
+        {/* Shoe outline */}
         <path
-          d="M42 15 C42 15, 46 12, 52 11 C58 10, 64 11, 68 13"
-          stroke="currentColor"
+          d="M28 46 C28 46, 30 34, 36 28 C42 22, 50 18, 60 16 C70 14, 78 14, 86 16 C94 18, 100 22, 106 28 C112 34, 116 40, 118 43"
+          className="stroke-zinc-400 dark:stroke-zinc-500"
+          strokeWidth="1"
+          strokeLinecap="round"
+          fill="none"
+          opacity="0.6"
+        />
+
+        {/* Collar opening */}
+        <path
+          d="M58 16 C58 16, 64 12, 72 11 C80 10, 88 12, 92 14"
+          className="stroke-zinc-400 dark:stroke-zinc-500"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          fill="none"
+          opacity="0.5"
+        />
+
+        {/* Lace area */}
+        <path d="M66 22 L76 18" className="stroke-zinc-400 dark:stroke-zinc-500" strokeWidth="0.8" strokeLinecap="round" opacity="0.3" />
+        <path d="M68 26 L78 21" className="stroke-zinc-400 dark:stroke-zinc-500" strokeWidth="0.8" strokeLinecap="round" opacity="0.3" />
+        <path d="M70 30 L80 25" className="stroke-zinc-400 dark:stroke-zinc-500" strokeWidth="0.8" strokeLinecap="round" opacity="0.3" />
+
+        {/* Swoosh-like detail */}
+        <path
+          d="M40 40 C50 34, 70 28, 100 32"
+          className="stroke-orange-400 dark:stroke-orange-500"
           strokeWidth="1.5"
           strokeLinecap="round"
-          opacity="0.3"
+          fill="none"
+          opacity="0.35"
         />
-        {/* Lacing detail */}
+
+        {/* Heel counter */}
         <path
-          d="M48 20 L56 17 M50 24 L58 20 M52 28 L60 24"
-          stroke="currentColor"
+          d="M30 46 C30 42, 32 36, 36 32"
+          className="stroke-zinc-400 dark:stroke-zinc-500"
           strokeWidth="1"
           strokeLinecap="round"
-          opacity="0.2"
-        />
-        {/* Midsole line */}
-        <path
-          d="M14 43 C14 43, 20 40, 30 39 C40 38, 60 38, 80 39 C100 40, 108 42, 112 44"
-          stroke="currentColor"
-          strokeWidth="1"
-          strokeLinecap="round"
-          opacity="0.25"
+          fill="none"
+          opacity="0.4"
         />
       </svg>
-      <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-zinc-400 dark:text-zinc-500 mt-2">
+
+      <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-400 dark:text-zinc-500 mt-1.5 relative z-10">
         {brand}
       </span>
     </div>
