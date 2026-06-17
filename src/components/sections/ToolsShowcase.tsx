@@ -180,7 +180,7 @@ export default function ToolsShowcase() {
   return (
     <>
       {/* ========== MOBILE LAYOUT (< lg) ========== */}
-      <div className="lg:hidden py-16 relative overflow-x-clip">
+      <div className="lg:hidden py-16 relative overflow-hidden">
         {/* Background image */}
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -203,14 +203,15 @@ export default function ToolsShowcase() {
         </div>
 
         {/* Horizontal snap-scroll cards */}
-        <div className="relative flex gap-4 overflow-x-auto snap-x snap-mandatory pl-6 pb-4 scrollbar-hide">
-          {tools.map((tool, index) => (
-            <div key={tool.name} className="snap-start flex-shrink-0">
-              <ToolCard tool={tool} index={index} />
-            </div>
-          ))}
-          {/* End spacer — compensates for right padding lost in overflow scroll */}
-          <div className="flex-shrink-0 w-6" />
+        <div className="relative overflow-x-auto overflow-y-hidden -mx-0">
+          <div className="flex gap-4 snap-x snap-mandatory pl-6 pb-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
+            {tools.map((tool, index) => (
+              <div key={tool.name} className="snap-start flex-shrink-0">
+                <ToolCard tool={tool} index={index} />
+              </div>
+            ))}
+            <div className="flex-shrink-0 w-6" />
+          </div>
         </div>
 
         {/* CTA */}
