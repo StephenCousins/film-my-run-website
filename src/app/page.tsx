@@ -84,16 +84,8 @@ async function getLatestPosts() {
   });
 }
 
-async function getFilmCount() {
-  const count = await prisma.films.count();
-  return count;
-}
-
 export default async function HomePage() {
-  const [latestPosts, filmCount] = await Promise.all([
-    getLatestPosts(),
-    getFilmCount(),
-  ]);
+  const latestPosts = await getLatestPosts();
 
   return (
     <>
@@ -108,7 +100,7 @@ export default async function HomePage() {
         <Hero />
 
         {/* Section 2: Stats Banner with animated counters */}
-        <StatsBanner filmCount={filmCount || 900} />
+        <StatsBanner filmCount={900} />
 
         {/* Section 3: Featured Film showcase */}
         <FeaturedFilm />
