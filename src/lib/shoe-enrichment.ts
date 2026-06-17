@@ -111,7 +111,10 @@ async function braveWebSearch(query: string, count = 8): Promise<SearchResult[]>
   const res = await fetch(url, {
     headers: { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': getBraveKey() },
   });
-  if (!res.ok) return [];
+  if (!res.ok) {
+    console.error(`Brave search failed (${res.status}): ${query}`);
+    return [];
+  }
   const data = await res.json();
   return (data.web?.results ?? []).map((r: Record<string, string>) => ({
     title: r.title ?? '', url: r.url ?? '', description: r.description ?? '',
@@ -130,7 +133,10 @@ async function braveImageSearch(query: string, count = 8): Promise<ImageSearchRe
   const res = await fetch(url, {
     headers: { Accept: 'application/json', 'Accept-Encoding': 'gzip', 'X-Subscription-Token': getBraveKey() },
   });
-  if (!res.ok) return [];
+  if (!res.ok) {
+    console.error(`Brave image search failed (${res.status}): ${query}`);
+    return [];
+  }
   const data = await res.json();
   return ((data.results ?? []) as Record<string, unknown>[])
     .map((r) => {
@@ -315,10 +321,21 @@ export interface ReviewResult {
 }
 
 export async function fetchReviewsForShoe(brand: string, model: string, onProgress?: (msg: string) => void): Promise<ReviewResult[]> {
-  const primaryQuery = `"${brand} ${model}" running shoe review`;
   onProgress?.(`Searching for reviews...`);
-  const allResults = await braveWebSearch(primaryQuery);
+  let allResults = await braveWebSearch(`"${brand} ${model}" running shoe review`);
   await sleep(1100);
+
+  if (allResults.length === 0) {
+    onProgress?.(`Broadening search...`);
+    allResults = await braveWebSearch(`${brand} ${model} review`);
+    await sleep(1100);
+  }
+
+  if (allResults.length === 0) {
+    onProgress?.(`Trying model name only...`);
+    allResults = await braveWebSearch(`${model} running shoe review`);
+    await sleep(1100);
+  }
 
   const verifiedReviews: ReviewResult[] = [];
   const seenSources = new Set<string>();
@@ -588,29 +605,36 @@ export async function findImageForShoe(brand: string, model: string, onProgress?
     }
   }
 
-  // Strategy 2: Image search with source verification
-  onProgress?.(`Trying image search...`);
-  const imageResults = await braveImageSearch(`"${brand} ${model}" running shoe`);
-  await sleep(1100);
+  // Strategy 2: Image search with source verification (try quoted then unquoted)
+  const imageQueries = [
+    `"${brand} ${model}" running shoe`,
+    `${brand} ${model} running shoe`,
+  ];
 
-  const verified = imageResults.filter((c: ImageSearchResult) => {
-    if (findVersionConflict(model, c.title)) return false;
-    return c.title.toLowerCase().includes(model.toLowerCase());
-  });
+  for (const imgQuery of imageQueries) {
+    onProgress?.(`Trying image search...`);
+    const imageResults = await braveImageSearch(imgQuery);
+    await sleep(1100);
 
-  for (const c of verified) {
-    const imgUrl = c.fullUrl ?? c.thumbnailUrl;
-    if (!imgUrl || !isLikelyProductImage(imgUrl)) continue;
-    const sizeCheck = await checkImageSize(imgUrl);
-    if (!sizeCheck.ok) continue;
-    onProgress?.(`Verifying image candidate...`);
-    const visionResult = await visionConfirmProductShot(imgUrl);
-    if (visionResult === false) continue;
-    return {
-      url: imgUrl,
-      method: 'image-search (source-verified)',
-      confidence: visionResult === true ? 'medium' : 'low',
-    };
+    const verified = imageResults.filter((c: ImageSearchResult) => {
+      if (findVersionConflict(model, c.title)) return false;
+      return c.title.toLowerCase().includes(model.toLowerCase());
+    });
+
+    for (const c of verified) {
+      const imgUrl = c.fullUrl ?? c.thumbnailUrl;
+      if (!imgUrl || !isLikelyProductImage(imgUrl)) continue;
+      const sizeCheck = await checkImageSize(imgUrl);
+      if (!sizeCheck.ok) continue;
+      onProgress?.(`Verifying image candidate...`);
+      const visionResult = await visionConfirmProductShot(imgUrl);
+      if (visionResult === false) continue;
+      return {
+        url: imgUrl,
+        method: 'image-search (source-verified)',
+        confidence: visionResult === true ? 'medium' : 'low',
+      };
+    }
   }
 
   return null;
