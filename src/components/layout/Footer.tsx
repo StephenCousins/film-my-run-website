@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Instagram, Youtube, Twitter, Mail, MapPin, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
+import { FilmMyRunLogo } from '@/components/ui/FilmMyRunLogo';
 
 // ============================================
 // FOOTER DATA
@@ -64,30 +65,7 @@ const socialLinks = [
 // ============================================
 
 function FooterLogo() {
-  return (
-    <Link href="/" className="flex items-center gap-2 group">
-      <div className="flex gap-0.5">
-        {[0, 1, 2].map((i) => (
-          <svg
-            key={i}
-            className={cn(
-              'w-6 h-6 text-orange-500 transition-transform duration-300',
-              'group-hover:scale-110',
-              i === 0 && 'group-hover:-translate-x-0.5',
-              i === 2 && 'group-hover:translate-x-0.5'
-            )}
-            viewBox="0 0 24 24"
-            fill="currentColor"
-          >
-            <path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm-3.6 13.9l1-4.4 2.1 2v6h2v-7.5l-2.1-2 .6-3c1.3 1.5 3.3 2.5 5.5 2.5v-2c-1.9 0-3.5-1-4.3-2.4l-1-1.6c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.1l-5.2 2.2v4.7h2v-3.4l1.8-.7-1.6 8.1-4.9-1-.4 2 7 1.4z" />
-          </svg>
-        ))}
-      </div>
-      <span className="font-display text-xl font-semibold text-foreground">
-        Film My Run
-      </span>
-    </Link>
-  );
+  return <FilmMyRunLogo size="lg" />;
 }
 
 // ============================================
