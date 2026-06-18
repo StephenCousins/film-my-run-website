@@ -74,9 +74,26 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Database may not be available during build
   }
 
+  // Dynamic film pages
+  let filmRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const films = await prisma.films.findMany({
+      select: { slug: true, created_at: true },
+    });
+    filmRoutes = films.map((film) => ({
+      url: `${baseUrl}/films/${film.slug}`,
+      lastModified: film.created_at,
+      changeFrequency: 'monthly' as const,
+      priority: 0.8,
+    }));
+  } catch {
+    // Database may not be available during build
+  }
+
   return [
     ...staticRoutes,
     ...blogRoutes,
     ...newsRoutes,
+    ...filmRoutes,
   ];
 }
