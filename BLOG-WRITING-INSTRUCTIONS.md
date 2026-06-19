@@ -354,12 +354,16 @@ Every blog post must include these HTML elements:
 
 #### 7. Strava Activity Embed
 
+**IMPORTANT:** The Strava embed requires a `data-token` attribute to render properly. Stephen will provide the full embed code (copy it from Strava's share/embed UI). The format is:
+
 ```html
 <h2>Strava Activity</h2>
 
-<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="ACTIVITY_ID_HERE" data-style="standard" data-from-embed="false"></div>
+<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="ACTIVITY_ID_HERE" data-style="standard" data-from-embed="false" data-token="TOKEN_HERE"></div>
 <script src="https://strava-embeds.com/embed.js"></script>
 ```
+
+If you don't have the embed code with the token, ask Stephen for it — the embed won't work without the `data-token`.
 
 ### Complete HTML Template
 
@@ -420,7 +424,7 @@ Every blog post must include these HTML elements:
 
 <h2>Strava Activity</h2>
 
-<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="STRAVA_ID" data-style="standard" data-from-embed="false"></div>
+<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="STRAVA_ID" data-style="standard" data-from-embed="false" data-token="TOKEN_FROM_STEPHEN"></div>
 <script src="https://strava-embeds.com/embed.js"></script>
 ```
 

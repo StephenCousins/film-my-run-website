@@ -24,6 +24,28 @@ function extractYouTubeId(url: string): string | null {
 
 export async function GET() {
   try {
+    // Fetch dedicated film landing pages from films table
+    const filmRecords = await prisma.films.findMany({
+      orderBy: { year: 'desc' },
+    });
+
+    const landingPageFilms = filmRecords.map((film) => ({
+      id: `film-${film.id}`,
+      title: film.title,
+      subtitle: film.description || undefined,
+      description: film.description || '',
+      thumbnail: film.thumbnail_url || (film.youtube_id ? `https://img.youtube.com/vi/${film.youtube_id}/hqdefault.jpg` : ''),
+      videoId: film.youtube_id || '',
+      year: film.year?.toString() || null,
+      location: 'Trail',
+      slug: film.slug,
+      stats: {
+        distance: null as string | null,
+        elevation: null as string | null,
+        time: null as string | null,
+      },
+    }));
+
     // Fetch Ultra races with video URLs from 2018 onwards
     const races = await prisma.races.findMany({
       where: {
@@ -40,11 +62,17 @@ export async function GET() {
       },
     });
 
-    // Transform to films format
-    const films = races
+    // Collect video IDs that already have landing pages
+    const landingPageVideoIds = new Set(
+      filmRecords.map((f) => f.youtube_id).filter(Boolean)
+    );
+
+    // Transform races to films format, excluding those with dedicated landing pages
+    const raceFilms = races
       .map((race) => {
         const videoId = extractYouTubeId(race.video_url || '');
         if (!videoId) return null;
+        if (landingPageVideoIds.has(videoId)) return null;
 
         const year = race.date ? new Date(race.date).getFullYear().toString() : null;
 
@@ -57,6 +85,7 @@ export async function GET() {
           videoId,
           year,
           location: race.terrain || 'Trail',
+          slug: undefined as string | undefined,
           stats: {
             distance: race.distance_km ? `${Number(race.distance_km)}km` : null,
             elevation: race.elevation ? `${race.elevation.toLocaleString()}m` : null,
@@ -65,6 +94,9 @@ export async function GET() {
         };
       })
       .filter(Boolean);
+
+    // Landing page films first, then race films
+    const films = [...landingPageFilms, ...raceFilms];
 
     return NextResponse.json({
       ok: true,

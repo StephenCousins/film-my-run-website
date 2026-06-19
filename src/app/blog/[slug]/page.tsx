@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import Script from 'next/script';
 import { Calendar, Clock, ArrowLeft, Twitter, Facebook, Linkedin, Tag, ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -412,6 +413,13 @@ export default async function BlogPostPage({ params }: PageProps) {
                     prose-img:rounded-xl"
                   dangerouslySetInnerHTML={{ __html: sanitizeContent(post.content) }}
                 />
+
+                {post.content.includes('strava-embed-placeholder') && (
+                  <Script
+                    src="https://strava-embeds.com/embed.js"
+                    strategy="lazyOnload"
+                  />
+                )}
 
                 {/* Tags */}
                 <div className="mt-12 pt-8 border-t border-border">

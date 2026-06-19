@@ -21,6 +21,7 @@ interface Film {
   videoId: string;
   year: string | null;
   location: string;
+  slug?: string;
   stats: {
     distance: string | null;
     elevation: string | null;
@@ -110,13 +111,21 @@ interface FilmCardProps {
 }
 
 function FilmCard({ film, onPlay, featured = false }: FilmCardProps) {
+  const handleClick = () => {
+    if (film.slug) {
+      window.location.href = `/films/${film.slug}`;
+    } else {
+      onPlay(film);
+    }
+  };
+
   return (
     <article
       className={cn(
         'group relative overflow-hidden rounded-2xl bg-surface-secondary cursor-pointer',
         featured ? 'aspect-[16/9]' : 'aspect-video'
       )}
-      onClick={() => onPlay(film)}
+      onClick={handleClick}
     >
       {/* Thumbnail */}
       <Image

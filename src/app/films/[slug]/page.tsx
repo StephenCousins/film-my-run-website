@@ -247,21 +247,14 @@ export default async function FilmPage({ params }: FilmPageProps) {
               </div>
             )}
 
-            {/* Related blog post link */}
+            {/* Back to films */}
             <div className="pt-8 border-t border-border">
-              <h2 className="font-display text-xl font-bold text-foreground mb-4">Related</h2>
               <Link
-                href="/blog/filming-the-fastest-100-miles-on-british-soil-south-downs-way-100-2025"
-                className="group flex items-center gap-4 p-4 rounded-xl bg-surface-secondary border border-border hover:border-brand transition-colors"
+                href="/films"
+                className="group inline-flex items-center gap-2 text-secondary hover:text-brand transition-colors"
               >
-                <div>
-                  <p className="font-semibold text-foreground group-hover:text-brand transition-colors">
-                    Read the Blog Post
-                  </p>
-                  <p className="text-sm text-secondary">
-                    The full story of filming Mark Derbyshire&apos;s record-breaking run
-                  </p>
-                </div>
+                <ArrowLeft className="w-4 h-4" />
+                <span>Back to all films</span>
               </Link>
             </div>
           </div>
