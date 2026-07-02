@@ -158,6 +158,9 @@ const methodologies = ['Starrett', 'Hansons', '80/20 Polarised', 'Pfitzinger'];
 // ============================================
 
 function PricingCard({ plan }: { plan: PricingPlan }) {
+  // Free → plain signup; paid tiers carry the selection so the app sends the
+  // user straight to checkout for that tier after they create an account.
+  const href = plan.id === 'free' ? REGISTER_URL : `${REGISTER_URL}?plan=${plan.id}`;
   return (
     <div
       className={cn(
@@ -230,9 +233,9 @@ function PricingCard({ plan }: { plan: PricingPlan }) {
         ))}
       </ul>
 
-      {/* CTA — sign up in the Adrian app */}
+      {/* CTA — sign up in the Adrian app (paid tiers go straight to checkout) */}
       <a
-        href={REGISTER_URL}
+        href={href}
         className={cn(
           'w-full py-3 font-semibold rounded-full transition-all text-center',
           plan.highlighted
