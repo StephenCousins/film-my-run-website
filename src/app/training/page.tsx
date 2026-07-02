@@ -30,8 +30,10 @@ import { cn } from '@/lib/utils';
 const ADRIAN_APP_URL =
   process.env.NEXT_PUBLIC_ADRIAN_APP_URL ||
   'https://marathon-plan-app-production.up.railway.app';
-const REGISTER_URL = `${ADRIAN_APP_URL}/register`;
 const LOGIN_URL = `${ADRIAN_APP_URL}/login`;
+// Sign-up funnels through the seamless SSO hand-off: signed-in Film My Run
+// members go straight into Adrian; everyone else falls back to Adrian signup.
+const START_URL = '/api/sso/adrian';
 
 // ============================================
 // TYPES
@@ -160,7 +162,7 @@ const methodologies = ['Starrett', 'Hansons', '80/20 Polarised', 'Pfitzinger'];
 function PricingCard({ plan }: { plan: PricingPlan }) {
   // Free → plain signup; paid tiers carry the selection so the app sends the
   // user straight to checkout for that tier after they create an account.
-  const href = plan.id === 'free' ? REGISTER_URL : `${REGISTER_URL}?plan=${plan.id}`;
+  const href = plan.id === 'free' ? START_URL : `${START_URL}?plan=${plan.id}`;
   return (
     <div
       className={cn(
@@ -293,7 +295,7 @@ export default function TrainingPage() {
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a
-                  href={REGISTER_URL}
+                  href={START_URL}
                   className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
                 >
                   Start free
@@ -308,7 +310,8 @@ export default function TrainingPage() {
               </div>
 
               <p className="text-sm text-muted mt-6">
-                Free plan available — no card needed.{' '}
+                Free plan available — no card needed. Continues to Adrian, your Film My Run
+                training app.{' '}
                 <a href={LOGIN_URL} className="text-orange-500 hover:text-orange-600 font-medium">
                   Already have an account? Sign in
                 </a>
@@ -400,7 +403,7 @@ export default function TrainingPage() {
                 </ul>
 
                 <a
-                  href={REGISTER_URL}
+                  href={START_URL}
                   className="inline-flex items-center gap-2 text-orange-500 font-semibold hover:text-orange-600 transition-colors"
                 >
                   Start free
@@ -541,7 +544,8 @@ export default function TrainingPage() {
               <div className="inline-flex items-center gap-2 text-muted">
                 <Lock className="w-4 h-4" />
                 <span className="text-sm">
-                  No card required for the free plan. Upgrade or cancel anytime.
+                  No card required for the free plan. Upgrade or cancel anytime — you&apos;ll
+                  continue to Adrian, the Film My Run training app.
                 </span>
               </div>
             </div>
@@ -571,7 +575,7 @@ export default function TrainingPage() {
                 closer than you think.
               </p>
               <a
-                href={REGISTER_URL}
+                href={START_URL}
                 className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
               >
                 Start free
