@@ -83,9 +83,15 @@ export function computeStones(profile: RunnerProfile, now: Date = new Date()): S
   const earnedTotal = earnedRaces.reduce((s, e) => s + e.stones, 0);
   const lastFinalDate = finals.length ? finals[0].dateIso : null;
 
-  // Anything earned on or before the most recent Finals acceptance was spent.
+  // Stones are spent at the Finals lottery / pre-registration (~January of the
+  // race's year), NOT on race day. So stones earned between the draw and the
+  // race that same year survive. The most recent Finals acceptance consumed
+  // everything earned before Jan 1 of its year; anything since is available.
+  // (This also correctly handles charity/elite entries, whose exact spend isn't
+  // public — they still can't consume stones you hadn't earned yet at the draw.)
+  const spendCutoff = lastFinalDate ? `${lastFinalDate.slice(0, 4)}-01-01` : null;
   for (const e of earnedRaces) {
-    e.spent = !!lastFinalDate && e.dateIso <= lastFinalDate;
+    e.spent = !!spendCutoff && e.dateIso < spendCutoff;
   }
   const availableFromHistory = earnedRaces
     .filter((e) => !e.spent)
