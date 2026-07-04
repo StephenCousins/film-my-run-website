@@ -34,16 +34,18 @@ export interface MajorRule {
 }
 
 // Confirmed per season. Majors rotate host events, so this is keyed by year.
-// (2022 was the first, smaller season — its Majors are incomplete here but any
-// 2022 Major is frozen by now anyway.)
+// 2022 (inaugural season) had just two Majors — Europe (Val d'Aran) and
+// Asia-Pacific (Doi Inthanon Thailand, moved from Hong Kong/TransLantau due to
+// COVID). The Americas Major (Canyons) began in 2023 and Oceania (Tarawera) in
+// 2024.
 export const MAJORS: MajorRule[] = [
   // Europe — Val d'Aran throughout
   { label: "Val d'Aran by UTMB (Europe)", match: /val\s*d.?aran/i, years: [2022, 2023, 2024, 2025, 2026] },
   // Americas — Canyons (2023–24), then Kodiak (2025+)
   { label: 'Canyons by UTMB (Americas)', match: /canyons/i, years: [2023, 2024] },
   { label: 'Kodiak by UTMB (Americas)', match: /kodiak/i, years: [2025, 2026] },
-  // Asia-Pacific — Doi Inthanon / Chiang Mai Thailand
-  { label: 'Doi Inthanon Thailand by UTMB (Asia-Pacific)', match: /chiang\s*mai|thailand|doi\s*inthanon/i, years: [2023, 2024, 2025, 2026] },
+  // Asia-Pacific — Doi Inthanon / Chiang Mai Thailand throughout
+  { label: 'Doi Inthanon Thailand by UTMB (Asia-Pacific)', match: /chiang\s*mai|thailand|doi\s*inthanon/i, years: [2022, 2023, 2024, 2025, 2026] },
   // Oceania — Tarawera (2024), then Ultra-Trail Australia (2025+)
   { label: 'Tarawera by UTMB (Oceania)', match: /tarawera/i, years: [2024] },
   { label: 'Ultra-Trail Australia by UTMB (Oceania)', match: /ultra-?trail\s+australia/i, years: [2025, 2026] },
