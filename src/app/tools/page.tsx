@@ -9,6 +9,7 @@ import {
   Target,
   Gauge,
   ArrowRight,
+  Gem,
   Footprints,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
@@ -34,6 +35,16 @@ export const metadata: Metadata = {
 // ============================================
 
 const tools = [
+  {
+    name: 'StoneTracker',
+    description:
+      'Instantly see how many UTMB Running Stones you have and whether your UTMB Index is valid for the Mont-Blanc lottery. Just search your name.',
+    href: '/tools/stone-tracker',
+    icon: Gem,
+    color: 'from-orange-500 to-purple-600',
+    stats: 'UTMB World Series',
+    popular: true,
+  },
   {
     name: 'Running Calculators',
     description:
