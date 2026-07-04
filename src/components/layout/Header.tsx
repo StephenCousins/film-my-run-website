@@ -29,6 +29,8 @@ const navigation = [
     href: '/tools/calculators',
     children: [
       { name: 'Running Calculators', href: '/tools/calculators' },
+      { name: 'StoneTracker', href: '/tools/stone-tracker' },
+      { name: 'RaceScript', href: '/tools/racescript' },
       { name: 'Shoe Finder', href: '/tools/shoe-finder' },
       { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
       { name: 'Runner Quiz', href: '/tools/runner-quiz' },
