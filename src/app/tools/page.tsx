@@ -10,6 +10,7 @@ import {
   Gauge,
   ArrowRight,
   Gem,
+  FileText,
   Footprints,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
@@ -43,6 +44,16 @@ const tools = [
     icon: Gem,
     color: 'from-orange-500 to-purple-600',
     stats: 'UTMB World Series',
+    popular: true,
+  },
+  {
+    name: 'RaceScript',
+    description:
+      'Paste a Strava run and get a race report, blog post, or social caption — written from your real data, photos, gear and race-day weather.',
+    href: '/tools/racescript',
+    icon: FileText,
+    color: 'from-orange-500 to-red-600',
+    stats: 'Powered by your Strava',
     popular: true,
   },
   {
