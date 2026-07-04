@@ -10,12 +10,15 @@ import {
   AlertCircle,
   Info,
   ChevronRight,
+  ChevronDown,
+  SlidersHorizontal,
   Trophy,
   ArrowLeft,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
+import { COUNTRIES, AGE_GROUPS } from '@/lib/stone-tracker/countries';
 
 // ---- Types (mirror the API) ------------------------------------------------
 
@@ -90,31 +93,60 @@ const CATEGORY_LABEL: Record<string, string> = {
 
 export default function StoneTrackerPage() {
   const [query, setQuery] = useState('');
+  const [country, setCountry] = useState('');
+  const [sex, setSex] = useState('');
+  const [age, setAge] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
   const [matches, setMatches] = useState<RunnerMatch[] | null>(null);
+  const [nbHits, setNbHits] = useState(0);
   const [searching, setSearching] = useState(false);
   const [data, setData] = useState<RunnerData | null>(null);
   const [loadingRunner, setLoadingRunner] = useState(false);
   const [error, setError] = useState('');
   const [upcomingFinal, setUpcomingFinal] = useState(false);
 
-  async function doSearch(e: React.FormEvent) {
-    e.preventDefault();
-    const name = query.trim();
-    if (name.length < 2) return;
+  async function runSearch(name: string, f: { country: string; sex: string; age: string }) {
+    if (name.trim().length < 2) return;
     setSearching(true);
     setError('');
     setMatches(null);
     setData(null);
     try {
-      const res = await fetch(`/api/stone-tracker/search?name=${encodeURIComponent(name)}`);
+      const p = new URLSearchParams({ name: name.trim() });
+      if (f.country) p.set('nationality', f.country);
+      if (f.sex) p.set('sex', f.sex);
+      if (f.age) p.set('ageGroup', f.age);
+      const res = await fetch(`/api/stone-tracker/search?${p.toString()}`);
       const body = await res.json();
       if (!res.ok) throw new Error(body.error || 'Search failed');
       setMatches(body.runners || []);
+      setNbHits(body.nbHits || 0);
+      // Nudge the user to refine when the result set is large and not yet narrow.
+      if ((body.nbHits || 0) > 12 && !(f.country && f.age)) setShowFilters(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong.');
     } finally {
       setSearching(false);
     }
+  }
+
+  function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    runSearch(query, { country, sex, age });
+  }
+
+  // Re-run immediately when a filter changes (if there's already a name).
+  function changeCountry(v: string) {
+    setCountry(v);
+    if (query.trim().length >= 2) runSearch(query, { country: v, sex, age });
+  }
+  function changeSex(v: string) {
+    setSex(v);
+    if (query.trim().length >= 2) runSearch(query, { country, sex: v, age });
+  }
+  function changeAge(v: string) {
+    setAge(v);
+    if (query.trim().length >= 2) runSearch(query, { country, sex, age: v });
   }
 
   async function selectRunner(m: RunnerMatch) {
@@ -139,6 +171,11 @@ export default function StoneTrackerPage() {
     setMatches(null);
     setError('');
     setQuery('');
+    setCountry('');
+    setSex('');
+    setAge('');
+    setShowFilters(false);
+    setNbHits(0);
   }
 
   const stones = data?.stones;
@@ -173,7 +210,7 @@ export default function StoneTrackerPage() {
           <div className="container">
             <div className="max-w-2xl">
               {/* Search */}
-              <form onSubmit={doSearch} className="flex gap-3 mb-8">
+              <form onSubmit={onSubmit} className="flex gap-3 mb-3">
                 <div className="relative flex-1">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
                   <input
@@ -194,6 +231,64 @@ export default function StoneTrackerPage() {
                 </button>
               </form>
 
+              {/* Refine filters (server-side facets) */}
+              <button
+                type="button"
+                onClick={() => setShowFilters((v) => !v)}
+                className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-foreground transition-colors mb-4"
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+                {showFilters ? 'Hide filters' : 'Narrow by country, age or gender'}
+                <ChevronDown className={cn('w-4 h-4 transition-transform', showFilters && 'rotate-180')} />
+              </button>
+
+              {showFilters && (
+                <div className="grid sm:grid-cols-3 gap-3 mb-6 p-4 bg-surface rounded-xl border border-border">
+                  <label className="text-sm">
+                    <span className="block text-muted mb-1">Country</span>
+                    <select
+                      value={country}
+                      onChange={(e) => changeCountry(e.target.value)}
+                      className="w-full px-3 py-2 bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-orange-500"
+                    >
+                      <option value="">Any country</option>
+                      {COUNTRIES.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="text-sm">
+                    <span className="block text-muted mb-1">Gender</span>
+                    <select
+                      value={sex}
+                      onChange={(e) => changeSex(e.target.value)}
+                      className="w-full px-3 py-2 bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-orange-500"
+                    >
+                      <option value="">Any</option>
+                      <option value="H">Men</option>
+                      <option value="F">Women</option>
+                    </select>
+                  </label>
+                  <label className="text-sm">
+                    <span className="block text-muted mb-1">Age category</span>
+                    <select
+                      value={age}
+                      onChange={(e) => changeAge(e.target.value)}
+                      className="w-full px-3 py-2 bg-surface-tertiary border border-border rounded-lg text-foreground focus:outline-none focus:border-orange-500"
+                    >
+                      <option value="">Any age</option>
+                      {AGE_GROUPS.map((a) => (
+                        <option key={a} value={a}>
+                          {a}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+              )}
+
               {error && (
                 <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 flex items-start gap-3">
                   <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
@@ -211,7 +306,11 @@ export default function StoneTrackerPage() {
                   ) : (
                     <>
                       <p className="text-sm text-muted mb-3">
-                        {matches.length === 1 ? 'Is this you?' : 'Which one is you?'}
+                        {nbHits > matches.length
+                          ? `Showing the top ${matches.length} of ${nbHits.toLocaleString()} matches — narrow by country or age to find yourself.`
+                          : matches.length === 1
+                          ? 'Is this you?'
+                          : 'Which one is you?'}
                       </p>
                       <div className="space-y-2">
                         {matches.map((m) => (

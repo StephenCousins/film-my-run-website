@@ -26,15 +26,39 @@ export interface RunnerMatch {
   uri: string; // profile slug, e.g. "812784.stephen.cousins"
 }
 
-export async function searchRunners(name: string, limit = 25): Promise<RunnerMatch[]> {
-  const url = `${SEARCH_URL}?search=${encodeURIComponent(name)}&limit=${limit}`;
-  const res = await fetch(url, {
+export interface SearchFilters {
+  nationality?: string; // ISO-2, e.g. "GB"
+  sex?: string; // "H" | "F"
+  ageGroup?: string; // e.g. "55-59"
+  limit?: number;
+}
+
+export interface SearchResponse {
+  runners: RunnerMatch[];
+  nbHits: number; // total matches (the list is capped/index-sorted)
+}
+
+export async function searchRunners(
+  name: string,
+  filters: SearchFilters = {}
+): Promise<SearchResponse> {
+  const params = new URLSearchParams({
+    search: name,
+    limit: String(filters.limit ?? 25),
+  });
+  // Server-side facets — the API is index-sorted and capped, so narrowing here
+  // (not client-side) is the only way to surface a buried common-name runner.
+  if (filters.nationality) params.set('nationality', filters.nationality);
+  if (filters.sex) params.set('sex', filters.sex);
+  if (filters.ageGroup) params.set('ageGroup', filters.ageGroup);
+
+  const res = await fetch(`${SEARCH_URL}?${params.toString()}`, {
     headers: { accept: 'application/json', 'user-agent': UA },
     next: { revalidate: CACHE_SECONDS },
   });
   if (!res.ok) throw new Error(`UTMB search failed (${res.status})`);
   const data = await res.json();
-  return (data.runners || [])
+  const runners: RunnerMatch[] = (data.runners || [])
     .filter((r: { uri?: string }) => !!r.uri)
     .map(
       (r: {
@@ -55,6 +79,7 @@ export async function searchRunners(name: string, limit = 25): Promise<RunnerMat
         uri: r.uri,
       })
     );
+  return { runners, nbHits: data.nbHits ?? runners.length };
 }
 
 export interface RaceResult {
