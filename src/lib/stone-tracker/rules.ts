@@ -62,9 +62,16 @@ export function majorForEvent(eventName: string, year: number): MajorRule | null
  * How each result is classified comes straight from UTMB's own
  * `utmbEventStatus` field on every race:
  *   'event' → stone-EARNING World Series event (incl. TDS/MCC/ETC at Mont-Blanc)
+ *   'major' → stone-EARNING World Series MAJOR — earns DOUBLE. UTMB tags these
+ *             directly, so this is the authoritative "is a Major" signal.
  *   'final' → OCC/CCC/UTMB — you SPEND stones to enter these; they earn nothing
  *   ''      → an independent race with a UTMB Index only — earns nothing
  * This means we don't have to maintain the full World Series event list.
  */
-export const STATUS_EARNS = 'event';
+export const STATUS_EVENT = 'event';
+export const STATUS_MAJOR = 'major';
 export const STATUS_FINAL = 'final';
+
+// The statuses at which stones are EARNED: a plain World Series event, or a
+// Major (which additionally earns double — see the doubling logic in compute).
+export const STATUS_EARNS: ReadonlySet<string> = new Set([STATUS_EVENT, STATUS_MAJOR]);

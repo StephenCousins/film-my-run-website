@@ -88,7 +88,7 @@ export interface RaceResult {
   raceName: string;
   piCategory: string | null; // "20k" | "50k" | "100k" | "100m" | null
   isDnf: boolean;
-  utmbEventStatus: string; // "event" | "final" | ""
+  utmbEventStatus: string; // "event" | "major" | "final" | ""
 }
 
 export interface PerformanceIndex {

@@ -2,8 +2,8 @@
  * The Running Stones engine.
  *
  * Model (validated against real MyUTMB data):
- *  - EARN stones at each `utmbEventStatus === 'event'` finish (category value,
- *    doubled at Majors).
+ *  - EARN stones at each `utmbEventStatus === 'event'` or `'major'` finish
+ *    (category value, doubled at Majors — which UTMB tags as `'major'`).
  *  - SPEND: each Finals acceptance (OCC/CCC/UTMB, `status === 'final'`) consumes
  *    ALL your stones. Past finals are visible here; an upcoming/accepted final
  *    is NOT public, so the UI asks the user about it and applies it on top.
@@ -12,7 +12,7 @@
  *    again.
  */
 
-import { CATEGORY_STONES, FREEZE_YEARS, majorForEvent, STATUS_EARNS, STATUS_FINAL } from './rules';
+import { CATEGORY_STONES, FREEZE_YEARS, majorForEvent, STATUS_EARNS, STATUS_FINAL, STATUS_MAJOR } from './rules';
 import type { RunnerProfile } from './utmb';
 
 export interface EarnedRace {
@@ -59,20 +59,26 @@ export function computeStones(profile: RunnerProfile, now: Date = new Date()): S
       continue;
     }
     if (r.isDnf) continue;
-    if (r.utmbEventStatus !== STATUS_EARNS) continue;
+    if (!STATUS_EARNS.has(r.utmbEventStatus)) continue;
     const cat = (r.piCategory || '').toLowerCase();
     const base = CATEGORY_STONES[cat];
     if (!base) continue;
     const year = parseInt(r.dateIso.slice(0, 4), 10);
-    const major = majorForEvent(r.eventName, year);
+    // A Major awards DOUBLE. UTMB flags these two ways and either is enough:
+    // its own `utmbEventStatus === 'major'` tag (authoritative), or a name match
+    // in our per-year MAJORS map (a fallback for any Major UTMB tags as a plain
+    // 'event'). Trusting the status means we no longer miss a Major just because
+    // its host isn't in our map yet.
+    const nameMajor = majorForEvent(r.eventName, year);
+    const isMajor = r.utmbEventStatus === STATUS_MAJOR || !!nameMajor;
     earnedRaces.push({
       dateIso: r.dateIso,
       eventName: r.eventName,
       raceName: r.raceName,
       category: cat,
-      stones: base * (major ? 2 : 1),
-      isMajor: !!major,
-      majorLabel: major?.label,
+      stones: base * (isMajor ? 2 : 1),
+      isMajor,
+      majorLabel: nameMajor?.label ?? (isMajor ? 'UTMB Major' : undefined),
       spent: false,
     });
   }
