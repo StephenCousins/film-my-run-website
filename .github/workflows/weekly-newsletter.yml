@@ -1,0 +1,31 @@
+name: Weekly Newsletter
+
+on:
+  schedule:
+    # Every Monday at 7:00 AM UK time (GMT)
+    # Note: During BST (late March–late October), this fires at 8am local
+    - cron: '0 7 * * 1'
+  workflow_dispatch: # Allow manual trigger from GitHub UI
+
+jobs:
+  stage-newsletter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Stage weekly newsletter draft
+        run: |
+          response=$(curl -s -w "\n%{http_code}" -X POST \
+            "${{ secrets.SITE_URL }}/api/newsletter/send" \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -d '{"subject":"Film My Run Weekly"}')
+
+          http_code=$(echo "$response" | tail -1)
+          body=$(echo "$response" | head -1)
+
+          echo "Status: $http_code"
+          echo "Response: $body"
+
+          if [ "$http_code" != "200" ]; then
+            echo "::error::Newsletter staging failed with status $http_code"
+            exit 1
+          fi
