@@ -334,9 +334,36 @@ async function autoPopulateParkrun(
 
     const latest = allRuns[0]; // sorted by date DESC
     const runDate = new Date(latest.date);
+    if (isNaN(runDate.getTime())) return;
     const daysSince = Math.round((Date.now() - runDate.getTime()) / (1000 * 60 * 60 * 24));
 
-    if (daysSince > 9 || isNaN(runDate.getTime())) return;
+    // Aggregate lifetime stats don't depend on having run this week —
+    // gather them either way so the card still shows totals/venues/avg time.
+    let totalRuns: number | undefined;
+    let venues: number | undefined;
+    let avgTime: string | undefined;
+    try {
+      const meta = await getMetadata();
+      const avgSeconds = allRuns.length > 0
+        ? Math.round(allRuns.reduce((sum, r) => sum + r.time_seconds, 0) / allRuns.length)
+        : 0;
+
+      if (meta.totalParkruns > 0) totalRuns = meta.totalParkruns;
+      if (meta.uniqueVenues > 0) venues = meta.uniqueVenues;
+      if (avgSeconds > 0) avgTime = formatTime(avgSeconds);
+    } catch {
+      // Stats are a nice-to-have — don't fail the whole section
+    }
+
+    if (daysSince > 9) {
+      payload.parkrun = {
+        text: 'No parkrun for us this week — back out there again soon!',
+        totalRuns,
+        venues,
+        avgTime,
+      };
+      return;
+    }
 
     const timeParts = latest.time_formatted.split(':');
     const mins = parseInt(timeParts[0], 10);
@@ -357,23 +384,6 @@ async function autoPopulateParkrun(
       text += ` in ${latest.position}${ordinalSuffix(latest.position)} place`;
     }
     text += '. We\'ll get the video out soon!';
-
-    // Gather aggregate stats as structured data
-    let totalRuns: number | undefined;
-    let venues: number | undefined;
-    let avgTime: string | undefined;
-    try {
-      const meta = await getMetadata();
-      const avgSeconds = allRuns.length > 0
-        ? Math.round(allRuns.reduce((sum, r) => sum + r.time_seconds, 0) / allRuns.length)
-        : 0;
-
-      if (meta.totalParkruns > 0) totalRuns = meta.totalParkruns;
-      if (meta.uniqueVenues > 0) venues = meta.uniqueVenues;
-      if (avgSeconds > 0) avgTime = formatTime(avgSeconds);
-    } catch {
-      // Stats are a nice-to-have — don't fail the whole section
-    }
 
     payload.parkrun = { text, totalRuns, venues, avgTime };
   } catch (e) {
