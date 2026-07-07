@@ -19,8 +19,7 @@ const ORANGE = '#f88c00';
 const DEEP = '#2d2926';
 const SLATE = '#4a4541';
 const GREY = '#6b6560';
-const SILVER = '#9e9893';
-const MUTED = '#b5b0ab';
+const OLIVE = '#6b7a3f';
 const CREAM = '#faf8f5';
 const LIGHT_GREY = '#f5f3f0';
 const WARM_PEACH = '#fff3e0';
@@ -39,25 +38,36 @@ const MSO_TABLE = 'border-collapse:collapse;border-spacing:0;mso-table-lspace:0p
 //  GRAPHIC HELPERS
 // ═══════════════════════════════════════════
 
-/**
- * SVG-based diagonal divider — creates a visible diagonal line with an orange
- * triangle sweeping across the section transition.
- *
- * Uses a hosted API route instead of data: URIs because Gmail strips data: URIs.
- *
- * dir='ltr': Orange triangle grows from bottom-left
- * dir='rtl': Orange triangle grows from top-right
- */
-function svgDivider(fromBg: string, toBg: string, dir: 'ltr' | 'rtl' = 'ltr', baseUrl: string): string {
-  const strip = (c: string) => c.replace('#', '');
-  // v= cache-buster — bump when divider dimensions/design change
-  const url = `${baseUrl}/api/newsletter/divider?from=${strip(fromBg)}&to=${strip(toBg)}&dir=${dir}&v=4`;
-  return `<tr><td style="padding:0;font-size:0;line-height:0;"><img src="${url}" alt="" width="600" style="display:block;width:100%;max-width:600px;height:auto;border:0;" /></td></tr>`;
-}
-
 /** Thin horizontal rule within a section */
 function thinRule(): string {
   return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="height:1px;background:${RULE};font-size:0;">&nbsp;</td></tr></table>`;
+}
+
+/**
+ * Film-strip sprocket row — a line of punched "holes" used to frame the
+ * masthead and footer like a strip of 16mm film. Pure table cells + background
+ * colors, so it survives Gmail/Outlook (no images, no positioning).
+ */
+function sprocketRow(holeColor: string): string {
+  const count = 13;
+  const pct = (100 / count).toFixed(2);
+  const cells = Array.from({ length: count })
+    .map(
+      () =>
+        `<td width="${pct}%" align="center" style="padding:0;"><table role="presentation" cellpadding="0" cellspacing="0"><tr><td style="width:14px;height:10px;background:${holeColor};border-radius:2px;font-size:0;line-height:0;">&nbsp;</td></tr></table></td>`
+    )
+    .join('');
+  return `<table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>${cells}</tr></table>`;
+}
+
+/**
+ * Right-pointing play triangle built from CSS borders (no image, no unicode —
+ * unicode &#9654; gets emoji-styled on some mobile clients). Degrades to
+ * nothing in old Outlook, which is acceptable.
+ */
+function playTriangle(size: number, color: string): string {
+  const half = Math.round(size * 0.65);
+  return `<div style="width:0;height:0;border-top:${half}px solid transparent;border-bottom:${half}px solid transparent;border-left:${size}px solid ${color};font-size:0;line-height:0;"></div>`;
 }
 
 /** CTA button — 3 variants */
@@ -76,15 +86,24 @@ function ctaButton(url: string, label: string, variant: 'orange' | 'ghost-dark' 
  *
  * Gmail strips position:absolute/relative, so CSS triangle overlays
  * are invisible. Instead we use a 4px orange bottom border for brand accent.
+ *
+ * `aspectRatio` (width/height, e.g. 1.5 for 3:2) crops tall source photos
+ * down via object-fit so a portrait hero shot can't push the headline below
+ * the fold. Clients without object-fit support (older Outlook) will stretch
+ * the image instead of cropping it — an accepted tradeoff for this audience.
  */
 function angularImage(
   imageUrl: string,
   alt: string,
   linkUrl: string,
   width: number,
+  aspectRatio?: number,
 ): string {
+  const heightStyle = aspectRatio
+    ? `height:${Math.round(width / aspectRatio)}px;object-fit:cover;object-position:center;`
+    : `height:auto;`;
   return `<a href="${linkUrl}" style="text-decoration:none;display:block;">
-    <img src="${imageUrl}" alt="${alt}" width="${width}" style="display:block;width:100%;max-width:${width}px;height:auto;border:0;border-bottom:4px solid ${ORANGE};" />
+    <img src="${imageUrl}" alt="${alt}" width="${width}" style="display:block;width:100%;max-width:${width}px;${heightStyle}border:0;border-bottom:4px solid ${ORANGE};" />
   </a>`;
 }
 
@@ -94,9 +113,12 @@ function angularImage(
 // ═══════════════════════════════════════════
 
 function renderIntro(text: string): string {
-  return `<tr><td style="background:${CREAM};padding:32px 48px 36px;">
+  return `<tr><td style="background:${CREAM};padding:32px 48px 36px;" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr><td style="font-family:${DISPLAY};font-size:18px;line-height:1.8;color:${SLATE};font-style:italic;">${text}</td></tr>
+      <tr><td style="padding-top:14px;font-family:${DISPLAY};font-size:16px;font-style:italic;color:${DEEP};">
+        <span style="color:${ORANGE};">&mdash;</span>&nbsp;Stephen
+      </td></tr>
     </table>
   </td></tr>`;
 }
@@ -104,25 +126,22 @@ function renderIntro(text: string): string {
 function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): string {
   const image = post.imageUrl
     ? `<tr><td style="padding:0;font-size:0;line-height:0;">
-        ${angularImage(post.imageUrl, post.title, post.url, 600)}
+        ${angularImage(post.imageUrl, post.title, post.url, 600, 1.5)}
       </td></tr>`
     : '';
 
   return `<tr><td style="background:${WHITE};padding:0;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-      <tr><td style="padding:28px 48px 16px;">
+      <tr><td style="padding:28px 48px 16px;" class="section-pad">
         <span style="font-family:${SANS};font-size:11px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2.5px;">Latest Post</span>
       </td></tr>
       ${image}
-      <tr><td style="padding:28px 48px 44px;">
+      <tr><td style="padding:28px 48px 44px;" class="section-pad">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-          <tr><td style="padding-bottom:12px;">
-            <a href="${post.url}" style="text-decoration:none;">
-              <h2 style="margin:0;font-family:${DISPLAY};font-size:28px;font-weight:700;line-height:1.25;color:${DEEP};">${post.title}</h2>
-            </a>
-          </td></tr>
           <tr><td style="padding-bottom:16px;">
-            <span style="font-family:${SANS};font-size:12px;font-weight:600;color:${ORANGE};letter-spacing:0.5px;">${post.snippet.length > 100 ? '' : post.snippet}</span>
+            <a href="${post.url}" style="text-decoration:none;">
+              <h2 style="margin:0;font-family:${DISPLAY};font-size:36px;font-weight:700;line-height:1.2;color:${DEEP};">${post.title}</h2>
+            </a>
           </td></tr>
           <tr><td style="padding-bottom:28px;">
             <p style="margin:0;font-family:${SANS};font-size:15px;line-height:1.75;color:${GREY};">${post.snippet}</p>
@@ -135,19 +154,45 @@ function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): strin
 }
 
 function renderVideo(video: NonNullable<NewsletterPayload['videoOfTheWeek']>): string {
-  return `<tr><td style="background:${LIGHT_GREY};padding:36px 48px 44px;">
+  // 16:9 crop removes the letterbox bars baked into YouTube hqdefault thumbs
+  const thumbHeight = Math.round(504 / (16 / 9));
+
+  return `<tr><td style="background:${LIGHT_GREY};padding:36px 48px 44px;" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr><td style="padding-bottom:16px;">
         <span style="font-family:${SANS};font-size:11px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2.5px;">Video of the Week</span>
       </td></tr>
       <tr><td style="padding-bottom:20px;">
-        <h2 style="margin:0;font-family:${DISPLAY};font-size:26px;font-weight:700;line-height:1.3;color:${DEEP};">${video.title}</h2>
-        <p style="margin:6px 0 0;font-family:${SANS};font-size:13px;font-weight:500;color:${SILVER};">${video.description}</p>
+        <h2 style="margin:0;font-family:${DISPLAY};font-size:22px;font-weight:700;line-height:1.3;color:${DEEP};">${video.title}</h2>
+        <p style="margin:6px 0 0;font-family:${SANS};font-size:13px;font-weight:500;color:${GREY};">${video.description}</p>
       </td></tr>
       <tr><td style="padding-bottom:28px;font-size:0;line-height:0;">
-        ${angularImage(video.thumbnailUrl, video.title, video.url, 504)}
+        <a href="${video.url}" style="text-decoration:none;display:block;">
+          <img src="${video.thumbnailUrl}" alt="${video.title}" width="504" style="display:block;width:100%;max-width:504px;height:${thumbHeight}px;object-fit:cover;object-position:center;border:0;" />
+        </a>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+          <td style="background:${DEEP};padding:11px 16px;border-bottom:4px solid ${ORANGE};">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+              <td>
+                <a href="${video.url}" style="text-decoration:none;display:block;">
+                  <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                    <td style="padding-right:10px;">${playTriangle(11, ORANGE)}</td>
+                    <td style="font-family:${SANS};font-size:11px;font-weight:700;color:${CREAM};text-transform:uppercase;letter-spacing:2px;line-height:1;">Press Play</td>
+                  </tr></table>
+                </a>
+              </td>
+              <td align="right">
+                <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                  <td valign="bottom"><div style="width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:8px solid #5a534d;font-size:0;line-height:0;"></div></td>
+                  <td valign="bottom" style="padding-left:2px;"><div style="width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-bottom:12px solid #756c64;font-size:0;line-height:0;"></div></td>
+                  <td valign="bottom" style="padding-left:2px;"><div style="width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:6px solid #5a534d;font-size:0;line-height:0;"></div></td>
+                </tr></table>
+              </td>
+            </tr></table>
+          </td>
+        </tr></table>
       </td></tr>
-      <tr><td>${ctaButton(video.url, 'Watch Now')}</td></tr>
+      <tr><td>${ctaButton(video.url, 'Watch Now', 'ghost-orange')}</td></tr>
     </table>
   </td></tr>`;
 }
@@ -168,7 +213,8 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
   const featured = `
     ${firstImage}
     <tr><td style="padding-bottom:6px;">
-      <span style="font-family:${SANS};font-size:11px;font-weight:600;color:${SILVER};letter-spacing:0.5px;">${first.source}</span>
+      <span style="font-family:${SANS};font-size:12px;font-weight:800;color:${ORANGE};">01</span>
+      <span style="font-family:${SANS};font-size:11px;font-weight:600;color:${GREY};letter-spacing:0.5px;">&nbsp;&nbsp;${first.source}</span>
     </td></tr>
     <tr><td style="padding-bottom:24px;">
       <a href="${newsPageUrl}" style="text-decoration:none;">
@@ -189,7 +235,7 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
             <span style="font-family:${SANS};font-size:12px;font-weight:800;color:${ORANGE};">${num}</span>
           </td>
           <td valign="top">
-            <span style="font-family:${SANS};font-size:11px;font-weight:600;color:${SILVER};letter-spacing:0.5px;">${item.source}</span><br/>
+            <span style="font-family:${SANS};font-size:11px;font-weight:600;color:${GREY};letter-spacing:0.5px;">${item.source}</span><br/>
             <a href="${newsPageUrl}" style="text-decoration:none;">
               <span style="font-family:${DISPLAY};font-size:16px;font-weight:700;line-height:1.4;color:${DEEP};">${item.title}</span>
             </a>
@@ -199,13 +245,13 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
     })
     .join('');
 
-  return `<tr><td style="background:${WHITE};padding:36px 48px 44px;">
+  return `<tr><td style="background:${WHITE};padding:36px 48px 44px;" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr><td style="padding-bottom:6px;">
         <span style="font-family:${SANS};font-size:11px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2.5px;">Trail &amp; Ultra News</span>
       </td></tr>
       <tr><td style="padding-bottom:24px;">
-        <h2 style="margin:0;font-family:${DISPLAY};font-size:26px;font-weight:700;color:${DEEP};">This Week in Running</h2>
+        <h2 style="margin:0;font-family:${DISPLAY};font-size:22px;font-weight:700;color:${DEEP};">This Week in Running</h2>
       </td></tr>
       ${featured}
       ${compact}
@@ -224,24 +270,24 @@ function renderParkrun(parkrun: NonNullable<NewsletterPayload['parkrun']>): stri
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr>
         <td width="33%" align="center" style="padding:18px 8px;background:${WHITE};border-radius:6px;">
-          <span style="display:block;font-family:${SANS};font-size:30px;font-weight:800;color:${ORANGE};line-height:1;">${totalRuns}</span>
-          <span style="display:block;font-family:${SANS};font-size:10px;font-weight:600;color:${SILVER};text-transform:uppercase;letter-spacing:1px;margin-top:6px;">Total Runs</span>
+          <span style="display:block;font-family:${SANS};font-size:30px;font-weight:800;color:${ORANGE};line-height:1;" class="stat-num">${totalRuns}</span>
+          <span style="display:block;font-family:${SANS};font-size:10px;font-weight:600;color:${GREY};text-transform:uppercase;letter-spacing:1px;margin-top:6px;">Total Runs</span>
         </td>
         <td style="width:12px;">&nbsp;</td>
         <td width="34%" align="center" style="padding:18px 8px;background:${WHITE};border-radius:6px;">
-          <span style="display:block;font-family:${SANS};font-size:30px;font-weight:800;color:${ORANGE};line-height:1;">${venues}</span>
-          <span style="display:block;font-family:${SANS};font-size:10px;font-weight:600;color:${SILVER};text-transform:uppercase;letter-spacing:1px;margin-top:6px;">Venues</span>
+          <span style="display:block;font-family:${SANS};font-size:30px;font-weight:800;color:${ORANGE};line-height:1;" class="stat-num">${venues}</span>
+          <span style="display:block;font-family:${SANS};font-size:10px;font-weight:600;color:${GREY};text-transform:uppercase;letter-spacing:1px;margin-top:6px;">Venues</span>
         </td>
         <td style="width:12px;">&nbsp;</td>
         <td width="33%" align="center" style="padding:18px 8px;background:${WHITE};border-radius:6px;">
-          <span style="display:block;font-family:${SANS};font-size:30px;font-weight:800;color:${ORANGE};line-height:1;">${avgTime}</span>
-          <span style="display:block;font-family:${SANS};font-size:10px;font-weight:600;color:${SILVER};text-transform:uppercase;letter-spacing:1px;margin-top:6px;">Avg Time</span>
+          <span style="display:block;font-family:${SANS};font-size:30px;font-weight:800;color:${ORANGE};line-height:1;" class="stat-num">${avgTime}</span>
+          <span style="display:block;font-family:${SANS};font-size:10px;font-weight:600;color:${GREY};text-transform:uppercase;letter-spacing:1px;margin-top:6px;">Avg Time</span>
         </td>
       </tr>
     </table>
   </td></tr>`;
 
-  return `<tr><td style="background:${WARM_PEACH};padding:32px 48px 40px;">
+  return `<tr><td style="background:${WARM_PEACH};padding:32px 48px 40px;" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr><td style="padding-bottom:16px;">
         <span style="font-family:${SANS};font-size:11px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2.5px;">parkrun</span>
@@ -280,7 +326,7 @@ function renderCards(
     </td></tr>`);
   }
 
-  return `<tr><td style="background:${WHITE};padding:36px 48px 44px;">
+  return `<tr><td style="background:${WHITE};padding:36px 48px 44px;" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${cards.join('')}</table>
   </td></tr>`;
 }
@@ -291,7 +337,7 @@ function renderTips(tips: TipItem[]): string {
   const items = tips
     .map((tip, i) => {
       const cite = tip.citation
-        ? `<p style="margin:12px 0 0;font-family:${SANS};font-size:11px;font-style:italic;color:${MUTED};">${tip.citation}</p>`
+        ? `<p style="margin:12px 0 0;font-family:${SANS};font-size:11px;font-style:italic;color:${GREY};">${tip.citation}</p>`
         : '';
       const spacer = i < tips.length - 1
         ? `<tr><td style="height:20px;font-size:0;">&nbsp;</td></tr>`
@@ -304,13 +350,13 @@ function renderTips(tips: TipItem[]): string {
     })
     .join('');
 
-  return `<tr><td style="background:${CREAM};padding:36px 48px 44px;">
+  return `<tr><td style="background:${CREAM};padding:36px 48px 44px;" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr><td style="padding-bottom:6px;">
         <span style="font-family:${SANS};font-size:11px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2.5px;">Knowledge Corner</span>
       </td></tr>
       <tr><td style="padding-bottom:28px;">
-        <h2 style="margin:0;font-family:${DISPLAY};font-size:26px;font-weight:700;color:${DEEP};">Tips &amp; Insights</h2>
+        <h2 style="margin:0;font-family:${DISPLAY};font-size:22px;font-weight:700;color:${DEEP};">Tips &amp; Insights</h2>
       </td></tr>
       ${items}
     </table>
@@ -324,13 +370,13 @@ function renderArchives(item: NonNullable<NewsletterPayload['fromTheArchives']>)
       </td></tr>`
     : '';
 
-  return `<tr><td style="background:${WHITE};padding:36px 48px 44px;">
+  return `<tr><td style="background:${WHITE};padding:36px 48px 44px;" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr><td style="padding-bottom:6px;">
         <span style="font-family:${SANS};font-size:11px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2.5px;">From the Archives</span>
       </td></tr>
       <tr><td style="padding-bottom:24px;">
-        <h2 style="margin:0;font-family:${DISPLAY};font-size:24px;font-weight:700;color:${DEEP};line-height:1.25;">Worth Another Look</h2>
+        <h2 style="margin:0;font-family:${DISPLAY};font-size:22px;font-weight:700;color:${DEEP};line-height:1.25;">Worth Another Look</h2>
       </td></tr>
       ${image}
       <tr><td style="padding-bottom:12px;">
@@ -347,13 +393,13 @@ function renderArchives(item: NonNullable<NewsletterPayload['fromTheArchives']>)
 }
 
 function renderWhatsNew(text: string): string {
-  return `<tr><td style="background:${WHITE};padding:36px 48px 44px;">
+  return `<tr><td style="background:${WHITE};padding:36px 48px 44px;" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
       <tr><td style="padding-bottom:6px;">
         <span style="font-family:${SANS};font-size:11px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2.5px;">What&rsquo;s New</span>
       </td></tr>
       <tr><td style="padding-bottom:20px;">
-        <h2 style="margin:0;font-family:${DISPLAY};font-size:24px;font-weight:700;color:${DEEP};line-height:1.25;">On the Site</h2>
+        <h2 style="margin:0;font-family:${DISPLAY};font-size:22px;font-weight:700;color:${DEEP};line-height:1.25;">On the Site</h2>
       </td></tr>
       <tr><td>
         <p style="margin:0;font-family:${SANS};font-size:15px;line-height:1.7;color:${GREY};">${text}</p>
@@ -372,26 +418,26 @@ function renderSponsors(): string {
     { name: 'Flying Burrito', url: 'https://flyingburrito.eu', logo: `${R2_URL}/newsletter/sponsors/flying-burrito-logo.png`, width: 80 },
   ];
 
-  const cells = sponsors
-    .map(
-      (s) =>
-        `<td width="25%" align="center" valign="middle" style="padding:14px 8px;">
+  const card = (s: (typeof sponsors)[number]) =>
+    `<td width="50%" class="mob-stack" style="padding:5px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+        <tr><td align="center" valign="middle" height="76" style="background:${WHITE};border:1px solid ${RULE};border-radius:6px;height:76px;padding:12px 16px;">
           <a href="${s.url}" style="text-decoration:none;">
-            <img src="${s.logo}" alt="${s.name}" width="${s.width}" style="display:inline-block;width:${s.width}px;max-width:100%;height:auto;border:0;" />
+            <img src="${s.logo}" alt="${s.name}" width="${s.width}" style="display:inline-block;width:${s.width}px;max-width:100%;max-height:52px;border:0;" />
           </a>
-        </td>`
-    )
-    .join('');
+        </td></tr>
+      </table>
+    </td>`;
 
-  return `<tr><td style="padding:0;">${thinRule()}</td></tr>
-  <tr><td style="background:${WHITE};padding:32px 48px 36px;" align="center">
+  return `<tr><td style="background:${CREAM};padding:32px 43px 36px;" align="center" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-      <tr><td align="center" style="padding-bottom:20px;">
-        <span style="font-family:${SANS};font-size:10px;font-weight:700;color:${MUTED};text-transform:uppercase;letter-spacing:2.5px;">Thanks to Our Sponsors</span>
+      <tr><td align="center" style="padding-bottom:18px;">
+        <span style="font-family:${SANS};font-size:10px;font-weight:700;color:${GREY};text-transform:uppercase;letter-spacing:2.5px;">Thanks to Our Sponsors</span>
       </td></tr>
       <tr><td>
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-          <tr>${cells}</tr>
+          <tr>${card(sponsors[0])}${card(sponsors[1])}</tr>
+          <tr>${card(sponsors[2])}${card(sponsors[3])}</tr>
         </table>
       </td></tr>
     </table>
@@ -441,59 +487,42 @@ export function buildNewsletterHtml(
   baseUrl: string,
   viewInBrowserUrl?: string
 ): string {
-  // ── Gather content blocks with their background colors ──
-  type Block = { html: string; bg: string };
-  const blocks: Block[] = [];
+  // ── Gather content blocks ──
+  const body: string[] = [];
 
   if (payload.intro) {
-    blocks.push({ html: renderIntro(payload.intro), bg: CREAM });
+    body.push(renderIntro(payload.intro));
   }
   if (payload.blogPost) {
-    blocks.push({ html: renderBlogPost(payload.blogPost), bg: WHITE });
+    body.push(renderBlogPost(payload.blogPost));
   }
   if (payload.videoOfTheWeek) {
-    blocks.push({ html: renderVideo(payload.videoOfTheWeek), bg: LIGHT_GREY });
+    body.push(renderVideo(payload.videoOfTheWeek));
   }
   if (payload.news?.length) {
-    blocks.push({ html: renderNews(payload.news, `${baseUrl}/news`), bg: WHITE });
+    body.push(renderNews(payload.news, `${baseUrl}/news`));
   }
   if (payload.parkrun) {
-    blocks.push({ html: renderParkrun(payload.parkrun), bg: WARM_PEACH });
+    body.push(renderParkrun(payload.parkrun));
   }
   if (payload.appOfTheWeek || payload.sessionOfTheWeek) {
-    blocks.push({
-      html: renderCards(payload.appOfTheWeek, payload.sessionOfTheWeek),
-      bg: WHITE,
-    });
+    body.push(renderCards(payload.appOfTheWeek, payload.sessionOfTheWeek));
   }
 
   // Combine tips into one section
   const tips: TipItem[] = [];
   if (payload.trainingTip) tips.push({ label: 'Training Tip', text: payload.trainingTip.text, accent: ORANGE, citation: payload.trainingTip.citation });
-  if (payload.scienceSection) tips.push({ label: 'Science Says', text: payload.scienceSection.text, accent: '#3b82f6', citation: payload.scienceSection.citation });
-  if (payload.nutritionTip) tips.push({ label: 'Nutrition', text: payload.nutritionTip.text, accent: '#22c55e', citation: payload.nutritionTip.citation });
+  if (payload.scienceSection) tips.push({ label: 'Science Says', text: payload.scienceSection.text, accent: DEEP, citation: payload.scienceSection.citation });
+  if (payload.nutritionTip) tips.push({ label: 'Nutrition', text: payload.nutritionTip.text, accent: OLIVE, citation: payload.nutritionTip.citation });
   if (tips.length > 0) {
-    blocks.push({ html: renderTips(tips), bg: CREAM });
+    body.push(renderTips(tips));
   }
 
   if (payload.fromTheArchives) {
-    blocks.push({ html: renderArchives(payload.fromTheArchives), bg: WHITE });
+    body.push(renderArchives(payload.fromTheArchives));
   }
   if (payload.whatsNew) {
-    blocks.push({ html: renderWhatsNew(payload.whatsNew.text), bg: WHITE });
-  }
-
-  // ── Compose sections with SVG diagonal dividers ──
-  let dir: 'ltr' | 'rtl' = 'ltr';
-  const body: string[] = [];
-  let prevBg = WHITE; // header background is now white
-
-  for (const block of blocks) {
-    // Always insert an SVG diagonal divider between sections
-    body.push(svgDivider(prevBg, block.bg, dir, baseUrl));
-    dir = dir === 'ltr' ? 'rtl' : 'ltr';
-    body.push(block.html);
-    prevBg = block.bg;
+    body.push(renderWhatsNew(payload.whatsNew.text));
   }
 
   // ── Date ──
@@ -508,7 +537,7 @@ export function buildNewsletterHtml(
   const viewLink = viewInBrowserUrl
     ? `<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;">
         <tr><td align="center" style="padding:10px 0 16px;">
-          <a href="${viewInBrowserUrl}" style="font-family:${SANS};font-size:11px;color:${SILVER};text-decoration:underline;">View this email in your browser</a>
+          <a href="${viewInBrowserUrl}" style="font-family:${SANS};font-size:11px;color:${GREY};text-decoration:underline;">View this email in your browser</a>
         </td></tr>
       </table>`
     : '';
@@ -535,6 +564,7 @@ export function buildNewsletterHtml(
       .section-pad { padding-left: 24px !important; padding-right: 24px !important; }
       .hero-title { font-size: 24px !important; }
       .stat-num { font-size: 22px !important; }
+      .mast-title { font-size: 24px !important; }
     }
   </style>
 </head>
@@ -552,58 +582,70 @@ export function buildNewsletterHtml(
 
       <table role="presentation" class="email-wrap" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;${MSO_TABLE}">
 
-        <!-- ══ HEADER — Light & Clean ══ -->
-        <tr><td style="background:${WHITE};padding:40px 40px 32px;" align="center" class="section-pad">
-          <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-            <tr><td align="center" style="padding-bottom:14px;">
-              <h1 style="margin:0;font-family:${SANS};font-size:28px;font-weight:800;color:${DEEP};letter-spacing:3px;text-transform:uppercase;">FILM MY RUN</h1>
-            </td></tr>
-            <tr><td align="center" style="padding-bottom:14px;">
+        <!-- ══ MASTHEAD — Film-strip band ══ -->
+        <tr><td style="background:${DEEP};padding:0;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+            <tr><td style="padding:12px 22px 0;">${sprocketRow(OUTER_BG)}</td></tr>
+            <tr><td align="center" style="padding:32px 40px 10px;" class="section-pad">
               <table role="presentation" cellpadding="0" cellspacing="0"><tr>
-                <td style="height:3px;width:50px;background:${ORANGE};font-size:0;line-height:0;">&nbsp;</td>
+                <td style="padding-right:14px;" valign="middle">${playTriangle(15, ORANGE)}</td>
+                <td valign="middle">
+                  <h1 class="mast-title" style="margin:0;font-family:${DISPLAY};font-size:32px;font-weight:700;color:${CREAM};letter-spacing:2px;text-transform:uppercase;line-height:1;">Film My Run</h1>
+                </td>
               </tr></table>
             </td></tr>
-            <tr><td align="center">
-              <span style="font-family:${SANS};font-size:12px;font-weight:500;color:${SILVER};text-transform:uppercase;letter-spacing:2px;">Weekly Round-Up&nbsp;&nbsp;&middot;&nbsp;&nbsp;${today}</span>
+            <tr><td align="center" style="padding:0 40px 30px;">
+              <span style="font-family:${SANS};font-size:11px;font-weight:600;color:#a89f96;text-transform:uppercase;letter-spacing:2.5px;">The Weekly Round-Up&nbsp;&nbsp;<span style="color:${ORANGE};">&middot;</span>&nbsp;&nbsp;${today}</span>
             </td></tr>
+            <tr><td style="padding:0 22px 12px;">${sprocketRow(OUTER_BG)}</td></tr>
           </table>
         </td></tr>
 
-        <!-- ══ CONTENT SECTIONS WITH SVG DIAGONAL DIVIDERS ══ -->
+        <!-- ══ CONTENT SECTIONS ══ -->
         ${body.join('\n')}
 
         <!-- ══ SPONSORS ══ -->
         ${renderSponsors()}
 
-        <!-- ══ FOOTER — Light ══ -->
+        <!-- ══ FOOTER — Film-strip band (mirrors masthead) ══ -->
         <tr><td style="padding:0;font-size:0;line-height:0;">
           <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="height:3px;background:${ORANGE};font-size:0;line-height:0;">&nbsp;</td></tr></table>
         </td></tr>
-        <tr><td style="background:${CREAM};padding:32px 48px 36px;" align="center" class="section-pad">
-          <table role="presentation" cellpadding="0" cellspacing="0" width="100%">
-            <tr><td align="center" style="padding-bottom:14px;">
-              <span style="font-family:${SANS};font-size:16px;font-weight:800;color:${DEEP};letter-spacing:3px;text-transform:uppercase;">Film My Run</span>
+        <tr><td style="background:${DEEP};padding:0;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+            <tr><td style="padding:12px 22px 0;">${sprocketRow(OUTER_BG)}</td></tr>
+            <tr><td align="center" style="padding:28px 48px 0;" class="section-pad">
+              <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                <td style="padding-right:10px;" valign="middle">${playTriangle(10, ORANGE)}</td>
+                <td valign="middle">
+                  <span style="font-family:${DISPLAY};font-size:18px;font-weight:700;color:${CREAM};letter-spacing:2px;text-transform:uppercase;line-height:1;">Film My Run</span>
+                </td>
+              </tr></table>
             </td></tr>
-            <tr><td align="center" style="padding-bottom:20px;">
+            <tr><td align="center" style="padding:8px 48px 20px;">
+              <span style="font-family:${DISPLAY};font-size:14px;font-style:italic;color:#a89f96;">Every run tells a story.</span>
+            </td></tr>
+            <tr><td align="center" style="padding:0 48px 22px;">
               <table role="presentation" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td style="padding:0 14px;"><a href="https://youtube.com/@filmmyrun" style="font-family:${SANS};font-size:11px;font-weight:600;color:${SILVER};text-decoration:none;letter-spacing:1px;text-transform:uppercase;">YouTube</a></td>
-                  <td style="color:#d6d1c9;font-size:11px;">&middot;</td>
-                  <td style="padding:0 14px;"><a href="https://instagram.com/filmmyrun" style="font-family:${SANS};font-size:11px;font-weight:600;color:${SILVER};text-decoration:none;letter-spacing:1px;text-transform:uppercase;">Instagram</a></td>
-                  <td style="color:#d6d1c9;font-size:11px;">&middot;</td>
-                  <td style="padding:0 14px;"><a href="https://twitter.com/filmmyrun" style="font-family:${SANS};font-size:11px;font-weight:600;color:${SILVER};text-decoration:none;letter-spacing:1px;text-transform:uppercase;">Twitter</a></td>
+                  <td style="padding:0 14px;"><a href="https://youtube.com/@filmmyrun" style="font-family:${SANS};font-size:11px;font-weight:600;color:#c9c1b8;text-decoration:none;letter-spacing:1px;text-transform:uppercase;">YouTube</a></td>
+                  <td style="color:#5a534d;font-size:11px;">&middot;</td>
+                  <td style="padding:0 14px;"><a href="https://instagram.com/filmmyrun" style="font-family:${SANS};font-size:11px;font-weight:600;color:#c9c1b8;text-decoration:none;letter-spacing:1px;text-transform:uppercase;">Instagram</a></td>
+                  <td style="color:#5a534d;font-size:11px;">&middot;</td>
+                  <td style="padding:0 14px;"><a href="https://twitter.com/filmmyrun" style="font-family:${SANS};font-size:11px;font-weight:600;color:#c9c1b8;text-decoration:none;letter-spacing:1px;text-transform:uppercase;">Twitter</a></td>
                 </tr>
               </table>
             </td></tr>
-            <tr><td style="padding-bottom:16px;">
-              ${thinRule()}
+            <tr><td style="padding:0 48px 18px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr><td style="height:1px;background:#453f3a;font-size:0;">&nbsp;</td></tr></table>
             </td></tr>
-            <tr><td align="center">
-              <p style="margin:0;font-family:${SANS};font-size:11px;line-height:1.8;color:${SILVER};">
+            <tr><td align="center" style="padding:0 48px 26px;">
+              <p style="margin:0;font-family:${SANS};font-size:11px;line-height:1.8;color:#a89f96;">
                 You&rsquo;re receiving this because you subscribed to the Film My Run newsletter.<br/>
-                <a href="${unsubscribeUrl}" style="color:${GREY};text-decoration:underline;">Unsubscribe</a>
+                <a href="${unsubscribeUrl}" style="color:#a89f96;text-decoration:underline;">Unsubscribe</a>
               </p>
             </td></tr>
+            <tr><td style="padding:0 22px 12px;">${sprocketRow(OUTER_BG)}</td></tr>
           </table>
         </td></tr>
 
