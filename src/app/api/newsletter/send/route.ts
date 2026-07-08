@@ -3,24 +3,8 @@ import { prisma } from '@/lib/db';
 import { Resend } from 'resend';
 import { buildNewsletterHtml, wrapWithApprovalBanner, type NewsletterPayload } from '@/lib/newsletter-template';
 import { autoPopulateNewsletter } from '@/lib/newsletter-auto-populate';
-import { z } from 'zod';
+import { newsletterPayloadSchema } from '@/lib/newsletter-payload-schema';
 import crypto from 'crypto';
-
-const payloadSchema = z.object({
-  subject: z.string().min(1).max(200),
-  intro: z.string().optional(),
-  parkrun: z.object({ text: z.string() }).optional(),
-  news: z.array(z.object({ title: z.string(), url: z.string().url(), source: z.string(), imageUrl: z.string().url().optional(), description: z.string().optional() })).optional(),
-  blogPost: z.object({ title: z.string(), url: z.string().url(), snippet: z.string(), imageUrl: z.string().url().optional() }).optional(),
-  videoOfTheWeek: z.object({ title: z.string(), url: z.string().url(), description: z.string(), thumbnailUrl: z.string().url() }).optional(),
-  appOfTheWeek: z.object({ name: z.string(), url: z.string().url(), description: z.string() }).optional(),
-  sessionOfTheWeek: z.object({ title: z.string(), description: z.string() }).optional(),
-  trainingTip: z.object({ text: z.string(), citation: z.string().optional() }).optional(),
-  scienceSection: z.object({ text: z.string(), citation: z.string().optional() }).optional(),
-  nutritionTip: z.object({ text: z.string(), citation: z.string().optional() }).optional(),
-  fromTheArchives: z.object({ title: z.string(), url: z.string().url(), description: z.string(), imageUrl: z.string().url().optional() }).optional(),
-  whatsNew: z.object({ text: z.string() }).optional(),
-});
 
 function verifyAuth(request: NextRequest): boolean {
   const cronSecret = process.env.CRON_SECRET;
@@ -48,7 +32,7 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    const result = payloadSchema.safeParse(body);
+    const result = newsletterPayloadSchema.safeParse(body);
     if (!result.success) {
       return NextResponse.json({ error: 'Invalid payload', details: result.error.errors }, { status: 400 });
     }
@@ -75,9 +59,10 @@ export async function POST(request: NextRequest) {
 
     // Build the newsletter HTML for admin preview
     const approveUrl = `${baseUrl}/api/newsletter/approve?token=${approveToken}`;
+    const editUrl = `${baseUrl}/admin/newsletter/${approveToken}`;
     const viewInBrowserUrl = `${baseUrl}/api/newsletter/view/${issue.id}`;
     const newsletterHtml = buildNewsletterHtml(payload, '#', baseUrl, viewInBrowserUrl);
-    const adminHtml = wrapWithApprovalBanner(newsletterHtml, approveUrl);
+    const adminHtml = wrapWithApprovalBanner(newsletterHtml, approveUrl, editUrl);
 
     // Send only to admin for review
     const resend = new Resend(resendKey);

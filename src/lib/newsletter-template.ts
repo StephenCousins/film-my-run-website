@@ -446,10 +446,16 @@ function renderSponsors(): string {
 
 
 // ═══════════════════════════════════════════
-//  APPROVAL BANNER (unchanged)
+//  APPROVAL BANNER
 // ═══════════════════════════════════════════
 
-export function wrapWithApprovalBanner(html: string, approveUrl: string): string {
+export function wrapWithApprovalBanner(html: string, approveUrl: string, editUrl?: string): string {
+  const editLink = editUrl
+    ? `<p style="margin: 16px 0 0; font-size: 14px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
+        <a href="${editUrl}" style="color: #92400e; text-decoration: underline;">Not happy with it? Edit before sending &rarr;</a>
+      </p>`
+    : '';
+
   const banner = `
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color: #fef3c7; border: 2px solid #f59e0b;">
       <tr>
@@ -466,6 +472,7 @@ export function wrapWithApprovalBanner(html: string, approveUrl: string): string
                 <a href="${approveUrl}" style="display: inline-block; padding: 14px 32px; background-color: #16a34a; color: #ffffff; font-size: 16px; font-weight: 700; text-decoration: none; border-radius: 8px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
                   Approve &amp; Send to All Subscribers
                 </a>
+                ${editLink}
               </td>
             </tr>
           </table>
