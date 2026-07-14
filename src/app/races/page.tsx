@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
@@ -420,6 +420,7 @@ export default function RacesPage() {
   const [terrainFilter, setTerrainFilter] = useState(initialTerrain);
   const [distanceFilter, setDistanceFilter] = useState(initialDistance);
   const [searchFilter, setSearchFilter] = useState('');
+  const tableRef = useRef<HTMLDivElement>(null);
   const [activeFilterLabel, setActiveFilterLabel] = useState<string | null>(() => {
     if (initialYear) return `Year ${initialYear}`;
     if (initialType) return `All ${initialType}s`;
@@ -533,6 +534,12 @@ export default function RacesPage() {
     syncUrl('', '', '', '');
   };
 
+  const scrollToTable = () => {
+    setTimeout(() => {
+      tableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
+  };
+
   const filterByType = (type: string, label: string) => {
     setYearFilter('');
     setTypeFilter(type);
@@ -541,6 +548,7 @@ export default function RacesPage() {
     setSearchFilter('');
     setActiveFilterLabel(label);
     syncUrl('', type, '', '');
+    scrollToTable();
   };
 
   const filterByDistance = (category: string) => {
@@ -552,6 +560,7 @@ export default function RacesPage() {
     const cat = DISTANCE_CATEGORIES[category as keyof typeof DISTANCE_CATEGORIES];
     setActiveFilterLabel(cat?.label || null);
     syncUrl('', '', '', category);
+    scrollToTable();
   };
 
   const filterByCombo = (type: string, terrain: string, label: string) => {
@@ -562,6 +571,7 @@ export default function RacesPage() {
     setSearchFilter('');
     setActiveFilterLabel(label);
     syncUrl('', type, terrain, '');
+    scrollToTable();
   };
 
   if (loading) {
@@ -722,7 +732,7 @@ export default function RacesPage() {
         </section>
 
         {/* Filters */}
-        <section className="py-3 bg-surface-secondary border-y border-border sticky top-16 lg:top-20 z-30">
+        <section ref={tableRef} className="py-3 bg-surface-secondary border-y border-border sticky top-16 lg:top-20 z-30">
           <div className="container">
             <div className="flex flex-wrap items-center gap-2">
               <select
