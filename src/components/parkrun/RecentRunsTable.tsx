@@ -69,7 +69,7 @@ export function RecentRunsTable({ runs }: RecentRunsTableProps) {
               </td>
               <td className="py-4 px-4 text-right">
                 <a
-                  href={`https://www.parkrun.org.uk/${run.event.toLowerCase().replace(/\s+/g, '')}/results/weeklyresults/?runSeqNumber=${run.run_number}`}
+                  href={`https://www.parkrun.org.uk/${run.event.toLowerCase().replace(/\s+/g, '')}/results/${run.run_number}/`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 text-sm text-muted hover:text-green-400 transition-colors"
