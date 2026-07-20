@@ -34,6 +34,21 @@ const SANS = "'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif";
 // ─── MSO fix string ───
 const MSO_TABLE = 'border-collapse:collapse;border-spacing:0;mso-table-lspace:0pt;mso-table-rspace:0pt;';
 
+/** Escapes HTML special characters so raw editor text can't break markup. */
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+/**
+ * Converts a plain-text textarea value into email-safe HTML, preserving line
+ * breaks the way the author typed them (blank line = paragraph gap). Raw HTML
+ * has no idea about `\n` — without this, every newline the editor typed just
+ * gets collapsed away and the text renders as one run-on paragraph.
+ */
+function textToHtml(text: string): string {
+  return escapeHtml(text).split(/\n/).join('<br/>');
+}
+
 // ═══════════════════════════════════════════
 //  GRAPHIC HELPERS
 // ═══════════════════════════════════════════
@@ -115,7 +130,7 @@ function angularImage(
 function renderIntro(text: string): string {
   return `<tr><td style="background:${CREAM};padding:32px 48px 36px;" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-      <tr><td style="font-family:${DISPLAY};font-size:18px;line-height:1.8;color:${SLATE};font-style:italic;">${text}</td></tr>
+      <tr><td style="font-family:${DISPLAY};font-size:18px;line-height:1.8;color:${SLATE};font-style:italic;">${textToHtml(text)}</td></tr>
       <tr><td style="padding-top:14px;font-family:${DISPLAY};font-size:16px;font-style:italic;color:${DEEP};">
         <span style="color:${ORANGE};">&mdash;</span>&nbsp;Stephen
       </td></tr>
@@ -144,7 +159,7 @@ function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): strin
             </a>
           </td></tr>
           <tr><td style="padding-bottom:28px;">
-            <p style="margin:0;font-family:${SANS};font-size:15px;line-height:1.75;color:${GREY};">${post.snippet}</p>
+            <p style="margin:0;font-family:${SANS};font-size:15px;line-height:1.75;color:${GREY};">${textToHtml(post.snippet)}</p>
           </td></tr>
           <tr><td>${ctaButton(post.url, 'Read the Full Story')}</td></tr>
         </table>
@@ -293,7 +308,7 @@ function renderParkrun(parkrun: NonNullable<NewsletterPayload['parkrun']>): stri
         <span style="font-family:${SANS};font-size:11px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2.5px;">parkrun</span>
       </td></tr>
       <tr><td>
-        <p style="margin:0;font-family:${DISPLAY};font-size:19px;line-height:1.7;color:${SLATE};font-style:italic;">${parkrun.text}</p>
+        <p style="margin:0;font-family:${DISPLAY};font-size:19px;line-height:1.7;color:${SLATE};font-style:italic;">${textToHtml(parkrun.text)}</p>
       </td></tr>
       ${statsRow}
     </table>
@@ -312,7 +327,7 @@ function renderCards(
       <h3 style="margin:10px 0 8px;font-family:${DISPLAY};font-size:22px;font-weight:700;color:${DEEP};">
         <a href="${app.url}" style="text-decoration:none;color:${DEEP};">${app.name}</a>
       </h3>
-      <p style="margin:0 0 14px;font-family:${SANS};font-size:14px;line-height:1.7;color:${GREY};">${app.description}</p>
+      <p style="margin:0 0 14px;font-family:${SANS};font-size:14px;line-height:1.7;color:${GREY};">${textToHtml(app.description)}</p>
       <a href="${app.url}" style="font-family:${SANS};font-size:13px;font-weight:700;color:${ORANGE};text-decoration:none;">Try it &rarr;</a>
     </td></tr>`);
   }
@@ -322,7 +337,7 @@ function renderCards(
     cards.push(`<tr><td style="background:${CREAM};padding:28px 28px 28px 32px;border-left:3px solid ${DEEP};border-radius:0 6px 6px 0;">
       <span style="font-family:${SANS};font-size:10px;font-weight:700;color:${DEEP};text-transform:uppercase;letter-spacing:2px;">Session of the Week</span>
       <h3 style="margin:10px 0 8px;font-family:${DISPLAY};font-size:22px;font-weight:700;color:${DEEP};">${session.title}</h3>
-      <p style="margin:0;font-family:${SANS};font-size:14px;line-height:1.7;color:${GREY};">${session.description}</p>
+      <p style="margin:0;font-family:${SANS};font-size:14px;line-height:1.7;color:${GREY};">${textToHtml(session.description)}</p>
     </td></tr>`);
   }
 
@@ -344,7 +359,7 @@ function renderTips(tips: TipItem[]): string {
         : '';
       return `<tr><td style="background:${WHITE};padding:24px 24px 24px 28px;border-left:3px solid ${tip.accent};border-radius:0 6px 6px 0;">
         <span style="font-family:${SANS};font-size:10px;font-weight:700;color:${tip.accent};text-transform:uppercase;letter-spacing:2px;">${tip.label}</span>
-        <p style="margin:10px 0 0;font-family:${SANS};font-size:14px;line-height:1.75;color:${SLATE};">${tip.text}</p>
+        <p style="margin:10px 0 0;font-family:${SANS};font-size:14px;line-height:1.75;color:${SLATE};">${textToHtml(tip.text)}</p>
         ${cite}
       </td></tr>${spacer}`;
     })
@@ -385,7 +400,7 @@ function renderArchives(item: NonNullable<NewsletterPayload['fromTheArchives']>)
         </a>
       </td></tr>
       <tr><td style="padding-bottom:24px;">
-        <p style="margin:0;font-family:${SANS};font-size:14px;line-height:1.7;color:${GREY};">${item.description}</p>
+        <p style="margin:0;font-family:${SANS};font-size:14px;line-height:1.7;color:${GREY};">${textToHtml(item.description)}</p>
       </td></tr>
       <tr><td>${ctaButton(item.url, 'Read Again &rarr;', 'ghost-dark')}</td></tr>
     </table>
@@ -402,7 +417,7 @@ function renderWhatsNew(text: string): string {
         <h2 style="margin:0;font-family:${DISPLAY};font-size:22px;font-weight:700;color:${DEEP};line-height:1.25;">On the Site</h2>
       </td></tr>
       <tr><td>
-        <p style="margin:0;font-family:${SANS};font-size:15px;line-height:1.7;color:${GREY};">${text}</p>
+        <p style="margin:0;font-family:${SANS};font-size:15px;line-height:1.7;color:${GREY};">${textToHtml(text)}</p>
       </td></tr>
     </table>
   </td></tr>`;
@@ -579,7 +594,7 @@ export function buildNewsletterHtml(
 
   <!-- Preheader -->
   <div style="display:none;max-height:0;overflow:hidden;mso-hide:all;font-size:0;">
-    ${payload.intro || payload.subject}${'&#847; &zwnj; &nbsp;'.repeat(40)}
+    ${escapeHtml(payload.intro || payload.subject)}${'&#847; &zwnj; &nbsp;'.repeat(40)}
   </div>
 
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${OUTER_BG};">

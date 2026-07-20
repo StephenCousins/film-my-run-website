@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { Loader2, CheckCircle, AlertCircle, Plus, Trash2, ExternalLink } from 'lucide-react';
 import type { NewsletterPayload } from '@/lib/newsletter-template';
 
@@ -103,6 +103,15 @@ export default function NewsletterEditForm({
   const [status, setStatus] = useState<SaveStatus>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [previewHtml, setPreviewHtml] = useState<string | null>(null);
+  const [previewHeight, setPreviewHeight] = useState(800);
+  const previewFrameRef = useRef<HTMLIFrameElement>(null);
+
+  function handlePreviewLoad() {
+    const doc = previewFrameRef.current?.contentWindow?.document;
+    if (doc) {
+      setPreviewHeight(doc.documentElement.scrollHeight);
+    }
+  }
 
   function update<K extends keyof NewsletterPayload>(key: K, value: NewsletterPayload[K]) {
     setPayload((p) => ({ ...p, [key]: value }));
@@ -326,8 +335,16 @@ export default function NewsletterEditForm({
         <div className="card overflow-hidden">
           <div className="px-6 py-3 border-b border-border">
             <span className="font-display text-lg font-semibold text-foreground">Preview</span>
+            <span className="text-xs text-muted ml-2">(this is the full email, scroll the page to see it all)</span>
           </div>
-          <iframe srcDoc={previewHtml} className="w-full" style={{ height: '80vh', border: 0 }} title="Newsletter preview" />
+          <iframe
+            ref={previewFrameRef}
+            srcDoc={previewHtml}
+            onLoad={handlePreviewLoad}
+            className="w-full"
+            style={{ height: previewHeight, border: 0 }}
+            title="Newsletter preview"
+          />
         </div>
       )}
 
