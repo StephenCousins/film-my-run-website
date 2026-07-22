@@ -33,6 +33,7 @@ export function RaceMapView({ races, routes, selectedRace, onRaceSelect, isDark 
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [glowHue, setGlowHue] = useState(0);
+  const [darkMap, setDarkMap] = useState(isDark);
 
   const onLoad = useCallback(
     (mapInstance: google.maps.Map) => {
@@ -132,18 +133,26 @@ export function RaceMapView({ races, routes, selectedRace, onRaceSelect, isDark 
         streetViewControl: false,
         mapTypeControl: true,
         fullscreenControl: true,
-        styles: isDark ? darkMapStyle : [],
+        styles: darkMap ? darkMapStyle : [],
       }}
     >
-      {/* Reset zoom button */}
-      {selectedRace && (
+      {/* Map controls */}
+      <div className="absolute top-3 left-3 flex gap-2 z-10">
+        {selectedRace && (
+          <button
+            onClick={resetZoom}
+            className="px-4 py-2 bg-white dark:bg-zinc-800 border-2 border-brand rounded-lg text-brand font-semibold text-sm hover:bg-brand hover:text-white transition-colors shadow-md"
+          >
+            View All Routes
+          </button>
+        )}
         <button
-          onClick={resetZoom}
-          className="absolute top-3 right-3 px-4 py-2 bg-white dark:bg-zinc-800 border-2 border-brand rounded-lg text-brand font-semibold text-sm hover:bg-brand hover:text-white transition-colors z-10 shadow-md"
+          onClick={() => setDarkMap((prev) => !prev)}
+          className="px-3 py-2 bg-white dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-600 rounded-lg text-zinc-700 dark:text-zinc-200 text-sm hover:bg-zinc-100 dark:hover:bg-zinc-700 transition-colors shadow-md"
         >
-          🗺️ View All Routes
+          {darkMap ? '☀️ Light' : '🌙 Dark'}
         </button>
-      )}
+      </div>
 
       {/* Render all race routes */}
       {races &&
