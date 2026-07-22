@@ -307,7 +307,7 @@ export default function RaceMapPage() {
         if (raceYear !== filters.year) return false;
       }
       return true;
-    });
+    }).reverse();
   }, [races, filters]);
 
   // Filter routes
