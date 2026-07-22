@@ -20,7 +20,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "fetch-routes": "node scripts/fetch-routes.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.77.0",
