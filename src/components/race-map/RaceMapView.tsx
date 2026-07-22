@@ -137,7 +137,7 @@ export function RaceMapView({ races, routes, selectedRace, onRaceSelect, isDark 
       }}
     >
       {/* Map controls */}
-      <div className="absolute top-3 left-3 flex gap-2 z-10">
+      <div className="absolute top-3 left-1/2 -translate-x-1/2 flex gap-2 z-10">
         {selectedRace && (
           <button
             onClick={resetZoom}
