@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-01-20T02:40:09.427Z",
+  "lastUpdated": "2026-07-21T04:59:41.220Z",
   "races": [
     {
       "activityId": "33811771",
@@ -379,7 +379,7 @@
       "activityId": "320313314",
       "number": 18,
       "date": "07/06/2015",
-      "name": "Kent Viking Coastal",
+      "name": "Viking Coastal Marathon",
       "distance": 26.2,
       "time": "03:13:39",
       "position": 3,
@@ -395,7 +395,7 @@
       "roadCount": "",
       "trailCount": 11,
       "hundredMilers": "",
-      "raceCount": "1 x Kent Viking Coastal"
+      "raceCount": "1 x Viking Coastal Marathon"
     },
     {
       "activityId": "333938662",
@@ -1457,7 +1457,7 @@
       "activityId": "1063002018",
       "number": 67,
       "date": "01/07/2017",
-      "name": "Serpent Trail",
+      "name": "Serpent Trail 100k",
       "distance": 62,
       "time": "15:17:27",
       "position": "",
@@ -1473,7 +1473,7 @@
       "roadCount": "",
       "trailCount": 54,
       "hundredMilers": "",
-      "raceCount": "1 x Serpent Trail"
+      "raceCount": "1 x Serpent Trail 100k"
     },
     {
       "activityId": "1075220242",
@@ -1523,7 +1523,7 @@
       "activityId": "1132440050",
       "number": 70,
       "date": "12/08/2017",
-      "name": "The RAT Plague 100k",
+      "name": "The RAT Plague",
       "distance": 62,
       "time": "16:26:52",
       "position": "",
@@ -1539,7 +1539,7 @@
       "roadCount": "",
       "trailCount": 57,
       "hundredMilers": "",
-      "raceCount": "1 x The RAT Plague 100k"
+      "raceCount": "1 x The RAT Plague"
     },
     {
       "activityId": "1187248758",
@@ -1891,7 +1891,7 @@
       "roadCount": "",
       "trailCount": 71,
       "hundredMilers": "",
-      "raceCount": "1 x Viking Coastal Marathon"
+      "raceCount": "2 x Viking Coastal Marathon"
     },
     {
       "activityId": "1629802466",
@@ -1941,7 +1941,7 @@
       "activityId": "1765332651",
       "number": 89,
       "date": "11/08/2018",
-      "name": "RAT Plague",
+      "name": "The RAT Plague",
       "distance": 62,
       "time": "15:13:20",
       "position": "",
@@ -1957,7 +1957,7 @@
       "roadCount": "",
       "trailCount": 74,
       "hundredMilers": "",
-      "raceCount": "2 x RAT Plague"
+      "raceCount": "2 x The RAT Plague"
     },
     {
       "activityId": "1811612798",
@@ -2705,7 +2705,7 @@
       "roadCount": "",
       "trailCount": 105,
       "hundredMilers": "",
-      "raceCount": "1 x Serpent Trail 100k"
+      "raceCount": "2 x Serpent Trail 100k"
     },
     {
       "activityId": "5613391071",
@@ -3750,7 +3750,7 @@
       "time": "10:15:16",
       "position": 19,
       "elevation": 2357,
-      "video": "",
+      "video": "https://youtu.be/P6U2yqpYORk",
       "report": "",
       "strava": "https://www.strava.com/activities/15803647901",
       "officialResults": "https://results.runthrough.co.uk/myresults.aspx?uid=16487-5569-4-11884 || Official Results",
@@ -3828,6 +3828,72 @@
       "trailCount": 146,
       "hundredMilers": "",
       "raceCount": "1 x Hurtwood 50k"
+    },
+    {
+      "activityId": "18081809685",
+      "number": 175,
+      "date": "12/04/2026",
+      "name": "Brighton Marathon",
+      "distance": 26.2,
+      "time": "3:44:32",
+      "position": 2604,
+      "elevation": 290,
+      "video": "https://youtu.be/5p2JWIaoIp4",
+      "report": "",
+      "strava": "https://www.strava.com/activities/18081809685",
+      "officialResults": "https://brighton.r.mikatiming.com/2026/?content=detail&fpid=search&pid=search&idp=9TGEELFR2E98A&lang=EN_CAP&event=BRMA&search%5Bname%5D=Cousins&search%5Bfirstname%5D=Stephen&search_event=BRMA",
+      "type": "Marathon",
+      "terrain": "Road",
+      "marathonCount": 95,
+      "ultraCount": "",
+      "roadCount": 29,
+      "trailCount": "",
+      "hundredMilers": "",
+      "raceCount": "3 x Brighton Marathon"
+    },
+    {
+      "activityId": "18364958323",
+      "number": 176,
+      "date": "02/05/2026",
+      "name": "Pennine Barrier Ultra",
+      "distance": 50,
+      "time": "14:00:27",
+      "position": 305,
+      "elevation": 2565,
+      "video": "https://youtu.be/gcrQunySngI",
+      "report": "",
+      "strava": "https://www.strava.com/activities/18364958323",
+      "officialResults": "https://my3.raceresult.com/314217/details0/certificate/2224/Certificate%20Web",
+      "type": "Ultra",
+      "terrain": "Trail",
+      "marathonCount": "",
+      "ultraCount": 81,
+      "roadCount": "",
+      "trailCount": 147,
+      "hundredMilers": "",
+      "raceCount": "1 x Pennine Barrier Ultra"
+    },
+    {
+      "activityId": "19004930558",
+      "number": 177,
+      "date": "20/06/2026",
+      "name": "Midnight Sun Marathon",
+      "distance": 26.2,
+      "time": "3:53:21",
+      "position": 507,
+      "elevation": 245,
+      "video": "",
+      "report": "",
+      "strava": "https://www.strava.com/activities/19004930558",
+      "officialResults": "https://live.eqtiming.com/77902#result:319736-0-0-1-1-cousins",
+      "type": "Marathon",
+      "terrain": "Road",
+      "marathonCount": 96,
+      "ultraCount": "",
+      "roadCount": 30,
+      "trailCount": "",
+      "hundredMilers": "",
+      "raceCount": "1 x Midnight Sun Marathon"
     }
   ]
 }
