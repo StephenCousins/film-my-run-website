@@ -14,6 +14,7 @@ import { RouteData, ChartDataPoint } from '@/lib/route-comparison/types';
 import { buildCumulativeDistances } from '@/lib/route-comparison/gps';
 import { formatElevation, formatDistance } from '@/lib/route-comparison/formatting';
 import { decimateData } from '@/lib/route-comparison/stats';
+import { niceAxisBounds, axisOptionsFor } from '@/lib/route-comparison/axis';
 
 interface ElevationChartProps {
   routes: RouteData[];
@@ -81,6 +82,15 @@ export default function ElevationChart({ routes, selectedRouteIds }: ElevationCh
     );
   }
 
+  const plotted = chartData.flatMap((row) =>
+    selectedRouteIds
+      .map((id) => row[id])
+      .filter((v): v is number => typeof v === 'number' && isFinite(v))
+  );
+  const axis = plotted.length
+    ? niceAxisBounds(Math.min(...plotted), Math.max(...plotted), axisOptionsFor('elevation'))
+    : null;
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <AreaChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
@@ -93,7 +103,9 @@ export default function ElevationChart({ routes, selectedRouteIds }: ElevationCh
         <YAxis
           tick={{ fontSize: 11, fill: '#a1a1aa' }}
           label={{ value: 'Elevation (m)', angle: -90, position: 'insideLeft', offset: 10, fontSize: 11, fill: '#a1a1aa' }}
-          domain={['auto', 'auto']}
+          domain={axis ? [axis.min, axis.max] : ['auto', 'auto']}
+          ticks={axis ? axis.ticks : undefined}
+          allowDecimals={false}
         />
         <Tooltip
           content={({ active, payload, label }) => {

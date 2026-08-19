@@ -14,6 +14,7 @@ import {
 import { RouteData } from '@/lib/route-comparison/types';
 import { calculateTimeGaps } from '@/lib/route-comparison/analysis';
 import { formatDistance, formatTimeDelta } from '@/lib/route-comparison/formatting';
+import { niceAxisBounds, TIME_STEPS } from '@/lib/route-comparison/axis';
 
 interface TimeGapChartProps {
   routes: RouteData[];
@@ -73,6 +74,21 @@ export default function TimeGapChart({ routes, selectedRouteIds, referenceRouteI
     );
   }
 
+  // Symmetric around zero on round numbers of seconds, so the labels read
+  // 30s / 1:00 rather than thirds of whatever the biggest gap happened to be.
+  const gaps = chartData.flatMap((row) =>
+    Object.entries(row)
+      .filter(([k]) => k !== 'distance')
+      .map(([, v]) => v)
+      .filter((v): v is number => typeof v === 'number' && isFinite(v))
+  );
+  const peak = gaps.length ? Math.max(30, ...gaps.map((g) => Math.abs(g))) : 30;
+  const axis = niceAxisBounds(-peak, peak, {
+    targetTicks: 6,
+    snapZeroWithin: 0,
+    stepLadder: TIME_STEPS,
+  });
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
@@ -86,6 +102,8 @@ export default function TimeGapChart({ routes, selectedRouteIds, referenceRouteI
           tick={{ fontSize: 11, fill: '#a1a1aa' }}
           tickFormatter={(v) => formatTimeDelta(v)}
           label={{ value: `Gap vs ${referenceRoute.displayName}`, angle: -90, position: 'insideLeft', offset: 10, fontSize: 11, fill: '#a1a1aa' }}
+          domain={[axis.min, axis.max]}
+          ticks={axis.ticks}
         />
         <ReferenceLine y={0} stroke="#71717a" strokeDasharray="3 3" />
         <Tooltip

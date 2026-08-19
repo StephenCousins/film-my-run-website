@@ -227,6 +227,30 @@ export function calculateBestEfforts(
 /**
  * Calculate zone distribution for a metric
  */
+/**
+ * Zone thresholds as a fraction of the observed maximum.
+ *
+ * Heart rate uses the conventional 50/60/70/80/90% of max split. Power uses
+ * the usual percentage-of-threshold bands. Both are approximations here
+ * because we take the activity's own maximum as the anchor — we have no
+ * recorded max HR or FTP — but they put the boundaries where a runner expects
+ * them, which the previous implementation did not: it divided the range
+ * between the *minimum* and maximum observed value into five equal parts, so
+ * an easy run still reported time in "Max" and the boundaries moved with
+ * whatever the slowest reading happened to be.
+ */
+const ZONE_THRESHOLDS: Record<string, number[]> = {
+  heartRate: [0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+  power: [0.55, 0.75, 0.9, 1.05, 1.2, 2.0],
+};
+
+const ZONE_NAMES: Record<string, string[]> = {
+  heartRate: ['Warm Up', 'Easy', 'Aerobic', 'Threshold', 'Maximum'],
+  power: ['Recovery', 'Endurance', 'Tempo', 'Threshold', 'Max'],
+};
+
+const ZONE_COLORS = ['#34A853', '#4285F4', '#FBBC04', '#FF9800', '#EA4335'];
+
 export function calculateZones(
   values: (number | null)[],
   timestamps: (Date | null)[] | undefined,
@@ -237,26 +261,32 @@ export function calculateZones(
 
   const minVal = Math.min(...validValues);
   const maxVal = Math.max(...validValues);
-  const range = maxVal - minVal;
+  if (maxVal === minVal) return null;
 
-  if (range === 0) return null;
-
-  const zoneNames = ['Recovery', 'Endurance', 'Tempo', 'Threshold', 'Max'];
-  const zoneColors = ['#34A853', '#4285F4', '#FBBC04', '#FF9800', '#EA4335'];
+  const thresholds = ZONE_THRESHOLDS[metricType] ?? ZONE_THRESHOLDS.heartRate;
+  const names = ZONE_NAMES[metricType] ?? ZONE_NAMES.heartRate;
 
   const zones: Zone[] = [];
   for (let i = 0; i < 5; i++) {
     zones.push({
       zone: i + 1,
-      name: zoneNames[i],
-      color: zoneColors[i],
-      min: Math.round(minVal + range * (i * 0.2)),
-      max: Math.round(minVal + range * ((i + 1) * 0.2)),
+      name: names[i],
+      color: ZONE_COLORS[i],
+      min: Math.round(maxVal * thresholds[i]),
+      max: Math.round(maxVal * thresholds[i + 1]),
       time: 0,
       points: 0,
       percent: 0,
     });
   }
+
+  /** Lowest zone whose upper bound the value hasn't exceeded. */
+  const zoneIndexFor = (val: number): number => {
+    for (let i = 0; i < zones.length; i++) {
+      if (val <= zones[i].max) return i;
+    }
+    return zones.length - 1;
+  };
 
   let totalTime = 0;
   const hasTimestamps = timestamps && timestamps.length === values.length;
@@ -265,8 +295,8 @@ export function calculateZones(
     const val = values[i];
     if (val === null || val <= 0) continue;
 
-    const normalized = (val - minVal) / range;
-    const zoneIdx = Math.min(4, Math.floor(normalized * 5));
+    // Anything below the first boundary still belongs in zone 1.
+    const zoneIdx = val < zones[0].min ? 0 : zoneIndexFor(val);
 
     let timeDelta = 1;
     if (hasTimestamps && i > 0 && timestamps[i] && timestamps[i - 1]) {

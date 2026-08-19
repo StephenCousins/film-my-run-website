@@ -13,6 +13,7 @@ import {
 import { RouteData, ChartDataPoint } from '@/lib/route-comparison/types';
 import { buildCumulativeDistances } from '@/lib/route-comparison/gps';
 import { formatDistance } from '@/lib/route-comparison/formatting';
+import { niceAxisBounds, axisOptionsFor } from '@/lib/route-comparison/axis';
 
 export type MetricType = 'pace' | 'speed' | 'heartRate' | 'cadence' | 'power';
 
@@ -147,6 +148,17 @@ export default function MetricChart({ routes, selectedRouteIds, metric }: Metric
     );
   }
 
+  // Round the axis out to whole numbers rather than letting Recharts pick
+  // bounds off the data — a 103-178bpm trace otherwise labels 103, 118, 133...
+  const plotted = chartData.flatMap((row) =>
+    selectedRouteIds
+      .map((id) => row[id])
+      .filter((v): v is number => typeof v === 'number' && isFinite(v))
+  );
+  const axis = plotted.length
+    ? niceAxisBounds(Math.min(...plotted), Math.max(...plotted), axisOptionsFor(metric))
+    : null;
+
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={chartData} margin={{ top: 5, right: 10, left: 0, bottom: 5 }}>
@@ -161,7 +173,9 @@ export default function MetricChart({ routes, selectedRouteIds, metric }: Metric
           reversed={config.reversed}
           tickFormatter={(v) => config.formatValue(v)}
           label={{ value: `${config.label} (${config.unit})`, angle: -90, position: 'insideLeft', offset: 10, fontSize: 11, fill: '#a1a1aa' }}
-          domain={['auto', 'auto']}
+          domain={axis ? [axis.min, axis.max] : ['auto', 'auto']}
+          ticks={axis ? axis.ticks : undefined}
+          allowDecimals={false}
         />
         <Tooltip
           content={({ active, payload, label }) => {
