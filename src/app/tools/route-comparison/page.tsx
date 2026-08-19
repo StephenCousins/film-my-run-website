@@ -11,7 +11,7 @@ import LoginPrompt from '@/components/route-comparison/LoginPrompt';
 import RouteMap from '@/components/route-comparison/RouteMap';
 import ElevationChart from '@/components/route-comparison/ElevationChart';
 import MetricChart from '@/components/route-comparison/MetricChart';
-import type { MetricType } from '@/components/route-comparison/MetricChart';
+import { availableMetrics, type MetricType } from '@/components/route-comparison/MetricChart';
 import SplitsTable from '@/components/route-comparison/SplitsTable';
 import InsightsPanel from '@/components/route-comparison/InsightsPanel';
 import TimeGapChart from '@/components/route-comparison/TimeGapChart';
@@ -56,6 +56,9 @@ const METRIC_OPTIONS: { id: MetricType; label: string }[] = [
   { id: 'heartRate', label: 'Heart Rate' },
   { id: 'cadence', label: 'Cadence' },
   { id: 'power', label: 'Power' },
+  { id: 'temperature', label: 'Temperature' },
+  { id: 'battery', label: 'Battery' },
+  { id: 'gpsAccuracy', label: 'GPS Accuracy' },
 ];
 
 function RouteComparisonContent() {
@@ -453,6 +456,12 @@ function ChartsTab({
   selectedMetric: MetricType;
   setSelectedMetric: (m: MetricType) => void;
 }) {
+  // Only offer metrics the loaded files actually carry — a Garmin FIT brings
+  // temperature and GPS accuracy, a bare GPX brings none of them.
+  const visible = routes.filter((r) => selectedRouteIds.includes(r.id));
+  const present = new Set(availableMetrics(visible));
+  const shownMetrics = METRIC_OPTIONS.filter((o) => present.has(o.id));
+
   return (
     <div className="space-y-6">
       {/* Elevation */}
@@ -471,8 +480,8 @@ function ChartsTab({
           <h3 className="font-display font-semibold text-foreground">
             Metric Comparison
           </h3>
-          <div className="flex gap-1">
-            {METRIC_OPTIONS.map((opt) => (
+          <div className="flex gap-1 flex-wrap justify-end">
+            {shownMetrics.map((opt) => (
               <button
                 key={opt.id}
                 onClick={() => setSelectedMetric(opt.id)}

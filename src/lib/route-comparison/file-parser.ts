@@ -10,6 +10,7 @@ import {
 } from './gps';
 import { calculateElevationStats, cleanGPSData, rollingMedian } from './stats';
 import { RouteData, ParsedRawData, ValidatedData, RouteStats } from './types';
+import { buildBatteryLevels } from './fit-battery';
 
 /**
  * Generate a unique ID for a route
@@ -135,7 +136,8 @@ function createRouteData(
   cadences: (number | null)[],
   powers: (number | null)[],
   speeds: (number | null)[],
-  paces: (number | null)[]
+  paces: (number | null)[],
+  extras: Partial<Pick<RouteData, 'temperatures' | 'batteryLevels' | 'gpsAccuracies' | 'gpsElevations'>> = {}
 ): RouteData {
   let distance = 0;
   for (let i = 1; i < coordinates.length; i++) {
@@ -181,6 +183,12 @@ function createRouteData(
     powers,
     speeds,
     paces,
+    // Only attach a series if it actually carried a value — an all-null array
+    // would light up a chart option with nothing behind it.
+    ...(extras.temperatures?.some((v) => v !== null) ? { temperatures: extras.temperatures } : {}),
+    ...(extras.batteryLevels?.some((v) => v !== null) ? { batteryLevels: extras.batteryLevels } : {}),
+    ...(extras.gpsAccuracies?.some((v) => v !== null) ? { gpsAccuracies: extras.gpsAccuracies } : {}),
+    ...(extras.gpsElevations?.some((v) => v !== null) ? { gpsElevations: extras.gpsElevations } : {}),
     stats,
   };
 }
@@ -355,6 +363,10 @@ export async function parseFIT(
       const powers: (number | null)[] = [];
       const speeds: (number | null)[] = [];
       const paces: (number | null)[] = [];
+      const temperatures: (number | null)[] = [];
+      const gpsAccuracies: (number | null)[] = [];
+      const gpsElevations: (number | null)[] = [];
+      const batterySoc: (number | null)[] = [];
 
       records.forEach((record: Record<string, unknown>) => {
         const lat = record.position_lat as number | undefined;
@@ -389,6 +401,15 @@ export async function parseFIT(
             }
             speeds.push(speedKmh);
             paces.push(speedKmh && speedKmh > 0 ? 60 / speedKmh : null);
+
+            temperatures.push((record.temperature as number) ?? null);
+            gpsAccuracies.push((record.gps_accuracy as number) ?? null);
+            // Plain `altitude` is GPS-derived; `enhanced_altitude` is the
+            // barometric/corrected figure that went into `elevations`.
+            gpsElevations.push((record.altitude as number) ?? null);
+            batterySoc.push(
+              (record.battery_soc as number) ?? (record.battery_level as number) ?? null
+            );
           }
         }
       });
@@ -408,6 +429,13 @@ export async function parseFIT(
       const smoothedSpeeds = rollingMedian(cleanedData.speeds, 5);
       const smoothedPaces = rollingMedian(cleanedData.paces, 5);
 
+      // Only keep GPS altitude when it genuinely differs from the barometric
+      // series — on devices without a barometer the two are the same array and
+      // a dual-elevation overlay would just draw the same line twice.
+      const dualElevation = gpsElevations.filter(
+        (v, i) => v !== null && elevations[i] !== null && Math.abs(v - elevations[i]!) > 0.1
+      ).length > gpsElevations.length * 0.1;
+
       resolve(
         createRouteData(
           filename,
@@ -419,7 +447,13 @@ export async function parseFIT(
           cadences,
           powers,
           smoothedSpeeds,
-          smoothedPaces
+          smoothedPaces,
+          {
+            temperatures,
+            gpsAccuracies,
+            batteryLevels: buildBatteryLevels(batterySoc, timestamps, arrayBuffer),
+            gpsElevations: dualElevation ? gpsElevations : undefined,
+          }
         )
       );
     });

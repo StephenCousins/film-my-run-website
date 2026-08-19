@@ -26,6 +26,16 @@ export interface RouteData {
   powers: (number | null)[];
   speeds: (number | null)[];
   paces: (number | null)[];
+  /**
+   * Optional series, only present when the source file carried them. FIT files
+   * from a Garmin usually do; GPX rarely does. Absent rather than all-null so
+   * the UI can hide a metric outright instead of drawing an empty chart.
+   */
+  temperatures?: (number | null)[];
+  batteryLevels?: (number | null)[];
+  gpsAccuracies?: (number | null)[];
+  /** GPS altitude, where it differs from the barometric `elevations`. */
+  gpsElevations?: (number | null)[];
   stats: RouteStats;
 }
 

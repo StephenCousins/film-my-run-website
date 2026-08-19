@@ -15,7 +15,9 @@ import { buildCumulativeDistances } from '@/lib/route-comparison/gps';
 import { formatDistance } from '@/lib/route-comparison/formatting';
 import { niceAxisBounds, axisOptionsFor } from '@/lib/route-comparison/axis';
 
-export type MetricType = 'pace' | 'speed' | 'heartRate' | 'cadence' | 'power';
+export type MetricType =
+  | 'pace' | 'speed' | 'heartRate' | 'cadence' | 'power'
+  | 'temperature' | 'battery' | 'gpsAccuracy';
 
 interface MetricChartProps {
   routes: RouteData[];
@@ -66,16 +68,45 @@ const METRIC_CONFIG: Record<MetricType, {
     getValues: (r) => r.powers,
     formatValue: (v) => `${Math.round(v)}`,
   },
+  temperature: {
+    label: 'Temperature',
+    unit: '\u00B0C',
+    getValues: (r) => r.temperatures ?? [],
+    formatValue: (v) => `${Math.round(v)}`,
+  },
+  battery: {
+    label: 'Battery',
+    unit: '%',
+    getValues: (r) => r.batteryLevels ?? [],
+    formatValue: (v) => `${Math.round(v)}`,
+  },
+  gpsAccuracy: {
+    label: 'GPS Accuracy',
+    unit: 'm',
+    getValues: (r) => r.gpsAccuracies ?? [],
+    formatValue: (v) => `${v.toFixed(1)}`,
+  },
 };
+
+/** Which metrics any of these routes actually carry data for. */
+export function availableMetrics(routes: RouteData[]): MetricType[] {
+  return (Object.keys(METRIC_CONFIG) as MetricType[]).filter((m) =>
+    routes.some((r) => METRIC_CONFIG[m].getValues(r).some((v) => v !== null && v > 0))
+  );
+}
 
 export default function MetricChart({ routes, selectedRouteIds, metric }: MetricChartProps) {
   const config = METRIC_CONFIG[metric];
+  const allowsNonPositive = metric === 'temperature';
   const visibleRoutes = routes.filter((r) => selectedRouteIds.includes(r.id));
 
   // Check if any visible route has data for this metric
   const routesWithData = visibleRoutes.filter((r) => {
     const values = config.getValues(r);
-    return values.some((v) => v !== null && v > 0);
+    // Temperature is the one metric where zero and below are real readings.
+    return metric === 'temperature'
+      ? values.some((v) => v !== null && isFinite(v))
+      : values.some((v) => v !== null && v > 0);
   });
 
   const chartData = useMemo(() => {
@@ -125,7 +156,10 @@ export default function MetricChart({ routes, selectedRouteIds, metric }: Metric
         let count = 0;
         for (let j = start; j <= end; j++) {
           const v = values[j];
-          if (v !== null && v > 0 && isFinite(v)) {
+          // Below-zero readings are real for temperature; for every other
+          // metric a zero means "no reading" and must not drag the mean down.
+          const usable = v !== null && isFinite(v) && (allowsNonPositive || v > 0);
+          if (usable) {
             sum += v;
             count++;
           }
@@ -138,7 +172,7 @@ export default function MetricChart({ routes, selectedRouteIds, metric }: Metric
     }
 
     return data;
-  }, [routesWithData, config]);
+  }, [routesWithData, config, allowsNonPositive]);
 
   if (routesWithData.length === 0) {
     return (

@@ -28,14 +28,22 @@ export default function ElevationChart({ routes, selectedRouteIds }: ElevationCh
     if (visibleRoutes.length === 0) return [];
 
     // Build distance-indexed elevation data for each route
-    const routeDistElev: { distances: number[]; elevations: (number | null)[] }[] = [];
+    const routeDistElev: {
+      distances: number[];
+      elevations: (number | null)[];
+      gpsElevations?: (number | null)[];
+    }[] = [];
     let maxDistance = 0;
 
     for (const route of visibleRoutes) {
       const distances = buildCumulativeDistances(route.coordinates);
       const totalDist = distances[distances.length - 1];
       if (totalDist > maxDistance) maxDistance = totalDist;
-      routeDistElev.push({ distances, elevations: route.elevations });
+      routeDistElev.push({
+        distances,
+        elevations: route.elevations,
+        gpsElevations: route.gpsElevations,
+      });
     }
 
     // Sample at regular intervals
@@ -66,6 +74,13 @@ export default function ElevationChart({ routes, selectedRouteIds }: ElevationCh
 
         const elev = elevations[low];
         point[route.id] = elev !== null && elev !== undefined ? Math.round(elev * 10) / 10 : null;
+
+        // Raw GPS altitude, plotted dashed behind the barometric trace so the
+        // difference between the two is visible.
+        const gps = routeDistElev[i].gpsElevations?.[low];
+        if (gps !== null && gps !== undefined) {
+          point[`${route.id}__gps`] = Math.round(gps * 10) / 10;
+        }
       }
 
       data.push(point);
@@ -135,6 +150,24 @@ export default function ElevationChart({ routes, selectedRouteIds }: ElevationCh
             }}
           />
         )}
+        {/* GPS altitude behind the barometric trace, where the two differ */}
+        {visibleRoutes
+          .filter((route) => route.gpsElevations)
+          .map((route) => (
+            <Area
+              key={`${route.id}__gps`}
+              type="monotone"
+              dataKey={`${route.id}__gps`}
+              stroke={route.color}
+              strokeDasharray="4 3"
+              strokeOpacity={0.55}
+              fill="none"
+              strokeWidth={1.5}
+              dot={false}
+              connectNulls={false}
+              isAnimationActive={false}
+            />
+          ))}
         {visibleRoutes.map((route, i) => (
           <Area
             key={route.id}

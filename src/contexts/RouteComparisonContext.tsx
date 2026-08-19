@@ -1,7 +1,8 @@
 'use client';
 
-import { createContext, useContext, useState, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useCallback, useEffect, useRef, ReactNode } from 'react';
 import { RouteData, getNextColor, parseFile, ROUTE_COLORS } from '@/lib/route-comparison';
+import { loadState, saveState, clearState } from '@/lib/route-comparison/persistence';
 
 interface RouteComparisonContextType {
   // State
@@ -40,6 +41,28 @@ export function RouteComparisonProvider({ children }: { children: ReactNode }) {
   const [compareMode, setCompareMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Restore whatever was loaded last time. Runs once, after mount so the
+  // server and client render the same empty state and hydration stays happy.
+  const restored = useRef(false);
+  useEffect(() => {
+    if (restored.current) return;
+    restored.current = true;
+
+    const saved = loadState();
+    if (!saved) return;
+
+    setRoutes(saved.routes);
+    setSelectedRouteIds(saved.selectedRouteIds);
+    setReferenceRouteId(saved.referenceRouteId);
+  }, []);
+
+  // Persist on change, but not before the restore has run — otherwise the
+  // initial empty state would wipe the very thing we're about to load.
+  useEffect(() => {
+    if (!restored.current) return;
+    saveState({ routes, selectedRouteIds, referenceRouteId });
+  }, [routes, selectedRouteIds, referenceRouteId]);
 
   // Get used colors
   const getUsedColors = useCallback(() => {
@@ -130,6 +153,7 @@ export function RouteComparisonProvider({ children }: { children: ReactNode }) {
     setReferenceRouteId(null);
     setCompareMode(false);
     setError(null);
+    clearState();
   }, []);
 
   // Selection methods
