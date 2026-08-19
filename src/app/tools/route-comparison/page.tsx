@@ -334,28 +334,17 @@ function OverviewTab({
         />
       </div>
 
-      {/* Map and Elevation */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-surface rounded-xl border border-border p-4">
-          <h3 className="font-display font-semibold text-foreground mb-3">
-            Map View
-          </h3>
-          <div className="h-[350px] rounded-lg overflow-hidden">
-            <RouteMap
-              routes={routes}
-              selectedRouteIds={selectedRouteIds}
-              referenceRouteId={referenceRouteId}
-            />
-          </div>
-        </div>
-
-        <div className="bg-surface rounded-xl border border-border p-4">
-          <h3 className="font-display font-semibold text-foreground mb-3">
-            Elevation Profile
-          </h3>
-          <div className="h-[350px]">
-            <ElevationChart routes={routes} selectedRouteIds={selectedRouteIds} />
-          </div>
+      {/* Map — full width. The elevation profile lives on the Charts tab. */}
+      <div className="bg-surface rounded-xl border border-border p-4">
+        <h3 className="font-display font-semibold text-foreground mb-3">
+          Map View
+        </h3>
+        <div className="h-[350px] rounded-lg overflow-hidden">
+          <RouteMap
+            routes={routes}
+            selectedRouteIds={selectedRouteIds}
+            referenceRouteId={referenceRouteId}
+          />
         </div>
       </div>
 
