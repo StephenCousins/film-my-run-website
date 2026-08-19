@@ -482,18 +482,26 @@ async function fetchPageData(pageUrl: string): Promise<PageData | null> {
     const twMatches2 = [...html.matchAll(/<meta\s+content="([^"]+)"\s+(?:property|name)="twitter:image"/gi)];
     for (const m of twMatches2) images.push({ url: m[1], source: 'twitter:image' });
 
+    // Only Product entities. Retailer pages embed related-product carousels in
+    // JSON-LD too, and taking image off any entity pulled those in — which is
+    // how a Mafate hiking boot ended up on the Mafate X, from a page that
+    // genuinely was about the Mafate X.
+    const isProduct = (item: { '@type'?: unknown }) => {
+      const t = item['@type'];
+      return t === 'Product' || (Array.isArray(t) && t.includes('Product'));
+    };
+
     const jsonLdBlocks = [...html.matchAll(/<script\s+type="application\/ld\+json"[^>]*>([^]*?)<\/script>/gi)];
     for (const block of jsonLdBlocks) {
       try {
         const data = JSON.parse(block[1]);
         const items = Array.isArray(data) ? data : [data];
         for (const item of items) {
-          if (item.image) {
-            const imgs = Array.isArray(item.image) ? item.image : [item.image];
-            for (const img of imgs) {
-              const imgUrl = typeof img === 'string' ? img : img?.url;
-              if (imgUrl) images.push({ url: imgUrl, source: 'json-ld' });
-            }
+          if (!isProduct(item) || !item.image) continue;
+          const imgs = Array.isArray(item.image) ? item.image : [item.image];
+          for (const img of imgs) {
+            const imgUrl = typeof img === 'string' ? img : img?.url;
+            if (imgUrl) images.push({ url: imgUrl, source: 'json-ld' });
           }
         }
       } catch { /* malformed JSON-LD */ }
@@ -520,8 +528,20 @@ async function fetchPageData(pageUrl: string): Promise<PageData | null> {
   }
 }
 
+/**
+ * Hosts that serve user-uploaded or editorial photography rather than
+ * catalogue shots. Every bad image found in the August 2026 audit came from
+ * one of these: eBay listings, Bazaarvoice review uploads, and running
+ * magazines shooting shoes on rocks.
+ */
+const NON_CATALOGUE_HOSTS = [
+  'ebayimg.com', 'bazaarvoice.com', 'switchbacktravel.com', 'outsideonline.com',
+  'redd.it', 'redditmedia.com', 'pinimg.com', 'cdninstagram.com', 'fbcdn.net',
+];
+
 function isLikelyProductImage(imageUrl: string): boolean {
   const urlLower = imageUrl.toLowerCase();
+  if (NON_CATALOGUE_HOSTS.some(h => urlLower.includes(h))) return false;
   const rejectPatterns = [
     /logo/i, /icon/i, /favicon/i, /brand/i, /swoosh/i,
     /placeholder/i, /default/i, /avatar/i, /badge/i,
@@ -583,6 +603,12 @@ function verifyPageMatchesShoe(brand: string, model: string, pageUrl: string, pa
  * about the Mafate X can still yield a picture of a Mafate hiking boot. Asking
  * only "is this a running shoe?" waves those through.
  *
+ * Scope is deliberately limited to what a vision model can actually judge:
+ * photo quality, and branding it can read off the shoe. It is NOT asked to
+ * confirm a version number — asked to, it invents them (it called a Brooks
+ * Ghost 18 a "Ghost 15" from a shoe with no version printed on it). Model
+ * identity is the job of the page/URL matching that ran before this.
+ *
  * Returns null when the check itself failed (network/API), which callers treat
  * as unverified rather than as a pass.
  */
@@ -595,15 +621,19 @@ async function visionConfirmShoeImage(
     const answer = await completeTextWithImage({
       imageUrl,
       maxTokens: 40,
-      prompt: `You are verifying a product photo for a running shoe database.
+      prompt: `Verify a product photo for a running shoe database.
 
 Expected shoe: ${brand} ${model}
 
-Answer TWO things:
-1. Is this a clean product photo of a single shoe or pair (not lifestyle, not worn, not a logo, not broken/tiny)?
-2. Does the shoe shown match the expected model above? Check silhouette, cut height and any visible model branding. A different model from the same brand is NOT a match.
+Reply NO if any of these is true:
+- It is not a clean catalogue-style product shot: a lifestyle or outdoor scene, a shoe worn on a foot, a hand holding it, an extreme close-up of part of the shoe, a sole or tread close-up, blurry, a logo, or tiny/broken.
+- Brand markings visible on the shoe are a different brand from "${brand}".
+- A model name printed on the shoe is a different model from "${model}".
+- It is obviously a different type of footwear from what the name describes (for example a mid or high-cut boot).
 
-Reply ONLY: YES if both are true, otherwise NO followed by a 6-word reason.`,
+Do NOT reply NO because you cannot confirm a version number. Version numbers are almost never printed on shoes and you cannot tell one version from the next by eye — judge the brand and model line only.
+
+Reply ONLY: YES, or NO followed by a 6-word reason.`,
     });
     if (!answer) return null;
     return answer.toUpperCase().startsWith('YES');
