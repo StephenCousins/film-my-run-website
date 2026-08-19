@@ -164,7 +164,7 @@ async function main() {
       slug,
       content,
       excerpt,
-      featured_image: `${R2}/breithorn-matterhorn-dawn-zermatt.jpg`,
+      featured_image: `${R2}/breithorn-summit-family.jpg`,
       status: 'published',
       post_type: 'post',
       read_time: 7,
