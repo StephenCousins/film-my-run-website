@@ -1,4 +1,4 @@
-import Anthropic from '@anthropic-ai/sdk';
+import { completeText, WRITING_MODEL } from '@/lib/llm';
 import type { RawStorySection } from './irunfar-scraper';
 
 // ============================================
@@ -29,14 +29,6 @@ export interface SynthesizedStory {
 // CLIENT
 // ============================================
 
-function getClient(): Anthropic {
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
-    throw new Error('ANTHROPIC_API_KEY environment variable is required');
-  }
-  return new Anthropic({ apiKey });
-}
-
 // ============================================
 // STAGE A — EXTRACT & PRIORITISE
 // ============================================
@@ -44,8 +36,6 @@ function getClient(): Anthropic {
 export async function extractAndPrioritise(
   sections: RawStorySection[]
 ): Promise<ExtractedStory[]> {
-  const client = getClient();
-
   // Build a summary of each section for the AI
   const sectionSummaries = sections.map((s, i) => {
     let text = `## Section ${i + 1}: ${s.heading}\n`;
@@ -93,16 +83,10 @@ Here are the sections:
 
 ${sectionSummaries.join('\n\n---\n\n')}`;
 
-  const message = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 4096,
-    messages: [{ role: 'user', content: prompt }],
+  const responseText = await completeText({
+    maxTokens: 4096,
+    prompt,
   });
-
-  const responseText = message.content
-    .filter((block): block is Anthropic.TextBlock => block.type === 'text')
-    .map((block) => block.text)
-    .join('');
 
   // Extract JSON from response (handle markdown code blocks)
   const jsonMatch = responseText.match(/\[[\s\S]*\]/);
@@ -123,8 +107,6 @@ export async function rewriteStory(
   rawSection: RawStorySection,
   roundupUrl: string
 ): Promise<SynthesizedStory> {
-  const client = getClient();
-
   const sectionContent = [
     ...rawSection.paragraphs,
     ...rawSection.results.map((r) => `- ${r}`),
@@ -160,16 +142,12 @@ Return ONLY valid JSON with these fields:
 - content (string — HTML with <p> tags)
 - slug (string — URL-friendly, lowercase, hyphens, no special chars, max 60 chars)`;
 
-  const message = await client.messages.create({
-    model: 'claude-sonnet-4-20250514',
-    max_tokens: 1024,
-    messages: [{ role: 'user', content: prompt }],
+  const responseText = await completeText({
+    model: WRITING_MODEL,
+    maxTokens: 1024,
+    temperature: 0.6,
+    prompt,
   });
-
-  const responseText = message.content
-    .filter((block): block is Anthropic.TextBlock => block.type === 'text')
-    .map((block) => block.text)
-    .join('');
 
   const jsonMatch = responseText.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {

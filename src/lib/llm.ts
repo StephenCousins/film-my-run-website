@@ -15,6 +15,15 @@ import OpenAI from 'openai';
  */
 const DEFAULT_MODEL = 'google/gemini-2.5-flash-lite';
 
+/**
+ * For work where the writing itself is the product — race scripts, news
+ * stories in a particular voice — rather than pulling fields out of text.
+ * DeepSeek V3.2 is $0.269/$0.400 per MTok against Claude Opus 4.8's
+ * $5.00/$25.00, so a 4k-token piece costs about a sixth of a penny instead
+ * of ten pence, and it holds a voice far better than a flash-tier model.
+ */
+export const WRITING_MODEL = 'deepseek/deepseek-v3.2';
+
 function getClient(): OpenAI {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new Error('OPENROUTER_API_KEY is not set');
@@ -33,6 +42,8 @@ function getClient(): OpenAI {
 export interface CompleteOptions {
   prompt: string;
   maxTokens: number;
+  /** Optional system prompt, sent as a leading system message. */
+  system?: string;
   /** Low by default — every caller here wants a deterministic, parseable answer. */
   temperature?: number;
   model?: string;
@@ -49,6 +60,7 @@ export interface CompleteOptions {
 export async function completeText({
   prompt,
   maxTokens,
+  system,
   temperature = 0,
   model = process.env.OPENROUTER_MODEL || DEFAULT_MODEL,
 }: CompleteOptions): Promise<string> {
@@ -58,7 +70,10 @@ export async function completeText({
     model,
     max_tokens: maxTokens,
     temperature,
-    messages: [{ role: 'user', content: prompt }],
+    messages: [
+      ...(system ? [{ role: 'system' as const, content: system }] : []),
+      { role: 'user' as const, content: prompt },
+    ],
   });
 
   return completion.choices[0]?.message?.content?.trim() ?? '';

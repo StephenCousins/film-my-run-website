@@ -1,4 +1,4 @@
-import Anthropic from '@anthropic-ai/sdk';
+import { completeText, WRITING_MODEL } from '@/lib/llm';
 import { HOUSE_STYLE, FORMAT_SPECS, FORMAT_LABELS, type OutputFormat } from './voice';
 import type { ActivityData } from './strava';
 import type { RaceWeather } from './weather';
@@ -69,8 +69,6 @@ export async function generateRaceScript(opts: {
   answers: QA[];
   format: OutputFormat;
 }): Promise<string> {
-  const client = new Anthropic(); // reads ANTHROPIC_API_KEY
-
   const system = [
     HOUSE_STYLE,
     FORMAT_SPECS[opts.format],
@@ -88,15 +86,15 @@ export async function generateRaceScript(opts: {
     `=== THE RUNNER'S ANSWERS (the human layer — weave these in) ===\n${answersBlock}`,
   ].join('\n\n');
 
-  const res = await client.messages.create({
-    model: 'claude-opus-4-8',
-    max_tokens: 4096,
+  const text = await completeText({
+    model: WRITING_MODEL,
+    maxTokens: 4096,
+    // Creative writing, unlike the extraction calls — leave some room to move.
+    temperature: 0.7,
     system,
-    messages: [{ role: 'user', content: userPrompt }],
+    prompt: userPrompt,
   });
 
-  return res.content
-    .map((b) => (b.type === 'text' ? b.text : ''))
-    .join('')
+  return text
     .trim();
 }
