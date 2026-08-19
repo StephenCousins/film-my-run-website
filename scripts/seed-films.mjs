@@ -2,6 +2,25 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+/**
+ * YouTube only generates maxresdefault.jpg for uploads above 720p, and serves a
+ * ~1KB grey placeholder for some other sizes. Probe for the best one that is a
+ * real image so older films don't get a dead thumbnail URL.
+ */
+async function bestThumbnail(youtubeId) {
+  for (const quality of ['maxresdefault', 'sddefault', 'hqdefault']) {
+    const url = `https://img.youtube.com/vi/${youtubeId}/${quality}.jpg`;
+    try {
+      const res = await fetch(url);
+      if (res.ok && (await res.arrayBuffer()).byteLength > 5000) return url;
+    } catch {
+      // try the next size down
+    }
+  }
+  return `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
+}
+
+
 const films = [
   {
     title: 'Cape Wrath Ultra 2024 | 8 Days Across the Scottish Highlands',
@@ -323,7 +342,7 @@ async function main() {
         slug: film.slug,
         description: film.description,
         youtube_id: film.youtube_id,
-        thumbnail_url: `https://img.youtube.com/vi/${film.youtube_id}/maxresdefault.jpg`,
+        thumbnail_url: await bestThumbnail(film.youtube_id),
         year: film.year,
         featured: film.featured,
         awards: [],

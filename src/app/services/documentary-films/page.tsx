@@ -19,12 +19,20 @@ const stats = [
 
 const pastWork = [
   {
+    id: 'vcyl6WWKskg',
+    title: "You've Got To Win UTMB",
+    description: "Tom Evans tells the inside story of his 2025 UTMB victory — two DNFs, a knife attack that nearly ended his running career, and the night everything finally came together on the 100 miles around Mont Blanc.",
+    stats: { views: '21K+', watchTime: '-' },
+    award: null,
+    featured: true,
+  },
+  {
     id: 'R2fhcCSvZj8',
     title: '81 Yards',
     description: 'John Stocker breaks the backyard ultra world record in this gripping documentary following every yard of his historic 81-yard journey.',
     stats: { views: '80K+', watchTime: '45K hrs' },
     award: 'Winner - Sheffield Adventure Film Festival',
-    featured: true,
+    featured: false,
   },
   {
     id: '2VwS68uEg04',
