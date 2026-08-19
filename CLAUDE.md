@@ -4,7 +4,7 @@ This file provides guidance to Claude Code when working with this repository.
 
 ## Project Overview
 
-**Film My Run** is a complete rebuild of filmmyrun.co.uk - transforming from a WordPress blog into a modern, dynamic running platform with:
+**Film My Run** is a complete rebuild of the old WordPress blog into a modern, dynamic running platform. It serves from **filmmyrun.com**; filmmyrun.co.uk 301s to it. Features:
 - Personal race blog & reports (15 years of content, 2011-2025)
 - Running tools (calculators, parkrun stats, race visualization)
 - Race results dashboard
@@ -162,7 +162,7 @@ return { featuredImage: post.featuredImage };  // field is 'featured_image'
 ## Site Structure
 
 ```
-filmmyrun.co.uk/
+filmmyrun.com/
 ├── /                           # Homepage - Hero, featured content, stats
 ├── /blog                       # Blog listing with filters
 ├── /blog/[slug]               # Individual blog posts
@@ -369,8 +369,11 @@ CREATE TABLE settings (
 | Cloudflare R2 | Image storage | `R2_*` credentials |
 | Stripe | Payments | `STRIPE_*` keys |
 | Google Sheets | Race data sync | `GOOGLE_CREDENTIALS` |
-| Strava | Activity widget | `STRAVA_*` tokens |
+| Strava | Activity widget, RaceScript OAuth | `STRAVA_*` tokens |
 | YouTube/Vimeo | Video embeds | API keys |
+| OpenRouter | All LLM calls (see "LLM calls") | `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` |
+| Brave Search | Shoe Finder review/image search | `BRAVE_SEARCH_API_KEY` |
+| NextAuth + Google | Sign-in | `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `GOOGLE_CLIENT_*` |
 
 ---
 
@@ -473,7 +476,7 @@ featured_image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/2025/r
 featured_image: '/images/blog/2025/race-name-01.jpg'
 
 // ❌ WRONG - Old WordPress URL (will break when old site is removed)
-featured_image: 'https://filmmyrun.co.uk/wp-content/uploads/2025/01/image.jpg'
+featured_image: 'https://filmmyrun.com/wp-content/uploads/2025/01/image.jpg'
 ```
 
 #### In HTML Content
@@ -509,7 +512,7 @@ R2_PUBLIC_URL=https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev
 
 #### Future: Custom Domain
 
-When DNS is moved to Cloudflare, the R2 bucket can be connected to `images.filmmyrun.co.uk`. At that point, do a find/replace in the database and codebase to update URLs.
+`images.filmmyrun.co.uk` was planned as a custom domain for R2 but **was never set up — the host does not resolve**. Images serve from the `pub-…r2.dev` URL directly. If you do set the subdomain up, find/replace in the database and codebase.
 
 ### Animation Performance
 - Use GSAP for scroll animations (hardware accelerated)
@@ -589,21 +592,11 @@ When DNS is moved to Cloudflare, the R2 bucket can be connected to `images.filmm
 
 ---
 
-## Migration Checklist
+## Migration — complete
 
-- [ ] Set up new Railway project
-- [ ] Configure PostgreSQL database
-- [ ] Set up Cloudflare R2 bucket
-- [ ] Migrate 2.6GB of images to R2
-- [ ] Extract posts from WordPress SQL
-- [ ] Transform WordPress content to clean format
-- [ ] Import posts to new database
-- [ ] Migrate race results data
-- [ ] Set up DNS for filmmyrun.co.uk
-- [ ] Configure Stripe products
-- [ ] Deploy to Railway
-- [ ] Test all pages and features
-- [ ] Switch DNS to new site
+The WordPress migration is done: Railway project and Postgres live, R2 bucket
+holding the 2.6GB of images, 212 posts and the race results imported, Stripe
+configured, and DNS switched. The site serves from **filmmyrun.com**.
 
 ---
 
@@ -625,9 +618,8 @@ When DNS is moved to Cloudflare, the R2 bucket can be connected to `images.filmm
 - [ ] Set up Stripe products and inventory
 
 ### Other
-- [ ] Migrate WordPress blog content
-- [ ] Set up Cloudflare R2 for image hosting
-- [ ] Configure custom domain (filmmyrun.co.uk)
+- [ ] RaceScript (`/tools/racescript`) is built but unfinished — see its section below
+- [ ] Decide whether Route Comparison should stay behind the login wall
 
 ---
 
@@ -644,6 +636,9 @@ When DNS is moved to Cloudflare, the R2 bucket can be connected to `images.filmm
 ### Scripts
 
 All scripts require `.env` with `DATABASE_URL`, `BRAVE_SEARCH_API_KEY`, and `ANTHROPIC_API_KEY`.
+**Note:** the standalone `scripts/*.mjs` still call Anthropic directly and will fail
+while that account has no credit. The site itself (`src/`) uses OpenRouter — see
+"LLM calls" below.
 Run with: `node --env-file=.env scripts/<script>.mjs`
 
 | Script | Purpose | Key flags |
@@ -663,14 +658,26 @@ node --env-file=.env scripts/cleanup-mismatched-reviews.mjs
 
 ### Image Matching Notes
 - Uses two-pass search: quoted exact query first, broader fallback second
-- Opus 4.8 vision verifies every image — checks version numbers strictly (e.g. Tecton X2 vs X3)
-- If no verified image found, `image_url` is set to null (shows placeholder)
+- `fetchPageData` collects images from og:image, twitter:image and JSON-LD.
+  **JSON-LD is filtered to `Product` entities** — retailer pages embed
+  related-product carousels in their structured data, and without that filter a
+  page genuinely about the Hoka Mafate X served up a Mafate hiking boot.
+- Vision then checks the candidate. It judges **photo quality and legible brand
+  or model names only** — it is explicitly told not to guess version numbers.
+  Asked to verify the model, it invents them (it called a Brooks Ghost 18 a
+  "Ghost 15" from a shoe with no version printed on it). Model identity is the
+  job of the page/URL match, not the vision call.
+- Only an explicit YES passes. An API failure counts as unverified, not a pass —
+  a wrong image is worse than none, and a null `image_url` renders a placeholder.
+- `NON_CATALOGUE_HOSTS` rejects eBay, Bazaarvoice, Outside Online and similar
+  before spending a vision call; every bad image in the Aug 2026 audit came from
+  one of those.
 - Images are hotlinked from external sources — future improvement: migrate to R2
 - To fix a specific mismatched shoe: `node --env-file=.env scripts/fix-shoe.mjs --slug <slug>`
 
 ### Review Score Notes
 - Brave Search finds review pages, regex extracts explicit scores (e.g. 9.2/10)
-- Where no explicit score exists, Haiku reads the review text and infers a score
+- Where no explicit score exists, the LLM reads the review text and infers a score
 - Scores are normalised to 0–10 (5-star ratings doubled, percentages divided by 10)
 - Results filtered to only include pages that mention the exact shoe model name
 - Sources: runrepeat, runners_world, irunfar, believe_in_run, the_run_testers
@@ -680,6 +687,138 @@ node --env-file=.env scripts/cleanup-mismatched-reviews.mjs
 To add more shoes: append entries to the JSON and re-run `seed-shoes.mjs` (skips existing slugs).
 
 ---
+
+---
+
+## Route Comparison
+
+**Page:** `/tools/route-comparison` — upload N GPX or FIT files and compare them.
+Gated behind `hasAccess('FREE')`, which still requires an authenticated session,
+so signed-out visitors see nothing but the `LoginPrompt`.
+
+Six tabs: Overview (stats + full-width map), Charts, Splits, Time Gaps,
+Segments, Insights.
+
+### Library layout (`src/lib/route-comparison/`)
+| File | Holds |
+|---|---|
+| `types.ts` | `RouteData` — the per-point series and stats |
+| `file-parser.ts` | GPX (DOMParser) and FIT (`fit-file-parser`) |
+| `fit-battery.ts` | Raw binary scan for battery (see below) |
+| `analysis.ts` | Splits, best efforts, zones, time gaps, grades, steep sections, effort score |
+| `stats.ts` / `gps.ts` | Distance, elevation stats, smoothing, GPS cleaning |
+| `axis.ts` | Chart Y-axis scaling |
+| `persistence.ts` | localStorage save/restore |
+
+### Metrics parsed
+Always: elevation, speed, pace, heart rate, cadence, power.
+From FIT where present: **temperature, battery, GPS accuracy, GPS altitude**.
+These four are optional on `RouteData` and attached **only when the file
+actually carried a value** — an all-null array would light up a chart option
+with nothing behind it. `availableMetrics()` drives which metric buttons show.
+
+- **Battery** is not on the FIT record messages, and the `device_info` fields
+  are INVALID on most Garmins. `fit-battery.ts` walks the raw binary for
+  message type 104 ("pad"): field 2 is the percentage, field 253 the timestamp
+  (Garmin epoch, 31 Dec 1989). Snapshots are sparse and step-interpolated onto
+  trackpoint timestamps.
+- **Dual elevation**: `enhanced_altitude` is barometric and goes to
+  `elevations`; plain `altitude` is GPS-derived and goes to `gpsElevations`,
+  kept only when it differs by >0.1m on at least 10% of points. Without a
+  barometer the two are identical and the overlay would draw the same line twice.
+- **Temperature is the one metric where 0 and below are real readings.** Every
+  other metric treats 0 as "no data" and filters it out; temperature has to opt
+  out of that or sub-zero readings vanish from the smoothing average.
+
+### Chart axes (`axis.ts`)
+`niceAxisBounds()` rounds Y bounds out to whole multiples of a nice step, so a
+103–178bpm trace labels 100/120/140/160/180 rather than 103/118/133. Per-metric
+rules live in `AXIS_OPTIONS`: speed, power, cadence and GPS error snap to zero;
+heart rate, pace and temperature do not (zero is meaningless and squashes the
+useful range); battery caps at 100 and prefers it as the top. Pace and time-gap
+axes use second-based step ladders.
+
+### Zones
+`calculateZones` anchors to a **fraction of the observed maximum** — 50/60/70/80/90%
+for heart rate, percentage-of-threshold bands for power. It previously split the
+range between the *minimum* and maximum into five equal parts, which reported
+time in "Max" on easy runs and moved every boundary if one low reading appeared.
+
+### Persistence
+Routes are saved to localStorage (`fmr:route-comparison:v1`) and restored after
+mount, so a refresh doesn't discard loaded files. Timestamps need reviving —
+JSON turns Dates into strings. Payloads over ~3.5MB are skipped rather than
+risking `QuotaExceededError`, and blocked storage (private browsing) is handled
+silently. "Clear All" clears storage too.
+
+### Not ported from the standalone app
+The standalone Route Overlay app (`~/Developer/route-comparison`) also has a
+hardware-tester suite — cross-track deviation, auto-align, distance drift,
+session self-check, HR/cadence validation, dropout diagnostics, fault report —
+plus photos, ZIP export, playback animation and Firebase sessions. **That suite
+is deliberately not here**: it exists to file Garmin firmware bugs, not to serve
+runners. Auto-align is the one piece worth porting eventually.
+
+Note the FIT parser reads only `data.records` — no `session`, `lap` or
+`device_info` — so device-reported totals aren't available and session
+self-check can't be ported without extending it.
+
+---
+
+## LLM calls
+
+All LLM calls from the site go through **OpenRouter**, not the Anthropic API.
+`OPENROUTER_API_KEY` is required; `OPENROUTER_MODEL` optionally overrides the
+default.
+
+`src/lib/llm.ts` exposes `completeText()` and `completeTextWithImage()`. Two
+models, chosen per job:
+
+| Model | Used for | $/MTok in/out |
+|---|---|---|
+| `google/gemini-2.5-flash-lite` (default) | Extraction, scoring, yes/no checks, image verification | 0.10 / 0.40 |
+| `deepseek/deepseek-v3.2` (`WRITING_MODEL`) | Race scripts, news stories — where the writing is the product | 0.269 / 0.400 |
+
+Extraction calls run at `temperature: 0` for parseable output; the writing calls
+use 0.6–0.7. Nothing in `src/` calls the Anthropic SDK any more. The standalone
+`scripts/*.mjs` still do.
+
+---
+
+## RaceScript — built but unfinished
+
+`/tools/racescript` turns a Strava run into a race report, blog post or social
+post. It was built in one commit and has **never worked in production**:
+
+- The Strava app's Authorization Callback Domain is still `localhost`, so OAuth
+  works on a dev machine and fails for every real visitor. Fix at
+  strava.com/settings/api.
+- The page is live but **linked from nowhere** — not in the nav, `/tools`, or
+  the sitemap.
+- `src/lib/racescript/store.ts` keeps the OAuth state and activity context in an
+  in-process `Map`. A restart mid-flow, or a second instance, drops the user's
+  session between the authorize redirect and the callback.
+
+---
+
+## Gotchas worth knowing
+
+- **YouTube `maxresdefault.jpg` only exists above 720p.** Older uploads 404.
+  Probe maxres → sd → hq and check the response is a real image (>5KB — YouTube
+  also serves a ~1KB grey placeholder). This broke 12 film thumbnails.
+- **Strava embeds need a per-activity `data-token`** on recent activities;
+  without it the iframe renders "Error code: EEE". Store it in the post's
+  `meta.strava_embed_token` — `applyStravaEmbedToken()` injects it at render, so
+  the token stays data rather than markup. Older activities still embed fine
+  without one.
+- **`sitemap.ts` must stay `force-dynamic`.** It queries the database, and the
+  build container can't reach it — as a static route it silently shipped only
+  the 25 hard-coded paths and no posts at all. The catch blocks log now.
+- **Next.js metadata `alternates` does not deep-merge.** A page that sets its
+  own `alternates` (for a canonical) replaces the parent's wholesale. Put
+  document-wide `<link>` tags in the root layout's `<head>`, not in
+  `metadata.alternates`.
+
 
 ## Owner Context
 
@@ -692,4 +831,4 @@ Stephen is not a professional coder. When making changes:
 
 ---
 
-*Last updated: June 15, 2026*
+*Last updated: 19 August 2026*
