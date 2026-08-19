@@ -72,10 +72,13 @@ const nextConfig: NextConfig = {
         destination: 'https://filmmyrun.com/:path*',
         permanent: true,
       },
-      // Old image paths
+      // Old WordPress image paths. These live in R2 under wp-uploads/ — the
+      // previous destination (images.filmmyrun.co.uk) was a custom domain that
+      // was never set up, so every legacy image URL redirected to a dead host.
       {
         source: '/wp-content/uploads/:path*',
-        destination: 'https://images.filmmyrun.co.uk/uploads/:path*',
+        destination:
+          'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/:path*',
         permanent: true,
       },
       // Old WordPress date-based permalinks
