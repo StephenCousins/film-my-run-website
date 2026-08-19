@@ -7,6 +7,7 @@ import {
   shoeToSlug,
   webSearch,
 } from '@/lib/shoe-enrichment';
+import { completeText } from '@/lib/llm';
 
 export const maxDuration = 300;
 
@@ -25,7 +26,6 @@ interface DiscoveredShoe {
 }
 
 async function discoverNewShoes(): Promise<DiscoveredShoe[]> {
-  const anthropicKey = process.env.ANTHROPIC_API_KEY!;
 
   const now = new Date();
   const month = now.toLocaleString('en-US', { month: 'long' });
@@ -49,15 +49,9 @@ async function discoverNewShoes(): Promise<DiscoveredShoe[]> {
     await sleep(1100);
   }
 
-  const { default: Anthropic } = await import('@anthropic-ai/sdk');
-  const anthropic = new Anthropic({ apiKey: anthropicKey });
-
-  const msg = await anthropic.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 1500,
-    messages: [{
-      role: 'user',
-      content: `Extract all specific running shoe models mentioned in these search results. Only include shoes where you can identify both the brand and the specific model name (including version number).
+  const text = await completeText({
+    maxTokens: 1500,
+    prompt: `Extract all specific running shoe models mentioned in these search results. Only include shoes where you can identify both the brand and the specific model name (including version number).
 
 Search results:
 ${allSnippets.slice(0, 20).join('\n---\n')}
@@ -70,10 +64,8 @@ Rules:
 - Only include real, specific running shoe models
 - Capitalize brand and model names properly
 - No duplicates`,
-    }],
   });
 
-  const text = msg.content[0].type === 'text' ? msg.content[0].text : '[]';
   const jsonMatch = text.match(/\[[\s\S]*\]/);
   if (!jsonMatch) return [];
 
@@ -91,8 +83,8 @@ export async function POST(req: NextRequest) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return Response.json({ error: 'ANTHROPIC_API_KEY not configured' }, { status: 503 });
+  if (!process.env.OPENROUTER_API_KEY) {
+    return Response.json({ error: 'OPENROUTER_API_KEY not configured' }, { status: 503 });
   }
   if (!process.env.BRAVE_SEARCH_API_KEY && !process.env.SERPER_API_KEY) {
     return Response.json({ error: 'No search API key configured (BRAVE_SEARCH_API_KEY or SERPER_API_KEY)' }, { status: 503 });

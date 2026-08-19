@@ -51,6 +51,7 @@
     "mime-types": "^3.0.2",
     "next": "15.x",
     "next-auth": "^4.24.13",
+    "openai": "^7.5.0",
     "react": "19.x",
     "react-dom": "19.x",
     "react-hook-form": "^7.x",

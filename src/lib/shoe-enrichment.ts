@@ -1,14 +1,8 @@
-import Anthropic from '@anthropic-ai/sdk';
+import { completeText, completeTextWithImage } from '@/lib/llm';
 
 function getBraveKey(): string {
   const key = process.env.BRAVE_SEARCH_API_KEY;
   if (!key) throw new Error('BRAVE_SEARCH_API_KEY is not set');
-  return key;
-}
-
-function getAnthropicKey(): string {
-  const key = process.env.ANTHROPIC_API_KEY;
-  if (!key) throw new Error('ANTHROPIC_API_KEY is not set');
   return key;
 }
 
@@ -223,10 +217,6 @@ async function imageSearch(query: string, count = 8): Promise<ImageSearchResult[
 
 // ── Claude helpers ──────────────────────────────────────────────────
 
-function getAnthropicClient(): Anthropic {
-  return new Anthropic({ apiKey: getAnthropicKey() });
-}
-
 // ── Parse shoe query ────────────────────────────────────────────────
 
 interface ParsedShoe {
@@ -246,13 +236,9 @@ export async function parseShoeQuery(query: string): Promise<ParsedShoe> {
   const results = await webSearch(`"${query}" running shoe specs`, 5);
   const snippets = results.slice(0, 3).map(r => `${r.title}\n${r.description}`).join('\n\n');
 
-  const anthropic = getAnthropicClient();
-  const msg = await anthropic.messages.create({
-    model: 'claude-haiku-4-5-20251001',
-    max_tokens: 400,
-    messages: [{
-      role: 'user',
-      content: `Extract running shoe details from this search query and context.
+  const text = await completeText({
+    maxTokens: 400,
+    prompt: `Extract running shoe details from this search query and context.
 
 Query: "${query}"
 
@@ -277,10 +263,8 @@ Rules:
 - Brand and model must be properly capitalized
 - Model includes version number if applicable (e.g., "Clifton 9" not just "Clifton")
 - Only include specs you're confident about, use null otherwise`,
-    }],
   });
 
-  const text = msg.content[0].type === 'text' ? msg.content[0].text : '';
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (!jsonMatch) throw new Error('Failed to parse shoe details from AI response');
 
@@ -326,22 +310,17 @@ function extractExplicitScore(text: string): number | null {
 async function inferScoreFromText(brand: string, model: string, text: string): Promise<number | null> {
   if (!text || text.length < 60) return null;
   try {
-    const anthropic = getAnthropicClient();
-    const msg = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 100,
-      messages: [{
-        role: 'user',
-        content: `Score this running shoe review snippet. Assign 0.0–10.0 based on sentiment toward the ${brand} ${model}.
+    const answer = await completeText({
+      maxTokens: 100,
+      prompt: `Score this running shoe review snippet. Assign 0.0–10.0 based on sentiment toward the ${brand} ${model}.
 
 Guide: 9.5–10 exceptional | 8.5–9.4 excellent | 7.5–8.4 good | 6.5–7.4 decent | 5–6.4 average | <5 poor
 
 "${text.slice(0, 400)}"
 
 Reply with ONLY a number like: 8.5`,
-      }],
     });
-    const score = parseFloat(msg.content[0].type === 'text' ? msg.content[0].text.trim() : '');
+    const score = parseFloat(answer);
     if (!isNaN(score) && score >= 0 && score <= 10) return score;
   } catch { /* skip */ }
   return null;
@@ -354,13 +333,9 @@ async function claudeVerifyResult(brand: string, model: string, result: SearchRe
     : '';
 
   try {
-    const anthropic = getAnthropicClient();
-    const msg = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 60,
-      messages: [{
-        role: 'user',
-        content: `Is this search result a review of EXACTLY the ${brand} ${model} running shoe?
+    const answer = await completeText({
+      maxTokens: 60,
+      prompt: `Is this search result a review of EXACTLY the ${brand} ${model} running shoe?
 ${adjacentList}
 
 Title: "${result.title}"
@@ -373,10 +348,8 @@ Rules:
 - A "best of" roundup counts if it scores the ${model} individually.
 
 Reply: YES or NO, then a 5-word reason.`,
-      }],
     });
-    const answer = msg.content[0].type === 'text' ? msg.content[0].text.trim() : 'NO';
-    return { verified: answer.toUpperCase().startsWith('YES'), reason: answer };
+    return { verified: answer.toUpperCase().startsWith('YES'), reason: answer || 'no answer' };
   } catch {
     return { verified: false, reason: 'API error' };
   }
@@ -604,19 +577,12 @@ function verifyPageMatchesShoe(brand: string, model: string, pageUrl: string, pa
 
 async function visionConfirmProductShot(imageUrl: string): Promise<boolean | null> {
   try {
-    const anthropic = getAnthropicClient();
-    const msg = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 10,
-      messages: [{
-        role: 'user',
-        content: [
-          { type: 'text', text: 'Is this a clean product photo of a single running shoe or pair of running shoes? (Not a lifestyle photo, not a person wearing them, not a logo, not broken/tiny)\n\nReply ONLY: YES or NO' },
-          { type: 'image', source: { type: 'url', url: imageUrl } },
-        ],
-      }],
+    const answer = await completeTextWithImage({
+      imageUrl,
+      maxTokens: 10,
+      prompt: 'Is this a clean product photo of a single running shoe or pair of running shoes? (Not a lifestyle photo, not a person wearing them, not a logo, not broken/tiny)\n\nReply ONLY: YES or NO',
     });
-    return (msg.content[0] as { type: 'text'; text: string }).text.trim().toUpperCase().startsWith('YES');
+    return answer.toUpperCase().startsWith('YES');
   } catch {
     return null;
   }
