@@ -575,13 +575,37 @@ function verifyPageMatchesShoe(brand: string, model: string, pageUrl: string, pa
   return { match: false, reason: 'neither URL nor title mention the model' };
 }
 
-async function visionConfirmProductShot(imageUrl: string): Promise<boolean | null> {
+/**
+ * Confirm an image is both a usable product shot AND the right shoe.
+ *
+ * The model check matters as much as the photo check: retailer product pages
+ * carry "you may also like" thumbnails, so scraping a page that genuinely is
+ * about the Mafate X can still yield a picture of a Mafate hiking boot. Asking
+ * only "is this a running shoe?" waves those through.
+ *
+ * Returns null when the check itself failed (network/API), which callers treat
+ * as unverified rather than as a pass.
+ */
+async function visionConfirmShoeImage(
+  brand: string,
+  model: string,
+  imageUrl: string
+): Promise<boolean | null> {
   try {
     const answer = await completeTextWithImage({
       imageUrl,
-      maxTokens: 10,
-      prompt: 'Is this a clean product photo of a single running shoe or pair of running shoes? (Not a lifestyle photo, not a person wearing them, not a logo, not broken/tiny)\n\nReply ONLY: YES or NO',
+      maxTokens: 40,
+      prompt: `You are verifying a product photo for a running shoe database.
+
+Expected shoe: ${brand} ${model}
+
+Answer TWO things:
+1. Is this a clean product photo of a single shoe or pair (not lifestyle, not worn, not a logo, not broken/tiny)?
+2. Does the shoe shown match the expected model above? Check silhouette, cut height and any visible model branding. A different model from the same brand is NOT a match.
+
+Reply ONLY: YES if both are true, otherwise NO followed by a 6-word reason.`,
     });
+    if (!answer) return null;
     return answer.toUpperCase().startsWith('YES');
   } catch {
     return null;
@@ -628,12 +652,14 @@ export async function findImageForShoe(brand: string, model: string, onProgress?
         const sizeCheck = await checkImageSize(img.url);
         if (!sizeCheck.ok) continue;
         onProgress?.(`Verifying image...`);
-        const visionResult = await visionConfirmProductShot(img.url);
-        if (visionResult === false) continue;
+        const visionResult = await visionConfirmShoeImage(brand, model, img.url);
+        // Only an explicit YES is good enough. A wrong image is worse than none
+        // — the schema allows a null image_url and the UI shows a placeholder.
+        if (visionResult !== true) continue;
         return {
           url: img.url,
           method: `product-page (${domain})`,
-          confidence: visionResult === true ? (verification.confidence ?? 'medium') : 'medium',
+          confidence: verification.confidence ?? 'medium',
         };
       }
       await sleep(500);
@@ -662,12 +688,12 @@ export async function findImageForShoe(brand: string, model: string, onProgress?
       const sizeCheck = await checkImageSize(imgUrl);
       if (!sizeCheck.ok) continue;
       onProgress?.(`Verifying image candidate...`);
-      const visionResult = await visionConfirmProductShot(imgUrl);
-      if (visionResult === false) continue;
+      const visionResult = await visionConfirmShoeImage(brand, model, imgUrl);
+      if (visionResult !== true) continue;
       return {
         url: imgUrl,
         method: 'image-search (source-verified)',
-        confidence: visionResult === true ? 'medium' : 'low',
+        confidence: 'medium',
       };
     }
   }
