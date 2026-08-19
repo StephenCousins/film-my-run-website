@@ -47,13 +47,6 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Stephen Cousins' }],
   creator: 'Stephen Cousins',
-  alternates: {
-    types: {
-      'application/rss+xml': [
-        { url: '/blog/rss.xml', title: 'Film My Run - Blog' },
-      ],
-    },
-  },
   openGraph: {
     type: 'website',
     locale: 'en_GB',
@@ -108,6 +101,15 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
+        {/* Declared here rather than in metadata.alternates: any page that sets
+            its own alternates (for a canonical) replaces the parent's entirely,
+            which silently dropped this link from every page that has one. */}
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Film My Run - Blog"
+          href="/blog/rss.xml"
+        />
         <meta name="theme-color" content="#f88c00" />
         {/* Prevent FOUC by setting theme before React hydrates */}
         <script
