@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Master of Ceremonies',
-  alternates: { canonical: 'https://filmmyrun.co.uk/services/master-of-ceremonies' },
+  alternates: { canonical: 'https://filmmyrun.com/services/master-of-ceremonies' },
   description:
     'Experienced MC for trail races, ultra-marathons, and running events. Energetic commentary and event hosting from a runner who understands the sport inside out.',
   keywords: [

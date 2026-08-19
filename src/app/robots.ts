@@ -9,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/admin/', '/_next/', '/login', '/register'],
       },
     ],
-    sitemap: 'https://filmmyrun.co.uk/sitemap.xml',
+    sitemap: 'https://filmmyrun.com/sitemap.xml',
   };
 }

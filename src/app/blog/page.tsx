@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Blog | Film My Run',
-  alternates: { canonical: 'https://filmmyrun.co.uk/blog' },
+  alternates: { canonical: 'https://filmmyrun.com/blog' },
   description: 'Running stories, race reports, gear reviews, and training insights from 15 years of running and filming.',
   keywords: [
     'running blog',
@@ -111,8 +111,8 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-    { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://filmmyrun.co.uk/blog' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+    { '@type': 'ListItem', position: 2, name: 'Blog', item: 'https://filmmyrun.com/blog' },
   ],
 };
 

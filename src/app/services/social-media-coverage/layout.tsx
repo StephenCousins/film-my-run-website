@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Social Media Coverage',
-  alternates: { canonical: 'https://filmmyrun.co.uk/services/social-media-coverage' },
+  alternates: { canonical: 'https://filmmyrun.com/services/social-media-coverage' },
   description:
     'Professional social media content creation for running events. Real-time race updates, stories, reels, and highlight clips to boost your event presence online.',
   keywords: [

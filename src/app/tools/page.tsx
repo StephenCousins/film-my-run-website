@@ -21,7 +21,7 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Running Tools',
-  alternates: { canonical: 'https://filmmyrun.co.uk/tools' },
+  alternates: { canonical: 'https://filmmyrun.com/tools' },
   description:
     'Free running tools used by 250,000+ runners every week. Pace calculators, parkrun statistics, race visualization, and more.',
   openGraph: {
@@ -128,7 +128,7 @@ const webAppJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: 'Film My Run Running Tools',
-  url: 'https://filmmyrun.co.uk/tools',
+  url: 'https://filmmyrun.com/tools',
   description:
     'Free running tools used by 250,000+ runners every week. Pace calculators, parkrun statistics, race visualization, and more.',
   applicationCategory: 'SportsApplication',
@@ -138,15 +138,15 @@ const webAppJsonLd = {
     price: '0',
     priceCurrency: 'GBP',
   },
-  creator: { '@id': 'https://filmmyrun.co.uk/#organization' },
+  creator: { '@id': 'https://filmmyrun.com/#organization' },
 };
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://filmmyrun.co.uk/tools' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+    { '@type': 'ListItem', position: 2, name: 'Tools', item: 'https://filmmyrun.com/tools' },
   ],
 };
 

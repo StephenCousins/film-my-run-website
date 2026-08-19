@@ -175,7 +175,7 @@ function buildEmail(ideology: ReturnType<typeof findClosestIdeology>, scores: z.
           <!-- Footer -->
           <tr>
             <td style="padding: 20px 32px; background-color: #09090b; border-top: 1px solid #27272a; border-radius: 0 0 12px 12px;" align="center">
-              <p style="margin: 0 0 4px; font-size: 13px; font-weight: 700; color: #f88c00;">filmmyrun.co.uk</p>
+              <p style="margin: 0 0 4px; font-size: 13px; font-weight: 700; color: #f88c00;">filmmyrun.com</p>
               <p style="margin: 0; color: #52525b; font-size: 11px; line-height: 1.5;">
                 You received this because you requested your Runner Quiz results.
               </p>
@@ -213,7 +213,7 @@ export async function POST(request: NextRequest) {
 
     const resend = new Resend(resendKey);
     const fromEmail = process.env.RESEND_FROM_EMAIL || 'Film My Run <onboarding@resend.dev>';
-    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.co.uk';
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.com';
 
     await resend.emails.send({
       from: fromEmail,

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Films',
-  alternates: { canonical: 'https://filmmyrun.co.uk/films' },
+  alternates: { canonical: 'https://filmmyrun.com/films' },
   description:
     'Award-winning running documentaries and race films. From ultra marathons to trail adventures, experience the stories behind the miles.',
   keywords: [

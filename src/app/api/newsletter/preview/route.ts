@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = result.data as NewsletterPayload;
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.co.uk';
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.com';
 
     // Auto-populate all missing sections (dryRun=true — don't update rotation tracking)
     await autoPopulateNewsletter(payload, baseUrl, true);

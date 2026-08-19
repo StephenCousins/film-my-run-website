@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Trail & Ultra Running News',
-  alternates: { canonical: 'https://filmmyrun.co.uk/news' },
+  alternates: { canonical: 'https://filmmyrun.com/news' },
   description: 'The latest news from the world of trail and ultra running. Curated stories from trusted sources, updated daily.',
   keywords: [
     'trail running news',
@@ -111,8 +111,8 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-    { '@type': 'ListItem', position: 2, name: 'News', item: 'https://filmmyrun.co.uk/news' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+    { '@type': 'ListItem', position: 2, name: 'News', item: 'https://filmmyrun.com/news' },
   ],
 };
 

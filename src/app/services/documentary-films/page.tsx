@@ -223,8 +223,8 @@ const serviceJsonLd = {
   '@type': 'Service',
   name: 'Documentary Film Production',
   description: 'Award-winning documentary filmmaking specialising in trail and ultra running. Compelling storytelling with professional cinematography.',
-  url: 'https://filmmyrun.co.uk/services/documentary-films',
-  provider: { '@id': 'https://filmmyrun.co.uk/#organization' },
+  url: 'https://filmmyrun.com/services/documentary-films',
+  provider: { '@id': 'https://filmmyrun.com/#organization' },
   areaServed: { '@type': 'Place', name: 'United Kingdom' },
   serviceType: 'Documentary Film Production',
 };
@@ -233,9 +233,9 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.co.uk/services' },
-    { '@type': 'ListItem', position: 3, name: 'Documentary Films', item: 'https://filmmyrun.co.uk/services/documentary-films' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.com/services' },
+    { '@type': 'ListItem', position: 3, name: 'Documentary Films', item: 'https://filmmyrun.com/services/documentary-films' },
   ],
 };
 

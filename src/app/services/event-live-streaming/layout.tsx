@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Event Live Streaming',
-  alternates: { canonical: 'https://filmmyrun.co.uk/services/event-live-streaming' },
+  alternates: { canonical: 'https://filmmyrun.com/services/event-live-streaming' },
   description:
     'Professional live streaming for running events, trail races, and ultra-marathons. Multi-camera setups bringing race day to audiences worldwide in real time.',
   keywords: [

@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Shop',
-  alternates: { canonical: 'https://filmmyrun.co.uk/shop' },
+  alternates: { canonical: 'https://filmmyrun.com/shop' },
   description:
     'The Film My Run shop is coming soon. Running gear, apparel, and accessories designed by runners, for runners.',
   openGraph: {

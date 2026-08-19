@@ -12,7 +12,7 @@ import ContactForm from '@/components/contact/ContactForm';
 
 export const metadata: Metadata = {
   title: 'Contact | Film My Run',
-  alternates: { canonical: 'https://filmmyrun.co.uk/contact' },
+  alternates: { canonical: 'https://filmmyrun.com/contact' },
   description: 'Get in touch for race filming, event coverage, collaborations, or just to say hello. We\'d love to hear from you.',
   keywords: [
     'contact Film My Run',
@@ -59,8 +59,8 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-    { '@type': 'ListItem', position: 2, name: 'Contact', item: 'https://filmmyrun.co.uk/contact' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+    { '@type': 'ListItem', position: 2, name: 'Contact', item: 'https://filmmyrun.com/contact' },
   ],
 };
 

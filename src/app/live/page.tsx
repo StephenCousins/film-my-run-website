@@ -201,7 +201,7 @@ export default function LivePage() {
                       </div>
                       <iframe
                         className="w-full h-[400px] lg:h-[calc(100%-44px)]"
-                        src={`https://www.youtube.com/live_chat?v=${streamInfo.videoId}&embed_domain=${typeof window !== 'undefined' ? window.location.hostname : 'filmmyrun.co.uk'}`}
+                        src={`https://www.youtube.com/live_chat?v=${streamInfo.videoId}&embed_domain=${typeof window !== 'undefined' ? window.location.hostname : 'filmmyrun.com'}`}
                         title="Live Chat"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       />

@@ -78,8 +78,8 @@ const serviceJsonLd = {
   '@type': 'Service',
   name: 'Master of Ceremonies',
   description: 'Professional MC services for running events. Pre-race briefings, start line energy, finish line welcomes, and presentation ceremonies.',
-  url: 'https://filmmyrun.co.uk/services/master-of-ceremonies',
-  provider: { '@id': 'https://filmmyrun.co.uk/#organization' },
+  url: 'https://filmmyrun.com/services/master-of-ceremonies',
+  provider: { '@id': 'https://filmmyrun.com/#organization' },
   areaServed: { '@type': 'Place', name: 'United Kingdom' },
   serviceType: 'Event MC Services',
 };
@@ -88,9 +88,9 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.co.uk/services' },
-    { '@type': 'ListItem', position: 3, name: 'Master of Ceremonies', item: 'https://filmmyrun.co.uk/services/master-of-ceremonies' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.com/services' },
+    { '@type': 'ListItem', position: 3, name: 'Master of Ceremonies', item: 'https://filmmyrun.com/services/master-of-ceremonies' },
   ],
 };
 

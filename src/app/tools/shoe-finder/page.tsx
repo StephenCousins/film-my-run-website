@@ -6,7 +6,7 @@ import ShoeFinderClient from '@/components/shoes/ShoeFinderClient';
 
 export const metadata: Metadata = {
   title: 'Running Shoe Finder',
-  alternates: { canonical: 'https://filmmyrun.co.uk/tools/shoe-finder' },
+  alternates: { canonical: 'https://filmmyrun.com/tools/shoe-finder' },
   description:
     'Find the best running shoes for trail and road. Aggregated review scores from RunRepeat, Runner\'s World, iRunFar and more — ranked to help you choose.',
   openGraph: {

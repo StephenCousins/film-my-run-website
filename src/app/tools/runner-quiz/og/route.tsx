@@ -168,7 +168,7 @@ export async function GET(request: Request) {
                 <span style={{ color: '#fff', fontSize: '14px', fontWeight: 900 }}>F</span>
               </div>
               <span style={{ color: '#52525b', fontSize: '15px', fontWeight: 600 }}>
-                filmmyrun.co.uk
+                filmmyrun.com
               </span>
             </div>
             <div style={{
@@ -317,7 +317,7 @@ export async function GET(request: Request) {
               <span style={{ color: '#fff', fontSize: '14px', fontWeight: 900 }}>F</span>
             </div>
             <span style={{ color: '#52525b', fontSize: '15px', fontWeight: 600 }}>
-              filmmyrun.co.uk
+              filmmyrun.com
             </span>
           </div>
           <div style={{

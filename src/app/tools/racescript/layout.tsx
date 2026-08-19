@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'RaceScript — turn your Strava run into a race report',
-  alternates: { canonical: 'https://filmmyrun.co.uk/tools/racescript' },
+  alternates: { canonical: 'https://filmmyrun.com/tools/racescript' },
   description:
     'Paste a Strava activity, answer a few quick questions, and RaceScript writes your race report, blog post, or social caption — using your real run data, photos, gear and race-day weather.',
   keywords: [

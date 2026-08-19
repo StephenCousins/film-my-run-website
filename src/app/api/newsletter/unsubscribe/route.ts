@@ -63,7 +63,7 @@ function unsubscribePage(message: string, success: boolean): string {
     <div style="font-size: 48px; margin-bottom: 16px;">${success ? '&#10003;' : '&#10007;'}</div>
     <h1 style="font-size: 22px; color: #18181b; margin-bottom: 12px;">Film My Run</h1>
     <p style="color: ${success ? '#52525b' : '#ef4444'}; font-size: 15px; line-height: 1.5;">${message}</p>
-    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.co.uk'}" style="display: inline-block; margin-top: 24px; color: #f88c00; text-decoration: none; font-size: 14px;">Visit Film My Run</a>
+    <a href="${process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.com'}" style="display: inline-block; margin-top: 24px; color: #f88c00; text-decoration: none; font-size: 14px;">Visit Film My Run</a>
   </div>
 </body>
 </html>`;

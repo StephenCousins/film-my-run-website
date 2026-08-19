@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'POV Race Coverage',
-  alternates: { canonical: 'https://filmmyrun.co.uk/services/pov-race-coverage' },
+  alternates: { canonical: 'https://filmmyrun.com/services/pov-race-coverage' },
   description:
     'Professional first-person race videography that puts viewers in the heart of the action. POV camera coverage for trail races, ultras, and running events across the UK.',
   keywords: [

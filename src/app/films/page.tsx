@@ -247,8 +247,8 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-    { '@type': 'ListItem', position: 2, name: 'Films', item: 'https://filmmyrun.co.uk/films' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+    { '@type': 'ListItem', position: 2, name: 'Films', item: 'https://filmmyrun.com/films' },
   ],
 };
 
@@ -257,8 +257,8 @@ const collectionJsonLd = {
   '@type': 'CollectionPage',
   name: 'Ultra Race Films',
   description: 'Documentary-style race films capturing the spirit of ultra running.',
-  url: 'https://filmmyrun.co.uk/films',
-  creator: { '@id': 'https://filmmyrun.co.uk/#organization' },
+  url: 'https://filmmyrun.com/films',
+  creator: { '@id': 'https://filmmyrun.com/#organization' },
 };
 
 export default function FilmsPage() {

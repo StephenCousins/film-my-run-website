@@ -11,7 +11,7 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'About | Film My Run',
-  alternates: { canonical: 'https://filmmyrun.co.uk/about' },
+  alternates: { canonical: 'https://filmmyrun.com/about' },
   description: 'The story behind Film My Run - runner, filmmaker, and tool builder since 2011. Creating content and tools for the running community.',
   keywords: [
     'Stephen Cousins',
@@ -59,7 +59,7 @@ const personJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Person',
   name: 'Stephen Cousins',
-  url: 'https://filmmyrun.co.uk/about',
+  url: 'https://filmmyrun.com/about',
   image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about/stephen.jpg',
   jobTitle: 'Documentary Filmmaker & Ultra Runner',
   description:
@@ -69,15 +69,15 @@ const personJsonLd = {
     'https://www.instagram.com/filmmyrun',
     'https://www.strava.com/athletes/filmmyrun',
   ],
-  worksFor: { '@id': 'https://filmmyrun.co.uk/#organization' },
+  worksFor: { '@id': 'https://filmmyrun.com/#organization' },
 };
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-    { '@type': 'ListItem', position: 2, name: 'About', item: 'https://filmmyrun.co.uk/about' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+    { '@type': 'ListItem', position: 2, name: 'About', item: 'https://filmmyrun.com/about' },
   ],
 };
 

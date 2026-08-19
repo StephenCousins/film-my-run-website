@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Route Comparison Tool',
-  alternates: { canonical: 'https://filmmyrun.co.uk/tools/route-comparison' },
+  alternates: { canonical: 'https://filmmyrun.com/tools/route-comparison' },
   description:
     'Compare two running routes side by side with elevation profiles and distance overlays. Upload GPX files to visualise and analyse route differences.',
   keywords: [

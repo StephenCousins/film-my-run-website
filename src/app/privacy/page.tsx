@@ -4,7 +4,7 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  alternates: { canonical: 'https://filmmyrun.co.uk/privacy' },
+  alternates: { canonical: 'https://filmmyrun.com/privacy' },
   description: 'Privacy Policy for Film My Run website and services.',
 };
 
@@ -31,7 +31,7 @@ export default function PrivacyPage() {
                 <p className="text-secondary mb-4">
                   Film My Run (&quot;we&quot;, &quot;our&quot;, &quot;us&quot;) is committed to protecting your privacy.
                   This Privacy Policy explains how we collect, use, and safeguard your personal
-                  information when you use our website (filmmyrun.co.uk) and services.
+                  information when you use our website (filmmyrun.com) and services.
                 </p>
                 <p className="text-secondary mb-4">
                   We are based in the United Kingdom and comply with the UK General Data Protection

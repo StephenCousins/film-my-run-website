@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'parkrun Statistics',
-  alternates: { canonical: 'https://filmmyrun.co.uk/tools/parkrun' },
+  alternates: { canonical: 'https://filmmyrun.com/tools/parkrun' },
   description:
     'Track your parkrun history, compare performances, and visualize your progress over time. Enter your athlete ID to view all your parkrun runs.',
   keywords: [

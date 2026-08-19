@@ -13,7 +13,7 @@
 const SEARCH_URL = 'https://api.utmb.world/search/runners';
 const PROFILE_BASE = 'https://utmb.world/runner';
 const UA =
-  'Mozilla/5.0 (compatible; FilmMyRun-StoneTracker/1.0; +https://filmmyrun.co.uk/tools/stone-tracker)';
+  'Mozilla/5.0 (compatible; FilmMyRun-StoneTracker/1.0; +https://filmmyrun.com/tools/stone-tracker)';
 const CACHE_SECONDS = 300;
 
 export interface RunnerMatch {

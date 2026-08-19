@@ -55,7 +55,7 @@ export async function GET(request: NextRequest) {
 
     // Parse the stored payload
     const payload = issue.content as unknown as NewsletterPayload;
-    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.co.uk';
+    const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.com';
 
     // Fetch all active subscribers
     const subscribers = await prisma.newsletter_subscribers.findMany({

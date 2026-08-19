@@ -21,7 +21,7 @@ export async function GET(
   }
 
   const payload = issue.content as unknown as NewsletterPayload;
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.co.uk';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.com';
   const html = buildNewsletterHtml(payload, '#', baseUrl);
 
   return new NextResponse(html, {

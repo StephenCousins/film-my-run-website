@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Contact',
-  alternates: { canonical: 'https://filmmyrun.co.uk/contact' },
+  alternates: { canonical: 'https://filmmyrun.com/contact' },
   description:
     'Get in touch for collaborations, sponsorships, media inquiries, or just to say hello. Based in the UK, available worldwide.',
   keywords: [

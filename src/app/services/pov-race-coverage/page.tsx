@@ -221,8 +221,8 @@ const serviceJsonLd = {
   '@type': 'Service',
   name: 'POV Race Coverage',
   description: 'Authentic first-person race footage filmed while competing. Professional 4K video capturing the course, atmosphere, and runner experience.',
-  url: 'https://filmmyrun.co.uk/services/pov-race-coverage',
-  provider: { '@id': 'https://filmmyrun.co.uk/#organization' },
+  url: 'https://filmmyrun.com/services/pov-race-coverage',
+  provider: { '@id': 'https://filmmyrun.com/#organization' },
   areaServed: { '@type': 'Place', name: 'United Kingdom' },
   serviceType: 'Video Production',
 };
@@ -231,9 +231,9 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.co.uk/services' },
-    { '@type': 'ListItem', position: 3, name: 'POV Race Coverage', item: 'https://filmmyrun.co.uk/services/pov-race-coverage' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.com/services' },
+    { '@type': 'ListItem', position: 3, name: 'POV Race Coverage', item: 'https://filmmyrun.com/services/pov-race-coverage' },
   ],
 };
 

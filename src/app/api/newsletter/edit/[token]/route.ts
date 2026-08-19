@@ -43,7 +43,7 @@ export async function POST(
     },
   });
 
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.co.uk';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.com';
   const html = buildNewsletterHtml(payload, '#unsubscribe-preview', baseUrl);
 
   return NextResponse.json({ ok: true, html });

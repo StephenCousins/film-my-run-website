@@ -177,7 +177,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${post.title} | Film My Run`,
     description: post.excerpt,
     alternates: {
-      canonical: `https://filmmyrun.co.uk/blog/${slug}`,
+      canonical: `https://filmmyrun.com/blog/${slug}`,
     },
     openGraph: {
       title: post.title,
@@ -247,7 +247,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   }
 
   const relatedPosts = await getRelatedPosts(slug);
-  const postUrl = `https://filmmyrun.co.uk/blog/${post.slug}`;
+  const postUrl = `https://filmmyrun.com/blog/${post.slug}`;
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -260,10 +260,10 @@ export default async function BlogPostPage({ params }: PageProps) {
     author: {
       '@type': 'Person',
       name: post.author.name,
-      url: 'https://filmmyrun.co.uk/about',
+      url: 'https://filmmyrun.com/about',
     },
     publisher: {
-      '@id': 'https://filmmyrun.co.uk/#organization',
+      '@id': 'https://filmmyrun.com/#organization',
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
@@ -280,13 +280,13 @@ export default async function BlogPostPage({ params }: PageProps) {
         '@type': 'ListItem',
         position: 1,
         name: 'Home',
-        item: 'https://filmmyrun.co.uk',
+        item: 'https://filmmyrun.com',
       },
       {
         '@type': 'ListItem',
         position: 2,
         name: 'Blog',
-        item: 'https://filmmyrun.co.uk/blog',
+        item: 'https://filmmyrun.com/blog',
       },
       {
         '@type': 'ListItem',

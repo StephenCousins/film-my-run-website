@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'StoneTracker — UTMB Running Stones',
-  alternates: { canonical: 'https://filmmyrun.co.uk/tools/stone-tracker' },
+  alternates: { canonical: 'https://filmmyrun.com/tools/stone-tracker' },
   description:
     'Instantly see how many UTMB Running Stones you have. Search your name, pick your profile, and StoneTracker works out your stones and whether your UTMB Index is valid for the Mont-Blanc lottery.',
   keywords: [

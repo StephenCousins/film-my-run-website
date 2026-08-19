@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Runner Discounts',
-  alternates: { canonical: 'https://filmmyrun.co.uk/discounts' },
+  alternates: { canonical: 'https://filmmyrun.com/discounts' },
   description:
     'Exclusive discount codes for runners. Save on race entries, running gear, nutrition, and accessories from top brands and event organisers.',
   keywords: [

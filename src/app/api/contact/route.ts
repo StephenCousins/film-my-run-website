@@ -45,7 +45,7 @@ export async function POST(request: Request) {
       : null;
 
   const textBody = [
-    `New contact form submission from filmmyrun.co.uk`,
+    `New contact form submission from filmmyrun.com`,
     ``,
     `From: ${name} <${email}>`,
     `Subject: ${subjectLabel}`,
@@ -80,7 +80,7 @@ export async function POST(request: Request) {
         <div style="color: #18181b; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(message)}</div>
       </div>
       <p style="margin-top: 24px; font-size: 12px; color: #a1a1aa;">
-        Sent via filmmyrun.co.uk contact form
+        Sent via filmmyrun.com contact form
       </p>
     </div>
   `;

@@ -27,7 +27,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 // Metadata
 export const metadata: Metadata = {
-  metadataBase: new URL('https://filmmyrun.co.uk'),
+  metadataBase: new URL('https://filmmyrun.com'),
   title: {
     default: 'Film My Run | Documentary Filmmaker & Ultra Runner',
     template: '%s | Film My Run',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    url: 'https://filmmyrun.co.uk',
+    url: 'https://filmmyrun.com',
     siteName: 'Film My Run',
     title: 'Film My Run | Documentary Filmmaker & Ultra Runner',
     description:
@@ -137,12 +137,12 @@ export default function RootLayout({
               '@graph': [
                 {
                   '@type': 'Organization',
-                  '@id': 'https://filmmyrun.co.uk/#organization',
+                  '@id': 'https://filmmyrun.com/#organization',
                   name: 'Film My Run',
-                  url: 'https://filmmyrun.co.uk',
+                  url: 'https://filmmyrun.com',
                   logo: {
                     '@type': 'ImageObject',
-                    url: 'https://filmmyrun.co.uk/og-image.jpg',
+                    url: 'https://filmmyrun.com/og-image.jpg',
                   },
                   description:
                     'Award-winning documentary filmmaker, ultra-marathoner, and creator of running tools.',
@@ -158,13 +158,13 @@ export default function RootLayout({
                 },
                 {
                   '@type': 'WebSite',
-                  '@id': 'https://filmmyrun.co.uk/#website',
-                  url: 'https://filmmyrun.co.uk',
+                  '@id': 'https://filmmyrun.com/#website',
+                  url: 'https://filmmyrun.com',
                   name: 'Film My Run',
                   description:
                     'Race reports, training insights, and tools for runners.',
                   publisher: {
-                    '@id': 'https://filmmyrun.co.uk/#organization',
+                    '@id': 'https://filmmyrun.com/#organization',
                   },
                 },
               ],

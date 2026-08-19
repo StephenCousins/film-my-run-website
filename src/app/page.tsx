@@ -37,11 +37,11 @@ export const metadata: Metadata = {
     title: 'Film My Run | Documentary Filmmaker & Ultra Runner',
     description:
       'Award-winning documentary filmmaker, ultra-marathoner, and creator of free running tools.',
-    url: 'https://filmmyrun.co.uk',
+    url: 'https://filmmyrun.com',
     images: ['/og-image.jpg'],
   },
   alternates: {
-    canonical: 'https://filmmyrun.co.uk',
+    canonical: 'https://filmmyrun.com',
   },
 };
 

@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     title: `${story.title} | Film My Run`,
     description: story.excerpt,
     alternates: {
-      canonical: `https://filmmyrun.co.uk/news/${slug}`,
+      canonical: `https://filmmyrun.com/news/${slug}`,
     },
     openGraph: {
       title: story.title,
@@ -99,7 +99,7 @@ export default async function NewsStoryPage({ params }: PageProps) {
   }
 
   const relatedStories = await getRelatedStories(slug);
-  const storyUrl = `https://filmmyrun.co.uk/news/${story.slug}`;
+  const storyUrl = `https://filmmyrun.com/news/${story.slug}`;
 
   const articleJsonLd = {
     '@context': 'https://schema.org',
@@ -111,10 +111,10 @@ export default async function NewsStoryPage({ params }: PageProps) {
     author: {
       '@type': 'Organization',
       name: 'Film My Run',
-      url: 'https://filmmyrun.co.uk',
+      url: 'https://filmmyrun.com',
     },
     publisher: {
-      '@id': 'https://filmmyrun.co.uk/#organization',
+      '@id': 'https://filmmyrun.com/#organization',
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
@@ -126,8 +126,8 @@ export default async function NewsStoryPage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-      { '@type': 'ListItem', position: 2, name: 'News', item: 'https://filmmyrun.co.uk/news' },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+      { '@type': 'ListItem', position: 2, name: 'News', item: 'https://filmmyrun.com/news' },
       { '@type': 'ListItem', position: 3, name: story.title, item: storyUrl },
     ],
   };

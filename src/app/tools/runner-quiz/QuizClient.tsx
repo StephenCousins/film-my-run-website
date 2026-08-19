@@ -310,7 +310,7 @@ function generateShareImage(
       ctx.fillStyle = '#f88c00';
       ctx.font = '700 22px "Inter", sans-serif';
       ctx.textAlign = 'left';
-      ctx.fillText('filmmyrun.co.uk/tools/runner-quiz', PAD_L, H - 110);
+      ctx.fillText('filmmyrun.com/tools/runner-quiz', PAD_L, H - 110);
 
       ctx.fillStyle = '#71717a';
       ctx.font = '400 16px "Inter", sans-serif';
@@ -329,7 +329,7 @@ function generateShareImage(
 
 function getShareUrl(scores: { surfaceL: number; methodL: number; distanceL: number; spiritL: number }) {
   const r = `${Math.round(scores.surfaceL)}-${Math.round(scores.methodL)}-${Math.round(scores.distanceL)}-${Math.round(scores.spiritL)}`;
-  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://filmmyrun.co.uk';
+  const origin = typeof window !== 'undefined' ? window.location.origin : 'https://filmmyrun.com';
   return `${origin}/tools/runner-quiz?r=${r}`;
 }
 

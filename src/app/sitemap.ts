@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { prisma } from '@/lib/db';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://filmmyrun.co.uk';
+  const baseUrl = 'https://filmmyrun.com';
 
   // Static pages with individual priorities
   const staticPages: { route: string; changeFrequency: 'daily' | 'weekly' | 'monthly'; priority: number }[] = [

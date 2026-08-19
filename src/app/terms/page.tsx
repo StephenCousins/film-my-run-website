@@ -4,7 +4,7 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  alternates: { canonical: 'https://filmmyrun.co.uk/terms' },
+  alternates: { canonical: 'https://filmmyrun.com/terms' },
   description: 'Terms of Service for Film My Run website and services.',
 };
 
@@ -29,7 +29,7 @@ export default function TermsPage() {
                   1. Agreement to Terms
                 </h2>
                 <p className="text-secondary mb-4">
-                  By accessing or using the Film My Run website (filmmyrun.co.uk), you agree to be
+                  By accessing or using the Film My Run website (filmmyrun.com), you agree to be
                   bound by these Terms of Service. If you do not agree to these terms, please do
                   not use our website or services.
                 </p>

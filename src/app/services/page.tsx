@@ -7,7 +7,7 @@ import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
   title: 'Services',
-  alternates: { canonical: 'https://filmmyrun.co.uk/services' },
+  alternates: { canonical: 'https://filmmyrun.com/services' },
   description: 'POV race footage, award-winning documentaries, MC services, and live streaming for trail and ultra running events.',
   keywords: [
     'race filming services',
@@ -96,8 +96,8 @@ const servicesJsonLd = {
       '@type': 'Service',
       name: service.title,
       description: service.description,
-      url: `https://filmmyrun.co.uk${service.detailsHref}`,
-      provider: { '@id': 'https://filmmyrun.co.uk/#organization' },
+      url: `https://filmmyrun.com${service.detailsHref}`,
+      provider: { '@id': 'https://filmmyrun.com/#organization' },
     },
   })),
 };
@@ -106,8 +106,8 @@ const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'BreadcrumbList',
   itemListElement: [
-    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.co.uk' },
-    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.co.uk/services' },
+    { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
+    { '@type': 'ListItem', position: 2, name: 'Services', item: 'https://filmmyrun.com/services' },
   ],
 };
 

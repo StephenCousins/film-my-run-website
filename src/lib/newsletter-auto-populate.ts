@@ -424,7 +424,7 @@ function autoPopulateIntro(payload: NewsletterPayload): void {
  * Auto-populate all missing sections of a newsletter payload.
  *
  * @param payload - The newsletter payload (sections already provided are preserved)
- * @param baseUrl - The site base URL (e.g. https://filmmyrun.co.uk)
+ * @param baseUrl - The site base URL (e.g. https://filmmyrun.com)
  * @param dryRun - If true, don't update last_used_at in the content pool (for preview)
  */
 export async function autoPopulateNewsletter(

@@ -134,7 +134,7 @@ export async function rewriteStory(
     ]),
   ].join('\n');
 
-  const prompt = `You are writing a short news article for Film My Run (filmmyrun.co.uk), a British trail and ultra running website.
+  const prompt = `You are writing a short news article for Film My Run (filmmyrun.com), a British trail and ultra running website.
 
 Write about this race/event based on the source material below. Your voice should be:
 - Conversational British English (not formal, not laddish — think knowledgeable running mate at the pub)

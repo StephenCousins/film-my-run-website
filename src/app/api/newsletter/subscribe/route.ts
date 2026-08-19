@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
     if (resendKey) {
       const resend = new Resend(resendKey);
       const fromEmail = process.env.RESEND_FROM_EMAIL || 'Film My Run <onboarding@resend.dev>';
-      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.co.uk';
+      const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.com';
       resend.emails.send({
         from: fromEmail,
         to: email,
