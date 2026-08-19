@@ -125,4 +125,4 @@ Somewhere in Zermatt there's a hotel where my great-great-uncle planned the bold
 
 ## Strava Activity
 
-<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="19678997146" data-style="standard" data-from-embed="false"></div><script src="https://strava-embeds.com/embed.js"></script>
+<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="19678997146" data-style="standard" data-from-embed="false" data-token="nZKYJVmQov7njgzx-eLj8F46agOxEBl4xEUbr--rclc"></div><script src="https://strava-embeds.com/embed.js"></script>

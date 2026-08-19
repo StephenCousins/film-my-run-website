@@ -153,7 +153,7 @@ const content = `<!-- TL;DR Summary -->
 
 <h2>Strava Activity</h2>
 
-<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="19678997146" data-style="standard" data-from-embed="false"></div>
+<div class="strava-embed-placeholder" data-embed-type="activity" data-embed-id="19678997146" data-style="standard" data-from-embed="false" data-token="nZKYJVmQov7njgzx-eLj8F46agOxEBl4xEUbr--rclc"></div>
 <script src="https://strava-embeds.com/embed.js"></script>`;
 
 async function main() {
