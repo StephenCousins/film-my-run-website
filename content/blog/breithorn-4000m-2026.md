@@ -69,11 +69,6 @@ The summit ridge is where it gets properly Alpine. It's narrow, with a serious d
 And then we were all there, 4,164 metres above sea level, the four of us roped together on top of our first 4,000m mountain, with the Matterhorn standing right in front of us. Uncle Edward would have approved. Probably. He might have had notes on our gondola usage.
 
 <figure>
-  <img src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/2026/breithorn-summit-ridge-portrait.jpg" alt="The four of us on the summit ridge of the Breithorn, sun overhead and the ridge running away behind" />
-  <figcaption>On top, with the ridge running away behind us and the queue still coming up. Note the sleeveless top, which I maintain was the correct call.</figcaption>
-</figure>
-
-<figure>
   <img src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/blog/2026/breithorn-summit-family.jpg" alt="The four of us roped up on the summit ridge of the Breithorn" />
   <figcaption>The summit of the Breithorn, 4,164m. A drop on either side, the Monte Rosa massif behind, and four very happy first-time four-thousanders.</figcaption>
 </figure>

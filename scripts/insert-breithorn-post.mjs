@@ -97,11 +97,6 @@ const content = `<!-- TL;DR Summary -->
 <p>And then we were all there, 4,164 metres above sea level, the four of us roped together on top of our first 4,000m mountain, with the Matterhorn standing right in front of us. Uncle Edward would have approved. Probably. He might have had notes on our gondola usage.</p>
 
 <figure>
-  <img src="${R2}/breithorn-summit-ridge-portrait.jpg" alt="The four of us on the summit ridge of the Breithorn, sun overhead and the ridge running away behind" />
-  <figcaption>On top, with the ridge running away behind us and the queue still coming up. Note the sleeveless top, which I maintain was the correct call.</figcaption>
-</figure>
-
-<figure>
   <img src="${R2}/breithorn-summit-family.jpg" alt="The four of us roped up on the summit ridge of the Breithorn" />
   <figcaption>The summit of the Breithorn, 4,164m. A drop on either side, the Monte Rosa massif behind, and four very happy first-time four-thousanders.</figcaption>
 </figure>
