@@ -63,6 +63,15 @@ const nextConfig: NextConfig = {
   // Redirects for old WordPress URLs
   async redirects() {
     return [
+      // www -> apex. Both hosts serve the site, and while the canonical tags
+      // already point search engines at the bare domain, a 301 keeps the two
+      // from being crawled as separate copies.
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'www.filmmyrun.com' }],
+        destination: 'https://filmmyrun.com/:path*',
+        permanent: true,
+      },
       // Old image paths
       {
         source: '/wp-content/uploads/:path*',

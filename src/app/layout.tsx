@@ -47,6 +47,13 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: 'Stephen Cousins' }],
   creator: 'Stephen Cousins',
+  alternates: {
+    types: {
+      'application/rss+xml': [
+        { url: '/blog/rss.xml', title: 'Film My Run - Blog' },
+      ],
+    },
+  },
   openGraph: {
     type: 'website',
     locale: 'en_GB',
