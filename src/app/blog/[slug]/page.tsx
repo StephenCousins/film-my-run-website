@@ -9,6 +9,7 @@ import Footer from '@/components/layout/Footer';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import { prisma } from '@/lib/db';
 import { sanitizeContent } from '@/lib/sanitize';
+import { applyStravaEmbedToken, type StravaEmbedMeta } from '@/lib/strava-embed';
 
 export const dynamic = 'force-dynamic';
 
@@ -84,7 +85,8 @@ async function getPostBySlug(slug: string) {
     id: post.id.toString(),
     title: post.title,
     slug: post.slug,
-    content: post.content,
+    // Strava's per-activity embed token lives in meta, not in the post HTML.
+    content: applyStravaEmbedToken(post.content, post.meta as StravaEmbedMeta | null),
     excerpt: post.excerpt || post.content.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
     featuredImage: post.featured_image,
     publishedAt: post.published_at?.toISOString() || post.created_at.toISOString(),
