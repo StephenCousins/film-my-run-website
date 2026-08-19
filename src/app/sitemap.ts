@@ -1,6 +1,11 @@
 import { MetadataRoute } from 'next';
 import { prisma } from '@/lib/db';
 
+// Built at request time, not build time. The database isn't reachable from the
+// build container, so a statically generated sitemap silently lost every blog
+// post, film and news story and shipped with the static routes alone.
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://filmmyrun.com';
 
@@ -53,8 +58,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     }));
-  } catch {
-    // Database may not be available during build
+  } catch (error) {
+    console.error('sitemap: failed to load dynamic routes', error);
   }
 
   // Dynamic news stories
@@ -70,8 +75,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.6,
     }));
-  } catch {
-    // Database may not be available during build
+  } catch (error) {
+    console.error('sitemap: failed to load dynamic routes', error);
   }
 
   // Dynamic film pages
@@ -86,8 +91,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'monthly' as const,
       priority: 0.8,
     }));
-  } catch {
-    // Database may not be available during build
+  } catch (error) {
+    console.error('sitemap: failed to load dynamic routes', error);
   }
 
   return [
