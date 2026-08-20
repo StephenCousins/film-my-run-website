@@ -66,7 +66,8 @@ function Logo({ variant }: { variant: 'default' | 'hero' | 'scrolled' }) {
   return (
     <FilmMyRunLogo
       size="md"
-      textVariant={variant === 'hero' ? 'white' : 'default'}
+      priority
+      variant={variant === 'hero' ? 'onDark' : 'auto'}
     />
   );
 }
