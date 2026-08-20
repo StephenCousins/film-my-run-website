@@ -577,7 +577,7 @@ export default function RacesPage() {
   const scrollToTable = () => {
     setTimeout(() => {
       tableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 100);
+    }, 300);
   };
 
   const filterByType = (type: string, label: string) => {
