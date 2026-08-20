@@ -19,6 +19,9 @@ import {
   FileText,
   ChevronDown,
   ChevronUp,
+  ArrowUp,
+  ArrowDown,
+  ArrowUpDown,
   Loader2,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
@@ -152,6 +155,41 @@ function SubStatCard({ title, value, onClick }: SubStatCardProps) {
       <div className="text-2xl font-bold text-foreground mb-1">{value}</div>
       <div className="text-xs text-muted">{title}</div>
     </button>
+  );
+}
+
+// ============================================
+// SORTABLE HEADER COMPONENT
+// ============================================
+
+interface SortableHeaderProps {
+  column: string;
+  label: string;
+  sortColumn: string | null;
+  sortDirection: 'asc' | 'desc';
+  onToggle: (column: string) => void;
+}
+
+function SortableHeader({ column, label, sortColumn, sortDirection, onToggle }: SortableHeaderProps) {
+  const isActive = sortColumn === column;
+  return (
+    <th className="py-3 px-4 text-sm font-medium text-secondary">
+      <button
+        onClick={() => onToggle(column)}
+        className="flex items-center gap-1 hover:text-foreground transition-colors group"
+      >
+        {label}
+        {isActive ? (
+          sortDirection === 'asc' ? (
+            <ArrowUp className="w-3.5 h-3.5 text-brand" />
+          ) : (
+            <ArrowDown className="w-3.5 h-3.5 text-brand" />
+          )
+        ) : (
+          <ArrowUpDown className="w-3.5 h-3.5 opacity-0 group-hover:opacity-50 transition-opacity" />
+        )}
+      </button>
+    </th>
   );
 }
 
@@ -420,6 +458,8 @@ export default function RacesPage() {
   const [terrainFilter, setTerrainFilter] = useState(initialTerrain);
   const [distanceFilter, setDistanceFilter] = useState(initialDistance);
   const [searchFilter, setSearchFilter] = useState('');
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const tableRef = useRef<HTMLDivElement>(null);
   const [activeFilterLabel, setActiveFilterLabel] = useState<string | null>(() => {
     if (initialYear) return `Year ${initialYear}`;
@@ -574,6 +614,55 @@ export default function RacesPage() {
     scrollToTable();
   };
 
+  const toggleSort = (column: string) => {
+    if (sortColumn === column) {
+      setSortDirection((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortColumn(column);
+      setSortDirection(column === 'date' ? 'desc' : 'asc');
+    }
+  };
+
+  const sortedRaces = useMemo(() => {
+    if (!sortColumn) return filteredRaces;
+
+    return [...filteredRaces].sort((a, b) => {
+      let cmp = 0;
+
+      switch (sortColumn) {
+        case 'date': {
+          const da = a.date ? new Date(a.date).getTime() : 0;
+          const db = b.date ? new Date(b.date).getTime() : 0;
+          cmp = da - db;
+          break;
+        }
+        case 'event':
+          cmp = (a.event || '').localeCompare(b.event || '');
+          break;
+        case 'distance':
+          cmp = (a.distanceKm || 0) - (b.distanceKm || 0);
+          break;
+        case 'time':
+          cmp = (a.secs || Infinity) - (b.secs || Infinity);
+          break;
+        case 'elevation':
+          cmp = (a.elev || 0) - (b.elev || 0);
+          break;
+        case 'position': {
+          const posNum = (p: string | null) => {
+            if (!p) return Infinity;
+            const m = p.match(/^(\d+)/);
+            return m ? parseInt(m[1]) : Infinity;
+          };
+          cmp = posNum(a.pos) - posNum(b.pos);
+          break;
+        }
+      }
+
+      return sortDirection === 'asc' ? cmp : -cmp;
+    });
+  }, [filteredRaces, sortColumn, sortDirection]);
+
   if (loading) {
     return (
       <>
@@ -643,7 +732,7 @@ export default function RacesPage() {
                 title="Total Races"
                 value={stats?.total || 0}
                 icon={<Trophy className="w-6 h-6 text-white" />}
-                onClick={resetFilters}
+                onClick={() => { resetFilters(); scrollToTable(); }}
                 color="orange"
               />
               <StatCard
@@ -848,19 +937,19 @@ export default function RacesPage() {
                 <table className="w-full">
                   <thead>
                     <tr className="bg-surface-secondary text-left">
-                      <th className="py-3 px-4 text-sm font-medium text-secondary">Date</th>
-                      <th className="py-3 px-4 text-sm font-medium text-secondary">Event</th>
+                      <SortableHeader column="date" label="Date" sortColumn={sortColumn} sortDirection={sortDirection} onToggle={toggleSort} />
+                      <SortableHeader column="event" label="Event" sortColumn={sortColumn} sortDirection={sortDirection} onToggle={toggleSort} />
                       <th className="py-3 px-4 text-sm font-medium text-secondary">Type</th>
-                      <th className="py-3 px-4 text-sm font-medium text-secondary">Distance</th>
-                      <th className="py-3 px-4 text-sm font-medium text-secondary">Time</th>
-                      <th className="py-3 px-4 text-sm font-medium text-secondary">Elevation</th>
-                      <th className="py-3 px-4 text-sm font-medium text-secondary">Position</th>
+                      <SortableHeader column="distance" label="Distance" sortColumn={sortColumn} sortDirection={sortDirection} onToggle={toggleSort} />
+                      <SortableHeader column="time" label="Time" sortColumn={sortColumn} sortDirection={sortDirection} onToggle={toggleSort} />
+                      <SortableHeader column="elevation" label="Elevation" sortColumn={sortColumn} sortDirection={sortDirection} onToggle={toggleSort} />
+                      <SortableHeader column="position" label="Position" sortColumn={sortColumn} sortDirection={sortDirection} onToggle={toggleSort} />
                       <th className="py-3 px-4 text-sm font-medium text-secondary">Surface</th>
                       <th className="py-3 px-4 text-sm font-medium text-secondary">Links</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredRaces.map((race) => (
+                    {sortedRaces.map((race) => (
                       <RaceRow key={race.id} race={race} />
                     ))}
                   </tbody>
@@ -874,7 +963,7 @@ export default function RacesPage() {
         <section className="py-8 lg:hidden">
           <div className="container">
             <div className="space-y-4">
-              {filteredRaces.map((race) => (
+              {sortedRaces.map((race) => (
                 <MobileRaceCard key={race.id} race={race} />
               ))}
             </div>
