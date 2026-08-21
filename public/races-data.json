@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-08-20T03:38:48.246Z",
+  "lastUpdated": "2026-08-21T03:42:43.735Z",
   "races": [
     {
       "activityId": "33811771",
@@ -3702,7 +3702,7 @@
       "number": 169,
       "date": "21/06/2025",
       "name": "Race to the King",
-      "distance": 64,
+      "distance": 62,
       "time": "15:10:28",
       "position": 77,
       "elevation": 1616,
@@ -3724,7 +3724,7 @@
       "number": 170,
       "date": "12/07/2025",
       "name": "Race to the Stones",
-      "distance": 64,
+      "distance": 62,
       "time": "15:36:08",
       "position": 255,
       "elevation": 1414,
@@ -3768,7 +3768,7 @@
       "number": 172,
       "date": "27/09/2025",
       "name": "7 Valleys Ultra",
-      "distance": 64,
+      "distance": 62,
       "time": "21:51:40",
       "position": 147,
       "elevation": 4251,
@@ -3894,6 +3894,28 @@
       "trailCount": "",
       "hundredMilers": "",
       "raceCount": "1 x Midnight Sun Marathon"
+    },
+    {
+      "activityId": "19661205746",
+      "number": 178,
+      "date": "07/08/2026",
+      "name": "Swiss Alps 100",
+      "distance": 62,
+      "time": "24:42:40",
+      "position": 156,
+      "elevation": 5752,
+      "video": "",
+      "report": "",
+      "strava": "https://www.strava.com/activities/19661205746",
+      "officialResults": "https://my.raceresult.com/357491/details0?pid=1243",
+      "type": "Ultra",
+      "terrain": "Trail",
+      "marathonCount": "",
+      "ultraCount": 82,
+      "roadCount": "",
+      "trailCount": 148,
+      "hundredMilers": "",
+      "raceCount": "1 x Swiss Alps 100"
     }
   ]
 }
