@@ -28,7 +28,7 @@ export default function InsightsPanel({ route }: InsightsPanelProps) {
   const steepSections = useMemo(() => detectSteepSections(route), [route]);
   const hrZones = useMemo(() => {
     if (!route.heartRates.some((hr) => hr !== null)) return null;
-    return calculateZones(route.heartRates, route.timestamps, 'heartRate');
+    return calculateZones(route.heartRates, route.timestamps, 'heartRate', route.hrZoneBoundaries);
   }, [route]);
   const splits = useMemo(() => calculateSplits(route), [route]);
 

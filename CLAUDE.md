@@ -126,6 +126,21 @@ return { featuredImage: post.featuredImage };  // field is 'featured_image'
 --info: #3b82f6;
 ```
 
+### Logo
+
+The brand lockup is a transparent PNG rendered via `next/image` in
+`src/components/ui/FilmMyRunLogo.tsx`. Two variants ship in
+`public/images/logo/`:
+
+| File | Use on | Content |
+|------|--------|---------|
+| `fmr-logo-light.png` | Light backgrounds | Dark runner silhouettes |
+| `fmr-logo-dark.png` | Dark backgrounds | White runner silhouettes |
+
+Both are 1000 × 444 px (aspect ≈ 2.25). The wordmark ("Film My Run") is
+baked into the artwork — no separate text is rendered. The component
+auto-switches between variants based on the active theme.
+
 ### Typography
 
 ```css
@@ -706,7 +721,7 @@ Segments, Insights.
 | `file-parser.ts` | GPX (DOMParser) and FIT (`fit-file-parser`) |
 | `fit-battery.ts` | Raw binary scan for battery (see below) |
 | `analysis.ts` | Splits, best efforts, zones, time gaps, grades, steep sections, effort score |
-| `stats.ts` / `gps.ts` | Distance, elevation stats, smoothing, GPS cleaning |
+| `stats.ts` / `gps.ts` | Distance, elevation stats, smoothing, GPS cleaning, device distance channel |
 | `axis.ts` | Chart Y-axis scaling |
 | `persistence.ts` | localStorage save/restore |
 
@@ -738,11 +753,51 @@ heart rate, pace and temperature do not (zero is meaningless and squashes the
 useful range); battery caps at 100 and prefers it as the top. Pace and time-gap
 axes use second-based step ladders.
 
+### Distance and duration
+`stats.distance` comes from **the device, not the GPS track**. A Haversine sum
+over the track is the worst distance available for a FIT file: it accumulates
+positional jitter as real distance, and records with no lat/lng are dropped at
+parse time, so a lost-fix stretch gets chorded straight across. Measured over
+18 real Garmin files the track over-reads by up to **3.97% — 4.1 km on a 103 km
+ultra**.
+
+Precedence is `session.total_distance` → the `record.distance` odometer →
+Haversine, recorded in `stats.distanceSource`. Duration follows the same shape
+from `total_elapsed_time`, and `stats.movingTime` carries `total_timer_time`.
+`stats.gpsDistance`/`gpsDuration` keep the purely track-derived figures, because
+anything measuring the device against the track needs both.
+
+**Ascent and descent stay recomputed on purpose.** Device ascent is barometric
+and calibrated per-device, so comparing two watches on their own numbers
+compares their barometers rather than the route.
+
+Two guards matter:
+- `isUsableDistanceChannel()` rejects a per-point channel that has holes, goes
+  backwards, or doesn't match the track length. `findIndexAtDistance` binary-
+  searches this array, so a single null or backward step *corrupts a search*
+  rather than merely looking wrong. **4 of 18 real Garmin files have a
+  non-monotonic odometer** — this is not a theoretical case. Such files keep
+  the session total as the headline and fall back to Haversine for plotting.
+- If the odometer and the session total disagree by more than 25%, the channel
+  is dropped, as insurance against the parser's units shifting underneath us.
+
+Everything that slices by distance — splits, best efforts, segments, time gaps —
+goes through `buildCumulativeDistances(coords, route.distances)` so it agrees
+with the headline number. `calculateSplitPace` measures over that same array:
+pricing a 1 device-km split over the Haversine length of those points reported
+a pace several percent faster than the watch did.
+
 ### Zones
-`calculateZones` anchors to a **fraction of the observed maximum** — 50/60/70/80/90%
-for heart rate, percentage-of-threshold bands for power. It previously split the
-range between the *minimum* and maximum into five equal parts, which reported
-time in "Max" on easy runs and moved every boundary if one low reading appeared.
+`calculateZones` uses **the device's own zone boundaries** when the file carries
+them, via `buildHrZoneBoundaries()`: `time_in_zone` high boundaries first, then
+explicit `hr_zone` messages, then computed from `zones_target` + `user_profile`
+(percent-of-HRR where the device works that way, else percent of max).
+
+Anchoring to the activity's observed maximum — the previous behaviour, kept as
+the fallback for GPX and any file without zone data — makes every easy run look
+hard. On a 103 km easy ultra whose HR never passed 152 against a true max of
+178, it reported **15.9% at Threshold and 3.3% at Maximum for a run the device
+scored 0% and 0%**.
 
 ### Persistence
 Routes are saved to localStorage (`fmr:route-comparison:v1`) and restored after
@@ -759,9 +814,16 @@ plus photos, ZIP export, playback animation and Firebase sessions. **That suite
 is deliberately not here**: it exists to file Garmin firmware bugs, not to serve
 runners. Auto-align is the one piece worth porting eventually.
 
-Note the FIT parser reads only `data.records` — no `session`, `lap` or
-`device_info` — so device-reported totals aren't available and session
-self-check can't be ported without extending it.
+The FIT parser now also reads `data.sessions`, `zones_target`, `user_profile`
+and `time_in_zone` (see "Distance and duration" and "Zones" above), so
+device-reported totals *are* available. The session self-check itself is still
+not ported, but `stats.gpsDistance`/`gpsDuration` exist so it could be.
+
+**`fit-file-parser` is pinned at 2.2.5 here and 4.1.0 in the standalone.** That
+is deliberate, not drift: verified against real files, 2.2.5 returns identical
+`total_distance`, `total_elapsed_time`, `total_timer_time` and odometer values,
+and already exposes `zones_target`/`user_profile`. Upgrading buys nothing these
+features need.
 
 ---
 
@@ -831,4 +893,4 @@ Stephen is not a professional coder. When making changes:
 
 ---
 
-*Last updated: 19 August 2026*
+*Last updated: 31 August 2026*

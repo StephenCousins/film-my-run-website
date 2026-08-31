@@ -43,16 +43,76 @@ export function calculateDistance(coords: Coordinate[]): number {
 }
 
 /**
- * Build cumulative distances array
+ * Is a FIT `record.distance` channel safe to plot and index against?
+ *
+ * Only if it covers every plotted point and never goes backwards. The x-axis,
+ * the split finder and the best-effort window search all assume a sorted
+ * array, so a single null or backward step would corrupt a binary search
+ * rather than merely look wrong. Anything less than complete and monotonic
+ * falls back to Haversine, which is always well-formed.
+ */
+export function isUsableDistanceChannel(
+  distances: number[] | undefined | null,
+  expectedLength: number | null = null
+): boolean {
+  if (!Array.isArray(distances) || distances.length < 2) return false;
+  if (expectedLength !== null && distances.length !== expectedLength) return false;
+
+  for (let i = 0; i < distances.length; i++) {
+    const d = distances[i];
+    if (typeof d !== 'number' || !isFinite(d)) return false;
+    if (i > 0 && d < distances[i - 1]) return false;
+  }
+
+  return distances[distances.length - 1] > distances[0];
+}
+
+/**
+ * Build cumulative distances array.
+ *
+ * Prefers the device's own odometer when one is supplied and usable, rebased
+ * to the first plotted point — the raw channel is an absolute figure for the
+ * whole activity, so a run whose first GPS fix arrives 2 km in would otherwise
+ * start its x-axis at 2 km and offset every split by that much.
+ *
  * @returns Array of cumulative distances in kilometers
  */
-export function buildCumulativeDistances(coords: Coordinate[]): number[] {
+export function buildCumulativeDistances(
+  coords: Coordinate[],
+  deviceDistances?: number[] | null
+): number[] {
+  if (isUsableDistanceChannel(deviceDistances, coords.length)) {
+    const base = deviceDistances![0];
+    return deviceDistances!.map((d) => d - base);
+  }
+
   const distances = [0];
   for (let i = 1; i < coords.length; i++) {
     const d = haversineDistance(coords[i - 1], coords[i]);
     distances.push(distances[i - 1] + d);
   }
   return distances;
+}
+
+/**
+ * Total distance according to the device's own odometer. Takes the maximum
+ * rather than the last element so a trailing null or a spurious reset at the
+ * end of the file can't report a short run — the odometer only ever climbs,
+ * so the maximum is the total. Tolerates gaps, unlike the channel check.
+ */
+export function deviceTotalDistance(distances: number[] | undefined | null): number | null {
+  if (!Array.isArray(distances) || distances.length === 0) return null;
+
+  let min: number | null = null;
+  let max: number | null = null;
+  for (const d of distances) {
+    if (typeof d !== 'number' || !isFinite(d)) continue;
+    if (min === null || d < min) min = d;
+    if (max === null || d > max) max = d;
+  }
+
+  if (min === null || max === null || max <= min) return null;
+  return max - min;
 }
 
 /**

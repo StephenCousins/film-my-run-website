@@ -1,7 +1,7 @@
 // Analysis utilities: splits, best efforts, zones, time gaps
 
 import { Coordinate, haversineDistance, buildCumulativeDistances, findIndexAtDistance } from './gps';
-import { RouteData, Split, BestEffort, Zone, ZoneAnalysis, TimeGapResult, GradePoint, SteepSection } from './types';
+import { RouteData, Split, BestEffort, Zone, ZoneAnalysis, ZoneBoundary, TimeGapResult, GradePoint, SteepSection } from './types';
 
 /**
  * Calculate pace for a split segment
@@ -9,7 +9,13 @@ import { RouteData, Split, BestEffort, Zone, ZoneAnalysis, TimeGapResult, GradeP
 export function calculateSplitPace(
   route: RouteData,
   startIdx: number,
-  endIdx: number
+  endIdx: number,
+  /**
+   * The cumulative distance array the caller sliced with. Pass it whenever one
+   * is already to hand — rebuilding it per split is O(n) each time, which on a
+   * 100 km file with 88k points and 100 splits is millions of wasted hops.
+   */
+  cumulativeDistances?: number[]
 ): number | null {
   if (!route.timestamps || startIdx >= endIdx) return null;
 
@@ -21,12 +27,22 @@ export function calculateSplitPace(
   const durationSeconds = (endTime.getTime() - startTime.getTime()) / 1000;
   if (durationSeconds <= 0) return null;
 
+  // Measure the segment in the same currency that bounded it. Callers slice
+  // by cumulative distance, which prefers the device odometer; re-deriving the
+  // length by Haversine here would price a 1 device-km split over ~1.03 km of
+  // GPS jitter and report a pace several percent faster than the watch did.
   let segmentDistance = 0;
-  for (let i = startIdx + 1; i <= endIdx; i++) {
-    segmentDistance += haversineDistance(
-      route.coordinates[i - 1],
-      route.coordinates[i]
-    );
+  const cumulative =
+    cumulativeDistances ?? buildCumulativeDistances(route.coordinates, route.distances);
+  if (cumulative.length > endIdx) {
+    segmentDistance = cumulative[endIdx] - cumulative[startIdx];
+  } else {
+    for (let i = startIdx + 1; i <= endIdx; i++) {
+      segmentDistance += haversineDistance(
+        route.coordinates[i - 1],
+        route.coordinates[i]
+      );
+    }
   }
 
   if (segmentDistance <= 0) return null;
@@ -109,7 +125,7 @@ export function calculateSplits(
     return [];
   }
 
-  const distances = buildCumulativeDistances(route.coordinates);
+  const distances = buildCumulativeDistances(route.coordinates, route.distances);
   const totalDistance = distances[distances.length - 1];
   const splits: Split[] = [];
   let splitNum = 1;
@@ -136,7 +152,7 @@ export function calculateSplits(
       distance: endKm - startKm,
       isPartial: isPartialSplit,
       duration,
-      pace: calculateSplitPace(route, startIdx, endIdx),
+      pace: calculateSplitPace(route, startIdx, endIdx, distances),
       elevGain: calculateSplitElevGain(route.elevations, startIdx, endIdx),
       avgHR: calculateSplitAvg(route.heartRates, startIdx, endIdx),
     };
@@ -156,12 +172,16 @@ export function calculateBestEfforts(
   route: RouteData,
   targetDistances = [1, 5, 10, 21.1, 42.195]
 ): BestEffort[] {
-  const routeDistance = route.stats.distance;
+  // Bound the search by the array it indexes, not by the headline figure.
+  // stats.distance now comes from the session message, which covers the whole
+  // recording — including any stretch with no GPS fix, which has no plotted
+  // points behind it. Admitting a target the cumulative array cannot reach
+  // would search a window that does not exist.
+  const cumulativeDistances = buildCumulativeDistances(route.coordinates, route.distances);
+  const routeDistance = cumulativeDistances[cumulativeDistances.length - 1] ?? 0;
   const validDistances = targetDistances.filter((d) => d <= routeDistance);
 
   if (validDistances.length === 0) return [];
-
-  const cumulativeDistances = buildCumulativeDistances(route.coordinates);
   const bestEfforts: BestEffort[] = [];
 
   for (const targetDistance of validDistances) {
@@ -254,7 +274,8 @@ const ZONE_COLORS = ['#34A853', '#4285F4', '#FBBC04', '#FF9800', '#EA4335'];
 export function calculateZones(
   values: (number | null)[],
   timestamps: (Date | null)[] | undefined,
-  metricType = 'heartRate'
+  metricType = 'heartRate',
+  deviceBoundaries?: ZoneBoundary[] | null
 ): ZoneAnalysis | null {
   const validValues = values.filter((v): v is number => v !== null && v > 0);
   if (validValues.length < 10) return null;
@@ -267,17 +288,35 @@ export function calculateZones(
   const names = ZONE_NAMES[metricType] ?? ZONE_NAMES.heartRate;
 
   const zones: Zone[] = [];
-  for (let i = 0; i < 5; i++) {
-    zones.push({
-      zone: i + 1,
-      name: names[i],
-      color: ZONE_COLORS[i],
-      min: Math.round(maxVal * thresholds[i]),
-      max: Math.round(maxVal * thresholds[i + 1]),
-      time: 0,
-      points: 0,
-      percent: 0,
-    });
+  if (deviceBoundaries && deviceBoundaries.length >= 2) {
+    // The device's own bands. Fixed for the athlete, not for the activity, so
+    // an easy run reads as easy instead of being stretched to fill five zones.
+    const bounds = deviceBoundaries.slice(0, 5);
+    for (let i = 0; i < bounds.length; i++) {
+      zones.push({
+        zone: i + 1,
+        name: bounds[i].name ?? names[i] ?? `Zone ${i + 1}`,
+        color: ZONE_COLORS[i],
+        min: i === 0 ? 0 : bounds[i - 1].high,
+        max: bounds[i].high,
+        time: 0,
+        points: 0,
+        percent: 0,
+      });
+    }
+  } else {
+    for (let i = 0; i < 5; i++) {
+      zones.push({
+        zone: i + 1,
+        name: names[i],
+        color: ZONE_COLORS[i],
+        min: Math.round(maxVal * thresholds[i]),
+        max: Math.round(maxVal * thresholds[i + 1]),
+        time: 0,
+        points: 0,
+        percent: 0,
+      });
+    }
   }
 
   /** Lowest zone whose upper bound the value hasn't exceeded. */
@@ -464,7 +503,7 @@ export function calculateGrades(route: RouteData): GradePoint[] {
   }
 
   const grades: GradePoint[] = [];
-  const distances = buildCumulativeDistances(route.coordinates);
+  const distances = buildCumulativeDistances(route.coordinates, route.distances);
 
   for (let i = 1; i < route.coordinates.length; i++) {
     const dist = (distances[i] - distances[i - 1]) * 1000;
@@ -503,7 +542,7 @@ export function detectSteepSections(
 
   const climbs: SteepSection[] = [];
   const descents: SteepSection[] = [];
-  const distances = buildCumulativeDistances(route.coordinates);
+  const distances = buildCumulativeDistances(route.coordinates, route.distances);
 
   let currentSection: {
     type: 'climb' | 'descent';

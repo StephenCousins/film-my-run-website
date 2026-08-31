@@ -4,6 +4,26 @@ import { Coordinate } from './gps';
 
 export type { Coordinate };
 
+/** Where a headline figure came from, in descending order of trust. */
+export type DistanceSource = 'session' | 'record' | 'gps';
+export type DurationSource = 'session' | 'gps';
+
+/** The device's own totals for the activity, from the FIT session message. */
+export interface SessionSummary {
+  totalDistanceKm: number | null;
+  totalElapsedSeconds: number | null;
+  /** Elapsed minus auto-pause — the "moving time" counterpart. */
+  totalTimerSeconds: number | null;
+  totalAscent: number | null;
+  totalDescent: number | null;
+}
+
+/** One zone, identified by the value at its upper bound. */
+export interface ZoneBoundary {
+  high: number;
+  name: string | null;
+}
+
 export interface RouteStats {
   distance: number;
   elevationGain: number;
@@ -11,6 +31,23 @@ export interface RouteStats {
   minElevation: number;
   maxElevation: number;
   duration: number | null;
+  /**
+   * Which channel `distance` and `duration` came from. A Haversine sum over
+   * the track is the worst distance available for a FIT file: it accumulates
+   * positional jitter as real distance, and records with no fix are dropped at
+   * parse time, so a lost-fix stretch gets chorded straight across.
+   */
+  distanceSource: DistanceSource;
+  durationSource: DurationSource;
+  /**
+   * Purely track-derived figures, kept because the session self-check measures
+   * the device's self-reported totals against them. Pointing that check at the
+   * headline stats would report a zero discrepancy on every file.
+   */
+  gpsDistance: number;
+  gpsDuration: number | null;
+  /** Elapsed minus auto-pause, when the device recorded it. */
+  movingTime: number | null;
 }
 
 export interface RouteData {
@@ -36,6 +73,16 @@ export interface RouteData {
   gpsAccuracies?: (number | null)[];
   /** GPS altitude, where it differs from the barometric `elevations`. */
   gpsElevations?: (number | null)[];
+  /**
+   * The device's own cumulative odometer in km, one entry per plotted point.
+   * Only present when the channel is complete and monotonic — anything less
+   * would corrupt the binary search in `findIndexAtDistance` rather than
+   * merely look wrong.
+   */
+  distances?: number[];
+  /** Exact zone boundaries the device used, where the file carried them. */
+  hrZoneBoundaries?: ZoneBoundary[];
+  powerZoneBoundaries?: ZoneBoundary[];
   stats: RouteStats;
 }
 

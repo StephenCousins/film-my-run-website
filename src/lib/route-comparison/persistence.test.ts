@@ -35,6 +35,49 @@ beforeEach(() => {
 });
 
 describe('route comparison persistence', () => {
+  it('round-trips the device distance channel and zone boundaries', () => {
+    // These decide the headline distance and every zone percentage, so a
+    // reload that dropped them would quietly change the numbers on screen.
+    saveState({
+      routes: [
+        route('a', {
+          distances: [0, 0.1, 0.2],
+          hrZoneBoundaries: [
+            { high: 122, name: 'Warm Up' },
+            { high: 136, name: 'Easy' },
+          ],
+          powerZoneBoundaries: [{ high: 220, name: 'Recovery' }],
+          stats: {
+            distance: 1.05,
+            elevationGain: 10,
+            elevationLoss: 10,
+            minElevation: 0,
+            maxElevation: 20,
+            duration: 300,
+            distanceSource: 'session',
+            durationSource: 'session',
+            gpsDistance: 1.11,
+            gpsDuration: 290,
+            movingTime: 280,
+          },
+        }),
+      ],
+      selectedRouteIds: ['a'],
+      referenceRouteId: null,
+    });
+
+    const r = loadState()!.routes[0];
+    expect(r.distances).toEqual([0, 0.1, 0.2]);
+    expect(r.hrZoneBoundaries).toEqual([
+      { high: 122, name: 'Warm Up' },
+      { high: 136, name: 'Easy' },
+    ]);
+    expect(r.powerZoneBoundaries).toEqual([{ high: 220, name: 'Recovery' }]);
+    expect(r.stats.distanceSource).toBe('session');
+    expect(r.stats.gpsDistance).toBe(1.11);
+    expect(r.stats.movingTime).toBe(280);
+  });
+
   it('round-trips routes and selection', () => {
     const ok = saveState({
       routes: [route('a'), route('b')],

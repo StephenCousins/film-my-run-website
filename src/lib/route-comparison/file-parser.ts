@@ -6,10 +6,22 @@ import {
   validateCoordinate,
   validateElevation,
   validateTimestamp,
+  calculateDistance,
+  isUsableDistanceChannel,
+  deviceTotalDistance,
   GPS_VALIDATION,
 } from './gps';
 import { calculateElevationStats, cleanGPSData, rollingMedian } from './stats';
-import { RouteData, ParsedRawData, ValidatedData, RouteStats } from './types';
+import {
+  RouteData,
+  ParsedRawData,
+  ValidatedData,
+  RouteStats,
+  SessionSummary,
+  DistanceSource,
+  DurationSource,
+  ZoneBoundary,
+} from './types';
 import { buildBatteryLevels } from './fit-battery';
 
 /**
@@ -126,7 +138,32 @@ function calculateSpeedsAndPaces(
 /**
  * Create RouteData from parsed components
  */
-function createRouteData(
+export interface RouteExtras
+  extends Partial<
+    Pick<
+      RouteData,
+      | 'temperatures'
+      | 'batteryLevels'
+      | 'gpsAccuracies'
+      | 'gpsElevations'
+      | 'hrZoneBoundaries'
+      | 'powerZoneBoundaries'
+    >
+  > {
+  /** The device's per-record odometer in km, aligned with `coordinates`. */
+  distances?: number[];
+  sessionSummary?: SessionSummary | null;
+}
+
+/**
+ * How far apart the record odometer and the session total may be before we
+ * stop believing the channel. They describe the same run and should agree to
+ * well under a percent; a gross mismatch means one of them is not in the units
+ * we think, so drop the per-point channel rather than plot it.
+ */
+const DISTANCE_CHANNEL_TOLERANCE = 0.25;
+
+export function createRouteData(
   filename: string,
   color: string,
   coordinates: Coordinate[],
@@ -137,24 +174,77 @@ function createRouteData(
   powers: (number | null)[],
   speeds: (number | null)[],
   paces: (number | null)[],
-  extras: Partial<Pick<RouteData, 'temperatures' | 'batteryLevels' | 'gpsAccuracies' | 'gpsElevations'>> = {}
+  extras: RouteExtras = {}
 ): RouteData {
-  let distance = 0;
-  for (let i = 1; i < coordinates.length; i++) {
-    distance += haversineDistance(coordinates[i - 1], coordinates[i]);
-  }
-
   const elevStats = calculateElevationStats(elevations);
 
-  let duration: number | null = null;
+  // Distance and duration recomputed from the raw GPS track. These are no
+  // longer the headline numbers, but they are what the session self-check
+  // measures the device's self-reported totals against — so they have to stay
+  // available and stay purely track-derived.
+  const gpsDistance = calculateDistance(coordinates);
+
+  let gpsDuration: number | null = null;
   const validTimestamps = timestamps.filter((t): t is Date => t !== null);
   if (validTimestamps.length >= 2) {
-    duration =
+    gpsDuration =
       (validTimestamps[validTimestamps.length - 1].getTime() -
         validTimestamps[0].getTime()) /
       1000;
   }
 
+  // A Haversine sum over the track accumulates GPS jitter as real distance and
+  // chords straight across any stretch where the fix was lost (those records
+  // are dropped for having no lat/lng). The device's own figure fuses GPS with
+  // the accelerometer/footpod, spans dropouts, and is what the watch showed —
+  // so prefer it, session message first, then the record odometer, and fall
+  // back to the track only when neither is present (GPX, and FIT without them).
+  let deviceDistances = extras.distances ?? [];
+  const recordTotal = deviceTotalDistance(deviceDistances);
+  const sessionTotal = extras.sessionSummary?.totalDistanceKm ?? null;
+
+  if (
+    sessionTotal !== null &&
+    recordTotal !== null &&
+    sessionTotal > 0 &&
+    Math.abs(recordTotal - sessionTotal) / sessionTotal > DISTANCE_CHANNEL_TOLERANCE
+  ) {
+    console.warn(
+      `${filename}: record distance channel (${recordTotal.toFixed(2)} km) disagrees with ` +
+        `session total (${sessionTotal.toFixed(2)} km) — ignoring the channel.`
+    );
+    deviceDistances = [];
+  }
+
+  let distance: number;
+  let distanceSource: DistanceSource;
+  if (sessionTotal !== null) {
+    distance = sessionTotal;
+    distanceSource = 'session';
+  } else if (recordTotal !== null && deviceDistances.length > 0) {
+    distance = recordTotal;
+    distanceSource = 'record';
+  } else {
+    distance = gpsDistance;
+    distanceSource = 'gps';
+  }
+
+  // Elapsed time, same precedence: the session message covers the whole
+  // recording, whereas the track-derived figure silently starts at the first
+  // GPS fix and so loses any pre-lock portion.
+  let duration: number | null;
+  let durationSource: DurationSource;
+  if (extras.sessionSummary?.totalElapsedSeconds != null) {
+    duration = extras.sessionSummary.totalElapsedSeconds;
+    durationSource = 'session';
+  } else {
+    duration = gpsDuration;
+    durationSource = 'gps';
+  }
+
+  // Ascent and descent stay recomputed on purpose. Device ascent is barometric
+  // and calibrated per-device, so comparing two watches on their own numbers
+  // compares their barometers rather than the route.
   const stats: RouteStats = {
     distance,
     elevationGain: elevStats.gain,
@@ -162,7 +252,17 @@ function createRouteData(
     minElevation: elevStats.min,
     maxElevation: elevStats.max,
     duration,
+    distanceSource,
+    durationSource,
+    gpsDistance,
+    gpsDuration,
+    movingTime: extras.sessionSummary?.totalTimerSeconds ?? null,
   };
+
+  // Only carry the channel onward if it can safely be indexed against.
+  const usableDistances = isUsableDistanceChannel(deviceDistances, coordinates.length)
+    ? deviceDistances
+    : undefined;
 
   // Create display name from filename
   const displayName = filename
@@ -189,6 +289,9 @@ function createRouteData(
     ...(extras.batteryLevels?.some((v) => v !== null) ? { batteryLevels: extras.batteryLevels } : {}),
     ...(extras.gpsAccuracies?.some((v) => v !== null) ? { gpsAccuracies: extras.gpsAccuracies } : {}),
     ...(extras.gpsElevations?.some((v) => v !== null) ? { gpsElevations: extras.gpsElevations } : {}),
+    ...(usableDistances ? { distances: usableDistances } : {}),
+    ...(extras.hrZoneBoundaries ? { hrZoneBoundaries: extras.hrZoneBoundaries } : {}),
+    ...(extras.powerZoneBoundaries ? { powerZoneBoundaries: extras.powerZoneBoundaries } : {}),
     stats,
   };
 }
@@ -317,6 +420,140 @@ export function parseGPX(xmlString: string, color: string, filename: string): Ro
   );
 }
 
+const HR_ZONE_NAMES = ['Warm Up', 'Easy', 'Aerobic', 'Threshold', 'Maximum'];
+const POWER_ZONE_NAMES = ['Recovery', 'Endurance', 'Tempo', 'Threshold', 'Max'];
+
+/** Percentages of HRR (or of max HR) that bound the five classic HR zones. */
+const HR_ZONE_PERCENTS = [0.6, 0.7, 0.8, 0.9, 1.0];
+/** Percentages of functional threshold power bounding the five power zones. */
+const POWER_ZONE_PERCENTS = [0.55, 0.75, 0.9, 1.05, 1.2];
+
+/**
+ * The parts of a parsed FIT file this module reads. Declared structurally
+ * rather than typed as the whole parser output, which is untyped and vast.
+ */
+interface FitData {
+  sessions?: {
+    total_distance?: number | null;
+    total_elapsed_time?: number | null;
+    total_timer_time?: number | null;
+    total_ascent?: number | null;
+    total_descent?: number | null;
+  }[];
+  time_in_zone?: { hr_zone_high_boundary?: (number | null)[] }[];
+  time_in_zones?: { hr_zone_high_boundary?: (number | null)[] }[];
+  hr_zone?: { message_index?: number; high_bpm?: number | null; name?: string | null }[];
+  hr_zones?: { message_index?: number; high_bpm?: number | null; name?: string | null }[];
+  zones_target?: {
+    max_heart_rate?: number | null;
+    hr_calc_type?: string | null;
+    functional_threshold_power?: number | null;
+    pwr_calc_type?: string | null;
+  };
+  user_profile?: {
+    resting_heart_rate?: number | null;
+    functional_threshold_power?: number | null;
+  };
+}
+
+/**
+ * The device's own totals for the activity.
+ *
+ * Kept deliberately separate from the record stream: these are what the watch
+ * displayed, and the record stream is what it plotted.
+ */
+export function extractSessionSummary(data: FitData): SessionSummary | null {
+  const session = (data?.sessions || [])[0];
+  if (!session) return null;
+
+  const totalDistanceKm =
+    session.total_distance !== undefined && session.total_distance !== null
+      ? session.total_distance / 1000
+      : null;
+  const totalElapsedSeconds = session.total_elapsed_time ?? session.total_timer_time ?? null;
+  // Timer time excludes auto-pause, so it is the "moving time" counterpart to
+  // elapsed. Kept separate rather than folded into totalElapsedSeconds, which
+  // must stay elapsed for the session self-check to mean anything.
+  const totalTimerSeconds = session.total_timer_time ?? null;
+
+  if (totalDistanceKm === null && totalElapsedSeconds === null) return null;
+
+  return {
+    totalDistanceKm,
+    totalElapsedSeconds,
+    totalTimerSeconds,
+    totalAscent: session.total_ascent ?? null,
+    totalDescent: session.total_descent ?? null,
+  };
+}
+
+/**
+ * The heart rate zone boundaries the device itself used.
+ *
+ * Anchoring zones to the activity's observed maximum makes every easy run look
+ * hard: a 103 km ultra whose HR never passed 152 against a true max of 178 was
+ * reported as 15.9% at Threshold when the device scored it 0%. The file has
+ * the real numbers; this reads them, in descending order of directness.
+ */
+export function buildHrZoneBoundaries(data: FitData): ZoneBoundary[] | null {
+  // 1. time_in_zone messages carry the exact boundaries the device applied.
+  const tiz = data?.time_in_zone || data?.time_in_zones || [];
+  if (tiz.length > 0 && tiz[0].hr_zone_high_boundary) {
+    const highs = tiz[0].hr_zone_high_boundary!.filter((v): v is number => v != null);
+    if (highs.length >= 2) {
+      return highs
+        .slice(0, 5)
+        .map((high, i) => ({ high, name: HR_ZONE_NAMES[i] ?? `Zone ${i + 1}` }));
+    }
+  }
+
+  // 2. Explicit hr_zone messages, which some devices write instead.
+  const hrZones = data?.hr_zones || data?.hr_zone || [];
+  if (hrZones.length >= 2) {
+    const sorted = [...hrZones].sort(
+      (a, b) => (a.message_index ?? 0) - (b.message_index ?? 0)
+    );
+    const boundaries = sorted
+      .filter((z) => z.high_bpm != null)
+      .map((z, i) => ({ high: z.high_bpm as number, name: z.name ?? HR_ZONE_NAMES[i] ?? null }));
+    if (boundaries.length >= 2) return boundaries;
+  }
+
+  // 3. Compute from the user's configured max, against resting HR where the
+  //    device works in percent of heart rate reserve.
+  const zt = data?.zones_target;
+  if (!zt || !zt.max_heart_rate) return null;
+  const maxHR = zt.max_heart_rate;
+  const restingHR = data?.user_profile?.resting_heart_rate ?? null;
+
+  if (zt.hr_calc_type === 'percent_hrr' && restingHR != null) {
+    const hrr = maxHR - restingHR;
+    return HR_ZONE_PERCENTS.map((pct, i) => ({
+      high: Math.round(restingHR + hrr * pct),
+      name: HR_ZONE_NAMES[i],
+    }));
+  }
+
+  return HR_ZONE_PERCENTS.map((pct, i) => ({
+    high: Math.round(maxHR * pct),
+    name: HR_ZONE_NAMES[i],
+  }));
+}
+
+/** Power zones as percentages of the device's recorded FTP. */
+export function buildPowerZoneBoundaries(data: FitData): ZoneBoundary[] | null {
+  const ftp =
+    data?.zones_target?.functional_threshold_power ??
+    data?.user_profile?.functional_threshold_power ??
+    null;
+  if (!ftp) return null;
+
+  return POWER_ZONE_PERCENTS.map((pct, i) => ({
+    high: Math.round(ftp * pct),
+    name: POWER_ZONE_NAMES[i],
+  }));
+}
+
 /**
  * Parse FIT file content using fit-file-parser
  */
@@ -367,6 +604,7 @@ export async function parseFIT(
       const gpsAccuracies: (number | null)[] = [];
       const gpsElevations: (number | null)[] = [];
       const batterySoc: (number | null)[] = [];
+      const distances: (number | null)[] = [];
 
       records.forEach((record: Record<string, unknown>) => {
         const lat = record.position_lat as number | undefined;
@@ -376,6 +614,16 @@ export async function parseFIT(
           const coordResult = validateCoordinate(lat, lng);
           if (coordResult.valid) {
             coordinates.push({ lat, lng });
+            // The device's own cumulative odometer. Parsed under lengthUnit
+            // 'm', so this is metres — normalised to km to match every other
+            // distance in the app, and sanity-checked against the session
+            // total in createRouteData in case those units ever shift.
+            const recordDistance = record.distance as number | undefined;
+            distances.push(
+              recordDistance !== undefined && recordDistance !== null
+                ? recordDistance / 1000
+                : null
+            );
             elevations.push(
               (record.enhanced_altitude as number) ??
                 (record.altitude as number) ??
@@ -453,6 +701,10 @@ export async function parseFIT(
             gpsAccuracies,
             batteryLevels: buildBatteryLevels(batterySoc, timestamps, arrayBuffer),
             gpsElevations: dualElevation ? gpsElevations : undefined,
+            distances: distances as number[],
+            sessionSummary: extractSessionSummary(data),
+            hrZoneBoundaries: buildHrZoneBoundaries(data) ?? undefined,
+            powerZoneBoundaries: buildPowerZoneBoundaries(data) ?? undefined,
           }
         )
       );
