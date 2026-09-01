@@ -498,6 +498,24 @@ model shoe_user_ratings {
   @@index([user_id])
 }
 
+/// Weekly-refreshed YouTube view counts, keyed by video ID so any page can
+/// reuse them (most showcased films have no `films` row).
+model youtube_video_stats {
+  youtube_id String   @id
+  view_count Int
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now()) @updatedAt
+}
+
+/// Weekly-refreshed channel-level totals for headline stats.
+model youtube_channel_stats {
+  channel_id  String   @id
+  subscribers Int
+  total_views Int
+  created_at  DateTime @default(now())
+  updated_at  DateTime @default(now()) @updatedAt
+}
+
 enum AccessTier {
   FREE
   PREMIUM
