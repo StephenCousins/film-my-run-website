@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
-import { MapContainer, TileLayer, Polyline, CircleMarker, Tooltip, useMap } from 'react-leaflet';
-import 'leaflet/dist/leaflet.css';
+import { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { GoogleMap, Marker, Polyline, useJsApiLoader } from '@react-google-maps/api';
+import { config, darkMapStyle } from '@/lib/race-map/config';
+import { useTheme } from '@/contexts/ThemeContext';
 import type { RouteData } from '@/lib/route-comparison/types';
 import { calculateMapBounds } from '@/lib/route-comparison/types';
 
@@ -12,14 +13,35 @@ interface RouteMapClientProps {
   referenceRouteId: string | null;
 }
 
-function FitBounds({ routes }: { routes: RouteData[] }) {
-  const map = useMap();
+const containerStyle = { width: '100%', height: '100%' };
+const MAX_FIT_ZOOM = 16;
+
+export function RouteMapClient({ routes, selectedRouteIds, referenceRouteId }: RouteMapClientProps) {
+  const { resolvedTheme } = useTheme();
+  const { isLoaded, loadError } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: config.googleMapsApiKey,
+  });
+
+  const [map, setMap] = useState<google.maps.Map | null>(null);
   const prevBoundsRef = useRef<string>('');
 
-  useEffect(() => {
-    if (routes.length === 0) return;
+  const visibleRoutes = routes.filter((r) => selectedRouteIds.includes(r.id));
 
-    const bounds = calculateMapBounds(routes);
+  const onLoad = useCallback((mapInstance: google.maps.Map) => {
+    setMap(mapInstance);
+  }, []);
+
+  const onUnmount = useCallback(() => {
+    setMap(null);
+    prevBoundsRef.current = '';
+  }, []);
+
+  // Fit the map to the visible routes whenever their combined extent changes
+  useEffect(() => {
+    if (!map || visibleRoutes.length === 0) return;
+
+    const bounds = calculateMapBounds(visibleRoutes);
     if (!bounds) return;
 
     const boundsKey = `${bounds.north.toFixed(4)},${bounds.south.toFixed(4)},${bounds.east.toFixed(4)},${bounds.west.toFixed(4)}`;
@@ -27,19 +49,22 @@ function FitBounds({ routes }: { routes: RouteData[] }) {
     prevBoundsRef.current = boundsKey;
 
     map.fitBounds(
-      [
-        [bounds.south, bounds.west],
-        [bounds.north, bounds.east],
-      ],
-      { padding: [20, 20], maxZoom: 16 }
+      new google.maps.LatLngBounds(
+        { lat: bounds.south, lng: bounds.west },
+        { lat: bounds.north, lng: bounds.east }
+      ),
+      20
     );
-  }, [map, routes]);
 
-  return null;
-}
+    const listener = google.maps.event.addListenerOnce(map, 'idle', () => {
+      const zoom = map.getZoom();
+      if (zoom !== undefined && zoom > MAX_FIT_ZOOM) map.setZoom(MAX_FIT_ZOOM);
+    });
 
-export function RouteMapClient({ routes, selectedRouteIds, referenceRouteId }: RouteMapClientProps) {
-  const visibleRoutes = routes.filter((r) => selectedRouteIds.includes(r.id));
+    return () => {
+      google.maps.event.removeListener(listener);
+    };
+  }, [map, visibleRoutes]);
 
   if (visibleRoutes.length === 0) {
     return (
@@ -49,67 +74,79 @@ export function RouteMapClient({ routes, selectedRouteIds, referenceRouteId }: R
     );
   }
 
+  if (loadError) {
+    return (
+      <div className="h-full bg-zinc-100 dark:bg-zinc-800 rounded-lg flex items-center justify-center">
+        <p className="text-zinc-500 text-sm">Map failed to load</p>
+      </div>
+    );
+  }
+
+  if (!isLoaded) {
+    return (
+      <div className="h-full bg-zinc-100 dark:bg-zinc-800 rounded-lg flex items-center justify-center">
+        <p className="text-zinc-500 text-sm">Loading map...</p>
+      </div>
+    );
+  }
+
   const center = visibleRoutes[0].coordinates[0];
+  const isDark = resolvedTheme === 'dark';
+
+  // Render non-reference routes first so the reference sits on top
+  const orderedRoutes = [...visibleRoutes].sort((a, b) => {
+    if (a.id === referenceRouteId) return 1;
+    if (b.id === referenceRouteId) return -1;
+    return 0;
+  });
 
   return (
-    <MapContainer
-      center={[center.lat, center.lng]}
-      zoom={13}
-      style={{ height: '100%', width: '100%' }}
-      className="z-0 rounded-lg"
-    >
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-      />
-
-      <FitBounds routes={visibleRoutes} />
-
-      {/* Render non-reference routes first, reference on top */}
-      {visibleRoutes
-        .sort((a, b) => {
-          if (a.id === referenceRouteId) return 1;
-          if (b.id === referenceRouteId) return -1;
-          return 0;
-        })
-        .map((route) => {
-          const positions = route.coordinates.map((c) => [c.lat, c.lng] as [number, number]);
+    <div className="h-full w-full rounded-lg overflow-hidden">
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={{ lat: center.lat, lng: center.lng }}
+        zoom={13}
+        onLoad={onLoad}
+        onUnmount={onUnmount}
+        options={{
+          streetViewControl: false,
+          mapTypeControl: true,
+          fullscreenControl: false,
+          styles: isDark ? darkMapStyle : [],
+        }}
+      >
+        {orderedRoutes.map((route, index) => {
           const isRef = route.id === referenceRouteId;
-          const startCoord = route.coordinates[0];
+          const start = route.coordinates[0];
 
           return (
-            <div key={route.id}>
+            <Fragment key={route.id}>
               <Polyline
-                positions={positions}
-                pathOptions={{
-                  color: route.color,
-                  weight: isRef ? 4 : 3,
-                  opacity: isRef ? 1 : 0.8,
+                path={route.coordinates.map((c) => ({ lat: c.lat, lng: c.lng }))}
+                options={{
+                  strokeColor: route.color,
+                  strokeWeight: isRef ? 4 : 3,
+                  strokeOpacity: isRef ? 1 : 0.8,
+                  zIndex: index,
                 }}
-              >
-                <Tooltip sticky>
-                  <span className="text-xs font-medium">{route.displayName}</span>
-                </Tooltip>
-              </Polyline>
-
-              {/* Start marker */}
-              <CircleMarker
-                center={[startCoord.lat, startCoord.lng]}
-                radius={6}
-                pathOptions={{
+              />
+              <Marker
+                position={{ lat: start.lat, lng: start.lng }}
+                title={`${route.displayName} — Start`}
+                icon={{
+                  path: google.maps.SymbolPath.CIRCLE,
+                  scale: 6,
                   fillColor: route.color,
                   fillOpacity: 1,
-                  color: '#fff',
-                  weight: 2,
+                  strokeColor: '#fff',
+                  strokeWeight: 2,
                 }}
-              >
-                <Tooltip>
-                  <span className="text-xs">{route.displayName} — Start</span>
-                </Tooltip>
-              </CircleMarker>
-            </div>
+                zIndex={100 + index}
+              />
+            </Fragment>
           );
         })}
-    </MapContainer>
+      </GoogleMap>
+    </div>
   );
 }
