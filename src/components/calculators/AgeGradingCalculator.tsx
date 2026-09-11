@@ -1,17 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { formatTimeFromSeconds, getTimeInSeconds, getAgeGradingClassification, ageGradingEvents } from './utils';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
-
-interface AgeGradingResult {
-  actualTime: string;
-  ageGradedTime: string;
-  ageGradedPercentage: number;
-  classification: string;
-  factor: number;
-  openRecord: number;
-}
+import {
+  ageGradingEvents,
+  formatTimeFromSeconds,
+  gradeAge,
+  secondsFromFields,
+  WMA_MAX_AGE,
+  WMA_MIN_AGE,
+  type AgeGradingResult,
+} from '@/lib/calculators';
 
 export function AgeGradingCalculator() {
   const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
@@ -25,13 +24,9 @@ export function AgeGradingCalculator() {
 
   const calculateAgeGrading = async () => {
     const ageNum = parseInt(age);
-    const totalSeconds = getTimeInSeconds(
-      parseInt(time.hours) || 0,
-      parseInt(time.minutes) || 0,
-      parseInt(time.seconds) || 0
-    );
+    const totalSeconds = secondsFromFields(time);
 
-    if (ageNum < 30 || ageNum > 110) {
+    if (ageNum < WMA_MIN_AGE || ageNum > WMA_MAX_AGE) {
       setError('Age must be between 30 and 110 for WMA age grading.');
       return;
     }
@@ -54,21 +49,9 @@ export function AgeGradingCalculator() {
       }
 
       const data = await response.json();
-      const factor = data.factor;
-      const openRecord = data.openRecord;
 
-      // Calculate age-graded performance
-      const ageGradedSeconds = totalSeconds * factor;
-      const ageGradedPercentage = (openRecord / ageGradedSeconds) * 100;
-
-      setResult({
-        actualTime: formatTimeFromSeconds(totalSeconds),
-        ageGradedTime: formatTimeFromSeconds(ageGradedSeconds),
-        ageGradedPercentage,
-        classification: getAgeGradingClassification(ageGradedPercentage),
-        factor,
-        openRecord,
-      });
+      // Maths lives in src/lib/calculators/ageGrading.ts (shared with the iPhone app).
+      setResult(gradeAge({ totalSeconds, factor: data.factor, openRecord: data.openRecord }));
     } catch (err) {
       setError('Failed to calculate age grading. Please try again.');
       console.error(err);

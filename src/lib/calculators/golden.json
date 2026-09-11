@@ -1,0 +1,1850 @@
+{
+  "pace": [
+    {
+      "id": "marathon-3h30",
+      "input": {
+        "id": "marathon-3h30",
+        "distance": "42.195",
+        "distanceUnit": "km",
+        "time": {
+          "hours": "3",
+          "minutes": "30",
+          "seconds": "0"
+        }
+      },
+      "output": {
+        "pace": "4:59 /km",
+        "speed": "12.06 km/h (8:01 /mile)",
+        "predictions": [
+          {
+            "name": "5K",
+            "time": "24:53"
+          },
+          {
+            "name": "10K",
+            "time": "49:46"
+          },
+          {
+            "name": "Half Marathon",
+            "time": "1:44:59"
+          },
+          {
+            "name": "Marathon",
+            "time": "3:29:59"
+          }
+        ]
+      }
+    },
+    {
+      "id": "5k-25min",
+      "input": {
+        "id": "5k-25min",
+        "distance": "5",
+        "distanceUnit": "km",
+        "time": {
+          "hours": "0",
+          "minutes": "25",
+          "seconds": "0"
+        }
+      },
+      "output": {
+        "pace": "5:00 /km",
+        "speed": "12.00 km/h (8:03 /mile)",
+        "predictions": [
+          {
+            "name": "5K",
+            "time": "25:00"
+          },
+          {
+            "name": "10K",
+            "time": "50:00"
+          },
+          {
+            "name": "Half Marathon",
+            "time": "1:45:29"
+          },
+          {
+            "name": "Marathon",
+            "time": "3:30:58"
+          }
+        ]
+      }
+    },
+    {
+      "id": "10mi-80min",
+      "input": {
+        "id": "10mi-80min",
+        "distance": "10",
+        "distanceUnit": "miles",
+        "time": {
+          "hours": "1",
+          "minutes": "20",
+          "seconds": "0"
+        }
+      },
+      "output": {
+        "pace": "4:58 /km",
+        "speed": "12.07 km/h (8:00 /mile)",
+        "predictions": [
+          {
+            "name": "5K",
+            "time": "24:51"
+          },
+          {
+            "name": "10K",
+            "time": "49:42"
+          },
+          {
+            "name": "Half Marathon",
+            "time": "1:44:52"
+          },
+          {
+            "name": "Marathon",
+            "time": "3:29:45"
+          }
+        ]
+      }
+    },
+    {
+      "id": "half-1h42m18",
+      "input": {
+        "id": "half-1h42m18",
+        "distance": "21.0975",
+        "distanceUnit": "km",
+        "time": {
+          "hours": "1",
+          "minutes": "42",
+          "seconds": "18"
+        }
+      },
+      "output": {
+        "pace": "4:51 /km",
+        "speed": "12.37 km/h (7:48 /mile)",
+        "predictions": [
+          {
+            "name": "5K",
+            "time": "24:14"
+          },
+          {
+            "name": "10K",
+            "time": "48:29"
+          },
+          {
+            "name": "Half Marathon",
+            "time": "1:42:17"
+          },
+          {
+            "name": "Marathon",
+            "time": "3:24:35"
+          }
+        ]
+      }
+    },
+    {
+      "id": "1km-3m59",
+      "input": {
+        "id": "1km-3m59",
+        "distance": "1",
+        "distanceUnit": "km",
+        "time": {
+          "hours": "0",
+          "minutes": "3",
+          "seconds": "59"
+        }
+      },
+      "output": {
+        "pace": "3:59 /km",
+        "speed": "15.06 km/h (6:25 /mile)",
+        "predictions": [
+          {
+            "name": "5K",
+            "time": "19:55"
+          },
+          {
+            "name": "10K",
+            "time": "39:50"
+          },
+          {
+            "name": "Half Marathon",
+            "time": "1:24:02"
+          },
+          {
+            "name": "Marathon",
+            "time": "2:48:04"
+          }
+        ]
+      }
+    },
+    {
+      "id": "100mi-30h",
+      "input": {
+        "id": "100mi-30h",
+        "distance": "161",
+        "distanceUnit": "km",
+        "time": {
+          "hours": "30",
+          "minutes": "0",
+          "seconds": "0"
+        }
+      },
+      "output": {
+        "pace": "11:11 /km",
+        "speed": "5.37 km/h (17:60 /mile)",
+        "predictions": [
+          {
+            "name": "5K",
+            "time": "55:54"
+          },
+          {
+            "name": "10K",
+            "time": "1:51:48"
+          },
+          {
+            "name": "Half Marathon",
+            "time": "3:55:52"
+          },
+          {
+            "name": "Marathon",
+            "time": "7:51:44"
+          }
+        ]
+      }
+    },
+    {
+      "id": "rounding-59.6s",
+      "input": {
+        "id": "rounding-59.6s",
+        "distance": "10",
+        "distanceUnit": "km",
+        "time": {
+          "hours": "0",
+          "minutes": "59",
+          "seconds": "56"
+        }
+      },
+      "output": {
+        "pace": "5:60 /km",
+        "speed": "10.01 km/h (9:39 /mile)",
+        "predictions": [
+          {
+            "name": "5K",
+            "time": "29:58"
+          },
+          {
+            "name": "10K",
+            "time": "59:56"
+          },
+          {
+            "name": "Half Marathon",
+            "time": "2:06:26"
+          },
+          {
+            "name": "Marathon",
+            "time": "4:12:53"
+          }
+        ]
+      }
+    },
+    {
+      "id": "empty-fields",
+      "input": {
+        "id": "empty-fields",
+        "distance": "10",
+        "distanceUnit": "km",
+        "time": {
+          "hours": "",
+          "minutes": "50",
+          "seconds": ""
+        }
+      },
+      "output": {
+        "pace": "5:00 /km",
+        "speed": "12.00 km/h (8:03 /mile)",
+        "predictions": [
+          {
+            "name": "5K",
+            "time": "25:00"
+          },
+          {
+            "name": "10K",
+            "time": "50:00"
+          },
+          {
+            "name": "Half Marathon",
+            "time": "1:45:29"
+          },
+          {
+            "name": "Marathon",
+            "time": "3:30:58"
+          }
+        ]
+      }
+    },
+    {
+      "id": "zero-distance",
+      "input": {
+        "id": "zero-distance",
+        "distance": "0",
+        "distanceUnit": "km",
+        "time": {
+          "hours": "0",
+          "minutes": "50",
+          "seconds": "0"
+        }
+      },
+      "output": null
+    },
+    {
+      "id": "zero-time",
+      "input": {
+        "id": "zero-time",
+        "distance": "10",
+        "distanceUnit": "km",
+        "time": {
+          "hours": "0",
+          "minutes": "0",
+          "seconds": "0"
+        }
+      },
+      "output": null
+    }
+  ],
+  "quick": [
+    {
+      "id": "10k-50-to-marathon-exp",
+      "input": {
+        "id": "10k-50-to-marathon-exp",
+        "knownDistance": "10",
+        "knownTime": {
+          "hours": "0",
+          "minutes": "50",
+          "seconds": "0"
+        },
+        "targetDistance": "42.195",
+        "experience": "1.06",
+        "gender": "male"
+      },
+      "output": [
+        {
+          "distance": "Marathon",
+          "km": 42.195,
+          "time": "3:50:00",
+          "pace": "5:27/km",
+          "confidence": 85,
+          "isUltra": false
+        }
+      ]
+    },
+    {
+      "id": "5k-20-to-10k-elite",
+      "input": {
+        "id": "5k-20-to-10k-elite",
+        "knownDistance": "5",
+        "knownTime": {
+          "hours": "0",
+          "minutes": "20",
+          "seconds": "0"
+        },
+        "targetDistance": "10",
+        "experience": "1.04",
+        "gender": "male"
+      },
+      "output": [
+        {
+          "distance": "10K",
+          "km": 10,
+          "time": "41:07",
+          "pace": "4:06/km",
+          "confidence": 85,
+          "isUltra": false
+        }
+      ]
+    },
+    {
+      "id": "half-to-5k-novice",
+      "input": {
+        "id": "half-to-5k-novice",
+        "knownDistance": "21.0975",
+        "knownTime": {
+          "hours": "2",
+          "minutes": "0",
+          "seconds": "0"
+        },
+        "targetDistance": "5",
+        "experience": "1.10",
+        "gender": "female"
+      },
+      "output": [
+        {
+          "distance": "5K",
+          "km": 5,
+          "time": "24:37",
+          "pace": "4:55/km",
+          "confidence": 85,
+          "isUltra": false
+        }
+      ]
+    },
+    {
+      "id": "marathon-to-50k-intermediate",
+      "input": {
+        "id": "marathon-to-50k-intermediate",
+        "knownDistance": "42.195",
+        "knownTime": {
+          "hours": "3",
+          "minutes": "30",
+          "seconds": "0"
+        },
+        "targetDistance": "50",
+        "experience": "1.08",
+        "gender": "male"
+      },
+      "output": [
+        {
+          "distance": "50K",
+          "km": 50,
+          "time": "4:12:14",
+          "pace": "5:02/km",
+          "confidence": 85,
+          "isUltra": true
+        }
+      ]
+    },
+    {
+      "id": "10k-to-100k-female-ratio-gt4",
+      "input": {
+        "id": "10k-to-100k-female-ratio-gt4",
+        "knownDistance": "10",
+        "knownTime": {
+          "hours": "0",
+          "minutes": "45",
+          "seconds": "0"
+        },
+        "targetDistance": "100",
+        "experience": "1.06",
+        "gender": "female"
+      },
+      "output": [
+        {
+          "distance": "100K",
+          "km": 100,
+          "time": "12:41:02",
+          "pace": "7:36/km",
+          "confidence": 85,
+          "isUltra": true
+        }
+      ]
+    },
+    {
+      "id": "marathon-to-100mi-female",
+      "input": {
+        "id": "marathon-to-100mi-female",
+        "knownDistance": "42.195",
+        "knownTime": {
+          "hours": "4",
+          "minutes": "0",
+          "seconds": "0"
+        },
+        "targetDistance": "160.934",
+        "experience": "1.06",
+        "gender": "female"
+      },
+      "output": [
+        {
+          "distance": "100 Miles",
+          "km": 160.934,
+          "time": "16:54:28",
+          "pace": "6:18/km",
+          "confidence": 85,
+          "isUltra": true
+        }
+      ]
+    },
+    {
+      "id": "marathon-to-100mi-male",
+      "input": {
+        "id": "marathon-to-100mi-male",
+        "knownDistance": "42.195",
+        "knownTime": {
+          "hours": "4",
+          "minutes": "0",
+          "seconds": "0"
+        },
+        "targetDistance": "160.934",
+        "experience": "1.06",
+        "gender": "male"
+      },
+      "output": [
+        {
+          "distance": "100 Miles",
+          "km": 160.934,
+          "time": "18:54:01",
+          "pace": "7:02/km",
+          "confidence": 85,
+          "isUltra": true
+        }
+      ]
+    },
+    {
+      "id": "half-to-50mi-ratio-gt2",
+      "input": {
+        "id": "half-to-50mi-ratio-gt2",
+        "knownDistance": "21.0975",
+        "knownTime": {
+          "hours": "1",
+          "minutes": "45",
+          "seconds": "0"
+        },
+        "targetDistance": "80.4672",
+        "experience": "1.06",
+        "gender": "male"
+      },
+      "output": [
+        {
+          "distance": "50 Miles",
+          "km": 80.4672,
+          "time": "8:16:08",
+          "pace": "6:09/km",
+          "confidence": 85,
+          "isUltra": true
+        }
+      ]
+    },
+    {
+      "id": "custom-target-7km",
+      "input": {
+        "id": "custom-target-7km",
+        "knownDistance": "5",
+        "knownTime": {
+          "hours": "0",
+          "minutes": "22",
+          "seconds": "30"
+        },
+        "targetDistance": "7",
+        "experience": "1.06",
+        "gender": "male"
+      },
+      "output": [
+        {
+          "distance": "7km",
+          "km": 7,
+          "time": "32:08",
+          "pace": "4:35/km",
+          "confidence": 85,
+          "isUltra": false
+        }
+      ]
+    },
+    {
+      "id": "invalid-zero-time",
+      "input": {
+        "id": "invalid-zero-time",
+        "knownDistance": "10",
+        "knownTime": {
+          "hours": "0",
+          "minutes": "0",
+          "seconds": "0"
+        },
+        "targetDistance": "42.195",
+        "experience": "1.06",
+        "gender": "male"
+      },
+      "output": null
+    }
+  ],
+  "advanced": [
+    {
+      "id": "default",
+      "input": {
+        "id": "default",
+        "race1Distance": "10",
+        "race1Time": {
+          "hours": "0",
+          "minutes": "50",
+          "seconds": "0"
+        },
+        "race2Distance": "21.0975",
+        "race2Time": {
+          "hours": "1",
+          "minutes": "50",
+          "seconds": "0"
+        },
+        "age": "35",
+        "weight": "70",
+        "height": "175",
+        "gender": "male"
+      },
+      "output": [
+        {
+          "distance": "5K",
+          "km": 5,
+          "time": "23:53",
+          "pace": "4:46/km",
+          "confidence": 79,
+          "isUltra": false
+        },
+        {
+          "distance": "10K",
+          "km": 10,
+          "time": "50:00",
+          "pace": "5:00/km",
+          "confidence": 100,
+          "isUltra": false
+        },
+        {
+          "distance": "Half Marathon",
+          "km": 21.0975,
+          "time": "1:50:00",
+          "pace": "5:12/km",
+          "confidence": 100,
+          "isUltra": false
+        },
+        {
+          "distance": "Marathon",
+          "km": 42.195,
+          "time": "3:50:17",
+          "pace": "5:27/km",
+          "confidence": 79,
+          "isUltra": false
+        },
+        {
+          "distance": "50K",
+          "km": 50,
+          "time": "4:57:35",
+          "pace": "5:57/km",
+          "confidence": 74,
+          "isUltra": true
+        },
+        {
+          "distance": "50 Miles",
+          "km": 80.4672,
+          "time": "9:21:36",
+          "pace": "6:58/km",
+          "confidence": 60,
+          "isUltra": true
+        },
+        {
+          "distance": "100K",
+          "km": 100,
+          "time": "12:15:30",
+          "pace": "7:21/km",
+          "confidence": 53,
+          "isUltra": true
+        },
+        {
+          "distance": "100 Miles",
+          "km": 160.934,
+          "time": "27:10:28",
+          "pace": "10:07/km",
+          "confidence": 50,
+          "isUltra": true
+        }
+      ]
+    },
+    {
+      "id": "female-45-bmi-low",
+      "input": {
+        "id": "female-45-bmi-low",
+        "race1Distance": "5",
+        "race1Time": {
+          "hours": "0",
+          "minutes": "22",
+          "seconds": "0"
+        },
+        "race2Distance": "10",
+        "race2Time": {
+          "hours": "0",
+          "minutes": "46",
+          "seconds": "0"
+        },
+        "age": "45",
+        "weight": "48",
+        "height": "168",
+        "gender": "female"
+      },
+      "output": [
+        {
+          "distance": "5K",
+          "km": 5,
+          "time": "22:00",
+          "pace": "4:24/km",
+          "confidence": 100,
+          "isUltra": false
+        },
+        {
+          "distance": "10K",
+          "km": 10,
+          "time": "46:00",
+          "pace": "4:36/km",
+          "confidence": 100,
+          "isUltra": false
+        },
+        {
+          "distance": "Half Marathon",
+          "km": 21.0975,
+          "time": "1:43:24",
+          "pace": "4:54/km",
+          "confidence": 78,
+          "isUltra": false
+        },
+        {
+          "distance": "Marathon",
+          "km": 42.195,
+          "time": "3:39:21",
+          "pace": "5:11/km",
+          "confidence": 57,
+          "isUltra": false
+        },
+        {
+          "distance": "50K",
+          "km": 50,
+          "time": "5:04:20",
+          "pace": "6:05/km",
+          "confidence": 52,
+          "isUltra": true
+        },
+        {
+          "distance": "50 Miles",
+          "km": 80.4672,
+          "time": "9:24:33",
+          "pace": "7:00/km",
+          "confidence": 50,
+          "isUltra": true
+        },
+        {
+          "distance": "100K",
+          "km": 100,
+          "time": "12:18:37",
+          "pace": "7:23/km",
+          "confidence": 50,
+          "isUltra": true
+        },
+        {
+          "distance": "100 Miles",
+          "km": 160.934,
+          "time": "24:20:53",
+          "pace": "9:04/km",
+          "confidence": 50,
+          "isUltra": true
+        }
+      ]
+    },
+    {
+      "id": "male-22-bmi-high",
+      "input": {
+        "id": "male-22-bmi-high",
+        "race1Distance": "10",
+        "race1Time": {
+          "hours": "0",
+          "minutes": "40",
+          "seconds": "0"
+        },
+        "race2Distance": "42.195",
+        "race2Time": {
+          "hours": "3",
+          "minutes": "10",
+          "seconds": "0"
+        },
+        "age": "22",
+        "weight": "90",
+        "height": "180",
+        "gender": "male"
+      },
+      "output": [
+        {
+          "distance": "5K",
+          "km": 5,
+          "time": "18:27",
+          "pace": "3:41/km",
+          "confidence": 79,
+          "isUltra": false
+        },
+        {
+          "distance": "10K",
+          "km": 10,
+          "time": "40:00",
+          "pace": "4:00/km",
+          "confidence": 100,
+          "isUltra": false
+        },
+        {
+          "distance": "Half Marathon",
+          "km": 21.0975,
+          "time": "1:32:00",
+          "pace": "4:21/km",
+          "confidence": 78,
+          "isUltra": false
+        },
+        {
+          "distance": "Marathon",
+          "km": 42.195,
+          "time": "3:10:00",
+          "pace": "4:30/km",
+          "confidence": 100,
+          "isUltra": false
+        },
+        {
+          "distance": "50K",
+          "km": 50,
+          "time": "3:53:12",
+          "pace": "4:39/km",
+          "confidence": 95,
+          "isUltra": true
+        },
+        {
+          "distance": "50 Miles",
+          "km": 80.4672,
+          "time": "7:12:38",
+          "pace": "5:22/km",
+          "confidence": 81,
+          "isUltra": true
+        },
+        {
+          "distance": "100K",
+          "km": 100,
+          "time": "9:32:24",
+          "pace": "5:43/km",
+          "confidence": 74,
+          "isUltra": true
+        },
+        {
+          "distance": "100 Miles",
+          "km": 160.934,
+          "time": "20:19:37",
+          "pace": "7:34/km",
+          "confidence": 60,
+          "isUltra": true
+        }
+      ]
+    },
+    {
+      "id": "male-50-bmi-mid",
+      "input": {
+        "id": "male-50-bmi-mid",
+        "race1Distance": "5",
+        "race1Time": {
+          "hours": "0",
+          "minutes": "25",
+          "seconds": "0"
+        },
+        "race2Distance": "21.0975",
+        "race2Time": {
+          "hours": "2",
+          "minutes": "5",
+          "seconds": "0"
+        },
+        "age": "50",
+        "weight": "72",
+        "height": "175",
+        "gender": "male"
+      },
+      "output": [
+        {
+          "distance": "5K",
+          "km": 5,
+          "time": "25:00",
+          "pace": "5:00/km",
+          "confidence": 100,
+          "isUltra": false
+        },
+        {
+          "distance": "10K",
+          "km": 10,
+          "time": "56:05",
+          "pace": "5:36/km",
+          "confidence": 79,
+          "isUltra": false
+        },
+        {
+          "distance": "Half Marathon",
+          "km": 21.0975,
+          "time": "2:05:00",
+          "pace": "5:55/km",
+          "confidence": 100,
+          "isUltra": false
+        },
+        {
+          "distance": "Marathon",
+          "km": 42.195,
+          "time": "4:40:27",
+          "pace": "6:38/km",
+          "confidence": 79,
+          "isUltra": false
+        },
+        {
+          "distance": "50K",
+          "km": 50,
+          "time": "6:11:14",
+          "pace": "7:25/km",
+          "confidence": 74,
+          "isUltra": true
+        },
+        {
+          "distance": "50 Miles",
+          "km": 80.4672,
+          "time": "12:23:37",
+          "pace": "9:14/km",
+          "confidence": 60,
+          "isUltra": true
+        },
+        {
+          "distance": "100K",
+          "km": 100,
+          "time": "16:38:49",
+          "pace": "9:59/km",
+          "confidence": 53,
+          "isUltra": true
+        },
+        {
+          "distance": "100 Miles",
+          "km": 160.934,
+          "time": "39:45:50",
+          "pace": "14:49/km",
+          "confidence": 50,
+          "isUltra": true
+        }
+      ]
+    },
+    {
+      "id": "female-38-bmi-optimal",
+      "input": {
+        "id": "female-38-bmi-optimal",
+        "race1Distance": "10",
+        "race1Time": {
+          "hours": "0",
+          "minutes": "48",
+          "seconds": "0"
+        },
+        "race2Distance": "21.0975",
+        "race2Time": {
+          "hours": "1",
+          "minutes": "48",
+          "seconds": "0"
+        },
+        "age": "38",
+        "weight": "58",
+        "height": "165",
+        "gender": "female"
+      },
+      "output": [
+        {
+          "distance": "5K",
+          "km": 5,
+          "time": "22:30",
+          "pace": "4:30/km",
+          "confidence": 79,
+          "isUltra": false
+        },
+        {
+          "distance": "10K",
+          "km": 10,
+          "time": "48:00",
+          "pace": "4:48/km",
+          "confidence": 100,
+          "isUltra": false
+        },
+        {
+          "distance": "Half Marathon",
+          "km": 21.0975,
+          "time": "1:48:00",
+          "pace": "5:07/km",
+          "confidence": 100,
+          "isUltra": false
+        },
+        {
+          "distance": "Marathon",
+          "km": 42.195,
+          "time": "3:50:20",
+          "pace": "5:27/km",
+          "confidence": 79,
+          "isUltra": false
+        },
+        {
+          "distance": "50K",
+          "km": 50,
+          "time": "4:59:34",
+          "pace": "5:59/km",
+          "confidence": 74,
+          "isUltra": true
+        },
+        {
+          "distance": "50 Miles",
+          "km": 80.4672,
+          "time": "9:06:23",
+          "pace": "6:47/km",
+          "confidence": 60,
+          "isUltra": true
+        },
+        {
+          "distance": "100K",
+          "km": 100,
+          "time": "11:54:29",
+          "pace": "7:08/km",
+          "confidence": 53,
+          "isUltra": true
+        },
+        {
+          "distance": "100 Miles",
+          "km": 160.934,
+          "time": "22:59:01",
+          "pace": "8:34/km",
+          "confidence": 50,
+          "isUltra": true
+        }
+      ]
+    },
+    {
+      "id": "race1-not-shorter",
+      "input": {
+        "id": "race1-not-shorter",
+        "race1Distance": "21.0975",
+        "race1Time": {
+          "hours": "1",
+          "minutes": "50",
+          "seconds": "0"
+        },
+        "race2Distance": "10",
+        "race2Time": {
+          "hours": "0",
+          "minutes": "50",
+          "seconds": "0"
+        },
+        "age": "35",
+        "weight": "70",
+        "height": "175",
+        "gender": "male"
+      },
+      "output": "ALERT"
+    },
+    {
+      "id": "missing-age",
+      "input": {
+        "id": "missing-age",
+        "race1Distance": "10",
+        "race1Time": {
+          "hours": "0",
+          "minutes": "50",
+          "seconds": "0"
+        },
+        "race2Distance": "21.0975",
+        "race2Time": {
+          "hours": "1",
+          "minutes": "50",
+          "seconds": "0"
+        },
+        "age": "",
+        "weight": "70",
+        "height": "175",
+        "gender": "male"
+      },
+      "output": null
+    }
+  ],
+  "ageGrading": [
+    {
+      "id": "5000m-25min-m40",
+      "input": {
+        "id": "5000m-25min-m40",
+        "totalSeconds": 1500,
+        "factor": 0.9328,
+        "openRecord": 757.35
+      },
+      "output": {
+        "actualTime": "25:00",
+        "ageGradedTime": "23:19",
+        "ageGradedPercentage": 54.12735849056604,
+        "classification": "Good",
+        "factor": 0.9328,
+        "openRecord": 757.35
+      }
+    },
+    {
+      "id": "marathon-3h30-w50",
+      "input": {
+        "id": "marathon-3h30-w50",
+        "totalSeconds": 12600,
+        "factor": 0.8347,
+        "openRecord": 8125
+      },
+      "output": {
+        "actualTime": "3:30:00",
+        "ageGradedTime": "2:55:17",
+        "ageGradedPercentage": 77.25425540209295,
+        "classification": "Local Class",
+        "factor": 0.8347,
+        "openRecord": 8125
+      }
+    },
+    {
+      "id": "world-class",
+      "input": {
+        "id": "world-class",
+        "totalSeconds": 800,
+        "factor": 0.95,
+        "openRecord": 757.35
+      },
+      "output": {
+        "actualTime": "13:20",
+        "ageGradedTime": "12:40",
+        "ageGradedPercentage": 99.65131578947368,
+        "classification": "National Class",
+        "factor": 0.95,
+        "openRecord": 757.35
+      }
+    },
+    {
+      "id": "mile-slow",
+      "input": {
+        "id": "mile-slow",
+        "totalSeconds": 600,
+        "factor": 0.99,
+        "openRecord": 223.13
+      },
+      "output": {
+        "actualTime": "10:00",
+        "ageGradedTime": "9:54",
+        "ageGradedPercentage": 37.56397306397306,
+        "classification": "Good",
+        "factor": 0.99,
+        "openRecord": 223.13
+      }
+    }
+  ],
+  "vo2": [
+    {
+      "id": "vdot-5k-25",
+      "input": {
+        "id": "vdot-5k-25",
+        "testType": "vdot",
+        "vdotDistance": "5000",
+        "vdotTime": {
+          "hours": "0",
+          "minutes": "25",
+          "seconds": "0"
+        }
+      },
+      "output": {
+        "vo2max": 43.5,
+        "classification": "Fair"
+      }
+    },
+    {
+      "id": "vdot-10k-38m30",
+      "input": {
+        "id": "vdot-10k-38m30",
+        "testType": "vdot",
+        "vdotDistance": "10000",
+        "vdotTime": {
+          "hours": "0",
+          "minutes": "38",
+          "seconds": "30"
+        }
+      },
+      "output": {
+        "vo2max": 55.44805194805195,
+        "classification": "Excellent"
+      }
+    },
+    {
+      "id": "vdot-zero-time",
+      "input": {
+        "id": "vdot-zero-time",
+        "testType": "vdot",
+        "vdotDistance": "5000",
+        "vdotTime": {
+          "hours": "0",
+          "minutes": "0",
+          "seconds": "0"
+        }
+      },
+      "output": null
+    },
+    {
+      "id": "cooper-2400",
+      "input": {
+        "id": "cooper-2400",
+        "testType": "cooper",
+        "cooperDistance": "2400"
+      },
+      "output": {
+        "vo2max": 42.36753856472166,
+        "classification": "Fair"
+      }
+    },
+    {
+      "id": "cooper-3200",
+      "input": {
+        "id": "cooper-3200",
+        "testType": "cooper",
+        "cooperDistance": "3200"
+      },
+      "output": {
+        "vo2max": 60.25262687234518,
+        "classification": "Excellent"
+      }
+    },
+    {
+      "id": "custom-male-30",
+      "input": {
+        "id": "custom-male-30",
+        "testType": "custom",
+        "customGender": "male",
+        "customAge": "30",
+        "customTime": {
+          "hours": "0",
+          "minutes": "25",
+          "seconds": "0"
+        },
+        "customMaxHR": "190",
+        "customRestHR": "60"
+      },
+      "output": {
+        "vo2max": 45.045,
+        "classification": "Good",
+        "hrReserve": 130
+      }
+    },
+    {
+      "id": "custom-female-55",
+      "input": {
+        "id": "custom-female-55",
+        "testType": "custom",
+        "customGender": "female",
+        "customAge": "55",
+        "customTime": {
+          "hours": "0",
+          "minutes": "28",
+          "seconds": "0"
+        },
+        "customMaxHR": "175",
+        "customRestHR": "58"
+      },
+      "output": {
+        "vo2max": 37.7171527093596,
+        "classification": "Fair",
+        "hrReserve": 117
+      }
+    },
+    {
+      "id": "custom-age-floor",
+      "input": {
+        "id": "custom-age-floor",
+        "testType": "custom",
+        "customGender": "male",
+        "customAge": "90",
+        "customTime": {
+          "hours": "0",
+          "minutes": "40",
+          "seconds": "0"
+        },
+        "customMaxHR": "150",
+        "customRestHR": "70"
+      },
+      "output": {
+        "vo2max": 26.379642857142855,
+        "classification": "Poor",
+        "hrReserve": 80
+      }
+    },
+    {
+      "id": "custom-age-25-no-adjust",
+      "input": {
+        "id": "custom-age-25-no-adjust",
+        "testType": "custom",
+        "customGender": "male",
+        "customAge": "25",
+        "customTime": {
+          "hours": "0",
+          "minutes": "25",
+          "seconds": "0"
+        },
+        "customMaxHR": "190",
+        "customRestHR": "60"
+      },
+      "output": {
+        "vo2max": 45.5,
+        "classification": "Good",
+        "hrReserve": 130
+      }
+    }
+  ],
+  "hrZones": [
+    {
+      "id": "180-55",
+      "input": {
+        "id": "180-55",
+        "maxHR": "180",
+        "restHR": "55"
+      },
+      "output": [
+        {
+          "name": "Zone 1 - Recovery",
+          "minHR": 118,
+          "maxHR": 130,
+          "minPercent": 50,
+          "maxPercent": 60,
+          "purpose": "Active recovery, warm-up, cool-down",
+          "trainingPercent": "0-10%"
+        },
+        {
+          "name": "Zone 2 - Aerobic Base",
+          "minHR": 130,
+          "maxHR": 143,
+          "minPercent": 60,
+          "maxPercent": 70,
+          "purpose": "Build aerobic base, fat burning, easy runs",
+          "trainingPercent": "70-80%"
+        },
+        {
+          "name": "Zone 3 - Tempo",
+          "minHR": 143,
+          "maxHR": 155,
+          "minPercent": 70,
+          "maxPercent": 80,
+          "purpose": "Improve aerobic capacity, tempo runs",
+          "trainingPercent": "10-15%"
+        },
+        {
+          "name": "Zone 4 - Threshold",
+          "minHR": 155,
+          "maxHR": 168,
+          "minPercent": 80,
+          "maxPercent": 90,
+          "purpose": "Lactate threshold, race pace for 10K-Half",
+          "trainingPercent": "5-10%"
+        },
+        {
+          "name": "Zone 5 - VO2 Max",
+          "minHR": 168,
+          "maxHR": 180,
+          "minPercent": 90,
+          "maxPercent": 100,
+          "purpose": "Improve VO2 max, intervals, 5K race pace",
+          "trainingPercent": "0-5%"
+        }
+      ]
+    },
+    {
+      "id": "195-42",
+      "input": {
+        "id": "195-42",
+        "maxHR": "195",
+        "restHR": "42"
+      },
+      "output": [
+        {
+          "name": "Zone 1 - Recovery",
+          "minHR": 119,
+          "maxHR": 134,
+          "minPercent": 50,
+          "maxPercent": 60,
+          "purpose": "Active recovery, warm-up, cool-down",
+          "trainingPercent": "0-10%"
+        },
+        {
+          "name": "Zone 2 - Aerobic Base",
+          "minHR": 134,
+          "maxHR": 149,
+          "minPercent": 60,
+          "maxPercent": 70,
+          "purpose": "Build aerobic base, fat burning, easy runs",
+          "trainingPercent": "70-80%"
+        },
+        {
+          "name": "Zone 3 - Tempo",
+          "minHR": 149,
+          "maxHR": 164,
+          "minPercent": 70,
+          "maxPercent": 80,
+          "purpose": "Improve aerobic capacity, tempo runs",
+          "trainingPercent": "10-15%"
+        },
+        {
+          "name": "Zone 4 - Threshold",
+          "minHR": 164,
+          "maxHR": 180,
+          "minPercent": 80,
+          "maxPercent": 90,
+          "purpose": "Lactate threshold, race pace for 10K-Half",
+          "trainingPercent": "5-10%"
+        },
+        {
+          "name": "Zone 5 - VO2 Max",
+          "minHR": 180,
+          "maxHR": 195,
+          "minPercent": 90,
+          "maxPercent": 100,
+          "purpose": "Improve VO2 max, intervals, 5K race pace",
+          "trainingPercent": "0-5%"
+        }
+      ]
+    },
+    {
+      "id": "165-70",
+      "input": {
+        "id": "165-70",
+        "maxHR": "165",
+        "restHR": "70"
+      },
+      "output": [
+        {
+          "name": "Zone 1 - Recovery",
+          "minHR": 118,
+          "maxHR": 127,
+          "minPercent": 50,
+          "maxPercent": 60,
+          "purpose": "Active recovery, warm-up, cool-down",
+          "trainingPercent": "0-10%"
+        },
+        {
+          "name": "Zone 2 - Aerobic Base",
+          "minHR": 127,
+          "maxHR": 137,
+          "minPercent": 60,
+          "maxPercent": 70,
+          "purpose": "Build aerobic base, fat burning, easy runs",
+          "trainingPercent": "70-80%"
+        },
+        {
+          "name": "Zone 3 - Tempo",
+          "minHR": 137,
+          "maxHR": 146,
+          "minPercent": 70,
+          "maxPercent": 80,
+          "purpose": "Improve aerobic capacity, tempo runs",
+          "trainingPercent": "10-15%"
+        },
+        {
+          "name": "Zone 4 - Threshold",
+          "minHR": 146,
+          "maxHR": 156,
+          "minPercent": 80,
+          "maxPercent": 90,
+          "purpose": "Lactate threshold, race pace for 10K-Half",
+          "trainingPercent": "5-10%"
+        },
+        {
+          "name": "Zone 5 - VO2 Max",
+          "minHR": 156,
+          "maxHR": 165,
+          "minPercent": 90,
+          "maxPercent": 100,
+          "purpose": "Improve VO2 max, intervals, 5K race pace",
+          "trainingPercent": "0-5%"
+        }
+      ]
+    },
+    {
+      "id": "too-low-max",
+      "input": {
+        "id": "too-low-max",
+        "maxHR": "99",
+        "restHR": "55"
+      },
+      "output": null
+    },
+    {
+      "id": "too-low-rest",
+      "input": {
+        "id": "too-low-rest",
+        "maxHR": "180",
+        "restHR": "29"
+      },
+      "output": null
+    }
+  ],
+  "paceZones": [
+    {
+      "id": "4m30",
+      "input": {
+        "id": "4m30",
+        "thresholdMin": "4",
+        "thresholdSec": "30"
+      },
+      "output": [
+        {
+          "name": "Zone 1 - Recovery",
+          "pace": "5:38/km",
+          "purpose": "Active recovery runs"
+        },
+        {
+          "name": "Zone 2 - Easy/Base",
+          "pace": "5:11/km",
+          "purpose": "Build aerobic base (most training here!)"
+        },
+        {
+          "name": "Zone 3 - Tempo",
+          "pace": "4:44/km",
+          "purpose": "Aerobic capacity, tempo runs"
+        },
+        {
+          "name": "Zone 4 - Threshold",
+          "pace": "4:30/km",
+          "purpose": "Lactate threshold, 10K-Half race pace"
+        },
+        {
+          "name": "Zone 5 - VO2 Max",
+          "pace": "4:03/km",
+          "purpose": "5K race pace, intervals"
+        }
+      ]
+    },
+    {
+      "id": "3m45",
+      "input": {
+        "id": "3m45",
+        "thresholdMin": "3",
+        "thresholdSec": "45"
+      },
+      "output": [
+        {
+          "name": "Zone 1 - Recovery",
+          "pace": "4:41/km",
+          "purpose": "Active recovery runs"
+        },
+        {
+          "name": "Zone 2 - Easy/Base",
+          "pace": "4:19/km",
+          "purpose": "Build aerobic base (most training here!)"
+        },
+        {
+          "name": "Zone 3 - Tempo",
+          "pace": "3:56/km",
+          "purpose": "Aerobic capacity, tempo runs"
+        },
+        {
+          "name": "Zone 4 - Threshold",
+          "pace": "3:45/km",
+          "purpose": "Lactate threshold, 10K-Half race pace"
+        },
+        {
+          "name": "Zone 5 - VO2 Max",
+          "pace": "3:23/km",
+          "purpose": "5K race pace, intervals"
+        }
+      ]
+    },
+    {
+      "id": "6m00-empty-sec",
+      "input": {
+        "id": "6m00-empty-sec",
+        "thresholdMin": "6",
+        "thresholdSec": ""
+      },
+      "output": [
+        {
+          "name": "Zone 1 - Recovery",
+          "pace": "7:30/km",
+          "purpose": "Active recovery runs"
+        },
+        {
+          "name": "Zone 2 - Easy/Base",
+          "pace": "6:54/km",
+          "purpose": "Build aerobic base (most training here!)"
+        },
+        {
+          "name": "Zone 3 - Tempo",
+          "pace": "6:18/km",
+          "purpose": "Aerobic capacity, tempo runs"
+        },
+        {
+          "name": "Zone 4 - Threshold",
+          "pace": "6:00/km",
+          "purpose": "Lactate threshold, 10K-Half race pace"
+        },
+        {
+          "name": "Zone 5 - VO2 Max",
+          "pace": "5:24/km",
+          "purpose": "5K race pace, intervals"
+        }
+      ]
+    },
+    {
+      "id": "too-fast",
+      "input": {
+        "id": "too-fast",
+        "thresholdMin": "2",
+        "thresholdSec": "59"
+      },
+      "output": null
+    }
+  ],
+  "elevation": [
+    {
+      "id": "default",
+      "input": {
+        "id": "default",
+        "distance": "21.0975",
+        "time": {
+          "hours": "1",
+          "minutes": "45",
+          "seconds": "0"
+        },
+        "elevGain": "500",
+        "elevLoss": "500",
+        "terrain": "1.1"
+      },
+      "output": {
+        "originalTime": "1:45:00",
+        "adjustedTime": "2:20:30",
+        "timeDifference": 36,
+        "equivalentFlatDistance": 28.230464285714287,
+        "gainPenalty": 50,
+        "lossBenefit": 25,
+        "terrainPenalty": 11
+      }
+    },
+    {
+      "id": "flat-road",
+      "input": {
+        "id": "flat-road",
+        "distance": "10",
+        "time": {
+          "hours": "0",
+          "minutes": "50",
+          "seconds": "0"
+        },
+        "elevGain": "0",
+        "elevLoss": "0",
+        "terrain": "1.0"
+      },
+      "output": {
+        "originalTime": "50:00",
+        "adjustedTime": "50:00",
+        "timeDifference": 0,
+        "equivalentFlatDistance": 10,
+        "gainPenalty": 0,
+        "lossBenefit": 0,
+        "terrainPenalty": 0
+      }
+    },
+    {
+      "id": "big-climb-little-descent",
+      "input": {
+        "id": "big-climb-little-descent",
+        "distance": "42.195",
+        "time": {
+          "hours": "3",
+          "minutes": "30",
+          "seconds": "0"
+        },
+        "elevGain": "2000",
+        "elevLoss": "300",
+        "terrain": "1.2"
+      },
+      "output": {
+        "originalTime": "3:30:00",
+        "adjustedTime": "7:17:00",
+        "timeDifference": 227,
+        "equivalentFlatDistance": 87.80578571428572,
+        "gainPenalty": 200,
+        "lossBenefit": 15,
+        "terrainPenalty": 42
+      }
+    },
+    {
+      "id": "more-loss-than-gain",
+      "input": {
+        "id": "more-loss-than-gain",
+        "distance": "10",
+        "time": {
+          "hours": "0",
+          "minutes": "45",
+          "seconds": "0"
+        },
+        "elevGain": "100",
+        "elevLoss": "800",
+        "terrain": "1.3"
+      },
+      "output": {
+        "originalTime": "45:00",
+        "adjustedTime": "1:03:30",
+        "timeDifference": 19,
+        "equivalentFlatDistance": 14.11111111111111,
+        "gainPenalty": 10,
+        "lossBenefit": 5,
+        "terrainPenalty": 14
+      }
+    },
+    {
+      "id": "empty-gain-loss",
+      "input": {
+        "id": "empty-gain-loss",
+        "distance": "10",
+        "time": {
+          "hours": "0",
+          "minutes": "45",
+          "seconds": "0"
+        },
+        "elevGain": "",
+        "elevLoss": "",
+        "terrain": "1.0"
+      },
+      "output": {
+        "originalTime": "45:00",
+        "adjustedTime": "45:00",
+        "timeDifference": 0,
+        "equivalentFlatDistance": 10,
+        "gainPenalty": 0,
+        "lossBenefit": 0,
+        "terrainPenalty": 0
+      }
+    },
+    {
+      "id": "zero-time",
+      "input": {
+        "id": "zero-time",
+        "distance": "10",
+        "time": {
+          "hours": "0",
+          "minutes": "0",
+          "seconds": "0"
+        },
+        "elevGain": "100",
+        "elevLoss": "100",
+        "terrain": "1.0"
+      },
+      "output": null
+    }
+  ],
+  "nutrition": [
+    {
+      "id": "default",
+      "input": {
+        "id": "default",
+        "weight": "70",
+        "distance": "42.195",
+        "paceMin": "5",
+        "paceSec": "30",
+        "terrain": "1.0",
+        "temperature": "1.0"
+      },
+      "output": {
+        "totalTimeHours": 3.8678749999999997,
+        "speedKmh": 10.909090909090908,
+        "caloriesPerHour": 764,
+        "totalCalories": 2954,
+        "carbsPerHour": 70,
+        "totalCarbs": 271,
+        "hydrationPerHour": 600,
+        "totalHydration": 2321,
+        "sodiumPerHour": 500,
+        "totalSodium": 1934,
+        "gelsPerHour": 2.8
+      }
+    },
+    {
+      "id": "hot-mountains-ultra",
+      "input": {
+        "id": "hot-mountains-ultra",
+        "weight": "65",
+        "distance": "100",
+        "paceMin": "8",
+        "paceSec": "0",
+        "terrain": "1.3",
+        "temperature": "1.3"
+      },
+      "output": {
+        "totalTimeHours": 13.333333333333334,
+        "speedKmh": 7.5,
+        "caloriesPerHour": 824,
+        "totalCalories": 10985,
+        "carbsPerHour": 70,
+        "totalCarbs": 933,
+        "hydrationPerHour": 780,
+        "totalHydration": 10400,
+        "sodiumPerHour": 500,
+        "totalSodium": 6667,
+        "gelsPerHour": 2.8
+      }
+    },
+    {
+      "id": "cold-short",
+      "input": {
+        "id": "cold-short",
+        "weight": "80",
+        "distance": "10",
+        "paceMin": "4",
+        "paceSec": "45",
+        "terrain": "1.0",
+        "temperature": "0.9"
+      },
+      "output": {
+        "totalTimeHours": 0.7916666666666666,
+        "speedKmh": 12.631578947368421,
+        "caloriesPerHour": 909,
+        "totalCalories": 720,
+        "carbsPerHour": 50,
+        "totalCarbs": 40,
+        "hydrationPerHour": 540,
+        "totalHydration": 428,
+        "sodiumPerHour": 500,
+        "totalSodium": 396,
+        "gelsPerHour": 2
+      }
+    },
+    {
+      "id": "exactly-2.5h",
+      "input": {
+        "id": "exactly-2.5h",
+        "weight": "70",
+        "distance": "30",
+        "paceMin": "5",
+        "paceSec": "0",
+        "terrain": "1.0",
+        "temperature": "1.0"
+      },
+      "output": {
+        "totalTimeHours": 2.5,
+        "speedKmh": 12,
+        "caloriesPerHour": 840,
+        "totalCalories": 2100,
+        "carbsPerHour": 50,
+        "totalCarbs": 125,
+        "hydrationPerHour": 600,
+        "totalHydration": 1500,
+        "sodiumPerHour": 500,
+        "totalSodium": 1250,
+        "gelsPerHour": 2
+      }
+    },
+    {
+      "id": "empty-sec",
+      "input": {
+        "id": "empty-sec",
+        "weight": "70",
+        "distance": "21.0975",
+        "paceMin": "5",
+        "paceSec": "",
+        "terrain": "1.1",
+        "temperature": "1.15"
+      },
+      "output": {
+        "totalTimeHours": 1.758125,
+        "speedKmh": 12,
+        "caloriesPerHour": 1063,
+        "totalCalories": 1868,
+        "carbsPerHour": 50,
+        "totalCarbs": 88,
+        "hydrationPerHour": 690,
+        "totalHydration": 1213,
+        "sodiumPerHour": 500,
+        "totalSodium": 879,
+        "gelsPerHour": 2
+      }
+    },
+    {
+      "id": "zero-pace-min",
+      "input": {
+        "id": "zero-pace-min",
+        "weight": "70",
+        "distance": "21.0975",
+        "paceMin": "0",
+        "paceSec": "30",
+        "terrain": "1.0",
+        "temperature": "1.0"
+      },
+      "output": null
+    }
+  ]
+}

@@ -2,24 +2,16 @@
 
 import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import {
+  calculateHRZones as calculateHRZonesResult,
+  calculatePaceZones as calculatePaceZonesResult,
+  hrZonesInputFromForm,
+  paceZonesInputFromForm,
+  type HRZone,
+  type PaceZone,
+} from '@/lib/calculators';
 
 type ZoneMode = 'hr' | 'pace';
-
-interface HRZone {
-  name: string;
-  minHR: number;
-  maxHR: number;
-  minPercent: number;
-  maxPercent: number;
-  purpose: string;
-  trainingPercent: string;
-}
-
-interface PaceZone {
-  name: string;
-  pace: string;
-  purpose: string;
-}
 
 export function TrainingZonesCalculator() {
   const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
@@ -37,62 +29,16 @@ export function TrainingZonesCalculator() {
   const [paceZones, setPaceZones] = useState<PaceZone[] | null>(null);
 
   const calculateHRZones = () => {
-    const max = parseInt(maxHR);
-    const rest = parseInt(restHR);
-
-    if (!max || !rest || max < 100 || rest < 30) return;
-
-    const hrReserve = max - rest;
-
-    const zoneDefinitions = [
-      { name: 'Zone 1 - Recovery', range: [0.5, 0.6], purpose: 'Active recovery, warm-up, cool-down', training: '0-10%' },
-      { name: 'Zone 2 - Aerobic Base', range: [0.6, 0.7], purpose: 'Build aerobic base, fat burning, easy runs', training: '70-80%' },
-      { name: 'Zone 3 - Tempo', range: [0.7, 0.8], purpose: 'Improve aerobic capacity, tempo runs', training: '10-15%' },
-      { name: 'Zone 4 - Threshold', range: [0.8, 0.9], purpose: 'Lactate threshold, race pace for 10K-Half', training: '5-10%' },
-      { name: 'Zone 5 - VO2 Max', range: [0.9, 1.0], purpose: 'Improve VO2 max, intervals, 5K race pace', training: '0-5%' },
-    ];
-
-    const zones: HRZone[] = zoneDefinitions.map((zone) => ({
-      name: zone.name,
-      minHR: Math.round(rest + hrReserve * zone.range[0]),
-      maxHR: Math.round(rest + hrReserve * zone.range[1]),
-      minPercent: Math.round(zone.range[0] * 100),
-      maxPercent: Math.round(zone.range[1] * 100),
-      purpose: zone.purpose,
-      trainingPercent: zone.training,
-    }));
-
+    // Maths lives in src/lib/calculators/trainingZones.ts (shared with the iPhone app).
+    const zones = calculateHRZonesResult(hrZonesInputFromForm({ maxHR, restHR }));
+    if (!zones) return;
     setHRZones(zones);
     setPaceZones(null);
   };
 
   const calculatePaceZones = () => {
-    const min = parseInt(thresholdMin);
-    const sec = parseInt(thresholdSec) || 0;
-
-    if (!min || min < 3) return;
-
-    const thresholdPaceSeconds = min * 60 + sec;
-
-    const zoneDefinitions = [
-      { name: 'Zone 1 - Recovery', factor: 1.25, purpose: 'Active recovery runs' },
-      { name: 'Zone 2 - Easy/Base', factor: 1.15, purpose: 'Build aerobic base (most training here!)' },
-      { name: 'Zone 3 - Tempo', factor: 1.05, purpose: 'Aerobic capacity, tempo runs' },
-      { name: 'Zone 4 - Threshold', factor: 1.0, purpose: 'Lactate threshold, 10K-Half race pace' },
-      { name: 'Zone 5 - VO2 Max', factor: 0.9, purpose: '5K race pace, intervals' },
-    ];
-
-    const zones: PaceZone[] = zoneDefinitions.map((zone) => {
-      const zonePaceSeconds = thresholdPaceSeconds * zone.factor;
-      const paceMin = Math.floor(zonePaceSeconds / 60);
-      const paceSec = Math.round(zonePaceSeconds % 60);
-      return {
-        name: zone.name,
-        pace: `${paceMin}:${paceSec.toString().padStart(2, '0')}/km`,
-        purpose: zone.purpose,
-      };
-    });
-
+    const zones = calculatePaceZonesResult(paceZonesInputFromForm({ thresholdMin, thresholdSec }));
+    if (!zones) return;
     setPaceZones(zones);
     setHRZones(null);
   };

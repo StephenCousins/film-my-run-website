@@ -1,19 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { getVO2Classification, getTimeInSeconds } from './utils';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { estimateVO2Max, vo2MaxInputFromForm, type VO2MaxResult, type VO2TestType } from '@/lib/calculators';
 
-type TestType = 'vdot' | 'cooper' | 'custom';
+type TestType = VO2TestType;
 
 export function VO2MaxCalculator() {
   const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
   const [testType, setTestType] = useState<TestType>('vdot');
-  const [result, setResult] = useState<{
-    vo2max: number;
-    classification: string;
-    hrReserve?: number;
-  } | null>(null);
+  const [result, setResult] = useState<VO2MaxResult | null>(null);
 
   // VDOT inputs
   const [vdotDistance, setVdotDistance] = useState('5000');
@@ -30,64 +26,22 @@ export function VO2MaxCalculator() {
   const [customRestHR, setCustomRestHR] = useState('60');
 
   const calculateVO2Max = () => {
-    let vo2max = 0;
-    let hrReserve: number | undefined;
-
-    if (testType === 'vdot') {
-      const distance = parseFloat(vdotDistance);
-      const totalSeconds = getTimeInSeconds(
-        parseInt(vdotTime.hours) || 0,
-        parseInt(vdotTime.minutes) || 0,
-        parseInt(vdotTime.seconds) || 0
-      );
-
-      if (!distance || !totalSeconds) return;
-
-      const totalTimeMinutes = totalSeconds / 60;
-      const speed = distance / totalTimeMinutes;
-      vo2max = 0.2 * speed + 3.5;
-    } else if (testType === 'cooper') {
-      const distance = parseFloat(cooperDistance);
-      if (!distance) return;
-      vo2max = (distance - 504.9) / 44.73;
-    } else if (testType === 'custom') {
-      const age = parseInt(customAge);
-      const maxHR = parseFloat(customMaxHR);
-      const restHR = parseFloat(customRestHR);
-      const totalSeconds = getTimeInSeconds(
-        parseInt(customTime.hours) || 0,
-        parseInt(customTime.minutes) || 0,
-        parseInt(customTime.seconds) || 0
-      );
-
-      if (!age || !maxHR || !restHR || !totalSeconds) return;
-
-      const totalTimeMinutes = totalSeconds / 60;
-      const distance = 5000;
-      const speed = distance / totalTimeMinutes;
-      const vo2maxTime = 0.2 * speed + 3.5;
-      const vo2maxHR = 15 * (maxHR / restHR);
-      vo2max = (vo2maxTime + vo2maxHR) / 2;
-
-      if (customGender === 'female') {
-        vo2max = vo2max * 0.95;
-      }
-
-      if (age > 25) {
-        const yearsOver25 = age - 25;
-        let ageAdjustmentFactor = 1 - 0.002 * yearsOver25;
-        ageAdjustmentFactor = Math.max(ageAdjustmentFactor, 0.7);
-        vo2max = vo2max * ageAdjustmentFactor;
-      }
-
-      hrReserve = maxHR - restHR;
-    }
-
-    setResult({
-      vo2max,
-      classification: getVO2Classification(vo2max),
-      hrReserve,
-    });
+    // Maths lives in src/lib/calculators/vo2max.ts (shared with the iPhone app).
+    const estimate = estimateVO2Max(
+      vo2MaxInputFromForm({
+        testType,
+        vdotDistance,
+        vdotTime,
+        cooperDistance,
+        customGender,
+        customAge,
+        customTime,
+        customMaxHR,
+        customRestHR,
+      })
+    );
+    if (!estimate) return;
+    setResult(estimate);
   };
 
   return (

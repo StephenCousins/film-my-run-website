@@ -2,20 +2,7 @@
 
 import { useState } from 'react';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
-
-interface NutritionResult {
-  totalTimeHours: number;
-  speedKmh: number;
-  caloriesPerHour: number;
-  totalCalories: number;
-  carbsPerHour: number;
-  totalCarbs: number;
-  hydrationPerHour: number;
-  totalHydration: number;
-  sodiumPerHour: number;
-  totalSodium: number;
-  gelsPerHour: number;
-}
+import { nutritionInputFromForm, planNutrition, type NutritionResult } from '@/lib/calculators';
 
 export function NutritionCalculator() {
   const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
@@ -29,53 +16,12 @@ export function NutritionCalculator() {
   const [result, setResult] = useState<NutritionResult | null>(null);
 
   const calculateNutrition = () => {
-    const weightNum = parseFloat(weight);
-    const distanceNum = parseFloat(distance);
-    const paceMinNum = parseInt(paceMin);
-    const paceSecNum = parseInt(paceSec) || 0;
-    const terrainFactor = parseFloat(terrain);
-    const tempFactor = parseFloat(temperature);
-
-    if (!weightNum || !distanceNum || !paceMinNum) return;
-
-    const paceMinPerKm = paceMinNum + paceSecNum / 60;
-    const totalTimeHours = (distanceNum * paceMinPerKm) / 60;
-    const speedKmh = 60 / paceMinPerKm;
-
-    // Calorie calculation: approximately 1 kcal per kg per km, adjusted for speed and terrain
-    const baseCaloriesPerHour = weightNum * speedKmh;
-    const adjustedCaloriesPerHour = baseCaloriesPerHour * terrainFactor * tempFactor;
-    const totalCalories = adjustedCaloriesPerHour * totalTimeHours;
-
-    // Carb needs (60-90g per hour for events > 2.5 hours)
-    const carbsPerHour = totalTimeHours > 2.5 ? 70 : 50;
-    const totalCarbs = carbsPerHour * totalTimeHours;
-
-    // Hydration (500-800ml per hour, adjusted for temperature)
-    const baseHydrationPerHour = 600;
-    const hydrationPerHour = Math.round(baseHydrationPerHour * tempFactor);
-    const totalHydration = hydrationPerHour * totalTimeHours;
-
-    // Sodium (300-700mg per hour for long events)
-    const sodiumPerHour = 500;
-    const totalSodium = sodiumPerHour * totalTimeHours;
-
-    // Gels calculation (assuming 25g carbs per gel)
-    const gelsPerHour = carbsPerHour / 25;
-
-    setResult({
-      totalTimeHours,
-      speedKmh,
-      caloriesPerHour: Math.round(adjustedCaloriesPerHour),
-      totalCalories: Math.round(totalCalories),
-      carbsPerHour,
-      totalCarbs: Math.round(totalCarbs),
-      hydrationPerHour,
-      totalHydration: Math.round(totalHydration),
-      sodiumPerHour,
-      totalSodium: Math.round(totalSodium),
-      gelsPerHour: Math.round(gelsPerHour * 10) / 10,
-    });
+    // Maths lives in src/lib/calculators/nutrition.ts (shared with the iPhone app).
+    const plan = planNutrition(
+      nutritionInputFromForm({ weight, distance, paceMin, paceSec, terrain, temperature })
+    );
+    if (!plan) return;
+    setResult(plan);
   };
 
   return (

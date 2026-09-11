@@ -17,6 +17,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { calculatePace as calculatePaceResult, paceInputFromForm } from '@/lib/calculators';
 
 // Import all calculator components
 import {
@@ -105,52 +106,12 @@ function PaceCalculator() {
   const [predictions, setPredictions] = useState<{ name: string; time: string }[]>([]);
 
   const calculatePace = () => {
-    let dist = parseFloat(distance);
-    if (distanceUnit === 'miles') {
-      dist = dist * 1.60934;
-    }
-
-    const totalSeconds =
-      parseInt(time.hours || '0') * 3600 +
-      parseInt(time.minutes || '0') * 60 +
-      parseInt(time.seconds || '0');
-
-    if (dist && totalSeconds) {
-      const paceSecondsPerKm = totalSeconds / dist;
-      const paceMinutes = Math.floor(paceSecondsPerKm / 60);
-      const paceSeconds = Math.round(paceSecondsPerKm % 60);
-      setPace(`${paceMinutes}:${paceSeconds.toString().padStart(2, '0')} /km`);
-
-      const paceSecondsPerMile = paceSecondsPerKm * 1.60934;
-      const paceMiMin = Math.floor(paceSecondsPerMile / 60);
-      const paceMiSec = Math.round(paceSecondsPerMile % 60);
-
-      const speedKmh = (dist / totalSeconds) * 3600;
-      setSpeed(`${speedKmh.toFixed(2)} km/h (${paceMiMin}:${paceMiSec.toString().padStart(2, '0')} /mile)`);
-
-      // Calculate predictions for standard distances
-      const distances = [
-        { name: '5K', km: 5 },
-        { name: '10K', km: 10 },
-        { name: 'Half Marathon', km: 21.0975 },
-        { name: 'Marathon', km: 42.195 },
-      ];
-
-      const preds = distances.map((d) => {
-        const predictedSeconds = paceSecondsPerKm * d.km;
-        const predHours = Math.floor(predictedSeconds / 3600);
-        const predMinutes = Math.floor((predictedSeconds % 3600) / 60);
-        const predSeconds = Math.floor(predictedSeconds % 60);
-        return {
-          name: d.name,
-          time:
-            predHours > 0
-              ? `${predHours}:${predMinutes.toString().padStart(2, '0')}:${predSeconds.toString().padStart(2, '0')}`
-              : `${predMinutes}:${predSeconds.toString().padStart(2, '0')}`,
-        };
-      });
-
-      setPredictions(preds);
+    // Maths lives in src/lib/calculators/pace.ts (shared with the iPhone app).
+    const result = calculatePaceResult(paceInputFromForm({ distance, distanceUnit, time }));
+    if (result) {
+      setPace(result.pace);
+      setSpeed(result.speed);
+      setPredictions(result.predictions);
     }
   };
 

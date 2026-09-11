@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { formatTimeFromSeconds, getTimeInSeconds } from './utils';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import { adjustForElevation, elevationInputFromForm, type ElevationResult } from '@/lib/calculators';
 
 export function ElevationCalculator() {
   const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
@@ -12,54 +12,15 @@ export function ElevationCalculator() {
   const [elevLoss, setElevLoss] = useState('500');
   const [terrain, setTerrain] = useState('1.1');
 
-  const [result, setResult] = useState<{
-    originalTime: string;
-    adjustedTime: string;
-    timeDifference: number;
-    equivalentFlatDistance: number;
-    gainPenalty: number;
-    lossBenefit: number;
-    terrainPenalty: number;
-  } | null>(null);
+  const [result, setResult] = useState<ElevationResult | null>(null);
 
   const calculateElevation = () => {
-    const dist = parseFloat(distance);
-    const flatTimeSeconds = getTimeInSeconds(
-      parseInt(time.hours) || 0,
-      parseInt(time.minutes) || 0,
-      parseInt(time.seconds) || 0
+    // Maths lives in src/lib/calculators/elevation.ts (shared with the iPhone app).
+    const adjusted = adjustForElevation(
+      elevationInputFromForm({ distance, time, elevGain, elevLoss, terrain })
     );
-    const gain = parseFloat(elevGain) || 0;
-    const loss = parseFloat(elevLoss) || 0;
-    const terrainFactor = parseFloat(terrain);
-
-    if (!dist || !flatTimeSeconds) return;
-
-    // Naismith's Rule: +1 minute per 10m elevation gain
-    // Modified: -0.5 minutes per 10m elevation loss (but capped)
-    const gainPenalty = (gain / 10) * 60; // seconds
-    const lossBenefit = Math.min((loss / 10) * 30, (gain / 10) * 30); // seconds, capped at half the gain penalty
-
-    // Apply terrain factor
-    const terrainPenalty = flatTimeSeconds * (terrainFactor - 1);
-
-    const adjustedTimeSeconds = flatTimeSeconds + gainPenalty - lossBenefit + terrainPenalty;
-
-    // Calculate equivalent flat distance
-    const flatPacePerKm = flatTimeSeconds / dist;
-    const equivalentFlatDistance = adjustedTimeSeconds / flatPacePerKm;
-
-    const timeDifference = adjustedTimeSeconds - flatTimeSeconds;
-
-    setResult({
-      originalTime: formatTimeFromSeconds(flatTimeSeconds),
-      adjustedTime: formatTimeFromSeconds(adjustedTimeSeconds),
-      timeDifference: Math.round(timeDifference / 60),
-      equivalentFlatDistance,
-      gainPenalty: Math.round(gainPenalty / 60),
-      lossBenefit: Math.round(lossBenefit / 60),
-      terrainPenalty: Math.round(terrainPenalty / 60),
-    });
+    if (!adjusted) return;
+    setResult(adjusted);
   };
 
   return (

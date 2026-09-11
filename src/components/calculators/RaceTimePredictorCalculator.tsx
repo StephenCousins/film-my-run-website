@@ -1,8 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { formatTimeFromSeconds, getTimeInSeconds, standardDistances } from './utils';
 import { useRequireAuth } from '@/hooks/useRequireAuth';
+import {
+  advancedInputFromForm,
+  advancedInputIsComplete,
+  advancedRaceOrderIsValid,
+  predictAdvanced,
+  predictQuick,
+  quickInputFromForm,
+  standardDistances,
+} from '@/lib/calculators';
 
 export function RaceTimePredictorCalculator() {
   const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
@@ -36,190 +44,34 @@ export function RaceTimePredictorCalculator() {
   >([]);
 
   const calculateQuick = () => {
-    const distance = parseFloat(knownDistance);
-    const totalSeconds = getTimeInSeconds(
-      parseInt(knownTime.hours) || 0,
-      parseInt(knownTime.minutes) || 0,
-      parseInt(knownTime.seconds) || 0
+    // Maths lives in src/lib/calculators/racePredictor.ts (shared with the iPhone app).
+    const predictions = predictQuick(
+      quickInputFromForm({ knownDistance, knownTime, targetDistance, experience, gender })
     );
-    const target = parseFloat(targetDistance);
-    let fatigueFactor = parseFloat(experience);
-
-    if (!distance || !totalSeconds || !target) return;
-
-    // Gender adjustments for ultra distances
-    if (gender === 'female' && target > 80) {
-      fatigueFactor *= 0.97;
-    }
-    if (gender === 'female' && target > 150) {
-      fatigueFactor *= 0.95;
-    }
-
-    // Ultra distance adjustment
-    if (target > 42.195) {
-      const distanceRatio = target / distance;
-      if (distanceRatio > 4) {
-        fatigueFactor += 0.2;
-      } else if (distanceRatio > 2) {
-        fatigueFactor += 0.1;
-      }
-    }
-
-    const predictedSeconds = totalSeconds * Math.pow(target / distance, fatigueFactor);
-    const pacePerKm = predictedSeconds / target;
-
-    // Get target distance name
-    const targetName =
-      standardDistances.find((d) => Math.abs(d.km - target) < 0.1)?.label || `${target}km`;
-
-    setResults([
-      {
-        distance: targetName,
-        km: target,
-        time: formatTimeFromSeconds(predictedSeconds),
-        pace: `${Math.floor(pacePerKm / 60)}:${Math.floor(pacePerKm % 60)
-          .toString()
-          .padStart(2, '0')}/km`,
-        confidence: 85,
-        isUltra: target > 42.195,
-      },
-    ]);
+    if (!predictions) return;
+    setResults(predictions);
   };
 
   const calculateAdvanced = () => {
-    const r1Distance = parseFloat(race1Distance);
-    const r1TimeSeconds = getTimeInSeconds(
-      parseInt(race1Time.hours) || 0,
-      parseInt(race1Time.minutes) || 0,
-      parseInt(race1Time.seconds) || 0
-    );
-    const r2Distance = parseFloat(race2Distance);
-    const r2TimeSeconds = getTimeInSeconds(
-      parseInt(race2Time.hours) || 0,
-      parseInt(race2Time.minutes) || 0,
-      parseInt(race2Time.seconds) || 0
-    );
-    const ageNum = parseInt(age);
-    const weightNum = parseFloat(weight);
-    const heightNum = parseFloat(height);
+    const input = advancedInputFromForm({
+      race1Distance,
+      race1Time,
+      race2Distance,
+      race2Time,
+      age,
+      weight,
+      height,
+      gender,
+    });
+    if (!advancedInputIsComplete(input)) return;
 
-    if (
-      !r1Distance ||
-      !r1TimeSeconds ||
-      !r2Distance ||
-      !r2TimeSeconds ||
-      !ageNum ||
-      !weightNum ||
-      !heightNum
-    )
-      return;
-
-    if (r1Distance >= r2Distance) {
+    if (!advancedRaceOrderIsValid(input)) {
       alert('Race #1 should be shorter than Race #2');
       return;
     }
 
-    // Calculate personal exponent
-    const personalExponent = Math.log(r2TimeSeconds / r1TimeSeconds) / Math.log(r2Distance / r1Distance);
-
-    // BMI calculation
-    const heightM = heightNum / 100;
-    const bmi = weightNum / (heightM * heightM);
-
-    // Age adjustment
-    let ageAdjustment = 1.0;
-    if (ageNum > 35) {
-      ageAdjustment = 1.0 + (ageNum - 35) * 0.002;
-      if (gender === 'female' && ageNum > 40) {
-        ageAdjustment *= 0.98;
-      }
-    } else if (ageNum < 25) {
-      ageAdjustment = 1.0 + (25 - ageNum) * 0.001;
-    }
-
-    // BMI adjustment
-    const optimalBMI = gender === 'female' ? 21 : 20;
-    let bmiAdjustment = 1.0;
-    if (bmi < 18) {
-      bmiAdjustment = 1.02;
-    } else if (bmi > 25) {
-      bmiAdjustment = 1.0 + (bmi - 25) * 0.01;
-    } else if (bmi > optimalBMI + 1 && bmi <= 25) {
-      bmiAdjustment = 1.0 + (bmi - optimalBMI - 1) * 0.005;
-    }
-
-    const distances = [
-      { name: '5K', km: 5, isUltra: false },
-      { name: '10K', km: 10, isUltra: false },
-      { name: 'Half Marathon', km: 21.0975, isUltra: false },
-      { name: 'Marathon', km: 42.195, isUltra: false },
-      { name: '50K', km: 50, isUltra: true },
-      { name: '50 Miles', km: 80.4672, isUltra: true },
-      { name: '100K', km: 100, isUltra: true },
-      { name: '100 Miles', km: 160.934, isUltra: true },
-    ];
-
-    const predictions = distances.map((distance) => {
-      let exponent = personalExponent;
-      let baseDistance: number;
-      let baseTime: number;
-
-      // Choose which known race to base the prediction on
-      if (distance.km < r1Distance) {
-        baseDistance = r1Distance;
-        baseTime = r1TimeSeconds;
-      } else if (distance.km >= r1Distance && distance.km <= r2Distance) {
-        const dist1Diff = Math.abs(distance.km - r1Distance);
-        const dist2Diff = Math.abs(distance.km - r2Distance);
-        if (dist1Diff < dist2Diff) {
-          baseDistance = r1Distance;
-          baseTime = r1TimeSeconds;
-        } else {
-          baseDistance = r2Distance;
-          baseTime = r2TimeSeconds;
-        }
-      } else {
-        baseDistance = r2Distance;
-        baseTime = r2TimeSeconds;
-      }
-
-      if (distance.isUltra) {
-        const ultraMultiplier = Math.pow(distance.km / 42.195, 0.15);
-        exponent = exponent * (1 + ultraMultiplier * 0.08);
-
-        if (distance.km > 80) {
-          exponent *= 1.05;
-          if (gender === 'female') exponent *= 0.97;
-        }
-        if (distance.km > 150) {
-          exponent *= 1.08;
-          if (gender === 'female') exponent *= 0.95;
-        }
-      }
-
-      exponent *= ageAdjustment;
-      exponent *= bmiAdjustment;
-
-      let predictedSeconds = baseTime * Math.pow(distance.km / baseDistance, exponent);
-
-      // Confidence calculation
-      const distanceRatio = Math.abs(Math.log(distance.km / baseDistance));
-      const confidence = Math.max(50, 100 - distanceRatio * 30);
-
-      const pacePerKm = predictedSeconds / distance.km;
-
-      return {
-        distance: distance.name,
-        km: distance.km,
-        time: formatTimeFromSeconds(predictedSeconds),
-        pace: `${Math.floor(pacePerKm / 60)}:${Math.floor(pacePerKm % 60)
-          .toString()
-          .padStart(2, '0')}/km`,
-        confidence: Math.round(confidence),
-        isUltra: distance.isUltra,
-      };
-    });
-
+    const predictions = predictAdvanced(input);
+    if (!predictions) return;
     setResults(predictions);
   };
 
