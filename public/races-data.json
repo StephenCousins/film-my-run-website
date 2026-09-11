@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-09-10T07:39:06.758Z",
+  "lastUpdated": "2026-09-11T07:36:17.616Z",
   "races": [
     {
       "activityId": "33811771",
@@ -3916,6 +3916,28 @@
       "trailCount": 148,
       "hundredMilers": "",
       "raceCount": "1 x Swiss Alps 100"
+    },
+    {
+      "activityId": "19928365257",
+      "number": 179,
+      "date": "27/08/2026",
+      "name": "OCC",
+      "distance": 38,
+      "time": "13:11:35",
+      "position": 1200,
+      "elevation": 3518,
+      "video": "",
+      "report": "",
+      "strava": " https://www.strava.com/activities/19928365257",
+      "officialResults": "https://live.utmb.world/utmb/2026/runners/7296",
+      "type": "Ultra",
+      "terrain": "Trail",
+      "marathonCount": "",
+      "ultraCount": 83,
+      "roadCount": "",
+      "trailCount": 149,
+      "hundredMilers": "",
+      "raceCount": "2 x OCC"
     }
   ]
 }
