@@ -1,0 +1,4 @@
+{
+  "_comment": "Partner offers shown on the app's Today screen. At most one is shown, the first active by date. Dates are YYYY-MM-DD inclusive. Edit here and push; the site deploys.",
+  "offers": []
+}
