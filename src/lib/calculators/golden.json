@@ -409,9 +409,9 @@
         {
           "distance": "50K",
           "km": 50,
-          "seconds": 15285.334484661005,
-          "time": "4:14:45",
-          "paceSecondsPerKm": 305.7066896932201,
+          "seconds": 15257.403356528477,
+          "time": "4:14:17",
+          "paceSecondsPerKm": 305.14806713056953,
           "pace": "5:05/km",
           "confidence": 85,
           "isUltra": true
@@ -436,9 +436,9 @@
         {
           "distance": "100K",
           "km": 100,
-          "seconds": 49140.02362335645,
-          "time": "13:39:00",
-          "paceSecondsPerKm": 491.4002362335645,
+          "seconds": 49103.7134443229,
+          "time": "13:38:23",
+          "paceSecondsPerKm": 491.037134443229,
           "pace": "8:11/km",
           "confidence": 85,
           "isUltra": true
@@ -463,10 +463,10 @@
         {
           "distance": "100 Miles",
           "km": 160.934,
-          "seconds": 88322.60289890615,
-          "time": "24:32:02",
-          "paceSecondsPerKm": 548.8125747132747,
-          "pace": "9:08/km",
+          "seconds": 83039.44959504787,
+          "time": "23:03:59",
+          "paceSecondsPerKm": 515.9845004476858,
+          "pace": "8:35/km",
           "confidence": 85,
           "isUltra": true
         }
@@ -490,10 +490,10 @@
         {
           "distance": "100 Miles",
           "km": 160.934,
-          "seconds": 91343.21558910958,
-          "time": "25:22:23",
-          "paceSecondsPerKm": 567.581838449983,
-          "pace": "9:27/km",
+          "seconds": 85429.32117267656,
+          "time": "23:43:49",
+          "paceSecondsPerKm": 530.8345108720131,
+          "pace": "8:50/km",
           "confidence": 85,
           "isUltra": true
         }
@@ -517,10 +517,10 @@
         {
           "distance": "50 Miles",
           "km": 80.4672,
-          "seconds": 32013.002688878827,
-          "time": "8:53:33",
-          "paceSecondsPerKm": 397.83915295771226,
-          "pace": "6:37/km",
+          "seconds": 31635.473889252047,
+          "time": "8:47:15",
+          "paceSecondsPerKm": 393.1474425511518,
+          "pace": "6:33/km",
           "confidence": 85,
           "isUltra": true
         }

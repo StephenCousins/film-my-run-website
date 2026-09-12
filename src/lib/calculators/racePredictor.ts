@@ -39,37 +39,53 @@ export interface QuickPredictionInput {
 }
 
 /**
- * Exponents at 100 miles, per experience level (keyed by the base Riegel
- * factor). Calibrated 12 Sep 2026 to Stephen's race experience for a 3:00
- * marathoner on flat terrain: Experienced 17–21 h, Intermediate 22–25 h,
- * Novice 25–30 h; Elite a little under Experienced. Between the marathon and
- * 100 miles the exponent is interpolated in log-distance, so a 50K barely
- * moves and a 100K lands between (3:00 marathon → about 9 h Experienced).
+ * The Riegel exponent at 100 miles depends on how fast the marathoner is:
+ * faster marathoners lose more, relative to their marathon, over 100 miles.
+ * Fitted 12 Sep 2026 to 1,077 runners with both a London Marathon time
+ * (2019–2025) and a Centurion 100-mile finish (DUV statistics):
+ * marathon under 3:00 → median exponent 1.48, 3:00–3:30 → 1.44,
+ * 3:30–4:00 → 1.39, 4:00–5:00 → 1.32. Experience level then places the
+ * runner within the spread (about the 25th / 40th / 60th / 85th
+ * percentiles). Details: filmmyrun-ios/tools/ultra-calibration/REPORT.md.
  */
-export const ULTRA_EXPONENT_AT_100_MILES: Record<string, number> = {
-  '1.04': 1.28, // Elite   → 16.6 h
-  '1.06': 1.38, // Experienced → 19.0 h
-  '1.08': 1.54, // Intermediate → 23.6 h
-  '1.1': 1.66, // Novice → 27.7 h
+export const ULTRA_LEVEL_OFFSET: Record<string, number> = {
+  '1.04': -0.1, // Elite
+  '1.06': -0.04, // Experienced
+  '1.08': 0.04, // Intermediate
+  '1.1': 0.12, // Novice
 };
 
 const MARATHON_KM = 42.195;
 const HUNDRED_MILES_KM = 160.934;
 
+/** Exponent at 100 miles for a runner whose marathon takes `marathonHours`. */
+export function ultraExponentAt100Miles(marathonHours: number, fatigueFactor: number): number {
+  const base = Math.min(1.52, Math.max(1.22, 1.73 - 0.09 * marathonHours));
+  const offset = ULTRA_LEVEL_OFFSET[String(fatigueFactor)] ?? 0;
+  return Math.min(1.7, Math.max(1.1, base + offset));
+}
+
 /**
  * The exponent to use for a prediction whose target is `target` km. Up to the
- * marathon it is the plain experience factor; beyond it, it rises towards the
- * 100-mile value. Women slow a little less over ultras, so their ultra
- * increment is scaled down (the same 0.97 / 0.95 the old formula used).
+ * marathon it is the plain experience factor; beyond it, it rises in
+ * log-distance towards the 100-mile value for this runner. Women slow a
+ * little less over ultras, so their ultra increment is scaled down (the same
+ * 0.97 / 0.95 the old formula used). `marathonHours` is the runner's
+ * marathon-equivalent time from the known race.
  */
-export function predictionExponent(fatigueFactor: number, target: number, gender: PredictorGender): number {
+export function predictionExponent(fatigueFactor: number, target: number, gender: PredictorGender, marathonHours: number): number {
   if (target <= MARATHON_KM) return fatigueFactor;
-  const at100 = ULTRA_EXPONENT_AT_100_MILES[String(fatigueFactor)] ?? fatigueFactor + 0.32;
+  const at100 = ultraExponentAt100Miles(marathonHours, fatigueFactor);
   const position = Math.min(1, Math.log(target / MARATHON_KM) / Math.log(HUNDRED_MILES_KM / MARATHON_KM));
   let increment = (at100 - fatigueFactor) * position;
   if (gender === 'female' && target > 80) increment *= 0.97;
   if (gender === 'female' && target > 150) increment *= 0.95;
   return fatigueFactor + increment;
+}
+
+/** The runner's marathon time implied by the known race, in hours. */
+export function marathonEquivalentHours(knownDistanceKm: number, knownSeconds: number, fatigueFactor: number): number {
+  return (knownSeconds * Math.pow(MARATHON_KM / knownDistanceKm, fatigueFactor)) / 3600;
 }
 
 /**
@@ -96,7 +112,12 @@ export function predictQuick(input: QuickPredictionInput): RacePrediction[] | nu
 
   // Beyond the marathon the exponent grows with distance (see predictionExponent);
   // this replaced the old +0.1 / +0.2 ratio steps on 12 Sep 2026.
-  const fatigueFactor = predictionExponent(input.fatigueFactor, target, input.gender);
+  const fatigueFactor = predictionExponent(
+    input.fatigueFactor,
+    target,
+    input.gender,
+    marathonEquivalentHours(distance, totalSeconds, input.fatigueFactor)
+  );
 
   const predictedSeconds = totalSeconds * Math.pow(target / distance, fatigueFactor);
   const pacePerKm = predictedSeconds / target;
