@@ -27,6 +27,10 @@ import {
  * were BEFORE the maths moved here (commit d573d47, 11 Sep 2026). Every case
  * must still produce the same result. If a formula is ever changed on purpose,
  * regenerate the file and say so in the commit.
+ *
+ * Changed on purpose: 12 Sep 2026, quick-mode ultra predictions (the five
+ * `quick` cases with targets beyond the marathon) after the exponent was
+ * recalibrated to real 100-mile finishing times; see racePredictor.ts.
  */
 
 type Case<I, O> = { id: string; input: I; output: O };

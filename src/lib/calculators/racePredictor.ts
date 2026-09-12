@@ -38,31 +38,65 @@ export interface QuickPredictionInput {
   gender: PredictorGender;
 }
 
+/**
+ * Exponents at 100 miles, per experience level (keyed by the base Riegel
+ * factor). Calibrated 12 Sep 2026 to Stephen's race experience for a 3:00
+ * marathoner on flat terrain: Experienced 17–21 h, Intermediate 22–25 h,
+ * Novice 25–30 h; Elite a little under Experienced. Between the marathon and
+ * 100 miles the exponent is interpolated in log-distance, so a 50K barely
+ * moves and a 100K lands between (3:00 marathon → about 9 h Experienced).
+ */
+export const ULTRA_EXPONENT_AT_100_MILES: Record<string, number> = {
+  '1.04': 1.28, // Elite   → 16.6 h
+  '1.06': 1.38, // Experienced → 19.0 h
+  '1.08': 1.54, // Intermediate → 23.6 h
+  '1.1': 1.66, // Novice → 27.7 h
+};
+
+const MARATHON_KM = 42.195;
+const HUNDRED_MILES_KM = 160.934;
+
+/**
+ * The exponent to use for a prediction whose target is `target` km. Up to the
+ * marathon it is the plain experience factor; beyond it, it rises towards the
+ * 100-mile value. Women slow a little less over ultras, so their ultra
+ * increment is scaled down (the same 0.97 / 0.95 the old formula used).
+ */
+export function predictionExponent(fatigueFactor: number, target: number, gender: PredictorGender): number {
+  if (target <= MARATHON_KM) return fatigueFactor;
+  const at100 = ULTRA_EXPONENT_AT_100_MILES[String(fatigueFactor)] ?? fatigueFactor + 0.32;
+  const position = Math.min(1, Math.log(target / MARATHON_KM) / Math.log(HUNDRED_MILES_KM / MARATHON_KM));
+  let increment = (at100 - fatigueFactor) * position;
+  if (gender === 'female' && target > 80) increment *= 0.97;
+  if (gender === 'female' && target > 150) increment *= 0.95;
+  return fatigueFactor + increment;
+}
+
+/**
+ * A plain-English warning when the chosen experience level does not fit the
+ * time entered: an Elite runner's marathon is under about 2:45 (women 3:05).
+ * Null when the pairing looks fine.
+ */
+export function experienceMismatch(input: QuickPredictionInput): string | null {
+  const { knownDistanceKm, knownSeconds, fatigueFactor, gender } = input;
+  if (!knownDistanceKm || !knownSeconds) return null;
+  if (fatigueFactor !== 1.04) return null;
+  const marathonEquivalent = knownSeconds * Math.pow(MARATHON_KM / knownDistanceKm, 1.04);
+  const limit = gender === 'female' ? 3 * 3600 + 5 * 60 : 2 * 3600 + 45 * 60;
+  if (marathonEquivalent <= limit * 1.03) return null;
+  return `Elite usually means a marathon under ${gender === 'female' ? '3:05' : '2:45'}. This time fits Experienced better, and the prediction will be more realistic.`;
+}
+
 export function predictQuick(input: QuickPredictionInput): RacePrediction[] | null {
   const distance = input.knownDistanceKm;
   const totalSeconds = input.knownSeconds;
   const target = input.targetDistanceKm;
-  let fatigueFactor = input.fatigueFactor;
 
   if (!distance || !totalSeconds || !target) return null;
 
-  // Gender adjustments for ultra distances
-  if (input.gender === 'female' && target > 80) {
-    fatigueFactor *= 0.97;
-  }
-  if (input.gender === 'female' && target > 150) {
-    fatigueFactor *= 0.95;
-  }
-
-  // Ultra distance adjustment
-  if (target > 42.195) {
-    const distanceRatio = target / distance;
-    if (distanceRatio > 4) {
-      fatigueFactor += 0.2;
-    } else if (distanceRatio > 2) {
-      fatigueFactor += 0.1;
-    }
-  }
+  // Beyond the marathon the exponent grows with distance (see predictionExponent);
+  // this replaced the old +0.1 / +0.2 ratio steps on 12 Sep 2026.
+  const fatigueFactor = predictionExponent(input.fatigueFactor, target, input.gender);
 
   const predictedSeconds = totalSeconds * Math.pow(target / distance, fatigueFactor);
   const pacePerKm = predictedSeconds / target;

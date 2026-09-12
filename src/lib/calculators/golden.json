@@ -328,7 +328,9 @@
         {
           "distance": "Marathon",
           "km": 42.195,
+          "seconds": 13800.597999769758,
           "time": "3:50:00",
+          "paceSecondsPerKm": 327.06714065101926,
           "pace": "5:27/km",
           "confidence": 85,
           "isUltra": false
@@ -353,7 +355,9 @@
         {
           "distance": "10K",
           "km": 10,
+          "seconds": 2467.4731839745596,
           "time": "41:07",
+          "paceSecondsPerKm": 246.74731839745596,
           "pace": "4:06/km",
           "confidence": 85,
           "isUltra": false
@@ -378,7 +382,9 @@
         {
           "distance": "5K",
           "km": 5,
+          "seconds": 1477.560954554148,
           "time": "24:37",
+          "paceSecondsPerKm": 295.51219091082964,
           "pace": "4:55/km",
           "confidence": 85,
           "isUltra": false
@@ -403,8 +409,10 @@
         {
           "distance": "50K",
           "km": 50,
-          "time": "4:12:14",
-          "pace": "5:02/km",
+          "seconds": 15285.334484661005,
+          "time": "4:14:45",
+          "paceSecondsPerKm": 305.7066896932201,
+          "pace": "5:05/km",
           "confidence": 85,
           "isUltra": true
         }
@@ -428,8 +436,10 @@
         {
           "distance": "100K",
           "km": 100,
-          "time": "12:41:02",
-          "pace": "7:36/km",
+          "seconds": 49140.02362335645,
+          "time": "13:39:00",
+          "paceSecondsPerKm": 491.4002362335645,
+          "pace": "8:11/km",
           "confidence": 85,
           "isUltra": true
         }
@@ -453,8 +463,10 @@
         {
           "distance": "100 Miles",
           "km": 160.934,
-          "time": "16:54:28",
-          "pace": "6:18/km",
+          "seconds": 88322.60289890615,
+          "time": "24:32:02",
+          "paceSecondsPerKm": 548.8125747132747,
+          "pace": "9:08/km",
           "confidence": 85,
           "isUltra": true
         }
@@ -478,8 +490,10 @@
         {
           "distance": "100 Miles",
           "km": 160.934,
-          "time": "18:54:01",
-          "pace": "7:02/km",
+          "seconds": 91343.21558910958,
+          "time": "25:22:23",
+          "paceSecondsPerKm": 567.581838449983,
+          "pace": "9:27/km",
           "confidence": 85,
           "isUltra": true
         }
@@ -503,8 +517,10 @@
         {
           "distance": "50 Miles",
           "km": 80.4672,
-          "time": "8:16:08",
-          "pace": "6:09/km",
+          "seconds": 32013.002688878827,
+          "time": "8:53:33",
+          "paceSecondsPerKm": 397.83915295771226,
+          "pace": "6:37/km",
           "confidence": 85,
           "isUltra": true
         }
@@ -528,7 +544,9 @@
         {
           "distance": "7km",
           "km": 7,
+          "seconds": 1928.5437091815888,
           "time": "32:08",
+          "paceSecondsPerKm": 275.5062441687984,
           "pace": "4:35/km",
           "confidence": 85,
           "isUltra": false
