@@ -2,202 +2,123 @@ import { NextRequest } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
-import {
-  parseShoeQuery,
-  fetchReviewsForShoe,
-  findImageForShoe,
-  shoeToSlug,
-} from '@/lib/shoe-enrichment';
+import { loadBrands, resolveBrand } from '@/lib/shoes/brands';
+import { shoeToSlug } from '@/lib/shoes/slug';
+import { isSameLine, parseModelVersion } from '@/lib/shoes/versions';
+import { parseUserQuery } from '@/lib/shoes/parseUserQuery';
+import { evaluate, type CandidateInput } from '@/lib/shoes/publish/gate';
+import { publishCandidate } from '@/lib/shoes/publish/publish';
+import { findAndStoreImage } from '@/lib/shoes/images';
+
+export const maxDuration = 120;
+export const dynamic = 'force-dynamic';
+
+const DAILY_LIMIT = 5;
+
+function json(body: Record<string, unknown>, status: number): Response {
+  return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
+}
 
 function streamLine(controller: ReadableStreamDefaultController, data: Record<string, unknown>) {
   controller.enqueue(new TextEncoder().encode(JSON.stringify(data) + '\n'));
 }
 
+/**
+ * Suggest-a-Shoe. A signed-in visitor's free text goes through the same gate
+ * as a discovered candidate (brand page, reviews, specs), with the two
+ * judgement holds overridden: a visitor asking for an older shoe with one
+ * review is a visitor who wants that shoe. The modal reads NDJSON lines
+ * `{ step, message, ... }`; `complete` carries the shoe, `duplicate` and
+ * `error` end the stream.
+ */
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
-  if (!session?.user?.id) {
-    return new Response(JSON.stringify({ error: 'Sign in required' }), {
-      status: 401,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
+  if (!session?.user?.id) return json({ error: 'Sign in required' }, 401);
   const userId = parseInt(session.user.id);
 
-  if (!process.env.ANTHROPIC_API_KEY || (!process.env.BRAVE_SEARCH_API_KEY && !process.env.SERPER_API_KEY)) {
-    return new Response(JSON.stringify({ error: 'Shoe suggestion service is not configured' }), {
-      status: 503,
-      headers: { 'Content-Type': 'application/json' },
-    });
+  if (!process.env.OPENROUTER_API_KEY || (!process.env.BRAVE_SEARCH_API_KEY && !process.env.SERPER_API_KEY)) {
+    return json({ error: 'Shoe suggestion service is not configured' }, 503);
   }
 
   const body = await req.json().catch(() => null);
-  const query = body?.query?.trim();
-  if (!query || query.length < 3 || query.length > 100) {
-    return new Response(JSON.stringify({ error: 'Please enter a shoe name (3-100 characters)' }), {
-      status: 400,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
+  const query: string | undefined = typeof body?.query === 'string' ? body.query.trim() : undefined;
+  if (!query || query.length < 3 || query.length > 100) return json({ error: 'Please enter a shoe name (3-100 characters)' }, 400);
 
-  // Rate limit: 5 additions per user per day
   const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-  const recentCount = await prisma.shoes.count({
-    where: {
-      created_at: { gte: dayAgo },
-      description: { contains: `[added by user ${userId}]` },
-    },
-  });
-  if (recentCount >= 50) {
-    return new Response(JSON.stringify({ error: 'Daily limit reached (50 shoes per day). Try again tomorrow.' }), {
-      status: 429,
-      headers: { 'Content-Type': 'application/json' },
-    });
-  }
+  const recentCount = await prisma.shoes.count({ where: { added_by_user_id: userId, created_at: { gte: dayAgo } } });
+  if (recentCount >= DAILY_LIMIT) return json({ error: `Daily limit reached (${DAILY_LIMIT} shoes per day). Try again tomorrow.` }, 429);
 
   const stream = new ReadableStream({
     async start(controller) {
       try {
-        // Step 1: Parse shoe details
-        streamLine(controller, { step: 'parsing', message: 'Looking up shoe details...' });
+        streamLine(controller, { step: 'parsing', message: 'Working out which shoe you mean...' });
+        const parsed = await parseUserQuery(query);
+        const brand = resolveBrand(parsed.brand, await loadBrands());
+        if (!brand) {
+          streamLine(controller, { step: 'error', message: `We don't know the brand "${parsed.brand}" yet. Email stephen@filmmyrun.com and we'll add it.` });
+          return;
+        }
+        const model = parsed.model;
+        const slug = shoeToSlug(brand.name, model);
+        streamLine(controller, { step: 'parsed', message: `Found: ${brand.name} ${model}`, brand: brand.name, model });
 
-        const parsed = await parseShoeQuery(query);
-        streamLine(controller, {
-          step: 'parsed',
-          message: `Found: ${parsed.brand} ${parsed.model} (${parsed.terrain} ${parsed.category.replace(/_/g, ' ')})`,
-          brand: parsed.brand,
-          model: parsed.model,
-        });
-
-        // Step 2: Check for duplicates
-        const slug = shoeToSlug(parsed.brand, parsed.model);
-        const existing = await prisma.shoes.findUnique({ where: { slug } });
+        // Same duplicate rule as discovery: the slug, or the same line at the same version.
+        const version = parseModelVersion(model).versionNum;
+        const existing = await prisma.shoes.findUnique({ where: { slug }, select: { slug: true } })
+          ?? (await prisma.shoes.findMany({ where: { brand_id: brand.id }, select: { slug: true, model: true } }))
+            .find(s => isSameLine(s.model, model) && parseModelVersion(s.model).versionNum === version);
         if (existing) {
-          streamLine(controller, {
-            step: 'duplicate',
-            message: `${parsed.brand} ${parsed.model} is already in our database`,
-            slug,
-          });
-          controller.close();
+          streamLine(controller, { step: 'duplicate', message: `${brand.name} ${model} is already in our database`, slug: existing.slug });
           return;
         }
 
-        // Step 3: Create shoe record
+        streamLine(controller, { step: 'reviews', message: `Checking ${brand.domain} and fetching reviews...` });
+        const input: CandidateInput = { id: 0, slug, brand, model, evidence: { sources: [] } };
+        const gate = await evaluate(input, undefined, { override: ['too_old', 'reviews_lt_2'] });
+        if (!gate.publish) {
+          const message = gate.reasons.includes('no_brand_page')
+            ? `Couldn't find the "${brand.name} ${model}" on ${brand.domain}, so it wasn't added`
+            : `Couldn't add ${brand.name} ${model}: ${gate.reasons.join(', ')}`;
+          streamLine(controller, { step: 'error', message });
+          return;
+        }
+
         streamLine(controller, { step: 'creating', message: 'Adding to database...' });
-
-        const shoe = await prisma.shoes.create({
-          data: {
-            brand: parsed.brand,
-            model: parsed.model,
-            slug,
-            terrain: parsed.terrain,
-            category: parsed.category,
-            drop_mm: parsed.drop_mm,
-            weight_g: parsed.weight_g,
-            stack_height_mm: parsed.stack_height_mm,
-            price_gbp: parsed.price_gbp,
-            release_year: parsed.release_year,
-            description: parsed.description ? `${parsed.description} [added by user ${userId}]` : `[added by user ${userId}]`,
-          },
+        const published = await publishCandidate(input, gate, { kind: 'user', userId });
+        streamLine(controller, {
+          step: 'reviews_done',
+          message: gate.reviews.length ? `Found ${gate.reviews.length} review${gate.reviews.length === 1 ? '' : 's'}` : 'No reviews found yet',
         });
 
-        // Step 4: Fetch reviews
-        streamLine(controller, { step: 'reviews', message: 'Fetching reviews...' });
-
-        const reviews = await fetchReviewsForShoe(parsed.brand, parsed.model, (msg) => {
-          streamLine(controller, { step: 'reviews', message: msg });
-        });
-        let avgScore: number | null = null;
-
-        if (reviews.length > 0) {
-          for (const review of reviews) {
-            await prisma.shoe_reviews.upsert({
-              where: { shoe_id_source: { shoe_id: shoe.id, source: review.source } },
-              update: {
-                source_url: review.source_url,
-                expert_score: review.expert_score,
-                summary: review.summary,
-                fetched_at: new Date(),
-              },
-              create: {
-                shoe_id: shoe.id,
-                source: review.source,
-                source_url: review.source_url,
-                expert_score: review.expert_score,
-                summary: review.summary,
-              },
-            });
-          }
-
-          const scores = reviews.map(r => r.expert_score);
-          avgScore = Math.round((scores.reduce((a, b) => a + b, 0) / scores.length) * 10) / 10;
-
-          await prisma.shoes.update({
-            where: { id: shoe.id },
-            data: {
-              avg_score: avgScore,
-              review_count: reviews.length,
-              last_reviewed: new Date(),
-            },
-          });
-
-          streamLine(controller, {
-            step: 'reviews_done',
-            message: `Found ${reviews.length} review(s), avg score: ${avgScore}/10`,
-          });
-        } else {
-          streamLine(controller, { step: 'reviews_done', message: 'No reviews found yet' });
-        }
-
-        // Step 5: Find image
         streamLine(controller, { step: 'image', message: 'Finding product image...' });
+        const image = await findAndStoreImage({ slug: published.slug, brand, model }, gate.brandPage);
+        streamLine(controller, { step: 'image_done', message: image ? `Image found (${image.method})` : 'No image found' });
 
-        const imageResult = await findImageForShoe(parsed.brand, parsed.model, (msg) => {
-          streamLine(controller, { step: 'image', message: msg });
-        });
-        let imageUrl: string | null = null;
-
-        if (imageResult) {
-          imageUrl = imageResult.url;
-          await prisma.shoes.update({
-            where: { id: shoe.id },
-            data: { image_url: imageUrl },
-          });
-          streamLine(controller, {
-            step: 'image_done',
-            message: `Image found (${imageResult.method})`,
-          });
-        } else {
-          streamLine(controller, { step: 'image_done', message: 'No image found' });
-        }
-
-        // Step 6: Return complete shoe
+        const shoe = await prisma.shoes.findUniqueOrThrow({ where: { id: published.shoeId } });
         streamLine(controller, {
           step: 'complete',
           message: 'Shoe added successfully!',
           shoe: {
             id: shoe.id,
-            brand: parsed.brand,
-            model: parsed.model,
-            slug,
-            terrain: parsed.terrain,
-            category: parsed.category,
-            dropMm: parsed.drop_mm,
-            weightG: parsed.weight_g,
-            stackHeightMm: parsed.stack_height_mm,
-            priceGbp: parsed.price_gbp,
-            releaseYear: parsed.release_year,
-            description: parsed.description,
-            imageUrl,
-            avgScore,
-            reviewCount: reviews.length,
+            brand: shoe.brand,
+            model: shoe.model,
+            slug: shoe.slug,
+            terrain: shoe.terrain,
+            category: shoe.category,
+            dropMm: shoe.drop_mm,
+            weightG: shoe.weight_g,
+            stackHeightMm: shoe.stack_height_mm,
+            priceGbp: shoe.price_gbp,
+            releaseYear: shoe.release_year,
+            description: shoe.description,
+            imageUrl: shoe.image_url,
+            avgScore: shoe.avg_score === null ? null : Number(shoe.avg_score),
+            reviewCount: shoe.review_count,
           },
         });
       } catch (err) {
-        streamLine(controller, {
-          step: 'error',
-          message: err instanceof Error ? err.message : 'Something went wrong',
-        });
+        console.error('Shoe suggestion failed', err);
+        streamLine(controller, { step: 'error', message: err instanceof Error ? err.message : 'Something went wrong' });
       } finally {
         controller.close();
       }
@@ -205,10 +126,6 @@ export async function POST(req: NextRequest) {
   });
 
   return new Response(stream, {
-    headers: {
-      'Content-Type': 'application/x-ndjson',
-      'Cache-Control': 'no-cache',
-      Connection: 'keep-alive',
-    },
+    headers: { 'Content-Type': 'application/x-ndjson', 'Cache-Control': 'no-cache', Connection: 'keep-alive' },
   });
 }
