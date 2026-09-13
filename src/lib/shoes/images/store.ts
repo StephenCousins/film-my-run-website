@@ -45,6 +45,7 @@ export async function storeImage(slug: string, sourceUrl: string, deps: StoreDep
   const jpeg = await sharp(original)
     .rotate()
     .resize({ width: 1000, height: 1000, fit: 'inside', withoutEnlargement: true })
+    .flatten({ background: '#ffffff' }) // JPEG has no alpha; transparent PNGs would otherwise go black
     .jpeg({ quality: 85 })
     .toBuffer();
   return deps.upload(imageKey(slug), jpeg, 'image/jpeg');

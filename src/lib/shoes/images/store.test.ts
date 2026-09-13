@@ -14,3 +14,15 @@ describe('storeImage', () => {
     expect(uploaded).toEqual({ key: 'shoes/hoka-clifton-10.jpg', type: 'image/jpeg', w: 1000, h: 500 });
   });
 });
+
+describe('storeImage: transparency', () => {
+  it('flattens a fully transparent PNG onto white', async () => {
+    const png = await sharp({ create: { width: 40, height: 40, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } }).png().toBuffer();
+    let corner: number[] = [];
+    await storeImage('s', 'https://x/t.png', {
+      download: async () => png,
+      upload: async (_k, body) => { const raw = await sharp(body).raw().toBuffer(); corner = [raw[0], raw[1], raw[2]]; return 'u'; },
+    });
+    expect(corner).toEqual([255, 255, 255]);
+  });
+});

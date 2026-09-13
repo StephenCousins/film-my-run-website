@@ -1,5 +1,5 @@
 import type { Brand } from '../brands';
-import { findVersionConflict } from '../versions';
+import { findVersionConflict, parseModelVersion } from '../versions';
 import { webSearch, sleep } from '../search';
 import { fetchPage, extractJsonLdProducts, extractMetaImages, type JsonLdProduct } from '../html';
 import { pageNamesExactModel, type BrandPage } from '../publish/brandPage';
@@ -62,20 +62,25 @@ function nameConflicts(model: string, name: string | undefined): boolean {
   return name.toLowerCase().includes(model.toLowerCase()) && !pageNamesExactModel(model, '', name);
 }
 
+/** "Men's Ghost" is the Ghost line; "Adrenaline GTS 23" alone on a Ghost 16 page is not this shoe. */
+function nameIsThisLine(model: string, name: string | undefined): boolean {
+  return !!name && name.toLowerCase().includes(parseModelVersion(model).base.toLowerCase());
+}
+
 /**
  * Which JSON-LD Products on an accepted page may supply images. The walker
  * in html.ts also returns related-product carousels (ItemList entries), and
  * those are exactly how a hiking boot ended up on a running shoe. Products
  * whose name names this exact model are used. If none does, the page's only
- * Product is used when its name does not point at another version (brand
- * pages often name it "Men's Clifton" with no number) — but never one of
+ * Product is used when its name is in this line and does not point at another
+ * version (brand pages often name it "Men's Clifton" with no number) — but never one of
  * several, because then there is no way to tell the page's own product from
  * the carousel.
  */
 function productsForModel(products: JsonLdProduct[], model: string): JsonLdProduct[] {
   const named = products.filter(p => p.name && pageNamesExactModel(model, '', p.name));
   if (named.length > 0) return named;
-  if (products.length === 1 && !nameConflicts(model, products[0].name)) return [products[0]];
+  if (products.length === 1 && !nameConflicts(model, products[0].name) && nameIsThisLine(model, products[0].name)) return [products[0]];
   return [];
 }
 
@@ -106,20 +111,20 @@ function dedupe(candidates: ImageCandidate[]): ImageCandidate[] {
   return candidates.filter(c => (seen.has(c.url) ? false : (seen.add(c.url), true)));
 }
 
+/** Candidates from the brand's own product page: JSON-LD Product images, then og/twitter images. */
+export function brandPageCandidates(model: string, brandPage: BrandPage | null): ImageCandidate[] {
+  if (!brandPage) return [];
+  return dedupe(pageImages(brandPage.html, brandPage.url, model, ['brand-jsonld', 'brand-og']));
+}
+
 /**
- * Image candidates in order of trust: the brand's own product page (JSON-LD
- * Product images, then og/twitter images), then the first retailer whose
- * page provably names this exact model and version. Retailer pages are only
- * accepted on the same rule as the brand page; the search-result title is not
- * trusted, the fetched <title> is. There is deliberately no image-search
- * fallback: every mismatched image in the old catalogue came from one.
+ * Candidates from the first retailer whose page provably names this exact
+ * model and version. Retailer pages are accepted on the same rule as the
+ * brand page; the search-result title is not trusted, the fetched <title> is.
+ * There is deliberately no image-search fallback: every mismatched image in
+ * the old catalogue came from one.
  */
-export async function imageCandidates(input: ImageCandidatesInput, deps: ImageCandidatesDeps = liveDeps): Promise<ImageCandidate[]> {
-  const { brand, model, brandPage } = input;
-  const candidates: ImageCandidate[] = [];
-
-  if (brandPage) candidates.push(...pageImages(brandPage.html, brandPage.url, model, ['brand-jsonld', 'brand-og']));
-
+export async function retailerCandidates(brand: Brand, model: string, deps: ImageCandidatesDeps = liveDeps): Promise<ImageCandidate[]> {
   const pause = deps.sleep ?? (async () => {});
   for (let i = 0; i < RETAILER_DOMAINS.length; i++) {
     const domain = RETAILER_DOMAINS[i];
@@ -136,11 +141,23 @@ export async function imageCandidates(input: ImageCandidatesInput, deps: ImageCa
       if (!pageNamesExactModel(model, result.url, page.title)) continue;
       found.push(...pageImages(page.html, result.url, model, ['retailer-jsonld', 'retailer-og']));
     }
-    if (found.length > 0) {
-      candidates.push(...found);
-      break;
-    }
+    if (found.length > 0) return dedupe(found);
   }
+  return [];
+}
 
-  return dedupe(candidates);
+export type ImagePhase = 'brand' | 'retailer';
+
+/**
+ * Image candidates in order of trust. `phase: 'brand'` returns only the brand
+ * page's images and never searches; `phase: 'retailer'` runs the retailer
+ * searches only. Without a phase both are returned together, brand first.
+ * findAndStoreImage runs the brand phase through verify+store first and only
+ * pays for retailer searches when nothing from the brand page stored.
+ */
+export async function imageCandidates(input: ImageCandidatesInput, deps: ImageCandidatesDeps = liveDeps, opts: { phase?: ImagePhase } = {}): Promise<ImageCandidate[]> {
+  const { brand, model, brandPage } = input;
+  if (opts.phase === 'brand') return brandPageCandidates(model, brandPage);
+  if (opts.phase === 'retailer') return retailerCandidates(brand, model, deps);
+  return dedupe([...brandPageCandidates(model, brandPage), ...(await retailerCandidates(brand, model, deps))]);
 }

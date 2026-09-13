@@ -1,12 +1,13 @@
 import { prisma } from '@/lib/db';
+import { sleep } from '../search';
 import type { Brand } from '../brands';
 import type { BrandPage } from '../publish/brandPage';
-import { imageCandidates, type ImageCandidate } from './candidates';
+import { imageCandidates, type ImageCandidate, type ImagePhase } from './candidates';
 import { isLikelyProductImage, checkImageSize, visionConfirmShoeImage } from './verify';
 import { storeImage } from './store';
 
-export type { ImageCandidate, ImageMethod } from './candidates';
-export { RETAILER_DOMAINS, isProductPageUrl, imageCandidates } from './candidates';
+export type { ImageCandidate, ImageMethod, ImagePhase } from './candidates';
+export { RETAILER_DOMAINS, isProductPageUrl, imageCandidates, brandPageCandidates, retailerCandidates } from './candidates';
 export { NON_CATALOGUE_HOSTS, isLikelyProductImage, checkImageSize, visionConfirmShoeImage } from './verify';
 export { storeImage, imageKey } from './store';
 
@@ -24,7 +25,8 @@ export interface ImageWrite {
 }
 
 export interface FindImageDeps {
-  imageCandidates: (input: { brand: Brand; model: string; brandPage: BrandPage | null }) => Promise<ImageCandidate[]>;
+  /** Called once per phase; the retailer phase only runs if nothing from the brand phase stored. */
+  imageCandidates: (input: { brand: Brand; model: string; brandPage: BrandPage | null }, phase: ImagePhase) => Promise<ImageCandidate[]>;
   isLikelyProductImage: (url: string) => boolean;
   checkImageSize: (url: string) => Promise<{ ok: boolean; reason?: string }>;
   visionConfirmShoeImage: (brand: string, model: string, url: string) => Promise<boolean | null>;
@@ -33,7 +35,7 @@ export interface FindImageDeps {
 }
 
 const liveFindDeps: FindImageDeps = {
-  imageCandidates: input => imageCandidates(input),
+  imageCandidates: (input, phase) => imageCandidates(input, undefined, { phase }),
   isLikelyProductImage,
   checkImageSize: url => checkImageSize(url),
   visionConfirmShoeImage: (brand, model, url) => visionConfirmShoeImage(brand, model, url),
@@ -41,20 +43,31 @@ const liveFindDeps: FindImageDeps = {
   writeImage: async (slug, data) => { await prisma.shoes.update({ where: { slug }, data }); },
 };
 
+const PHASES: ImagePhase[] = ['brand', 'retailer'];
+
 /**
- * Find, verify and store one image for a shoe. Each candidate must pass the
- * URL heuristics, the size/type HEAD check, and an explicit vision YES before
- * it is copied to R2; only after the copy succeeds is anything written to the
- * row. A wrong image is worse than none, so a vision NO and a vision failure
- * (null) are treated the same: skip.
+ * Find, verify and store one image for a shoe. Brand-page candidates go
+ * through the full verify+store path first; retailer searches only run when
+ * none of them stored. Each candidate must pass the URL heuristics, the
+ * size/type HEAD check, and an explicit vision YES before it is copied to R2;
+ * only after the copy succeeds is anything written to the row. A wrong image
+ * is worse than none, so a vision NO and a vision failure (null) are treated
+ * the same: skip.
  */
 export async function findAndStoreImage(
   shoe: { slug: string; brand: Brand; model: string },
   brandPage: BrandPage | null,
   deps: FindImageDeps = liveFindDeps
 ): Promise<ImageOutcome | null> {
-  const candidates = await deps.imageCandidates({ brand: shoe.brand, model: shoe.model, brandPage });
+  for (const phase of PHASES) {
+    const candidates = await deps.imageCandidates({ brand: shoe.brand, model: shoe.model, brandPage }, phase);
+    const stored = await tryCandidates(shoe, candidates, deps);
+    if (stored) return stored;
+  }
+  return null;
+}
 
+async function tryCandidates(shoe: { slug: string; brand: Brand; model: string }, candidates: ImageCandidate[], deps: FindImageDeps): Promise<ImageOutcome | null> {
   for (const candidate of candidates) {
     if (!deps.isLikelyProductImage(candidate.url)) continue;
     const size = await deps.checkImageSize(candidate.url);
@@ -77,7 +90,6 @@ export async function findAndStoreImage(
     });
     return { url, sourceUrl: candidate.url, method: candidate.method };
   }
-
   return null;
 }
 
@@ -86,6 +98,8 @@ export interface AuditImageDeps {
   /** HTTP status of a HEAD request, or null when no response came back at all. */
   head: (url: string) => Promise<number | null>;
   clearImage: (slug: string) => Promise<void>;
+  /** Pause between HEADs so the audit does not hammer R2; tests pass a no-op. */
+  sleep?: typeof sleep;
 }
 
 async function headStatus(url: string): Promise<number | null> {
@@ -118,27 +132,45 @@ const liveAuditDeps: AuditImageDeps = {
       data: { image_url: null, image_source_url: null, image_method: null, image_verified_at: null },
     });
   },
+  sleep,
 };
 
+/** Statuses that say the object is gone, as opposed to the request having a bad day. */
+const GONE_STATUSES = new Set([404, 410]);
+
+export interface AuditResult {
+  checked: number;
+  cleared: string[];
+  /** HEADs that answered neither 2xx nor gone (429, 5xx, 401/403, no response): left alone, but the audit was degraded. */
+  unverified: number;
+}
+
 /**
- * HEAD every stored image and clear the four image fields on any that no
- * longer resolves, so the page shows a placeholder rather than a broken img.
- * A request that gets no response at all (timeout, DNS) says nothing about
- * the image and is left alone; only an actual non-2xx status clears.
+ * HEAD every stored image and clear the four image fields on any that is
+ * gone (404/410), so the page shows a placeholder rather than a broken img.
+ * Anything else that is not a 2xx — rate limiting, a 5xx, an auth error, no
+ * response at all — says nothing about the image and is counted as
+ * unverified rather than cleared: an R2 blip must not empty the catalogue.
  */
 export async function auditImages(
   deps: AuditImageDeps = liveAuditDeps,
   opts: { limit?: number } = {}
-): Promise<{ checked: number; cleared: string[] }> {
+): Promise<AuditResult> {
   const rows = await deps.listImages(opts.limit);
+  const pause = deps.sleep ?? (async () => {});
   const cleared: string[] = [];
-  for (const row of rows) {
+  let unverified = 0;
+  for (let i = 0; i < rows.length; i++) {
+    if (i > 0) await pause(250);
+    const row = rows[i];
     const status = await deps.head(row.image_url);
-    if (status === null) continue;
-    if (status < 200 || status >= 300) {
+    if (status !== null && status >= 200 && status < 300) continue;
+    if (status !== null && GONE_STATUSES.has(status)) {
       await deps.clearImage(row.slug);
       cleared.push(row.slug);
+    } else {
+      unverified++;
     }
   }
-  return { checked: rows.length, cleared };
+  return { checked: rows.length, cleared, unverified };
 }

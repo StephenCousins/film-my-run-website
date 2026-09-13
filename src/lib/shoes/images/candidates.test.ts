@@ -94,3 +94,21 @@ describe('imageCandidates: retailers', () => {
     expect(pauses).toEqual(Array(7).fill(1100));
   });
 });
+
+describe('imageCandidates: lone product must be this line', () => {
+  const page = (html: string) => ({ url: 'https://www.brooksrunning.com/ghost-16', title: 'Ghost 16', html, product: null, releaseDate: null });
+  const noSearch = { webSearch: async () => [], fetchPage: async () => null };
+  const lone = (name: string) => `<script type="application/ld+json">{"@type":"Product","name":"${name}","image":"https://c/x.jpg"}</script>`;
+  it('rejects a lone product from another line and accepts one named for the model', async () => {
+    expect(await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: page(lone('Adrenaline GTS 23')) }, noSearch)).toEqual([]);
+    expect((await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: page(lone('Ghost 16')) }, noSearch)).map(c => c.url)).toEqual(['https://c/x.jpg']);
+  });
+  it('splits by phase: brand never searches, retailer never reads the brand page', async () => {
+    const queries: string[] = [];
+    const deps = { webSearch: async (q: string) => { queries.push(q); return []; }, fetchPage: async () => null };
+    const brand = await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: page(lone('Ghost 16')) }, deps, { phase: 'brand' });
+    expect(brand.map(c => c.method)).toEqual(['brand-jsonld']); expect(queries).toEqual([]);
+    const retail = await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: page(lone('Ghost 16')) }, deps, { phase: 'retailer' });
+    expect(retail).toEqual([]); expect(queries).toHaveLength(8);
+  });
+});
