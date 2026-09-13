@@ -27,11 +27,14 @@ describe('digest', () => {
     expect(d.subject).toContain('1 held');
     expect(d.subject).toContain('0 errors');
     expect(d.html).toContain('hoka-clifton-10');
-    expect(d.html).toContain('https://filmmyrun.com/tools/shoe-finder/hoka-clifton-10');
+    expect(d.html).toContain('<a href="https://filmmyrun.com/api/shoes/hoka-clifton-10"');
+    expect(d.html).toContain('<a href="https://filmmyrun.com/tools/shoe-finder"');
+    expect(d.html).not.toContain('/tools/shoe-finder/hoka-clifton-10');
+    expect(d.text).toContain('data: https://filmmyrun.com/api/shoes/hoka-clifton-10 finder: https://filmmyrun.com/tools/shoe-finder');
     expect(d.html).toContain(`/api/shoes/candidates/3/publish?token=${publishToken(3)}`);
     expect(d.html).toContain('reviews_lt_2');
     expect(d.html).toContain('believe_in_run');
-    expect(d.html).toContain('>b<');
+    expect(d.html).toContain('<li>b <a href="https://filmmyrun.com/api/shoes/b"');
     expect(d.text).toContain('hoka-clifton-10');
     expect(d.text).toContain(`/api/shoes/candidates/3/publish?token=${publishToken(3)}`);
   });
@@ -74,7 +77,7 @@ describe('digest', () => {
     delete process.env.CRON_SECRET;
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     const sent: unknown[] = [];
-    expect(await sendDigest(report(), { apiKey: 'key', baseUrl: 'b', send: async msg => { sent.push(msg); } })).toBe(false);
+    expect(await sendDigest(report(), { apiKey: 'key', baseUrl: 'b', send: async msg => { sent.push(msg); return { error: null }; } })).toBe(false);
     expect(sent).toEqual([]);
     expect(warn).toHaveBeenCalledOnce();
     warn.mockRestore();
@@ -96,14 +99,19 @@ describe('digest', () => {
   it('sendDigest sends to Stephen with the rendered subject', async () => {
     process.env.CRON_SECRET = 'test';
     const sent: unknown[] = [];
-    const deps: SendDeps = { apiKey: 'key', baseUrl: 'https://filmmyrun.com', send: async msg => { sent.push(msg); } };
+    const deps: SendDeps = { apiKey: 'key', baseUrl: 'https://filmmyrun.com', send: async msg => { sent.push(msg); return { error: null }; } };
     expect(await sendDigest(report(), deps)).toBe(true);
     expect(sent).toHaveLength(1);
     expect(sent[0]).toMatchObject({ to: 'stephen@filmmyrun.com', subject: expect.stringContaining('1 published') });
   });
+  it('sendDigest rejects when Resend answers with an error instead of a throw', async () => {
+    process.env.CRON_SECRET = 'test';
+    const deps: SendDeps = { apiKey: 'key', baseUrl: 'https://filmmyrun.com', send: async () => ({ error: { name: 'validation_error', message: 'The from domain is not verified' } }) };
+    await expect(sendDigest(report(), deps)).rejects.toThrow('Resend: validation_error: The from domain is not verified');
+  });
   it('sendDigest skips on dry run and when there is no key', async () => {
     const sent: unknown[] = [];
-    const send = async (msg: unknown) => { sent.push(msg); };
+    const send = async (msg: unknown) => { sent.push(msg); return { error: null }; };
     expect(await sendDigest(report({ dryRun: true }), { apiKey: 'key', baseUrl: 'b', send })).toBe(false);
     expect(await sendDigest(report(), { apiKey: undefined, baseUrl: 'b', send })).toBe(false);
     expect(sent).toEqual([]);

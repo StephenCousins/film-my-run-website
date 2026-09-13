@@ -17,7 +17,15 @@ export interface DiscoverDeps {
   existingSlugs: () => Promise<{ slug: string; brand: string; model: string }[]>;
   upsertCandidate: (c: CandidateUpsert) => Promise<void>;
 }
-export interface DiscoverReport { nominations: number; candidatesUpserted: number; alreadyKnown: number; feedsEmpty: string[] }
+export interface DiscoverReport {
+  nominations: number;
+  candidatesUpserted: number;
+  alreadyKnown: number;
+  /** Feed keys that yielded nothing, with the error when there was one: 'irunfar (HTTP 403)' is a block, 'irunfar' is a quiet week. */
+  feedsEmpty: string[];
+  /** The one LLM call that turns headlines into shoes returned something unparseable; every nomination was lost. */
+  normaliseFailed: boolean;
+}
 
 /** Union of evidence sources by url; the stored order is kept, new urls appended. */
 export function mergeEvidenceSources(existing: unknown, incoming: EvidenceSource[]): EvidenceSource[] {
@@ -59,9 +67,9 @@ export async function discover(deps: DiscoverDeps = liveDiscoverDeps): Promise<D
   const searchResult = await deps.searchNominations();
   const all = [...feedResults, ...brandResults, searchResult];
   const noms = all.flatMap(r => r.nominations);
-  const feedsEmpty = all.filter(r => r.empty && r.source !== 'search' && !r.source.startsWith('brand:')).map(r => r.source);
+  const feedsEmpty = all.filter(r => r.empty && r.source !== 'search' && !r.source.startsWith('brand:')).map(r => (r.error ? `${r.source} (${r.error})` : r.source));
 
-  const { resolved, unresolved } = await normalise(noms, brands, { completeText: deps.completeText });
+  const { resolved, unresolved, failed: normaliseFailed } = await normalise(noms, brands, { completeText: deps.completeText });
   const existing = await deps.existingSlugs();
   const existingSlugs = new Set(existing.map(e => e.slug));
 
@@ -76,5 +84,5 @@ export async function discover(deps: DiscoverDeps = liveDiscoverDeps): Promise<D
     await deps.upsertCandidate({ slug: u.slug, brandId: null, brandText: u.brandText, modelText: u.model, holdReasons: ['brand_unresolved'], evidence: evidenceOf(u.nominations) });
     upserted++;
   }
-  return { nominations: noms.length, candidatesUpserted: upserted, alreadyKnown: known, feedsEmpty };
+  return { nominations: noms.length, candidatesUpserted: upserted, alreadyKnown: known, feedsEmpty, normaliseFailed };
 }

@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db';
 import type { CandidateStatus, Prisma } from '@prisma/client';
-import { loadBrands, type Brand } from '../brands';
+import { loadBrands, resetBrandCache, type Brand } from '../brands';
 import { discover, liveDiscoverDeps, type DiscoverReport } from '../discovery';
 import { evaluate, type CandidateInput, type GateHold, type GatePass } from '../publish/gate';
 import { findBrandProductPage, type BrandPage } from '../publish/brandPage';
@@ -65,7 +65,8 @@ export interface WeeklyDeps {
   log: (msg: string) => void;
 }
 
-export const DEFAULTS = { maxPublish: 10, maxImages: 20, maxStaleRefresh: 10 } as const;
+// maxImages: each imageless shoe can cost up to nine searches and forty page fetches; ten keeps a run inside the workflow's timeout.
+export const DEFAULTS = { maxPublish: 10, maxImages: 10, maxStaleRefresh: 10 } as const;
 export const STALE_REVIEW_DAYS = 30;
 export const REJECT_HELD_AFTER_WEEKS = 8;
 
@@ -249,12 +250,16 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
     report.errored.push({ slug, error: errorMessage(err) });
   };
 
+  // A brand or alias added to shoe_brands since the process started must count on this run.
+  resetBrandCache();
   deps.log(`Shoe Finder weekly${dryRun ? ' (dry run)' : ''}: discovering`);
   try {
     const d = await deps.discover();
     report.discovered = d.candidatesUpserted;
     report.feedsEmpty = d.feedsEmpty;
     deps.log(`discovery: ${d.nominations} nominations, ${d.candidatesUpserted} candidates upserted, ${d.alreadyKnown} already known`);
+    // Every nomination was thrown away; that is a failed run, not a quiet week.
+    if (d.normaliseFailed) report.errored.push({ slug: 'discover', error: `LLM normalise output was unparseable; ${d.nominations} nominations dropped` });
   } catch (err) {
     fail('discover', err);
   }
@@ -335,9 +340,10 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
     fail('auditImages', err);
   }
 
+  // A dry run stubs findAndStoreImage, so the brand-page searches here would be paid for and thrown away.
   let needImage: ShoeRef[] = [];
   try {
-    needImage = await deps.shoesNeedingImage(maxImages);
+    needImage = dryRun ? [] : await deps.shoesNeedingImage(maxImages);
   } catch (err) {
     fail('shoesNeedingImage', err);
   }

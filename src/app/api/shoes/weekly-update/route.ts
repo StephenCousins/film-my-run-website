@@ -27,7 +27,13 @@ export async function POST(req: NextRequest) {
     `${report.imagesStored.length} images stored, ${report.imagesCleared.length} cleared, ${Math.round(report.durationMs / 1000)}s`
   );
   if (!dryRun) {
-    try { await sendDigest(report); } catch (err) { console.error('Shoe digest failed', err); }
+    // A digest that did not arrive is an error of the run: it lands in `errored` so the response is a 500 and the workflow fails.
+    try {
+      await sendDigest(report);
+    } catch (err) {
+      console.error('Shoe digest failed', err);
+      report.errored.push({ slug: 'digest', error: err instanceof Error ? err.message : String(err) });
+    }
   }
   return Response.json(report, { status: report.errored.length === 0 ? 200 : 500 });
 }

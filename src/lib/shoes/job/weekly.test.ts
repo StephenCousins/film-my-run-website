@@ -23,7 +23,7 @@ interface Writes {
 function fakeDeps(over: Partial<WeeklyDeps> = {}): { deps: WeeklyDeps; writes: Writes } {
   const writes: Writes = { upsertCandidate: 0, publish: [], hold: [], link: [], rejectStale: [], rejectCandidate: [], upsertReviews: [], recompute: [], touch: [], clearImage: 0, store: [] };
   const deps: WeeklyDeps = {
-    discover: async () => { writes.upsertCandidate += 2; return { nominations: 5, candidatesUpserted: 2, alreadyKnown: 3, feedsEmpty: ['believe_in_run'] }; },
+    discover: async () => { writes.upsertCandidate += 2; return { nominations: 5, candidatesUpserted: 2, alreadyKnown: 3, feedsEmpty: ['believe_in_run'], normaliseFailed: false }; },
     listCandidates: async statuses => (statuses.includes('pending') ? [clifton, pegasus] : []),
     shoeExists: async () => null,
     linkCandidate: async (id, shoeId) => { writes.link.push({ id, shoeId }); },
@@ -143,7 +143,7 @@ describe('runWeekly', () => {
       shoesNeedingImage: async limit => { limits.images = limit; return []; },
     });
     await runWeekly({}, second.deps);
-    expect(limits).toEqual({ stale: 10, images: 20 });
+    expect(limits).toEqual({ stale: 10, images: 10 });
   });
   it('a shoe needing an image gets the brand page looked up first', async () => {
     const pages: string[] = [];
@@ -157,10 +157,17 @@ describe('runWeekly', () => {
     // The published candidate reuses the gate's brand page; the imageless shoe gets a fresh lookup.
     expect(received).toEqual([page, page]);
   });
-  it('dryRun reports the same numbers and calls no writing dep', async () => {
+  it('dryRun reports the same numbers, calls no writing dep, and skips the image loop', async () => {
     // The fakes record every call, so an empty writes list proves runWeekly stubbed them, not the fake.
-    const { deps, writes } = fakeDeps({ shoeExists: async slug => (slug === 'nike-pegasus-42' ? { id: 9 } : null) });
+    let imageLookups = 0;
+    const { deps, writes } = fakeDeps({
+      shoeExists: async slug => (slug === 'nike-pegasus-42' ? { id: 9 } : null),
+      shoesNeedingImage: async () => { imageLookups++; return [imageless]; },
+      findBrandProductPage: async () => { imageLookups++; return page; },
+    });
     const r = await runWeekly({ dryRun: true }, deps);
+    expect(imageLookups).toBe(0);
+    expect(r.imagesStored).toEqual([]);
     expect(r.dryRun).toBe(true);
     expect(r.published).toHaveLength(1);
     expect(r.linkedExisting).toEqual(['nike-pegasus-42']);
@@ -194,6 +201,11 @@ describe('runWeekly', () => {
     expect(writes.hold).toHaveLength(1);
     expect(r.reviewsRefreshed).toBe(0);
     expect(r.imagesCleared).toEqual(['dead-shoe']);
+  });
+  it('an unparseable normalise reply is reported under errored', async () => {
+    const { deps } = fakeDeps({ discover: async () => ({ nominations: 9, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: [], normaliseFailed: true }) });
+    const r = await runWeekly({}, deps);
+    expect(r.errored).toEqual([{ slug: 'discover', error: 'LLM normalise output was unparseable; 9 nominations dropped' }]);
   });
   it('a failing discover is reported, not fatal', async () => {
     const { deps } = fakeDeps({ discover: async () => { throw new Error('feeds down'); } });

@@ -18,14 +18,15 @@ permissions:
 jobs:
   update-shoes:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    # A realistic run is 15-30 minutes of rate-limited searches and page fetches; curl must outlast it.
+    timeout-minutes: 35
     steps:
       - name: Run the weekly shoe job
         id: run
         run: |
           q=""; [ "${{ inputs.dryRun }}" = "true" ] && q="?dryRun=1"
           code=$(curl -s -o report.json -w "%{http_code}" -X POST "${{ secrets.SITE_URL }}/api/shoes/weekly-update$q" \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" --max-time 600)
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" --max-time 1800)
           echo "## Weekly Shoe Update (HTTP $code)" >> $GITHUB_STEP_SUMMARY
           echo '```json' >> $GITHUB_STEP_SUMMARY; cat report.json >> $GITHUB_STEP_SUMMARY; echo '```' >> $GITHUB_STEP_SUMMARY
 

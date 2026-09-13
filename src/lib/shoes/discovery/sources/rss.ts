@@ -1,13 +1,19 @@
 import Parser from 'rss-parser';
 import type { Nomination, SourceResult } from '../types';
 
+// Not listed: road_trail_run (https://www.roadtrailrun.com/feeds/posts/default?alt=rss).
+// Probed 13 September 2026 with this file's headers: HTTP 403, a Cloudflare
+// "Just a moment..." JS challenge on every path and User-Agent tried
+// (/feeds/posts/default, /rss.xml, /feed/, /sitemap.xml; Chrome, Googlebot,
+// FeedFetcher-Google, none). A feed that fails every week trains the
+// digest's "feeds that returned nothing" section to be skipped, which is
+// where a real outage would show. Re-add once a direct fetch returns items.
 export const FEEDS: { key: string; url: string }[] = [
   { key: 'running_shoes_guru', url: 'https://www.runningshoesguru.com/feed/' },
   { key: 'the_run_testers', url: 'https://theruntesters.com/feed/' },
   { key: 'runners_world', url: 'https://www.runnersworld.com/uk/rss/all.xml/' },
   { key: 'irunfar', url: 'https://www.irunfar.com/feed' },
   { key: 'believe_in_run', url: 'https://believeintherun.com/feed/' },
-  { key: 'road_trail_run', url: 'https://www.roadtrailrun.com/feeds/posts/default?alt=rss' },
   { key: 'doctors_of_running', url: 'https://www.doctorsofrunning.com/feed/' },
 ];
 

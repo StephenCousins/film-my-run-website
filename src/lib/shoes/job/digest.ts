@@ -33,15 +33,25 @@ export function digestSubject(report: JobReport): string {
   return `Shoe Finder weekly${report.dryRun ? ' (dry run)' : ''}: ${report.published.length} published, ${report.held.length} held, ${errors} ${errors === 1 ? 'error' : 'errors'}`;
 }
 
-interface Line { text: string; href?: string; note?: string; /** Held rows only: the signed one-click publish link. */ publishUrl?: string }
+interface Line {
+  text: string;
+  /** Labelled links after the text. There is no per-shoe page yet, so a shoe links to its API record and to the finder. */
+  links?: { label: string; href: string }[];
+  note?: string;
+  /** Held rows only: the signed one-click publish link. */
+  publishUrl?: string;
+}
 interface Section { title: string; lines: Line[]; empty: string }
 
 function sections(report: JobReport, baseUrl: string, signPublish: (candidateId: number) => string): Section[] {
-  const shoeUrl = (slug: string) => `${baseUrl}/tools/shoe-finder/${slug}`;
+  const shoeLinks = (slug: string) => [
+    { label: 'data', href: `${baseUrl}/api/shoes/${slug}` },
+    { label: 'finder', href: `${baseUrl}/tools/shoe-finder` },
+  ];
   return [
     {
       title: `Published (${report.published.length})`,
-      lines: report.published.map(p => ({ text: p.slug, href: shoeUrl(p.slug), note: p.imageUrl ? undefined : 'no image' })),
+      lines: report.published.map(p => ({ text: p.slug, links: shoeLinks(p.slug), note: p.imageUrl ? undefined : 'no image' })),
       empty: 'Nothing published.',
     },
     {
@@ -51,7 +61,7 @@ function sections(report: JobReport, baseUrl: string, signPublish: (candidateId:
     },
     {
       title: `Linked to existing shoes (${report.linkedExisting.length})`,
-      lines: report.linkedExisting.map(slug => ({ text: slug, href: shoeUrl(slug) })),
+      lines: report.linkedExisting.map(slug => ({ text: slug, links: shoeLinks(slug) })),
       empty: 'None.',
     },
     {
@@ -61,12 +71,12 @@ function sections(report: JobReport, baseUrl: string, signPublish: (candidateId:
     },
     {
       title: `Images stored (${report.imagesStored.length})`,
-      lines: report.imagesStored.map(slug => ({ text: slug, href: shoeUrl(slug) })),
+      lines: report.imagesStored.map(slug => ({ text: slug, links: shoeLinks(slug) })),
       empty: 'None stored.',
     },
     {
       title: `Images cleared (${report.imagesCleared.length})`,
-      lines: report.imagesCleared.map(slug => ({ text: slug, href: shoeUrl(slug) })),
+      lines: report.imagesCleared.map(slug => ({ text: slug, links: shoeLinks(slug) })),
       empty: 'None cleared.',
     },
     {
@@ -102,7 +112,7 @@ export function renderDigest(report: JobReport, baseUrl: string, signPublish: (c
     ...summary, '',
     ...secs.flatMap(s => [
       s.title,
-      ...(s.lines.length ? s.lines.map(l => `- ${l.text}${l.href ? ` ${l.href}` : ''}${l.note ? ` (${l.note})` : ''}${l.publishUrl ? ` publish anyway: ${l.publishUrl}` : ''}`) : [s.empty]),
+      ...(s.lines.length ? s.lines.map(l => `- ${l.text}${(l.links ?? []).map(k => ` ${k.label}: ${k.href}`).join('')}${l.note ? ` (${l.note})` : ''}${l.publishUrl ? ` publish anyway: ${l.publishUrl}` : ''}`) : [s.empty]),
       '',
     ]),
   ].join('\n');
@@ -114,7 +124,7 @@ export function renderDigest(report: JobReport, baseUrl: string, signPublish: (c
       ${secs.map(s => `
       <h3 style="margin: 20px 0 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: #52525b;">${escapeHtml(s.title)}</h3>
       ${s.lines.length
-        ? `<ul style="margin: 0; padding-left: 20px; line-height: 1.7;">${s.lines.map(l => `<li>${l.href ? `<a href="${escapeHtml(l.href)}" style="color: #18181b;">${escapeHtml(l.text)}</a>` : escapeHtml(l.text)}${l.note ? ` <span style="color: #52525b;">(${escapeHtml(l.note)})</span>` : ''}${l.publishUrl ? ` <a href="${escapeHtml(l.publishUrl)}" style="color: #f88c00;">publish anyway</a>` : ''}</li>`).join('')}</ul>`
+        ? `<ul style="margin: 0; padding-left: 20px; line-height: 1.7;">${s.lines.map(l => `<li>${escapeHtml(l.text)}${(l.links ?? []).map(k => ` <a href="${escapeHtml(k.href)}" style="color: #18181b;">${escapeHtml(k.label)}</a>`).join('')}${l.note ? ` <span style="color: #52525b;">(${escapeHtml(l.note)})</span>` : ''}${l.publishUrl ? ` <a href="${escapeHtml(l.publishUrl)}" style="color: #f88c00;">publish anyway</a>` : ''}</li>`).join('')}</ul>`
         : `<p style="margin: 0; color: #a1a1aa;">${escapeHtml(s.empty)}</p>`}`).join('')}
       <p style="margin-top: 24px; font-size: 12px; color: #a1a1aa;">Sent by the Shoe Finder weekly job on filmmyrun.com</p>
     </div>
@@ -125,7 +135,8 @@ export function renderDigest(report: JobReport, baseUrl: string, signPublish: (c
 export interface SendDeps {
   apiKey: string | undefined;
   baseUrl: string;
-  send: (msg: { from: string; to: string; subject: string; html: string; text: string }) => Promise<void>;
+  /** The Resend SDK's shape: it resolves `{ data, error }` and never throws on an API error. */
+  send: (msg: { from: string; to: string; subject: string; html: string; text: string }) => Promise<{ error: { name: string; message: string } | null }>;
 }
 
 function liveSendDeps(): SendDeps {
@@ -133,15 +144,22 @@ function liveSendDeps(): SendDeps {
   return {
     apiKey,
     baseUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.com',
-    send: async msg => { await new Resend(apiKey).emails.send(msg); },
+    send: msg => new Resend(apiKey).emails.send(msg),
   };
 }
 
-/** Emails the digest to Stephen. Skipped (returns false) on a dry run or without a Resend key. */
+/**
+ * Emails the digest to Stephen. Skipped (returns false) on a dry run or
+ * without a Resend key. A Resend API error (unverified sender, 422, 429)
+ * comes back in the response rather than as a throw, so it is turned into
+ * one here: a digest that quietly never arrives is the failure this whole
+ * pipeline was built to end.
+ */
 export async function sendDigest(report: JobReport, deps: SendDeps = liveSendDeps()): Promise<boolean> {
   if (report.dryRun || !deps.apiKey) return false;
   if (!process.env.CRON_SECRET) { console.warn('Shoe Finder digest not sent: CRON_SECRET is not set, cannot sign publish links'); return false; }
   const { subject, html, text } = renderDigest(report, deps.baseUrl, id => publishLink(deps.baseUrl, id));
-  await deps.send({ from: process.env.RESEND_FROM_EMAIL || 'Film My Run <onboarding@resend.dev>', to: DIGEST_TO, subject, html, text });
+  const { error } = await deps.send({ from: process.env.RESEND_FROM_EMAIL || 'Film My Run <onboarding@resend.dev>', to: DIGEST_TO, subject, html, text });
+  if (error) throw new Error(`Resend: ${error.name}: ${error.message}`);
   return true;
 }

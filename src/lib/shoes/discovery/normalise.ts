@@ -18,8 +18,21 @@ const VERSIONLESS_SUFFIX = /\b(gtx|plus|max|pro|elite|premium)\b/i;
  * resolved against the catalogue and nominations grouped by slug. A brand the
  * source already knew (a brand page) beats whatever the LLM read from the title.
  */
-export async function normalise(noms: Nomination[], brands: Brand[], deps: NormaliseDeps = { completeText }): Promise<{ resolved: Resolved[]; unresolved: Unresolved[] }> {
-  if (noms.length === 0) return { resolved: [], unresolved: [] };
+export interface NormaliseResult {
+  resolved: Resolved[];
+  unresolved: Unresolved[];
+  /** The LLM reply was not a JSON array (refusal, truncation past maxTokens, prose): nothing was resolved and the run should say so. */
+  failed: boolean;
+}
+
+/** Nothing usable came back; the reply's head goes to the log so the digest's "discovered: 0" has a cause. */
+function unparseable(text: string): NormaliseResult {
+  console.warn(`Shoe discovery: LLM normalise output was not a JSON array: ${JSON.stringify(text.slice(0, 200))}`);
+  return { resolved: [], unresolved: [], failed: true };
+}
+
+export async function normalise(noms: Nomination[], brands: Brand[], deps: NormaliseDeps = { completeText }): Promise<NormaliseResult> {
+  if (noms.length === 0) return { resolved: [], unresolved: [], failed: false };
   const rows = noms.map((n, i) => `${i}\t${n.brandText ?? ''}\t${n.title}`).join('\n');
   const text = await deps.completeText({
     maxTokens: 2000,
@@ -30,19 +43,21 @@ ${rows}
 Reply with ONLY a JSON array, no markdown: [{"i": 0, "brand": "Hoka", "model": "Clifton 10"}]`,
   });
   const m = text.match(/\[[\s\S]*\]/);
-  if (!m) return { resolved: [], unresolved: [] };
-  let parsed: { i: number; brand?: string; model?: string }[];
-  try { parsed = JSON.parse(m[0]); } catch { return { resolved: [], unresolved: [] }; }
-  if (!Array.isArray(parsed)) return { resolved: [], unresolved: [] };
+  if (!m) return unparseable(text);
+  let parsed: unknown;
+  try { parsed = JSON.parse(m[0]); } catch { return unparseable(text); }
+  if (!Array.isArray(parsed)) return unparseable(text);
 
   const resolvedMap = new Map<string, Resolved>();
   const unresolvedMap = new Map<string, Unresolved>();
-  for (const row of parsed) {
-    const nom = noms[row?.i];
+  for (const raw of parsed as unknown[]) {
+    // Each row is whatever the LLM wrote: a non-string brand or model must not throw and fail the whole batch.
+    const row = (raw && typeof raw === 'object' ? raw : {}) as { i?: unknown; brand?: unknown; model?: unknown };
+    const nom = typeof row.i === 'number' ? noms[row.i] : undefined;
     if (!nom) continue;
     const model = String(row.model ?? '').trim();
     if (!model || (parseModelVersion(model).pattern === 'none' && !VERSIONLESS_SUFFIX.test(model))) continue;
-    const brandText = (nom.brandText ?? row.brand ?? '').trim();
+    const brandText = (nom.brandText ?? (typeof row.brand === 'string' ? row.brand : '')).trim();
     const brand = resolveBrand(brandText, brands);
     if (brand) {
       const slug = shoeToSlug(brand.name, model);
@@ -54,5 +69,5 @@ Reply with ONLY a JSON array, no markdown: [{"i": 0, "brand": "Hoka", "model": "
       if (e) e.nominations.push(nom); else unresolvedMap.set(slug, { brandText, model, slug, nominations: [nom] });
     }
   }
-  return { resolved: [...resolvedMap.values()], unresolved: [...unresolvedMap.values()] };
+  return { resolved: [...resolvedMap.values()], unresolved: [...unresolvedMap.values()], failed: false };
 }

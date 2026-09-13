@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { discover, mergeEvidenceSources } from './index';
 
 const brands = [{ id: 1, name: 'Hoka', aliases: ['hoka'], domain: 'hoka.com', newArrivalsUrl: null }];
@@ -19,7 +19,7 @@ describe('discover', () => {
       existingSlugs: async () => [{ slug: 'hoka-bondi-9', brand: 'Hoka', model: 'Bondi 9' }],
       upsertCandidate: async c => { upserts.push(c); },
     });
-    expect(r).toMatchObject({ nominations: 3, candidatesUpserted: 2, alreadyKnown: 1, feedsEmpty: ['b'] });
+    expect(r).toMatchObject({ nominations: 3, candidatesUpserted: 2, alreadyKnown: 1, feedsEmpty: ['b (403)'], normaliseFailed: false });
     expect(upserts[0]).toMatchObject({ slug: 'hoka-clifton-10', brandId: 1, holdReasons: [] });
     expect(upserts[1]).toMatchObject({ slug: 'asics-novablast-5', brandId: null, holdReasons: ['brand_unresolved'] });
   });
@@ -54,7 +54,29 @@ describe('discover', () => {
       upsertCandidate: async () => {},
     });
     expect(asked).toEqual(['Hoka']);
-    expect(r).toEqual({ nominations: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: [] });
+    expect(r).toEqual({ nominations: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: [], normaliseFailed: false });
+  });
+
+  it('a quiet feed is listed bare, a failed one with its error, and an unparseable LLM reply is flagged', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const upserts: unknown[] = [];
+    const r = await discover({
+      readAllFeeds: async () => [
+        { source: 'quiet', nominations: [], empty: true },
+        { source: 'blocked', nominations: [], empty: true, error: 'HTTP 403' },
+        { source: 'a', nominations: [nom('Hoka Clifton 10 review', 'a')], empty: false },
+      ],
+      readBrandNewArrivals: async () => ({ source: 'brand:x', nominations: [], empty: true }),
+      searchNominations: async () => ({ source: 'search', nominations: [], empty: true }),
+      loadBrands: async () => brands,
+      completeText: async () => 'I cannot help with that.',
+      existingSlugs: async () => [],
+      upsertCandidate: async c => { upserts.push(c); },
+    });
+    expect(r).toEqual({ nominations: 1, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: ['quiet', 'blocked (HTTP 403)'], normaliseFailed: true });
+    expect(upserts).toEqual([]);
+    expect(warn).toHaveBeenCalledOnce();
+    warn.mockRestore();
   });
 
   it('serialises evidence with ISO dates and null for undated nominations', async () => {

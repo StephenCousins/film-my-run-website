@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { normalise } from './normalise';
 import type { Brand } from '../brands';
 
@@ -34,15 +34,38 @@ describe('normalise', () => {
     expect(r.resolved).toHaveLength(1);
     expect(r.resolved[0].slug).toBe('hoka-speedgoat-gtx');
   });
-  it('returns nothing on unparseable LLM output', async () => {
-    const r = await normalise([nom('x 2')], brands, { completeText: async () => 'sorry' });
-    expect(r).toEqual({ resolved: [], unresolved: [] });
+  it('flags unparseable, truncated or non-array LLM output as failed and warns with the head of the reply', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const failed = { resolved: [], unresolved: [], failed: true };
+    expect(await normalise([nom('x 2')], brands, { completeText: async () => 'sorry' })).toEqual(failed);
+    expect(await normalise([nom('x 2')], brands, { completeText: async () => '[{"i": 0, "brand": "Hoka", "mod' })).toEqual(failed);
+    expect(await normalise([nom('x 2')], brands, { completeText: async () => '{"i": 0}' })).toEqual(failed);
+    expect(warn).toHaveBeenCalledTimes(3);
+    expect(warn.mock.calls[0][0]).toContain('"sorry"');
+    const long = 'x'.repeat(500);
+    await normalise([nom('x 2')], brands, { completeText: async () => long });
+    expect((warn.mock.calls[3][0] as string).length).toBeLessThan(300);
+    warn.mockRestore();
+  });
+  it('tolerates rows whose brand, model or index are not what was asked for', async () => {
+    const r = await normalise([nom('Clifton 10 review'), nom('Bondi 9 review')], brands, {
+      completeText: async () => JSON.stringify([
+        { i: 0, brand: { name: 'Hoka' }, model: 'Clifton 10' },
+        { i: 1, brand: 'Hoka', model: 9 },
+        { i: '0', brand: 'Hoka', model: 'Clifton 10' },
+        null,
+        { i: 5, brand: 'Hoka', model: 'Mach 7' },
+      ]),
+    });
+    expect(r.failed).toBe(false);
+    expect(r.resolved).toHaveLength(0);
+    expect(r.unresolved).toEqual([expect.objectContaining({ brandText: '', model: 'Clifton 10', slug: 'unknown-clifton-10' })]);
   });
   it('does not call the LLM when there are no nominations', async () => {
     let calls = 0;
     const r = await normalise([], brands, { completeText: async () => { calls++; return '[]'; } });
     expect(calls).toBe(0);
-    expect(r).toEqual({ resolved: [], unresolved: [] });
+    expect(r).toEqual({ resolved: [], unresolved: [], failed: false });
   });
   it('sends the prompt with one tab-separated line per nomination and a 2000-token cap', async () => {
     let seen: { prompt: string; maxTokens: number } | null = null;

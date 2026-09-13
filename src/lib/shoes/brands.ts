@@ -19,14 +19,17 @@ const liveDeps: BrandDeps = {
     })),
 };
 
-let cache: Brand[] | null = null;
+/** Long enough to serve one request's dozens of lookups from memory, short enough that a new alias counts within minutes, not at the next deploy. */
+export const BRAND_CACHE_TTL_MS = 5 * 60 * 1000;
 
-export async function loadBrands(deps: BrandDeps = liveDeps): Promise<Brand[]> {
-  if (!cache) cache = await deps.findAll();
-  return cache;
+let cache: { brands: Brand[]; loadedAt: number } | null = null;
+
+export async function loadBrands(deps: BrandDeps = liveDeps, now: () => number = Date.now): Promise<Brand[]> {
+  if (!cache || now() - cache.loadedAt >= BRAND_CACHE_TTL_MS) cache = { brands: await deps.findAll(), loadedAt: now() };
+  return cache.brands;
 }
 
-/** Test hook and for after inserting a brand. */
+/** Test hook; also called at the start of every weekly run so a brand added since the process started counts. */
 export function resetBrandCache() { cache = null; }
 
 function norm(s: string): string {
