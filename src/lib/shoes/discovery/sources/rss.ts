@@ -39,6 +39,12 @@ const liveDeps: RssDeps = {
   },
 };
 
+function parseDate(s: string | undefined): Date | null {
+  if (!s) return null;
+  const d = new Date(s);
+  return Number.isNaN(d.getTime()) ? null : d;
+}
+
 export async function readFeed(feed: { key: string; url: string }, deps: RssDeps = liveDeps): Promise<SourceResult> {
   try {
     const xml = await deps.fetchText(feed.url);
@@ -48,10 +54,9 @@ export async function readFeed(feed: { key: string; url: string }, deps: RssDeps
       const title = (item.title ?? '').trim();
       const url = item.link ?? '';
       if (!title || !url || !titleLooksLikeShoe(title)) continue;
-      const d = item.isoDate ?? item.pubDate;
-      nominations.push({ modelText: title, title, url, publishedAt: d ? new Date(d) : null, source: feed.key });
+      nominations.push({ modelText: title, title, url, publishedAt: parseDate(item.isoDate ?? item.pubDate), source: feed.key });
     }
-    return { source: feed.key, nominations, empty: parsed.items.length === 0 };
+    return { source: feed.key, nominations, empty: nominations.length === 0 };
   } catch (err) {
     return { source: feed.key, nominations: [], empty: true, error: err instanceof Error ? err.message : String(err) };
   }

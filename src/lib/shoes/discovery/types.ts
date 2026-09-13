@@ -12,7 +12,7 @@ export interface Nomination {
 export interface SourceResult {
   source: string;
   nominations: Nomination[];
-  /** True when the source produced nothing — reachable-but-empty or failed (see `error`). */
+  /** True when `nominations` is empty — nothing usable, filtered to nothing, or failed (see `error`). */
   empty: boolean;
   error?: string;
 }

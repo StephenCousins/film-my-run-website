@@ -37,6 +37,18 @@ describe('readFeed', () => {
     const r = await readFeed({ key: 'x', url: 'x' }, { fetchText: async () => { throw new Error('403'); } });
     expect(r).toMatchObject({ empty: true, error: '403', nominations: [] });
   });
+  it('yields publishedAt null for an unparseable date rather than an Invalid Date', async () => {
+    const xml = '<rss version="2.0"><channel><title>t</title><item><title>Hoka Clifton 10 Review</title><link>https://x/c10</link><pubDate>not a date</pubDate></item></channel></rss>';
+    const r = await readFeed({ key: 'x', url: 'x' }, { fetchText: async () => xml });
+    expect(r.nominations).toHaveLength(1);
+    expect(r.nominations[0].publishedAt).toBeNull();
+  });
+  it('is empty when every item is filtered out, even though the feed had items', async () => {
+    const xml = '<rss version="2.0"><channel><title>t</title><item><title>How to pace a marathon</title><link>https://x/pace</link></item></channel></rss>';
+    const r = await readFeed({ key: 'x', url: 'x' }, { fetchText: async () => xml });
+    expect(r).toMatchObject({ empty: true, nominations: [] });
+    expect(r.error).toBeUndefined();
+  });
   it('flags a feed with no items as empty without an error', async () => {
     const r = await readFeed({ key: 'x', url: 'x' }, { fetchText: async () => '<rss version="2.0"><channel><title>t</title></channel></rss>' });
     expect(r).toMatchObject({ empty: true, nominations: [] });
