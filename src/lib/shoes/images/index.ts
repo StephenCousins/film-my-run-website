@@ -115,7 +115,7 @@ async function headStatus(url: string): Promise<number | null> {
   }
 }
 
-const liveAuditDeps: AuditImageDeps = {
+export const liveAuditDeps: AuditImageDeps = {
   listImages: async limit => {
     const rows = await prisma.shoes.findMany({
       where: { image_url: { not: null } },

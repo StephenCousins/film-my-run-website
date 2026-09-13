@@ -32,7 +32,7 @@ export function mergeEvidenceSources(existing: unknown, incoming: EvidenceSource
   return merged;
 }
 
-const liveDeps: DiscoverDeps = {
+export const liveDiscoverDeps: DiscoverDeps = {
   readAllFeeds, readBrandNewArrivals, searchNominations, loadBrands, completeText,
   existingSlugs: async () => prisma.shoes.findMany({ select: { slug: true, brand: true, model: true } }),
   upsertCandidate: async c => {
@@ -52,7 +52,7 @@ function evidenceOf(noms: Nomination[]): { sources: EvidenceSource[] } {
   return { sources: noms.map(n => ({ source: n.source, url: n.url, title: n.title, publishedAt: n.publishedAt?.toISOString() ?? null })) };
 }
 
-export async function discover(deps: DiscoverDeps = liveDeps): Promise<DiscoverReport> {
+export async function discover(deps: DiscoverDeps = liveDiscoverDeps): Promise<DiscoverReport> {
   const brands = await deps.loadBrands();
   const feedResults = await deps.readAllFeeds();
   const brandResults = await Promise.all(brands.filter(b => b.newArrivalsUrl).map(b => deps.readBrandNewArrivals(b)));
