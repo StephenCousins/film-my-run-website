@@ -439,45 +439,115 @@ model quiz_results {
   @@index([created_at])
 }
 
+enum ShoeTerrain {
+  road
+  trail
+  both
+}
+
+enum ShoeCategory {
+  daily_trainer
+  race
+  long_run
+  speed
+  ultra
+  stability
+  max_cushion
+  minimal
+}
+
+enum ReviewSource {
+  runrepeat
+  runners_world
+  irunfar
+  believe_in_run
+  the_run_testers
+  running_shoes_guru
+  road_trail_run
+  doctors_of_running
+  other
+}
+
+enum ShoeOrigin {
+  seed
+  user
+  discovery
+}
+
+enum CandidateStatus {
+  pending
+  published
+  held
+  rejected
+}
+
+model shoe_brands {
+  id               Int      @id @default(autoincrement())
+  name             String   @unique
+  aliases          String[]
+  domain           String
+  new_arrivals_url String?
+  created_at       DateTime @default(now())
+  shoes            shoes[]
+  candidates       shoe_candidates[]
+}
+
 model shoes {
-  id              Int            @id @default(autoincrement())
-  brand           String
-  model           String
-  slug            String         @unique
-  terrain         String         // 'road' | 'trail' | 'both'
-  category        String         // 'daily_trainer' | 'race' | 'long_run' | 'speed' | 'ultra' | 'stability' | 'max_cushion' | 'minimal'
-  drop_mm         Int?
-  weight_g        Int?
-  stack_height_mm Int?
-  price_gbp       Int?           // in pence
-  release_year    Int?
-  description     String?
-  image_url       String?
-  buy_url         String?
-  avg_score       Decimal?       @db.Decimal(4, 2)
-  review_count    Int            @default(0)
-  last_reviewed   DateTime?
-  created_at           DateTime              @default(now())
-  shoe_reviews         shoe_reviews[]
-  shoe_user_ratings    shoe_user_ratings[]
+  id                Int            @id @default(autoincrement())
+  brand             String
+  brand_id          Int
+  model             String
+  slug              String         @unique
+  terrain           ShoeTerrain
+  category          ShoeCategory
+  drop_mm           Int?
+  weight_g          Int?
+  stack_height_mm   Int?
+  price_gbp         Int?           // in pence
+  release_year      Int?
+  release_date      DateTime?
+  description       String?
+  image_url         String?
+  image_source_url  String?
+  image_method      String?
+  image_verified_at DateTime?
+  buy_url           String?
+  avg_score         Decimal?       @db.Decimal(4, 2)
+  review_count      Int            @default(0)
+  user_avg_score    Decimal?       @db.Decimal(3, 1)
+  user_rating_count Int            @default(0)
+  last_reviewed     DateTime?
+  origin            ShoeOrigin     @default(seed)
+  added_by_user_id  Int?
+  superseded_by_id  Int?
+  created_at        DateTime       @default(now())
+  brand_ref         shoe_brands    @relation(fields: [brand_id], references: [id])
+  superseded_by     shoes?         @relation("ShoeSupersession", fields: [superseded_by_id], references: [id])
+  supersedes        shoes[]        @relation("ShoeSupersession")
+  shoe_reviews      shoe_reviews[]
+  shoe_user_ratings shoe_user_ratings[]
+  candidate         shoe_candidates?
 
   @@index([terrain])
   @@index([brand])
+  @@index([brand_id])
   @@index([avg_score])
+  @@index([user_avg_score])
   @@index([category])
+  @@index([superseded_by_id])
 }
 
 model shoe_reviews {
-  id           Int      @id @default(autoincrement())
+  id           Int          @id @default(autoincrement())
   shoe_id      Int
-  source       String   // 'runrepeat' | 'runners_world' | 'irunfar' | 'believe_in_run' | 'running_warehouse' | 'the_run_testers'
+  source       ReviewSource
   source_url   String?
-  expert_score Decimal? @db.Decimal(4, 2)
-  user_score   Decimal? @db.Decimal(4, 2)
+  expert_score Decimal?     @db.Decimal(4, 2)
+  user_score   Decimal?     @db.Decimal(4, 2)
   user_count   Int?
   summary      String?
-  fetched_at   DateTime @default(now())
-  shoes        shoes    @relation(fields: [shoe_id], references: [id], onDelete: Cascade)
+  fetched_at   DateTime     @default(now())
+  shoes        shoes        @relation(fields: [shoe_id], references: [id], onDelete: Cascade)
 
   @@unique([shoe_id, source])
   @@index([shoe_id])
@@ -496,6 +566,25 @@ model shoe_user_ratings {
   @@unique([shoe_id, user_id])
   @@index([shoe_id])
   @@index([user_id])
+}
+
+model shoe_candidates {
+  id            Int             @id @default(autoincrement())
+  brand_id      Int?
+  brand_text    String
+  model_text    String
+  slug          String          @unique
+  status        CandidateStatus @default(pending)
+  hold_reasons  String[]
+  evidence      Json            @default("{}")
+  shoe_id       Int?            @unique
+  first_seen_at DateTime        @default(now())
+  last_seen_at  DateTime        @default(now())
+  decided_at    DateTime?
+  brand_ref     shoe_brands?    @relation(fields: [brand_id], references: [id])
+  shoe          shoes?          @relation(fields: [shoe_id], references: [id])
+
+  @@index([status])
 }
 
 /// Weekly-refreshed YouTube view counts, keyed by video ID so any page can
