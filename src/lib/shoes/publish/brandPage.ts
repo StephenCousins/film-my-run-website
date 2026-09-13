@@ -41,6 +41,21 @@ function urlNamesLaterVersion(modelSlug: string, url: string): boolean {
   return new RegExp(escapeRegExp(modelSlug) + '-\\d', 'i').test(url);
 }
 
+/**
+ * Does this page name exactly this model and version? The URL must contain the
+ * model slug, or the fetched page's <title> must contain the model; in either
+ * place the model must not be followed by a version token, and the title must
+ * not name a neighbouring version instead. Shared by the brand-page search and
+ * the retailer image candidates so there is one definition of "the right shoe".
+ */
+export function pageNamesExactModel(model: string, url: string, title: string): boolean {
+  const modelSlug = shoeToSlug('', model).replace(/^-/, '');
+  const urlMatches = url.toLowerCase().includes(modelSlug) && !urlNamesLaterVersion(modelSlug, url);
+  const titleMatches = title.toLowerCase().includes(model.toLowerCase()) && !titleNamesLaterVersion(model, title);
+  if (!urlMatches && !titleMatches) return false;
+  return findVersionConflict(model, title) === null;
+}
+
 function parseReleaseDate(value: string | undefined): Date | null {
   if (!value) return null;
   const d = new Date(value);
@@ -56,17 +71,10 @@ export async function findBrandProductPage(brand: Brand, model: string, deps: Br
   const results = (await deps.webSearch(`site:${brand.domain} "${model}"`, MAX_RESULTS)).slice(0, MAX_RESULTS);
   await (deps.sleep ?? sleep)(1100);
 
-  const modelSlug = shoeToSlug('', model).replace(/^-/, '');
-  const modelLower = model.toLowerCase();
-
   for (const result of results) {
     const page = await deps.fetchPage(result.url);
     if (!page) continue;
-
-    const urlMatches = result.url.toLowerCase().includes(modelSlug) && !urlNamesLaterVersion(modelSlug, result.url);
-    const titleMatches = page.title.toLowerCase().includes(modelLower) && !titleNamesLaterVersion(model, page.title);
-    if (!urlMatches && !titleMatches) continue;
-    if (findVersionConflict(model, page.title) !== null) continue;
+    if (!pageNamesExactModel(model, result.url, page.title)) continue;
 
     const product = extractJsonLdProducts(page.html)[0] ?? null;
     return {
