@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { renderDigest, publishToken, verifyPublishToken, sendDigest, type SendDeps } from './digest';
 import type { JobReport } from './weekly';
 
@@ -50,6 +50,34 @@ describe('digest', () => {
     expect(d.html).toContain('brooks-ghost-17');
     expect(d.text).toContain('no image');
     expect(d.text).toContain('asics-novablast-5');
+  });
+  it('an error note containing a URL is plain text, only held rows get the publish anchor', () => {
+    process.env.CRON_SECRET = 'test';
+    const d = renderDigest(report({ held: [], errored: [{ slug: 'x', error: 'fetch https://x failed' }] }), 'https://filmmyrun.com', id => `https://filmmyrun.com/p/${id}`);
+    const errorsSection = d.html.slice(d.html.indexOf('Errors ('), d.html.indexOf('Images stored ('));
+    expect(errorsSection).toContain('fetch https://x failed');
+    expect(errorsSection).not.toContain('<a');
+    const held = renderDigest(report(), 'https://filmmyrun.com', id => `https://filmmyrun.com/p/${id}`);
+    expect(held.html).toContain('<a href="https://filmmyrun.com/p/3"');
+  });
+  it('without CRON_SECRET tokens cannot be made and never verify', () => {
+    process.env.CRON_SECRET = 'test';
+    const t = publishToken(3);
+    delete process.env.CRON_SECRET;
+    expect(() => publishToken(3)).toThrow('CRON_SECRET');
+    expect(verifyPublishToken(3, t)).toBe(false);
+    expect(verifyPublishToken(3, '')).toBe(false);
+    process.env.CRON_SECRET = '';
+    expect(verifyPublishToken(3, t)).toBe(false);
+  });
+  it('sendDigest skips without CRON_SECRET', async () => {
+    delete process.env.CRON_SECRET;
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const sent: unknown[] = [];
+    expect(await sendDigest(report(), { apiKey: 'key', baseUrl: 'b', send: async msg => { sent.push(msg); } })).toBe(false);
+    expect(sent).toEqual([]);
+    expect(warn).toHaveBeenCalledOnce();
+    warn.mockRestore();
   });
   it('tokens verify and reject', () => {
     process.env.CRON_SECRET = 'test';

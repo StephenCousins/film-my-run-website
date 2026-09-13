@@ -4,12 +4,16 @@ import type { JobReport } from './weekly';
 
 export const DIGEST_TO = 'stephen@filmmyrun.com';
 
+/** Throws without CRON_SECRET: a link signed with an empty key would be guessable by anyone who read this file. */
 export function publishToken(candidateId: number): string {
-  return createHmac('sha256', process.env.CRON_SECRET ?? '').update(String(candidateId)).digest('hex');
+  const secret = process.env.CRON_SECRET;
+  if (!secret) throw new Error('CRON_SECRET is not set');
+  return createHmac('sha256', secret).update(String(candidateId)).digest('hex');
 }
 
-/** Constant-time compare; a length mismatch is a plain reject since timingSafeEqual throws on it. */
+/** Constant-time compare; no secret or a length mismatch is a plain reject (timingSafeEqual throws on unequal lengths). */
 export function verifyPublishToken(candidateId: number, token: string): boolean {
+  if (!process.env.CRON_SECRET) return false;
   const expected = Buffer.from(publishToken(candidateId), 'utf8');
   const given = Buffer.from(token, 'utf8');
   if (expected.length !== given.length) return false;
@@ -29,7 +33,8 @@ export function digestSubject(report: JobReport): string {
   return `Shoe Finder weekly${report.dryRun ? ' (dry run)' : ''}: ${report.published.length} published, ${report.held.length} held, ${errors} ${errors === 1 ? 'error' : 'errors'}`;
 }
 
-interface Section { title: string; lines: { text: string; href?: string; note?: string }[]; empty: string }
+interface Line { text: string; href?: string; note?: string; /** Held rows only: the signed one-click publish link. */ publishUrl?: string }
+interface Section { title: string; lines: Line[]; empty: string }
 
 function sections(report: JobReport, baseUrl: string, signPublish: (candidateId: number) => string): Section[] {
   const shoeUrl = (slug: string) => `${baseUrl}/tools/shoe-finder/${slug}`;
@@ -41,7 +46,7 @@ function sections(report: JobReport, baseUrl: string, signPublish: (candidateId:
     },
     {
       title: `Held (${report.held.length})`,
-      lines: report.held.map(h => ({ text: h.slug, note: `${h.reasons.join(', ')}; publish anyway: ${signPublish(h.id)}` })),
+      lines: report.held.map(h => ({ text: h.slug, note: h.reasons.join(', '), publishUrl: signPublish(h.id) })),
       empty: 'Nothing held.',
     },
     {
@@ -97,7 +102,7 @@ export function renderDigest(report: JobReport, baseUrl: string, signPublish: (c
     ...summary, '',
     ...secs.flatMap(s => [
       s.title,
-      ...(s.lines.length ? s.lines.map(l => `- ${l.text}${l.href ? ` ${l.href}` : ''}${l.note ? ` (${l.note})` : ''}`) : [s.empty]),
+      ...(s.lines.length ? s.lines.map(l => `- ${l.text}${l.href ? ` ${l.href}` : ''}${l.note ? ` (${l.note})` : ''}${l.publishUrl ? ` publish anyway: ${l.publishUrl}` : ''}`) : [s.empty]),
       '',
     ]),
   ].join('\n');
@@ -109,20 +114,12 @@ export function renderDigest(report: JobReport, baseUrl: string, signPublish: (c
       ${secs.map(s => `
       <h3 style="margin: 20px 0 8px; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: #52525b;">${escapeHtml(s.title)}</h3>
       ${s.lines.length
-        ? `<ul style="margin: 0; padding-left: 20px; line-height: 1.7;">${s.lines.map(l => `<li>${l.href ? `<a href="${escapeHtml(l.href)}" style="color: #18181b;">${escapeHtml(l.text)}</a>` : escapeHtml(l.text)}${l.note ? ` <span style="color: #52525b;">(${linkify(l.note)})</span>` : ''}</li>`).join('')}</ul>`
+        ? `<ul style="margin: 0; padding-left: 20px; line-height: 1.7;">${s.lines.map(l => `<li>${l.href ? `<a href="${escapeHtml(l.href)}" style="color: #18181b;">${escapeHtml(l.text)}</a>` : escapeHtml(l.text)}${l.note ? ` <span style="color: #52525b;">(${escapeHtml(l.note)})</span>` : ''}${l.publishUrl ? ` <a href="${escapeHtml(l.publishUrl)}" style="color: #f88c00;">publish anyway</a>` : ''}</li>`).join('')}</ul>`
         : `<p style="margin: 0; color: #a1a1aa;">${escapeHtml(s.empty)}</p>`}`).join('')}
       <p style="margin-top: 24px; font-size: 12px; color: #a1a1aa;">Sent by the Shoe Finder weekly job on filmmyrun.com</p>
     </div>
   `;
   return { subject, html, text };
-}
-
-/** Notes are plain text except for the publish link, which becomes an anchor. */
-function linkify(note: string): string {
-  const i = note.indexOf('https://');
-  if (i === -1) return escapeHtml(note);
-  const url = note.slice(i);
-  return `${escapeHtml(note.slice(0, i))}<a href="${escapeHtml(url)}" style="color: #f88c00;">publish</a>`;
 }
 
 export interface SendDeps {
@@ -143,6 +140,7 @@ function liveSendDeps(): SendDeps {
 /** Emails the digest to Stephen. Skipped (returns false) on a dry run or without a Resend key. */
 export async function sendDigest(report: JobReport, deps: SendDeps = liveSendDeps()): Promise<boolean> {
   if (report.dryRun || !deps.apiKey) return false;
+  if (!process.env.CRON_SECRET) { console.warn('Shoe Finder digest not sent: CRON_SECRET is not set, cannot sign publish links'); return false; }
   const { subject, html, text } = renderDigest(report, deps.baseUrl, id => publishLink(deps.baseUrl, id));
   await deps.send({ from: process.env.RESEND_FROM_EMAIL || 'Film My Run <onboarding@resend.dev>', to: DIGEST_TO, subject, html, text });
   return true;

@@ -17,20 +17,21 @@ const imageless: ShoeRef = { id: 101, slug: 'nike-vomero-18', brand: nike, model
 
 interface Writes {
   upsertCandidate: number; publish: string[]; hold: { id: number; reasons: string[]; partial: unknown }[]; link: { id: number; shoeId: number }[];
-  rejectStale: number[]; upsertReviews: { shoeId: number; n: number }[]; recompute: number[]; touch: number[]; clearImage: number; store: string[];
+  rejectStale: number[]; rejectCandidate: { id: number; reasons: string[] }[]; upsertReviews: { shoeId: number; n: number }[]; recompute: number[]; touch: number[]; clearImage: number; store: string[];
 }
 
 function fakeDeps(over: Partial<WeeklyDeps> = {}): { deps: WeeklyDeps; writes: Writes } {
-  const writes: Writes = { upsertCandidate: 0, publish: [], hold: [], link: [], rejectStale: [], upsertReviews: [], recompute: [], touch: [], clearImage: 0, store: [] };
+  const writes: Writes = { upsertCandidate: 0, publish: [], hold: [], link: [], rejectStale: [], rejectCandidate: [], upsertReviews: [], recompute: [], touch: [], clearImage: 0, store: [] };
   const deps: WeeklyDeps = {
     discover: async () => { writes.upsertCandidate += 2; return { nominations: 5, candidatesUpserted: 2, alreadyKnown: 3, feedsEmpty: ['believe_in_run'] }; },
-    listCandidates: async () => [clifton, pegasus],
+    listCandidates: async statuses => (statuses.includes('pending') ? [clifton, pegasus] : []),
     shoeExists: async () => null,
     linkCandidate: async (id, shoeId) => { writes.link.push({ id, shoeId }); },
     evaluate: async c => (c.slug === 'hoka-clifton-10' ? passFor() : holdFor()),
     publishCandidate: async c => { writes.publish.push(c.slug); return { shoeId: 42, slug: c.slug, supersededSlug: null }; },
     holdCandidate: async (id, reasons, partial) => { writes.hold.push({ id, reasons, partial }); },
-    rejectStale: async (weeks, countOnly) => { if (!countOnly) writes.rejectStale.push(weeks); return 1; },
+    rejectStale: async weeks => { writes.rejectStale.push(weeks); return 1; },
+    rejectCandidate: async (id, reasons) => { writes.rejectCandidate.push({ id, reasons }); },
     staleShoes: async () => [staleShoe],
     fetchReviewsForShoe: async () => [review('runrepeat'), review('irunfar')],
     upsertReviews: async (shoeId, reviews) => { writes.upsertReviews.push({ shoeId, n: reviews.length }); },
@@ -86,13 +87,23 @@ describe('runWeekly', () => {
   it('maxPublish caps the number of candidates evaluated', async () => {
     const evaluated: string[] = [];
     const { deps, writes } = fakeDeps({
-      listCandidates: async () => [clifton, { ...pegasus, slug: 'nike-pegasus-42' }, { ...clifton, id: 13, slug: 'hoka-mach-7', model: 'Mach 7' }],
+      listCandidates: async statuses => (statuses.includes('pending') ? [clifton, pegasus, { ...clifton, id: 13, slug: 'hoka-mach-7', model: 'Mach 7' }] : []),
       evaluate: async c => { evaluated.push(c.slug); return passFor(); },
     });
     const r = await runWeekly({ maxPublish: 1 }, deps);
     expect(evaluated).toEqual(['hoka-clifton-10']);
     expect(writes.publish).toEqual(['hoka-clifton-10']);
     expect(r.published).toHaveLength(1);
+  });
+  it('pending candidates are evaluated before held ones, whatever their age', async () => {
+    const evaluated: string[] = [];
+    const { deps } = fakeDeps({
+      // The held one was seen first; the pending one is newer.
+      listCandidates: async statuses => (statuses.includes('held') ? [pegasus] : [clifton]),
+      evaluate: async c => { evaluated.push(c.slug); return passFor(); },
+    });
+    await runWeekly({ maxPublish: 1 }, deps);
+    expect(evaluated).toEqual(['hoka-clifton-10']);
   });
   it('a candidate whose slug is already a shoe is linked, not re-published', async () => {
     const { deps, writes } = fakeDeps({ shoeExists: async slug => (slug === 'hoka-clifton-10' ? { id: 7 } : null) });
@@ -101,6 +112,17 @@ describe('runWeekly', () => {
     expect(writes.publish).toEqual([]);
     expect(r.linkedExisting).toEqual(['hoka-clifton-10']);
     expect(r.published).toEqual([]);
+    expect(r.held).toHaveLength(1);
+  });
+  it('a candidate that cannot link because the shoe already has one is rejected, not retried', async () => {
+    const { deps, writes } = fakeDeps({
+      shoeExists: async slug => (slug === 'hoka-clifton-10' ? { id: 7 } : null),
+      linkCandidate: async () => { throw { code: 'P2002', message: 'Unique constraint failed on the fields: (`shoe_id`)' }; },
+    });
+    const r = await runWeekly({}, deps);
+    expect(writes.rejectCandidate).toEqual([{ id: 11, reasons: ['shoe_already_linked'] }]);
+    expect(r.linkedExisting).toEqual(['hoka-clifton-10']);
+    expect(r.errored).toEqual([]);
     expect(r.held).toHaveLength(1);
   });
   it('a linked candidate does not use up a publish slot', async () => {
@@ -136,18 +158,21 @@ describe('runWeekly', () => {
     expect(received).toEqual([page, page]);
   });
   it('dryRun reports the same numbers and calls no writing dep', async () => {
-    const { deps, writes } = fakeDeps();
+    // The fakes record every call, so an empty writes list proves runWeekly stubbed them, not the fake.
+    const { deps, writes } = fakeDeps({ shoeExists: async slug => (slug === 'nike-pegasus-42' ? { id: 9 } : null) });
     const r = await runWeekly({ dryRun: true }, deps);
     expect(r.dryRun).toBe(true);
     expect(r.published).toHaveLength(1);
-    expect(r.held).toHaveLength(1);
+    expect(r.linkedExisting).toEqual(['nike-pegasus-42']);
+    expect(r.held).toHaveLength(0);
     expect(r.reviewsRefreshed).toBe(1);
     expect(r.imagesCleared).toEqual(['dead-shoe']);
-    expect(r.rejectedStale).toBe(1);
+    expect(r.rejectedStale).toBe(0);
     expect(writes.publish).toEqual([]);
     expect(writes.hold).toEqual([]);
     expect(writes.link).toEqual([]);
     expect(writes.rejectStale).toEqual([]);
+    expect(writes.rejectCandidate).toEqual([]);
     expect(writes.upsertReviews).toEqual([]);
     expect(writes.recompute).toEqual([]);
     expect(writes.touch).toEqual([]);

@@ -41,14 +41,17 @@ export interface ShoeRef { id: number; slug: string; brand: Brand; model: string
 
 export interface WeeklyDeps {
   discover: () => Promise<DiscoverReport>;
+  /** Candidates in the given statuses, oldest first_seen_at first. */
   listCandidates: (statuses: CandidateStatus[]) => Promise<CandidateInput[]>;
   shoeExists: (slug: string) => Promise<{ id: number } | null>;
   linkCandidate: (candidateId: number, shoeId: number) => Promise<void>;
   evaluate: (c: CandidateInput) => Promise<GatePass | GateHold>;
   publishCandidate: (c: CandidateInput, pass: GatePass) => Promise<{ shoeId: number; slug: string; supersededSlug: string | null }>;
   holdCandidate: (id: number, reasons: string[], partial: GateHold['partial']) => Promise<void>;
-  /** Closes held candidates older than the cutoff; with `countOnly` (a dry run) it only counts them. */
-  rejectStale: (olderThanWeeks: number, countOnly: boolean) => Promise<number>;
+  /** Closes held candidates older than the cutoff; returns how many. */
+  rejectStale: (olderThanWeeks: number) => Promise<number>;
+  /** Closes a candidate that can never publish; `reasons` is recorded in hold_reasons. */
+  rejectCandidate: (candidateId: number, reasons: string[]) => Promise<void>;
   staleShoes: (limit: number) => Promise<ShoeRef[]>;
   fetchReviewsForShoe: (brand: string, model: string) => Promise<ReviewResult[]>;
   upsertReviews: (shoeId: number, reviews: ReviewResult[]) => Promise<void>;
@@ -87,6 +90,8 @@ export function withDryRun(deps: WeeklyDeps): WeeklyDeps {
     linkCandidate: noop,
     publishCandidate: async c => ({ shoeId: -1, slug: c.slug, supersededSlug: null }),
     holdCandidate: noop,
+    rejectStale: async () => 0,
+    rejectCandidate: noop,
     upsertReviews: noop,
     recomputeShoeScore: noop,
     touchReviewed: noop,
@@ -135,11 +140,13 @@ export function liveDeps(dryRun: boolean): WeeklyDeps {
       };
       await prisma.shoe_candidates.update({ where: { id }, data: { status: 'held', hold_reasons: reasons, evidence: JSON.parse(JSON.stringify(merged)), decided_at: new Date() } });
     },
-    rejectStale: async (olderThanWeeks, countOnly) => {
+    rejectStale: async olderThanWeeks => {
       const cutoff = new Date(Date.now() - olderThanWeeks * 7 * 24 * 60 * 60 * 1000);
       const where = { status: 'held' as const, first_seen_at: { lt: cutoff } };
-      if (countOnly) return prisma.shoe_candidates.count({ where });
       return (await prisma.shoe_candidates.updateMany({ where, data: { status: 'rejected', decided_at: new Date() } })).count;
+    },
+    rejectCandidate: async (candidateId, reasons) => {
+      await prisma.shoe_candidates.update({ where: { id: candidateId }, data: { status: 'rejected', hold_reasons: reasons, decided_at: new Date() } });
     },
     staleShoes: async limit => {
       const cutoff = new Date(Date.now() - STALE_REVIEW_DAYS * 24 * 60 * 60 * 1000);
@@ -179,6 +186,20 @@ export function liveDeps(dryRun: boolean): WeeklyDeps {
     now: () => new Date(),
     log: msg => console.log(msg),
   };
+}
+
+/**
+ * shoe_candidates.shoe_id is unique, so a shoe that already has a candidate
+ * (it was published from one, then re-nominated under a variant slug) cannot
+ * take a second. That candidate is closed rather than retried every week.
+ */
+async function linkOrReject(deps: WeeklyDeps, c: CandidateInput, shoeId: number): Promise<void> {
+  try {
+    await deps.linkCandidate(c.id, shoeId);
+  } catch (err) {
+    if ((err as { code?: unknown } | null)?.code !== 'P2002') throw err;
+    await deps.rejectCandidate(c.id, ['shoe_already_linked']);
+  }
 }
 
 function errorMessage(err: unknown): string {
@@ -221,14 +242,16 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
   }
 
   try {
-    report.rejectedStale = await deps.rejectStale(REJECT_HELD_AFTER_WEEKS, dryRun);
+    report.rejectedStale = await deps.rejectStale(REJECT_HELD_AFTER_WEEKS);
   } catch (err) {
     fail('rejectStale', err);
   }
 
+  // New candidates first: a backlog of holds re-evaluated every week must not
+  // use up the cap before anything new gets a look.
   let candidates: CandidateInput[] = [];
   try {
-    candidates = await deps.listCandidates(['pending', 'held']);
+    candidates = [...(await deps.listCandidates(['pending'])), ...(await deps.listCandidates(['held']))];
   } catch (err) {
     fail('listCandidates', err);
   }
@@ -238,7 +261,7 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
     try {
       const existing = await deps.shoeExists(c.slug);
       if (existing) {
-        await deps.linkCandidate(c.id, existing.id);
+        await linkOrReject(deps, c, existing.id);
         report.linkedExisting.push(c.slug);
         deps.log(`${c.slug}: already in the catalogue, linked`);
         continue;
