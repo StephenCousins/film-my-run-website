@@ -484,7 +484,7 @@ enum CandidateStatus {
 model shoe_brands {
   id               Int      @id @default(autoincrement())
   name             String   @unique
-  aliases          String[]
+  aliases          String[] @default([])
   domain           String
   new_arrivals_url String?
   created_at       DateTime @default(now())
@@ -575,7 +575,7 @@ model shoe_candidates {
   model_text    String
   slug          String          @unique
   status        CandidateStatus @default(pending)
-  hold_reasons  String[]
+  hold_reasons  String[]        @default([])
   evidence      Json            @default("{}")
   shoe_id       Int?            @unique
   first_seen_at DateTime        @default(now())
