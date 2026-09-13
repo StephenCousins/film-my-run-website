@@ -20,7 +20,7 @@ Over the limit: `429` with `Retry-After` seconds and `{ ok: false, error: "Too m
 
 **how-fast/po10** — `{ ok, cached, needsRefresh, athlete: { name, athleteId, club, ageGroup, gender, pbs: { [distance]: { time, seconds, timeFormatted } } }, stats: { distances: [{ distance, distanceName, time, seconds, percentile, abilityLevel }], … } }`.
 
-**shoes** — `{ shoes: [{ id, brand, model, slug, terrain, category, dropMm, weightG, stackHeightMm, priceGbp, releaseYear, description, imageUrl, buyUrl, avgScore, reviewCount, lastReviewed, reviews: [{ source, sourceUrl, expertScore, userScore, userCount, summary }], userAvgScore, userRatingCount, myRating }], meta: { brands[], categories[], total } }`. The app sends no session, so `myRating` is always `null`.
+**shoes** — `{ shoes: [{ id, brand, model, slug, terrain, category, dropMm, weightG, stackHeightMm, priceGbp, releaseYear, description, imageUrl, buyUrl, avgScore, reviewCount, userAvgScore, userRatingCount, lastReviewed, supersededBySlug }], meta: { brands[], categories[], total, labels: { categories, sources, terrains } } }`. Catalogue only: since 13 September 2026 the list carries no `reviews` or `myRating`. Per-shoe reviews are at `/api/shoes/[slug]` (same shoe fields plus `reviews: [{ source, sourceUrl, expertScore, userScore, userCount, summary }]`); the signed-in user's own ratings at `/api/shoes/my-ratings` (`{ ratings: { [shoeId]: number } }`, session required). Superseded shoes are hidden unless `includeSuperseded=1`.
 
 **partner-offers** — `{ offers: [{ id, partner, title, body, url, logoUrl, startsAt, endsAt }] }`, filtered to today's date. Edit `content/app/partner-offers.json` and push.
 

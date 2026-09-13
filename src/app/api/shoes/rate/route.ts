@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
+import { recomputeShoeScore } from '@/lib/shoes/scores';
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions);
@@ -30,16 +31,12 @@ export async function POST(req: NextRequest) {
     create: { shoe_id: shoeId, user_id: userId, score },
   });
 
-  const agg = await prisma.shoe_user_ratings.aggregate({
-    where: { shoe_id: shoeId },
-    _avg: { score: true },
-    _count: { score: true },
-  });
+  const s = await recomputeShoeScore(shoeId);
 
   return NextResponse.json({
     rating: parseFloat(rating.score.toString()),
-    userAvg: agg._avg.score ? parseFloat(agg._avg.score.toString()) : null,
-    userCount: agg._count.score,
+    userAvg: s.userAvgScore,
+    userCount: s.userRatingCount,
   });
 }
 
@@ -61,14 +58,7 @@ export async function DELETE(req: NextRequest) {
     where: { shoe_id: shoeId, user_id: userId },
   });
 
-  const agg = await prisma.shoe_user_ratings.aggregate({
-    where: { shoe_id: shoeId },
-    _avg: { score: true },
-    _count: { score: true },
-  });
+  const s = await recomputeShoeScore(shoeId);
 
-  return NextResponse.json({
-    userAvg: agg._avg.score ? parseFloat(agg._avg.score.toString()) : null,
-    userCount: agg._count.score,
-  });
+  return NextResponse.json({ userAvg: s.userAvgScore, userCount: s.userRatingCount });
 }
