@@ -1,8 +1,10 @@
 import type { Brand } from '../brands';
 import { findVersionConflict, parseModelVersion } from '../versions';
-import { webSearch, sleep } from '../search';
-import { fetchPage, extractJsonLdProducts, extractMetaImages, type JsonLdProduct } from '../html';
+import { extractJsonLdProducts, extractMetaImages, type JsonLdProduct } from '../html';
 import { pageNamesExactModel, type BrandPage } from '../publish/brandPage';
+import { searchRetailerPages, liveRetailerDeps, type RetailerPageDeps } from '../publish/retailerPage';
+
+export { RETAILER_DOMAINS, isProductPageUrl } from '../publish/retailerPage';
 
 export type ImageMethod = 'brand-jsonld' | 'brand-og' | 'retailer-jsonld' | 'retailer-og';
 
@@ -19,31 +21,9 @@ export interface ImageCandidatesInput {
   brandPage: BrandPage | null;
 }
 
-export interface ImageCandidatesDeps {
-  webSearch: typeof webSearch;
-  fetchPage: (url: string) => Promise<{ html: string; title: string } | null>;
-  /** Rate-limit pause between retailer searches. Injected deps without one do not pause. */
-  sleep?: typeof sleep;
-}
+export type ImageCandidatesDeps = RetailerPageDeps;
 
-const liveDeps: ImageCandidatesDeps = { webSearch, fetchPage: url => fetchPage(url), sleep };
-
-export const RETAILER_DOMAINS = [
-  'sportsshoes.com', 'runnersneed.com', 'wiggle.com', 'startfitness.co.uk',
-  'sportpursuit.com', 'runrepeat.com', 'running-shoe-guru.com', 'roadrunnersports.com',
-];
-
-const RESULTS_PER_DOMAIN = 5;
-
-export function isProductPageUrl(url: string): { isProduct: boolean; isArticle: boolean } {
-  const urlLower = url.toLowerCase();
-  const productPatterns = [/\/product[s]?\//i, /\/shop\//i, /\/p\//i, /\/pd\//i, /\/buy\//i, /\/item\//i];
-  const articlePatterns = [/\/a\//i, /\/news\//i, /\/article[s]?\//i, /\/blog\//i, /\/release-info/i, /\/stories\//i];
-  return {
-    isProduct: productPatterns.some(p => p.test(urlLower)),
-    isArticle: articlePatterns.some(p => p.test(urlLower)),
-  };
-}
+const liveDeps: ImageCandidatesDeps = liveRetailerDeps;
 
 /** JSON-LD image entries can be relative or protocol-relative; anything not http(s) after resolving is dropped. */
 function resolveImageUrl(img: string, pageUrl: string): string | null {
@@ -96,54 +76,35 @@ function pageImages(html: string, pageUrl: string, model: string, methods: [Imag
   return out;
 }
 
-/** Brave's site: operator occasionally leaks other hosts; a candidate must come from the domain that was asked for. */
-function onDomain(url: string, domain: string): boolean {
-  try {
-    const host = new URL(url).hostname.toLowerCase();
-    return host === domain || host.endsWith(`.${domain}`);
-  } catch {
-    return false;
-  }
-}
-
 function dedupe(candidates: ImageCandidate[]): ImageCandidate[] {
   const seen = new Set<string>();
   return candidates.filter(c => (seen.has(c.url) ? false : (seen.add(c.url), true)));
 }
 
-/** Candidates from the brand's own product page: JSON-LD Product images, then og/twitter images. */
+/**
+ * Candidates from the page the gate accepted: JSON-LD Product images, then
+ * og/twitter images. The method records whose page it was, because a brand
+ * page can be a retailer's standing in for a brand site that refuses the fetch.
+ */
 export function brandPageCandidates(model: string, brandPage: BrandPage | null): ImageCandidate[] {
   if (!brandPage) return [];
-  return dedupe(pageImages(brandPage.html, brandPage.url, model, ['brand-jsonld', 'brand-og']));
+  const methods: [ImageMethod, ImageMethod] = brandPage.source === 'retailer' ? ['retailer-jsonld', 'retailer-og'] : ['brand-jsonld', 'brand-og'];
+  return dedupe(pageImages(brandPage.html, brandPage.url, model, methods));
 }
 
 /**
- * Candidates from the first retailer whose page provably names this exact
- * model and version. Retailer pages are accepted on the same rule as the
- * brand page; the search-result title is not trusted, the fetched <title> is.
- * There is deliberately no image-search fallback: every mismatched image in
- * the old catalogue came from one.
+ * Candidates from the first retailer domain whose exact-model pages carry any
+ * images. The search and the page match live in publish/retailerPage.ts,
+ * shared with the gate's brand-site fallback. There is deliberately no
+ * image-search fallback: every mismatched image in the old catalogue came
+ * from one.
  */
 export async function retailerCandidates(brand: Brand, model: string, deps: ImageCandidatesDeps = liveDeps): Promise<ImageCandidate[]> {
-  const pause = deps.sleep ?? (async () => {});
-  for (let i = 0; i < RETAILER_DOMAINS.length; i++) {
-    const domain = RETAILER_DOMAINS[i];
-    if (i > 0) await pause(1100);
-    const results = (await deps.webSearch(`site:${domain} "${brand.name} ${model}"`, RESULTS_PER_DOMAIN)).slice(0, RESULTS_PER_DOMAIN);
-
-    const found: ImageCandidate[] = [];
-    for (const result of results) {
-      if (!onDomain(result.url, domain)) continue;
-      const kind = isProductPageUrl(result.url);
-      if (!kind.isProduct && kind.isArticle) continue;
-      const page = await deps.fetchPage(result.url);
-      if (!page) continue;
-      if (!pageNamesExactModel(model, result.url, page.title)) continue;
-      found.push(...pageImages(page.html, result.url, model, ['retailer-jsonld', 'retailer-og']));
-    }
-    if (found.length > 0) return dedupe(found);
-  }
-  return [];
+  const found = await searchRetailerPages(brand, model, pages => {
+    const images = pages.flatMap(p => pageImages(p.html, p.url, model, ['retailer-jsonld', 'retailer-og']));
+    return images.length > 0 ? dedupe(images) : null;
+  }, deps);
+  return found ?? [];
 }
 
 export type ImagePhase = 'brand' | 'retailer';

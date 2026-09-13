@@ -23,12 +23,12 @@ describe('readBrandNewArrivals', () => {
     expect(r).toMatchObject({ empty: true, nominations: [] });
     expect(r.error).toBeUndefined();
   });
-  it('reports unreachable when the page cannot be fetched', async () => {
-    const r = await readBrandNewArrivals(
-      { id: 1, name: 'Hoka', aliases: [], domain: 'hoka.com', newArrivalsUrl: 'https://www.hoka.com/new' },
-      { fetchPage: async () => null },
-    );
-    expect(r).toMatchObject({ source: 'brand:Hoka', empty: true, nominations: [], error: 'unreachable' });
+  it('reports a gone listing and a refused fetch as errors, not as a quiet empty', async () => {
+    const hoka = { id: 1, name: 'Hoka', aliases: [], domain: 'hoka.com', newArrivalsUrl: 'https://www.hoka.com/new' };
+    const gone = await readBrandNewArrivals(hoka, { fetchPage: async () => null });
+    expect(gone).toMatchObject({ source: 'brand:Hoka', empty: true, nominations: [], error: 'HTTP 404' });
+    const refused = await readBrandNewArrivals(hoka, { fetchPage: async () => { throw new Error('unreachable:406'); } });
+    expect(refused).toMatchObject({ source: 'brand:Hoka', empty: true, nominations: [], error: 'unreachable:406' });
   });
   it('is empty without error when the page has no Product JSON-LD', async () => {
     const r = await readBrandNewArrivals(

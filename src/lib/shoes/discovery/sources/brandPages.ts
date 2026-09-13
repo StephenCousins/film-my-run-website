@@ -9,8 +9,13 @@ export async function readBrandNewArrivals(brand: Brand, deps: BrandPageDeps = {
   const source = `brand:${brand.name}`;
   const listingUrl = brand.newArrivalsUrl;
   if (!listingUrl) return { source, nominations: [], empty: true };
-  const page = await deps.fetchPage(listingUrl);
-  if (!page) return { source, nominations: [], empty: true, error: 'unreachable' };
+  let page: Awaited<ReturnType<typeof fetchPage>>;
+  try {
+    page = await deps.fetchPage(listingUrl);
+  } catch (err) {
+    return { source, nominations: [], empty: true, error: err instanceof Error ? err.message : String(err) };
+  }
+  if (!page) return { source, nominations: [], empty: true, error: 'HTTP 404' };
   const nominations: Nomination[] = [];
   for (const p of extractJsonLdProducts(page.html)) {
     if (!p.name) continue;

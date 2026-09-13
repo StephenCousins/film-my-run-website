@@ -5,8 +5,12 @@ const jsonld = (name: string, img: string) => `<script type="application/ld+json
 
 describe('imageCandidates', () => {
   it('puts brand JSON-LD first, then brand og:image', async () => {
-    const r = await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: { url: 'https://www.brooksrunning.com/ghost-16', title: 'Ghost 16', html: jsonld('Ghost 16', 'https://c/j.jpg') + '<meta property="og:image" content="https://c/og.jpg">', product: null, releaseDate: null } }, { webSearch: async () => [], fetchPage: async () => null });
+    const r = await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: { url: 'https://www.brooksrunning.com/ghost-16', title: 'Ghost 16', html: jsonld('Ghost 16', 'https://c/j.jpg') + '<meta property="og:image" content="https://c/og.jpg">', product: null, releaseDate: null, source: 'brand' as const } }, { webSearch: async () => [], fetchPage: async () => null });
     expect(r.map(c => [c.method, c.url])).toEqual([['brand-jsonld', 'https://c/j.jpg'], ['brand-og', 'https://c/og.jpg']]);
+  });
+  it('labels images from a retailer page standing in for the brand site as retailer images', async () => {
+    const r = await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: { url: 'https://www.sportsshoes.com/product/brooks-ghost-16', title: 'Ghost 16', html: jsonld('Ghost 16', 'https://c/j.jpg') + '<meta property="og:image" content="https://c/og.jpg">', product: null, releaseDate: null, source: 'retailer' as const } }, { webSearch: async () => [], fetchPage: async () => null }, { phase: 'brand' });
+    expect(r.map(c => [c.method, c.url])).toEqual([['retailer-jsonld', 'https://c/j.jpg'], ['retailer-og', 'https://c/og.jpg']]);
   });
   it('rejects a retailer page for a neighbouring version', async () => {
     const r = await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: null }, {
@@ -25,7 +29,7 @@ describe('imageCandidates', () => {
 });
 
 describe('imageCandidates: JSON-LD product selection', () => {
-  const page = (html: string) => ({ url: 'https://www.brooksrunning.com/ghost-16', title: 'Ghost 16', html, product: null, releaseDate: null });
+  const page = (html: string) => ({ url: 'https://www.brooksrunning.com/ghost-16', title: 'Ghost 16', html, product: null, releaseDate: null, source: 'brand' as const });
   const product = (name: string | null, img: string) => `{"@type":"Product",${name === null ? '' : `"name":"${name}",`}"image":"${img}"}`;
   const ld = (...items: string[]) => `<script type="application/ld+json">[${items.join(',')}]</script>`;
   const noSearch = { webSearch: async () => [], fetchPage: async () => null };
@@ -76,7 +80,7 @@ describe('imageCandidates: retailers', () => {
         { title: 'dead', url: 'https://www.sportsshoes.com/product/brooks-ghost-16-dead', description: '' },
         { title: 'ok', url: 'https://www.sportsshoes.com/product/brooks-ghost-16', description: '' },
       ] : [],
-      fetchPage: async url => { fetched.push(url); return url.includes('dead') ? null : ghost16('https://c/ok.jpg'); },
+      fetchPage: async url => { fetched.push(url); if (url.includes('dead')) throw new Error('unreachable:503'); return ghost16('https://c/ok.jpg'); },
     });
     expect(fetched).toEqual(['https://www.sportsshoes.com/product/brooks-ghost-16-dead', 'https://www.sportsshoes.com/product/brooks-ghost-16']);
     expect(r.map(c => [c.method, c.url, c.pageUrl])).toEqual([['retailer-jsonld', 'https://c/ok.jpg', 'https://www.sportsshoes.com/product/brooks-ghost-16']]);
@@ -96,7 +100,7 @@ describe('imageCandidates: retailers', () => {
 });
 
 describe('imageCandidates: lone product must be this line', () => {
-  const page = (html: string) => ({ url: 'https://www.brooksrunning.com/ghost-16', title: 'Ghost 16', html, product: null, releaseDate: null });
+  const page = (html: string) => ({ url: 'https://www.brooksrunning.com/ghost-16', title: 'Ghost 16', html, product: null, releaseDate: null, source: 'brand' as const });
   const noSearch = { webSearch: async () => [], fetchPage: async () => null };
   const lone = (name: string) => `<script type="application/ld+json">{"@type":"Product","name":"${name}","image":"https://c/x.jpg"}</script>`;
   it('rejects a lone product from another line and accepts one named for the model', async () => {

@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/db';
-import type { CandidateStatus } from '@prisma/client';
+import type { CandidateStatus, Prisma } from '@prisma/client';
 import { loadBrands, type Brand } from '../brands';
 import { discover, liveDiscoverDeps, type DiscoverReport } from '../discovery';
 import { evaluate, type CandidateInput, type GateHold, type GatePass } from '../publish/gate';
@@ -76,6 +76,18 @@ async function withBrands(rows: { id: number; slug: string; model: string; brand
   return rows.flatMap(r => { const brand = brands.get(r.brand_id); return brand ? [{ id: r.id, slug: r.slug, model: r.model, brand }] : []; });
 }
 
+/** The page html is large and re-fetched on the next pass; keep only what a digest, a manual override or a later reader needs. */
+function brandPageEvidence(page: BrandPage): { url: string; title: string; source: BrandPage['source'] } {
+  return { url: page.url, title: page.title, source: page.source };
+}
+
+/** The candidate's stored evidence with `patch` laid over it, as a Prisma-safe JSON value. */
+async function mergedEvidence(candidateId: number, patch: Record<string, unknown>): Promise<Prisma.InputJsonObject> {
+  const current = await prisma.shoe_candidates.findUnique({ where: { id: candidateId }, select: { evidence: true } });
+  const evidence = (current?.evidence && typeof current.evidence === 'object' && !Array.isArray(current.evidence)) ? current.evidence as Record<string, unknown> : {};
+  return JSON.parse(JSON.stringify({ ...evidence, ...patch }));
+}
+
 /**
  * Every write on the deps object swapped for a no-op that returns a plausible
  * shape, so a dry run reports what a live run would do without touching the
@@ -128,17 +140,19 @@ export function liveDeps(dryRun: boolean): WeeklyDeps {
       await prisma.shoe_candidates.update({ where: { id: candidateId }, data: { status: 'published', shoe_id: shoeId, decided_at: new Date() } });
     },
     evaluate: c => evaluate(c),
-    publishCandidate: (c, pass) => publishCandidate(c, pass),
+    publishCandidate: async (c, pass) => {
+      const r = await publishCandidate(c, pass);
+      // Which page proved the shoe (brand site, or a retailer standing in for one that refused) stays on the closed candidate.
+      await prisma.shoe_candidates.update({ where: { id: c.id }, data: { evidence: await mergedEvidence(c.id, { brandPage: brandPageEvidence(pass.brandPage) }) } });
+      return r;
+    },
     holdCandidate: async (id, reasons, partial) => {
-      // The page html is large and re-fetched on the next pass; keep only what a digest or manual override needs.
-      const current = await prisma.shoe_candidates.findUnique({ where: { id }, select: { evidence: true } });
-      const evidence = (current?.evidence && typeof current.evidence === 'object' && !Array.isArray(current.evidence)) ? current.evidence as Record<string, unknown> : {};
-      const merged = {
-        ...evidence,
-        ...(partial.brandPage ? { brandPage: { url: partial.brandPage.url, title: partial.brandPage.title } } : {}),
+      const evidence = await mergedEvidence(id, {
+        ...(partial.brandPage ? { brandPage: brandPageEvidence(partial.brandPage) } : {}),
         ...(partial.reviews ? { reviews: partial.reviews } : {}),
-      };
-      await prisma.shoe_candidates.update({ where: { id }, data: { status: 'held', hold_reasons: reasons, evidence: JSON.parse(JSON.stringify(merged)), decided_at: new Date() } });
+        ...(partial.brandUnreachable ? { brandUnreachable: partial.brandUnreachable } : {}),
+      });
+      await prisma.shoe_candidates.update({ where: { id }, data: { status: 'held', hold_reasons: reasons, evidence, decided_at: new Date() } });
     },
     rejectStale: async olderThanWeeks => {
       const cutoff = new Date(Date.now() - olderThanWeeks * 7 * 24 * 60 * 60 * 1000);
@@ -181,7 +195,11 @@ export function liveDeps(dryRun: boolean): WeeklyDeps {
       });
       return withBrands(rows);
     },
-    findBrandProductPage: (brand, model) => findBrandProductPage(brand, model),
+    findBrandProductPage: async (brand, model) => {
+      const found = await findBrandProductPage(brand, model);
+      // An unreachable brand site is no different from an absent page here: the retailer phase of findAndStoreImage runs either way.
+      return found.kind === 'found' ? found.page : null;
+    },
     findAndStoreImage: (shoe, brandPage) => findAndStoreImage(shoe, brandPage),
     now: () => new Date(),
     log: msg => console.log(msg),

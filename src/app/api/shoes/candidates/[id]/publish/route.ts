@@ -77,7 +77,9 @@ export async function POST(req: NextRequest, ctx: Ctx) {
 
     const brand = (await loadBrands()).find(b => b.id === c.brand_id);
     if (!brand) return text('Still held: brand_unresolved', 409);
-    const input: CandidateInput = { id: c.id, slug: c.slug, brand, model: c.model_text, evidence: c.evidence as unknown as CandidateInput['evidence'] };
+    // Evidence is a JSON column; a malformed blob must not 500 the click (weekly.ts reads it the same way).
+    const sources = (c.evidence as { sources?: CandidateInput['evidence']['sources'] } | null)?.sources ?? [];
+    const input: CandidateInput = { id: c.id, slug: c.slug, brand, model: c.model_text, evidence: { sources: Array.isArray(sources) ? sources : [] } };
     const r = await evaluate(input, undefined, { override: ['too_old', 'reviews_lt_2'] });
     if (!r.publish) return text(`Still held: ${r.reasons.join(', ')}`, 409);
 

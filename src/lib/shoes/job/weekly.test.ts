@@ -4,7 +4,7 @@ import type { CandidateInput, GatePass, GateHold } from '../publish/gate';
 
 const hoka = { id: 1, name: 'Hoka', aliases: [], domain: 'hoka.com', newArrivalsUrl: null };
 const nike = { id: 2, name: 'Nike', aliases: [], domain: 'nike.com', newArrivalsUrl: null };
-const page = { url: 'https://www.hoka.com/clifton-10', title: 'Clifton 10', html: '', product: null, releaseDate: new Date('2026-02-01') };
+const page = { url: 'https://www.hoka.com/clifton-10', title: 'Clifton 10', html: '', product: null, releaseDate: new Date('2026-02-01'), source: 'brand' as const };
 const specs = { terrain: 'road' as const, category: 'daily_trainer' as const, description: null, drop_mm: 5, weight_g: 250, stack_height_mm: 40, price_gbp: 14000, release_year: 2026 };
 const review = (source: string) => ({ source: source as never, source_url: `https://${source}`, expert_score: 8.5, summary: null });
 const passFor = (): GatePass => ({ publish: true, brandPage: page, specs, reviews: [review('runrepeat'), review('irunfar')], releaseDate: new Date('2026-02-01'), softReasons: [] });

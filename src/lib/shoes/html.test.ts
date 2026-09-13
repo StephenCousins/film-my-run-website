@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { extractJsonLdProducts, extractMetaImages } from './html';
+import { describe, it, expect, vi } from 'vitest';
+import { extractJsonLdProducts, extractMetaImages, fetchPage } from './html';
 
 const page = `<html><head><title>Hoka Clifton 10</title>
 <meta property="og:image" content="/img/og.jpg">
@@ -49,5 +49,41 @@ describe('extractMetaImages', () => {
   it('collects og and twitter images in either attribute order, de-duplicated, with // resolved', () => {
     const html = `<meta content="//cdn/tw.jpg" name="twitter:image"><meta property="og:image" content="//cdn/tw.jpg"><meta property="og:image:url" content="https://cdn/og2.jpg">`;
     expect(extractMetaImages(html, 'https://x.com/p')).toEqual(['https://cdn/tw.jpg', 'https://cdn/og2.jpg']);
+  });
+});
+
+describe('fetchPage', () => {
+  const response = (status: number, body = '') => ({ ok: status >= 200 && status < 300, status, text: async () => body }) as unknown as Response;
+  const fetchWith = (res: Response | (() => never)) => ({ fetch: (async () => (typeof res === 'function' ? res() : res)) as unknown as typeof fetch });
+
+  it('returns html and the decoded, collapsed title on a 2xx', async () => {
+    const r = await fetchPage('https://x/p', fetchWith(response(200, '<title>  Hoka &amp; Co\n Clifton </title><p>x</p>')));
+    expect(r).toEqual({ html: '<title>  Hoka &amp; Co\n Clifton </title><p>x</p>', title: 'Hoka & Co Clifton' });
+  });
+  it('returns null when the page is gone (404/410)', async () => {
+    expect(await fetchPage('https://x/p', fetchWith(response(404)))).toBeNull();
+    expect(await fetchPage('https://x/p', fetchWith(response(410)))).toBeNull();
+  });
+  it('throws unreachable:<status> on 403, 406, 429 and 5xx', async () => {
+    for (const status of [403, 406, 429, 500, 503]) {
+      await expect(fetchPage('https://x/p', fetchWith(response(status)))).rejects.toThrow(`unreachable:${status}`);
+    }
+  });
+  it('throws unreachable:network when the fetch itself fails', async () => {
+    await expect(fetchPage('https://x/p', fetchWith(() => { throw new TypeError('fetch failed'); }))).rejects.toThrow('unreachable:network');
+  });
+  it('throws unreachable:timeout when the fetch is aborted', async () => {
+    const deps = { fetch: (async (_url: unknown, init?: { signal?: AbortSignal }) => new Promise<Response>((_, reject) => {
+      init?.signal?.addEventListener('abort', () => reject(new Error('aborted')));
+    })) as unknown as typeof fetch };
+    vi.useFakeTimers();
+    try {
+      const p = fetchPage('https://x/p', deps);
+      const assertion = expect(p).rejects.toThrow('unreachable:timeout');
+      await vi.advanceTimersByTimeAsync(10000);
+      await assertion;
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

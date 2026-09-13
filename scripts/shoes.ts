@@ -108,10 +108,13 @@ async function clearImage(slug: string): Promise<void> {
 
 /** Brand page then find+store; returns the one-line outcome for the log. */
 async function imageForShoe(shoe: ShoeRef): Promise<{ stored: boolean; line: string }> {
-  const brandPage = await findBrandProductPage(shoe.brand, shoe.model);
+  const found = await findBrandProductPage(shoe.brand, shoe.model);
+  const brandPage = found.kind === 'found' ? found.page : null;
   const outcome = await findAndStoreImage({ slug: shoe.slug, brand: shoe.brand, model: shoe.model }, brandPage);
   if (outcome) return { stored: true, line: `${shoe.slug} → ${outcome.method}` };
-  const reason = brandPage ? 'brand page found, no candidate passed verification' : 'no brand page, no retailer candidate passed verification';
+  const reason = found.kind === 'found' ? 'brand page found, no candidate passed verification'
+    : found.kind === 'unreachable' ? `brand site ${found.reason}, no retailer candidate passed verification`
+      : 'no brand page, no retailer candidate passed verification';
   return { stored: false, line: `${shoe.slug} → NONE (${reason})` };
 }
 

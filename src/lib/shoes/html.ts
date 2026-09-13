@@ -9,26 +9,38 @@ export interface FetchPageDeps {
   fetch: typeof fetch;
 }
 
+/**
+ * Fetch a page for the matchers. Three outcomes, because the gate needs to
+ * tell them apart: `{ html, title }` on a 2xx; `null` when the page is gone
+ * (404/410), which says the site is reachable and the page is not there; and
+ * a thrown `unreachable:<status|timeout|network>` for everything else (403,
+ * 406, 429, 5xx, no response) — hoka.com answers 406 and brooksrunning.com
+ * 403 to a server-side fetch, and that says nothing about whether the shoe
+ * exists.
+ */
 export async function fetchPage(pageUrl: string, deps: FetchPageDeps = { fetch }): Promise<{ html: string; title: string } | null> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+  let res: Response;
+  let html: string;
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 10000);
-    const res = await deps.fetch(pageUrl, {
+    res = await deps.fetch(pageUrl, {
       signal: controller.signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36' },
       redirect: 'follow',
     });
+    if (res.status === 404 || res.status === 410) return null;
+    if (!res.ok) throw new Error(`unreachable:${res.status}`);
+    html = await res.text();
+  } catch (err) {
+    if (err instanceof Error && err.message.startsWith('unreachable:')) throw err;
+    throw new Error(`unreachable:${controller.signal.aborted ? 'timeout' : 'network'}`);
+  } finally {
     clearTimeout(timeout);
-    if (!res.ok) return null;
-
-    const html = await res.text();
-    const titleMatch = html.match(/<title[^>]*>([^]*?)<\/title>/i);
-    const title = titleMatch ? decodeHtmlEntities(titleMatch[1]).replace(/\s+/g, ' ').trim() : '';
-
-    return { html, title };
-  } catch {
-    return null;
   }
+  const titleMatch = html.match(/<title[^>]*>([^]*?)<\/title>/i);
+  const title = titleMatch ? decodeHtmlEntities(titleMatch[1]).replace(/\s+/g, ' ').trim() : '';
+  return { html, title };
 }
 
 export interface JsonLdProduct {
