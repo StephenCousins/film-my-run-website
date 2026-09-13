@@ -9,7 +9,7 @@ import { storeImage } from './store';
 export type { ImageCandidate, ImageMethod, ImagePhase } from './candidates';
 export { RETAILER_DOMAINS, isProductPageUrl, imageCandidates, brandPageCandidates, retailerCandidates } from './candidates';
 export { NON_CATALOGUE_HOSTS, isLikelyProductImage, checkImageSize, visionConfirmShoeImage } from './verify';
-export { storeImage, imageKey } from './store';
+export { storeImage, imageKey, isR2ImageUrl, R2_SHOES_PREFIX } from './store';
 
 export interface ImageOutcome {
   url: string;

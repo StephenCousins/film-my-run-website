@@ -11,12 +11,20 @@ export const NON_CATALOGUE_HOSTS = [
   'redd.it', 'redditmedia.com', 'pinimg.com', 'cdninstagram.com', 'fbcdn.net',
 ];
 
+/**
+ * Cheap URL heuristics before a HEAD and a vision call. Two patterns are
+ * deliberately narrow: Salesforce Commerce Cloud (Hoka, Brooks, Saucony)
+ * serves every catalogue image under a `/default/` path segment, so
+ * "default" is only rejected as a filename (`/default.png`,
+ * `/default-image.jpg`), and "brand" only as a logo/mark/icon filename or
+ * folder, not wherever the word appears in a CDN path.
+ */
 export function isLikelyProductImage(imageUrl: string): boolean {
   const urlLower = imageUrl.toLowerCase();
   if (NON_CATALOGUE_HOSTS.some(h => urlLower.includes(h))) return false;
   const rejectPatterns = [
-    /logo/i, /icon/i, /favicon/i, /brand/i, /swoosh/i,
-    /placeholder/i, /default/i, /avatar/i, /badge/i,
+    /logo/i, /icon/i, /favicon/i, /\/brand[-_]?(logo|mark|icon)s?[\/.]/i, /swoosh/i,
+    /placeholder/i, /\/default[-_.]?(image|product|placeholder)?\.(png|jpe?g|webp|svg|gif)(\?|$)/i, /avatar/i, /badge/i,
     /social[-_]?share/i, /og[-_]?image/i, /banner/i,
     /sprite/i, /pixel/i, /spacer/i, /blank/i,
   ];

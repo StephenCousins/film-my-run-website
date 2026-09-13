@@ -17,11 +17,11 @@ const imageless: ShoeRef = { id: 101, slug: 'nike-vomero-18', brand: nike, model
 
 interface Writes {
   upsertCandidate: number; publish: string[]; hold: { id: number; reasons: string[]; partial: unknown }[]; link: { id: number; shoeId: number }[];
-  rejectStale: number[]; rejectCandidate: { id: number; reasons: string[] }[]; upsertReviews: { shoeId: number; n: number }[]; recompute: number[]; touch: number[]; clearImage: number; store: string[];
+  rejectStale: number[]; rejectCandidate: { id: number; reasons: string[] }[]; upsertReviews: { shoeId: number; n: number }[]; recompute: number[]; touch: number[]; clearImage: number; store: string[]; imageAttempt: string[];
 }
 
 function fakeDeps(over: Partial<WeeklyDeps> = {}): { deps: WeeklyDeps; writes: Writes } {
-  const writes: Writes = { upsertCandidate: 0, publish: [], hold: [], link: [], rejectStale: [], rejectCandidate: [], upsertReviews: [], recompute: [], touch: [], clearImage: 0, store: [] };
+  const writes: Writes = { upsertCandidate: 0, publish: [], hold: [], link: [], rejectStale: [], rejectCandidate: [], upsertReviews: [], recompute: [], touch: [], clearImage: 0, store: [], imageAttempt: [] };
   const deps: WeeklyDeps = {
     discover: async () => { writes.upsertCandidate += 2; return { nominations: 5, candidatesUpserted: 2, alreadyKnown: 3, feedsEmpty: ['believe_in_run'], normaliseFailed: false }; },
     listCandidates: async statuses => (statuses.includes('pending') ? [clifton, pegasus] : []),
@@ -41,6 +41,7 @@ function fakeDeps(over: Partial<WeeklyDeps> = {}): { deps: WeeklyDeps; writes: W
     shoesNeedingImage: async () => [imageless],
     findBrandProductPage: async () => page,
     findAndStoreImage: async shoe => { writes.store.push(shoe.slug); return { url: `https://r2/shoes/${shoe.slug}.jpg`, sourceUrl: 's', method: 'brand-og' }; },
+    markImageAttempt: async slug => { writes.imageAttempt.push(slug); },
     now: () => new Date('2026-09-13T09:00:00Z'),
     log: () => {},
     ...over,
@@ -77,12 +78,19 @@ describe('runWeekly', () => {
     expect(writes.touch).toEqual([100]);
     expect(writes.store).toEqual(['hoka-clifton-10', 'nike-vomero-18']);
   });
-  it('published shoes with no image found are listed under publishedWithoutImage', async () => {
-    const { deps } = fakeDeps({ findAndStoreImage: async () => null });
+  it('published shoes with no image found are listed under publishedWithoutImage and stamped as attempted', async () => {
+    const { deps, writes } = fakeDeps({ findAndStoreImage: async () => null });
     const r = await runWeekly({}, deps);
     expect(r.published).toEqual([{ slug: 'hoka-clifton-10', imageUrl: null }]);
     expect(r.publishedWithoutImage).toEqual(['hoka-clifton-10']);
     expect(r.imagesStored).toEqual([]);
+    // Both the fresh publish and the backfill shoe found nothing; a throw would not have been stamped.
+    expect(writes.imageAttempt).toEqual(['hoka-clifton-10', 'nike-vomero-18']);
+  });
+  it('a stored image is not stamped as a failed attempt', async () => {
+    const { deps, writes } = fakeDeps();
+    await runWeekly({}, deps);
+    expect(writes.imageAttempt).toEqual([]);
   });
   it('maxPublish caps the number of candidates evaluated', async () => {
     const evaluated: string[] = [];
@@ -184,6 +192,7 @@ describe('runWeekly', () => {
     expect(writes.recompute).toEqual([]);
     expect(writes.touch).toEqual([]);
     expect(writes.store).toEqual([]);
+    expect(writes.imageAttempt).toEqual([]);
   });
   it('a dep that throws for one candidate lands in errored and the run continues', async () => {
     const { deps, writes } = fakeDeps({
@@ -215,10 +224,11 @@ describe('runWeekly', () => {
     expect(r.published).toHaveLength(1);
   });
   it('a candidate that publishes but whose image search throws stays published', async () => {
-    const { deps } = fakeDeps({ findAndStoreImage: async () => { throw new Error('vision down'); }, shoesNeedingImage: async () => [] });
+    const { deps, writes } = fakeDeps({ findAndStoreImage: async () => { throw new Error('vision down'); }, shoesNeedingImage: async () => [] });
     const r = await runWeekly({}, deps);
     expect(r.published).toEqual([{ slug: 'hoka-clifton-10', imageUrl: null }]);
     expect(r.publishedWithoutImage).toEqual(['hoka-clifton-10']);
     expect(r.errored).toEqual([{ slug: 'hoka-clifton-10', error: 'vision down' }]);
+    expect(writes.imageAttempt).toEqual([]);
   });
 });

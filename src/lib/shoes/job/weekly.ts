@@ -5,7 +5,7 @@ import { discover, liveDiscoverDeps, type DiscoverReport } from '../discovery';
 import { evaluate, type CandidateInput, type GateHold, type GatePass } from '../publish/gate';
 import { findBrandProductPage, type BrandPage } from '../publish/brandPage';
 import { publishCandidate } from '../publish/publish';
-import { auditImages, findAndStoreImage, liveAuditDeps, type AuditResult, type ImageOutcome } from '../images';
+import { auditImages, findAndStoreImage, liveAuditDeps, R2_SHOES_PREFIX, type AuditResult, type ImageOutcome } from '../images';
 import { fetchReviewsForShoe, type ReviewResult } from '../reviews';
 import { recomputeShoeScore } from '../scores';
 
@@ -58,9 +58,12 @@ export interface WeeklyDeps {
   recomputeShoeScore: (shoeId: number) => Promise<unknown>;
   touchReviewed: (shoeId: number) => Promise<void>;
   auditImages: () => Promise<AuditResult>;
+  /** Shoes without an R2 image, least recently attempted first (never attempted before everything else). */
   shoesNeedingImage: (limit: number) => Promise<ShoeRef[]>;
   findBrandProductPage: (brand: Brand, model: string) => Promise<BrandPage | null>;
   findAndStoreImage: (shoe: { slug: string; brand: Brand; model: string }, brandPage: BrandPage | null) => Promise<ImageOutcome | null>;
+  /** Stamps image_verified_at on a shoe whose image search found nothing, so it goes to the back of the queue rather than being retried first every week. */
+  markImageAttempt: (slug: string) => Promise<void>;
   now: () => Date;
   log: (msg: string) => void;
 }
@@ -109,6 +112,7 @@ export function withDryRun(deps: WeeklyDeps): WeeklyDeps {
     recomputeShoeScore: noop,
     touchReviewed: noop,
     findAndStoreImage: async () => null,
+    markImageAttempt: noop,
   };
 }
 
@@ -188,9 +192,11 @@ export function liveDeps(dryRun: boolean): WeeklyDeps {
     auditImages: () => auditImages(dryRun ? { ...liveAuditDeps, clearImage: noop } : liveAuditDeps),
     shoesNeedingImage: async limit => {
       // Anything not in R2 is either missing or a hotlink from the old catalogue; both get the full find+store.
+      // image_verified_at doubles as "last attempt" on shoes with no image, so a shoe that found nothing last
+      // week waits behind every shoe that has never been tried.
       const rows = await prisma.shoes.findMany({
-        where: { OR: [{ image_url: null }, { NOT: { image_url: { contains: '/shoes/' } } }] },
-        orderBy: { slug: 'asc' },
+        where: { OR: [{ image_url: null }, { image_url: { not: { startsWith: R2_SHOES_PREFIX } } }] },
+        orderBy: [{ image_verified_at: { sort: 'asc', nulls: 'first' } }, { slug: 'asc' }],
         take: limit,
         select: SHOE_REF_SELECT,
       });
@@ -202,6 +208,7 @@ export function liveDeps(dryRun: boolean): WeeklyDeps {
       return found.kind === 'found' ? found.page : null;
     },
     findAndStoreImage: (shoe, brandPage) => findAndStoreImage(shoe, brandPage),
+    markImageAttempt: async slug => { await prisma.shoes.update({ where: { slug }, data: { image_verified_at: new Date() } }); },
     now: () => new Date(),
     log: msg => console.log(msg),
   };
@@ -304,6 +311,7 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
       try {
         const image = c.brand ? await deps.findAndStoreImage({ slug: c.slug, brand: c.brand, model: c.model }, verdict.brandPage) : null;
         if (image) { entry.imageUrl = image.url; report.imagesStored.push(c.slug); }
+        else await deps.markImageAttempt(c.slug);
       } catch (err) {
         fail(c.slug, err);
       }
@@ -352,7 +360,7 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
       const brandPage = await deps.findBrandProductPage(shoe.brand, shoe.model);
       const image = await deps.findAndStoreImage({ slug: shoe.slug, brand: shoe.brand, model: shoe.model }, brandPage);
       if (image) { report.imagesStored.push(shoe.slug); deps.log(`${shoe.slug}: image stored (${image.method})`); }
-      else deps.log(`${shoe.slug}: no image passed verification`);
+      else { await deps.markImageAttempt(shoe.slug); deps.log(`${shoe.slug}: no image passed verification`); }
     } catch (err) {
       fail(shoe.slug, err);
     }

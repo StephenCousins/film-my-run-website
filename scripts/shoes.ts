@@ -6,9 +6,11 @@
 // Commands:
 //   enrich --slug S                 Fetch review scores for one shoe, upsert them, recompute its score.
 //   image --slug S [--force]        Find, verify and store an image for one shoe. --force clears the current one first.
-//   backfill-images [--limit N] [--from-slug S] [--force]
+//   backfill-images [--limit N] [--from-slug S] [--force] [--clear-hotlinks]
 //                                   Image pass over the catalogue: current shoes first, then superseded.
 //                                   Skips shoes already on R2 unless --force. Resume with --from-slug.
+//                                   --clear-hotlinks nulls the image fields of every shoe still on a
+//                                   non-R2 URL afterwards; without it the count and the command are printed.
 //   run-weekly [--dry-run]          Run the weekly job in-process and print its report as JSON.
 //   candidates [--status held|pending|rejected|published]
 //                                   List discovered candidates with their hold reasons.
@@ -24,7 +26,7 @@ import { loadBrands, type Brand } from '@/lib/shoes/brands';
 import { fetchReviewsForShoe, type ReviewResult } from '@/lib/shoes/reviews';
 import { recomputeShoeScore } from '@/lib/shoes/scores';
 import { findBrandProductPage } from '@/lib/shoes/publish/brandPage';
-import { findAndStoreImage, auditImages } from '@/lib/shoes/images';
+import { findAndStoreImage, auditImages, isR2ImageUrl, R2_SHOES_PREFIX } from '@/lib/shoes/images';
 import { runWeekly } from '@/lib/shoes/job/weekly';
 import { sleep } from '@/lib/shoes/search';
 
@@ -32,7 +34,7 @@ const USAGE = `Usage: npm run shoes -- <command> [flags]
 
   enrich --slug S
   image --slug S [--force]
-  backfill-images [--limit N] [--from-slug S] [--force]
+  backfill-images [--limit N] [--from-slug S] [--force] [--clear-hotlinks]
   run-weekly [--dry-run]
   candidates [--status held|pending|rejected|published]
   audit-images
@@ -50,7 +52,12 @@ const SHOE_SELECT = { id: true, slug: true, model: true, brand_id: true, image_u
 
 /** Stored by this pipeline, as opposed to a hotlink left over from the old catalogue. Same test the weekly job uses. */
 function isOnR2(imageUrl: string | null): boolean {
-  return imageUrl !== null && imageUrl.includes('/shoes/');
+  return imageUrl !== null && isR2ImageUrl(imageUrl);
+}
+
+/** image_verified_at doubles as "last attempt" on a shoe with no R2 image, so the weekly queue tries never-attempted shoes first. */
+async function markImageAttempt(slug: string): Promise<void> {
+  await prisma.shoes.update({ where: { slug }, data: { image_verified_at: new Date() } });
 }
 
 async function withBrands(rows: ShoeRow[]): Promise<ShoeRef[]> {
@@ -130,12 +137,45 @@ async function image(slug: string, force: boolean): Promise<void> {
   }
   const { stored, line } = await imageForShoe(shoe);
   console.log(line);
-  if (!stored) process.exitCode = 1;
+  if (!stored) { await markImageAttempt(shoe.slug); process.exitCode = 1; }
 }
 
 // --- backfill-images --------------------------------------------------------
 
-async function backfillImages(opts: { limit?: number; fromSlug?: string; force: boolean }): Promise<void> {
+/** Shoes whose image_url is still a hotlink: the old catalogue's, or one the stricter match never replaced. */
+async function hotlinkedShoes(): Promise<{ slug: string; image_url: string }[]> {
+  const rows = await prisma.shoes.findMany({
+    where: { image_url: { not: null }, NOT: { image_url: { startsWith: R2_SHOES_PREFIX } } },
+    orderBy: { slug: 'asc' },
+    select: { slug: true, image_url: true },
+  });
+  return rows.flatMap(r => (r.image_url ? [{ slug: r.slug, image_url: r.image_url }] : []));
+}
+
+/**
+ * The spec's backfill contract: a shoe whose current image failed the
+ * stricter match ends with image_url = null, so a placeholder replaces a
+ * look-alike from the BigCommerce store the old catalogue hotlinked. The
+ * fields are only cleared when asked, after the loop, so an interrupted
+ * backfill leaves the site as it was.
+ */
+async function clearHotlinks(clear: boolean): Promise<void> {
+  const hotlinks = await hotlinkedShoes();
+  if (hotlinks.length === 0) { console.log('no hotlinked images remain'); return; }
+  console.log(`${hotlinks.length} shoe${hotlinks.length === 1 ? '' : 's'} still on a non-R2 image:`);
+  for (const h of hotlinks) console.log(`  ${h.slug}  ${h.image_url}`);
+  if (!clear) {
+    console.log('Not cleared. To replace them with the placeholder: npm run shoes -- backfill-images --limit 0 --clear-hotlinks');
+    return;
+  }
+  const { count } = await prisma.shoes.updateMany({
+    where: { slug: { in: hotlinks.map(h => h.slug) } },
+    data: { image_url: null, image_source_url: null, image_method: null, image_verified_at: null },
+  });
+  console.log(`cleared image fields on ${count} shoe${count === 1 ? '' : 's'}`);
+}
+
+async function backfillImages(opts: { limit?: number; fromSlug?: string; force: boolean; clearHotlinks: boolean }): Promise<void> {
   // Current shoes first so the catalogue people see fills in before the archive does.
   const rows = await prisma.shoes.findMany({ orderBy: { slug: 'asc' }, select: SHOE_SELECT });
   let ordered = [...rows.filter(r => r.superseded_by_id === null), ...rows.filter(r => r.superseded_by_id !== null)];
@@ -155,13 +195,14 @@ async function backfillImages(opts: { limit?: number; fromSlug?: string; force: 
     try {
       const r = await imageForShoe(shoe);
       console.log(r.line);
-      if (r.stored) stored++;
+      if (r.stored) stored++; else await markImageAttempt(shoe.slug);
     } catch (err) {
       failed++;
       console.log(`${shoe.slug} → ERROR ${errorMessage(err)}`);
     }
   }
   console.log(`backfill-images: ${shoes.length} shoes, ${attempted} attempted, ${stored} stored, ${skipped} skipped (already on R2), ${failed} errored`);
+  await clearHotlinks(opts.clearHotlinks);
   if (failed > 0) process.exitCode = 1;
 }
 
@@ -190,10 +231,11 @@ function errorMessage(err: unknown): string {
 
 // --- main -------------------------------------------------------------------
 
+/** 0 is allowed: `backfill-images --limit 0 --clear-hotlinks` runs only the clearing step. */
 function parseLimit(raw: string | undefined): number | undefined {
   if (raw === undefined) return undefined;
   const n = Number(raw);
-  if (!Number.isInteger(n) || n < 1) throw new UsageError(`--limit must be a positive integer, got "${raw}"`);
+  if (!Number.isInteger(n) || n < 0) throw new UsageError(`--limit must be a non-negative integer, got "${raw}"`);
   return n;
 }
 
@@ -206,6 +248,7 @@ async function main(argv: string[]): Promise<void> {
       force: { type: 'boolean', default: false },
       limit: { type: 'string' },
       'from-slug': { type: 'string' },
+      'clear-hotlinks': { type: 'boolean', default: false },
       'dry-run': { type: 'boolean', default: false },
       status: { type: 'string' },
       help: { type: 'boolean', short: 'h', default: false },
@@ -219,7 +262,7 @@ async function main(argv: string[]): Promise<void> {
   switch (command) {
     case 'enrich': return enrich(requireSlug(values));
     case 'image': return image(requireSlug(values), values.force);
-    case 'backfill-images': return backfillImages({ limit: parseLimit(values.limit), fromSlug: values['from-slug'], force: values.force });
+    case 'backfill-images': return backfillImages({ limit: parseLimit(values.limit), fromSlug: values['from-slug'], force: values.force, clearHotlinks: values['clear-hotlinks'] });
     case 'run-weekly': {
       const report = await runWeekly({ dryRun: values['dry-run'] });
       console.log(JSON.stringify(report, null, 2));

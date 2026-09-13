@@ -1,5 +1,5 @@
 import sharp from 'sharp';
-import { uploadToR2 } from '@/lib/r2';
+import { uploadToR2, getR2Url } from '@/lib/r2';
 
 export interface StoreDeps {
   download: (url: string) => Promise<Buffer>;
@@ -33,6 +33,18 @@ const liveDeps: StoreDeps = { download: downloadImage, upload: uploadToR2 };
 
 export function imageKey(slug: string): string {
   return `shoes/${slug}.jpg`;
+}
+
+/** Where every image this pipeline stores lives; the one test for "ours, not a hotlink". */
+export const R2_SHOES_PREFIX = getR2Url('shoes/');
+
+/**
+ * Was this image stored by the pipeline? Only a URL under the bucket's
+ * public `shoes/` prefix counts: a retailer hotlink whose path happens to
+ * contain `/shoes/` (runningzap.com/images/shoes/...) is not ours.
+ */
+export function isR2ImageUrl(url: string): boolean {
+  return url.startsWith(R2_SHOES_PREFIX);
 }
 
 /**

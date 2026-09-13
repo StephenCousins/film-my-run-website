@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import sharp from 'sharp';
-import { storeImage } from './store';
+import { storeImage, isR2ImageUrl, R2_SHOES_PREFIX } from './store';
 
 describe('storeImage', () => {
   it('resizes to ≤1000px JPEG and uploads under shoes/{slug}.jpg', async () => {
@@ -24,5 +24,15 @@ describe('storeImage: transparency', () => {
       upload: async (_k, body) => { const raw = await sharp(body).raw().toBuffer(); corner = [raw[0], raw[1], raw[2]]; return 'u'; },
     });
     expect(corner).toEqual([255, 255, 255]);
+  });
+});
+
+describe('isR2ImageUrl', () => {
+  it('is true only under the bucket public shoes/ prefix', () => {
+    expect(R2_SHOES_PREFIX).toMatch(/^https:\/\/.+\/shoes\/$/);
+    expect(isR2ImageUrl(`${R2_SHOES_PREFIX}hoka-clifton-10.jpg`)).toBe(true);
+    expect(isR2ImageUrl('https://www.runningzap.com/images/shoes/x/hero.webp')).toBe(false);
+    expect(isR2ImageUrl(`${R2_SHOES_PREFIX.replace('/shoes/', '/blog/')}shoes/x.jpg`)).toBe(false);
+    expect(isR2ImageUrl('')).toBe(false);
   });
 });
