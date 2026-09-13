@@ -4,37 +4,82 @@ on:
   schedule:
     # Every Sunday at 6:00 AM UK time (GMT)
     - cron: '0 6 * * 0'
-  workflow_dispatch: # Allow manual trigger from GitHub UI
+  workflow_dispatch:
+    inputs:
+      dryRun:
+        description: 'Dry run (no writes, no digest)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: read
 
 jobs:
   update-shoes:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
-      - name: Discover new shoes and refresh data
+      - name: Run the weekly shoe job
+        id: run
         run: |
-          echo "## Weekly Shoe Update" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+          q=""; [ "${{ inputs.dryRun }}" = "true" ] && q="?dryRun=1"
+          code=$(curl -s -o report.json -w "%{http_code}" -X POST "${{ secrets.SITE_URL }}/api/shoes/weekly-update$q" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" --max-time 600)
+          echo "## Weekly Shoe Update (HTTP $code)" >> $GITHUB_STEP_SUMMARY
+          echo '```json' >> $GITHUB_STEP_SUMMARY; cat report.json >> $GITHUB_STEP_SUMMARY; echo '```' >> $GITHUB_STEP_SUMMARY
 
-          http_code=$(curl -s -o /tmp/shoe-update.ndjson -w "%{http_code}" -X POST \
-            "${{ secrets.SITE_URL }}/api/shoes/weekly-update" \
-            -H "Content-Type: application/json" \
-            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
-            --max-time 600)
-
-          echo "Status: $http_code"
-
-          if [ "$http_code" != "200" ]; then
-            echo "::error::Shoe update failed with status $http_code"
-            echo "**Failed** with HTTP $http_code" >> $GITHUB_STEP_SUMMARY
-            cat /tmp/shoe-update.ndjson 2>/dev/null || true
-            exit 1
+          if [ -s report.json ]; then
+            python3 - <<'EOF' >> "$GITHUB_OUTPUT"
+          import json
+          r = json.load(open('report.json'))
+          activity = len(r.get('published', [])) + len(r.get('held', []))
+          print(f"activity={activity}")
+          EOF
+          else
+            echo "activity=" >> "$GITHUB_OUTPUT"
           fi
 
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          while IFS= read -r line; do
-            message=$(echo "$line" | python3 -c "import sys,json; print(json.loads(sys.stdin.read()).get('message',''))" 2>/dev/null || echo "$line")
-            echo "$message"
-            echo "$message" >> $GITHUB_STEP_SUMMARY
-          done < /tmp/shoe-update.ndjson
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          [ "$code" = "200" ] || { echo "::error::weekly-update returned $code"; exit 1; }
+
+      # Only a successful run's report is worth keeping: next week's "two
+      # empty runs" check walks back through successful runs only.
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: shoe-report
+          path: report.json
+          retention-days: 90
+
+      - name: Fail if two runs in a row found nothing
+        if: ${{ inputs.dryRun != true }}
+        env: { GH_TOKEN: "${{ github.token }}" }
+        run: |
+          this_activity="${{ steps.run.outputs.activity }}"
+          if [ "$this_activity" != "0" ]; then
+            echo "This run found activity ($this_activity); nothing to check."
+            exit 0
+          fi
+
+          mkdir -p prev
+          prev_run_id=$(gh run list --workflow weekly-shoe-update.yml --status success --limit 1 --json databaseId --jq '.[0].databaseId' 2>/dev/null || echo "")
+          if [ -z "$prev_run_id" ]; then
+            echo "No previous successful run to compare against."
+            exit 0
+          fi
+          gh run download "$prev_run_id" -n shoe-report -D prev/ 2>/dev/null || echo "Previous run had no shoe-report artifact (older workflow version, or it also found nothing to upload)."
+
+          prev_activity=0
+          if [ -f prev/report.json ]; then
+            prev_activity=$(python3 -c "
+          import json
+          r = json.load(open('prev/report.json'))
+          print(len(r.get('published', [])) + len(r.get('held', [])))
+          ")
+          fi
+
+          echo "::warning::No shoes published or held this week"
+          if [ "$prev_activity" = "0" ]; then
+            echo "::error::Two consecutive runs found nothing (published + held == 0)"
+            exit 1
+          fi
