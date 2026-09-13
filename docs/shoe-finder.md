@@ -31,13 +31,20 @@ runnable by hand via `workflow_dispatch` or `npm run shoes -- run-weekly`.
 
 1. **Discover** — read all sources, normalise nominations to `{brand, model}`,
    upsert `shoe_candidates` rows.
-2. **Evaluate** pending/held candidates through the publish gate.
-3. **Publish** the ones that pass, including an image search.
-4. **Reject stale holds** — held candidates untouched for 8 weeks
+2. **Reject stale holds** — held candidates untouched for 8 weeks
    (`REJECT_HELD_AFTER_WEEKS`) become `rejected`.
-5. **Refresh reviews** for shoes not reviewed in 30 days (`STALE_REVIEW_DAYS`).
-6. **Audit images** — HEAD every stored image, clear dead ones.
-7. **Send the digest** (skipped on a dry run).
+3. **Evaluate & publish** — pending candidates first, then held ones (so a
+   backlog of holds re-evaluated every week can't crowd out something new),
+   up to `maxPublish` (10/run). Each publish immediately attempts an image
+   find+store for that shoe.
+4. **Refresh reviews** for up to `maxStaleRefresh` (10) shoes not reviewed in
+   30 days (`STALE_REVIEW_DAYS`).
+5. **Audit images** — HEAD every stored image, clear dead ones.
+6. **Backfill images** — a separate pass, up to `maxImages` (20), over shoes
+   still missing an R2 image (published without one, or an old hotlink from
+   before this pipeline).
+7. **Send the digest** (skipped on a dry run) — done by the route handler
+   after `runWeekly()` returns, not inside it.
 
 The route handler (`src/app/api/shoes/weekly-update/route.ts`) wraps this:
 bearer-auth with `CRON_SECRET`, `?dryRun=1` to run every read and no write,
@@ -88,12 +95,17 @@ resolves each into a candidate:
   filtering.
 
 One LLM call per run (`completeText`, Gemini 2.5 Flash Lite) normalises the
-batch of headlines to `{brand, model}` pairs; the brand must resolve against
-`shoe_brands` (by name or alias) or the candidate is dropped at this stage —
-it never becomes a `shoe_candidates` row with no brand. Candidates are keyed
-by slug: a nomination that matches an existing candidate merges its evidence
-sources (deduped by URL) rather than replacing them, and keeps its current
-status — discovery does not decide publish/hold, the gate does.
+batch of headlines to `{brand, model}` pairs. The brand is then resolved
+against `shoe_brands` (by name or alias) — but an unresolved brand is **not**
+dropped: `discover()` still upserts it as a `shoe_candidates` row with
+`brand_id: null`, immediately `held` with `brand_unresolved`. Adding the
+brand's name (or an alias) to `shoe_brands` is what lets the *next* weekly
+run resolve it and hand it to the gate. Candidates are keyed by slug: a
+nomination that matches an existing candidate merges its evidence sources
+(deduped by URL) rather than replacing them, and keeps its current status —
+discovery only sets the initial status (`pending`, or `held` for an
+unresolved brand); every re-run after that is the gate's call, not
+discovery's.
 
 ## Publish gate & hold reasons
 
@@ -113,10 +125,17 @@ the paid calls):
 A held candidate is **re-evaluated every week** the gate runs, so a hold
 clears itself once its cause does — no manual action needed except for
 `too_old`/`reviews_lt_2`, which the gate will never lift on its own (that's
-the point of those two checks). **`shoe_already_linked`** is not a hold: it's
-set directly (bypassing the gate) when a candidate's slug already matches an
-existing `shoes` row, and the candidate is marked `rejected` immediately
-(counted in `linkedExisting`, not `held`).
+the point of those two checks).
+
+Before any of this, a candidate whose slug already matches an existing
+`shoes` row skips the gate entirely: it's linked to that shoe (`status:
+'published'`, `shoe_id` set) and counted in `linkedExisting`, not `held`.
+**`shoe_already_linked`** is the rare exception to that — it fires only when
+`shoe_id` (unique per candidate) is already claimed by a *different*
+candidate for the same shoe, e.g. two nominations under variant slugs for the
+same shoe. That candidate is rejected instead of linked, but it is still
+counted in `linkedExisting` (the report reflects "this slug matched an
+existing shoe", not "this candidate is now live").
 
 A candidate held for 8 weeks without changing status is closed as `rejected`
 by the weekly job (`rejectStale`), regardless of reason.
@@ -143,15 +162,25 @@ retailer only if nothing from the brand phase stored:
 1. **Candidates** (`images/candidates.ts`): the brand product page's JSON-LD
    `Product` images, then its `og:image`/`twitter:image`; if that phase
    yields nothing, retailer product pages — but only ones that name the exact
-   model **and** version (`isProductPageUrl`), never a generic listing.
+   model **and** version, checked by `pageNamesExactModel(model, url, title)`
+   (the same matcher the gate uses for the brand page itself, `src/lib/shoes/
+   publish/brandPage.ts`) against the fetched page's `<title>`.
+   `isProductPageUrl` is a separate, weaker check: it only ranks
+   product-shaped URLs (`/product/`, `/p/`, `/buy/`, …) above article-shaped
+   ones (`/article/`, `/blog/`, `/news/`, …) when picking which search results
+   to fetch — it doesn't confirm the model.
 2. **Filters** (`images/verify.ts`): `NON_CATALOGUE_HOSTS` rejects known-bad
    hosts (eBay, Bazaarvoice, Outside Online, etc.) before spending a vision
    call; `isLikelyProductImage` filters obvious non-product URLs;
    `checkImageSize` rejects anything too small to be a real product shot.
-3. **Vision check**: one call per surviving candidate — "clean product shot
-   of this brand/model" — and **only an explicit YES passes**. An API
-   failure or ambiguous answer counts as **not verified**, never as a pass:
-   no image beats a wrong image, and a null `image_url` just renders a
+3. **Vision check** (`visionConfirmShoeImage`): one call per surviving
+   candidate, asking for a catalogue-style product shot of the given
+   brand/model — but deliberately *not* asked to confirm a version number
+   (asked to, it invents one; it once called a Brooks Ghost 18 a "Ghost 15"
+   off a shoe with no version printed on it). Version identity is the URL/
+   title match's job, not vision's. Only an explicit YES passes; an API
+   failure or anything else counts as **not verified**, never as a pass — no
+   image beats a wrong image, and a null `image_url` just renders a
    placeholder.
 4. **Store** (`images/store.ts`): the winning candidate is downloaded,
    rotated per EXIF, resized to ≤1000px (longest side, no upscaling),
@@ -175,8 +204,11 @@ After every **non-dry** run, `sendDigest()` (`src/lib/shoes/job/digest.ts`)
 emails `stephen@filmmyrun.com` via Resend: published (with a link to each
 shoe, flagged if it has no image), held (with reasons and a **"Publish
 anyway"** link), linked-to-existing, errors, images cleared, and empty feeds.
-A digest send failure is caught and logged — it never fails the job or the
-HTTP response.
+`sendDigest` is a silent no-op (returns `false`, no log line) on a dry run or
+when `RESEND_API_KEY` is missing; if `CRON_SECRET` is missing it logs a
+warning and also sends nothing (there's no key to sign publish links with).
+An actual send failure (a Resend API error) is caught by the route handler
+and logged — it never fails the job or the HTTP response either way.
 
 **Publish anyway**: the link token is an HMAC-SHA256 of the candidate id
 keyed by `CRON_SECRET` (`publishToken`/`verifyPublishToken`, constant-time
@@ -272,9 +304,11 @@ genuinely have nothing that clears the filters or the vision check — check
 `findBrandProductPage` manually before assuming the pipeline is broken.
 
 **A shoe is held: what clears each reason** —
-- `brand_unresolved`: add the brand's name/alias to `shoe_brands`, or fix the
-  alias if the LLM's normalisation just missed it; the gate rechecks next
-  weekly run (or `npm run shoes -- run-weekly` to force it sooner).
+- `brand_unresolved`: add the brand's name (or an alias matching what the LLM
+  is outputting) to `shoe_brands`; the *next weekly run's discovery* is what
+  picks up the resolution when it re-nominates the shoe (or
+  `npm run shoes -- run-weekly` to force a run sooner) — the gate itself just
+  reads whatever `brand_id` is already stored on the candidate.
 - `no_brand_page`: nothing to do — the gate rechecks weekly and clears
   itself once the brand publishes the product page.
 - `too_old`: will never clear itself by design. Use "Publish anyway" from the
@@ -293,8 +327,10 @@ rate limit, or a genuine outage) looks identical to "no new posts". Try
 fetching the feed URL directly (`rss.ts`'s `FEEDS`) before assuming the site
 stopped publishing.
 
-**Digest not arriving**: confirm `RESEND_API_KEY` is set in the deploy
-environment (a missing key throws, which is caught and logged — the job still
-returns 200/500 based on `errored`, not on the digest). Check `report.dryRun`
-first: dry runs never send one, by design. Then check the sending domain is
+**Digest not arriving**: check `report.dryRun` first — dry runs never send
+one, by design. Otherwise confirm `RESEND_API_KEY` is set in the deploy
+environment: a missing key makes `sendDigest` return `false` **silently** (no
+error, no log line — the job's HTTP status only reflects `errored`, never the
+digest). A missing `CRON_SECRET` does log a warning ("cannot sign publish
+links") and also sends nothing. If both are set, check the sending domain is
 still verified in Resend.
