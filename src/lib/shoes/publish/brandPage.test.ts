@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { findBrandProductPage } from './brandPage';
 const hoka = { id: 1, name: 'Hoka', aliases: [], domain: 'hoka.com', newArrivalsUrl: null };
+const brooks = { id: 2, name: 'Brooks', aliases: [], domain: 'brooksrunning.com', newArrivalsUrl: null };
 const noSleep = async () => {};
 
 describe('findBrandProductPage', () => {
@@ -64,6 +65,36 @@ describe('findBrandProductPage', () => {
     expect(r?.title).toBe('HOKA Clifton 10 Road Shoe');
     expect(r?.product).toBeNull();
     expect(r?.releaseDate).toBeNull();
+  });
+  it('rejects a later edition of an unversioned model, by title', async () => {
+    const r = await findBrandProductPage(brooks, 'Glycerin Max', {
+      webSearch: async () => [{ title: 'Glycerin Max 2', url: 'https://www.brooksrunning.com/p/000123', description: '' }],
+      fetchPage: async () => ({ html: '', title: "Men's Glycerin Max 2 | Brooks Running" }),
+      sleep: noSleep,
+    });
+    expect(r).toBeNull();
+  });
+  it('rejects a later edition of an unversioned model, by URL', async () => {
+    const r = await findBrandProductPage(brooks, 'Glycerin Max', {
+      webSearch: async () => [{ title: 'Glycerin Max 2', url: 'https://www.brooksrunning.com/en_gb/glycerin-max-2/000123.html', description: '' }],
+      fetchPage: async () => ({ html: '', title: 'Brooks Running' }),
+      sleep: noSleep,
+    });
+    expect(r).toBeNull();
+  });
+  it('still accepts the unversioned model on its own page', async () => {
+    const r = await findBrandProductPage(brooks, 'Glycerin Max', {
+      webSearch: async () => [{ title: 'Glycerin Max', url: 'https://www.brooksrunning.com/p/000122', description: '' }],
+      fetchPage: async () => ({ html: '', title: 'Brooks Glycerin Max | Brooks Running' }),
+      sleep: noSleep,
+    });
+    expect(r?.url).toBe('https://www.brooksrunning.com/p/000122');
+    const byUrl = await findBrandProductPage(brooks, 'Glycerin Max', {
+      webSearch: async () => [{ title: 'x', url: 'https://www.brooksrunning.com/en_gb/glycerin-max/000122.html', description: '' }],
+      fetchPage: async () => ({ html: '', title: 'Brooks Running' }),
+      sleep: noSleep,
+    });
+    expect(byUrl?.url).toContain('glycerin-max/000122');
   });
   it('ignores an unparseable JSON-LD releaseDate', async () => {
     const r = await findBrandProductPage(hoka, 'Clifton 10', {

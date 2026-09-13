@@ -26,7 +26,8 @@ export interface NewShoe {
 export interface PublishOrigin { kind: 'user'; userId: number }
 
 export interface PublishDeps {
-  createShoe: (data: NewShoe) => Promise<{ id: number }>;
+  /** Upsert on slug so a retry after a partial failure reuses the row instead of hitting the unique constraint. */
+  upsertShoe: (data: NewShoe) => Promise<{ id: number }>;
   upsertReview: (shoeId: number, review: ReviewResult) => Promise<void>;
   recomputeShoeScore: (shoeId: number) => Promise<unknown>;
   markReviewed: (shoeId: number) => Promise<void>;
@@ -37,7 +38,11 @@ export interface PublishDeps {
 }
 
 const liveDeps: PublishDeps = {
-  createShoe: async data => prisma.shoes.create({ data, select: { id: true } }),
+  upsertShoe: async data => {
+    // origin, added_by_user_id and created_at belong to whoever first created the row.
+    const { origin: _origin, added_by_user_id: _addedBy, ...update } = data;
+    return prisma.shoes.upsert({ where: { slug: data.slug }, create: data, update, select: { id: true } });
+  },
   upsertReview: async (shoeId, review) => {
     await prisma.shoe_reviews.upsert({
       where: { shoe_id_source: { shoe_id: shoeId, source: review.source } },
@@ -81,13 +86,13 @@ export function findShoeToSupersede<T extends { model: string }>(model: string, 
 export async function publishCandidate(
   c: CandidateInput,
   pass: GatePass,
-  deps: PublishDeps = liveDeps,
   origin?: PublishOrigin,
+  deps: PublishDeps = liveDeps,
 ): Promise<{ shoeId: number; slug: string; supersededSlug: string | null }> {
   if (!c.brand) throw new Error('brand_unresolved');
   const { specs, reviews, releaseDate } = pass;
 
-  const shoe = await deps.createShoe({
+  const shoe = await deps.upsertShoe({
     brand: c.brand.name,
     brand_id: c.brand.id,
     model: c.model,

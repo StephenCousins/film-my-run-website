@@ -23,6 +23,24 @@ const liveDeps: BrandPageDeps = { webSearch, fetchPage: url => fetchPage(url), s
 
 const MAX_RESULTS = 5;
 
+function escapeRegExp(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Does the page belong to a later numbered edition of this model? "Glycerin
+ * Max" is contained in "Glycerin Max 2", and an unversioned model has no
+ * neighbours for findVersionConflict to catch, so the successor's page would
+ * otherwise pass on a plain substring match.
+ */
+function titleNamesLaterVersion(model: string, title: string): boolean {
+  return new RegExp(escapeRegExp(model) + '\\s*(?:v?\\d{1,2}|ii|iii|iv|v|vi|vii|viii|ix|x)\\b', 'i').test(title);
+}
+
+function urlNamesLaterVersion(modelSlug: string, url: string): boolean {
+  return new RegExp(escapeRegExp(modelSlug) + '-\\d', 'i').test(url);
+}
+
 function parseReleaseDate(value: string | undefined): Date | null {
   if (!value) return null;
   const d = new Date(value);
@@ -45,8 +63,8 @@ export async function findBrandProductPage(brand: Brand, model: string, deps: Br
     const page = await deps.fetchPage(result.url);
     if (!page) continue;
 
-    const urlMatches = result.url.toLowerCase().includes(modelSlug);
-    const titleMatches = page.title.toLowerCase().includes(modelLower);
+    const urlMatches = result.url.toLowerCase().includes(modelSlug) && !urlNamesLaterVersion(modelSlug, result.url);
+    const titleMatches = page.title.toLowerCase().includes(modelLower) && !titleNamesLaterVersion(model, page.title);
     if (!urlMatches && !titleMatches) continue;
     if (findVersionConflict(model, page.title) !== null) continue;
 
