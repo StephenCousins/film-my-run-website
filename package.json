@@ -20,6 +20,7 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,json,css}\"",
     "test": "vitest run",
+    "shoes": "node --env-file=.env node_modules/.bin/tsx scripts/shoes.ts",
     "test:watch": "vitest",
     "fetch-routes": "node scripts/fetch-routes.js"
   },

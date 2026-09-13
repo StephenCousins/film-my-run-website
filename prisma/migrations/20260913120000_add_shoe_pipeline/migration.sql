@@ -94,6 +94,9 @@ UPDATE "shoes" s SET
 FROM (SELECT "shoe_id", round(avg("score"),1) AS avg, count(*) AS cnt FROM "shoe_user_ratings" GROUP BY "shoe_id") r
 WHERE r."shoe_id" = s."id";
 
+-- Old review summaries carry raw HTML from search snippets; the UI no longer strips it
+UPDATE "shoe_reviews" SET "summary" = NULLIF(btrim(regexp_replace("summary", '<[^>]*>', '', 'g')), '') WHERE "summary" ~ '<[^>]*>';
+
 -- Enum casts
 ALTER TABLE "shoes" ALTER COLUMN "terrain" TYPE "ShoeTerrain" USING "terrain"::"ShoeTerrain";
 ALTER TABLE "shoes" ALTER COLUMN "category" TYPE "ShoeCategory" USING "category"::"ShoeCategory";
