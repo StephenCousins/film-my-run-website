@@ -106,3 +106,13 @@ describe('findBrandProductPage', () => {
     expect(r?.product?.name).toBe('Clifton 10');
   });
 });
+
+describe('pageNamesExactModel', () => {
+  it('does not let a single-digit version match the URL of a two-digit one', async () => {
+    const { pageNamesExactModel } = await import('./brandPage');
+    expect(pageNamesExactModel('Clifton 1', 'https://www.hoka.com/clifton-10/1.html', 'Clifton 10 | HOKA')).toBe(false);
+    expect(pageNamesExactModel('Clifton 10', 'https://www.hoka.com/clifton-10/1.html', 'Clifton 10 | HOKA')).toBe(true);
+    expect(pageNamesExactModel('Ghost 16', 'https://sportsshoes.com/product/brooks-ghost-16-mens', 'Brooks Ghost 16 Mens')).toBe(true);
+    expect(pageNamesExactModel('Ghost 16', 'https://sportsshoes.com/product/brooks-ghost-16-2', 'Brooks')).toBe(false);
+  });
+});

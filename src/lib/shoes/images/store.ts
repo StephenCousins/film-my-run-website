@@ -6,6 +6,9 @@ export interface StoreDeps {
   upload: (key: string, body: Buffer, contentType: string) => Promise<string>;
 }
 
+/** A catalogue shot is a few hundred KB; anything this size is not one, and sharp should not be handed it. */
+const MAX_DOWNLOAD_BYTES = 20 * 1024 * 1024;
+
 async function downloadImage(url: string): Promise<Buffer> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 15000);
@@ -16,7 +19,11 @@ async function downloadImage(url: string): Promise<Buffer> {
       redirect: 'follow',
     });
     if (!res.ok) throw new Error(`HTTP ${res.status} downloading ${url}`);
-    return Buffer.from(await res.arrayBuffer());
+    const declared = parseInt(res.headers.get('content-length') ?? '0');
+    if (declared > MAX_DOWNLOAD_BYTES) throw new Error(`image too large (${declared} bytes): ${url}`);
+    const buf = Buffer.from(await res.arrayBuffer());
+    if (buf.length > MAX_DOWNLOAD_BYTES) throw new Error(`image too large (${buf.length} bytes): ${url}`);
+    return buf;
   } finally {
     clearTimeout(timeout);
   }

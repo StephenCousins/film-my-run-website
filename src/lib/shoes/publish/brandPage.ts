@@ -37,8 +37,9 @@ function titleNamesLaterVersion(model: string, title: string): boolean {
   return new RegExp(escapeRegExp(model) + '\\s*(?:v?\\d{1,2}|ii|iii|iv|v|vi|vii|viii|ix|x)\\b', 'i').test(title);
 }
 
+/** "clifton-10" contains "clifton-1"; the slug must not run straight into another digit either. */
 function urlNamesLaterVersion(modelSlug: string, url: string): boolean {
-  return new RegExp(escapeRegExp(modelSlug) + '-\\d', 'i').test(url);
+  return new RegExp(escapeRegExp(modelSlug) + '-?\\d', 'i').test(url);
 }
 
 /**
