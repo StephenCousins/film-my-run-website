@@ -54,6 +54,11 @@ export async function DELETE(req: NextRequest) {
 
   const userId = parseInt(session.user.id);
 
+  const shoe = await prisma.shoes.findUnique({ where: { id: shoeId }, select: { id: true } });
+  if (!shoe) {
+    return NextResponse.json({ error: 'Shoe not found' }, { status: 404 });
+  }
+
   await prisma.shoe_user_ratings.deleteMany({
     where: { shoe_id: shoeId, user_id: userId },
   });
