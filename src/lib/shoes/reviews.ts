@@ -9,7 +9,11 @@ import { webSearch, sleep, type SearchResult } from './search';
 export interface ReviewDeps {
   webSearch: typeof webSearch;
   completeText: typeof completeText;
+  /** Rate-limit pause after each search; injected deps without one do not pause. */
+  sleep?: typeof sleep;
 }
+
+const liveDeps: ReviewDeps = { webSearch, completeText, sleep };
 
 async function inferScoreFromText(brand: string, model: string, text: string, deps: ReviewDeps): Promise<number | null> {
   if (!text || text.length < 60) return null;
@@ -70,22 +74,23 @@ export async function fetchReviewsForShoe(
   brand: string,
   model: string,
   onProgress?: (msg: string) => void,
-  deps: ReviewDeps = { webSearch, completeText }
+  deps: ReviewDeps = liveDeps
 ): Promise<ReviewResult[]> {
+  const pause = deps.sleep ?? (async () => {});
   onProgress?.(`Searching for reviews...`);
   let allResults = await deps.webSearch(`"${brand} ${model}" running shoe review`);
-  await sleep(1100);
+  await pause(1100);
 
   if (allResults.length === 0) {
     onProgress?.(`Broadening search...`);
     allResults = await deps.webSearch(`${brand} ${model} review`);
-    await sleep(1100);
+    await pause(1100);
   }
 
   if (allResults.length === 0) {
     onProgress?.(`Trying model name only...`);
     allResults = await deps.webSearch(`${model} running shoe review`);
-    await sleep(1100);
+    await pause(1100);
   }
 
   const verifiedReviews: ReviewResult[] = [];

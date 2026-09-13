@@ -40,18 +40,31 @@ runnable by hand via `workflow_dispatch` or `npm run shoes -- run-weekly`.
 4. **Refresh reviews** for up to `maxStaleRefresh` (10) shoes not reviewed in
    30 days (`STALE_REVIEW_DAYS`).
 5. **Audit images** — HEAD every stored image, clear dead ones.
-6. **Backfill images** — a separate pass, up to `maxImages` (20), over shoes
+6. **Backfill images** — a separate pass, up to `maxImages` (10), over shoes
    still missing an R2 image (published without one, or an old hotlink from
-   before this pipeline).
+   before this pipeline), least recently attempted first — see "Which shoes
+   get tried" under Images. Skipped entirely on a dry run: the searches would
+   be paid for and their result thrown away.
 7. **Send the digest** (skipped on a dry run) — done by the route handler
-   after `runWeekly()` returns, not inside it.
+   after `runWeekly()` returns, not inside it. A send failure is added to
+   `errored` as `{ slug: 'digest' }`, so the run is a 500.
 
 The route handler (`src/app/api/shoes/weekly-update/route.ts`) wraps this:
 bearer-auth with `CRON_SECRET`, `?dryRun=1` to run every read and no write,
 and returns the `JobReport` as JSON — **HTTP 200 iff `errored` is empty, else
 500** (so a broken run fails the workflow visibly). It 503s up front if
 `OPENROUTER_API_KEY` or a search key (`BRAVE_SEARCH_API_KEY`/`SERPER_API_KEY`)
-is missing.
+is missing. The workflow's curl waits up to 30 minutes (`--max-time 1800`,
+job timeout 35): a full run with the image backfill is 15–30 minutes of
+rate-limited searches and page fetches.
+
+Every candidate and shoe runs inside its own try/catch, and a thrown error
+becomes an `errored` row rather than a hold. Two failures are deliberately
+thrown rather than swallowed, because swallowed they read as "no shoe": a
+Brave search error (401/402/429, quota) with no `SERPER_API_KEY` fallback
+throws `search:<status>` (`src/lib/shoes/search.ts`); an LLM normalise reply
+that is not a JSON array drops every nomination and is reported as
+`{ slug: 'discover', error: 'LLM normalise output was unparseable; …' }`.
 
 ### JobReport shape
 
@@ -62,12 +75,12 @@ is missing.
   publishedWithoutImage: string[],   // published but no image cleared verification; retried next week
   linkedExisting: [],                // candidate's slug already existed as a shoe; marked published against it, no new row
   held: [{ id, slug, reasons }],
-  errored: [{ slug, error }],        // any entry here forces HTTP 500
+  errored: [{ slug, error }],        // any entry here forces HTTP 500; slug 'digest' = the email did not send
   rejectedStale: number,             // held candidates closed after 8 weeks untouched
   reviewsRefreshed: number,
   imagesStored: string[],
   imagesCleared: string[],           // by the image audit, see below
-  feedsEmpty: string[],
+  feedsEmpty: string[],              // 'irunfar' = quiet week; 'irunfar (HTTP 403)' = the fetch failed
   durationMs: number,
   dryRun: boolean
 }
@@ -81,10 +94,13 @@ resolves each into a candidate:
 
 - **Review-site RSS feeds** (`discovery/sources/rss.ts`, `FEEDS`): Running
   Shoes Guru, The Run Testers, Runner's World UK, iRunFar, Believe in the Run,
-  Road Trail Run, Doctors of Running. A title is a nomination only if it
-  matches `titleLooksLikeShoe()` — a review/launch word or a version number
-  (`v3`, `II`, digits). A feed returning zero items is recorded in
-  `feedsEmpty`.
+  Doctors of Running. Road Trail Run is not in the list: its feed answers
+  every server-side fetch with a Cloudflare challenge (403, probed 13
+  September 2026; the comment above `FEEDS` has the detail). A title is a
+  nomination only if it matches `titleLooksLikeShoe()` — a review/launch
+  word or a version number (`v3`, `II`, digits). A feed returning zero items
+  is recorded in `feedsEmpty`, with the error appended when there was one
+  (`'irunfar (HTTP 403)'`), so a block and a quiet week look different.
 - **Brand new-arrivals pages** (`discovery/sources/brandPages.ts`), driven by
   `shoe_brands.new_arrivals_url`. **No brand has this set yet** — the column
   exists but the source is dormant until URLs are added.
@@ -95,12 +111,17 @@ resolves each into a candidate:
   filtering.
 
 One LLM call per run (`completeText`, Gemini 2.5 Flash Lite) normalises the
-batch of headlines to `{brand, model}` pairs. The brand is then resolved
-against `shoe_brands` (by name or alias) — but an unresolved brand is **not**
+batch of headlines to `{brand, model}` pairs. A reply that is not a JSON
+array (a refusal, prose, output cut off at the token cap) loses every
+nomination for that run; it is logged with the first 200 characters of the
+reply and reported under `errored`. The brand is then resolved against
+`shoe_brands` (by name or alias) — but an unresolved brand is **not**
 dropped: `discover()` still upserts it as a `shoe_candidates` row with
 `brand_id: null`, immediately `held` with `brand_unresolved`. Adding the
 brand's name (or an alias) to `shoe_brands` is what lets the *next* weekly
-run resolve it and hand it to the gate. Candidates are keyed by slug: a
+run resolve it and hand it to the gate. `loadBrands()` caches the table for
+five minutes and `runWeekly()` clears the cache before it starts, so a row
+added between runs counts on the next one without a redeploy. Candidates are keyed by slug: a
 nomination that matches an existing candidate merges its evidence sources
 (deduped by URL) rather than replacing them, and keeps its current status —
 discovery only sets the initial status (`pending`, or `held` for an
@@ -116,11 +137,27 @@ the paid calls):
 | Order | Check | Hold reason | Clears when |
 |---|---|---|---|
 | 1 | Brand resolved | `brand_unresolved` | the LLM/alias match succeeds on a later run (rare without re-discovery) |
-| 2 | Brand's own site has a product page naming the exact model **and** version | `no_brand_page` | the brand publishes that page |
+| 2 | Brand's own site has a product page naming the exact model **and** version; if the brand site refuses the fetch, a retailer page that does (see below) | `no_brand_page` | the brand publishes that page, or a retailer lists it |
 | 3 | Release date (brand JSON-LD `releaseDate`, else earliest review date; **unknown passes**) within 15 months (`MAX_AGE_MONTHS`) | `too_old` | never on its own — lift via "Publish anyway" (see Digest) |
 | 4 | ≥2 review sources found | `reviews_lt_2` | a third review site covers it; or "Publish anyway" |
 | 5 | Specs parse (LLM) into valid taxonomy (`ShoeTerrain`/`ShoeCategory`) | `bad_taxonomy` | the brand page's text becomes parseable |
 | 5 | Specs otherwise fail to parse | `specs_unparseable` | same |
+
+**The brand-page check and sites that block server fetches.**
+`fetchPage` (`src/lib/shoes/html.ts`) distinguishes three outcomes: a 2xx
+page, a gone page (404/410 → `null`), and a refused one (403/406/429/5xx/
+timeout → it throws `unreachable:<status>`). `findBrandProductPage` returns
+`found`, `absent` (the site answered; no page names this exact model) or
+`unreachable` (every page it tried was refused — hoka.com answers 406 and
+brooksrunning.com 403 to any server-side fetch). On `unreachable` the gate
+searches the retailer domains in `RETAILER_DOMAINS` (`src/lib/shoes/publish/
+retailerPage.ts`, the same search the image finder uses) and the first page
+whose fetched `<title>` names the exact model stands in as the brand page
+with `source: 'retailer'`; `no_brand_page` is held only when the brand site
+was reachable and had no page, or was unreachable and no retailer has one
+(the candidate's evidence then records `brandUnreachable: 'unreachable:406'`).
+Which page proved the shoe (`brandPage: { url, title, source }`) is stored
+in the candidate's evidence on hold and on publish.
 
 A held candidate is **re-evaluated every week** the gate runs, so a hold
 clears itself once its cause does — no manual action needed except for
@@ -171,8 +208,12 @@ retailer only if nothing from the brand phase stored:
    to fetch — it doesn't confirm the model.
 2. **Filters** (`images/verify.ts`): `NON_CATALOGUE_HOSTS` rejects known-bad
    hosts (eBay, Bazaarvoice, Outside Online, etc.) before spending a vision
-   call; `isLikelyProductImage` filters obvious non-product URLs;
-   `checkImageSize` rejects anything too small to be a real product shot.
+   call; `isLikelyProductImage` filters obvious non-product URLs (logos,
+   icons, placeholders, banners) — "default" is rejected only as a filename
+   and "brand" only as a logo/mark/icon, because Salesforce Commerce Cloud
+   brand sites (Hoka, Brooks, Saucony) serve every catalogue image under a
+   `/default/` path segment; `checkImageSize` rejects anything too small to
+   be a real product shot.
 3. **Vision check** (`visionConfirmShoeImage`): one call per surviving
    candidate, asking for a catalogue-style product shot of the given
    brand/model — but deliberately *not* asked to confirm a version number
@@ -189,11 +230,24 @@ retailer only if nothing from the brand phase stored:
    `image_method` and `image_verified_at` are recorded on the `shoes` row.
 
 A shoe can publish with no image (`publishedWithoutImage`) — the image phase
-retries on every subsequent weekly run until something passes.
+retries on later weekly runs until something passes.
+
+### Which shoes get tried
+
+"Stored by the pipeline" means `image_url` starts with the bucket's public
+`shoes/` prefix (`isR2ImageUrl` in `images/store.ts`, built from
+`R2_PUBLIC_URL`); anything else — null, or a hotlink from the old catalogue —
+needs an image. There is no separate attempt column: **`image_verified_at`
+is the last successful verification when `image_url` is on R2, and the last
+attempt when it is not.** A failed `findAndStoreImage` (nothing passed
+verification; a thrown error does not count) stamps `image_verified_at =
+now()` and leaves `image_url` as it was, and the weekly pass orders by
+`image_verified_at ASC NULLS FIRST`, so every shoe is tried once before any
+is tried twice and a shoe that found nothing waits behind the whole queue.
 
 ### Weekly image audit
 
-`auditImages()` HEADs every stored image. `404`/`410` clears the three
+`auditImages()` HEADs every stored image. `404`/`410` clears the four
 `image_*` fields (`imagesCleared` in the report, re-tried next run); `429`,
 5xx, or no response at all count as merely **unverified**, not cleared — a
 flaky CDN should not wipe a good image.
@@ -201,14 +255,19 @@ flaky CDN should not wipe a good image.
 ## Digest & publish-anyway
 
 After every **non-dry** run, `sendDigest()` (`src/lib/shoes/job/digest.ts`)
-emails `stephen@filmmyrun.com` via Resend: published (with a link to each
-shoe, flagged if it has no image), held (with reasons and a **"Publish
-anyway"** link), linked-to-existing, errors, images cleared, and empty feeds.
-`sendDigest` is a silent no-op (returns `false`, no log line) on a dry run or
-when `RESEND_API_KEY` is missing; if `CRON_SECRET` is missing it logs a
-warning and also sends nothing (there's no key to sign publish links with).
-An actual send failure (a Resend API error) is caught by the route handler
-and logged — it never fails the job or the HTTP response either way.
+emails `stephen@filmmyrun.com` via Resend: published (flagged if it has no
+image), held (with reasons and a **"Publish anyway"** link),
+linked-to-existing, errors, images stored and cleared, and empty feeds. Each
+shoe carries two links, "data" (`/api/shoes/<slug>`, the record) and "finder"
+(`/tools/shoe-finder`); there is no per-shoe page yet and the finder takes no
+URL state. `sendDigest` is a silent no-op (returns `false`, no log line) on a
+dry run or when `RESEND_API_KEY` is missing; if `CRON_SECRET` is missing it
+logs a warning and also sends nothing (there's no key to sign publish links
+with). The Resend SDK reports an API error (unverified sender domain, 422,
+429) in its response instead of throwing; `sendDigest` turns that into a
+throw (`Resend: <name>: <message>`), and the route handler logs it **and
+adds it to `errored` as `{ slug: 'digest' }`, so the run returns 500 and the
+workflow fails**. The only silent case left is a missing key.
 
 **Publish anyway**: the link token is an HMAC-SHA256 of the candidate id
 keyed by `CRON_SECRET` (`publishToken`/`verifyPublishToken`, constant-time
@@ -242,16 +301,14 @@ instead of a form.
 |---|---|
 | `enrich --slug S` | Fetch review scores for one shoe, upsert them, recompute its score. |
 | `image --slug S [--force]` | Find, verify and store an image for one shoe. `--force` clears the current one first, then re-searches. |
-| `backfill-images [--limit N] [--from-slug S] [--force]` | Image pass over the whole catalogue — current shoes first, then superseded. Skips shoes already on R2 unless `--force`; resume a long run with `--from-slug`. |
-| `run-weekly [--dry-run]` | Runs the weekly job in-process and prints the `JobReport` as JSON — the same thing the workflow triggers over HTTP, without the network hop or CRON_SECRET. |
+| `backfill-images [--limit N] [--from-slug S] [--force] [--clear-hotlinks]` | Image pass over the whole catalogue — current shoes first, then superseded. Skips shoes already on R2 unless `--force`; resume a long run with `--from-slug`. Afterwards it lists every shoe still on a non-R2 `image_url`: with `--clear-hotlinks` it nulls their four `image_*` fields (the spec's "a shoe whose image fails the stricter match ends with `image_url = null`", so a placeholder replaces a look-alike); without it, it prints the count and the command. `--limit 0 --clear-hotlinks` runs only that step. A shoe that finds nothing is stamped as attempted, like in the weekly job. |
+| `run-weekly [--dry-run]` | Runs `runWeekly()` in-process and prints the `JobReport` as JSON. It does **not** send the digest — that is the HTTP route's job, so the CLI needs neither `RESEND_API_KEY` nor `CRON_SECRET`. |
 | `candidates [--status held\|pending\|rejected\|published]` | Lists discovered candidates with their hold reasons. |
 | `audit-images` | HEADs every stored image and clears the ones that are gone. |
 
 Needs `.env` with `DATABASE_URL`, `OPENROUTER_API_KEY`,
-`BRAVE_SEARCH_API_KEY` (or `SERPER_API_KEY`), the `R2_*` credentials, and
-`RESEND_API_KEY` (only `run-weekly` without `--dry-run` sends a digest, which
-also needs `CRON_SECRET` for the publish-anyway link token). Exit code is 1 on
-any error.
+`BRAVE_SEARCH_API_KEY` (or `SERPER_API_KEY`) and the `R2_*` credentials.
+No command sends email. Exit code is 1 on any error.
 
 **To fix one shoe's image:**
 ```
@@ -276,7 +333,9 @@ Additions on top of the original `shoes`/`shoe_reviews` tables (see
   `added_by_user_id`, `superseded_by_id` (self-relation — the newer version of
   this line), `user_avg_score`/`user_rating_count` (from `shoe_user_ratings`,
   distinct from the expert `avg_score`/`review_count`), `image_url`,
-  `image_source_url`, `image_method`, `image_verified_at`.
+  `image_source_url`, `image_method`, `image_verified_at` (last successful
+  verification when `image_url` is on R2; last attempt otherwise — see
+  "Which shoes get tried").
 - **Enums**: `ShoeTerrain` (`road|trail|both`), `ShoeCategory`
   (`daily_trainer|race|long_run|speed|ultra|stability|max_cushion|minimal`),
   `ShoeOrigin`, `CandidateStatus`.
@@ -308,9 +367,15 @@ genuinely have nothing that clears the filters or the vision check — check
   is outputting) to `shoe_brands`; the *next weekly run's discovery* is what
   picks up the resolution when it re-nominates the shoe (or
   `npm run shoes -- run-weekly` to force a run sooner) — the gate itself just
-  reads whatever `brand_id` is already stored on the candidate.
-- `no_brand_page`: nothing to do — the gate rechecks weekly and clears
-  itself once the brand publishes the product page.
+  reads whatever `brand_id` is already stored on the candidate. The brand
+  cache is cleared at the start of every run and expires after five minutes
+  anyway, so no redeploy is needed.
+- `no_brand_page`: look at the candidate's evidence
+  (`npm run shoes -- candidates --status held`, then the row). If it carries
+  `brandUnreachable`, the brand site refused the fetch *and* no retailer in
+  `RETAILER_DOMAINS` had a page naming the exact model; the gate rechecks
+  both weekly. Without it the brand site answered and has no such page —
+  nothing to do until the brand publishes it.
 - `too_old`: will never clear itself by design. Use "Publish anyway" from the
   digest email, or `POST` the same signed link if you kept it.
 - `reviews_lt_2`: clears itself once a third review source is found on a
@@ -321,16 +386,21 @@ genuinely have nothing that clears the filters or the vision check — check
 - Held candidates left untouched for 8 weeks close as `rejected` regardless of
   reason — check with `npm run shoes -- candidates --status rejected`.
 
-**Feed empty every week**: check `feedsEmpty` in the report/digest. First
-suspect the tool, not the pipeline — a feed host blocking the request (User-Agent,
-rate limit, or a genuine outage) looks identical to "no new posts". Try
-fetching the feed URL directly (`rss.ts`'s `FEEDS`) before assuming the site
-stopped publishing.
+**Feed empty every week**: check `feedsEmpty` in the report/digest. An entry
+with a suffix (`irunfar (HTTP 403)`) is a fetch that failed; a bare key is a
+feed that answered with nothing usable. Either way, first suspect the tool,
+not the pipeline — try fetching the feed URL directly with the headers in
+`rss.ts` before assuming the site stopped publishing. A feed that fails every
+week should be removed from `FEEDS` (as Road Trail Run was), not left to
+train the eye to skip that section.
 
-**Digest not arriving**: check `report.dryRun` first — dry runs never send
-one, by design. Otherwise confirm `RESEND_API_KEY` is set in the deploy
-environment: a missing key makes `sendDigest` return `false` **silently** (no
-error, no log line — the job's HTTP status only reflects `errored`, never the
-digest). A missing `CRON_SECRET` does log a warning ("cannot sign publish
-links") and also sends nothing. If both are set, check the sending domain is
-still verified in Resend.
+**Digest not arriving**: check the workflow run first. A Resend API error
+(the sending domain not verified, or the default `onboarding@resend.dev`
+sender used for a non-owner address, 422, 429) puts
+`{ slug: 'digest', error: 'Resend: …' }` in `errored`, the run returns 500
+and the workflow fails with the message in the step summary. If the run was
+200 and there is still no email: `report.dryRun` true means no digest, by
+design; otherwise `RESEND_API_KEY` is not set in the deploy environment — a
+missing key makes `sendDigest` return `false` **silently** (no error, no log
+line). A missing `CRON_SECRET` logs a warning ("cannot sign publish links")
+and also sends nothing. `run-weekly` from the CLI never sends one.
