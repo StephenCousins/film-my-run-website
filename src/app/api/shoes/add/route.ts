@@ -14,6 +14,20 @@ export const maxDuration = 120;
 export const dynamic = 'force-dynamic';
 
 const DAILY_LIMIT = 5;
+const ATTEMPT_LIMIT = 10;
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+// Attempts, not just publishes: a held or duplicate suggestion still costs
+// searches and LLM calls. Per process, so a deploy resets it; that is fine.
+const attempts = new Map<number, { count: number; resetAt: number }>();
+
+function overAttemptLimit(userId: number): boolean {
+  const now = Date.now();
+  const a = attempts.get(userId);
+  if (!a || a.resetAt <= now) { attempts.set(userId, { count: 1, resetAt: now + DAY_MS }); return false; }
+  a.count++;
+  return a.count > ATTEMPT_LIMIT;
+}
 
 function json(body: Record<string, unknown>, status: number): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
@@ -44,9 +58,10 @@ export async function POST(req: NextRequest) {
   const query: string | undefined = typeof body?.query === 'string' ? body.query.trim() : undefined;
   if (!query || query.length < 3 || query.length > 100) return json({ error: 'Please enter a shoe name (3-100 characters)' }, 400);
 
-  const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  const dayAgo = new Date(Date.now() - DAY_MS);
   const recentCount = await prisma.shoes.count({ where: { added_by_user_id: userId, created_at: { gte: dayAgo } } });
   if (recentCount >= DAILY_LIMIT) return json({ error: `Daily limit reached (${DAILY_LIMIT} shoes per day). Try again tomorrow.` }, 429);
+  if (overAttemptLimit(userId)) return json({ error: 'Too many suggestions today. Try again tomorrow.' }, 429);
 
   const stream = new ReadableStream({
     async start(controller) {
@@ -91,7 +106,13 @@ export async function POST(req: NextRequest) {
         });
 
         streamLine(controller, { step: 'image', message: 'Finding product image...' });
-        const image = await findAndStoreImage({ slug: published.slug, brand, model }, gate.brandPage);
+        // The shoe is published from here on; an image failure is logged, never streamed as an error.
+        let image: Awaited<ReturnType<typeof findAndStoreImage>> = null;
+        try {
+          image = await findAndStoreImage({ slug: published.slug, brand, model }, gate.brandPage);
+        } catch (err) {
+          console.error(`Shoe image failed after publishing ${published.slug}`, err);
+        }
         streamLine(controller, { step: 'image_done', message: image ? `Image found (${image.method})` : 'No image found' });
 
         const shoe = await prisma.shoes.findUniqueOrThrow({ where: { id: published.shoeId } });
