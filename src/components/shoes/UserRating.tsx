@@ -9,10 +9,12 @@ interface UserRatingProps {
   myRating: number | null;
   userAvgScore: number | null;
   userRatingCount: number;
-  onRated: (myRating: number | null, userAvg: number | null, userCount: number) => void;
+  /** Both resolve to the shoe's new user aggregate (or null on failure); the fetches live in useShoeRatings. */
+  onRate: (score: number) => Promise<unknown>;
+  onRemove: () => Promise<unknown>;
 }
 
-export default function UserRating({ shoeId, myRating, userAvgScore, userRatingCount, onRated }: UserRatingProps) {
+export default function UserRating({ shoeId, myRating, userAvgScore, userRatingCount, onRate, onRemove }: UserRatingProps) {
   const { status } = useAuth();
   const [hoveredScore, setHoveredScore] = useState<number | null>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -24,15 +26,7 @@ export default function UserRating({ shoeId, myRating, userAvgScore, userRatingC
     if (submitting) return;
     setSubmitting(true);
     try {
-      const res = await fetch('/api/shoes/rate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ shoeId, score }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        onRated(data.rating, data.userAvg, data.userCount);
-      }
+      await onRate(score);
     } finally {
       setSubmitting(false);
       setIsOpen(false);
@@ -43,11 +37,7 @@ export default function UserRating({ shoeId, myRating, userAvgScore, userRatingC
     if (submitting) return;
     setSubmitting(true);
     try {
-      const res = await fetch(`/api/shoes/rate?shoeId=${shoeId}`, { method: 'DELETE' });
-      if (res.ok) {
-        const data = await res.json();
-        onRated(null, data.userAvg, data.userCount);
-      }
+      await onRemove();
     } finally {
       setSubmitting(false);
       setIsOpen(false);
@@ -55,6 +45,7 @@ export default function UserRating({ shoeId, myRating, userAvgScore, userRatingC
   };
 
   const displayScore = hoveredScore ?? myRating;
+  const popoverId = `shoe-rating-${shoeId}`;
 
   return (
     <div className="mt-2">
@@ -76,6 +67,8 @@ export default function UserRating({ shoeId, myRating, userAvgScore, userRatingC
         <div className="relative">
           <button
             onClick={() => setIsOpen(!isOpen)}
+            aria-expanded={isOpen}
+            aria-controls={popoverId}
             className="flex items-center gap-1 text-xs font-medium transition-colors text-[#a1a1aa] hover:text-amber-500"
           >
             <Star className={`w-3.5 h-3.5 ${myRating ? 'text-amber-500 fill-amber-500' : ''}`} />
@@ -83,7 +76,10 @@ export default function UserRating({ shoeId, myRating, userAvgScore, userRatingC
           </button>
 
           {isOpen && (
-            <div className="absolute bottom-full left-0 mb-2 p-2 bg-white dark:bg-[#27272a] border border-[#e4e4e7] dark:border-[#3f3f46] rounded-xl shadow-lg z-20">
+            <div
+              id={popoverId}
+              className="absolute bottom-full left-0 mb-2 p-2 bg-white dark:bg-[#27272a] border border-[#e4e4e7] dark:border-[#3f3f46] rounded-xl shadow-lg z-20"
+            >
               <div className="flex gap-0.5 mb-1.5">
                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(n => (
                   <button

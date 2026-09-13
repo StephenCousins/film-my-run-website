@@ -1,31 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ExternalLink } from 'lucide-react';
-import type { Shoe } from './ShoeFinderClient';
+import { useShoeList, type Shoe, type ShoeReview } from './ShoeFinderClient';
 import ShoePlaceholder from './ShoePlaceholder';
 import UserRating from './UserRating';
-
-const CATEGORY_LABELS: Record<string, string> = {
-  daily_trainer: 'Daily Trainer',
-  race: 'Race',
-  long_run: 'Long Run',
-  speed: 'Speed',
-  ultra: 'Ultra',
-  stability: 'Stability',
-  max_cushion: 'Max Cushion',
-  minimal: 'Minimal',
-};
-
-const SOURCE_LABELS: Record<string, string> = {
-  runrepeat: 'RunRepeat',
-  runners_world: "Runner's World",
-  irunfar: 'iRunFar',
-  believe_in_run: 'Believe in the Run',
-  the_run_testers: 'The Run Testers',
-  other: 'Other',
-};
 
 const TERRAIN_COLORS: Record<string, string> = {
   road: 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400',
@@ -46,13 +26,50 @@ function ScoreBar({ score }: { score: number }) {
   );
 }
 
+type ReviewState =
+  | { status: 'idle' }
+  | { status: 'loading' }
+  | { status: 'loaded'; reviews: ShoeReview[] }
+  | { status: 'error' };
+
 export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | null }) {
+  const { ratings, rate, remove, labels } = useShoeList();
   const [expanded, setExpanded] = useState(false);
   const [imgError, setImgError] = useState(false);
-  const [myRating, setMyRating] = useState(shoe.myRating);
+  // Per-card aggregates change when this user rates; the rating itself comes from the shared hook.
   const [userAvgScore, setUserAvgScore] = useState(shoe.userAvgScore);
   const [userRatingCount, setUserRatingCount] = useState(shoe.userRatingCount);
-  const hasReviews = shoe.reviews.length > 0;
+  const [reviewState, setReviewState] = useState<ReviewState>({ status: 'idle' });
+  const myRating = ratings[shoe.id] ?? null;
+  const hasReviews = shoe.reviewCount > 0;
+
+  // The list payload carries no reviews; fetch them once, on first expand,
+  // and keep them for the card's lifetime. A ref tracks the fetch rather
+  // than `reviewState` sitting in the deps: with the status there the effect
+  // re-ran as it flipped to 'loading' and the cleanup discarded its own fetch.
+  const reviewFetch = useRef<'pending' | 'done' | null>(null);
+  useEffect(() => {
+    if (!expanded || reviewFetch.current !== null) return;
+    reviewFetch.current = 'pending';
+    let live = true;
+    setReviewState({ status: 'loading' });
+    fetch(`/api/shoes/${encodeURIComponent(shoe.slug)}`)
+      .then(r => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
+      .then(d => {
+        if (!live) return;
+        reviewFetch.current = 'done';
+        setReviewState({ status: 'loaded', reviews: Array.isArray(d.reviews) ? d.reviews : [] });
+      })
+      .catch(() => {
+        if (!live) return;
+        reviewFetch.current = null; // the next expand retries
+        setReviewState({ status: 'error' });
+      });
+    return () => {
+      live = false;
+      if (reviewFetch.current === 'pending') reviewFetch.current = null;
+    };
+  }, [expanded, shoe.slug]);
 
   const scoreColor =
     shoe.avgScore === null
@@ -94,6 +111,16 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
         >
           {shoe.terrain}
         </span>
+
+        {/* Superseded tag: only visible when "Show previous versions" is on */}
+        {shoe.supersededBySlug && (
+          <span
+            className="absolute bottom-3 right-3 text-[10px] font-medium px-2 py-0.5 rounded-full bg-[#18181b]/70 text-[#fafafa] dark:bg-[#fafafa]/80 dark:text-[#18181b]"
+            title="A newer version of this shoe is in the catalogue"
+          >
+            Superseded
+          </span>
+        )}
       </div>
 
       <div className="p-4">
@@ -126,17 +153,28 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
           myRating={myRating}
           userAvgScore={userAvgScore}
           userRatingCount={userRatingCount}
-          onRated={(newMyRating, newUserAvg, newUserCount) => {
-            setMyRating(newMyRating);
-            setUserAvgScore(newUserAvg);
-            setUserRatingCount(newUserCount);
+          onRate={async score => {
+            const d = await rate(shoe.id, score);
+            if (d) {
+              setUserAvgScore(d.userAvg);
+              setUserRatingCount(d.userCount);
+            }
+            return d;
+          }}
+          onRemove={async () => {
+            const d = await remove(shoe.id);
+            if (d) {
+              setUserAvgScore(d.userAvg);
+              setUserRatingCount(d.userCount);
+            }
+            return d;
           }}
         />
 
         {/* Category + specs */}
         <div className="flex flex-wrap gap-1.5 mt-3">
           <span className="text-xs bg-[#f4f4f5] dark:bg-[#27272a] text-[#52525b] dark:text-[#a1a1aa] px-2 py-0.5 rounded-md">
-            {CATEGORY_LABELS[shoe.category] ?? shoe.category}
+            {labels.categories[shoe.category] ?? shoe.category}
           </span>
           {shoe.dropMm !== null && (
             <span className="text-xs bg-[#f4f4f5] dark:bg-[#27272a] text-[#52525b] dark:text-[#a1a1aa] px-2 py-0.5 rounded-md">
@@ -179,11 +217,24 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
                   className="overflow-hidden"
                 >
                   <div className="pt-3 space-y-2.5">
-                    {shoe.reviews.map(r => (
+                    {reviewState.status === 'error' && (
+                      <p className="text-xs text-[#a1a1aa]">Couldn&apos;t load reviews</p>
+                    )}
+                    {(reviewState.status === 'loading' || reviewState.status === 'idle') &&
+                      Array.from({ length: 3 }).map((_, i) => (
+                        <div key={i} className="space-y-1.5 animate-pulse">
+                          <div className="h-3 w-1/3 rounded bg-[#f4f4f5] dark:bg-[#27272a]" />
+                          <div className="h-1.5 w-full rounded-full bg-[#f4f4f5] dark:bg-[#27272a]" />
+                        </div>
+                      ))}
+                    {reviewState.status === 'loaded' && reviewState.reviews.length === 0 && (
+                      <p className="text-xs text-[#a1a1aa]">No reviews yet</p>
+                    )}
+                    {reviewState.status === 'loaded' && reviewState.reviews.map(r => (
                       <div key={r.source}>
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-medium text-[#52525b] dark:text-[#a1a1aa]">
-                            {SOURCE_LABELS[r.source] ?? r.source}
+                            {labels.sources[r.source] ?? r.source}
                           </span>
                           <div className="flex items-center gap-2">
                             {r.expertScore !== null && (
@@ -206,7 +257,7 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
                         </div>
                         {r.expertScore !== null && <ScoreBar score={r.expertScore} />}
                         {r.summary && (
-                          <p className="text-xs text-[#a1a1aa] mt-1 italic line-clamp-2">{r.summary.replace(/<[^>]*>/g, '')}</p>
+                          <p className="text-xs text-[#a1a1aa] mt-1 italic line-clamp-2">{r.summary}</p>
                         )}
                       </div>
                     ))}
