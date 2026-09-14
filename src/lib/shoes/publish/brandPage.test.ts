@@ -224,3 +224,17 @@ describe('pageNamesExactModel word boundaries', () => {
     expect(pageNamesExactModel('Titan', 'https://x/products/li-ning-titan-trail', 'Li-Ning Titan Trail Running Shoes')).toBe(true);
   });
 });
+
+describe('pageNamesExactModel refuses a title that continues into another product name', () => {
+  it('rejects Mesa Verde, Cairn Evo and KD900X LD', () => {
+    expect(pageNamesExactModel('Mesa', 'https://x/p/1', 'Lems Mesa Verde | Lems Shoes')).toBe(false);
+    expect(pageNamesExactModel('Cairn', 'https://x/p/2', 'Cairn Evo 3D PRO Adventure Sandals')).toBe(false);
+    expect(pageNamesExactModel('KD900X', 'https://x/p/3', 'Kiprun KD900X LD Review')).toBe(false);
+  });
+  it('accepts audience, category, colour and review words after the model', () => {
+    expect(pageNamesExactModel('Clifton 10', 'https://x/p/4', "Hoka Clifton 10 Mens Running Shoes - White")).toBe(true);
+    expect(pageNamesExactModel('Endorphin Elite 3', 'https://x/p/5', 'Endorphin Elite 3 - Unisex | Saucony')).toBe(true);
+    expect(pageNamesExactModel('Clifton 10', 'https://x/p/6', 'HOKA Clifton 10 Review - RTINGS.com')).toBe(true);
+    expect(pageNamesExactModel('Feidian 6 Elite', 'https://x/p/7', "LiNing Feidian 6 ELITE 'Black' | Running Shoes")).toBe(true);
+  });
+});
