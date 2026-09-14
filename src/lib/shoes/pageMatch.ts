@@ -55,8 +55,11 @@ function namesVariant(needle: string, text: string, sep: string, model: string):
  */
 export function pageNamesExactModel(model: string, url: string, title: string): boolean {
   const modelSlug = shoeToSlug('', model).replace(/^-/, '');
-  const urlMatches = url.toLowerCase().includes(modelSlug) && !urlNamesLaterVersion(modelSlug, url);
-  const titleMatches = title.toLowerCase().includes(model.toLowerCase()) && !titleNamesLaterVersion(model, title);
+  // Whole-word matches only: "Titan" must not match "Titanium", "Ride" must not match "Rider".
+  const urlWord = new RegExp(`(?:^|[^a-z0-9])${escapeRegExp(modelSlug)}(?![a-z0-9])`);
+  const titleWord = new RegExp(`(?:^|[^a-z0-9])${escapeRegExp(model.toLowerCase())}(?![a-z0-9])`);
+  const urlMatches = urlWord.test(url.toLowerCase()) && !urlNamesLaterVersion(modelSlug, url);
+  const titleMatches = titleWord.test(title.toLowerCase()) && !titleNamesLaterVersion(model, title);
   if (!urlMatches && !titleMatches) return false;
   if (namesVariant(modelSlug, url, '-', model) || namesVariant(model, title, '[\\s-]+', model)) return false;
   return findVersionConflict(model, title) === null;

@@ -214,3 +214,13 @@ describe('findBrandProductPage with a storefront adapter', () => {
     expect(r).toEqual({ kind: 'unreachable', reason: 'unreachable:503' });
   });
 });
+
+describe('pageNamesExactModel word boundaries', () => {
+  it('does not match a model inside a longer word', () => {
+    expect(pageNamesExactModel('Titan', 'https://startfitness.co.uk/products/garmin-enduro-3-dlc-titanium-gps-watch-black', 'Garmin Enduro 3 DLC Titanium GPS Watch - Black')).toBe(false);
+    expect(pageNamesExactModel('Ride', 'https://x/products/saucony-rider-2', 'Saucony Rider 2')).toBe(false);
+  });
+  it('still matches the whole word', () => {
+    expect(pageNamesExactModel('Titan', 'https://x/products/li-ning-titan-trail', 'Li-Ning Titan Trail Running Shoes')).toBe(true);
+  });
+});
