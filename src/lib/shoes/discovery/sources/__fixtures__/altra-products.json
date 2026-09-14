@@ -1,0 +1,110 @@
+{
+ "_note": "Trimmed capture of https://www.altrarunning.com/en-us/products.json?limit=250, 2026-09-14: four products, the fields the nominator reads (body_html cut to 160 chars).",
+ "products": [
+  {
+   "id": 11087719006375,
+   "title": "Women's Torin 9 GTX",
+   "handle": "womens-torin-9-gtx-al0a85u1",
+   "vendor": "altra",
+   "product_type": "",
+   "tags": [
+    "FEATURED_WOMEN_NEW_ARRIVALS",
+    "FEATURED_WOMEN_TORIN_FAMILY",
+    "GIFTS_FOR_THE_HIKERS",
+    "GIFTS_FOR_THE_ROAD_RUNNERS",
+    "SHOP_ALL_SHOES",
+    "SHOP_GIFT_GUIDE",
+    "SHOP_NEW_ARRIVALS",
+    "SHOP_VIBRAM_SHOES",
+    "SHOP_WALK_SHOES",
+    "SHOP_WOMEN",
+    "SHOP_WOMEN_ACTIVITY_DAY_HIKING",
+    "SHOP_WOMEN_ACTIVITY_EVERYDAY_RUNNING",
+    "SHOP_WOMEN_SHOES",
+    "SHOP_WOMEN_SHOES_ROAD",
+    "SHOP_WOMEN_SHOES_WATERPROOF",
+    "SHOP_WOMENS_SHOES_WALK",
+    "SHOP_WOMENS_WATERPROOF"
+   ],
+   "published_at": "2026-09-01T00:00:07-04:00",
+   "created_at": "2026-07-29T17:19:29-04:00",
+   "body_html": "Tap into unique comfort &amp; stay dry with the Torin 9 GTX. It’s responsive, soft, waterproof, and performance-focused, so you can be uniquely you on your next"
+  },
+  {
+   "id": 11087711535271,
+   "title": "Men's Torin 9 GTX",
+   "handle": "mens-torin-9-gtx-al0a85uq",
+   "vendor": "altra",
+   "product_type": "",
+   "tags": [
+    "FEATURED_MEN_NEW_ARRIVALS",
+    "FEATURED_MEN_TORIN_FAMILY",
+    "SHOP_ALL_SHOES",
+    "SHOP_EGO_P35_FOAM",
+    "SHOP_GIFT_GUIDE",
+    "SHOP_MEN",
+    "SHOP_MEN_ACTIVITY_DAY_HIKING",
+    "SHOP_MEN_ACTIVITY_EVERYDAY_RUNNING",
+    "SHOP_MEN_NEW",
+    "SHOP_MEN_SHOES",
+    "SHOP_MEN_SHOES_ROAD",
+    "SHOP_MEN_SHOES_WATERPROOF",
+    "SHOP_MENS_SHOES_WALK",
+    "SHOP_NEUTRAL",
+    "SHOP_NEW_ARRIVALS",
+    "SHOP_VIBRAM_SHOES",
+    "SHOP_ZERO_DROP_SHOES"
+   ],
+   "published_at": "2026-09-01T00:00:07-04:00",
+   "created_at": "2026-07-29T17:15:35-04:00",
+   "body_html": "Tap into unique comfort &amp; stay dry with the Torin 9 GTX. It’s responsive, soft, waterproof, and performance-focused, so you can be uniquely you on your next"
+  },
+  {
+   "id": 8748491473063,
+   "title": "E-Gift Card",
+   "handle": "e-gift-card",
+   "vendor": "altra",
+   "product_type": "Gift Card",
+   "tags": [
+    "gift-card"
+   ],
+   "published_at": "2026-03-09T10:59:21-04:00",
+   "created_at": "2026-03-09T10:59:21-04:00",
+   "body_html": ""
+  },
+  {
+   "id": 11101631447207,
+   "title": "Men's Vanish Carbon 3",
+   "handle": "mens-vanish-carbon-3-al0a85sw",
+   "vendor": "altra",
+   "product_type": "",
+   "tags": [
+    "FEATURED_MEN_NEW_ARRIVALS",
+    "GIFTS_FOR_SPEED",
+    "GIFTS_FOR_THE_COMFORT_LOVERS",
+    "GIFTS_FOR_THE_GYM_GOERS",
+    "GIFTS_FOR_THE_ROAD_RUNNERS",
+    "SHOP_4mm_DROP_SHOES",
+    "SHOP_ALL_SHOES",
+    "SHOP_GIFT_GUIDE",
+    "SHOP_GYM_SHOES",
+    "SHOP_MARATHON_SHOES",
+    "SHOP_MAX_CUSHION",
+    "SHOP_MEN",
+    "SHOP_MEN_ACTIVITY_CROSS_TRAINING",
+    "SHOP_MEN_ACTIVITY_ROAD_RACING",
+    "SHOP_MEN_NEW",
+    "SHOP_MEN_SHOES_GYM_TRAINING",
+    "SHOP_MEN_SHOES_ROAD",
+    "SHOP_NEUTRAL",
+    "SHOP_NEW_ARRIVALS",
+    "SHOP_ROAD_SHOES",
+    "SHOP_SPEED_SHOES",
+    "SHOP_VANISH_FAMILY"
+   ],
+   "published_at": "2026-08-18T00:00:06-04:00",
+   "created_at": "2026-08-03T15:15:30-04:00",
+   "body_html": "Built for the grind of race day, it’s light, responsive, and brutally efficient. The Vanish Carbon 3 is Altra speed – reimagined. An all-new FAST RCE midsole is"
+  }
+ ]
+}

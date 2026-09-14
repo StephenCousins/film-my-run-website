@@ -1,0 +1,124 @@
+{
+ "_note": "Trimmed capture of https://kicksown.com/products.json?limit=250, 2026-09-14: eight products, the fields the nominator reads (body_html cut to 160 chars).",
+ "products": [
+  {
+   "id": 14945997881539,
+   "title": "361° Mega 3 Pro '24H' | Running Shoes",
+   "handle": "361-mega-3pro-running-shoes-unisex-low-top-black",
+   "vendor": "Kicksown",
+   "product_type": "Running Shoes",
+   "tags": [
+    "361°",
+    "Latest Drops",
+    "New arrvials",
+    "running shoes"
+   ],
+   "published_at": "2026-09-08T02:12:22-07:00",
+   "created_at": "2026-09-08T01:39:06-07:00",
+   "body_html": "The 361° Mega 3Pro is a unisex low-top running shoe designed for everyday training and jogging. Its Feather White and Obsidian Black colorway gives the shoe a c"
+  },
+  {
+   "id": 14945997947075,
+   "title": "361° Mega 3 Pro 'Attitude' | Running Shoes",
+   "handle": "361-mega-3pro-running-shoes-unisex-low-top-obsidian-black-metallic-gray-1",
+   "vendor": "Kicksown",
+   "product_type": "Running Shoes",
+   "tags": [
+    "361°",
+    "Latest Drops",
+    "New arrvials",
+    "running shoes"
+   ],
+   "published_at": "2026-09-08T02:12:05-07:00",
+   "created_at": "2026-09-08T01:39:09-07:00",
+   "body_html": "The 361° Mega 3Pro is a unisex low-top running shoe in an understated Obsidian Black and Metallic Gray colorway. Built for running and positioned as a training-"
+  },
+  {
+   "id": 14946584363203,
+   "title": "LiNing Wade All City 14 ENCORE 'Sand Gray'",
+   "handle": "lining-wade-all-city-14-encore-sand-gray",
+   "vendor": "Kicksown",
+   "product_type": "Basketball Shoes",
+   "tags": [
+    "basketball shoes",
+    "li-ning",
+    "New arrvials"
+   ],
+   "published_at": "2026-09-13T23:07:58-07:00",
+   "created_at": "2026-09-13T19:28:06-07:00",
+   "body_html": ""
+  },
+  {
+   "id": 14946593210563,
+   "title": "Volanti Rocket Air Basketball Shoes Laser 'Purple'",
+   "handle": "volanti-rocket-air-basketball-shoes-purple",
+   "vendor": "Kicksown",
+   "product_type": "待改",
+   "tags": [
+    "Latest Drops",
+    "New arrvials"
+   ],
+   "published_at": "2026-09-13T23:12:57-07:00",
+   "created_at": "2026-09-13T22:35:04-07:00",
+   "body_html": ""
+  },
+  {
+   "id": 14946473607363,
+   "title": "Anta C202 7.0 'Green Black' | Running Shoes (Discount) Only for US",
+   "handle": "anta-c202-7-0-green-black-running-shoes-discount-only-for-us-2",
+   "vendor": "Kicksown",
+   "product_type": "Discount-us",
+   "tags": [
+    "on sale1",
+    "安踏",
+    "跑步鞋"
+   ],
+   "published_at": "2026-09-12T03:54:32-07:00",
+   "created_at": "2026-09-12T03:52:31-07:00",
+   "body_html": ""
+  },
+  {
+   "id": 14945002553539,
+   "title": "LiNing Feidian 6 Ultra ’HangZhou Marathon‘",
+   "handle": "li-ning-feidian-6-ultra-hangzhou-marathon",
+   "vendor": "Kicksown",
+   "product_type": "跑步鞋",
+   "tags": [
+    "Restock",
+    "李宁",
+    "跑步鞋"
+   ],
+   "published_at": "2026-09-01T02:46:12-07:00",
+   "created_at": "2026-09-01T02:28:03-07:00",
+   "body_html": ""
+  },
+  {
+   "id": 14945655062723,
+   "title": "Li Ning Curry China Collection T Shirts Men's Meteorite Gray Crew Neck Moderate",
+   "handle": "li-ning-curry-china-collection-t-shirts-mens-meteorite-gray-crew-neck-moderate-1",
+   "vendor": "Kicksown",
+   "product_type": "T-Shirts",
+   "tags": [
+    "li-ning",
+    "t-shirts"
+   ],
+   "published_at": "2026-09-04T04:16:44-07:00",
+   "created_at": "2026-09-04T03:46:10-07:00",
+   "body_html": "The Li-Ning Curry China Collection T-Shirt is a men's crew neck top finished in Meteorite Gray. Based on the provided product information, this short-sleeve T-s"
+  },
+  {
+   "id": 14944084164803,
+   "title": "Volanti Chasing Moon 'Yellow' | Running Shoes",
+   "handle": "volanti-chasing-moon-yellow-running-shoes",
+   "vendor": "Kicksown",
+   "product_type": "待改",
+   "tags": [
+    "沃兰迪",
+    "跑步鞋"
+   ],
+   "published_at": "2026-08-24T03:28:48-07:00",
+   "created_at": "2026-08-24T03:10:15-07:00",
+   "body_html": ""
+  }
+ ]
+}

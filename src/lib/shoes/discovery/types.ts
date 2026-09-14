@@ -5,7 +5,7 @@ export interface Nomination {
   title: string;
   url: string;
   publishedAt: Date | null;
-  /** Feed key, `brand:<name>`, or 'search'. */
+  /** Feed key, or `shopify:<store>`. */
   source: string;
 }
 

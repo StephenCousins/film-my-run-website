@@ -12,8 +12,7 @@ describe('discover', () => {
         { source: 'a', nominations: [nom('Hoka Clifton 10 review', 'a'), nom('Hoka Bondi 9 review', 'a')], empty: false },
         { source: 'b', nominations: [], empty: true, error: '403' },
       ],
-      readBrandNewArrivals: async () => ({ source: 'brand:Hoka', nominations: [], empty: true }),
-      searchNominations: async () => ({ source: 'search', nominations: [nom('Asics Novablast 5', 'search')], empty: false }),
+      readAllShopifyNewArrivals: async () => [{ source: 'shopify:startfitness.co.uk', nominations: [{ ...nom('Novablast 5', 'shopify:startfitness.co.uk'), brandText: 'Asics' }], empty: false }],
       loadBrands: async () => brands,
       completeText: async () => JSON.stringify([{ i: 0, brand: 'Hoka', model: 'Clifton 10' }, { i: 1, brand: 'Hoka', model: 'Bondi 9' }, { i: 2, brand: 'Asics', model: 'Novablast 5' }]),
       existingSlugs: async () => [{ slug: 'hoka-bondi-9', brand: 'Hoka', model: 'Bondi 9' }],
@@ -28,8 +27,7 @@ describe('discover', () => {
     const upserts: unknown[] = [];
     const r = await discover({
       readAllFeeds: async () => [{ source: 'a', nominations: [nom('New Balance 1080 v14', 'a')], empty: false }],
-      readBrandNewArrivals: async () => ({ source: 'brand:x', nominations: [], empty: true }),
-      searchNominations: async () => ({ source: 'search', nominations: [], empty: true }),
+      readAllShopifyNewArrivals: async () => [],
       loadBrands: async () => [{ id: 3, name: 'New Balance', aliases: ['nb'], domain: 'newbalance.co.uk', newArrivalsUrl: null }],
       completeText: async () => JSON.stringify([{ i: 0, brand: 'New Balance', model: '1080 v14' }]),
       existingSlugs: async () => [{ slug: 'new-balance-fresh-foam-1080-v14', brand: 'New Balance', model: '1080 V14' }],
@@ -39,22 +37,19 @@ describe('discover', () => {
     expect(upserts).toHaveLength(0);
   });
 
-  it('only reads brand pages for brands that have a new-arrivals URL, and does not count them as empty feeds', async () => {
-    const asked: string[] = [];
+  it('a store with no new arrivals is listed among the empty sources, like a quiet feed', async () => {
     const r = await discover({
       readAllFeeds: async () => [],
-      readBrandNewArrivals: async b => { asked.push(b.name); return { source: `brand:${b.name}`, nominations: [], empty: true }; },
-      searchNominations: async () => ({ source: 'search', nominations: [], empty: true }),
-      loadBrands: async () => [
-        { id: 1, name: 'Hoka', aliases: [], domain: 'hoka.com', newArrivalsUrl: 'https://hoka.com/new' },
-        { id: 2, name: 'Asics', aliases: [], domain: 'asics.com', newArrivalsUrl: null },
+      readAllShopifyNewArrivals: async () => [
+        { source: 'shopify:kicksown.com', nominations: [], empty: true },
+        { source: 'shopify:nordarun.com', nominations: [], empty: true, error: 'unreachable:503' },
       ],
+      loadBrands: async () => brands,
       completeText: async () => { throw new Error('should not be called with no nominations'); },
       existingSlugs: async () => [],
       upsertCandidate: async () => {},
     });
-    expect(asked).toEqual(['Hoka']);
-    expect(r).toEqual({ nominations: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: [], normaliseFailed: false });
+    expect(r).toEqual({ nominations: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: ['shopify:kicksown.com', 'shopify:nordarun.com (unreachable:503)'], normaliseFailed: false });
   });
 
   it('a quiet feed is listed bare, a failed one with its error, and an unparseable LLM reply is flagged', async () => {
@@ -66,8 +61,7 @@ describe('discover', () => {
         { source: 'blocked', nominations: [], empty: true, error: 'HTTP 403' },
         { source: 'a', nominations: [nom('Hoka Clifton 10 review', 'a')], empty: false },
       ],
-      readBrandNewArrivals: async () => ({ source: 'brand:x', nominations: [], empty: true }),
-      searchNominations: async () => ({ source: 'search', nominations: [], empty: true }),
+      readAllShopifyNewArrivals: async () => [],
       loadBrands: async () => brands,
       completeText: async () => 'I cannot help with that.',
       existingSlugs: async () => [],
@@ -83,8 +77,7 @@ describe('discover', () => {
     const upserts: { evidence: { sources: { publishedAt: string | null; url: string }[] } }[] = [];
     await discover({
       readAllFeeds: async () => [{ source: 'a', nominations: [nom('Hoka Clifton 10 review', 'a'), { ...nom('Clifton 10 launch', 'a'), publishedAt: null, url: 'https://x/launch' }], empty: false }],
-      readBrandNewArrivals: async () => ({ source: 'brand:x', nominations: [], empty: true }),
-      searchNominations: async () => ({ source: 'search', nominations: [], empty: true }),
+      readAllShopifyNewArrivals: async () => [],
       loadBrands: async () => brands,
       completeText: async () => JSON.stringify([{ i: 0, brand: 'Hoka', model: 'Clifton 10' }, { i: 1, brand: 'Hoka', model: 'Clifton 10' }]),
       existingSlugs: async () => [],

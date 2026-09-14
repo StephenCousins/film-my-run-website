@@ -63,4 +63,15 @@ describe('readAllFeeds', () => {
     expect(results.map(r => r.source)).toEqual(FEEDS.map(f => f.key));
     expect(seen).toEqual(FEEDS.map(f => f.url));
   });
+  it('RTINGS: only the running-shoe items of the all-category feed', async () => {
+    const rtings = FEEDS.find(f => f.key === 'rtings')!;
+    const r = await readFeed(rtings, { fetchText: async () => fx('rtings-latest.xml') });
+    expect(r.empty).toBe(false);
+    expect(r.nominations.map(n => n.url)).toEqual([
+      'https://www.rtings.com/running-shoes/reviews/361/flame-5',
+      'https://www.rtings.com/running-shoes/reviews/asics/hyper-speed-6',
+      'https://www.rtings.com/running-shoes/reviews/diadora/corsa',
+    ]);
+    expect(r.nominations[0].title).toBe('361 Flame 5 Running Shoe Review');
+  });
 });

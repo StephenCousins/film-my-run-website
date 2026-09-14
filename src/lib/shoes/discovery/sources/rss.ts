@@ -8,7 +8,14 @@ import type { Nomination, SourceResult } from '../types';
 // FeedFetcher-Google, none). A feed that fails every week trains the
 // digest's "feeds that returned nothing" section to be skipped, which is
 // where a real outage would show. Re-add once a direct fetch returns items.
-export const FEEDS: { key: string; url: string }[] = [
+//
+// RTINGS has no per-category feed (/rss, /feed and /running-shoes/…/rss all
+// 404, probed 14 September 2026) but /latest-rss.xml lists its thirty most
+// recent reviews across every category; `linkPattern` keeps the running-shoe
+// ones. A week with no shoe review in those thirty reads as a quiet week.
+export interface Feed { key: string; url: string; /** Only items whose link matches are read; the rest of the feed is another category. */ linkPattern?: RegExp }
+export const FEEDS: Feed[] = [
+  { key: 'rtings', url: 'https://www.rtings.com/latest-rss.xml', linkPattern: /\/running-shoes\/reviews\// },
   { key: 'running_shoes_guru', url: 'https://www.runningshoesguru.com/feed/' },
   { key: 'the_run_testers', url: 'https://theruntesters.com/feed/' },
   { key: 'runners_world', url: 'https://www.runnersworld.com/uk/rss/all.xml/' },
@@ -51,7 +58,7 @@ function parseDate(s: string | undefined): Date | null {
   return Number.isNaN(d.getTime()) ? null : d;
 }
 
-export async function readFeed(feed: { key: string; url: string }, deps: RssDeps = liveDeps): Promise<SourceResult> {
+export async function readFeed(feed: Feed, deps: RssDeps = liveDeps): Promise<SourceResult> {
   try {
     const xml = await deps.fetchText(feed.url);
     const parsed = await new Parser().parseString(xml);
@@ -60,6 +67,7 @@ export async function readFeed(feed: { key: string; url: string }, deps: RssDeps
       const title = (item.title ?? '').trim();
       const url = item.link ?? '';
       if (!title || !url || !titleLooksLikeShoe(title)) continue;
+      if (feed.linkPattern && !feed.linkPattern.test(url)) continue;
       nominations.push({ modelText: title, title, url, publishedAt: parseDate(item.isoDate ?? item.pubDate), source: feed.key });
     }
     return { source: feed.key, nominations, empty: nominations.length === 0 };

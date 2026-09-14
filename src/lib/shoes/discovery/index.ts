@@ -3,16 +3,16 @@ import { completeText } from '@/lib/llm';
 import { loadBrands } from '../brands';
 import { isSameLine, parseModelVersion } from '../versions';
 import { readAllFeeds } from './sources/rss';
-import { readBrandNewArrivals } from './sources/brandPages';
-import { searchNominations } from './sources/search';
+import { readAllShopifyNewArrivals } from './sources/shopifyNewArrivals';
 import { normalise } from './normalise';
-import type { Nomination } from './types';
+import type { Nomination, SourceResult } from './types';
 
 // A type alias rather than an interface so it satisfies Prisma's InputJsonValue.
 export type EvidenceSource = { source: string; url: string; title: string; publishedAt: string | null };
 export interface CandidateUpsert { slug: string; brandId: number | null; brandText: string; modelText: string; holdReasons: string[]; evidence: { sources: EvidenceSource[] } }
 export interface DiscoverDeps {
-  readAllFeeds: typeof readAllFeeds; readBrandNewArrivals: typeof readBrandNewArrivals; searchNominations: typeof searchNominations;
+  readAllFeeds: () => Promise<SourceResult[]>;
+  readAllShopifyNewArrivals: () => Promise<SourceResult[]>;
   loadBrands: typeof loadBrands; completeText: typeof completeText;
   existingSlugs: () => Promise<{ slug: string; brand: string; model: string }[]>;
   upsertCandidate: (c: CandidateUpsert) => Promise<void>;
@@ -21,7 +21,7 @@ export interface DiscoverReport {
   nominations: number;
   candidatesUpserted: number;
   alreadyKnown: number;
-  /** Feed keys that yielded nothing, with the error when there was one: 'irunfar (HTTP 403)' is a block, 'irunfar' is a quiet week. */
+  /** Sources (feed keys and `shopify:<store>`) that yielded nothing, with the error when there was one: 'irunfar (HTTP 403)' is a block, 'irunfar' is a quiet week. */
   feedsEmpty: string[];
   /** The one LLM call that turns headlines into shoes returned something unparseable; every nomination was lost. */
   normaliseFailed: boolean;
@@ -41,7 +41,7 @@ export function mergeEvidenceSources(existing: unknown, incoming: EvidenceSource
 }
 
 export const liveDiscoverDeps: DiscoverDeps = {
-  readAllFeeds, readBrandNewArrivals, searchNominations, loadBrands, completeText,
+  readAllFeeds: () => readAllFeeds(), readAllShopifyNewArrivals: () => readAllShopifyNewArrivals(), loadBrands, completeText,
   existingSlugs: async () => prisma.shoes.findMany({ select: { slug: true, brand: true, model: true } }),
   upsertCandidate: async c => {
     // A candidate seen again keeps its status and hold reasons — the gate
@@ -62,12 +62,9 @@ function evidenceOf(noms: Nomination[]): { sources: EvidenceSource[] } {
 
 export async function discover(deps: DiscoverDeps = liveDiscoverDeps): Promise<DiscoverReport> {
   const brands = await deps.loadBrands();
-  const feedResults = await deps.readAllFeeds();
-  const brandResults = await Promise.all(brands.filter(b => b.newArrivalsUrl).map(b => deps.readBrandNewArrivals(b)));
-  const searchResult = await deps.searchNominations();
-  const all = [...feedResults, ...brandResults, searchResult];
+  const all = [...(await deps.readAllFeeds()), ...(await deps.readAllShopifyNewArrivals())];
   const noms = all.flatMap(r => r.nominations);
-  const feedsEmpty = all.filter(r => r.empty && r.source !== 'search' && !r.source.startsWith('brand:')).map(r => (r.error ? `${r.source} (${r.error})` : r.source));
+  const feedsEmpty = all.filter(r => r.empty).map(r => (r.error ? `${r.source} (${r.error})` : r.source));
 
   const { resolved, unresolved, failed: normaliseFailed } = await normalise(noms, brands, { completeText: deps.completeText });
   const existing = await deps.existingSlugs();
