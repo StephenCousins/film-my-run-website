@@ -1,0 +1,79 @@
+{
+ "_note": "Trimmed capture of https://www.altrarunning.com/en-us/search/suggest.json?q=Vanish Pulse, 2026-09-14: title/handle/available/vendor/type per product, other fields dropped.",
+ "resources": {
+  "results": {
+   "products": [
+    {
+     "title": "Men's Vanish Pulse",
+     "handle": "mens-vanish-pulse-al0a85sj",
+     "available": true,
+     "vendor": "altra",
+     "type": ""
+    },
+    {
+     "title": "Women's Vanish Pulse",
+     "handle": "womens-vanish-pulse-al0a85up",
+     "available": true,
+     "vendor": "altra",
+     "type": ""
+    },
+    {
+     "title": "Men's Vanish Carbon 2",
+     "handle": "mens-vanish-carbon-2-al0a85pc",
+     "available": true,
+     "vendor": "altra",
+     "type": ""
+    },
+    {
+     "title": "Men's Vanish Carbon 3",
+     "handle": "mens-vanish-carbon-3-al0a85sw",
+     "available": true,
+     "vendor": "altra",
+     "type": ""
+    },
+    {
+     "title": "Women's Vanish Carbon 2",
+     "handle": "womens-vanish-carbon-2-al0a85pd",
+     "available": true,
+     "vendor": "altra",
+     "type": ""
+    },
+    {
+     "title": "Women's Vanish Tempo",
+     "handle": "womens-vanish-tempo-al0a7r7f",
+     "available": true,
+     "vendor": "altra",
+     "type": ""
+    },
+    {
+     "title": "Women's Vanish Carbon 3",
+     "handle": "womens-vanish-carbon-3-al0a85tb",
+     "available": true,
+     "vendor": "altra",
+     "type": ""
+    },
+    {
+     "title": "Women's Vanish Carbon",
+     "handle": "womens-vanish-carbon-al0a548f",
+     "available": true,
+     "vendor": "altra",
+     "type": ""
+    },
+    {
+     "title": "Men's Vanish Carbon",
+     "handle": "mens-vanish-carbon-al0a547m",
+     "available": true,
+     "vendor": "altra",
+     "type": ""
+    },
+    {
+     "title": "Women's Vanish Tank Top",
+     "handle": "womens-vanish-tank-top-al0a816q",
+     "available": true,
+     "vendor": "altra",
+     "type": ""
+    }
+   ]
+  }
+ }
+}

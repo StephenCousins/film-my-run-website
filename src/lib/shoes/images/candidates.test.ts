@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { imageCandidates } from './candidates';
 const brooks = { id: 1, name: 'Brooks', aliases: [], domain: 'brooksrunning.com', newArrivalsUrl: null };
 /** Brooks has no Shopify importer, so no test here may reach the store lookup. */
-const noShopify = async () => { throw new Error('unexpected Shopify lookup'); };
+const noShopify = async () => [];
 const jsonld = (name: string, img: string) => `<script type="application/ld+json">{"@type":"Product","name":"${name}","image":"${img}"}</script>`;
 
 describe('imageCandidates', () => {
@@ -97,7 +97,7 @@ describe('imageCandidates: retailers', () => {
   it('pauses between retailer searches only when a sleep is injected', async () => {
     const pauses: number[] = [];
     await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: null }, { findShopifyProductPages: noShopify, webSearch: async () => [], fetchPage: async () => null, sleep: async ms => { pauses.push(ms); } });
-    expect(pauses).toEqual(Array(7).fill(1100));
+    expect(pauses).toEqual(Array(6).fill(1100)); // seven searched retailers; startfitness is a Shopify lookup
   });
 });
 
@@ -115,6 +115,6 @@ describe('imageCandidates: lone product must be this line', () => {
     const brand = await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: page(lone('Ghost 16')) }, deps, { phase: 'brand' });
     expect(brand.map(c => c.method)).toEqual(['brand-jsonld']); expect(queries).toEqual([]);
     const retail = await imageCandidates({ brand: brooks, model: 'Ghost 16', brandPage: page(lone('Ghost 16')) }, deps, { phase: 'retailer' });
-    expect(retail).toEqual([]); expect(queries).toHaveLength(8);
+    expect(retail).toEqual([]); expect(queries).toHaveLength(7);
   });
 });

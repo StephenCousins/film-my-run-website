@@ -7,7 +7,7 @@ import { findShopifyProductPages } from './shopifyLookup';
 export interface RetailerPageDeps {
   webSearch: typeof webSearch;
   /** For `lookup: 'shopify'` retailers: the store's own product search instead of a Brave query. */
-  findShopifyProductPages: typeof findShopifyProductPages;
+  findShopifyProductPages: (store: string, brand: string, model: string) => Promise<{ url: string; title: string }[]>;
   fetchPage: (url: string) => Promise<{ html: string; title: string } | null>;
   /** Rate-limit pause between retailer searches. Injected deps without one do not pause. */
   sleep?: typeof sleep;
@@ -15,23 +15,35 @@ export interface RetailerPageDeps {
 
 export const liveRetailerDeps: RetailerPageDeps = {
   webSearch,
-  findShopifyProductPages: (domain, brand, model) => findShopifyProductPages(domain, brand, model),
+  findShopifyProductPages: (store, brand, model) => findShopifyProductPages(store, brand, model),
   fetchPage: url => fetchPage(url),
   sleep,
 };
 
-export const RETAILER_DOMAINS = [
-  'sportsshoes.com', 'runnersneed.com', 'wiggle.com', 'startfitness.co.uk',
-  'sportpursuit.com', 'runrepeat.com', 'running-shoe-guru.com', 'roadrunnersports.com',
-];
-
 /**
  * How a retailer's product pages are found: a `site:` web search, or — for
- * a Shopify store Brave barely indexes — the store's own predictive search
- * (shopifyLookup.ts), which costs no search call.
+ * a Shopify store — the store's own predictive search (shopifyLookup.ts),
+ * which costs no search call and is not at the mercy of Brave's index.
  */
 export type RetailerLookup = 'search' | 'shopify';
 export interface Retailer { domain: string; lookup: RetailerLookup }
+
+/**
+ * The UK retailers, Shopify stores first: startfitness.co.uk answers
+ * `/search/suggest.json` (probed 14 September 2026), so it is asked before
+ * any Brave query is spent. The rest are found by `site:` search.
+ */
+export const UK_RETAILERS: Retailer[] = [
+  { domain: 'startfitness.co.uk', lookup: 'shopify' },
+  { domain: 'sportsshoes.com', lookup: 'search' },
+  { domain: 'runnersneed.com', lookup: 'search' },
+  { domain: 'wiggle.com', lookup: 'search' },
+  { domain: 'sportpursuit.com', lookup: 'search' },
+  { domain: 'runrepeat.com', lookup: 'search' },
+  { domain: 'running-shoe-guru.com', lookup: 'search' },
+  { domain: 'roadrunnersports.com', lookup: 'search' },
+];
+export const RETAILER_DOMAINS = UK_RETAILERS.map(r => r.domain);
 
 /**
  * Western importers that carry the Chinese brands with proper product pages
@@ -63,9 +75,9 @@ export const RETAILERS_BY_BRAND: Record<string, Retailer[]> = {
   Kailas: CHINESE_IMPORTERS,
 };
 
-/** The brand's own importers first, then the UK list (all web search). */
+/** The brand's own importers first, then the UK list. */
 export function retailersFor(brand: Brand): Retailer[] {
-  return [...(RETAILERS_BY_BRAND[brand.name] ?? []), ...RETAILER_DOMAINS.map(domain => ({ domain, lookup: 'search' as const }))];
+  return [...(RETAILERS_BY_BRAND[brand.name] ?? []), ...UK_RETAILERS];
 }
 
 const RESULTS_PER_DOMAIN = 5;
@@ -105,9 +117,21 @@ function retailerQuery(domain: string, brand: Brand, model: string): string {
     : `site:${domain} "${brand.name} ${model}"`;
 }
 
-/** Which pages on one retailer might be this shoe, by whichever lookup the retailer supports; each is still fetched and its <title> checked. */
+/**
+ * Which pages on one retailer might be this shoe, by whichever lookup the
+ * retailer supports; each is still fetched and its <title> checked. A store
+ * that refuses its own search (`unreachable:`) is skipped like one that
+ * refuses a page fetch: there are seven more.
+ */
 async function candidatePages(retailer: Retailer, brand: Brand, model: string, deps: RetailerPageDeps): Promise<{ url: string }[]> {
-  if (retailer.lookup === 'shopify') return deps.findShopifyProductPages(retailer.domain, brand, model);
+  if (retailer.lookup === 'shopify') {
+    try {
+      return await deps.findShopifyProductPages(retailer.domain, brand.name, model);
+    } catch (err) {
+      console.error(`Retailer ${retailer.domain} refused the lookup for ${brand.name} ${model}: ${err instanceof Error ? err.message : err}`);
+      return [];
+    }
+  }
   const results = (await deps.webSearch(retailerQuery(retailer.domain, brand, model), RESULTS_PER_DOMAIN)).slice(0, RESULTS_PER_DOMAIN);
   return results.filter(r => {
     if (!onDomain(r.url, retailer.domain)) return false;

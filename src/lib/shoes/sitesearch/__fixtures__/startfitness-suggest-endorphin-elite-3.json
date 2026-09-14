@@ -1,0 +1,79 @@
+{
+ "_note": "Trimmed capture of https://startfitness.co.uk/search/suggest.json?q=Endorphin Elite 3, 2026-09-14: title/handle/available/vendor/type per product, other fields dropped.",
+ "resources": {
+  "results": {
+   "products": [
+    {
+     "title": "Saucony Endorphin Elite 3 Running Shoes - White",
+     "handle": "saucony-endorphin-elite-3-running-shoes-white",
+     "available": true,
+     "vendor": "Saucony",
+     "type": "Footwear"
+    },
+    {
+     "title": "Saucony Endorphin Elite 3 Running Shoes - White",
+     "handle": "saucony-endorphin-elite-3-running-shoes-white-1",
+     "available": true,
+     "vendor": "Saucony",
+     "type": "Footwear"
+    },
+    {
+     "title": "Saucony Endorphin Elite 3 Running Shoes - Red",
+     "handle": "saucony-endorphin-elite-3-running-shoes-red",
+     "available": true,
+     "vendor": "Saucony",
+     "type": "Footwear"
+    },
+    {
+     "title": "Saucony Endorphin Elite 2 Running Shoes - Blue",
+     "handle": "saucony-endorphin-elite-2-running-shoes-blue-2",
+     "available": true,
+     "vendor": "Saucony",
+     "type": "Footwear"
+    },
+    {
+     "title": "Saucony Endorphin Elite 2 Running Shoes - White",
+     "handle": "saucony-endorphin-elite-2-running-shoes-white-2",
+     "available": true,
+     "vendor": "Saucony",
+     "type": "Footwear"
+    },
+    {
+     "title": "Saucony Endorphin Elite 2 Running Shoes - White",
+     "handle": "saucony-endorphin-elite-2-running-shoes-white-1",
+     "available": true,
+     "vendor": "Saucony",
+     "type": "Footwear"
+    },
+    {
+     "title": "Saucony Endorphin Elite 2 Running Shoes - Blue",
+     "handle": "saucony-endorphin-elite-2-running-shoes-blue",
+     "available": true,
+     "vendor": "Saucony",
+     "type": "Footwear"
+    },
+    {
+     "title": "Saucony Endorphin Elite 2 Running Shoes - Blue",
+     "handle": "saucony-endorphin-elite-2-running-shoes-blue-1",
+     "available": true,
+     "vendor": "Saucony",
+     "type": "Footwear"
+    },
+    {
+     "title": "Saucony Endorphin Elite 2 Running Shoes - White",
+     "handle": "saucony-endorphin-elite-2-running-shoes-white-3",
+     "available": true,
+     "vendor": "Saucony",
+     "type": "Footwear"
+    },
+    {
+     "title": "Saucony Endorphin Elite 2 Running Shoes - Pink",
+     "handle": "saucony-endorphin-elite-2-running-shoes-pink-1",
+     "available": true,
+     "vendor": "Saucony",
+     "type": "Footwear"
+    }
+   ]
+  }
+ }
+}
