@@ -117,17 +117,38 @@ describe('evaluate', () => {
     if (r.publish) expect(r.reviews).toHaveLength(0);
   });
 
-  describe('no_brand_page overridden', () => {
-    const lining = { id: 2, name: 'Li-Ning', aliases: ['lining'], domain: 'en.lining.com', newArrivalsUrl: null };
-    const feidian = () => cand({ slug: 'li-ning-feidian-6-elite', brand: lining, model: 'Feidian 6 Elite' });
-    const lift = { override: ['no_brand_page' as const] };
-    it('still asks the retailers when the brand site answers with no page, and uses their page when one names the shoe', async () => {
-      const retailerPage = { ...page, url: 'https://kicksown.com/products/lining-feidian-6-elite-black', title: "LiNing Feidian 6 ELITE 'Black'", source: 'retailer' as const };
+  const lining = { id: 2, name: 'Li-Ning', aliases: ['lining'], domain: 'en.lining.com', newArrivalsUrl: null };
+  const feidian = () => cand({ slug: 'li-ning-feidian-6-elite', brand: lining, model: 'Feidian 6 Elite' });
+  const importerPage = { ...page, url: 'https://kicksown.com/products/lining-feidian-6-elite-black', title: "LiNing Feidian 6 ELITE 'Black'", source: 'retailer' as const };
+
+  describe('brands with curated importers', () => {
+    it('an absent brand page asks the importers, and a matching page passes sourced retailer', async () => {
       let retailerAsked = false;
-      const r = await evaluate(feidian(), { ...ok(), findBrandProductPage: async () => ({ kind: 'absent' }), findRetailerProductPage: async () => { retailerAsked = true; return retailerPage; } }, lift);
+      const r = await evaluate(feidian(), { ...ok(), findBrandProductPage: async () => ({ kind: 'absent' }), findRetailerProductPage: async () => { retailerAsked = true; return importerPage; } });
       expect(retailerAsked).toBe(true);
       expect(r.publish).toBe(true);
-      if (r.publish) expect(r.brandPage).toEqual(retailerPage);
+      if (r.publish) expect(r.brandPage).toEqual(importerPage);
+    });
+    it('holds no_brand_page when the importers have nothing either, without recording a refusal', async () => {
+      const r = await evaluate(feidian(), { ...ok(), findBrandProductPage: async () => ({ kind: 'absent' }), findRetailerProductPage: async () => null });
+      expect(r).toEqual({ publish: false, reasons: ['no_brand_page'], partial: {} });
+    });
+    it('a brand without importers still holds on absent without asking retailers', async () => {
+      let retailerAsked = false;
+      const r = await evaluate(cand(), { ...ok(), findBrandProductPage: async () => ({ kind: 'absent' }), findRetailerProductPage: async () => { retailerAsked = true; return importerPage; } });
+      expect(r).toEqual({ publish: false, reasons: ['no_brand_page'], partial: {} });
+      expect(retailerAsked).toBe(false);
+    });
+  });
+
+  describe('no_brand_page overridden', () => {
+    const lift = { override: ['no_brand_page' as const] };
+    it('asks the retailers on an absent brand page even for a brand without importers, and uses their page when one names the shoe', async () => {
+      let retailerAsked = false;
+      const r = await evaluate(cand(), { ...ok(), findBrandProductPage: async () => ({ kind: 'absent' }), findRetailerProductPage: async () => { retailerAsked = true; return { ...importerPage, url: 'https://www.sportsshoes.com/product/hoka-clifton-10' }; } }, lift);
+      expect(retailerAsked).toBe(true);
+      expect(r.publish).toBe(true);
+      if (r.publish) expect(r.brandPage?.source).toBe('retailer');
     });
     it('passes with brandPage null when neither brand nor retailer has a page, parsing specs from search snippets', async () => {
       const queries: { q: string; count: number }[] = [];
@@ -165,7 +186,7 @@ describe('evaluate', () => {
       expect(r).toMatchObject({ publish: false, reasons: ['specs_unparseable'] });
       if (!r.publish) expect(r.partial.brandPage).toBeUndefined();
     });
-    it('without the override, an absent brand page still holds without asking retailers or searching', async () => {
+    it('without the override, an absent brand page with no importer page still holds', async () => {
       const r = await evaluate(feidian(), { ...ok(), findBrandProductPage: async () => ({ kind: 'absent' }) }, { override: ['too_old', 'reviews_lt_2'] });
       expect(r).toEqual({ publish: false, reasons: ['no_brand_page'], partial: {} });
     });

@@ -2,7 +2,7 @@ import type { Brand } from '../brands';
 import { fetchReviewsForShoe, type ReviewResult } from '../reviews';
 import { parseShoeSpecs, type ParsedSpecs } from '../specs';
 import { findBrandProductPage, type BrandPage, type BrandPageResult } from './brandPage';
-import { findRetailerProductPage } from './retailerPage';
+import { findRetailerProductPage, RETAILERS_BY_BRAND } from './retailerPage';
 import { webSearch } from '../search';
 
 export type HoldReason = 'brand_unresolved' | 'no_brand_page' | 'too_old' | 'reviews_lt_2' | 'bad_taxonomy' | 'specs_unparseable';
@@ -68,10 +68,11 @@ const SNIPPET_RESULTS = 5;
  * does not hold: the brand page itself is the evidence of currency.
  *
  * The brand page is the proof the shoe exists at this version. When the
- * brand's site refuses the fetch (Hoka 406, Brooks 403) a retailer page that
- * names the exact model stands in for it; `no_brand_page` is held only when
- * the brand site answered and has no such page, or refused and no retailer
- * has one either.
+ * brand's site refuses the fetch (Hoka 406, Brooks 403) — or answered with
+ * nothing and the brand has curated importers (RETAILERS_BY_BRAND) — a
+ * retailer page that names the exact model stands in for it; `no_brand_page`
+ * is held only when the brand site answered and has no such page (and no
+ * importer to ask), or when the retailers were asked and none has one either.
  *
  * `no_brand_page` can be overridden, but only the owner's `add` command does
  * (a brand whose English site is thin or blocked): the retailers are still
@@ -84,7 +85,9 @@ export async function evaluate(c: CandidateInput, deps: GateDeps = liveDeps, opt
   if (!c.brand) return { publish: false, reasons: ['brand_unresolved'], partial: {} };
 
   const found = await deps.findBrandProductPage(c.brand, c.model);
-  if (found.kind === 'absent' && !ignore.has('no_brand_page')) return { publish: false, reasons: ['no_brand_page'], partial: {} };
+  // A brand with curated importers is asked about them even when its own site answered and had nothing: that is the normal case for those brands.
+  const askRetailers = found.kind === 'unreachable' || c.brand.name in RETAILERS_BY_BRAND || ignore.has('no_brand_page');
+  if (found.kind === 'absent' && !askRetailers) return { publish: false, reasons: ['no_brand_page'], partial: {} };
   let brandPage: BrandPage | null;
   if (found.kind === 'found') {
     brandPage = found.page;

@@ -137,7 +137,7 @@ the paid calls):
 | Order | Check | Hold reason | Clears when |
 |---|---|---|---|
 | 1 | Brand resolved | `brand_unresolved` | the LLM/alias match succeeds on a later run (rare without re-discovery) |
-| 2 | Brand's own site has a product page naming the exact model **and** version; if the brand site refuses the fetch, a retailer page that does (see below) | `no_brand_page` | the brand publishes that page, or a retailer lists it |
+| 2 | Brand's own site has a product page naming the exact model **and** version; if the brand site refuses the fetch (or has no page and the brand has curated importers), a retailer page that does (see below) | `no_brand_page` | the brand publishes that page, or a retailer lists it |
 | 3 | Release date (brand JSON-LD `releaseDate`, else earliest review date; **unknown passes**) within 15 months (`MAX_AGE_MONTHS`) | `too_old` | never on its own — lift via "Publish anyway" (see Digest) |
 | 4 | ≥2 review sources found | `reviews_lt_2` | a third review site covers it; or "Publish anyway" |
 | 5 | Specs parse (LLM) into valid taxonomy (`ShoeTerrain`/`ShoeCategory`) | `bad_taxonomy` | the brand page's text becomes parseable |
@@ -209,8 +209,13 @@ match is on the model alone, as it always was. `resolveBrand` also ignores
 case, hyphens, whitespace and the degree sign, so `LiNing`, `Li Ning`,
 `Dowin` and `361 Degrees` all resolve.
 
-Discovery will still hold these shoes `no_brand_page` whenever no importer
-lists them, and nothing lifts that automatically. The owner adds them by hand:
+For a brand with a `RETAILERS_BY_BRAND` entry the gate asks the importers
+whenever the brand site has no page — on `absent` as well as `unreachable`
+(every other brand still holds on `absent` without a retailer search), and
+a matching importer page stands in as the brand page with `source:
+'retailer'`. Discovery therefore publishes these shoes on its own when an
+importer lists them; it holds `no_brand_page` only when none does, and
+nothing lifts that automatically. The owner adds those by hand:
 
 ```
 npm run shoes -- add --brand "Li-Ning" --model "Feidian 6 Elite" --lift-no-brand-page
