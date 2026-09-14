@@ -2,7 +2,7 @@ export function decodeHtmlEntities(text: string): string {
   return text
     .replace(/&#x([0-9A-Fa-f]+);/g, (_, hex) => String.fromCharCode(parseInt(hex, 16)))
     .replace(/&#(\d+);/g, (_, dec) => String.fromCharCode(parseInt(dec, 10)))
-    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'");
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&nbsp;/g, ' ');
 }
 
 export interface FetchPageDeps {
@@ -147,4 +147,81 @@ export function extractMetaImages(html: string, baseUrl: string): string[] {
     }
   }
   return uniqueImages;
+}
+
+/** Every object in a JSON-LD document, depth first, whatever its @type. */
+function walkNodes(node: unknown, out: JsonLdNode[]): void {
+  if (Array.isArray(node)) {
+    for (const n of node) walkNodes(n, out);
+    return;
+  }
+  if (!node || typeof node !== 'object') return;
+  const item = node as JsonLdNode;
+  out.push(item);
+  for (const v of Object.values(item)) if (v && typeof v === 'object') walkNodes(v, out);
+}
+
+/**
+ * The reviewer's own score from the page's JSON-LD, on a 0–10 scale: the
+ * first `reviewRating.ratingValue` found (RTINGS and Running Shoes Guru
+ * both publish one on a `Review`, RTINGS' nested inside the `Product`),
+ * scaled by its `bestRating`. `aggregateRating` is deliberately not read —
+ * on Running Shoes Guru that is the readers' score (9.7 beside an expert
+ * 7.0), and the catalogue wants the expert's.
+ */
+export function extractJsonLdReviewRating(html: string): number | null {
+  for (const block of html.matchAll(/<script[^>]*type="application\/ld\+json"[^>]*>([^]*?)<\/script>/gi)) {
+    let data: unknown;
+    try { data = JSON.parse(block[1]); } catch { continue; }
+    const nodes: JsonLdNode[] = [];
+    walkNodes(data, nodes);
+    for (const node of nodes) {
+      const rating = node.reviewRating as JsonLdNode | undefined;
+      if (!rating || typeof rating !== 'object') continue;
+      const value = parseFloat(String(rating.ratingValue));
+      const best = parseFloat(String(rating.bestRating ?? 10)) || 10;
+      if (Number.isNaN(value) || value < 0 || value > best) continue;
+      return Math.round((value / best) * 100) / 10;
+    }
+  }
+  return null;
+}
+
+/** The page's own summary: `<meta name="description">`, else `og:description`; decoded, whitespace collapsed. */
+export function extractMetaDescription(html: string): string | null {
+  for (const name of ['description', 'og:description']) {
+    const m = html.match(new RegExp(`<meta\\s+(?:name|property)="${name}"\\s+content="([^"]*)"`, 'i')) ?? html.match(new RegExp(`<meta\\s+content="([^"]*)"\\s+(?:name|property)="${name}"`, 'i'));
+    const text = m ? decodeHtmlEntities(m[1]).replace(/\s+/g, ' ').trim() : '';
+    if (text) return text;
+  }
+  return null;
+}
+
+const NON_CONTENT = /<(script|style|noscript|nav|header|footer|aside|form|svg|iframe)\b[^>]*>[^]*?<\/\1>/gi;
+
+/**
+ * The page's readable text, article first: scripts, styles and chrome
+ * (nav/header/footer/aside/form) are dropped, then the `<article>` (else
+ * `<main>`, else every `<p>` on the page — a site with neither still opens
+ * with its menu, and the paragraphs are where the review is) is stripped of
+ * tags. Used to find an explicit score in a review and to give the LLM its
+ * opening paragraphs.
+ */
+export function extractArticleText(html: string, maxChars = 3000): string {
+  const stripped = html.replace(NON_CONTENT, ' ');
+  const scope = stripped.match(/<article\b[^>]*>([^]*?)<\/article>/i)?.[1]
+    ?? stripped.match(/<main\b[^>]*>([^]*?)<\/main>/i)?.[1]
+    ?? [...stripped.matchAll(/<p\b[^>]*>([^]*?)<\/p>/gi)].map(m => m[1]).join(' ');
+  return decodeHtmlEntities(scope.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim().slice(0, maxChars);
+}
+
+/** The first paragraph of the article with some substance, for a summary when the page has no meta description. */
+export function extractFirstParagraph(html: string, minChars = 40): string | null {
+  const stripped = html.replace(NON_CONTENT, ' ');
+  const scope = stripped.match(/<article\b[^>]*>([^]*?)<\/article>/i)?.[1] ?? stripped;
+  for (const m of scope.matchAll(/<p\b[^>]*>([^]*?)<\/p>/gi)) {
+    const text = decodeHtmlEntities(m[1].replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+    if (text.length >= minChars) return text;
+  }
+  return null;
 }

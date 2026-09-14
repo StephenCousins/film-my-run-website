@@ -5,7 +5,7 @@ import type { CandidateInput, GatePass } from './gate';
 const hoka = { id: 1, name: 'Hoka', aliases: [], domain: 'hoka.com', newArrivalsUrl: null };
 const page = { url: 'https://www.hoka.com/clifton-10', title: 'Clifton 10', html: '', product: null, releaseDate: new Date('2026-02-01'), source: 'brand' as const };
 const specs = { terrain: 'road' as const, category: 'daily_trainer' as const, description: 'Cushioned daily trainer', drop_mm: 5, weight_g: 250, stack_height_mm: 40, price_gbp: 14000, release_year: 2026 };
-const review = (source: string) => ({ source: source as never, source_url: `https://${source}`, expert_score: 8.5, summary: null });
+const review = (source: string) => ({ source: source as never, source_url: `https://${source}`, expert_score: 8.5, summary: null, via: 'site' as const });
 const cand = (over: Partial<CandidateInput> = {}): CandidateInput => ({ id: 7, slug: 'hoka-clifton-10', brand: hoka, model: 'Clifton 10', evidence: { sources: [] }, ...over });
 const pass = (over: Partial<GatePass> = {}): GatePass => ({ publish: true, brandPage: page, specs, reviews: [review('runrepeat'), review('irunfar')], releaseDate: new Date('2026-02-01'), softReasons: [], ...over });
 
