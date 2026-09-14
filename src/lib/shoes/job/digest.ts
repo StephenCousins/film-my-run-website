@@ -2,7 +2,12 @@ import { createHmac, timingSafeEqual } from 'crypto';
 import { Resend } from 'resend';
 import type { JobReport } from './weekly';
 
-export const DIGEST_TO = 'stephen@filmmyrun.com';
+/**
+ * Resend delivers from the default `onboarding@resend.dev` sender only to the
+ * account owner's address until filmmyrun.com is verified at resend.com/domains,
+ * so the digest goes to the gmail address by default. Override with SHOE_DIGEST_TO.
+ */
+export const DIGEST_TO = process.env.SHOE_DIGEST_TO || 'stephen.cousins@gmail.com';
 
 /** Throws without CRON_SECRET: a link signed with an empty key would be guessable by anyone who read this file. */
 export function publishToken(candidateId: number): string {

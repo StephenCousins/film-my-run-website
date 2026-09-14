@@ -255,7 +255,7 @@ flaky CDN should not wipe a good image.
 ## Digest & publish-anyway
 
 After every **non-dry** run, `sendDigest()` (`src/lib/shoes/job/digest.ts`)
-emails `stephen@filmmyrun.com` via Resend: published (flagged if it has no
+emails `stephen.cousins@gmail.com (override with `SHOE_DIGEST_TO`; Resend's default sender only reaches the account owner until filmmyrun.com is verified at resend.com/domains)` via Resend: published (flagged if it has no
 image), held (with reasons and a **"Publish anyway"** link),
 linked-to-existing, errors, images stored and cleared, and empty feeds. Each
 shoe carries two links, "data" (`/api/shoes/<slug>`, the record) and "finder"

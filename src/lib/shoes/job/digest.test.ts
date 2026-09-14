@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { renderDigest, publishToken, verifyPublishToken, sendDigest, type SendDeps } from './digest';
+import { renderDigest, publishToken, verifyPublishToken, sendDigest, type SendDeps, DIGEST_TO } from './digest';
 import type { JobReport } from './weekly';
 
 const report = (over: Partial<JobReport> = {}): JobReport => ({
@@ -102,7 +102,7 @@ describe('digest', () => {
     const deps: SendDeps = { apiKey: 'key', baseUrl: 'https://filmmyrun.com', send: async msg => { sent.push(msg); return { error: null }; } };
     expect(await sendDigest(report(), deps)).toBe(true);
     expect(sent).toHaveLength(1);
-    expect(sent[0]).toMatchObject({ to: 'stephen@filmmyrun.com', subject: expect.stringContaining('1 published') });
+    expect(sent[0]).toMatchObject({ to: DIGEST_TO, subject: expect.stringContaining('1 published') });
   });
   it('sendDigest rejects when Resend answers with an error instead of a throw', async () => {
     process.env.CRON_SECRET = 'test';
