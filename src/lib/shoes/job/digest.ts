@@ -89,12 +89,24 @@ function sections(report: JobReport, baseUrl: string, signPublish: (candidateId:
       lines: report.feedsEmpty.map(f => ({ text: f })),
       empty: 'Every feed had entries.',
     },
+    {
+      title: `Stores that returned nothing (${report.storesEmpty.length})`,
+      lines: report.storesEmpty.map(f => ({ text: f })),
+      empty: 'Every store had something.',
+    },
   ];
+}
+
+/** One line on where discovery stood: what it found, from which kinds of source, and which sources went quiet or refused. */
+export function discoverySummary(report: JobReport): string {
+  const n = report.nominations;
+  const list = (xs: string[]) => (xs.length ? xs.join(', ') : 'none');
+  return `Discovered ${report.discovered} from ${n.feeds + n.shops + n.versionBumps} nominations (feeds ${n.feeds}, shops ${n.shops}, version bumps ${n.versionBumps}); feeds empty: ${list(report.feedsEmpty)}; stores empty: ${list(report.storesEmpty)}`;
 }
 
 function summaryLines(report: JobReport): string[] {
   return [
-    `${report.discovered} new candidates discovered`,
+    discoverySummary(report),
     `${report.rejectedStale} stale holds rejected`,
     `${report.reviewsRefreshed} shoes had reviews refreshed`,
     `Ran in ${Math.round(report.durationMs / 1000)}s${report.dryRun ? ' (dry run: nothing was written)' : ''}`,

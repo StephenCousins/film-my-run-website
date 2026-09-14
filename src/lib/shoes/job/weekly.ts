@@ -12,6 +12,8 @@ import { recomputeShoeScore } from '../scores';
 export interface JobReport {
   /** Candidates upserted by discovery this run. */
   discovered: number;
+  /** What discovery had to work from: nominations by kind of source. */
+  nominations: { feeds: number; shops: number; versionBumps: number };
   published: { slug: string; imageUrl: string | null }[];
   /** Published this run but no image passed verification; the image phase retries next week. */
   publishedWithoutImage: string[];
@@ -25,6 +27,8 @@ export interface JobReport {
   imagesStored: string[];
   imagesCleared: string[];
   feedsEmpty: string[];
+  /** Stores that yielded nothing (`shopify:<store>` new arrivals, `version-bump:<store>` lookups), the error appended when they refused. */
+  storesEmpty: string[];
   durationMs: number;
   dryRun: boolean;
 }
@@ -250,8 +254,8 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
   const maxStaleRefresh = opts.maxStaleRefresh ?? DEFAULTS.maxStaleRefresh;
 
   const report: JobReport = {
-    discovered: 0, published: [], publishedWithoutImage: [], linkedExisting: [], held: [], errored: [],
-    rejectedStale: 0, reviewsRefreshed: 0, imagesStored: [], imagesCleared: [], feedsEmpty: [], durationMs: 0, dryRun,
+    discovered: 0, nominations: { feeds: 0, shops: 0, versionBumps: 0 }, published: [], publishedWithoutImage: [], linkedExisting: [], held: [], errored: [],
+    rejectedStale: 0, reviewsRefreshed: 0, imagesStored: [], imagesCleared: [], feedsEmpty: [], storesEmpty: [], durationMs: 0, dryRun,
   };
   const fail = (slug: string, err: unknown) => {
     console.error(err);
@@ -264,8 +268,10 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
   try {
     const d = await deps.discover();
     report.discovered = d.candidatesUpserted;
+    report.nominations = { feeds: d.feeds, shops: d.shops, versionBumps: d.versionBumps };
     report.feedsEmpty = d.feedsEmpty;
-    deps.log(`discovery: ${d.nominations} nominations, ${d.candidatesUpserted} candidates upserted, ${d.alreadyKnown} already known`);
+    report.storesEmpty = d.storesEmpty;
+    deps.log(`discovery: ${d.nominations} nominations (feeds ${d.feeds}, shops ${d.shops}, version bumps ${d.versionBumps}), ${d.candidatesUpserted} candidates upserted, ${d.alreadyKnown} already known`);
     // Every nomination was thrown away; that is a failed run, not a quiet week.
     if (d.normaliseFailed) report.errored.push({ slug: 'discover', error: `LLM normalise output was unparseable; ${d.nominations} nominations dropped` });
   } catch (err) {

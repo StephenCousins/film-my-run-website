@@ -72,6 +72,7 @@ that is not a JSON array drops every nomination and is reported as
 ```
 {
   discovered: number,
+  nominations: { feeds, shops, versionBumps },  // what discovery had to work from, by kind of source
   published: [{ slug, imageUrl }],
   publishedWithoutImage: string[],   // published but no image cleared verification; retried next week
   linkedExisting: [],                // candidate's slug already existed as a shoe; marked published against it, no new row
@@ -81,7 +82,8 @@ that is not a JSON array drops every nomination and is reported as
   reviewsRefreshed: number,
   imagesStored: string[],
   imagesCleared: string[],           // by the image audit, see below
-  feedsEmpty: string[],              // 'irunfar' = quiet week; 'irunfar (HTTP 403)' = the fetch failed; 'shopify:kicksown.com' = a store the same way
+  feedsEmpty: string[],              // 'irunfar' = quiet week; 'irunfar (HTTP 403)' = the fetch failed
+  storesEmpty: string[],             // 'shopify:kicksown.com' = no new arrivals; 'version-bump:kicksown.com' = no newer versions; '… (unreachable:503)' = refused
   durationMs: number,
   dryRun: boolean
 }
@@ -90,11 +92,11 @@ that is not a JSON array drops every nomination and is reported as
 ## Discovery
 
 `src/lib/shoes/discovery/` gathers **nominations** — raw `{title, url,
-publishedAt, source}` guesses at a shoe — from two kinds of source, then
-resolves each into a candidate. No web search is spent here: the three
-fixed Brave queries (`best new running shoes <month>`, …) that used to
-nominate were removed on 14 September 2026, because they nominated roundup
-headlines rather than shoes.
+publishedAt, source}` guesses at a shoe — from three kinds of source, read
+concurrently, then resolves each into a candidate. No web search is spent
+here: the three fixed Brave queries (`best new running shoes <month>`, …)
+that used to nominate were removed on 14 September 2026, because they
+nominated roundup headlines rather than shoes.
 
 - **Review-site RSS feeds** (`discovery/sources/rss.ts`, `FEEDS`): RTINGS,
   Running Shoes Guru, The Run Testers, Runner's World UK, iRunFar, Believe
@@ -110,26 +112,83 @@ headlines rather than shoes.
   (`'irunfar (HTTP 403)'`), so a block and a quiet week look different.
 - **Shopify new arrivals** (`discovery/sources/shopifyNewArrivals.ts`,
   `NEW_ARRIVALS_STORES`): every Shopify store serves
-  `/products.json?limit=250` with a `published_at` per product. Two
-  retailers (kicksown.com, startfitness.co.uk) and ten brand stores
-  (361°, Anta, Norda, Xero Shoes, Altra, Atreyu, Newton, Speedland, Mount
-  to Coast, Freet — the ones whose store answered the probe, see "Site
-  adapters") are read each run. A product is put forward when it was
-  published in the last 21 days (`NEW_ARRIVAL_DAYS`) and looks like a
-  running shoe: apparel, socks, boots, sandals, basketball, kids and the
-  like are out by title or `product_type`; then a running word in the
-  type, the tags, the title or the description counts, or the store being
-  configured `assumeShoes` (Altra, Xero and the small brand stores put
-  nothing useful in `product_type`). Colourways collapse to one nomination
-  per cleaned model name (`cleanModelText` strips `'Black'`, `「Women」`,
-  `- Women's`, `| Running Shoes`, "Men's"), most recent first, at most 60
-  per store. The brand is the store's own for a brand store, the `vendor`
-  for Start Fitness, and left for the normaliser to read from the title on
-  kicksown (whose vendor is itself). A store that answered with nothing, or
-  refused, is listed in `feedsEmpty` as `shopify:<store>` like a feed. Start
-  Fitness republishes its whole catalogue in bursts (250 products inside two
-  weeks on 14 September 2026), so most of its nominations are shoes the
-  catalogue already has; those drop out as `alreadyKnown`.
+  `/products.json?limit=250`, newest first, with a `published_at` per
+  product. Two retailers (kicksown.com, startfitness.co.uk) and sixteen
+  brand stores are read each run — 361°, Anta, Norda, Xero Shoes, Altra,
+  Atreyu, Newton, Speedland, Mount to Coast, Freet, Karhu, Scarpa,
+  Raidlight, Luna, Bedrock, Shamma: the ones whose `/products.json?limit=5`
+  answered with products on 14 September 2026 (diadora.com is a 404;
+  lemsshoes.com and normanwalsh.com answer but sell boots and retro
+  trainers). Up to three pages are read while each page is full and still
+  has something inside the window (Start Fitness has thousands of products
+  and republishes in bursts). A product is put forward when it was
+  published in the last 21 days (`NEW_ARRIVAL_DAYS`; `windowDays` in the
+  deps overrides it) and looks like a running shoe, decided in this order:
+  1. **Out** if the title or `product_type` names apparel, socks, boots,
+     sandals, slides, spikes, other sports, lifestyle/hiking/climbing/
+     mountaineering/approach/ski, parts and services, kids; or if a tag,
+     read as a category (the whole tag after a `Footwear Type:` style key,
+     with one qualifier allowed: "Walking Boots", "Basketball Shoes",
+     "Socks"), names one. Start Fitness tags every shoe "Flair: + FREE PAIR
+     OF SOCKS", which is why a tag has to be the category and not merely
+     mention one. A store marked `sandals` (Luna, Bedrock, Shamma) keeps its
+     sandals: they are its running shoes.
+  2. A store with a `typePattern` puts forward only that `product_type`
+     (Karhu "Running" against "Lifestyle", Scarpa "Trail Running" against
+     "Hiking", Raidlight "Chaussures de trail …" against a hundred kinds of
+     trail kit whose French types all say "trail", the sandal brands
+     "Sandal(s)").
+  3. Otherwise a running word (running, road, trail, racing, marathon,
+     trainer, tempo, 跑步) in the type, the title, a tag or the description
+     counts, as does a bare "Shoes"/"Footwear" type; failing all that, the
+     store being configured `assumeShoes` (Altra, Xero and the small brand
+     stores put nothing useful in `product_type`). Whatever gets through is
+     still the LLM normaliser's to drop.
+  Colourways collapse to one nomination per cleaned model name
+  (`cleanModelText` strips `'Black'`, `「Women」`, `- Women's`, `| Running
+  Shoes`, "Men's", "WIDE FIT (2E)"), most recent first, at most 60 per
+  store. The brand is the store's own for a brand store, the `vendor` for
+  Start Fitness, and left for the normaliser to read from the title on
+  kicksown (whose vendor is itself). Most of Start Fitness's nominations
+  are shoes the catalogue already has; those drop out as `alreadyKnown`.
+- **Version bumps** (`discovery/sources/versionBumps.ts`): the catalogue
+  asked of the stores. Every shoe with `superseded_by_id IS NULL` whose
+  model parses to a version (`parseModelVersion`) is grouped into lines by
+  `(brand, base)` and the highest version kept — "Clifton 11", "1080 v14",
+  "Ultra Raptor II", "Rocket X2". For each line the Shopify stores'
+  predictive search (`/search/suggest.json?q=<brand> <base>`, ten products,
+  no API key) is asked at startfitness.co.uk, kicksown.com and the brand's
+  own store when `BRAND_SITE_ADAPTERS` has a `shopify` adapter for it. Each
+  product title is read for the version after the base — `Clifton 11`,
+  `Clifton 11 GORE-TEX`, `1080v15`, `Flame 4.5`, `Lone Peak 9+` (the "+"
+  is a refresh of 9, not a version), `Gel Kayano 32` for the catalogue's
+  "Gel-Kayano", `Ultra Raptor III` for a roman line — and any version
+  **strictly greater** than the catalogue's and **less than catalogue + 4**
+  (`MAX_VERSION_JUMP`: "Wave Rider 300" and a SKU are noise, a jump of
+  three is real when the catalogue is stale) is nominated, once per
+  (brand, base, version), written in the line's own style (`v15`, `III`,
+  `X3`). The nomination's title is "<brand> <base> <N>" in the catalogue's
+  spelling, so the normaliser extends the line rather than opening a
+  parallel one; its URL is the plainest product page that named it (the
+  shortest title once colour, gender and width are stripped, so "Clifton
+  11" over "Clifton 11 GORE-TEX"); `publishedAt` is null. Stores are read
+  concurrently, each line 300 ms after the last (`PAUSE_MS`); a store that
+  refuses (`unreachable:<status>`), 404s or answers something that is not
+  the suggest JSON is not asked again that run, and the other stores'
+  answers still count. On 14 September 2026 the live catalogue (164 lines)
+  produced 13 bumps in 111 s; the prototype earlier that day found 38, the
+  first 25 of which had already been added by hand.
+
+Every store read — new arrivals and version-bump lookups alike — is
+recorded in the report's `stores` as `{ store, fetched, nominated,
+error? }` (`shopify:<host>` or `version-bump:<host>`), and the ones that
+produced nothing are listed in `storesEmpty` with the error appended the
+way `feedsEmpty` does it: `shopify:nordarun.com (unreachable:503)` is a
+refusal, `version-bump:kicksown.com` is a store that had no newer version
+of anything — which, for the lookups, is the normal state of a catalogue
+that is up to date. The digest opens with one line on all of it:
+`Discovered 26 from 173 nominations (feeds 66, shops 94, version bumps 13);
+feeds empty: none; stores empty: …`.
 
 The `shoe_brands.new_arrivals_url` column and its reader (`brandPages.ts`)
 were removed from the run on 14 September 2026 — no brand ever had the URL
@@ -454,7 +513,8 @@ page-less `add`.
 | 361europe.com, eu.anta.com, nordarun.com, xeroshoes.com, altrarunning.com (`/en-us`), atreyu.com, newtonrunning.com, runspeedland.com, mounttocoast.com, lemsshoes.com, freetbarefoot.com, normanwalsh.com | brand page (`BRAND_SITE_ADAPTERS`); most also discovery (`NEW_ARRIVALS_STORES`) | `shopify` | `suggest.json` 200 with products; `products.json` 200 | `https://<store>/search/suggest.json?q=x&resources[type]=product` still returns `resources.results.products` |
 | kicksown.com, qiaodan.asia, dynafish.us | Chinese-brand importers (gate fallback, images); kicksown also discovery | `shopify` | 200 | as above |
 | startfitness.co.uk | first UK retailer (gate fallback, images); discovery | `shopify` | 200 | as above |
-| tracksmith.com (404), nnormal.com (404), topoathletic.com (HTML back), diadora.com (404), vivobarefoot.com (403), karhu.com / scarpa.com / raidlight.com (503) | — | none | probed, no Shopify search | Brave `site:` fallback |
+| karhu.com, scarpa.com, raidlight.com, lunasandals.com, bedrocksandals.com, shammasandals.com | discovery only (`NEW_ARRIVALS_STORES`, each with a `typePattern`) | `products.json` | 200 with products (suggest.json on karhu/scarpa/raidlight was 503 on the earlier probe, so no brand-page adapter) | `https://<store>/products.json?limit=5` still returns `products`; the `product_type` of a running shoe is still "Running" / "Trail Running" / "Chaussures de trail …" / "Sandal" |
+| tracksmith.com (404), nnormal.com (404), topoathletic.com (HTML back), diadora.com (404), vivobarefoot.com (403) | — | none | probed, no Shopify search | Brave `site:` fallback |
 
 **Adding a site**: an entry in `REVIEW_SITE_LOOKUPS`, `BRAND_SITE_ADAPTERS`
 or `NEW_ARRIVALS_STORES`, a trimmed capture of the live response under
@@ -573,10 +633,11 @@ genuinely have nothing that clears the filters or the vision check — check
 - Held candidates left untouched for 8 weeks close as `rejected` regardless of
   reason — check with `npm run shoes -- candidates --status rejected`.
 
-**Feed or store empty every week**: check `feedsEmpty` in the report/digest.
-An entry with a suffix (`irunfar (HTTP 403)`, `shopify:nordarun.com
-(unreachable:503)`) is a fetch that failed; a bare key is a feed or store
-that answered with nothing usable. Either way, first suspect the tool, not
+**Feed or store empty every week**: check `feedsEmpty` and `storesEmpty` in
+the report/digest. An entry with a suffix (`irunfar (HTTP 403)`,
+`shopify:nordarun.com (unreachable:503)`) is a fetch that failed; a bare
+key is a feed or store that answered with nothing usable (for a
+`version-bump:` store, nothing newer than the catalogue, which is normal). Either way, first suspect the tool, not
 the pipeline — try fetching the feed URL directly with the headers in
 `rss.ts`, or `https://<store>/products.json?limit=250` with a Chrome UA,
 before assuming the site stopped publishing. A feed that fails every week

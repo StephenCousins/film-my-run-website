@@ -1,9 +1,10 @@
 import { describe, it, expect, vi } from 'vitest';
-import { renderDigest, publishToken, verifyPublishToken, sendDigest, type SendDeps, DIGEST_TO } from './digest';
+import { renderDigest, discoverySummary, publishToken, verifyPublishToken, sendDigest, type SendDeps, DIGEST_TO } from './digest';
 import type { JobReport } from './weekly';
 
 const report = (over: Partial<JobReport> = {}): JobReport => ({
   discovered: 5,
+  nominations: { feeds: 6, shops: 5, versionBumps: 3 },
   published: [{ slug: 'hoka-clifton-10', imageUrl: 'https://r2/x.jpg' }],
   publishedWithoutImage: [],
   linkedExisting: [],
@@ -14,12 +15,22 @@ const report = (over: Partial<JobReport> = {}): JobReport => ({
   imagesStored: ['a'],
   imagesCleared: ['b'],
   feedsEmpty: ['believe_in_run'],
+  storesEmpty: ['shopify:nordarun.com (unreachable:503)', 'version-bump:kicksown.com'],
   durationMs: 1000,
   dryRun: false,
   ...over,
 });
 
 describe('digest', () => {
+  it('summarises discovery in one line: counts by source kind, then the quiet feeds and stores', () => {
+    expect(discoverySummary(report())).toBe('Discovered 5 from 14 nominations (feeds 6, shops 5, version bumps 3); feeds empty: believe_in_run; stores empty: shopify:nordarun.com (unreachable:503), version-bump:kicksown.com');
+    expect(discoverySummary(report({ discovered: 0, nominations: { feeds: 0, shops: 0, versionBumps: 0 }, feedsEmpty: [], storesEmpty: [] }))).toBe('Discovered 0 from 0 nominations (feeds 0, shops 0, version bumps 0); feeds empty: none; stores empty: none');
+    const d = renderDigest(report(), 'https://filmmyrun.com', () => '');
+    expect(d.text).toContain('Discovered 5 from 14 nominations (feeds 6, shops 5, version bumps 3)');
+    expect(d.html).toContain('Discovered 5 from 14 nominations (feeds 6, shops 5, version bumps 3)');
+    expect(d.html).toContain('Stores that returned nothing (2)');
+    expect(d.html).toContain('<li>shopify:nordarun.com (unreachable:503)</li>');
+  });
   it('renders published, held with publish links, cleared images, empty feeds', () => {
     process.env.CRON_SECRET = 'test';
     const d = renderDigest(report(), 'https://filmmyrun.com', id => `https://filmmyrun.com/api/shoes/candidates/${id}/publish?token=${publishToken(id)}`);
