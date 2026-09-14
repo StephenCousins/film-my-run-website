@@ -56,17 +56,44 @@ function urlNamesLaterVersion(modelSlug: string, url: string): boolean {
 }
 
 /**
+ * Words that turn a model into a sibling: "Miro Nude ST" is not the Miro
+ * Nude, "Clifton 10 GTX" is not the Clifton 10. A version number after the
+ * model is caught above; these are caught here — unless the word is part of
+ * the model itself ("Feidian 6 Elite" is allowed its "elite").
+ */
+const VARIANT_WORDS = new Set(['st', 'gtx', 'gt', 'wp', 'tr', 'pro', 'elite', 'ultra', 'max', 'plus', 'challenger', 'turbo', 'fly', 'lite', 'light', 'se', 'x']);
+
+function modelWords(model: string): Set<string> {
+  return new Set(model.toLowerCase().split(/[^a-z0-9]+/).filter(Boolean));
+}
+
+/** Is any occurrence of `needle` in `text` followed (after `sep`) by a variant word that is not in the model? */
+function namesVariant(needle: string, text: string, sep: string, model: string): boolean {
+  const own = modelWords(model);
+  const re = new RegExp(escapeRegExp(needle) + sep + '([a-z0-9]+)', 'gi');
+  for (const m of text.matchAll(re)) {
+    const next = m[1].toLowerCase();
+    if (VARIANT_WORDS.has(next) && !own.has(next)) return true;
+  }
+  return false;
+}
+
+/**
  * Does this page name exactly this model and version? The URL must contain the
  * model slug, or the fetched page's <title> must contain the model; in either
  * place the model must not be followed by a version token, and the title must
- * not name a neighbouring version instead. Shared by the brand-page search and
- * the retailer image candidates so there is one definition of "the right shoe".
+ * not name a neighbouring version instead. A variant word after the model in
+ * either the URL slug or the title ("Miro Nude ST", "clifton-10-gtx") rejects
+ * the page outright, whichever of the two matched. Shared by the brand-page
+ * search and the retailer image candidates so there is one definition of
+ * "the right shoe".
  */
 export function pageNamesExactModel(model: string, url: string, title: string): boolean {
   const modelSlug = shoeToSlug('', model).replace(/^-/, '');
   const urlMatches = url.toLowerCase().includes(modelSlug) && !urlNamesLaterVersion(modelSlug, url);
   const titleMatches = title.toLowerCase().includes(model.toLowerCase()) && !titleNamesLaterVersion(model, title);
   if (!urlMatches && !titleMatches) return false;
+  if (namesVariant(modelSlug, url, '-', model) || namesVariant(model, title, '[\\s-]+', model)) return false;
   return findVersionConflict(model, title) === null;
 }
 

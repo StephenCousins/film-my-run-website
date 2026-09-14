@@ -287,7 +287,8 @@ async function add(opts: AddOpts): Promise<void> {
   }
   if (terrain) gate.specs.terrain = terrain;
   if (category) gate.specs.category = category;
-  console.log(`  proved by: ${gate.brandPage ? `${gate.brandPage.source} page ${gate.brandPage.url}` : 'nothing (specs from search snippets)'}`);
+  // The matched page's title is printed so a near-miss (a sibling variant, another version) is visible before anything is published.
+  console.log(`  proved by: ${gate.brandPage ? `${gate.brandPage.source} page ${gate.brandPage.url} — "${gate.brandPage.title}"` : 'nothing (specs from search snippets)'}`);
 
   const published = await publishCandidate(input, gate, { kind: 'seed' });
   // The shoe is published from here on; an image failure is logged, not a failed add.

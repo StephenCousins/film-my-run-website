@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { findBrandProductPage, type BrandPageResult } from './brandPage';
+import { findBrandProductPage, pageNamesExactModel, type BrandPageResult } from './brandPage';
 
 /** The page of a `found` result; fails the test on any other kind. */
 const pageOf = (r: BrandPageResult) => { expect(r.kind).toBe('found'); return r.kind === 'found' ? r.page : null; };
@@ -151,5 +151,22 @@ describe('pageNamesExactModel', () => {
     expect(pageNamesExactModel('Clifton 10', 'https://www.hoka.com/clifton-10/1.html', 'Clifton 10 | HOKA')).toBe(true);
     expect(pageNamesExactModel('Ghost 16', 'https://sportsshoes.com/product/brooks-ghost-16-mens', 'Brooks Ghost 16 Mens')).toBe(true);
     expect(pageNamesExactModel('Ghost 16', 'https://sportsshoes.com/product/brooks-ghost-16-2', 'Brooks')).toBe(false);
+  });
+});
+
+describe('pageNamesExactModel: variant words', () => {
+  const p = pageNamesExactModel;
+  it('rejects a variant word after the model, in the title or the URL slug', () => {
+    expect(p('Miro Nude', 'https://kicksown.com/p/1', '361° Miro Nude ST | Running Shoes')).toBe(false);
+    expect(p('Miro Nude', 'https://kicksown.com/products/miro-nude-st', 'Running Shoes | Kicksown')).toBe(false);
+    expect(p('Miro Nude', 'https://kicksown.com/products/miro-nude-st', '361° Miro Nude | Running Shoes')).toBe(false);
+    expect(p('Clifton 10', 'https://www.hoka.com/p/1', 'Clifton 10 GTX | HOKA UK')).toBe(false);
+    expect(p('Clifton 10', 'https://www.hoka.com/clifton-10-gtx/1.html', "Men's Clifton")).toBe(false);
+  });
+  it('still accepts the plain model, and a variant word that is part of the model', () => {
+    expect(p('Miro Nude', 'https://kicksown.com/p/1', '361° Miro Nude | Running Shoes')).toBe(true);
+    expect(p('Miro Nude', 'https://kicksown.com/products/361-miro-nude-black', '361 Miro Nude Black')).toBe(true);
+    expect(p('Feidian 6 Elite', 'https://kicksown.com/products/lining-feidian-6-elite-black', "LiNing Feidian 6 ELITE 'Black' | Running Shoes")).toBe(true);
+    expect(p('Clifton 10', 'https://www.hoka.com/p/1', 'Clifton 10 | HOKA UK')).toBe(true);
   });
 });
