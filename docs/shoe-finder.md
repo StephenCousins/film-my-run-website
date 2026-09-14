@@ -203,11 +203,21 @@ Western importers that do have proper product pages — `kicksown.com`,
 `supwell.com`, `shopnings.com`, `chinasportshop.com` (plus `qiaodan.asia` and
 `dynafish.us` first for their own brands) — and `searchRetailerPages` walks a
 brand's importers **before** the UK list, for both the gate's fallback and
-the image finder. On an importer only the model is quoted in the search
-(they spell the brand their own way: `LiNing`, `361`, `Dowin`), and the page
-match is on the model alone, as it always was. `resolveBrand` also ignores
-case, hyphens, whitespace and the degree sign, so `LiNing`, `Li Ning`,
-`Dowin` and `361 Degrees` all resolve.
+the image finder. Each entry carries a `lookup`: **`shopify`** for
+`kicksown.com`, `qiaodan.asia` and `dynafish.us`, whose own predictive
+search (`/search/suggest.json?q=<model>`, `findShopifyProductPages` in
+`src/lib/shoes/publish/shopifyLookup.ts`) is asked instead of Brave — Brave
+barely indexes them (`site:kicksown.com "Feidian Ultra"` finds nothing) and
+the store lookup costs no search call; **`search`** for `supwell.com`,
+`shopnings.com` and `chinasportshop.com`, which 404 that endpoint (probed
+14 September 2026) and get a `site:` search with only the model quoted
+(they spell the brand their own way: `LiNing`, `361`, `Dowin`). The Shopify
+reply is fuzzy — a query for one model returns its neighbours, colourways
+and unrelated shoes — so its products are filtered by `pageNamesExactModel`
+on handle and title, and the page is then fetched and its `<title>` checked
+exactly as a search result would be. `resolveBrand` also ignores case,
+hyphens, whitespace and the degree sign, so `LiNing`, `Li Ning`, `Dowin` and
+`361 Degrees` all resolve.
 
 For a brand with a `RETAILERS_BY_BRAND` entry the gate asks the importers
 whenever the brand site has no page — on `absent` as well as `unreachable`
@@ -244,7 +254,12 @@ retailer only if nothing from the brand phase stored:
    model **and** version, checked by `pageNamesExactModel(model, url, title)`
    (the same matcher the gate uses for the brand page itself, `src/lib/shoes/
    publish/brandPage.ts`) against the fetched page's `<title>`.
-   `isProductPageUrl` is a separate, weaker check: it only ranks
+   `pageNamesExactModel` also rejects a **variant word** straight after the
+   model in the title or URL slug — `st, gtx, gt, wp, tr, pro, elite, ultra,
+   max, plus, challenger, turbo, fly, lite, light, se, x` — unless the word is
+   part of the model itself: the `361° Miro Nude` was once proved (and
+   pictured) by the `Miro Nude ST` page, and a following version *number*
+   was already caught. `isProductPageUrl` is a separate, weaker check: it only ranks
    product-shaped URLs (`/product/`, `/p/`, `/buy/`, …) above article-shaped
    ones (`/article/`, `/blog/`, `/news/`, …) when picking which search results
    to fetch — it doesn't confirm the model.
