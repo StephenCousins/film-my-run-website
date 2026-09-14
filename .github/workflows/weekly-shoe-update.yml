@@ -46,6 +46,7 @@ jobs:
       # Only a successful run's report is worth keeping: next week's "two
       # empty runs" check walks back through successful runs only.
       - name: Upload report
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: shoe-report
