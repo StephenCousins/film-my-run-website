@@ -1,0 +1,79 @@
+{
+ "_note": "Trimmed capture of https://startfitness.co.uk/search/suggest.json?q=Hoka Clifton, 2026-09-14: title/handle/available/vendor/type per product, other fields dropped.",
+ "resources": {
+  "results": {
+   "products": [
+    {
+     "title": "Hoka Clifton 11 Mens Running Shoes - White",
+     "handle": "hoka-clifton-11-mens-running-shoes-white",
+     "available": true,
+     "vendor": "Hoka",
+     "type": "Footwear"
+    },
+    {
+     "title": "Hoka Clifton 11 WIDE FIT Mens Running Shoes - Black",
+     "handle": "hoka-clifton-11-wide-fit-mens-running-shoes-black",
+     "available": true,
+     "vendor": "Hoka",
+     "type": "Footwear"
+    },
+    {
+     "title": "Hoka Clifton 11 Mens Running Shoes - Grey",
+     "handle": "hoka-clifton-11-mens-running-shoes-grey",
+     "available": true,
+     "vendor": "Hoka",
+     "type": "Footwear"
+    },
+    {
+     "title": "Hoka Clifton 11 Mens Running Shoes - Blue",
+     "handle": "hoka-clifton-11-mens-running-shoes-blue",
+     "available": true,
+     "vendor": "Hoka",
+     "type": "Footwear"
+    },
+    {
+     "title": "Hoka Clifton 11 GORE-TEX Mens Running Shoes - Black",
+     "handle": "hoka-clifton-11-gore-tex-mens-running-shoes-black",
+     "available": true,
+     "vendor": "Hoka",
+     "type": "Footwear"
+    },
+    {
+     "title": "Hoka Clifton 11 WIDE FIT Mens Running Shoes - White",
+     "handle": "hoka-clifton-11-wide-fit-mens-running-shoes-white",
+     "available": true,
+     "vendor": "Hoka",
+     "type": "Footwear"
+    },
+    {
+     "title": "Hoka Clifton 11 WIDE FIT Womens Running Shoes - White",
+     "handle": "hoka-clifton-11-wide-fit-womens-running-shoes-white",
+     "available": true,
+     "vendor": "Hoka",
+     "type": "Footwear"
+    },
+    {
+     "title": "Hoka Clifton 11 Mens Running Shoes - Black",
+     "handle": "hoka-clifton-11-mens-running-shoes-black",
+     "available": true,
+     "vendor": "Hoka",
+     "type": "Footwear"
+    },
+    {
+     "title": "Hoka Clifton 11 Womens Running Shoes - Orange",
+     "handle": "hoka-clifton-11-womens-running-shoes-orange",
+     "available": true,
+     "vendor": "Hoka",
+     "type": "Footwear"
+    },
+    {
+     "title": "Hoka Clifton 11 Womens Running Shoes - Black",
+     "handle": "hoka-clifton-11-womens-running-shoes-black",
+     "available": true,
+     "vendor": "Hoka",
+     "type": "Footwear"
+    }
+   ]
+  }
+ }
+}

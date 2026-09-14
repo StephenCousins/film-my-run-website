@@ -1,0 +1,79 @@
+{
+ "_note": "Trimmed capture of https://kicksown.com/search/suggest.json?q=361° Flame, 2026-09-14: title/handle/available/vendor/type per product, other fields dropped.",
+ "resources": {
+  "results": {
+   "products": [
+    {
+     "title": "361° Flame 5 'Red' | Running Shoes",
+     "handle": "361-flame-5-red",
+     "available": true,
+     "vendor": "Kicksown",
+     "type": "Running Shoes"
+    },
+    {
+     "title": "361° Flames 5 'Reverse'",
+     "handle": "361-flames-5-reverse",
+     "available": true,
+     "vendor": "Kicksown",
+     "type": "待改"
+    },
+    {
+     "title": "361° Flames 5 MIX 'Jelly Mint‘",
+     "handle": "361-flames-5-mix-jelly-mint",
+     "available": true,
+     "vendor": "Kicksown",
+     "type": "待改"
+    },
+    {
+     "title": "361° Flame 4 'Anchor of Time' | Running Shoes",
+     "handle": "361-flame-4-running-shoes-anchor-of-time",
+     "available": true,
+     "vendor": "Kicksown",
+     "type": "Running shoes"
+    },
+    {
+     "title": "361° Flame 5 Future 'Aurora' | Running Shoes",
+     "handle": "361-flame-5-future-aurora",
+     "available": true,
+     "vendor": "Kicksown",
+     "type": "Running Shoes"
+    },
+    {
+     "title": "361° Flame 4 'Divine Speed' | Running Shoes",
+     "handle": "361-flame-4-running-shoes-divine-speed",
+     "available": true,
+     "vendor": "Kicksown",
+     "type": "Running shoes"
+    },
+    {
+     "title": "361° Flame 4 'Attitude' | Running Shoes",
+     "handle": "361-flame-4-running-shoes-attitude",
+     "available": true,
+     "vendor": "Kicksown",
+     "type": "Running shoes"
+    },
+    {
+     "title": "361° Flame 4.5 'Miro' | Running Shoes",
+     "handle": "361-flame-4-5-running-shoes-miro",
+     "available": true,
+     "vendor": "Kicksown",
+     "type": "Running shoes"
+    },
+    {
+     "title": "361° Flame 5 Future 'Flaming' | Running Shoes",
+     "handle": "361-flame-5-future-flaming",
+     "available": true,
+     "vendor": "Kicksown",
+     "type": "Running Shoes"
+    },
+    {
+     "title": "361° Flame 5 'Lemon' | Running Shoes",
+     "handle": "361-flame-5-lemon",
+     "available": true,
+     "vendor": "Kicksown",
+     "type": "Running Shoes"
+    }
+   ]
+  }
+ }
+}

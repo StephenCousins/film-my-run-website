@@ -1,0 +1,79 @@
+{
+ "_note": "Trimmed capture of https://startfitness.co.uk/search/suggest.json?q=Brooks Hyperion Elite, 2026-09-14: title/handle/available/vendor/type per product, other fields dropped.",
+ "resources": {
+  "results": {
+   "products": [
+    {
+     "title": "Brooks Hyperion Elite 5 Running Shoes - Pink",
+     "handle": "brooks-hyperion-elite-5-running-shoes-pink",
+     "available": true,
+     "vendor": "Brooks",
+     "type": "Footwear"
+    },
+    {
+     "title": "Brooks Hyperion Elite 6 Running Shoes - Red",
+     "handle": "brooks-hyperion-elite-6-running-shoes-red",
+     "available": true,
+     "vendor": "Brooks",
+     "type": "Footwear"
+    },
+    {
+     "title": "Brooks Hyperion Elite 5 Running Shoes - Blue",
+     "handle": "brooks-hyperion-elite-5-running-shoes-blue",
+     "available": true,
+     "vendor": "Brooks",
+     "type": "Footwear"
+    },
+    {
+     "title": "Brooks Hyperion Elite 5 Running Shoes - Yellow",
+     "handle": "brooks-hyperion-elite-5-running-shoes-yellow",
+     "available": true,
+     "vendor": "Brooks",
+     "type": "Footwear"
+    },
+    {
+     "title": "Brooks Hyperion Elite 6 Running Shoes - Grey",
+     "handle": "brooks-hyperion-elite-6-running-shoes-grey",
+     "available": true,
+     "vendor": "Brooks",
+     "type": "Footwear"
+    },
+    {
+     "title": "Brooks Hyperion Elite LD Running Spikes - Blue",
+     "handle": "brooks-hyperion-elite-ld-running-spikes-blue",
+     "available": true,
+     "vendor": "Brooks",
+     "type": "Footwear"
+    },
+    {
+     "title": "Brooks Hyperion Elite LD Running Spikes - Grey",
+     "handle": "brooks-hyperion-elite-ld-running-spikes-grey",
+     "available": true,
+     "vendor": "Brooks",
+     "type": "Footwear"
+    },
+    {
+     "title": "Brooks Hyperion Elite LD 2 Running Spikes - Yellow",
+     "handle": "brooks-hyperion-elite-ld-2-running-spikes-yellow",
+     "available": true,
+     "vendor": "Brooks",
+     "type": "Footwear"
+    },
+    {
+     "title": "Brooks Hyperion Elite MD Running Spikes - Blue",
+     "handle": "brooks-hyperion-elite-md-running-spikes-blue",
+     "available": true,
+     "vendor": "Brooks",
+     "type": "Footwear"
+    },
+    {
+     "title": "Brooks Hyperion Elite Mens Running Vest - White",
+     "handle": "brooks-hyperion-elite-mens-running-vest-white",
+     "available": true,
+     "vendor": "Brooks",
+     "type": "Clothing"
+    }
+   ]
+  }
+ }
+}

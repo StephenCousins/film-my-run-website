@@ -1,0 +1,79 @@
+{
+ "_note": "Trimmed capture of https://startfitness.co.uk/search/suggest.json?q=Mizuno Wave Rider, 2026-09-14: title/handle/available/vendor/type per product, other fields dropped.",
+ "resources": {
+  "results": {
+   "products": [
+    {
+     "title": "Mizuno Wave Rider 28 WIDE FIT (2E) Mens Running Shoes - Black",
+     "handle": "mizuno-wave-rider-28-wide-fit-2e-mens-running-shoes-black",
+     "available": true,
+     "vendor": "Mizuno",
+     "type": "Footwear"
+    },
+    {
+     "title": "Mizuno Wave Rider 28 WIDE FIT (D) Womens Running Shoes - Black",
+     "handle": "mizuno-wave-rider-28-wide-fit-d-womens-running-shoes-black",
+     "available": true,
+     "vendor": "Mizuno",
+     "type": "Footwear"
+    },
+    {
+     "title": "Mizuno Wave Rider 29 WIDE FIT (2E) Mens Running Shoes - Black",
+     "handle": "mizuno-wave-rider-29-wide-fit-2e-mens-running-shoes-black",
+     "available": true,
+     "vendor": "Mizuno",
+     "type": "Footwear"
+    },
+    {
+     "title": "Mizuno Wave Rider 29 Womens Running Shoes - Blue",
+     "handle": "mizuno-wave-rider-29-womens-running-shoes-blue-1",
+     "available": true,
+     "vendor": "Mizuno",
+     "type": "Footwear"
+    },
+    {
+     "title": "Mizuno Wave Rider 30 Running Shoes - White",
+     "handle": "mizuno-wave-rider-30-running-shoes-white",
+     "available": true,
+     "vendor": "Mizuno",
+     "type": "Footwear"
+    },
+    {
+     "title": "Mizuno Wave Rider 29 WIDE FIT (D) Womens Running Shoes - Black",
+     "handle": "mizuno-wave-rider-29-wide-fit-d-womens-running-shoes-black",
+     "available": true,
+     "vendor": "Mizuno",
+     "type": "Footwear"
+    },
+    {
+     "title": "Mizuno Wave Rider 29 Womens Running Shoes - Blue",
+     "handle": "mizuno-wave-rider-29-womens-running-shoes-blue-2",
+     "available": true,
+     "vendor": "Mizuno",
+     "type": "Footwear"
+    },
+    {
+     "title": "Mizuno Wave Rider 29 Womens Running Shoes - White",
+     "handle": "mizuno-wave-rider-29-womens-running-shoes-white",
+     "available": true,
+     "vendor": "Mizuno",
+     "type": "Footwear"
+    },
+    {
+     "title": "Mizuno Wave Rider GORE-TEX Womens Running Shoes - Blue",
+     "handle": "mizuno-wave-rider-gtx-womens-running-shoes-blue",
+     "available": true,
+     "vendor": "Mizuno",
+     "type": "Footwear"
+    },
+    {
+     "title": "Mizuno Wave Rider 30 Womens Running Shoes - Blue",
+     "handle": "mizuno-wave-rider-30-womens-running-shoes-blue",
+     "available": true,
+     "vendor": "Mizuno",
+     "type": "Footwear"
+    }
+   ]
+  }
+ }
+}

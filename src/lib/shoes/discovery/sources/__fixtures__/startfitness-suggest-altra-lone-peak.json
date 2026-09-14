@@ -1,0 +1,79 @@
+{
+ "_note": "Trimmed capture of https://startfitness.co.uk/search/suggest.json?q=Altra Lone Peak, 2026-09-14: title/handle/available/vendor/type per product, other fields dropped.",
+ "resources": {
+  "results": {
+   "products": [
+    {
+     "title": "Altra Lone Peak 9+ Mens Trail Running Shoes - Blue",
+     "handle": "altra-lone-peak-9-mens-trail-running-shoes-blue-1",
+     "available": true,
+     "vendor": "Altra",
+     "type": "Footwear"
+    },
+    {
+     "title": "Altra Lone Peak 9+ WIDE FIT Mens Trail Running Shoes - Black",
+     "handle": "altra-lone-peak-9-wide-fit-mens-trail-running-shoes-black",
+     "available": true,
+     "vendor": "Altra",
+     "type": "Footwear"
+    },
+    {
+     "title": "Altra Lone Peak 9+ Mens Trail Running Shoes - Black",
+     "handle": "altra-lone-peak-9-mens-trail-running-shoes-black",
+     "available": true,
+     "vendor": "Altra",
+     "type": "Footwear"
+    },
+    {
+     "title": "Altra Lone Peak 9+ Womens Trail Running Shoes - Pink",
+     "handle": "altra-lone-peak-9-womens-trail-running-shoes-pink",
+     "available": true,
+     "vendor": "Altra",
+     "type": "Footwear"
+    },
+    {
+     "title": "Altra Lone Peak 9+ WIDE FIT Womens Trail Running Shoes - Black",
+     "handle": "altra-lone-peak-9-wide-fit-womens-trail-running-shoes-black",
+     "available": true,
+     "vendor": "Altra",
+     "type": "Footwear"
+    },
+    {
+     "title": "Altra Lone Peak 9+ Womens Trail Running Shoes - Blue",
+     "handle": "altra-lone-peak-9-womens-trail-running-shoes-blue-1",
+     "available": true,
+     "vendor": "Altra",
+     "type": "Footwear"
+    },
+    {
+     "title": "Altra Lone Peak 9+ Mens Trail Running Shoes - Black",
+     "handle": "altra-lone-peak-9-mens-trail-running-shoes-black-2",
+     "available": true,
+     "vendor": "Altra",
+     "type": "Footwear"
+    },
+    {
+     "title": "Altra Lone Peak 9+ Mens Trail Running Shoes - Green",
+     "handle": "altra-lone-peak-9-mens-trail-running-shoes-green-1",
+     "available": true,
+     "vendor": "Altra",
+     "type": "Footwear"
+    },
+    {
+     "title": "Altra Lone Peak 9+ GORE-TEX Womens Trail Running Shoes - Green",
+     "handle": "altra-lone-peak-9-gore-tex-womens-trail-running-shoes-green",
+     "available": true,
+     "vendor": "Altra",
+     "type": "Footwear"
+    },
+    {
+     "title": "Altra Lone Peak 9+ Mens Trail Running Shoes - Black",
+     "handle": "altra-lone-peak-9-mens-trail-running-shoes-black-1",
+     "available": true,
+     "vendor": "Altra",
+     "type": "Footwear"
+    }
+   ]
+  }
+ }
+}
