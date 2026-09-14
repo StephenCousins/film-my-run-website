@@ -1,7 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { findRetailerProductPage, searchRetailerPages, RETAILER_DOMAINS } from './retailerPage';
+import { findRetailerProductPage, searchRetailerPages, retailerDomainsFor, RETAILER_DOMAINS, RETAILERS_BY_BRAND } from './retailerPage';
+import { pageNamesExactModel } from './brandPage';
 
 const brooks = { id: 1, name: 'Brooks', aliases: [], domain: 'brooksrunning.com', newArrivalsUrl: null };
+const lining = { id: 2, name: 'Li-Ning', aliases: ['lining', 'li ning'], domain: 'en.lining.com', newArrivalsUrl: null };
+const qiaodan = { id: 3, name: 'Qiaodan', aliases: ['qiaodan'], domain: 'qiaodan.asia', newArrivalsUrl: null };
 const jsonld = (name: string, img: string) => `<script type="application/ld+json">{"@type":"Product","name":"${name}","image":"${img}","releaseDate":"2026-03-01"}</script>`;
 const result = (url: string) => ({ title: 'x', url, description: '' });
 
@@ -64,5 +67,47 @@ describe('searchRetailerPages', () => {
       fetchPage: async url => { fetched.push(url); return { html: '', title: 'Brooks Ghost 16 Mens' }; },
     });
     expect(fetched).toEqual(['https://www.sportsshoes.com/product/brooks-ghost-16']);
+  });
+});
+
+describe('per-brand retailers', () => {
+  it('a brand with importers searches them first, then the UK list; the others get only the UK list', () => {
+    expect(retailerDomainsFor(lining)).toEqual(['kicksown.com', 'supwell.com', 'shopnings.com', 'chinasportshop.com', ...RETAILER_DOMAINS]);
+    expect(retailerDomainsFor(qiaodan)[0]).toBe('qiaodan.asia');
+    expect(retailerDomainsFor(brooks)).toEqual(RETAILER_DOMAINS);
+    expect(Object.keys(RETAILERS_BY_BRAND).sort()).toEqual(['361°', 'Anta', 'Bmai', 'Do-Win', 'Dynafish', 'Kailas', 'Li-Ning', 'Peak', 'Qiaodan', 'Runsifly', 'Xtep']);
+  });
+  it('quotes only the model on an importer, where the brand is spelt differently, and finds the page by the model', async () => {
+    const queries: string[] = [];
+    const r = await findRetailerProductPage(lining, 'Feidian 6 Elite', {
+      webSearch: async q => { queries.push(q); return q.startsWith('site:kicksown.com') ? [result('https://kicksown.com/products/lining-feidian-6-elite-black')] : []; },
+      fetchPage: async () => ({ html: jsonld('LiNing Feidian 6 ELITE', 'https://c/f6.jpg'), title: "LiNing Feidian 6 ELITE 'Black' | Running Shoes" }),
+    });
+    expect(queries[0]).toBe('site:kicksown.com Li-Ning "Feidian 6 Elite"');
+    expect(r).toMatchObject({ url: 'https://kicksown.com/products/lining-feidian-6-elite-black', source: 'retailer' });
+    expect(r?.product?.image).toEqual(['https://c/f6.jpg']);
+  });
+  it('falls through to the UK retailers, quoting brand and model, when no importer has the page', async () => {
+    const queries: string[] = [];
+    await findRetailerProductPage(lining, 'Feidian 6 Elite', {
+      webSearch: async q => { queries.push(q); return []; },
+      fetchPage: async () => null,
+    });
+    expect(queries).toHaveLength(4 + RETAILER_DOMAINS.length);
+    expect(queries[4]).toBe('site:sportsshoes.com "Li-Ning Feidian 6 Elite"');
+  });
+});
+
+describe('pageNamesExactModel on importer pages', () => {
+  const title = "LiNing Feidian 6 ELITE 'Black' | Running Shoes";
+  const url = 'https://kicksown.com/products/lining-feidian-6-elite-black';
+  it('matches on the model regardless of how the brand is spelt', () => {
+    expect(pageNamesExactModel('Feidian 6 Elite', url, title)).toBe(true);
+    expect(pageNamesExactModel('Feidian 6 Elite', 'https://kicksown.com/p/1', title)).toBe(true);
+    expect(pageNamesExactModel('Feidian 6 Elite', url, 'Running Shoes | Kicksown')).toBe(true);
+  });
+  it('does not match a sibling model or the previous version', () => {
+    expect(pageNamesExactModel('Feidian 6 Elite', 'https://kicksown.com/products/lining-feidian-6-challenger', 'LiNing Feidian 6 Challenger | Running Shoes')).toBe(false);
+    expect(pageNamesExactModel('Feidian 6 Elite', 'https://kicksown.com/products/lining-feidian-5-elite-white', "LiNing Feidian 5 ELITE 'White' | Running Shoes")).toBe(false);
   });
 });

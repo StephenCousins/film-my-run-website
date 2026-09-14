@@ -17,6 +17,34 @@ export const RETAILER_DOMAINS = [
   'sportpursuit.com', 'runrepeat.com', 'running-shoe-guru.com', 'roadrunnersports.com',
 ];
 
+/**
+ * Western importers that carry the Chinese brands with proper product pages
+ * (JSON-LD Product, an exact model in the title). None of the UK retailers
+ * above stock these, and the brands' own English sites are thin or refuse
+ * server fetches, so for these brands the importers are searched first and
+ * are in practice the only source of a product page and an image. Keyed by
+ * the canonical `shoe_brands.name`.
+ */
+const CHINESE_IMPORTERS = ['kicksown.com', 'supwell.com', 'shopnings.com', 'chinasportshop.com'];
+export const RETAILERS_BY_BRAND: Record<string, string[]> = {
+  'Li-Ning': CHINESE_IMPORTERS,
+  Anta: CHINESE_IMPORTERS,
+  Xtep: CHINESE_IMPORTERS,
+  '361°': CHINESE_IMPORTERS,
+  Qiaodan: ['qiaodan.asia', ...CHINESE_IMPORTERS],
+  Bmai: CHINESE_IMPORTERS,
+  Dynafish: ['dynafish.us', ...CHINESE_IMPORTERS],
+  'Do-Win': CHINESE_IMPORTERS,
+  Runsifly: CHINESE_IMPORTERS,
+  Peak: CHINESE_IMPORTERS,
+  Kailas: CHINESE_IMPORTERS,
+};
+
+/** The brand's own importers first, then the UK list. */
+export function retailerDomainsFor(brand: Brand): string[] {
+  return [...(RETAILERS_BY_BRAND[brand.name] ?? []), ...RETAILER_DOMAINS];
+}
+
 const RESULTS_PER_DOMAIN = 5;
 
 export function isProductPageUrl(url: string): { isProduct: boolean; isArticle: boolean } {
@@ -43,12 +71,25 @@ function onDomain(url: string, domain: string): boolean {
 export interface RetailerPage { url: string; title: string; html: string; domain: string }
 
 /**
- * Walk RETAILER_DOMAINS in order. Each domain's search results are fetched
- * and kept only when the fetched <title> (not the search-result title) names
- * the exact model; `accept` is handed that domain's pages and the first
- * non-null answer wins, so a caller decides what "found" means — a page for
- * the gate, images for the image finder — without repeating the search. A
- * retailer that blocks the fetch is skipped: there are seven more.
+ * Importers spell the brand their own way ("LiNing", "Li Ning", "361",
+ * "Dowin"), so quoting the brand with the model would miss their pages; the
+ * model alone is quoted and the brand is left as a loose term. The match
+ * that follows is on the model only either way (pageNamesExactModel).
+ */
+function retailerQuery(domain: string, brand: Brand, model: string): string {
+  return RETAILERS_BY_BRAND[brand.name]?.includes(domain)
+    ? `site:${domain} ${brand.name} "${model}"`
+    : `site:${domain} "${brand.name} ${model}"`;
+}
+
+/**
+ * Walk the brand's retailer domains in order (retailerDomainsFor: its own
+ * importers, if any, then RETAILER_DOMAINS). Each domain's search results
+ * are fetched and kept only when the fetched <title> (not the search-result
+ * title) names the exact model; `accept` is handed that domain's pages and
+ * the first non-null answer wins, so a caller decides what "found" means — a
+ * page for the gate, images for the image finder — without repeating the
+ * search. A retailer that blocks the fetch is skipped: there are seven more.
  */
 export async function searchRetailerPages<T>(
   brand: Brand,
@@ -57,10 +98,11 @@ export async function searchRetailerPages<T>(
   deps: RetailerPageDeps = liveRetailerDeps,
 ): Promise<T | null> {
   const pause = deps.sleep ?? (async () => {});
-  for (let i = 0; i < RETAILER_DOMAINS.length; i++) {
-    const domain = RETAILER_DOMAINS[i];
+  const domains = retailerDomainsFor(brand);
+  for (let i = 0; i < domains.length; i++) {
+    const domain = domains[i];
     if (i > 0) await pause(1100);
-    const results = (await deps.webSearch(`site:${domain} "${brand.name} ${model}"`, RESULTS_PER_DOMAIN)).slice(0, RESULTS_PER_DOMAIN);
+    const results = (await deps.webSearch(retailerQuery(domain, brand, model), RESULTS_PER_DOMAIN)).slice(0, RESULTS_PER_DOMAIN);
 
     const pages: RetailerPage[] = [];
     for (const result of results) {

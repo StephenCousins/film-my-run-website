@@ -32,8 +32,14 @@ export async function loadBrands(deps: BrandDeps = liveDeps, now: () => number =
 /** Test hook; also called at the start of every weekly run so a brand added since the process started counts. */
 export function resetBrandCache() { cache = null; }
 
+/**
+ * Case, whitespace, hyphens and the degree sign are not identity: "LiNing",
+ * "Li Ning" and "Li-Ning" are one brand, as are "361", "361°" and
+ * "361 Degrees" (the last via an alias). Both sides of every comparison go
+ * through this.
+ */
 function norm(s: string): string {
-  return s.toLowerCase().replace(/\s+/g, ' ').trim();
+  return s.toLowerCase().replace(/°/g, '').replace(/[\s-]+/g, '');
 }
 
 export function resolveBrand(text: string, brands: Brand[]): Brand | null {
