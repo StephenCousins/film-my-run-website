@@ -1,8 +1,8 @@
 # Shoe Finder pipeline
 
 `/tools/shoe-finder` is backed by a weekly job that discovers new shoes on
-review sites and brand pages, runs each one through a publish gate, finds and
-verifies a product image, and emails a digest. This doc covers that pipeline —
+review-site feeds and Shopify storefronts, runs each one through a publish
+gate, finds and verifies a product image, and emails a digest. This doc covers that pipeline —
 discovery, the gate, images, the digest, the CLI, the data model, and what to
 check when something looks wrong. For the catalogue/detail API shapes
 themselves, see `docs/app-api.md`.
@@ -54,9 +54,10 @@ bearer-auth with `CRON_SECRET`, `?dryRun=1` to run every read and no write,
 and returns the `JobReport` as JSON — **HTTP 200 iff `errored` is empty, else
 500** (so a broken run fails the workflow visibly). It 503s up front if
 `OPENROUTER_API_KEY` or a search key (`BRAVE_SEARCH_API_KEY`/`SERPER_API_KEY`)
-is missing. The workflow's curl waits up to 30 minutes (`--max-time 1800`,
-job timeout 35): a full run with the image backfill is 15–30 minutes of
-rate-limited searches and page fetches.
+is missing (the search key is still needed: Brave is the fallback behind
+every site adapter, see "Site adapters"). The workflow's curl waits up to 30
+minutes (`--max-time 1800`, job timeout 35): a full run with the image
+backfill is 15–30 minutes of page fetches and rate-limited searches.
 
 Every candidate and shoe runs inside its own try/catch, and a thrown error
 becomes an `errored` row rather than a hold. Two failures are deliberately
@@ -80,7 +81,7 @@ that is not a JSON array drops every nomination and is reported as
   reviewsRefreshed: number,
   imagesStored: string[],
   imagesCleared: string[],           // by the image audit, see below
-  feedsEmpty: string[],              // 'irunfar' = quiet week; 'irunfar (HTTP 403)' = the fetch failed
+  feedsEmpty: string[],              // 'irunfar' = quiet week; 'irunfar (HTTP 403)' = the fetch failed; 'shopify:kicksown.com' = a store the same way
   durationMs: number,
   dryRun: boolean
 }
@@ -89,26 +90,51 @@ that is not a JSON array drops every nomination and is reported as
 ## Discovery
 
 `src/lib/shoes/discovery/` gathers **nominations** — raw `{title, url,
-publishedAt, source}` guesses at a shoe — from three kinds of source, then
-resolves each into a candidate:
+publishedAt, source}` guesses at a shoe — from two kinds of source, then
+resolves each into a candidate. No web search is spent here: the three
+fixed Brave queries (`best new running shoes <month>`, …) that used to
+nominate were removed on 14 September 2026, because they nominated roundup
+headlines rather than shoes.
 
-- **Review-site RSS feeds** (`discovery/sources/rss.ts`, `FEEDS`): Running
-  Shoes Guru, The Run Testers, Runner's World UK, iRunFar, Believe in the Run,
-  Doctors of Running. Road Trail Run is not in the list: its feed answers
-  every server-side fetch with a Cloudflare challenge (403, probed 13
-  September 2026; the comment above `FEEDS` has the detail). A title is a
-  nomination only if it matches `titleLooksLikeShoe()` — a review/launch
-  word or a version number (`v3`, `II`, digits). A feed returning zero items
-  is recorded in `feedsEmpty`, with the error appended when there was one
+- **Review-site RSS feeds** (`discovery/sources/rss.ts`, `FEEDS`): RTINGS,
+  Running Shoes Guru, The Run Testers, Runner's World UK, iRunFar, Believe
+  in the Run, Doctors of Running. RTINGS has no per-category feed; its
+  `/latest-rss.xml` lists the thirty most recent reviews across every
+  category, and the feed's `linkPattern` keeps the `/running-shoes/reviews/`
+  ones. Road Trail Run is not in the list: its feed answers every
+  server-side fetch with a Cloudflare challenge (403, probed 13 September
+  2026; the comment above `FEEDS` has the detail). A title is a nomination
+  only if it matches `titleLooksLikeShoe()` — a review/launch word or a
+  version number (`v3`, `II`, digits). A feed returning zero items is
+  recorded in `feedsEmpty`, with the error appended when there was one
   (`'irunfar (HTTP 403)'`), so a block and a quiet week look different.
-- **Brand new-arrivals pages** (`discovery/sources/brandPages.ts`), driven by
-  `shoe_brands.new_arrivals_url`. **No brand has this set yet** — the column
-  exists but the source is dormant until URLs are added.
-- **Brave/Serper web search** (`discovery/sources/search.ts`) — three fixed
-  queries (`best new running shoes <month> <year>`, `new trail running shoes
-  <year>`, `new road running shoes <year>`), used **only as a nominator**:
-  every result becomes a nomination as-is, with resolution doing the real
-  filtering.
+- **Shopify new arrivals** (`discovery/sources/shopifyNewArrivals.ts`,
+  `NEW_ARRIVALS_STORES`): every Shopify store serves
+  `/products.json?limit=250` with a `published_at` per product. Two
+  retailers (kicksown.com, startfitness.co.uk) and ten brand stores
+  (361°, Anta, Norda, Xero Shoes, Altra, Atreyu, Newton, Speedland, Mount
+  to Coast, Freet — the ones whose store answered the probe, see "Site
+  adapters") are read each run. A product is put forward when it was
+  published in the last 21 days (`NEW_ARRIVAL_DAYS`) and looks like a
+  running shoe: apparel, socks, boots, sandals, basketball, kids and the
+  like are out by title or `product_type`; then a running word in the
+  type, the tags, the title or the description counts, or the store being
+  configured `assumeShoes` (Altra, Xero and the small brand stores put
+  nothing useful in `product_type`). Colourways collapse to one nomination
+  per cleaned model name (`cleanModelText` strips `'Black'`, `「Women」`,
+  `- Women's`, `| Running Shoes`, "Men's"), most recent first, at most 60
+  per store. The brand is the store's own for a brand store, the `vendor`
+  for Start Fitness, and left for the normaliser to read from the title on
+  kicksown (whose vendor is itself). A store that answered with nothing, or
+  refused, is listed in `feedsEmpty` as `shopify:<store>` like a feed. Start
+  Fitness republishes its whole catalogue in bursts (250 products inside two
+  weeks on 14 September 2026), so most of its nominations are shoes the
+  catalogue already has; those drop out as `alreadyKnown`.
+
+The `shoe_brands.new_arrivals_url` column and its reader (`brandPages.ts`)
+were removed from the run on 14 September 2026 — no brand ever had the URL
+set and the Shopify source covers the same ground from code. The column is
+still in the schema and unused.
 
 One LLM call per run (`completeText`, Gemini 2.5 Flash Lite) normalises the
 batch of headlines to `{brand, model}` pairs. A reply that is not a JSON
@@ -137,25 +163,34 @@ the paid calls):
 | Order | Check | Hold reason | Clears when |
 |---|---|---|---|
 | 1 | Brand resolved | `brand_unresolved` | the LLM/alias match succeeds on a later run (rare without re-discovery) |
-| 2 | Brand's own site has a product page naming the exact model **and** version; if the brand site refuses the fetch (or has no page and the brand has curated importers), a retailer page that does (see below) | `no_brand_page` | the brand publishes that page, or a retailer lists it |
+| 2 | Brand's own site has a product page naming the exact model **and** version — asked through the brand's storefront adapter where there is one, else a Brave `site:` search; if the brand site refuses the fetch (or has no page and the brand has curated importers), a retailer page that does (see below) | `no_brand_page` | the brand publishes that page, or a retailer lists it |
 | 3 | Release date (brand JSON-LD `releaseDate`, else earliest review date; **unknown passes**) within 15 months (`MAX_AGE_MONTHS`) | `too_old` | never on its own — lift via "Publish anyway" (see Digest) |
-| 4 | ≥2 review sources found | `reviews_lt_2` | a third review site covers it; or "Publish anyway" |
+| 4 | ≥2 review sources found (the review sites' own lookups first, one Brave search only if they gave fewer than two — see "Site adapters") | `reviews_lt_2` | a third review site covers it; or "Publish anyway" |
 | 5 | Specs parse (LLM) into valid taxonomy (`ShoeTerrain`/`ShoeCategory`) | `bad_taxonomy` | the brand page's text becomes parseable |
 | 5 | Specs otherwise fail to parse | `specs_unparseable` | same |
 
 **The brand-page check and sites that block server fetches.**
-`fetchPage` (`src/lib/shoes/html.ts`) distinguishes three outcomes: a 2xx
-page, a gone page (404/410 → `null`), and a refused one (403/406/429/5xx/
-timeout → it throws `unreachable:<status>`). `findBrandProductPage` returns
-`found`, `absent` (the site answered; no page names this exact model) or
+`findBrandProductPage` (`src/lib/shoes/publish/brandPage.ts`) asks the
+brand's storefront directly when `BRAND_SITE_ADAPTERS` has an adapter for
+it (Saucony and Nike by their search pages, the Shopify brands by
+`suggest.json` — see "Site adapters"); the Brave `site:<domain> "<model>"`
+search runs only when there is no adapter, or it refused, or nothing it
+named proved to be the shoe once fetched. Either way the fetched page's
+`<title>` decides, not the lookup's own title. `fetchPage`
+(`src/lib/shoes/html.ts`) distinguishes three outcomes: a 2xx page, a gone
+page (404/410 → `null`), and a refused one (403/406/429/5xx/timeout → it
+throws `unreachable:<status>`). `findBrandProductPage` returns `found`,
+`absent` (the site answered; no page names this exact model) or
 `unreachable` (every page it tried was refused — hoka.com answers 406 and
 brooksrunning.com 403 to any server-side fetch). On `unreachable` the gate
-searches the retailer domains in `RETAILER_DOMAINS` (`src/lib/shoes/publish/
-retailerPage.ts`, the same search the image finder uses) and the first page
-whose fetched `<title>` names the exact model stands in as the brand page
-with `source: 'retailer'`; `no_brand_page` is held only when the brand site
-was reachable and had no page, or was unreachable and no retailer has one
-(the candidate's evidence then records `brandUnreachable: 'unreachable:406'`).
+walks the UK retailers in `UK_RETAILERS` (`src/lib/shoes/publish/
+retailerPage.ts`, the same walk the image finder uses: startfitness.co.uk
+by its own Shopify search first, then the rest by `site:` search) and the
+first page whose fetched `<title>` names the exact model stands in as the
+brand page with `source: 'retailer'`; `no_brand_page` is held only when the
+brand site was reachable and had no page, or was unreachable and no
+retailer has one (the candidate's evidence then records `brandUnreachable:
+'unreachable:406'`).
 Which page proved the shoe (`brandPage: { url, title, source }`) is stored
 in the candidate's evidence on hold and on publish.
 
@@ -181,6 +216,31 @@ On publish: a `shoes` row is created with `origin: 'discovery'`, and if a
 prior version of the same shoe line exists, its `superseded_by_id` is set to
 the new row (`isSameLine`/`parseModelVersion` in `src/lib/shoes/versions.ts`
 decide "same line, newer version").
+
+### Reviews
+
+`fetchReviewsForShoe` (`src/lib/shoes/reviews.ts`) is what check 4 and the
+weekly refresh call. It asks each review site's own lookup first
+(`REVIEW_SITE_LOOKUPS` in `src/lib/shoes/sitesearch/config.ts`: RTINGS by
+its predictable review URL, the WordPress sites and Runner's World by their
+search pages), fetches the page it names, re-checks the fetched `<title>`
+against the model, and reads the score **from the page itself**: the
+JSON-LD `reviewRating` where the site publishes one (RTINGS, Running Shoes
+Guru — the reviewer's rating, never the readers' `aggregateRating`), else an
+explicit "8/10" / "4.5 stars" in the title, meta description or the opening
+of the article (`extractExplicitScore`), else the LLM's read of the first
+800 characters of the article (`inferScoreFromText`). A page that yields no
+number is not a usable review. The summary is the page's meta description,
+or its first real paragraph, cut to 200 characters. Only when fewer than
+two sites answered (`MIN_SITE_REVIEWS_BEFORE_SEARCH`) is **one** Brave
+search spent — `"<brand> <model>" running shoe review` — and its results
+handled as they always were (snippet score or LLM inference, an LLM check
+for comparisons and off-slug URLs). That fallback is how RunRepeat and Road
+Trail Run, which refuse server fetches, still get in. Each `ReviewResult`
+carries `via: 'site' | 'search'` (not stored; for reports). RTINGS has no
+`ReviewSource` enum value yet, so its review is stored under `other` — one
+per shoe, so an `other` review from the search fallback is dropped when
+RTINGS already has that slot. Adding `rtings` to the enum is a migration.
 
 ### User suggestions
 
@@ -253,13 +313,16 @@ retailer only if nothing from the brand phase stored:
 
 1. **Candidates** (`images/candidates.ts`): the brand product page's JSON-LD
    `Product` images, then its `og:image`/`twitter:image`; if that phase
-   yields nothing, retailer product pages — but only ones that name the exact
-   model **and** version, checked by `pageNamesExactModel(model, url, title)`
-   (the same matcher the gate uses for the brand page itself, `src/lib/shoes/
-   publish/brandPage.ts`) against the fetched page's `<title>`.
+   yields nothing, retailer product pages (the same `searchRetailerPages`
+   walk as the gate: the brand's importers, then `UK_RETAILERS` —
+   startfitness.co.uk by its own Shopify search, the rest by `site:` search)
+   — but only ones that name the exact model **and** version, checked by
+   `pageNamesExactModel(model, url, title)` (`src/lib/shoes/pageMatch.ts`,
+   the one matcher the gate, the site adapters, the review lookup and the
+   image finder share) against the fetched page's `<title>`.
    `pageNamesExactModel` also rejects a **variant word** straight after the
-   model in the title or URL slug — `st, gtx, gt, wp, tr, pro, elite, ultra,
-   max, plus, challenger, turbo, fly, lite, light, se, x` — unless the word is
+   model in the title or URL slug — `st, gtx, gore, gt, wp, tr, pro, elite,
+   ultra, max, plus, challenger, turbo, fly, lite, light, se, x` — unless the word is
    part of the model itself: the `361° Miro Nude` was once proved (and
    pictured) by the `Miro Nude ST` page, and a following version *number*
    was already caught. `isProductPageUrl` is a separate, weaker check: it only ranks
@@ -342,6 +405,63 @@ instead of a form. The only path that lifts `no_brand_page` is the CLI
 `add --lift-no-brand-page` (see "Brands without a findable English product
 page").
 
+## Site adapters
+
+`src/lib/shoes/sitesearch/` is how the pipeline asks a site for a page
+about one shoe **without a search engine**. One shape, `findPages(adapter,
+brand, model) → { url, title }[]`, three kinds, every result filtered
+through `pageNamesExactModel` and every page still fetched and its
+`<title>` checked by the caller:
+
+- **`rtings-url`** — RTINGS reviews live at
+  `https://www.rtings.com/running-shoes/reviews/<brand-slug>/<model-slug>`;
+  one GET answers 200 with the review or a 404 page.
+- **`html-search`** — the site's own search page (`?s=` on WordPress,
+  `/search/?q=` on Runner's World, the Saucony and Nike storefront
+  searches), every anchor whose URL matches the adapter's `linkPattern`.
+  Anchors are named from a `title`/`aria-label`/`data-vars-ga-call-to-
+  action` attribute when there is one (Runner's World's card text is the
+  byline), else their text; query strings are dropped (Saucony's `?dwvar_…`
+  colourways) and the longest name per URL kept.
+- **`shopify`** — the store's `/search/suggest.json?q=<model>`
+  (`findShopifyProductPages`), for brand and retailer stores on Shopify.
+  `store` is the host plus a locale prefix where the store only answers
+  under one (`www.altrarunning.com/en-us`).
+
+Every fetch sends a Chrome UA with a 15 s timeout and has `fetchPage`'s
+three outcomes: a body, `null` on 404/410, or a thrown `unreachable:
+<status|timeout|network>` on 403/406/429/5xx — so a caller falls back to
+Brave on a refusal and treats an absence as an absence. The Brave (or
+Serper) search is now only ever the **fallback**: no adapter for the brand,
+an adapter that refused or named nothing, fewer than two review sites
+answering, the non-Shopify UK retailers, and the specs snippets for a
+page-less `add`.
+
+| Site | Used for | Adapter | Probed 14 Sep 2026 | When it goes quiet, check |
+|---|---|---|---|---|
+| rtings.com | reviews (stored as `other`); discovery feed | `rtings-url`; `/latest-rss.xml` with `linkPattern` | 200 / 404 by URL; feed 200, 30 items all categories | GET the review URL for a shoe you know it has (`hoka/clifton-10`); the JSON-LD `reviewRating` must still be there |
+| runnersworld.com | reviews; discovery feed | `html-search` `/search/?q=`, links `/gear/a<id>/` | 200 | the result anchors still carry `data-vars-ga-call-to-action` and `href="/gear/a…"` |
+| irunfar.com | reviews; discovery feed | `html-search` `?s=`, links `…review…` | 200 | `<h3 class="article-title"><a href=…>` in the results |
+| believeintherun.com | reviews; discovery feed | `html-search` `?s=`, links `/shoe-reviews/` | 200 | `<div class="result"> … <h4><a href="/shoe-reviews/…">` |
+| theruntesters.com | reviews; discovery feed | `html-search` `?s=`, links `…review…` | 429 once, then 200 | a 429 is a refusal: that week's review comes via the Brave fallback; persistent 429 = they rate-limit the UA |
+| runningshoesguru.com | reviews; discovery feed | `html-search` `?s=`, links `/reviews/<cat>/<slug>/` | 200 | `<a … rel="bookmark">` under `h3.entry-title`; the JSON-LD `Review.reviewRating` |
+| doctorsofrunning.com | reviews; discovery feed | `html-search` `?s=`, links `…review…` | 200 | `h2.wp-block-post-title > a` |
+| runrepeat.com | reviews | none (403 to every server fetch) | 403 | Brave fallback only |
+| roadtrailrun.com | reviews | none (Cloudflare challenge) | 403 | Brave fallback only |
+| saucony.com | brand page | `html-search` `/UK/en_GB/search?q=<model>`, links `/UK/en_GB/<slug>/<sku>.html` | 200, product links in HTML | `a.name-link` in the results |
+| nike.com | brand page | `html-search` `/gb/w?q=<model>`, links `/gb/t/` | 200, product links in HTML | `a.product-card__link-overlay` |
+| on.com | brand page | none: Nuxt, search is client-side (`/en-gb/search?q=` returns an error shell) | 200, 4 KB | Brave `site:on.com` fallback finds the page |
+| 361europe.com, eu.anta.com, nordarun.com, xeroshoes.com, altrarunning.com (`/en-us`), atreyu.com, newtonrunning.com, runspeedland.com, mounttocoast.com, lemsshoes.com, freetbarefoot.com, normanwalsh.com | brand page (`BRAND_SITE_ADAPTERS`); most also discovery (`NEW_ARRIVALS_STORES`) | `shopify` | `suggest.json` 200 with products; `products.json` 200 | `https://<store>/search/suggest.json?q=x&resources[type]=product` still returns `resources.results.products` |
+| kicksown.com, qiaodan.asia, dynafish.us | Chinese-brand importers (gate fallback, images); kicksown also discovery | `shopify` | 200 | as above |
+| startfitness.co.uk | first UK retailer (gate fallback, images); discovery | `shopify` | 200 | as above |
+| tracksmith.com (404), nnormal.com (404), topoathletic.com (HTML back), diadora.com (404), vivobarefoot.com (403), karhu.com / scarpa.com / raidlight.com (503) | — | none | probed, no Shopify search | Brave `site:` fallback |
+
+**Adding a site**: an entry in `REVIEW_SITE_LOOKUPS`, `BRAND_SITE_ADAPTERS`
+or `NEW_ARRIVALS_STORES`, a trimmed capture of the live response under
+`sitesearch/__fixtures__/` (curl with a Chrome UA, keep the `<title>` and
+the result anchors), and a test in `sitesearch/index.test.ts` that finds
+the right page and rejects a version neighbour.
+
 ## API
 
 - `GET /api/shoes` — the public catalogue, no `reviews` unless
@@ -384,7 +504,7 @@ Additions on top of the original `shoes`/`shoe_reviews` tables (see
 `prisma/schema.prisma`, the source of truth):
 
 - **`shoe_brands`** — `name` (unique canonical name), `aliases` (String[]),
-  `domain`, `new_arrivals_url` (nullable — none set yet). Referenced by both
+  `domain`, `new_arrivals_url` (nullable, unused since 14 September 2026 — the store list lives in code, see Discovery). Referenced by both
   `shoes.brand_id` and `shoe_candidates.brand_id`.
 - **`shoe_candidates`** — `brand_id` (nullable — null while `brand_unresolved`),
   `brand_text`/`model_text` (raw, pre-resolution), `slug` (unique),
@@ -410,7 +530,7 @@ Additions on top of the original `shoes`/`shoe_reviews` tables (see
 |---|---|
 | `DATABASE_URL` | Everything |
 | `OPENROUTER_API_KEY` | Nomination normalisation, spec parsing, image vision check |
-| `BRAVE_SEARCH_API_KEY` or `SERPER_API_KEY` | The search-nomination source, brand/retailer page lookup |
+| `BRAVE_SEARCH_API_KEY` or `SERPER_API_KEY` | The fallback behind every site adapter: brand pages for brands without one, the UK retailers except Start Fitness, reviews when fewer than two sites answered, specs snippets for a page-less `add` |
 | `R2_ACCOUNT_ID` / `R2_ACCESS_KEY_ID` / `R2_SECRET_ACCESS_KEY` / `R2_BUCKET_NAME` / `R2_PUBLIC_URL` | Image storage |
 | `RESEND_API_KEY` | The weekly digest email |
 | `CRON_SECRET` | Auth for `POST /api/shoes/weekly-update`; also signs "Publish anyway" links |
@@ -453,13 +573,18 @@ genuinely have nothing that clears the filters or the vision check — check
 - Held candidates left untouched for 8 weeks close as `rejected` regardless of
   reason — check with `npm run shoes -- candidates --status rejected`.
 
-**Feed empty every week**: check `feedsEmpty` in the report/digest. An entry
-with a suffix (`irunfar (HTTP 403)`) is a fetch that failed; a bare key is a
-feed that answered with nothing usable. Either way, first suspect the tool,
-not the pipeline — try fetching the feed URL directly with the headers in
-`rss.ts` before assuming the site stopped publishing. A feed that fails every
-week should be removed from `FEEDS` (as Road Trail Run was), not left to
-train the eye to skip that section.
+**Feed or store empty every week**: check `feedsEmpty` in the report/digest.
+An entry with a suffix (`irunfar (HTTP 403)`, `shopify:nordarun.com
+(unreachable:503)`) is a fetch that failed; a bare key is a feed or store
+that answered with nothing usable. Either way, first suspect the tool, not
+the pipeline — try fetching the feed URL directly with the headers in
+`rss.ts`, or `https://<store>/products.json?limit=250` with a Chrome UA,
+before assuming the site stopped publishing. A feed that fails every week
+should be removed from `FEEDS` (as Road Trail Run was), and a store from
+`NEW_ARRIVALS_STORES`, not left to train the eye to skip that section. The
+Shopify brand stores publish new products rarely (Altra: two in the 21 days
+before 14 September 2026; Anta: one), so a bare `shopify:` entry is the
+normal week.
 
 **Digest not arriving**: check the workflow run first. A Resend API error
 (the sending domain not verified, or the default `onboarding@resend.dev`
