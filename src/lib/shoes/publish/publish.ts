@@ -23,7 +23,8 @@ export interface NewShoe {
   added_by_user_id: number | null;
 }
 
-export interface PublishOrigin { kind: 'user'; userId: number }
+/** Who is publishing besides discovery: a signed-in visitor's suggestion, or the owner curating from the CLI. */
+export type PublishOrigin = { kind: 'user'; userId: number } | { kind: 'seed' };
 
 export interface PublishDeps {
   /** Upsert on slug so a retry after a partial failure reuses the row instead of hitting the unique constraint. */
@@ -80,7 +81,8 @@ export function findShoeToSupersede<T extends { model: string }>(model: string, 
 
 /**
  * Turn a passed candidate into a catalogue shoe. A user suggestion has no
- * candidate row (`c.id === 0`) and is stamped with who added it; everything
+ * candidate row (`c.id === 0`) and is stamped with who added it; an owner
+ * `add` from the CLI is `seed`, also without a candidate row; everything
  * else is `discovery` and closes its candidate.
  */
 export async function publishCandidate(
@@ -106,8 +108,8 @@ export async function publishCandidate(
     price_gbp: specs.price_gbp,
     release_year: specs.release_year ?? releaseDate?.getFullYear() ?? null,
     release_date: releaseDate,
-    origin: origin ? 'user' : 'discovery',
-    added_by_user_id: origin?.userId ?? null,
+    origin: origin?.kind ?? 'discovery',
+    added_by_user_id: origin?.kind === 'user' ? origin.userId : null,
   });
 
   for (const review of reviews) await deps.upsertReview(shoe.id, review);

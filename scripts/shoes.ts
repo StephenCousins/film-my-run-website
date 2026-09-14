@@ -15,17 +15,29 @@
 //   candidates [--status held|pending|rejected|published]
 //                                   List discovered candidates with their hold reasons.
 //   audit-images                    HEAD every stored image and clear the ones that are gone.
+//   add --brand "X" --model "Y" [--lift-no-brand-page] [--terrain road|trail|both] [--category C]
+//                                   Owner-curated add: run one shoe through the gate with the age and
+//                                   review-count holds lifted (like a user suggestion), publish it with
+//                                   origin seed, then find an image. --lift-no-brand-page also lifts
+//                                   no_brand_page, for brands whose English site is thin or blocked:
+//                                   specs then come from search snippets. --terrain/--category override
+//                                   what the specs parser read.
 //
 // Needs DATABASE_URL, and for anything that searches or verifies: BRAVE_SEARCH_API_KEY,
 // OPENROUTER_API_KEY and the R2_* credentials. Exit code is 1 on any error.
 
 import { parseArgs } from 'node:util';
-import type { CandidateStatus } from '@prisma/client';
+import type { CandidateStatus, ShoeCategory, ShoeTerrain } from '@prisma/client';
 import { prisma } from '@/lib/db';
-import { loadBrands, type Brand } from '@/lib/shoes/brands';
+import { loadBrands, resolveBrand, type Brand } from '@/lib/shoes/brands';
 import { fetchReviewsForShoe, type ReviewResult } from '@/lib/shoes/reviews';
 import { recomputeShoeScore } from '@/lib/shoes/scores';
+import { shoeToSlug } from '@/lib/shoes/slug';
+import { isSameLine, parseModelVersion } from '@/lib/shoes/versions';
+import { CATEGORY_LABELS, TERRAIN_LABELS, isShoeCategory, isShoeTerrain } from '@/lib/shoes/taxonomy';
 import { findBrandProductPage } from '@/lib/shoes/publish/brandPage';
+import { evaluate, type CandidateInput, type HoldReason } from '@/lib/shoes/publish/gate';
+import { publishCandidate } from '@/lib/shoes/publish/publish';
 import { findAndStoreImage, auditImages, isR2ImageUrl, R2_SHOES_PREFIX } from '@/lib/shoes/images';
 import { runWeekly } from '@/lib/shoes/job/weekly';
 import { sleep } from '@/lib/shoes/search';
@@ -38,6 +50,7 @@ const USAGE = `Usage: npm run shoes -- <command> [flags]
   run-weekly [--dry-run]
   candidates [--status held|pending|rejected|published]
   audit-images
+  add --brand "X" --model "Y" [--lift-no-brand-page] [--terrain road|trail|both] [--category C]
 `;
 
 const CANDIDATE_STATUSES: CandidateStatus[] = ['pending', 'held', 'rejected', 'published'];
@@ -225,6 +238,70 @@ async function candidates(status: string | undefined): Promise<void> {
   console.log(`${rows.length} candidate${rows.length === 1 ? '' : 's'}${status ? ` with status ${status}` : ''}`);
 }
 
+// --- add --------------------------------------------------------------------
+
+interface AddOpts { brand: string; model: string; liftNoBrandPage: boolean; terrain?: string; category?: string }
+
+function parseTerrain(raw: string | undefined): ShoeTerrain | undefined {
+  if (raw !== undefined && !isShoeTerrain(raw)) throw new UsageError(`--terrain must be one of ${Object.keys(TERRAIN_LABELS).join(', ')}, got "${raw}"`);
+  return raw;
+}
+
+function parseCategory(raw: string | undefined): ShoeCategory | undefined {
+  if (raw !== undefined && !isShoeCategory(raw)) throw new UsageError(`--category must be one of ${Object.keys(CATEGORY_LABELS).join(', ')}, got "${raw}"`);
+  return raw;
+}
+
+/**
+ * Owner-curated add. The same gate as a user suggestion (too_old and
+ * reviews_lt_2 lifted), plus no_brand_page when asked, for brands whose
+ * English site is thin or refuses server fetches; those shoes are proved by
+ * an importer's page or, failing that, published on search snippets alone.
+ * Published as origin seed with no candidate row, like the seed catalogue.
+ */
+async function add(opts: AddOpts): Promise<void> {
+  const terrain = parseTerrain(opts.terrain);
+  const category = parseCategory(opts.category);
+  const model = opts.model.trim();
+  if (!model) throw new UsageError('--model is empty');
+
+  const brand = resolveBrand(opts.brand, await loadBrands());
+  if (!brand) throw new Error(`Unknown brand "${opts.brand}": add it (or an alias) to shoe_brands first`);
+  const slug = shoeToSlug(brand.name, model);
+  console.log(`${slug}: ${brand.name} ${model}`);
+
+  // Same duplicate rule as the user route: the slug, or the same line at the same version.
+  const version = parseModelVersion(model).versionNum;
+  const existing = await prisma.shoes.findUnique({ where: { slug }, select: { slug: true } })
+    ?? (await prisma.shoes.findMany({ where: { brand_id: brand.id }, select: { slug: true, model: true } }))
+      .find(s => isSameLine(s.model, model) && parseModelVersion(s.model).versionNum === version);
+  if (existing) throw new Error(`${brand.name} ${model} is already in the catalogue as ${existing.slug}`);
+
+  const override: HoldReason[] = ['too_old', 'reviews_lt_2', ...(opts.liftNoBrandPage ? ['no_brand_page' as const] : [])];
+  const input: CandidateInput = { id: 0, slug, brand, model, evidence: { sources: [] } };
+  const gate = await evaluate(input, undefined, { override });
+  if (!gate.publish) {
+    console.log(`${slug} → held: ${gate.reasons.join(', ')}`);
+    process.exitCode = 1;
+    return;
+  }
+  if (terrain) gate.specs.terrain = terrain;
+  if (category) gate.specs.category = category;
+  console.log(`  proved by: ${gate.brandPage ? `${gate.brandPage.source} page ${gate.brandPage.url}` : 'nothing (specs from search snippets)'}`);
+
+  const published = await publishCandidate(input, gate, { kind: 'seed' });
+  // The shoe is published from here on; an image failure is logged, not a failed add.
+  let image: Awaited<ReturnType<typeof findAndStoreImage>> = null;
+  try {
+    image = await findAndStoreImage({ slug: published.slug, brand, model }, gate.brandPage);
+  } catch (err) {
+    console.log(`  image: ERROR ${errorMessage(err)}`);
+  }
+  if (!image) await markImageAttempt(published.slug);
+  const n = gate.reviews.length;
+  console.log(`${published.slug} → published (${n} review${n === 1 ? '' : 's'}, image: ${image ? image.method : 'NONE'})${published.supersededSlug ? `, supersedes ${published.supersededSlug}` : ''}`);
+}
+
 function errorMessage(err: unknown): string {
   return String((err as { message?: unknown } | null)?.message ?? err);
 }
@@ -251,6 +328,11 @@ async function main(argv: string[]): Promise<void> {
       'clear-hotlinks': { type: 'boolean', default: false },
       'dry-run': { type: 'boolean', default: false },
       status: { type: 'string' },
+      brand: { type: 'string' },
+      model: { type: 'string' },
+      'lift-no-brand-page': { type: 'boolean', default: false },
+      terrain: { type: 'string' },
+      category: { type: 'string' },
       help: { type: 'boolean', short: 'h', default: false },
     },
   });
@@ -270,6 +352,10 @@ async function main(argv: string[]): Promise<void> {
       return;
     }
     case 'candidates': return candidates(values.status);
+    case 'add': {
+      if (!values.brand || !values.model) throw new UsageError('add needs --brand and --model');
+      return add({ brand: values.brand, model: values.model, liftNoBrandPage: values['lift-no-brand-page'], terrain: values.terrain, category: values.category });
+    }
     case 'audit-images': {
       const result = await auditImages();
       console.log(`audit-images: ${result.checked} checked, ${result.cleared.length} cleared, ${result.unverified} unverified`);

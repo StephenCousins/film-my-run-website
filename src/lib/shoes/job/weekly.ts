@@ -148,7 +148,8 @@ export function liveDeps(dryRun: boolean): WeeklyDeps {
     publishCandidate: async (c, pass) => {
       const r = await publishCandidate(c, pass);
       // Which page proved the shoe (brand site, or a retailer standing in for one that refused) stays on the closed candidate.
-      await prisma.shoe_candidates.update({ where: { id: c.id }, data: { evidence: await mergedEvidence(c.id, { brandPage: brandPageEvidence(pass.brandPage) }) } });
+      // (Always present here: the weekly job never overrides no_brand_page.)
+      if (pass.brandPage) await prisma.shoe_candidates.update({ where: { id: c.id }, data: { evidence: await mergedEvidence(c.id, { brandPage: brandPageEvidence(pass.brandPage) }) } });
       return r;
     },
     holdCandidate: async (id, reasons, partial) => {

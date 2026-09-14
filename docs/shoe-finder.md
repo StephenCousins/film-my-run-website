@@ -191,6 +191,43 @@ asking for an older or under-reviewed shoe by name still wants it; `no_brand_pag
 per user per day: **5 published, 10 attempts** (held/rejected/errored all
 count as an attempt) — in-process, so a deploy resets the counters.
 
+### Brands without a findable English product page
+
+The Chinese brands — Li-Ning, Anta, Xtep, 361°, Qiaodan, Bmai, Dynafish,
+Do-Win, Runsifly, Peak, Kailas (`prisma/migrations/20260914120000_chinese_brands`)
+— mostly fail check 2: the English brand site is thin, has no JSON-LD, or
+refuses server fetches (`en.lining.com` 403s), and none of the UK retailers
+in `RETAILER_DOMAINS` stock them. `RETAILERS_BY_BRAND` in
+`src/lib/shoes/publish/retailerPage.ts` gives each of those brands the
+Western importers that do have proper product pages — `kicksown.com`,
+`supwell.com`, `shopnings.com`, `chinasportshop.com` (plus `qiaodan.asia` and
+`dynafish.us` first for their own brands) — and `searchRetailerPages` walks a
+brand's importers **before** the UK list, for both the gate's fallback and
+the image finder. On an importer only the model is quoted in the search
+(they spell the brand their own way: `LiNing`, `361`, `Dowin`), and the page
+match is on the model alone, as it always was. `resolveBrand` also ignores
+case, hyphens, whitespace and the degree sign, so `LiNing`, `Li Ning`,
+`Dowin` and `361 Degrees` all resolve.
+
+Discovery will still hold these shoes `no_brand_page` whenever no importer
+lists them, and nothing lifts that automatically. The owner adds them by hand:
+
+```
+npm run shoes -- add --brand "Li-Ning" --model "Feidian 6 Elite" --lift-no-brand-page
+```
+
+`add` runs the same gate as a user suggestion (`too_old` and `reviews_lt_2`
+lifted); `--lift-no-brand-page` also lifts `no_brand_page`. The retailers
+are still searched, and if nothing names the shoe the pass has
+`brandPage: null`: the specs are parsed from web-search snippets
+(`"<brand> <model>" running shoe specs`, five results) instead of a page, and
+the release date comes from review dates alone. `--terrain` and `--category`
+override what the parser read. The shoe is published with `origin: 'seed'`
+(no candidate row, no user), then an image is sought. **Images for such
+shoes come only from those importers**: with no brand page there is no
+brand phase, and the retailer phase's only pages naming the exact model are
+theirs. Expect `image: NONE` if none of them lists the shoe.
+
 ## Images
 
 `src/lib/shoes/images/` finds one image per shoe, brand phase first,
@@ -278,7 +315,9 @@ gate with `too_old` and `reviews_lt_2` overridden — the same two holds the
 `/api/shoes/add` user path lifts. Every other hold (`brand_unresolved`,
 `no_brand_page`, `bad_taxonomy`, `specs_unparseable`) still blocks it; an
 already-published or already-rejected candidate returns a plain message
-instead of a form.
+instead of a form. The only path that lifts `no_brand_page` is the CLI
+`add --lift-no-brand-page` (see "Brands without a findable English product
+page").
 
 ## API
 
@@ -305,6 +344,7 @@ instead of a form.
 | `run-weekly [--dry-run]` | Runs `runWeekly()` in-process and prints the `JobReport` as JSON. It does **not** send the digest — that is the HTTP route's job, so the CLI needs neither `RESEND_API_KEY` nor `CRON_SECRET`. |
 | `candidates [--status held\|pending\|rejected\|published]` | Lists discovered candidates with their hold reasons. |
 | `audit-images` | HEADs every stored image and clears the ones that are gone. |
+| `add --brand "X" --model "Y" [--lift-no-brand-page] [--terrain road\|trail\|both] [--category …]` | Owner-curated add: the user-suggestion gate (age and review-count holds lifted), published as `origin: 'seed'`, then an image find. `--lift-no-brand-page` also lifts `no_brand_page` — see "Brands without a findable English product page". Refuses a shoe already in the catalogue (prints its slug); exit 1 if held. |
 
 Needs `.env` with `DATABASE_URL`, `OPENROUTER_API_KEY`,
 `BRAVE_SEARCH_API_KEY` (or `SERPER_API_KEY`) and the `R2_*` credentials.
@@ -329,7 +369,8 @@ Additions on top of the original `shoes`/`shoe_reviews` tables (see
   `hold_reasons` (String[]), `evidence` (JSON — `{ sources: [{source, url,
   title, publishedAt}] }`, merged across runs), `shoe_id` (set once
   published), `first_seen_at`, `last_seen_at`, `decided_at`.
-- **`shoes`** additions: `origin` (`ShoeOrigin`: `seed | user | discovery`),
+- **`shoes`** additions: `origin` (`ShoeOrigin`: `seed | user | discovery` —
+  `seed` is both the original catalogue and the CLI `add` command),
   `added_by_user_id`, `superseded_by_id` (self-relation — the newer version of
   this line), `user_avg_score`/`user_rating_count` (from `shoe_user_ratings`,
   distinct from the expert `avg_score`/`review_count`), `image_url`,
@@ -375,7 +416,10 @@ genuinely have nothing that clears the filters or the vision check — check
   `brandUnreachable`, the brand site refused the fetch *and* no retailer in
   `RETAILER_DOMAINS` had a page naming the exact model; the gate rechecks
   both weekly. Without it the brand site answered and has no such page —
-  nothing to do until the brand publishes it.
+  nothing to do until the brand publishes it, unless it is one of the brands
+  with no findable English page, which the owner adds by hand with
+  `npm run shoes -- add … --lift-no-brand-page` (the candidate then closes as
+  linked on the next run, since its slug now exists).
 - `too_old`: will never clear itself by design. Use "Publish anyway" from the
   digest email, or `POST` the same signed link if you kept it.
 - `reviews_lt_2`: clears itself once a third review source is found on a

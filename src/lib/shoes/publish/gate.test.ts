@@ -8,7 +8,14 @@ const specs = { terrain: 'road' as const, category: 'daily_trainer' as const, de
 const review = (source: string) => ({ source: source as never, source_url: `https://${source}`, expert_score: 8.5, summary: null });
 const cand = (over: Partial<Parameters<typeof evaluate>[0]> = {}) => ({ id: 1, slug: 'hoka-clifton-10', brand: hoka, model: 'Clifton 10', evidence: { sources: [] }, ...over });
 const found = (p: BrandPage = page) => ({ kind: 'found' as const, page: p });
-const ok = () => ({ findBrandProductPage: async () => found(), findRetailerProductPage: async () => null, fetchReviewsForShoe: async () => [review('runrepeat'), review('irunfar')], parseShoeSpecs: async () => specs, now: () => new Date('2026-09-13') });
+const ok = () => ({
+  findBrandProductPage: async () => found(),
+  findRetailerProductPage: async () => null,
+  fetchReviewsForShoe: async () => [review('runrepeat'), review('irunfar')],
+  parseShoeSpecs: async () => specs,
+  webSearch: async () => { throw new Error('webSearch must only be called when no_brand_page is overridden and no page was found'); },
+  now: () => new Date('2026-09-13'),
+});
 
 describe('evaluate', () => {
   it('exports the age limit', () => {
@@ -108,5 +115,59 @@ describe('evaluate', () => {
     const r = await evaluate(cand(), { ...ok(), fetchReviewsForShoe: async () => [], findBrandProductPage: async () => found({ ...page, releaseDate: new Date('2020-01-01') }) }, { override: ['too_old', 'reviews_lt_2'] });
     expect(r.publish).toBe(true);
     if (r.publish) expect(r.reviews).toHaveLength(0);
+  });
+
+  describe('no_brand_page overridden', () => {
+    const lining = { id: 2, name: 'Li-Ning', aliases: ['lining'], domain: 'en.lining.com', newArrivalsUrl: null };
+    const feidian = () => cand({ slug: 'li-ning-feidian-6-elite', brand: lining, model: 'Feidian 6 Elite' });
+    const lift = { override: ['no_brand_page' as const] };
+    it('still asks the retailers when the brand site answers with no page, and uses their page when one names the shoe', async () => {
+      const retailerPage = { ...page, url: 'https://kicksown.com/products/lining-feidian-6-elite-black', title: "LiNing Feidian 6 ELITE 'Black'", source: 'retailer' as const };
+      let retailerAsked = false;
+      const r = await evaluate(feidian(), { ...ok(), findBrandProductPage: async () => ({ kind: 'absent' }), findRetailerProductPage: async () => { retailerAsked = true; return retailerPage; } }, lift);
+      expect(retailerAsked).toBe(true);
+      expect(r.publish).toBe(true);
+      if (r.publish) expect(r.brandPage).toEqual(retailerPage);
+    });
+    it('passes with brandPage null when neither brand nor retailer has a page, parsing specs from search snippets', async () => {
+      const queries: { q: string; count: number }[] = [];
+      let seen: { brand: string; model: string; context: string } | null = null;
+      const r = await evaluate(feidian(), {
+        ...ok(),
+        findBrandProductPage: async () => ({ kind: 'unreachable', reason: 'unreachable:403' }),
+        findRetailerProductPage: async () => null,
+        webSearch: async (q, count) => {
+          queries.push({ q, count: count ?? 0 });
+          return [
+            { title: 'Li-Ning Feidian 6 Elite review', url: 'https://a', description: 'Weight 210g, drop 6mm, carbon plate' },
+            { title: 'Feidian 6 Elite specs', url: 'https://b', description: '' },
+          ];
+        },
+        parseShoeSpecs: async input => { seen = input; return specs; },
+      }, lift);
+      expect(queries).toEqual([{ q: '"Li-Ning Feidian 6 Elite" running shoe specs', count: 5 }]);
+      expect(r).toMatchObject({ publish: true, brandPage: null, specs, releaseDate: null });
+      expect(seen).toEqual({ brand: 'Li-Ning', model: 'Feidian 6 Elite', context: 'Li-Ning Feidian 6 Elite review\nWeight 210g, drop 6mm, carbon plate\n\nFeidian 6 Elite specs' });
+    });
+    it('takes the release date from the reviews when there is no page, and too_old still holds', async () => {
+      const sources = [{ source: 'a', url: '', title: '', publishedAt: '2024-01-01T00:00:00Z' }];
+      const r = await evaluate({ ...feidian(), evidence: { sources } }, { ...ok(), findBrandProductPage: async () => ({ kind: 'absent' }), findRetailerProductPage: async () => null }, lift);
+      expect(r).toEqual({ publish: false, reasons: ['too_old'], partial: {} });
+    });
+    it('a specs failure on snippets holds without a brandPage in the partial', async () => {
+      const r = await evaluate(feidian(), {
+        ...ok(),
+        findBrandProductPage: async () => ({ kind: 'absent' }),
+        findRetailerProductPage: async () => null,
+        webSearch: async () => [],
+        parseShoeSpecs: async () => { throw new Error('specs_unparseable'); },
+      }, lift);
+      expect(r).toMatchObject({ publish: false, reasons: ['specs_unparseable'] });
+      if (!r.publish) expect(r.partial.brandPage).toBeUndefined();
+    });
+    it('without the override, an absent brand page still holds without asking retailers or searching', async () => {
+      const r = await evaluate(feidian(), { ...ok(), findBrandProductPage: async () => ({ kind: 'absent' }) }, { override: ['too_old', 'reviews_lt_2'] });
+      expect(r).toEqual({ publish: false, reasons: ['no_brand_page'], partial: {} });
+    });
   });
 });

@@ -85,6 +85,13 @@ describe('publishCandidate', () => {
     expect(calls.created[0]).toMatchObject({ origin: 'user', added_by_user_id: 99 });
     expect(calls.candidates).toEqual([]);
   });
+  it('publishes an owner add with origin seed, no user and no candidate row, and a null brand page', async () => {
+    const { deps, calls } = fakeDeps();
+    const r = await publishCandidate(cand({ id: 0 }), pass({ brandPage: null, releaseDate: null }), { kind: 'seed' }, deps);
+    expect(r.shoeId).toBe(42);
+    expect(calls.created[0]).toMatchObject({ origin: 'seed', added_by_user_id: null, release_year: 2026, release_date: null });
+    expect(calls.candidates).toEqual([]);
+  });
   it('is idempotent: publishing the same candidate twice upserts one shoe and does not throw', async () => {
     const rows = new Map<string, number>();
     const upserts: string[] = [];
