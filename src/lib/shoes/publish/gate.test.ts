@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { evaluate, MAX_AGE_MONTHS } from './gate';
 import type { BrandPage } from './brandPage';
+import type { ParsedSpecs, SpecsInput } from '../specs';
 
 const hoka = { id: 1, name: 'Hoka', aliases: [], domain: 'hoka.com', newArrivalsUrl: null };
 const page = { url: 'https://www.hoka.com/clifton-10', title: 'Clifton 10', html: '', product: null, releaseDate: new Date('2026-02-01'), source: 'brand' as const };
@@ -121,6 +122,18 @@ describe('evaluate', () => {
   const feidian = () => cand({ slug: 'li-ning-feidian-6-elite', brand: lining, model: 'Feidian 6 Elite' });
   const importerPage = { ...page, url: 'https://kicksown.com/products/lining-feidian-6-elite-black', title: "LiNing Feidian 6 ELITE 'Black'", source: 'retailer' as const };
 
+  it('passes opts.specs to the parser as overrides, so a valid category rescues an invalid LLM one', async () => {
+    const parser = async (input: SpecsInput): Promise<ParsedSpecs> => {
+      const j = { ...specs, category: 'supershoe', ...input.overrides };
+      if (j.category !== 'race' && j.category !== 'daily_trainer') throw new Error('bad_taxonomy');
+      return { ...j, category: j.category };
+    };
+    const held = await evaluate(cand(), { ...ok(), parseShoeSpecs: parser });
+    expect(held).toMatchObject({ publish: false, reasons: ['bad_taxonomy'] });
+    const r = await evaluate(cand(), { ...ok(), parseShoeSpecs: parser }, { specs: { category: 'race' } });
+    expect(r.publish).toBe(true);
+    if (r.publish) expect(r.specs.category).toBe('race');
+  });
   describe('brands with curated importers', () => {
     it('an absent brand page asks the importers, and a matching page passes sourced retailer', async () => {
       let retailerAsked = false;

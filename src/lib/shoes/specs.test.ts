@@ -22,6 +22,12 @@ describe('parseShoeSpecs', () => {
     await expect(parseShoeSpecs(input, replying(JSON.stringify({ ...good, category: 'tempo' })))).rejects.toThrow('bad_taxonomy');
     await expect(parseShoeSpecs(input, replying(JSON.stringify({ ...good, terrain: null })))).rejects.toThrow('bad_taxonomy');
   });
+  it('applies overrides before validation, so a valid category rescues an invalid one from the LLM', async () => {
+    const reply = replying(JSON.stringify({ ...good, category: 'supershoe' }));
+    await expect(parseShoeSpecs(input, reply)).rejects.toThrow('bad_taxonomy');
+    expect(await parseShoeSpecs({ ...input, overrides: { category: 'race' } }, reply)).toEqual({ ...good, category: 'race' });
+    await expect(parseShoeSpecs({ ...input, overrides: { terrain: 'trail' } }, reply)).rejects.toThrow('bad_taxonomy');
+  });
   it('rounds numbers, nulls anything that is not a finite number, and nulls a non-string description', async () => {
     const specs = await parseShoeSpecs(input, replying(JSON.stringify({
       ...good, drop_mm: 5.4, weight_g: '250', stack_height_mm: 39.5, price_gbp: Infinity, release_year: null, description: 42,

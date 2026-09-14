@@ -1,6 +1,6 @@
 import type { Brand } from '../brands';
 import { fetchReviewsForShoe, type ReviewResult } from '../reviews';
-import { parseShoeSpecs, type ParsedSpecs } from '../specs';
+import { parseShoeSpecs, type ParsedSpecs, type SpecsInput } from '../specs';
 import { findBrandProductPage, type BrandPage, type BrandPageResult } from './brandPage';
 import { findRetailerProductPage, RETAILERS_BY_BRAND } from './retailerPage';
 import { webSearch } from '../search';
@@ -36,7 +36,7 @@ export interface GateDeps {
   findBrandProductPage: (brand: Brand, model: string) => Promise<BrandPageResult>;
   findRetailerProductPage: (brand: Brand, model: string) => Promise<BrandPage | null>;
   fetchReviewsForShoe: (brand: string, model: string) => Promise<ReviewResult[]>;
-  parseShoeSpecs: (input: { brand: string; model: string; context: string }) => Promise<ParsedSpecs>;
+  parseShoeSpecs: (input: SpecsInput) => Promise<ParsedSpecs>;
   /** Only called when `no_brand_page` is overridden and no page was found: its snippets stand in for the page text. */
   webSearch: typeof webSearch;
   now: () => Date;
@@ -74,13 +74,22 @@ const SNIPPET_RESULTS = 5;
  * is held only when the brand site answered and has no such page (and no
  * importer to ask), or when the retailers were asked and none has one either.
  *
+ * `opts.specs` (the owner's --terrain/--category) is handed to the spec
+ * parser as overrides rather than applied to the result: the parser
+ * validates taxonomy, and a bad_taxonomy hold on the LLM's value would
+ * otherwise fire before the override could rescue it.
+ *
  * `no_brand_page` can be overridden, but only the owner's `add` command does
  * (a brand whose English site is thin or blocked): the retailers are still
  * tried, and if nothing names the shoe the pass carries `brandPage: null`
  * and the specs are parsed from web-search snippets instead of a page. The
  * release date then comes from review dates alone.
  */
-export async function evaluate(c: CandidateInput, deps: GateDeps = liveDeps, opts: { override?: HoldReason[] } = {}): Promise<GatePass | GateHold> {
+export async function evaluate(
+  c: CandidateInput,
+  deps: GateDeps = liveDeps,
+  opts: { override?: HoldReason[]; /** Owner-supplied spec fields, applied inside the parser before its taxonomy check. */ specs?: Partial<ParsedSpecs> } = {},
+): Promise<GatePass | GateHold> {
   const ignore = new Set(opts.override ?? []);
   if (!c.brand) return { publish: false, reasons: ['brand_unresolved'], partial: {} };
 
@@ -110,7 +119,7 @@ export async function evaluate(c: CandidateInput, deps: GateDeps = liveDeps, opt
   let specs: ParsedSpecs;
   try {
     const context = brandPage ? pageContext(brandPage) : await snippetContext(c.brand.name, c.model, deps);
-    specs = await deps.parseShoeSpecs({ brand: c.brand.name, model: c.model, context });
+    specs = await deps.parseShoeSpecs({ brand: c.brand.name, model: c.model, context, ...(opts.specs ? { overrides: opts.specs } : {}) });
   } catch (err) {
     const reason: HoldReason = err instanceof Error && err.message === 'bad_taxonomy' ? 'bad_taxonomy' : 'specs_unparseable';
     return { publish: false, reasons: [reason], partial: { ...partialPage, reviews } };

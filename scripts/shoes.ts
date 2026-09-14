@@ -279,14 +279,13 @@ async function add(opts: AddOpts): Promise<void> {
 
   const override: HoldReason[] = ['too_old', 'reviews_lt_2', ...(opts.liftNoBrandPage ? ['no_brand_page' as const] : [])];
   const input: CandidateInput = { id: 0, slug, brand, model, evidence: { sources: [] } };
-  const gate = await evaluate(input, undefined, { override });
+  // --terrain/--category go into the gate rather than onto its result: the parser's taxonomy check runs first and would hold bad_taxonomy on the LLM's value.
+  const gate = await evaluate(input, undefined, { override, specs: { ...(terrain ? { terrain } : {}), ...(category ? { category } : {}) } });
   if (!gate.publish) {
     console.log(`${slug} → held: ${gate.reasons.join(', ')}`);
     process.exitCode = 1;
     return;
   }
-  if (terrain) gate.specs.terrain = terrain;
-  if (category) gate.specs.category = category;
   // The matched page's title is printed so a near-miss (a sibling variant, another version) is visible before anything is published.
   console.log(`  proved by: ${gate.brandPage ? `${gate.brandPage.source} page ${gate.brandPage.url} — "${gate.brandPage.title}"` : 'nothing (specs from search snippets)'}`);
 

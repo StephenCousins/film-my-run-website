@@ -237,7 +237,10 @@ are still searched, and if nothing names the shoe the pass has
 `brandPage: null`: the specs are parsed from web-search snippets
 (`"<brand> <model>" running shoe specs`, five results) instead of a page, and
 the release date comes from review dates alone. `--terrain` and `--category`
-override what the parser read. The shoe is published with `origin: 'seed'`
+are handed to the spec parser as overrides (`evaluate(…, { specs })`), laid
+over the LLM's reply *before* its taxonomy check, so a valid value from the
+owner rescues an invalid one from the model instead of holding
+`bad_taxonomy`. The shoe is published with `origin: 'seed'`
 (no candidate row, no user), then an image is sought. **Images for such
 shoes come only from those importers**: with no brand page there is no
 brand phase, and the retailer phase's only pages naming the exact model are

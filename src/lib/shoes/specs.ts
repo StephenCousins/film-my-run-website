@@ -17,8 +17,16 @@ export interface SpecsDeps {
   completeText: typeof completeText;
 }
 
+export interface SpecsInput {
+  brand: string;
+  model: string;
+  context: string;
+  /** Laid over the LLM's reply before validation, so a valid terrain/category from the owner rescues an invalid one from the model. */
+  overrides?: Partial<ParsedSpecs>;
+}
+
 export async function parseShoeSpecs(
-  input: { brand: string; model: string; context: string },
+  input: SpecsInput,
   deps: SpecsDeps = { completeText }
 ): Promise<ParsedSpecs> {
   const text = await deps.completeText({
@@ -44,7 +52,7 @@ Rules: only include specs stated in the content; use null otherwise. terrain and
   });
   const m = text.match(/\{[\s\S]*\}/);
   if (!m) throw new Error('specs_unparseable');
-  const j = JSON.parse(m[0]);
+  const j = { ...JSON.parse(m[0]), ...input.overrides };
   if (!isShoeTerrain(j.terrain) || !isShoeCategory(j.category)) throw new Error('bad_taxonomy');
   const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? Math.round(v) : null);
   return {
