@@ -1,6 +1,4 @@
-function escapeHtml(str: string): string {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
+import { escapeHtml } from './html';
 
 export type ReplyEmailInput = { name: string; text: string };
 

@@ -11,7 +11,7 @@ const PRO_HEADER = encodeTestJws(proPayload);
 const INSTALL_A = '11111111-1111-4111-8111-111111111111';
 const INSTALL_B = '22222222-2222-4222-8222-222222222222';
 
-/** In-memory fake of the four store functions, isolated per install id. */
+/** In-memory fake of the store functions, isolated per install id. */
 function fakeStore() {
   const byInstall = new Map<string, { threadId: string; messages: ChatMessageDTO[] }>();
   let idCounter = 0;
@@ -21,23 +21,24 @@ function fakeStore() {
     return t ? { id: t.threadId, messages: t.messages } : null;
   };
 
-  const countUserMessagesToday: ChatDeps['countUserMessagesToday'] = async (installId) => {
-    const t = byInstall.get(installId);
-    return t ? t.messages.filter((m) => m.from === 'user').length : 0;
-  };
-
-  const addUserMessage: ChatDeps['addUserMessage'] = async (installId, m) => {
+  // Mirrors store.ts's addUserMessageIfUnderLimit contract: the count and the
+  // insert happen with no `await` between them, so this is atomic per call
+  // the same way the real transaction's row lock makes the database version
+  // atomic — even under Promise.all, nothing can interleave between the two.
+  const addUserMessageIfUnderLimit: ChatDeps['addUserMessageIfUnderLimit'] = async (installId, m, limit) => {
     let t = byInstall.get(installId);
     if (!t) {
       t = { threadId: `thread-${installId}`, messages: [] };
       byInstall.set(installId, t);
     }
+    const todayCount = t.messages.filter((msg) => msg.from === 'user').length;
+    if (todayCount >= limit) return { ok: false, reason: 'limit' };
     const message: ChatMessageDTO = { id: `m${++idCounter}`, from: 'user', text: m.text, createdAt: new Date(NOW).toISOString() };
     t.messages.push(message);
-    return { threadId: t.threadId, message };
+    return { ok: true, threadId: t.threadId, message };
   };
 
-  return { getThread, countUserMessagesToday, addUserMessage };
+  return { getThread, addUserMessageIfUnderLimit };
 }
 
 function makeDeps(): { deps: ChatDeps; notifyStephen: ReturnType<typeof vi.fn> } {
@@ -165,6 +166,23 @@ describe('handlePostMessage', () => {
     );
     expect(sixth.status).toBe(429);
     expect(await sixth.json()).toEqual({ ok: false, error: "That's five today, Stephen will get back to you." });
+    expect(notifyStephen).toHaveBeenCalledTimes(5);
+  });
+
+  it('enforces the limit atomically: 6 concurrent posts near the limit still cap at 5 successes', async () => {
+    const results = await Promise.all(
+      Array.from({ length: 6 }, (_, i) =>
+        handlePostMessage(
+          postReq(
+            { name: 'Jo', email: 'jo@example.com', text: `concurrent ${i}` },
+            { 'X-FMR-Install': INSTALL_A, 'X-FMR-Pro': PRO_HEADER, 'content-type': 'application/json' }
+          ),
+          deps
+        )
+      )
+    );
+    const statuses = results.map((r) => r.status).sort();
+    expect(statuses).toEqual([200, 200, 200, 200, 200, 429]);
     expect(notifyStephen).toHaveBeenCalledTimes(5);
   });
 });

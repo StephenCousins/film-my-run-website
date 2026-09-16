@@ -1,8 +1,5 @@
 import { Resend } from 'resend';
-
-function escapeHtml(str: string): string {
-  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-}
+import { escapeHtml } from './html';
 
 export type StephenEmailInput = { threadId: string; name: string; email: string; text: string };
 

@@ -1,3 +1,4 @@
+import type { ChatSender } from '@prisma/client';
 import { prisma } from '@/lib/db';
 import type { NewMessage } from './validate';
 
@@ -11,8 +12,8 @@ function startOfUtcDay(now: Date): Date {
   return new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
 }
 
-function toDTO(m: { id: string; sender: string; text: string; created_at: Date }): ChatMessageDTO {
-  return { id: m.id, from: m.sender as 'user' | 'stephen', text: m.text, createdAt: m.created_at.toISOString() };
+function toDTO(m: { id: string; sender: ChatSender; text: string; created_at: Date }): ChatMessageDTO {
+  return { id: m.id, from: m.sender, text: m.text, createdAt: m.created_at.toISOString() };
 }
 
 export async function getThread(installId: string): Promise<ChatThreadDTO | null> {
@@ -32,17 +33,50 @@ export async function countUserMessagesToday(installId: string, now: Date = new 
   });
 }
 
-export async function addUserMessage(installId: string, m: NewMessage): Promise<{ threadId: string; message: ChatMessageDTO }> {
-  const now = new Date();
-  const thread = await prisma.chat_threads.upsert({
-    where: { install_id: installId },
-    create: { install_id: installId, name: m.name, email: m.email, last_user_message_at: now, unanswered: true },
-    update: { name: m.name, email: m.email, last_user_message_at: now, unanswered: true },
+export type AddUserMessageResult =
+  | { ok: true; threadId: string; message: ChatMessageDTO }
+  | { ok: false; reason: 'limit' };
+
+/**
+ * Checks the daily limit and inserts the message as one atomic unit — the
+ * two-step "count, then insert" version (`countUserMessagesToday` followed
+ * by a separate insert) let two concurrent requests near the limit both
+ * pass, because neither request's count reflected the other's in-flight
+ * insert. Locking the thread row with `FOR UPDATE` inside the transaction
+ * serialises concurrent requests for the same install, so the count taken
+ * just before the insert is always up to date.
+ */
+export async function addUserMessageIfUnderLimit(
+  installId: string,
+  m: NewMessage,
+  limit: number = CHAT_DAILY_LIMIT,
+  now: Date = new Date()
+): Promise<AddUserMessageResult> {
+  return prisma.$transaction(async (tx) => {
+    const thread = await tx.chat_threads.upsert({
+      where: { install_id: installId },
+      create: { install_id: installId, name: m.name, email: m.email },
+      update: {},
+    });
+
+    // Serialises concurrent transactions for this thread until this one commits,
+    // so the count below can't miss a message another request is mid-insert on.
+    await tx.$queryRaw`SELECT id FROM chat_threads WHERE id = ${thread.id} FOR UPDATE`;
+
+    const todayCount = await tx.chat_messages.count({
+      where: { thread_id: thread.id, sender: 'user', created_at: { gte: startOfUtcDay(now) } },
+    });
+    if (todayCount >= limit) return { ok: false, reason: 'limit' };
+
+    await tx.chat_threads.update({
+      where: { id: thread.id },
+      data: { name: m.name, email: m.email, last_user_message_at: now, unanswered: true },
+    });
+    const message = await tx.chat_messages.create({
+      data: { thread_id: thread.id, sender: 'user', text: m.text },
+    });
+    return { ok: true, threadId: thread.id, message: toDTO(message) };
   });
-  const message = await prisma.chat_messages.create({
-    data: { thread_id: thread.id, sender: 'user', text: m.text },
-  });
-  return { threadId: thread.id, message: toDTO(message) };
 }
 
 export async function addReply(threadId: string, text: string): Promise<{ message: ChatMessageDTO; email: string; name: string }> {
