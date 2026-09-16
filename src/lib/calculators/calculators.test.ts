@@ -31,6 +31,11 @@ import {
  * Changed on purpose: 12 Sep 2026, quick-mode ultra predictions (the five
  * `quick` cases with targets beyond the marathon) after the exponent was
  * recalibrated to real 100-mile finishing times; see racePredictor.ts.
+ *
+ * Changed on purpose: 17 Sep 2026, every `quick` and `advanced` case, when the
+ * predictor moved to the evidence model (band exponents by distance pair and
+ * known time, ability × race cost beyond the marathon; two races are two
+ * anchors, no age/BMI terms). Regenerated with scripts/regen-predictor-golden.ts.
  */
 
 type Case<I, O> = { id: string; input: I; output: O };

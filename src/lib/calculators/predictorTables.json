@@ -1,0 +1,2127 @@
+{
+ "version": 2,
+ "generated": "2026-09-17",
+ "distancesKm": {
+  "5k": 5.0,
+  "10k": 10.0,
+  "hm": 21.0975,
+  "mar": 42.195
+ },
+ "roadPairs": {
+  "5k>10k": {
+   "n": 69335,
+   "median": 1.0547,
+   "bands": [
+    [
+     840,
+     930,
+     2550,
+     1.0702,
+     1.05,
+     1.0965,
+     1.0704,
+     1.0466
+    ],
+    [
+     930,
+     1020,
+     7266,
+     1.0668,
+     1.0429,
+     1.0957,
+     1.0669,
+     1.0648
+    ],
+    [
+     1020,
+     1110,
+     9935,
+     1.0617,
+     1.0327,
+     1.0944,
+     1.0613,
+     1.0638
+    ],
+    [
+     1110,
+     1200,
+     10923,
+     1.0576,
+     1.0226,
+     1.0969,
+     1.0568,
+     1.06
+    ],
+    [
+     1200,
+     1290,
+     8676,
+     1.0574,
+     1.0168,
+     1.0987,
+     1.0572,
+     1.0577
+    ],
+    [
+     1290,
+     1380,
+     7288,
+     1.0516,
+     1.0025,
+     1.1027,
+     1.05,
+     1.0535
+    ],
+    [
+     1380,
+     1470,
+     5796,
+     1.0449,
+     0.9934,
+     1.0978,
+     1.0376,
+     1.0499
+    ],
+    [
+     1470,
+     1560,
+     4418,
+     1.0443,
+     0.9794,
+     1.1016,
+     1.0302,
+     1.0525
+    ],
+    [
+     1560,
+     1650,
+     3419,
+     1.0348,
+     0.9605,
+     1.095,
+     1.0079,
+     1.0428
+    ],
+    [
+     1650,
+     1740,
+     2553,
+     1.0273,
+     0.948,
+     1.0891,
+     0.9903,
+     1.0374
+    ],
+    [
+     1740,
+     1830,
+     1998,
+     1.0078,
+     0.916,
+     1.0884,
+     0.9585,
+     1.0182
+    ],
+    [
+     1830,
+     1920,
+     1357,
+     0.9947,
+     0.8859,
+     1.0773,
+     0.931,
+     1.0034
+    ],
+    [
+     1920,
+     2010,
+     1031,
+     0.9822,
+     0.8532,
+     1.0682,
+     0.8897,
+     0.9888
+    ],
+    [
+     2010,
+     2100,
+     674,
+     0.9667,
+     0.8348,
+     1.0712,
+     0.9268,
+     0.9739
+    ],
+    [
+     2100,
+     2190,
+     513,
+     0.9495,
+     0.8312,
+     1.048,
+     0.8675,
+     0.9655
+    ],
+    [
+     2190,
+     2280,
+     355,
+     0.9139,
+     0.7858,
+     1.0212,
+     0.7991,
+     0.9312
+    ],
+    [
+     2280,
+     2370,
+     216,
+     0.8868,
+     0.7677,
+     1.0126,
+     0.8527,
+     0.8898
+    ],
+    [
+     2370,
+     2460,
+     103,
+     0.8541,
+     0.7337,
+     0.9669,
+     0.7479,
+     0.8659
+    ],
+    [
+     2460,
+     2550,
+     47,
+     0.7763,
+     0.7104,
+     0.8608,
+     null,
+     0.772
+    ]
+   ]
+  },
+  "5k>hm": {
+   "n": 65735,
+   "median": 1.0647,
+   "bands": [
+    [
+     840,
+     930,
+     1988,
+     1.0668,
+     1.0532,
+     1.0872,
+     1.0668,
+     1.0503
+    ],
+    [
+     930,
+     1020,
+     6665,
+     1.0651,
+     1.0492,
+     1.0845,
+     1.0649,
+     1.0671
+    ],
+    [
+     1020,
+     1110,
+     9437,
+     1.0642,
+     1.0461,
+     1.0871,
+     1.064,
+     1.0654
+    ],
+    [
+     1110,
+     1200,
+     10574,
+     1.0654,
+     1.0437,
+     1.0922,
+     1.0664,
+     1.063
+    ],
+    [
+     1200,
+     1290,
+     8426,
+     1.0684,
+     1.0412,
+     1.0976,
+     1.0701,
+     1.0654
+    ],
+    [
+     1290,
+     1380,
+     7058,
+     1.0677,
+     1.0379,
+     1.1001,
+     1.0698,
+     1.0656
+    ],
+    [
+     1380,
+     1470,
+     5560,
+     1.0686,
+     1.0361,
+     1.1013,
+     1.0685,
+     1.0687
+    ],
+    [
+     1470,
+     1560,
+     4208,
+     1.067,
+     1.0299,
+     1.1043,
+     1.0659,
+     1.0675
+    ],
+    [
+     1560,
+     1650,
+     3126,
+     1.0634,
+     1.0223,
+     1.1075,
+     1.0456,
+     1.0698
+    ],
+    [
+     1650,
+     1740,
+     2334,
+     1.0659,
+     1.0057,
+     1.1091,
+     1.0379,
+     1.0707
+    ],
+    [
+     1740,
+     1830,
+     1828,
+     1.0606,
+     0.9998,
+     1.1103,
+     1.0133,
+     1.0671
+    ],
+    [
+     1830,
+     1920,
+     1207,
+     1.0536,
+     0.9786,
+     1.0989,
+     0.9873,
+     1.0611
+    ],
+    [
+     1920,
+     2010,
+     911,
+     1.0351,
+     0.9523,
+     1.0944,
+     0.9544,
+     1.0472
+    ],
+    [
+     2010,
+     2100,
+     598,
+     1.0143,
+     0.9145,
+     1.0819,
+     0.881,
+     1.0313
+    ],
+    [
+     2100,
+     2190,
+     459,
+     1.0047,
+     0.9058,
+     1.0835,
+     0.8635,
+     1.0201
+    ],
+    [
+     2190,
+     2280,
+     331,
+     0.9833,
+     0.8729,
+     1.0647,
+     0.8572,
+     0.9985
+    ],
+    [
+     2280,
+     2370,
+     237,
+     0.9449,
+     0.8414,
+     1.0293,
+     0.8463,
+     0.9727
+    ],
+    [
+     2370,
+     2460,
+     138,
+     0.8576,
+     0.7487,
+     0.9899,
+     0.7656,
+     0.9309
+    ],
+    [
+     2460,
+     2550,
+     80,
+     0.8555,
+     0.753,
+     0.9496,
+     null,
+     0.8763
+    ],
+    [
+     2550,
+     2640,
+     68,
+     0.8472,
+     0.6838,
+     0.9623,
+     0.6012,
+     0.8658
+    ]
+   ]
+  },
+  "5k>mar": {
+   "n": 45361,
+   "median": 1.0934,
+   "bands": [
+    [
+     840,
+     930,
+     1249,
+     1.0783,
+     1.0639,
+     1.1029,
+     1.0785,
+     null
+    ],
+    [
+     930,
+     1020,
+     5033,
+     1.0814,
+     1.0645,
+     1.1047,
+     1.0816,
+     1.0741
+    ],
+    [
+     1020,
+     1110,
+     7262,
+     1.0833,
+     1.0666,
+     1.112,
+     1.084,
+     1.0774
+    ],
+    [
+     1110,
+     1200,
+     7879,
+     1.0953,
+     1.0684,
+     1.1275,
+     1.0999,
+     1.0832
+    ],
+    [
+     1200,
+     1290,
+     6201,
+     1.1007,
+     1.0735,
+     1.1356,
+     1.1121,
+     1.0869
+    ],
+    [
+     1290,
+     1380,
+     4979,
+     1.1026,
+     1.0733,
+     1.1418,
+     1.115,
+     1.093
+    ],
+    [
+     1380,
+     1470,
+     3703,
+     1.1082,
+     1.0751,
+     1.1481,
+     1.1216,
+     1.0989
+    ],
+    [
+     1470,
+     1560,
+     2718,
+     1.1133,
+     1.0757,
+     1.1487,
+     1.1198,
+     1.1111
+    ],
+    [
+     1560,
+     1650,
+     1835,
+     1.1101,
+     1.0732,
+     1.1464,
+     1.1126,
+     1.1095
+    ],
+    [
+     1650,
+     1740,
+     1288,
+     1.1067,
+     1.0671,
+     1.1465,
+     1.0866,
+     1.1099
+    ],
+    [
+     1740,
+     1830,
+     913,
+     1.1034,
+     1.0569,
+     1.1427,
+     1.0726,
+     1.1089
+    ],
+    [
+     1830,
+     1920,
+     608,
+     1.0943,
+     1.0439,
+     1.1333,
+     1.0572,
+     1.0993
+    ],
+    [
+     1920,
+     2010,
+     447,
+     1.0762,
+     1.0177,
+     1.1272,
+     1.0202,
+     1.0901
+    ],
+    [
+     2010,
+     2100,
+     281,
+     1.0576,
+     0.9855,
+     1.1076,
+     0.9674,
+     1.0786
+    ],
+    [
+     2100,
+     2190,
+     223,
+     1.047,
+     0.9936,
+     1.097,
+     0.9613,
+     1.0646
+    ],
+    [
+     2190,
+     2280,
+     149,
+     1.0296,
+     0.9579,
+     1.0783,
+     0.9341,
+     1.0453
+    ],
+    [
+     2280,
+     2370,
+     105,
+     0.9898,
+     0.9415,
+     1.0652,
+     0.9406,
+     1.0335
+    ],
+    [
+     2370,
+     2460,
+     79,
+     0.9612,
+     0.889,
+     1.0311,
+     0.9275,
+     0.976
+    ],
+    [
+     2460,
+     2550,
+     45,
+     0.92,
+     0.8598,
+     1.0024,
+     null,
+     0.9227
+    ],
+    [
+     2550,
+     2640,
+     43,
+     0.9096,
+     0.8166,
+     0.9783,
+     null,
+     0.9296
+    ]
+   ]
+  },
+  "10k>hm": {
+   "n": 130791,
+   "median": 1.0795,
+   "bands": [
+    [
+     1680,
+     1860,
+     874,
+     1.0702,
+     1.0503,
+     1.098,
+     1.0705,
+     null
+    ],
+    [
+     1860,
+     2040,
+     4672,
+     1.066,
+     1.0451,
+     1.0943,
+     1.0663,
+     1.0618
+    ],
+    [
+     2040,
+     2220,
+     10869,
+     1.0676,
+     1.0428,
+     1.1003,
+     1.0674,
+     1.0707
+    ],
+    [
+     2220,
+     2400,
+     16086,
+     1.0742,
+     1.0431,
+     1.1114,
+     1.0748,
+     1.0718
+    ],
+    [
+     2400,
+     2580,
+     15788,
+     1.079,
+     1.0414,
+     1.1279,
+     1.0811,
+     1.0746
+    ],
+    [
+     2580,
+     2760,
+     16348,
+     1.0844,
+     1.041,
+     1.1371,
+     1.0877,
+     1.0783
+    ],
+    [
+     2760,
+     2940,
+     14817,
+     1.0891,
+     1.0376,
+     1.1475,
+     1.0922,
+     1.0856
+    ],
+    [
+     2940,
+     3120,
+     12474,
+     1.0928,
+     1.037,
+     1.1524,
+     1.0918,
+     1.0934
+    ],
+    [
+     3120,
+     3300,
+     10523,
+     1.0858,
+     1.0244,
+     1.1581,
+     1.0765,
+     1.0901
+    ],
+    [
+     3300,
+     3480,
+     8519,
+     1.0914,
+     1.0077,
+     1.168,
+     1.0632,
+     1.0994
+    ],
+    [
+     3480,
+     3660,
+     6664,
+     1.093,
+     0.9979,
+     1.1734,
+     1.0419,
+     1.1025
+    ],
+    [
+     3660,
+     3840,
+     4368,
+     1.0886,
+     0.9868,
+     1.168,
+     1.025,
+     1.0988
+    ],
+    [
+     3840,
+     4020,
+     3028,
+     1.0801,
+     0.9568,
+     1.1711,
+     0.9596,
+     1.092
+    ],
+    [
+     4020,
+     4200,
+     2201,
+     1.0696,
+     0.9396,
+     1.1616,
+     0.9822,
+     1.0838
+    ]
+   ]
+  },
+  "10k>mar": {
+   "n": 86224,
+   "median": 1.1205,
+   "bands": [
+    [
+     1680,
+     1860,
+     570,
+     1.0849,
+     1.0669,
+     1.113,
+     1.0854,
+     null
+    ],
+    [
+     1860,
+     2040,
+     3492,
+     1.0874,
+     1.0674,
+     1.1176,
+     1.0878,
+     1.07
+    ],
+    [
+     2040,
+     2220,
+     8691,
+     1.0945,
+     1.072,
+     1.1236,
+     1.0949,
+     1.0895
+    ],
+    [
+     2220,
+     2400,
+     12454,
+     1.1065,
+     1.0745,
+     1.1503,
+     1.11,
+     1.094
+    ],
+    [
+     2400,
+     2580,
+     11802,
+     1.1232,
+     1.0878,
+     1.1699,
+     1.1324,
+     1.1034
+    ],
+    [
+     2580,
+     2760,
+     11596,
+     1.1318,
+     1.0913,
+     1.1781,
+     1.1464,
+     1.1082
+    ],
+    [
+     2760,
+     2940,
+     9904,
+     1.1346,
+     1.0934,
+     1.1918,
+     1.1523,
+     1.1187
+    ],
+    [
+     2940,
+     3120,
+     7816,
+     1.1454,
+     1.0952,
+     1.1974,
+     1.1626,
+     1.1344
+    ],
+    [
+     3120,
+     3300,
+     6088,
+     1.1446,
+     1.0972,
+     1.1947,
+     1.1519,
+     1.1424
+    ],
+    [
+     3300,
+     3480,
+     4589,
+     1.1465,
+     1.0962,
+     1.1991,
+     1.1433,
+     1.1478
+    ],
+    [
+     3480,
+     3660,
+     3240,
+     1.1385,
+     1.0814,
+     1.1907,
+     1.1167,
+     1.1457
+    ],
+    [
+     3660,
+     3840,
+     1980,
+     1.1351,
+     1.0666,
+     1.1873,
+     1.0899,
+     1.1425
+    ],
+    [
+     3840,
+     4020,
+     1307,
+     1.1195,
+     1.0401,
+     1.1721,
+     1.0451,
+     1.1307
+    ],
+    [
+     4020,
+     4200,
+     965,
+     1.1042,
+     1.0271,
+     1.1604,
+     1.024,
+     1.1166
+    ]
+   ]
+  },
+  "hm>mar": {
+   "n": 95263,
+   "median": 1.1683,
+   "bands": [
+    [
+     3600,
+     3900,
+     114,
+     1.0904,
+     1.0706,
+     1.1169,
+     1.0904,
+     null
+    ],
+    [
+     3900,
+     4200,
+     998,
+     1.1067,
+     1.0815,
+     1.1499,
+     1.1068,
+     null
+    ],
+    [
+     4200,
+     4500,
+     3295,
+     1.1127,
+     1.0818,
+     1.1601,
+     1.1138,
+     1.0911
+    ],
+    [
+     4500,
+     4800,
+     6570,
+     1.1282,
+     1.091,
+     1.1743,
+     1.1293,
+     1.1132
+    ],
+    [
+     4800,
+     5100,
+     8352,
+     1.1273,
+     1.0902,
+     1.198,
+     1.1301,
+     1.1129
+    ],
+    [
+     5100,
+     5400,
+     10326,
+     1.1604,
+     1.1033,
+     1.2381,
+     1.1711,
+     1.13
+    ],
+    [
+     5400,
+     5700,
+     8799,
+     1.1771,
+     1.1187,
+     1.2651,
+     1.1962,
+     1.1412
+    ],
+    [
+     5700,
+     6000,
+     9912,
+     1.1856,
+     1.1183,
+     1.2723,
+     1.2127,
+     1.145
+    ],
+    [
+     6000,
+     6300,
+     8669,
+     1.1909,
+     1.1205,
+     1.283,
+     1.2162,
+     1.1564
+    ],
+    [
+     6300,
+     6600,
+     7745,
+     1.1905,
+     1.1176,
+     1.2991,
+     1.2235,
+     1.1675
+    ],
+    [
+     6600,
+     6900,
+     6621,
+     1.2092,
+     1.1174,
+     1.3062,
+     1.2344,
+     1.1908
+    ],
+    [
+     6900,
+     7200,
+     6163,
+     1.2114,
+     1.1261,
+     1.3063,
+     1.2251,
+     1.2033
+    ],
+    [
+     7200,
+     7500,
+     4055,
+     1.2085,
+     1.1135,
+     1.2992,
+     1.212,
+     1.2077
+    ],
+    [
+     7500,
+     7800,
+     3299,
+     1.2039,
+     1.1109,
+     1.3019,
+     1.2019,
+     1.2042
+    ],
+    [
+     7800,
+     8100,
+     2687,
+     1.1937,
+     1.0982,
+     1.2937,
+     1.1681,
+     1.2017
+    ],
+    [
+     8100,
+     8400,
+     1977,
+     1.1879,
+     1.0778,
+     1.281,
+     1.1533,
+     1.1983
+    ]
+   ]
+  }
+ },
+ "bridge": {
+  "alpha": -7.276,
+  "beta": 0.7587,
+  "residSd": 0.1214,
+  "n": 25247
+ },
+ "cost": {
+  "c0": 4.7186,
+  "c1": 1.3093,
+  "c2": 0.01017,
+  "residSd": 0.0819,
+  "nEditions": 3068,
+  "nFinishes": 245726
+ },
+ "terrain": {
+  "flat": 4,
+  "rolling": 13,
+  "hilly": 24,
+  "mountain": 47
+ },
+ "surface": {
+  "trail": 0.0,
+  "road": -0.1
+ },
+ "softAnchorSeconds": {
+  "5k": 1680,
+  "10k": 3600,
+  "hm": 7800,
+  "mar": 18000
+ },
+ "confidence": {
+  "roadFromHalf": 96,
+  "roadFrom10k": 95,
+  "roadFrom5k": 94,
+  "ultraRace": 92,
+  "ultraClimb": 91,
+  "ultraDistanceOnly": 84
+ },
+ "races": [
+  {
+   "id": "amersham-ultra",
+   "name": "Amersham Ultra",
+   "km": 49.9,
+   "climbPerKm": 16.0,
+   "cost": 9.9932,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 873,
+   "editions": 7
+  },
+  {
+   "id": "arc-of-attrition-100",
+   "name": "Arc of Attrition 100",
+   "km": 160.9,
+   "climbPerKm": 28.6,
+   "cost": 11.7528,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1335,
+   "editions": 11
+  },
+  {
+   "id": "arc-of-attrition-50",
+   "name": "Arc of Attrition 50",
+   "km": 80.5,
+   "climbPerKm": 32.3,
+   "cost": 10.8413,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1251,
+   "editions": 7
+  },
+  {
+   "id": "autumn-100",
+   "name": "Autumn 100",
+   "km": 160.9,
+   "climbPerKm": 3.7,
+   "cost": 11.4225,
+   "class": "flat",
+   "surface": "trail",
+   "n": 1789,
+   "editions": 11
+  },
+  {
+   "id": "beacons-ultra",
+   "name": "Beacons Ultra",
+   "km": 73.7,
+   "climbPerKm": 21.7,
+   "cost": 10.5672,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 879,
+   "editions": 8
+  },
+  {
+   "id": "brecon-to-cardiff",
+   "name": "Brecon to Cardiff",
+   "km": 70.0,
+   "climbPerKm": 8.6,
+   "cost": 10.3654,
+   "class": "rolling",
+   "surface": "mixed",
+   "n": 1099,
+   "editions": 6
+  },
+  {
+   "id": "centurion-track-100",
+   "name": "Centurion Track 100",
+   "km": 80.5,
+   "climbPerKm": 0.0,
+   "cost": 10.5453,
+   "class": "flat",
+   "surface": "track",
+   "n": 133,
+   "editions": 15
+  },
+  {
+   "id": "chester-ultra-100",
+   "name": "Chester Ultra 100",
+   "km": 160.9,
+   "climbPerKm": 9.9,
+   "cost": 11.5551,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 672,
+   "editions": 8
+  },
+  {
+   "id": "chester-ultra-50",
+   "name": "Chester Ultra 50",
+   "km": 80.5,
+   "climbPerKm": 11.2,
+   "cost": 10.6147,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 2485,
+   "editions": 10
+  },
+  {
+   "id": "chiltern-ridge-ultra",
+   "name": "Chiltern Ridge Ultra",
+   "km": 50.0,
+   "climbPerKm": 20.0,
+   "cost": 10.0156,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 669,
+   "editions": 6
+  },
+  {
+   "id": "chiltern-wonderland-50",
+   "name": "Chiltern Wonderland 50",
+   "km": 80.5,
+   "climbPerKm": 21.1,
+   "cost": 10.5962,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1893,
+   "editions": 10
+  },
+  {
+   "id": "classic-quarter",
+   "name": "Classic Quarter",
+   "km": 71.6,
+   "climbPerKm": 27.9,
+   "cost": 10.6047,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 733,
+   "editions": 5
+  },
+  {
+   "id": "cotswold-way-century",
+   "name": "Cotswold Way Century",
+   "km": 164.2,
+   "climbPerKm": 24.4,
+   "cost": 11.6057,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 408,
+   "editions": 9
+  },
+  {
+   "id": "cotswold-way-challenge",
+   "name": "Cotswold Way Challenge",
+   "km": 100.0,
+   "climbPerKm": 24.0,
+   "cost": 11.124,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 716,
+   "editions": 3
+  },
+  {
+   "id": "country-to-capital",
+   "name": "Country to Capital",
+   "km": 70.8,
+   "climbPerKm": 8.5,
+   "cost": 10.3145,
+   "class": "rolling",
+   "surface": "mixed",
+   "n": 3090,
+   "editions": 12
+  },
+  {
+   "id": "d33-deeside-way",
+   "name": "D33 Deeside Way",
+   "km": 53.1,
+   "climbPerKm": 5.6,
+   "cost": 9.9053,
+   "class": "flat",
+   "surface": "trail",
+   "n": 1501,
+   "editions": 8
+  },
+  {
+   "id": "dartmoor-discovery",
+   "name": "Dartmoor Discovery",
+   "km": 51.5,
+   "climbPerKm": 19.4,
+   "cost": 9.9472,
+   "class": "hilly",
+   "surface": "road",
+   "n": 1195,
+   "editions": 8
+  },
+  {
+   "id": "devil-o-the-highlands",
+   "name": "Devil o' the Highlands",
+   "km": 67.6,
+   "climbPerKm": 25.1,
+   "cost": 10.4376,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 2916,
+   "editions": 10
+  },
+  {
+   "id": "dukeries-40",
+   "name": "Dukeries 40",
+   "km": 65.7,
+   "climbPerKm": 6.1,
+   "cost": 10.2382,
+   "class": "flat",
+   "surface": "trail",
+   "n": 734,
+   "editions": 9
+  },
+  {
+   "id": "fox-ultra",
+   "name": "Fox Ultra",
+   "km": 61.0,
+   "climbPerKm": 16.4,
+   "cost": 10.2094,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 975,
+   "editions": 7
+  },
+  {
+   "id": "glasgow-to-edinburgh",
+   "name": "Glasgow to Edinburgh",
+   "km": 90.1,
+   "climbPerKm": 3.3,
+   "cost": 10.5982,
+   "class": "flat",
+   "surface": "mixed",
+   "n": 1334,
+   "editions": 9
+  },
+  {
+   "id": "glen-ogle-33",
+   "name": "Glen Ogle 33",
+   "km": 53.1,
+   "climbPerKm": 15.1,
+   "cost": 9.9641,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 2246,
+   "editions": 8
+  },
+  {
+   "id": "glencoe-skyline",
+   "name": "Glencoe Skyline",
+   "km": 52.0,
+   "climbPerKm": 91.3,
+   "cost": 10.6824,
+   "class": "mountain",
+   "surface": "fell",
+   "n": 595,
+   "editions": 6
+  },
+  {
+   "id": "goring-gap-50k",
+   "name": "Goring Gap 50K",
+   "km": 50.0,
+   "climbPerKm": 14.0,
+   "cost": 10.0111,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 686,
+   "editions": 3
+  },
+  {
+   "id": "hardmoors-30",
+   "name": "Hardmoors 30",
+   "km": 48.3,
+   "climbPerKm": 22.8,
+   "cost": 10.0716,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1646,
+   "editions": 9
+  },
+  {
+   "id": "hardmoors-55",
+   "name": "Hardmoors 55",
+   "km": 88.5,
+   "climbPerKm": 28.2,
+   "cost": 10.769,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 2027,
+   "editions": 9
+  },
+  {
+   "id": "hardmoors-60",
+   "name": "Hardmoors 60",
+   "km": 99.8,
+   "climbPerKm": 23.0,
+   "cost": 10.9352,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1391,
+   "editions": 8
+  },
+  {
+   "id": "haworth-hobble",
+   "name": "Haworth Hobble",
+   "km": 51.0,
+   "climbPerKm": 27.5,
+   "cost": 10.1086,
+   "class": "hilly",
+   "surface": "fell",
+   "n": 987,
+   "editions": 3
+  },
+  {
+   "id": "heart-of-wales-ultra",
+   "name": "Heart of Wales Ultra",
+   "km": 48.3,
+   "climbPerKm": 24.8,
+   "cost": 10.0745,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 878,
+   "editions": 7
+  },
+  {
+   "id": "highland-fling",
+   "name": "Highland Fling",
+   "km": 85.3,
+   "climbPerKm": 27.0,
+   "cost": 10.7135,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 4212,
+   "editions": 8
+  },
+  {
+   "id": "hundred-hills-50k",
+   "name": "Hundred Hills 50K",
+   "km": 49.9,
+   "climbPerKm": 25.9,
+   "cost": 10.0848,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1272,
+   "editions": 4
+  },
+  {
+   "id": "hurtwood-50k",
+   "name": "Hurtwood 50K",
+   "km": 50.0,
+   "climbPerKm": 25.0,
+   "cost": 10.0893,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1883,
+   "editions": 8
+  },
+  {
+   "id": "imber-ultra",
+   "name": "Imber Ultra",
+   "km": 53.1,
+   "climbPerKm": 13.2,
+   "cost": 10.035,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 814,
+   "editions": 9
+  },
+  {
+   "id": "isle-of-wight-challenge",
+   "name": "Isle of Wight Challenge",
+   "km": 106.0,
+   "climbPerKm": 22.6,
+   "cost": 10.8079,
+   "class": "hilly",
+   "surface": "mixed",
+   "n": 1275,
+   "editions": 8
+  },
+  {
+   "id": "jedburgh-three-peaks",
+   "name": "Jedburgh Three Peaks",
+   "km": 61.2,
+   "climbPerKm": 19.6,
+   "cost": 10.2869,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1161,
+   "editions": 7
+  },
+  {
+   "id": "john-muir-way-50k",
+   "name": "John Muir Way 50K",
+   "km": 50.0,
+   "climbPerKm": 10.0,
+   "cost": 9.8857,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 784,
+   "editions": 6
+  },
+  {
+   "id": "jurassic-coast-challenge",
+   "name": "Jurassic Coast Challenge",
+   "km": 115.5,
+   "climbPerKm": 24.2,
+   "cost": 11.013,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 882,
+   "editions": 6
+  },
+  {
+   "id": "keswick-50k",
+   "name": "Keswick 50K",
+   "km": 50.0,
+   "climbPerKm": 38.0,
+   "cost": 10.2673,
+   "class": "mountain",
+   "surface": "trail",
+   "n": 903,
+   "editions": 7
+  },
+  {
+   "id": "ladybower-50k",
+   "name": "Ladybower 50K",
+   "km": 50.0,
+   "climbPerKm": 7.0,
+   "cost": 10.1232,
+   "class": "flat",
+   "surface": "trail",
+   "n": 882,
+   "editions": 3
+  },
+  {
+   "id": "lakeland-100",
+   "name": "Lakeland 100",
+   "km": 160.9,
+   "climbPerKm": 39.2,
+   "cost": 11.8134,
+   "class": "mountain",
+   "surface": "trail",
+   "n": 3000,
+   "editions": 10
+  },
+  {
+   "id": "lakeland-50",
+   "name": "Lakeland 50",
+   "km": 80.5,
+   "climbPerKm": 38.5,
+   "cost": 10.8274,
+   "class": "mountain",
+   "surface": "trail",
+   "n": 4963,
+   "editions": 7
+  },
+  {
+   "id": "lakes-in-a-day",
+   "name": "Lakes in a Day",
+   "km": 80.5,
+   "climbPerKm": 49.7,
+   "cost": 11.0441,
+   "class": "mountain",
+   "surface": "trail",
+   "n": 2147,
+   "editions": 9
+  },
+  {
+   "id": "london-2-brighton",
+   "name": "London 2 Brighton",
+   "km": 100.0,
+   "climbPerKm": 13.0,
+   "cost": 11.0466,
+   "class": "rolling",
+   "surface": "mixed",
+   "n": 2299,
+   "editions": 5
+  },
+  {
+   "id": "manchester-to-liverpool-50",
+   "name": "Manchester to Liverpool 50",
+   "km": 80.5,
+   "climbPerKm": 2.5,
+   "cost": 10.4716,
+   "class": "flat",
+   "surface": "mixed",
+   "n": 1775,
+   "editions": 7
+  },
+  {
+   "id": "millennium-way",
+   "name": "Millennium Way",
+   "km": 66.0,
+   "climbPerKm": 9.1,
+   "cost": 10.3066,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 878,
+   "editions": 11
+  },
+  {
+   "id": "north-downs-ridge-50k",
+   "name": "North Downs Ridge 50K",
+   "km": 50.0,
+   "climbPerKm": 27.0,
+   "cost": 9.9973,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 946,
+   "editions": 6
+  },
+  {
+   "id": "north-downs-way-100",
+   "name": "North Downs Way 100",
+   "km": 165.8,
+   "climbPerKm": 18.1,
+   "cost": 11.5441,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1601,
+   "editions": 12
+  },
+  {
+   "id": "north-downs-way-50",
+   "name": "North Downs Way 50",
+   "km": 80.5,
+   "climbPerKm": 21.1,
+   "cost": 10.6011,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 2535,
+   "editions": 11
+  },
+  {
+   "id": "old-county-tops",
+   "name": "Old County Tops",
+   "km": 59.5,
+   "climbPerKm": 50.4,
+   "cost": 10.6377,
+   "class": "mountain",
+   "surface": "fell",
+   "n": 852,
+   "editions": 5
+  },
+  {
+   "id": "peddars-way",
+   "name": "Peddars Way",
+   "km": 77.2,
+   "climbPerKm": 3.9,
+   "cost": 10.4559,
+   "class": "flat",
+   "surface": "trail",
+   "n": 1176,
+   "editions": 12
+  },
+  {
+   "id": "pennine-barrier-50",
+   "name": "Pennine Barrier 50",
+   "km": 80.5,
+   "climbPerKm": 28.6,
+   "cost": 10.7764,
+   "class": "mountain",
+   "surface": "trail",
+   "n": 2249,
+   "editions": 9
+  },
+  {
+   "id": "portsmouth-coastal-50k",
+   "name": "Portsmouth Coastal 50K",
+   "km": 50.0,
+   "climbPerKm": 3.0,
+   "cost": 9.8522,
+   "class": "flat",
+   "surface": "mixed",
+   "n": 609,
+   "editions": 3
+  },
+  {
+   "id": "rat-black-rat",
+   "name": "RAT Black Rat",
+   "km": 95.3,
+   "climbPerKm": 17.8,
+   "cost": 10.6901,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1794,
+   "editions": 17
+  },
+  {
+   "id": "race-to-the-king",
+   "name": "Race to the King",
+   "km": 86.1,
+   "climbPerKm": 17.4,
+   "cost": 10.6783,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 3568,
+   "editions": 10
+  },
+  {
+   "id": "race-to-the-stones-100k",
+   "name": "Race to the Stones 100K",
+   "km": 100.0,
+   "climbPerKm": 13.0,
+   "cost": 10.9164,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 5988,
+   "editions": 9
+  },
+  {
+   "id": "race-to-the-stones-50k",
+   "name": "Race to the Stones 50K",
+   "km": 50.0,
+   "climbPerKm": 12.0,
+   "cost": 10.1201,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 987,
+   "editions": 12
+  },
+  {
+   "id": "race-to-the-tower",
+   "name": "Race to the Tower",
+   "km": 84.3,
+   "climbPerKm": 23.7,
+   "cost": 10.7993,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1498,
+   "editions": 4
+  },
+  {
+   "id": "round-reading-50k",
+   "name": "Round Reading 50K",
+   "km": 52.5,
+   "climbPerKm": 7.6,
+   "cost": 10.1356,
+   "class": "flat",
+   "surface": "trail",
+   "n": 1035,
+   "editions": 9
+  },
+  {
+   "id": "round-rotherham",
+   "name": "Round Rotherham",
+   "km": 80.5,
+   "climbPerKm": 11.2,
+   "cost": 10.6339,
+   "class": "rolling",
+   "surface": "mixed",
+   "n": 1395,
+   "editions": 10
+  },
+  {
+   "id": "run-the-blades-50k",
+   "name": "Run the Blades 50K",
+   "km": 50.0,
+   "climbPerKm": 14.0,
+   "cost": 9.9083,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 727,
+   "editions": 8
+  },
+  {
+   "id": "run-to-the-sea-bournemouth",
+   "name": "Run to the Sea Bournemouth",
+   "km": 50.0,
+   "climbPerKm": 8.0,
+   "cost": 9.891,
+   "class": "flat",
+   "surface": "trail",
+   "n": 1104,
+   "editions": 4
+  },
+  {
+   "id": "run-to-the-sea-brighton",
+   "name": "Run to the Sea Brighton",
+   "km": 50.0,
+   "climbPerKm": 12.0,
+   "cost": 9.9613,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 879,
+   "editions": 4
+  },
+  {
+   "id": "salisbury-54321-50k",
+   "name": "Salisbury 54321 50K",
+   "km": 50.0,
+   "climbPerKm": 12.0,
+   "cost": 9.9547,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 1012,
+   "editions": 5
+  },
+  {
+   "id": "serpent-trail-100k",
+   "name": "Serpent Trail 100K",
+   "km": 100.0,
+   "climbPerKm": 14.0,
+   "cost": 10.9124,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 900,
+   "editions": 9
+  },
+  {
+   "id": "serpent-trail-50k",
+   "name": "Serpent Trail 50K",
+   "km": 50.0,
+   "climbPerKm": 14.0,
+   "cost": 10.0397,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 2000,
+   "editions": 9
+  },
+  {
+   "id": "shires-spires",
+   "name": "Shires & Spires",
+   "km": 56.3,
+   "climbPerKm": 8.9,
+   "cost": 10.1228,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 1291,
+   "editions": 12
+  },
+  {
+   "id": "south-coast-challenge",
+   "name": "South Coast Challenge",
+   "km": 100.0,
+   "climbPerKm": 25.0,
+   "cost": 11.0437,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 933,
+   "editions": 4
+  },
+  {
+   "id": "south-downs-way-100",
+   "name": "South Downs Way 100",
+   "km": 160.9,
+   "climbPerKm": 23.6,
+   "cost": 11.4609,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 2935,
+   "editions": 11
+  },
+  {
+   "id": "south-downs-way-50",
+   "name": "South Downs Way 50",
+   "km": 80.5,
+   "climbPerKm": 21.6,
+   "cost": 10.5389,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 3901,
+   "editions": 12
+  },
+  {
+   "id": "stort-30",
+   "name": "Stort 30",
+   "km": 48.3,
+   "climbPerKm": 4.1,
+   "cost": 9.8356,
+   "class": "flat",
+   "surface": "trail",
+   "n": 1109,
+   "editions": 10
+  },
+  {
+   "id": "stour-valley-path-100k",
+   "name": "Stour Valley Path 100K",
+   "km": 102.0,
+   "climbPerKm": 9.8,
+   "cost": 10.8616,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 857,
+   "editions": 12
+  },
+  {
+   "id": "stour-valley-path-50k",
+   "name": "Stour Valley Path 50K",
+   "km": 50.0,
+   "climbPerKm": 10.0,
+   "cost": 10.0751,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 934,
+   "editions": 9
+  },
+  {
+   "id": "thames-path-100",
+   "name": "Thames Path 100",
+   "km": 160.9,
+   "climbPerKm": 4.4,
+   "cost": 11.428,
+   "class": "flat",
+   "surface": "trail",
+   "n": 2217,
+   "editions": 12
+  },
+  {
+   "id": "thames-path-challenge",
+   "name": "Thames Path Challenge",
+   "km": 100.0,
+   "climbPerKm": 3.0,
+   "cost": 10.9663,
+   "class": "flat",
+   "surface": "trail",
+   "n": 1541,
+   "editions": 5
+  },
+  {
+   "id": "thames-trot",
+   "name": "Thames Trot",
+   "km": 80.5,
+   "climbPerKm": 2.5,
+   "cost": 10.4747,
+   "class": "flat",
+   "surface": "trail",
+   "n": 1001,
+   "editions": 7
+  },
+  {
+   "id": "the-fellsman",
+   "name": "The Fellsman",
+   "km": 98.2,
+   "climbPerKm": 34.6,
+   "cost": 11.2098,
+   "class": "mountain",
+   "surface": "fell",
+   "n": 1149,
+   "editions": 5
+  },
+  {
+   "id": "the-lap",
+   "name": "The Lap",
+   "km": 75.6,
+   "climbPerKm": 30.4,
+   "cost": 10.78,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1530,
+   "editions": 6
+  },
+  {
+   "id": "the-wall",
+   "name": "The Wall",
+   "km": 111.0,
+   "climbPerKm": 13.5,
+   "cost": 11.0013,
+   "class": "rolling",
+   "surface": "mixed",
+   "n": 2233,
+   "editions": 7
+  },
+  {
+   "id": "tiree-ultra",
+   "name": "Tiree Ultra",
+   "km": 56.3,
+   "climbPerKm": 5.3,
+   "cost": 10.1333,
+   "class": "flat",
+   "surface": "mixed",
+   "n": 671,
+   "editions": 6
+  },
+  {
+   "id": "ultimate-trails-55k",
+   "name": "Ultimate Trails 55K",
+   "km": 55.0,
+   "climbPerKm": 36.4,
+   "cost": 10.4337,
+   "class": "mountain",
+   "surface": "trail",
+   "n": 1880,
+   "editions": 7
+  },
+  {
+   "id": "ultra-tour-of-edinburgh",
+   "name": "Ultra Tour of Edinburgh",
+   "km": 56.0,
+   "climbPerKm": 19.6,
+   "cost": 10.134,
+   "class": "hilly",
+   "surface": "mixed",
+   "n": 1013,
+   "editions": 4
+  },
+  {
+   "id": "ultra-wales-50",
+   "name": "Ultra Wales 50",
+   "km": 80.5,
+   "climbPerKm": 18.6,
+   "cost": 10.9575,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 720,
+   "editions": 3
+  },
+  {
+   "id": "ultra-x-50k-series",
+   "name": "Ultra X 50K series",
+   "km": 50.0,
+   "climbPerKm": 16.0,
+   "cost": 10.0575,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 1598,
+   "editions": 14
+  },
+  {
+   "id": "ultra-trail-snowdonia-100k",
+   "name": "Ultra-Trail Snowdonia 100K",
+   "km": 103.0,
+   "climbPerKm": 64.1,
+   "cost": 11.5114,
+   "class": "mountain",
+   "surface": "trail",
+   "n": 719,
+   "editions": 2
+  },
+  {
+   "id": "ultra-trail-snowdonia-100m",
+   "name": "Ultra-Trail Snowdonia 100M",
+   "km": 168.0,
+   "climbPerKm": 59.5,
+   "cost": 12.1017,
+   "class": "mountain",
+   "surface": "trail",
+   "n": 258,
+   "editions": 3
+  },
+  {
+   "id": "ultra-trail-snowdonia-50k",
+   "name": "Ultra-Trail Snowdonia 50K",
+   "km": 55.0,
+   "climbPerKm": 58.2,
+   "cost": 10.8257,
+   "class": "mountain",
+   "surface": "trail",
+   "n": 2516,
+   "editions": 7
+  },
+  {
+   "id": "vale-of-glamorgan-ultra",
+   "name": "Vale of Glamorgan Ultra",
+   "km": 64.4,
+   "climbPerKm": 18.6,
+   "cost": 10.4003,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 873,
+   "editions": 8
+  },
+  {
+   "id": "weald-challenge-50k",
+   "name": "Weald Challenge 50K",
+   "km": 50.0,
+   "climbPerKm": 18.0,
+   "cost": 10.0366,
+   "class": "rolling",
+   "surface": "trail",
+   "n": 972,
+   "editions": 8
+  },
+  {
+   "id": "wendover-woods-50",
+   "name": "Wendover Woods 50",
+   "km": 80.5,
+   "climbPerKm": 37.3,
+   "cost": 10.7654,
+   "class": "hilly",
+   "surface": "trail",
+   "n": 1524,
+   "editions": 9
+  },
+  {
+   "id": "west-highland-way-race",
+   "name": "West Highland Way Race",
+   "km": 153.0,
+   "climbPerKm": 28.1,
+   "cost": 11.5219,
+   "class": "mountain",
+   "surface": "trail",
+   "n": 1632,
+   "editions": 10
+  }
+ ],
+ "evidence": {
+  "roadPerformances": 2367762,
+  "roadAthletes": 211100,
+  "roadYears": "2021–2025",
+  "ultraFinishes": 318089,
+  "ultraRunners": 124616,
+  "ultraEditions": 3285,
+  "ultraYears": "2015–2026",
+  "marathonUltraPairs": 25247,
+  "hundredMilePairsById": 1881,
+  "centurionSplits": 7687,
+  "heldOutErrorUltraPct": 8.3,
+  "heldOutErrorUltraMountainPct": 10.6,
+  "oldModelErrorUltraPct": 25.0,
+  "oldModelErrorMountainPct": 41.2,
+  "marathonFromHalfErrorPct": 4.0,
+  "riegelMarathonFromHalfErrorPct": 7.3,
+  "personalExponentErrorPct": 8.9
+ }
+}

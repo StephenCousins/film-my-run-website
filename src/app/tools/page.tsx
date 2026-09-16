@@ -96,7 +96,7 @@ const calculatorTools = [
   },
   {
     name: 'Race Predictor',
-    description: 'Predict times for other distances',
+    description: 'Times for other distances, from 2.4 million real results',
     icon: Target,
     href: '/tools/calculators#predictor',
   },

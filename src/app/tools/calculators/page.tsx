@@ -45,7 +45,7 @@ const calculators = [
   {
     id: 'predictor',
     name: 'Race Predictor',
-    description: 'Predict race times based on recent performances',
+    description: 'Your next race time, from 2.4 million real UK results',
     icon: Target,
     color: 'from-blue-500 to-blue-600',
     popular: true,

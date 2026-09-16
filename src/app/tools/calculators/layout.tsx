@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: 'Running Calculators',
   alternates: { canonical: 'https://filmmyrun.com/tools/calculators' },
   description:
-    'Free running calculators used by 250,000+ runners every week. Pace calculator, race predictor, splits calculator, age grading, VO2 max estimator, and more.',
+    'Free running calculators used by 250,000+ runners every week. Pace calculator, a race predictor built on 2.4 million real UK results, splits calculator, age grading, VO2 max estimator, and more.',
   keywords: [
     'pace calculator',
     'running calculator',
