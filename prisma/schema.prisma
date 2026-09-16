@@ -610,3 +610,35 @@ enum AccessTier {
   PREMIUM
   PRO
 }
+
+enum ChatSender {
+  user
+  stephen
+}
+
+/// "Ask Stephen" — one-to-one chat between a Pro app subscriber and Stephen.
+/// See docs/superpowers/specs/2026-09-16-pro-page-chat-design.md §3.
+model chat_threads {
+  id                   String          @id @default(uuid())
+  install_id           String          @unique
+  name                 String
+  email                String
+  created_at           DateTime        @default(now())
+  updated_at           DateTime        @default(now()) @updatedAt
+  last_user_message_at DateTime?
+  last_reply_at        DateTime?
+  unanswered           Boolean         @default(false)
+  messages             chat_messages[]
+}
+
+model chat_messages {
+  id               String       @id @default(uuid())
+  thread_id        String
+  sender           ChatSender
+  text             String
+  created_at       DateTime     @default(now())
+  read_by_user_at  DateTime?
+  thread           chat_threads @relation(fields: [thread_id], references: [id], onDelete: Cascade)
+
+  @@index([thread_id, created_at])
+}
