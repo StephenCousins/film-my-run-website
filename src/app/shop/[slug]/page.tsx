@@ -1,510 +1,151 @@
-'use client';
-
-import { useState } from 'react';
-import Image from 'next/image';
+import type { Metadata } from 'next';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
-import {
-  ShoppingBag,
-  Star,
-  Heart,
-  Share2,
-  Truck,
-  RefreshCw,
-  Shield,
-  ChevronRight,
-  Minus,
-  Plus,
-  Check,
-} from 'lucide-react';
+import { notFound } from 'next/navigation';
+import { ChevronRight, ExternalLink, Truck, Shield } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { cn } from '@/lib/utils';
+import ProductGallery from '@/components/shop/ProductGallery';
+import ProductCard from '@/components/shop/ProductCard';
+import { shopItems, getShopItem, formatPrice, etsyLink, swatch } from '@/lib/shop';
 
-// ============================================
-// TYPES
-// ============================================
-
-interface Product {
-  id: string;
-  name: string;
-  slug: string;
-  price: number;
-  comparePrice?: number;
-  images: string[];
-  category: string;
-  rating: number;
-  reviews: number;
-  badge?: string;
-  inStock: boolean;
-  description: string;
-  features: string[];
-  sizes?: string[];
-  colors?: { name: string; hex: string }[];
-  specs: { label: string; value: string }[];
+interface Props {
+  params: Promise<{ slug: string }>;
 }
 
-// ============================================
-// PLACEHOLDER DATA
-// ============================================
+export function generateStaticParams() {
+  return shopItems.map((i) => ({ slug: i.slug }));
+}
 
-const products: Record<string, Product> = {
-  'running-cap': {
-    id: '1',
-    name: 'Film My Run Running Cap',
-    slug: 'running-cap',
-    price: 24.99,
-    images: ['https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap.svg', 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap.svg', 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap.svg'],
-    category: 'Accessories',
-    rating: 4.9,
-    reviews: 47,
-    badge: 'Best Seller',
-    inStock: true,
-    description:
-      'Our signature running cap combines lightweight construction with superior breathability. The moisture-wicking sweatband keeps you cool during intense sessions, while the curved brim provides protection from sun and rain. Perfect for training runs and race day.',
-    features: [
-      'Lightweight, breathable mesh construction',
-      'Moisture-wicking sweatband',
-      'Adjustable strap for custom fit',
-      'Reflective Film My Run logo',
-      'UPF 30+ sun protection',
-      'Quick-dry fabric',
-    ],
-    colors: [
-      { name: 'Black', hex: '#1a1a1a' },
-      { name: 'Orange', hex: '#f88c00' },
-      { name: 'White', hex: '#ffffff' },
-    ],
-    specs: [
-      { label: 'Material', value: '100% Polyester' },
-      { label: 'Weight', value: '45g' },
-      { label: 'Care', value: 'Machine wash cold' },
-      { label: 'Origin', value: 'Made in UK' },
-    ],
-  },
-  'ultra-vest': {
-    id: '2',
-    name: 'Ultra Lightweight Running Vest',
-    slug: 'ultra-vest',
-    price: 89.99,
-    comparePrice: 109.99,
-    images: ['https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest.svg', 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest.svg'],
-    category: 'Gear',
-    rating: 4.8,
-    reviews: 32,
-    badge: 'Sale',
-    inStock: true,
-    description:
-      'Designed for ultra runners who demand the best. This race-ready vest features front pockets for easy access to nutrition, dual 500ml soft flask holders, and a comfortable fit that moves with you over any distance.',
-    features: [
-      'Front chest pockets for gels and snacks',
-      'Two 500ml soft flask holders included',
-      'Rear storage for layers and kit',
-      'Adjustable sternum straps',
-      'Reflective details for visibility',
-      'Pole attachment points',
-    ],
-    sizes: ['XS', 'S', 'M', 'L', 'XL'],
-    colors: [
-      { name: 'Black', hex: '#1a1a1a' },
-      { name: 'Blue', hex: '#3b82f6' },
-    ],
-    specs: [
-      { label: 'Capacity', value: '8L' },
-      { label: 'Weight', value: '180g (empty)' },
-      { label: 'Material', value: 'Nylon ripstop' },
-      { label: 'Water Resistance', value: 'DWR coating' },
-    ],
-  },
-};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const item = getShopItem(slug);
+  if (!item) return { title: 'Shop' };
+  const description = item.description.split('\n')[0].slice(0, 160);
+  return {
+    title: `${item.name} | Shop`,
+    description,
+    alternates: { canonical: `https://filmmyrun.com/shop/${item.slug}` },
+    openGraph: { title: `${item.name} | Film My Run Shop`, description, images: item.images[0] ? [item.images[0].src] : [] },
+  };
+}
 
-// Default product for unknown slugs
-const defaultProduct: Product = {
-  id: '0',
-  name: 'Product',
-  slug: 'product',
-  price: 29.99,
-  images: ['https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/placeholder.svg'],
-  category: 'General',
-  rating: 4.5,
-  reviews: 0,
-  inStock: true,
-  description: 'Product description coming soon.',
-  features: ['High quality', 'Great value'],
-  specs: [],
-};
+export default async function ProductPage({ params }: Props) {
+  const { slug } = await params;
+  const item = getShopItem(slug);
+  if (!item) notFound();
 
-// ============================================
-// PRODUCT PAGE
-// ============================================
-
-export default function ProductPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  const product = products[slug] || defaultProduct;
-
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [selectedSize, setSelectedSize] = useState(product.sizes?.[1] || '');
-  const [selectedColor, setSelectedColor] = useState(product.colors?.[0]?.name || '');
-  const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const related = shopItems.filter((i) => i.category === item.category && i.key !== item.key).slice(0, 4);
+  const paragraphs = item.description.split('\n').map((s) => s.trim()).filter(Boolean);
 
   const productJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: product.name,
-    description: product.description,
-    image: product.images[0],
-    url: `https://filmmyrun.com/shop/${product.slug}`,
+    name: item.title,
+    description: paragraphs[0],
+    image: item.images.map((i) => i.src),
     brand: { '@type': 'Brand', name: 'Film My Run' },
     offers: {
-      '@type': 'Offer',
-      price: product.price.toFixed(2),
+      '@type': 'AggregateOffer',
       priceCurrency: 'GBP',
-      availability: product.inStock
-        ? 'https://schema.org/InStock'
-        : 'https://schema.org/OutOfStock',
-      url: `https://filmmyrun.com/shop/${product.slug}`,
+      lowPrice: item.priceFrom,
+      highPrice: item.priceTo,
+      availability: 'https://schema.org/InStock',
+      url: item.etsyUrl,
     },
-    aggregateRating: product.reviews > 0
-      ? {
-          '@type': 'AggregateRating',
-          ratingValue: product.rating,
-          reviewCount: product.reviews,
-        }
-      : undefined,
-  };
-
-  const shopBreadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://filmmyrun.com' },
-      { '@type': 'ListItem', position: 2, name: 'Shop', item: 'https://filmmyrun.com/shop' },
-      { '@type': 'ListItem', position: 3, name: product.name, item: `https://filmmyrun.com/shop/${product.slug}` },
-    ],
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(shopBreadcrumbJsonLd) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
       <Header />
 
-      <main className="pt-20 lg:pt-24 bg-background">
-        {/* Breadcrumb */}
-        <div className="container py-4">
-          <nav className="flex items-center gap-2 text-sm text-muted">
-            <Link href="/shop" className="hover:text-orange-500 transition-colors">
-              Shop
-            </Link>
+      <main className="pt-20 lg:pt-24 bg-background min-h-screen">
+        <div className="container py-8 lg:py-12">
+          <nav className="flex items-center gap-2 text-sm text-muted mb-8" aria-label="Breadcrumb">
+            <Link href="/shop" className="hover:text-foreground">Shop</Link>
             <ChevronRight className="w-4 h-4" />
-            <Link
-              href={`/shop?category=${product.category}`}
-              className="hover:text-orange-500 transition-colors"
-            >
-              {product.category}
-            </Link>
+            <span className="text-secondary">{item.categoryLabel}</span>
             <ChevronRight className="w-4 h-4" />
-            <span className="text-foreground">{product.name}</span>
+            <span className="text-foreground truncate">{item.name}</span>
           </nav>
-        </div>
 
-        {/* Product section */}
-        <section className="py-8 lg:py-12">
-          <div className="container">
-            <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
-              {/* Images */}
-              <div className="space-y-4">
-                {/* Main image */}
-                <div className="relative aspect-square bg-surface rounded-2xl overflow-hidden">
-                  <Image
-                    src={product.images[selectedImage]}
-                    alt={product.name}
-                    fill
-                    className="object-cover"
-                    priority
-                  />
+          <div className="grid lg:grid-cols-2 gap-8 lg:gap-14">
+            <ProductGallery images={item.images} name={item.name} />
 
-                  {/* Badge */}
-                  {product.badge && (
-                    <div className="absolute top-4 left-4">
-                      <span
-                        className={cn(
-                          'px-3 py-1.5 text-sm font-semibold rounded-full',
-                          product.badge === 'Best Seller' && 'bg-orange-500 text-white',
-                          product.badge === 'New' && 'bg-emerald-500 text-white',
-                          product.badge === 'Sale' && 'bg-red-500 text-white'
-                        )}
-                      >
-                        {product.badge}
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wider text-brand mb-3">{item.productType}</p>
+              <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground leading-tight">{item.name}</h1>
+              {item.subtitle && <p className="text-secondary mt-2">{item.subtitle}</p>}
+              <p className="font-mono text-2xl text-foreground mt-5">{formatPrice(item)}</p>
+
+              {item.colours.length > 0 && (
+                <div className="mt-6">
+                  <p className="text-sm text-secondary mb-2">
+                    {item.colours.length} colour{item.colours.length > 1 ? 's' : ''}
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {item.colours.map((c) => (
+                      <span key={c} className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-secondary border border-border text-sm text-foreground">
+                        <span className="w-3.5 h-3.5 rounded-full border border-black/20" style={{ backgroundColor: swatch[c] ?? '#888' }} />
+                        {c}
                       </span>
-                    </div>
-                  )}
-                </div>
-
-                {/* Thumbnails */}
-                {product.images.length > 1 && (
-                  <div className="flex gap-3">
-                    {product.images.map((image, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImage(index)}
-                        className={cn(
-                          'relative w-20 h-20 rounded-lg overflow-hidden border-2 transition-colors',
-                          selectedImage === index
-                            ? 'border-orange-500'
-                            : 'border-transparent hover:border-border'
-                        )}
-                      >
-                        <Image
-                          src={image}
-                          alt={`${product.name} ${index + 1}`}
-                          fill
-                          className="object-cover"
-                        />
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Details */}
-              <div>
-                {/* Category */}
-                <div className="text-sm text-muted mb-2">{product.category}</div>
-
-                {/* Title */}
-                <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4">
-                  {product.name}
-                </h1>
-
-                {/* Rating */}
-                <div className="flex items-center gap-2 mb-6">
-                  <div className="flex items-center gap-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={cn(
-                          'w-5 h-5',
-                          i < Math.floor(product.rating)
-                            ? 'text-amber-400 fill-amber-400'
-                            : 'text-secondary'
-                        )}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm font-medium text-foreground">
-                    {product.rating}
-                  </span>
-                  <span className="text-sm text-muted">({product.reviews} reviews)</span>
-                </div>
-
-                {/* Price */}
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="font-mono text-3xl font-bold text-orange-500">
-                    £{product.price.toFixed(2)}
-                  </span>
-                  {product.comparePrice && (
-                    <>
-                      <span className="font-mono text-xl text-muted line-through">
-                        £{product.comparePrice.toFixed(2)}
-                      </span>
-                      <span className="px-2 py-1 bg-red-500/10 text-red-500 text-sm font-medium rounded">
-                        Save £{(product.comparePrice - product.price).toFixed(2)}
-                      </span>
-                    </>
-                  )}
-                </div>
-
-                {/* Description */}
-                <p className="text-muted leading-relaxed mb-8">
-                  {product.description}
-                </p>
-
-                {/* Colors */}
-                {product.colors && (
-                  <div className="mb-6">
-                    <div className="text-sm font-medium text-foreground mb-3">
-                      Color: <span className="text-muted">{selectedColor}</span>
-                    </div>
-                    <div className="flex gap-2">
-                      {product.colors.map((color) => (
-                        <button
-                          key={color.name}
-                          onClick={() => setSelectedColor(color.name)}
-                          className={cn(
-                            'w-10 h-10 rounded-full border-2 transition-all',
-                            selectedColor === color.name
-                              ? 'border-orange-500 ring-2 ring-orange-500/30'
-                              : 'border-border'
-                          )}
-                          style={{ backgroundColor: color.hex }}
-                          title={color.name}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Sizes */}
-                {product.sizes && (
-                  <div className="mb-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-medium text-foreground">
-                        Size: <span className="text-muted">{selectedSize}</span>
-                      </span>
-                      <button className="text-sm text-orange-500 hover:text-orange-600">
-                        Size Guide
-                      </button>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {product.sizes.map((size) => (
-                        <button
-                          key={size}
-                          onClick={() => setSelectedSize(size)}
-                          className={cn(
-                            'px-4 py-2 rounded-lg border text-sm font-medium transition-all',
-                            selectedSize === size
-                              ? 'border-orange-500 bg-orange-500/10 text-orange-500'
-                              : 'border-border text-secondary hover:border-orange-500/50'
-                          )}
-                        >
-                          {size}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Quantity */}
-                <div className="mb-8">
-                  <div className="text-sm font-medium text-foreground mb-3">
-                    Quantity
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center border border-border rounded-lg">
-                      <button
-                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                        className="p-3 hover:bg-surface-secondary transition-colors"
-                      >
-                        <Minus className="w-4 h-4" />
-                      </button>
-                      <span className="w-12 text-center font-medium">{quantity}</span>
-                      <button
-                        onClick={() => setQuantity(quantity + 1)}
-                        className="p-3 hover:bg-surface-secondary transition-colors"
-                      >
-                        <Plus className="w-4 h-4" />
-                      </button>
-                    </div>
-                    <span className="text-sm text-muted">
-                      {product.inStock ? 'In Stock' : 'Out of Stock'}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-4 mb-8">
-                  <button
-                    disabled={!product.inStock}
-                    className={cn(
-                      'flex-1 flex items-center justify-center gap-2 py-4 font-semibold rounded-full transition-all',
-                      product.inStock
-                        ? 'bg-orange-500 text-white hover:bg-orange-600'
-                        : 'bg-surface-secondary text-muted cursor-not-allowed'
-                    )}
-                  >
-                    <ShoppingBag className="w-5 h-5" />
-                    Add to Cart
-                  </button>
-                  <button
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                    className="p-4 border border-border rounded-full hover:border-orange-500 transition-colors"
-                  >
-                    <Heart
-                      className={cn(
-                        'w-5 h-5',
-                        isWishlisted ? 'fill-red-500 text-red-500' : 'text-muted'
-                      )}
-                    />
-                  </button>
-                  <button className="p-4 border border-border rounded-full hover:border-orange-500 transition-colors">
-                    <Share2 className="w-5 h-5 text-muted" />
-                  </button>
-                </div>
-
-                {/* Benefits */}
-                <div className="grid grid-cols-3 gap-4 p-4 bg-surface rounded-xl">
-                  <div className="text-center">
-                    <Truck className="w-5 h-5 mx-auto text-muted mb-2" />
-                    <div className="text-xs text-muted">Free Shipping</div>
-                  </div>
-                  <div className="text-center">
-                    <RefreshCw className="w-5 h-5 mx-auto text-muted mb-2" />
-                    <div className="text-xs text-muted">30-Day Returns</div>
-                  </div>
-                  <div className="text-center">
-                    <Shield className="w-5 h-5 mx-auto text-muted mb-2" />
-                    <div className="text-xs text-muted">Secure Payment</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Features & Specs */}
-        <section className="py-12 lg:py-16 bg-surface">
-          <div className="container">
-            <div className="grid lg:grid-cols-2 gap-12">
-              {/* Features */}
-              <div>
-                <h2 className="font-display text-2xl font-bold text-foreground mb-6">
-                  Features
-                </h2>
-                <ul className="space-y-3">
-                  {product.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-3">
-                      <div className="w-5 h-5 rounded-full bg-orange-500/10 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Check className="w-3 h-3 text-orange-500" />
-                      </div>
-                      <span className="text-secondary">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* Specifications */}
-              {product.specs.length > 0 && (
-                <div>
-                  <h2 className="font-display text-2xl font-bold text-foreground mb-6">
-                    Specifications
-                  </h2>
-                  <div className="space-y-3">
-                    {product.specs.map((spec, index) => (
-                      <div
-                        key={index}
-                        className="flex justify-between py-3 border-b border-border"
-                      >
-                        <span className="text-muted">{spec.label}</span>
-                        <span className="font-medium text-foreground">
-                          {spec.value}
-                        </span>
-                      </div>
                     ))}
                   </div>
                 </div>
               )}
+
+              {item.sizes.length > 0 && (
+                <div className="mt-5">
+                  <p className="text-sm text-secondary mb-2">Sizes</p>
+                  <div className="flex flex-wrap gap-2">
+                    {item.sizes.map((s) => (
+                      <span key={s} className="px-3 py-1.5 rounded-lg bg-surface-secondary border border-border text-sm font-mono text-foreground">{s}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <a
+                href={etsyLink(item.etsyUrl)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 rounded-xl bg-brand text-black font-semibold text-lg hover:bg-orange-400 transition-colors"
+              >
+                Buy on Etsy
+                <ExternalLink className="w-5 h-5" />
+              </a>
+              <p className="text-xs text-muted mt-3">Choose your colour and size on Etsy. Postage is calculated at checkout.</p>
+
+              <div className="mt-8 space-y-4 text-secondary leading-relaxed">
+                {paragraphs.map((p, i) => (
+                  <p key={i} className={i === 0 ? 'text-foreground' : ''}>{p}</p>
+                ))}
+              </div>
+
+              <div className="mt-8 grid sm:grid-cols-2 gap-4 text-sm">
+                <div className="flex gap-3 p-4 rounded-xl bg-surface-secondary border border-border">
+                  <Truck className="w-5 h-5 text-brand shrink-0" />
+                  <span className="text-secondary">Printed to order, usually dispatched in 2 to 5 working days.</span>
+                </div>
+                <div className="flex gap-3 p-4 rounded-xl bg-surface-secondary border border-border">
+                  <Shield className="w-5 h-5 text-brand shrink-0" />
+                  <span className="text-secondary">Etsy purchase protection on every order.</span>
+                </div>
+              </div>
             </div>
           </div>
-        </section>
+
+          {related.length > 0 && (
+            <section className="mt-16 lg:mt-24">
+              <h2 className="font-display text-2xl font-bold text-foreground mb-6">More {item.categoryLabel.toLowerCase()}</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+                {related.map((r) => (
+                  <ProductCard key={r.key} item={r} />
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
       </main>
 
       <Footer />

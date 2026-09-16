@@ -51,6 +51,12 @@ const nextConfig: NextConfig = {
         hostname: 'img.youtube.com',
         pathname: '/vi/**',
       },
+      // Printify product mockups (shop)
+      {
+        protocol: 'https',
+        hostname: 'images.printify.com',
+        pathname: '/**',
+      },
       // Unsplash (RSS feed placeholder images)
       {
         protocol: 'https',
