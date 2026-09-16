@@ -11,6 +11,8 @@ Routes the Film My Run iPhone app calls. Added 11 September 2026 (milestone M5-W
 | GET | `/api/app/v1/shoes?terrain=&category=&brand=&sort=&minDrop=&maxDrop=&search=` | `/api/shoes?withReviews=1` | 60 | 1 h |
 | GET | `/api/app/v1/partner-offers` | new | 60 | 1 h |
 | GET | `/api/app/v1/latest-video` | new | 60 | 1 h |
+| GET | `/api/app/v1/chat/thread` | new | 30 | none |
+| POST | `/api/app/v1/chat/messages` `{ name, email, text }` | new | 6 | none |
 
 Over the limit: `429` with `Retry-After` seconds and `{ ok: false, error: "Too many requests" }`. Every response carries `X-FMR-API: v1`. The limiter is in-memory per instance (`src/lib/app-api/rate-limit.ts`), like `/api/track`.
 
@@ -25,5 +27,9 @@ Over the limit: `429` with `Retry-After` seconds and `{ ok: false, error: "Too m
 **partner-offers** — `{ offers: [{ id, partner, title, body, url, logoUrl, startsAt, endsAt }] }`, filtered to today's date. Edit `content/app/partner-offers.json` and push.
 
 **latest-video** — `{ video: { id, title, publishedAt, thumbnailUrl, url } }` from the channel's public Atom feed (no API key). `503` if the feed is down.
+
+**chat/thread** — "Ask Stephen" (see `docs/superpowers/specs/2026-09-16-pro-page-chat-design.md` §3 in the app repository). Requires `X-FMR-Install: <uuid>`; no Pro proof needed — a lapsed subscriber can still read what Stephen wrote. `{ ok: true, thread: { id, messages: [{ id, from: "user" | "stephen", text, createdAt }] } | null }`, `null` when the install has no thread yet. `400 { ok: false, error }` when the install header is missing or not a UUID.
+
+**chat/messages** (POST `{ name, email, text }`) — requires `X-FMR-Install` and `X-FMR-Pro: <JWS>` (the StoreKit transaction's `jwsRepresentation`; the server decodes the payload without verifying Apple's signature in v1 — see the design doc for the known gap and the planned follow-up). A Debug build sends `X-FMR-Pro: debug-<installID>`, accepted only when that install id is in the server's `CHAT_DEBUG_INSTALL_IDS` (comma-separated) — how Stephen's own phone is Pro before the App Store products exist. `{ ok: true, message: { id, from, text, createdAt } }`. `403 { ok: false, error: "Pro required" }` when the Pro header fails. `400 { ok: false, error }` when `text` (1–2000 chars, trimmed), `name` (1–80) or `email` fails validation. `429 { ok: false, error: "That's five today, Stephen will get back to you." }` after 5 user messages to the same install in one UTC day (checked against the database, independent of the per-IP limit above). Side effect: emails `CHAT_ADMIN_EMAIL` via Resend with the message and a link to the admin inbox thread; a send failure is logged, not returned to the caller.
 
 Sample responses are saved in the app repository under `Packages/FMRData/Tests/FMRDataTests/Fixtures/api/`.
