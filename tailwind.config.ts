@@ -138,6 +138,8 @@ const config: Config = {
         'fade-up': 'fadeUp 0.5s ease-out',
         'scale-in': 'scaleIn 0.3s ease-out',
         'spin-slow': 'spin 3s linear infinite',
+        'marquee': 'marquee 60s linear infinite',
+        'marquee-reverse': 'marqueeReverse 45s linear infinite',
       },
 
       keyframes: {
@@ -152,6 +154,15 @@ const config: Config = {
         scaleIn: {
           '0%': { opacity: '0', transform: 'scale(0.95)' },
           '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        // The track holds two copies of its content; sliding by half loops seamlessly
+        marquee: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        marqueeReverse: {
+          '0%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(0)' },
         },
       },
 
