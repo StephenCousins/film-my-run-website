@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { getToken } from 'next-auth/jwt';
+import { isChatAdmin } from '@/lib/chat/admin';
 
 // Routes that require authentication (FREE tier or higher)
 // Note: /tools/route-comparison has its own client-side auth check
@@ -21,8 +22,28 @@ const proRoutes = [
   '/training/personal-coaching',
 ];
 
+// Stephen's Ask Stephen inbox (spec §3, "Admin inbox"). The pages call
+// notFound() themselves, but the root loading.tsx streams a 200 shell before
+// a page body runs, so the real 404 for anyone else has to be decided here.
+const chatAdminRoutes = ['/admin/inbox'];
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  if (chatAdminRoutes.some((route) => pathname === route || pathname.startsWith(`${route}/`))) {
+    let email: string | null | undefined;
+    try {
+      const token = await getToken({ req: request, secret: process.env.NEXTAUTH_SECRET });
+      email = token?.email;
+    } catch {
+      email = null;
+    }
+    if (!isChatAdmin({ user: { email } })) {
+      // A path that does not exist renders not-found.tsx with a 404 status.
+      return NextResponse.rewrite(new URL('/404', request.url));
+    }
+    return NextResponse.next();
+  }
 
   // Check if route is protected
   const isProtected = protectedRoutes.some(
@@ -86,5 +107,7 @@ export const config = {
   matcher: [
     '/training/:path*',
     '/account/:path*',
+    '/admin/inbox/:path*',
+    '/admin/inbox',
   ],
 };

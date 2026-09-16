@@ -3,17 +3,18 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { isChatAdmin } from '@/lib/chat/admin';
+import { chatAdminMetadata, isChatAdmin } from '@/lib/chat/admin';
 import { getThreadById } from '@/lib/chat/store';
 import { replyToThread } from './actions';
 import ReplyForm from './ReplyForm';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: 'Ask Stephen — Thread',
-  robots: { index: false, follow: false },
-};
+// Gated here as well as in the page: see chatAdminMetadata.
+export async function generateMetadata(): Promise<Metadata> {
+  const session = await getServerSession(authOptions);
+  return chatAdminMetadata(session, 'Ask Stephen — Thread');
+}
 
 export default async function ChatThreadPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getServerSession(authOptions);

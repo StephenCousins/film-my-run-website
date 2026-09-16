@@ -1,10 +1,12 @@
 export type NewMessage = { name: string; email: string; text: string };
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CONTROL = /[\x00-\x1f\x7f]/g;
 
 export function validateNewMessage(body: unknown): { ok: true; value: NewMessage } | { ok: false; error: string } {
   if (!body || typeof body !== 'object') return { ok: false, error: 'Bad request' };
   const b = body as Record<string, unknown>;
-  const name = typeof b.name === 'string' ? b.name.trim() : '';
+  // The name becomes an email subject, so no line breaks or other control characters.
+  const name = typeof b.name === 'string' ? b.name.replace(CONTROL, '').trim() : '';
   const email = typeof b.email === 'string' ? b.email.trim().toLowerCase() : '';
   const text = typeof b.text === 'string' ? b.text.trim() : '';
   if (!name || name.length > 80) return { ok: false, error: 'Please give your name (up to 80 characters).' };

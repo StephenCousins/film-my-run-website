@@ -23,4 +23,9 @@ describe('checkProHeader', () => {
     expect(checkProHeader('debug-abc', 'other', { now, debugIds: 'abc' }).ok).toBe(false);
     expect(checkProHeader('debug-abc', 'abc', { now }).ok).toBe(false);
   });
+  it('matches the allow list and the header id whatever their case (the app sends an upper-case UUID)', () => {
+    expect(checkProHeader('debug-6F9619FF-8B86', '6f9619ff-8b86', { now, debugIds: '6f9619ff-8b86' }).ok).toBe(true);
+    expect(checkProHeader('debug-6f9619ff-8b86', '6F9619FF-8B86', { now, debugIds: '6F9619FF-8B86' }).ok).toBe(true);
+    expect(checkProHeader('debug-6f9619ff-8b86', '6f9619ff-8b86', { now, debugIds: 'other' }).ok).toBe(false);
+  });
 });

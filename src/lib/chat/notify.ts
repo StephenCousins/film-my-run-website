@@ -29,9 +29,9 @@ export function buildStephenEmail({ threadId, name, email, text }: StephenEmailI
   return { subject, text: body, html };
 }
 
-export type SendFn = (msg: { from: string; to: string; subject: string; html: string; text: string }) => Promise<{ error: { name: string; message: string } | null }>;
+export type SendFn = (msg: { from: string; to: string; replyTo: string; subject: string; html: string; text: string }) => Promise<{ error: { name: string; message: string } | null }>;
 
-function resendSend(msg: { from: string; to: string; subject: string; html: string; text: string }) {
+function resendSend(msg: { from: string; to: string; replyTo: string; subject: string; html: string; text: string }) {
   return new Resend(process.env.RESEND_API_KEY).emails.send(msg);
 }
 
@@ -47,7 +47,8 @@ export async function notifyStephen(t: StephenEmailInput, send: SendFn = resendS
   }
   const { subject, text, html } = buildStephenEmail(t);
   try {
-    const { error } = await send({ from: process.env.RESEND_FROM_EMAIL || 'Film My Run <onboarding@resend.dev>', to, subject, html, text });
+    // Reply-to is the runner, so Stephen can answer from his mail client too.
+    const { error } = await send({ from: process.env.RESEND_FROM_EMAIL || 'Film My Run <onboarding@resend.dev>', to, replyTo: t.email, subject, html, text });
     if (error) console.error('Chat: Resend error notifying Stephen', error);
   } catch (err) {
     console.error('Chat: failed to notify Stephen', err);

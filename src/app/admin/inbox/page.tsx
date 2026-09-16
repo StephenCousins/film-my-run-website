@@ -3,15 +3,16 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
-import { isChatAdmin } from '@/lib/chat/admin';
+import { chatAdminMetadata, isChatAdmin } from '@/lib/chat/admin';
 import { listThreads } from '@/lib/chat/store';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
-  title: 'Ask Stephen — Inbox',
-  robots: { index: false, follow: false },
-};
+// Gated here as well as in the page: see chatAdminMetadata.
+export async function generateMetadata(): Promise<Metadata> {
+  const session = await getServerSession(authOptions);
+  return chatAdminMetadata(session, 'Ask Stephen — Inbox');
+}
 
 function relativeTime(iso: string): string {
   const ms = Date.now() - new Date(iso).getTime();

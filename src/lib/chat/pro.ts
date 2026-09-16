@@ -13,9 +13,10 @@ export function checkProHeader(header: string | null, installId: string, env: { 
   const now = env.now ?? Date.now();
   if (!header) return { ok: false, reason: 'missing' };
   if (header.startsWith('debug-')) {
-    const allowed = (env.debugIds ?? process.env.CHAT_DEBUG_INSTALL_IDS ?? '').split(',').map(s => s.trim()).filter(Boolean);
-    const id = header.slice('debug-'.length);
-    return id === installId && allowed.includes(id) ? { ok: true, productId: 'debug', source: 'debug' } : { ok: false, reason: 'debug id not allowed' };
+    // Case-insensitive: the app sends an upper-case UUID, the env may hold it either way.
+    const allowed = (env.debugIds ?? process.env.CHAT_DEBUG_INSTALL_IDS ?? '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
+    const id = header.slice('debug-'.length).toLowerCase();
+    return id === installId.toLowerCase() && allowed.includes(id) ? { ok: true, productId: 'debug', source: 'debug' } : { ok: false, reason: 'debug id not allowed' };
   }
   const parts = header.split('.');
   if (parts.length !== 3) return { ok: false, reason: 'malformed' };

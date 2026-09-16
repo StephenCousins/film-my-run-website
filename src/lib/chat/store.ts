@@ -25,22 +25,14 @@ export async function getThread(installId: string): Promise<ChatThreadDTO | null
   return { id: thread.id, messages: thread.messages.map(toDTO) };
 }
 
-export async function countUserMessagesToday(installId: string, now: Date = new Date()): Promise<number> {
-  const thread = await prisma.chat_threads.findUnique({ where: { install_id: installId } });
-  if (!thread) return 0;
-  return prisma.chat_messages.count({
-    where: { thread_id: thread.id, sender: 'user', created_at: { gte: startOfUtcDay(now) } },
-  });
-}
-
 export type AddUserMessageResult =
   | { ok: true; threadId: string; message: ChatMessageDTO }
   | { ok: false; reason: 'limit' };
 
 /**
  * Checks the daily limit and inserts the message as one atomic unit — the
- * two-step "count, then insert" version (`countUserMessagesToday` followed
- * by a separate insert) let two concurrent requests near the limit both
+ * two-step "count, then insert" version (a separate count query, then the
+ * insert) let two concurrent requests near the limit both
  * pass, because neither request's count reflected the other's in-flight
  * insert. Locking the thread row with `FOR UPDATE` inside the transaction
  * serialises concurrent requests for the same install, so the count taken

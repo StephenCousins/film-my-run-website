@@ -13,6 +13,12 @@ describe('validateNewMessage', () => {
     expect(validateNewMessage({ name: 'n'.repeat(81), email: 'a@b.c', text: 'hi' }).ok).toBe(false);
     expect(validateNewMessage('str').ok).toBe(false);
   });
+  it('strips control characters from the name, which goes into an email subject', () => {
+    const r = validateNewMessage({ name: 'Jo\r\nBcc: x@y.z\tSmith\x00\x7f', email: 'a@b.c', text: 'hi' });
+    expect(r).toEqual({ ok: true, value: { name: 'JoBcc: x@y.zSmith', email: 'a@b.c', text: 'hi' } });
+    // A name that is nothing but control characters is no name.
+    expect(validateNewMessage({ name: '\n\t', email: 'a@b.c', text: 'hi' }).ok).toBe(false);
+  });
 });
 
 describe('isInstallId', () => {
