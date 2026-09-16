@@ -135,7 +135,7 @@ export default function ShopTeaser() {
 
       <div className="container mt-8">
         <p className="text-sm text-muted">
-          Tees, hoodies, totes, mugs and posters. Checkout is on Etsy for now, with Etsy&apos;s buyer protection.{' '}
+          Tees, hoodies, caps, totes, mugs and posters. Checkout is on Etsy for now, with Etsy&apos;s buyer protection.{' '}
           <Link href="/shop" className="text-brand hover:underline">See everything</Link>
         </p>
       </div>

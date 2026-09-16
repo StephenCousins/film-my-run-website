@@ -41,7 +41,7 @@ export default function ShopPage() {
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5">The Shop</h1>
               <p className="text-lg text-zinc-300 leading-relaxed">
                 Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a
-                finish line. Printed to order in the UK on Bella+Canvas tees and Gildan hoodies, plus totes, mugs
+                finish line. Printed to order on Bella+Canvas tees and Gildan hoodies, plus caps, totes, mugs
                 and posters for the rest of the day.
               </p>
             </div>
@@ -61,14 +61,14 @@ export default function ShopPage() {
                 <Shirt className="w-5 h-5 text-brand shrink-0 mt-0.5" />
                 <p className="text-secondary">
                   <span className="text-foreground font-semibold">Printed to order.</span> Nothing sits in a
-                  warehouse. Tees and hoodies are printed in the UK and usually ship within 2 to 5 working days.
+                  warehouse. Tees, hoodies and totes are printed in the UK; caps in the US; mugs and posters in the EU.
                 </p>
               </div>
               <div className="flex gap-3">
                 <Truck className="w-5 h-5 text-brand shrink-0 mt-0.5" />
                 <p className="text-secondary">
                   <span className="text-foreground font-semibold">UK and worldwide delivery.</span> Postage is
-                  worked out at checkout. Mugs and posters are printed in the EU.
+                  worked out at checkout and depends on where the item is printed.
                 </p>
               </div>
               <div className="flex gap-3">
