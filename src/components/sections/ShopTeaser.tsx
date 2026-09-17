@@ -135,7 +135,7 @@ export default function ShopTeaser() {
 
       <div className="container mt-8">
         <p className="text-sm text-muted">
-          Tees, hoodies, caps, totes, mugs and posters. Printed to order in the UK, paid securely with Stripe.{' '}
+          Running vests, tees, hoodies, caps, totes, mugs and posters. Made to order in the UK, paid securely with Stripe.{' '}
           <Link href="/shop" className="text-brand hover:underline">See everything</Link>
         </p>
       </div>

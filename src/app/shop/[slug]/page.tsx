@@ -88,7 +88,11 @@ export default async function ProductPage({ params }: Props) {
               <div className="mt-8 grid sm:grid-cols-2 gap-4 text-sm">
                 <div className="flex gap-3 p-4 rounded-xl bg-surface-secondary border border-border">
                   <Truck className="w-5 h-5 text-brand shrink-0" />
-                  <span className="text-secondary">Printed to order, usually dispatched in 2 to 5 working days.</span>
+                  <span className="text-secondary">
+                    {item.supplier === 'contrado'
+                      ? 'Cut and sewn to order in London, dispatched tracked in about 2 days.'
+                      : 'Printed to order, usually dispatched in 2 to 5 working days.'}
+                  </span>
                 </div>
                 <div className="flex gap-3 p-4 rounded-xl bg-surface-secondary border border-border">
                   <Shield className="w-5 h-5 text-brand shrink-0" />

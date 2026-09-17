@@ -36,7 +36,7 @@ export default function ShopPage() {
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
                 <ShoppingBag className="w-4 h-4 text-orange-500" />
-                <span className="text-orange-400 text-sm font-medium">{shopItems.length} things to wear, carry and drink from</span>
+                <span className="text-orange-400 text-sm font-medium">{shopItems.length} things to run in, wear, carry and drink from</span>
               </div>
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5">The Shop</h1>
               <p className="text-lg text-zinc-300 leading-relaxed">
@@ -60,8 +60,8 @@ export default function ShopPage() {
               <div className="flex gap-3">
                 <Shirt className="w-5 h-5 text-brand shrink-0 mt-0.5" />
                 <p className="text-secondary">
-                  <span className="text-foreground font-semibold">Printed to order.</span> Nothing sits in a
-                  warehouse. Tees, hoodies and totes are printed in the UK; caps in the US; mugs and posters in the EU.
+                  <span className="text-foreground font-semibold">Made to order.</span> Nothing sits in a
+                  warehouse. Running vests are cut and sewn in London; tees, hoodies and totes are printed in the UK; caps in the US; mugs and posters in the EU.
                 </p>
               </div>
               <div className="flex gap-3">

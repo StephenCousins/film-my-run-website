@@ -1,13 +1,15 @@
 import { describe, it, expect } from 'vitest';
-import { buildOrderLines, subtotalPence, variantLabel } from './orders';
+import { buildOrderLines, subtotalPence, variantLabel, linesFor, contradoShippingPence } from './orders';
 import type { ShopItem } from '@/lib/shop';
 
 const tee = {
-  slug: 'tee', name: 'Tee', printifyId: 'p1', images: [{ src: 'img', position: 'front' }],
+  slug: 'tee', name: 'Tee', printifyId: 'p1', supplier: 'printify', images: [{ src: 'img', position: 'front' }],
   variants: [{ id: 1, colour: 'Black', size: 'M', price: 29.99 }, { id: 2, colour: 'Black', size: 'L', price: 31.99 }],
 } as unknown as ShopItem;
-const cap = { slug: 'cap', name: 'Cap', printifyId: 'p2', images: [], variants: [{ id: 9, colour: 'Navy', size: 'One size', price: 26.99 }] } as unknown as ShopItem;
-const items = [tee, cap];
+const cap = { slug: 'cap', name: 'Cap', printifyId: 'p2', supplier: 'printify', images: [], variants: [{ id: 9, colour: 'Navy', size: 'One size', price: 26.99 }] } as unknown as ShopItem;
+const vest = { slug: 'vest', name: 'Vest', printifyId: '', supplier: 'contrado', contradoProductId: 3097113, images: [],
+  variants: [{ id: '2Y3abc', colour: 'Black', size: 'M', price: 44.95, options: [{ optionId: 653, optionName: 'Vest Size', optionValueId: 3097, optionValueName: 'Medium' }] }] } as unknown as ShopItem;
+const items = [tee, cap, vest];
 
 describe('buildOrderLines', () => {
   it('prices from the catalogue, not the client', () => {
@@ -25,5 +27,20 @@ describe('buildOrderLines', () => {
   it('labels one-size items without the size', () => {
     expect(variantLabel(cap.variants[0])).toBe('Navy');
     expect(variantLabel(tee.variants[0])).toBe('Black / M');
+  });
+});
+
+describe('suppliers', () => {
+  it('carries the supplier, product id and option ids through to the order line', () => {
+    const lines = buildOrderLines([{ slug: 'vest', variantId: '2Y3abc', quantity: 1 }, { slug: 'tee', variantId: 1, quantity: 1 }], items);
+    expect(linesFor(lines, 'contrado')).toHaveLength(1);
+    expect(linesFor(lines, 'printify')).toHaveLength(1);
+    expect(lines[0]).toMatchObject({ supplier: 'contrado', supplierProductId: '3097113', variantId: '2Y3abc', unitPence: 4495 });
+    expect(lines[0].options?.[0].optionValueId).toBe(3097);
+  });
+  it('prices Contrado postage per item', () => {
+    expect(contradoShippingPence(0)).toBe(0);
+    expect(contradoShippingPence(1)).toBe(599);
+    expect(contradoShippingPence(3)).toBe(697);
   });
 });

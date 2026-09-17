@@ -11,11 +11,22 @@ export interface ShopImage {
   position: string;
 }
 
+export type Supplier = 'printify' | 'contrado';
+
+/** Contrado orders need the option ids behind a variant, not just the variant id. */
+export interface VariantOption {
+  optionId: number;
+  optionName: string;
+  optionValueId: number;
+  optionValueName: string;
+}
+
 export interface ShopVariant {
-  id: number;
+  id: number | string;       // Printify: number; Contrado: opaque string
   colour: string | null;
   size: string | null;
   price: number;
+  options?: VariantOption[];
 }
 
 export interface ShopItem {
@@ -39,6 +50,8 @@ export interface ShopItem {
   etsyUrl: string;
   etsyListingId: string;
   printifyId: string;
+  supplier: Supplier;
+  contradoProductId?: number;
 }
 
 export interface ShopCategory {

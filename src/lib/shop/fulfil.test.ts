@@ -1,7 +1,11 @@
 import { describe, it, expect, vi } from 'vitest';
 import { fulfilPaidSession, toPrintifyAddress, type FulfilDeps, type PaidOrder } from './fulfil';
+import type { OrderLine } from './orders';
 
 const addr = toPrintifyAddress('Jo Bloggs', 'jo@x.com', null, { line1: '1 St', city: 'Leeds', postal_code: 'LS1 1AA', country: 'GB' });
+
+const pf = { supplier: 'printify' } as OrderLine;
+const ct = { supplier: 'contrado' } as OrderLine;
 
 function deps(order: PaidOrder | null): FulfilDeps & { calls: string[] } {
   const calls: string[] = [];
@@ -9,17 +13,22 @@ function deps(order: PaidOrder | null): FulfilDeps & { calls: string[] } {
     calls,
     load: async () => order,
     markPaid: async () => { calls.push('paid'); },
-    placeWithPrintify: async () => { calls.push('printify'); return 'PF1'; },
-    markSubmitted: async () => { calls.push('submitted'); },
+    place: async (supplier, lines) => { calls.push(`${supplier}:${lines.length}`); return supplier === 'printify' ? 'PF1' : 'CT1'; },
+    markSubmitted: async (_id, ids) => { calls.push('submitted ' + JSON.stringify(ids)); },
     emailConfirmation: async () => { calls.push('email'); },
   };
 }
 
 describe('fulfilPaidSession', () => {
-  it('places a pending order once, in order', async () => {
-    const d = deps({ id: 1, status: 'pending', items: [] });
+  it('places a pending order once, per supplier, in order', async () => {
+    const d = deps({ id: 1, status: 'pending', items: [pf, ct, pf] });
     expect(await fulfilPaidSession('cs_1', 'jo@x.com', addr, d)).toBe('submitted');
-    expect(d.calls).toEqual(['paid', 'printify', 'submitted', 'email']);
+    expect(d.calls).toEqual(['paid', 'printify:2', 'contrado:1', 'submitted {"printify":"PF1","contrado":"CT1"}', 'email']);
+  });
+  it('skips suppliers with nothing in the basket', async () => {
+    const d = deps({ id: 1, status: 'pending', items: [ct] });
+    await fulfilPaidSession('cs_1', 'jo@x.com', addr, d);
+    expect(d.calls).toEqual(['paid', 'contrado:1', 'submitted {"contrado":"CT1"}', 'email']);
   });
   it('does nothing for a replayed webhook', async () => {
     const d = deps({ id: 1, status: 'submitted', items: [] });

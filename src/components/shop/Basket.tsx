@@ -19,7 +19,7 @@ export default function Basket() {
   });
   const subtotal = rows.reduce((s, r) => s + r.v.price * r.quantity, 0);
 
-  const setQty = (slug: string, variantId: number, q: number) =>
+  const setQty = (slug: string, variantId: number | string, q: number) =>
     set(lines.map((l) => (l.slug === slug && l.variantId === variantId ? { ...l, quantity: q } : l)).filter((l) => l.quantity > 0));
 
   const checkout = async () => {

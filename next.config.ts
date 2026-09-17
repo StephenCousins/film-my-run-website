@@ -57,6 +57,12 @@ const nextConfig: NextConfig = {
         hostname: 'images.printify.com',
         pathname: '/**',
       },
+      // Contrado product renders (vests)
+      {
+        protocol: 'https',
+        hostname: 'static.contrado.com',
+        pathname: '/**',
+      },
       // Unsplash (RSS feed placeholder images)
       {
         protocol: 'https',

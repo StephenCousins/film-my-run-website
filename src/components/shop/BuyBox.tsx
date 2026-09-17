@@ -80,10 +80,14 @@ export default function BuyBox({ item }: { item: ShopItem }) {
       </button>
       <p className="text-xs text-muted mt-3">
         {added ? <Link href="/shop/basket" className="text-brand hover:underline">Go to basket →</Link> : 'UK postage calculated at checkout. Paid securely with Stripe.'}
-        {' · '}
-        <a href={etsyLink(item.etsyUrl)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:text-foreground">
-          Or buy on Etsy <ExternalLink className="w-3 h-3" />
-        </a>
+        {item.etsyUrl && (
+          <>
+            {' · '}
+            <a href={etsyLink(item.etsyUrl)} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:text-foreground">
+              Or buy on Etsy <ExternalLink className="w-3 h-3" />
+            </a>
+          </>
+        )}
       </p>
     </div>
   );

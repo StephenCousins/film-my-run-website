@@ -21,7 +21,7 @@ export function writeBasket(lines: BasketLine[]) {
   window.dispatchEvent(new Event(EVENT));
 }
 
-export function addToBasket(slug: string, variantId: number, quantity = 1) {
+export function addToBasket(slug: string, variantId: number | string, quantity = 1) {
   const lines = readBasket();
   const hit = lines.find((l) => l.slug === slug && l.variantId === variantId);
   if (hit) hit.quantity = Math.min(10, hit.quantity + quantity);

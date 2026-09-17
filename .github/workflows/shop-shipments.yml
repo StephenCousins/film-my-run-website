@@ -1,0 +1,21 @@
+name: Shop shipment poll
+
+on:
+  schedule:
+    - cron: '15 7,13,19 * * *'   # three times a day, UK working hours
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ask Contrado about open orders
+        run: |
+          code=$(curl -s -o out.json -w "%{http_code}" -X POST "${{ secrets.SITE_URL }}/api/shop/cron/shipments" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" --max-time 120)
+          echo "HTTP $code: $(cat out.json)" >> $GITHUB_STEP_SUMMARY
+          [ "$code" = "200" ]

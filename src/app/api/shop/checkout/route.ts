@@ -4,7 +4,7 @@
  */
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { buildOrderLines, subtotalPence } from '@/lib/shop/orders';
+import { buildOrderLines, subtotalPence, linesFor, contradoShippingPence } from '@/lib/shop/orders';
 import { quoteShippingPence } from '@/lib/shop/printify';
 import { stripe, siteUrl } from '@/lib/shop/stripe';
 
@@ -19,9 +19,13 @@ export async function POST(request: Request) {
   }
 
   try {
-    const shippingPence = await quoteShippingPence(
-      lines.map((l) => ({ product_id: l.printifyProductId, variant_id: l.variantId, quantity: l.quantity })),
-    );
+    // Each supplier posts its own parcel: Printify quotes live, Contrado is a fixed UK rate.
+    const printifyLines = linesFor(lines, 'printify');
+    const contradoCount = linesFor(lines, 'contrado').reduce((n, l) => n + l.quantity, 0);
+    const shippingPence =
+      (printifyLines.length
+        ? await quoteShippingPence(printifyLines.map((l) => ({ product_id: l.supplierProductId, variant_id: Number(l.variantId), quantity: l.quantity })))
+        : 0) + contradoShippingPence(contradoCount);
     const total = subtotalPence(lines) + shippingPence;
     const order = await prisma.orders.create({
       data: { status: 'pending', total_cents: total, currency: 'GBP', items: lines as object[], updated_at: new Date() },

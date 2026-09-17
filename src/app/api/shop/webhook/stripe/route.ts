@@ -5,6 +5,7 @@ import { prisma } from '@/lib/db';
 import { stripe } from '@/lib/shop/stripe';
 import { fulfilPaidSession, toPrintifyAddress } from '@/lib/shop/fulfil';
 import { createOrder } from '@/lib/shop/printify';
+import { createContradoOrder } from '@/lib/shop/contrado';
 import { orderConfirmation } from '@/lib/shop/email';
 import type { OrderLine } from '@/lib/shop/orders';
 
@@ -38,9 +39,12 @@ export async function POST(request: Request) {
       return o && { id: o.id, status: o.status, items: o.items as unknown as OrderLine[] };
     },
     markPaid: (id, email, a) => prisma.orders.update({ where: { id }, data: { status: 'paid', email, shipping_address: a as object, updated_at: new Date() } }).then(() => {}),
-    placeWithPrintify: (o, a) =>
-      createOrder(String(o.id), o.items.map((l) => ({ product_id: l.printifyProductId, variant_id: l.variantId, quantity: l.quantity })), a),
-    markSubmitted: (id, printify_order_id) => prisma.orders.update({ where: { id }, data: { status: 'submitted', printify_order_id, updated_at: new Date() } }).then(() => {}),
+    place: (supplier, lines, o, a) =>
+      supplier === 'printify'
+        ? createOrder(String(o.id), lines.map((l) => ({ product_id: l.supplierProductId, variant_id: Number(l.variantId), quantity: l.quantity })), a)
+        : createContradoOrder(`FMR-${o.id}`, lines, a),
+    markSubmitted: (id, ids) =>
+      prisma.orders.update({ where: { id }, data: { status: 'submitted', printify_order_id: ids.printify ?? null, contrado_order_id: ids.contrado ?? null, updated_at: new Date() } }).then(() => {}),
     emailConfirmation: (o, to) => orderConfirmation(to, o.id, o.items, session.amount_total ?? 0),
   }).catch((e) => {
     // Stripe retries on non-2xx; the row is 'paid' so the retry will not double-order, but we want to know.
