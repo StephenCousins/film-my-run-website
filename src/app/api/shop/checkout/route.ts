@@ -4,7 +4,7 @@
  */
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { buildOrderLines, subtotalPence, linesFor, contradoShippingPence } from '@/lib/shop/orders';
+import { buildOrderLines, subtotalPence, linesFor, contradoShippingPence, returnUrls } from '@/lib/shop/orders';
 import { quoteShippingPence } from '@/lib/shop/printify';
 import { stripe, siteUrl } from '@/lib/shop/stripe';
 
@@ -12,8 +12,11 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   let lines;
+  let source: unknown;
   try {
-    lines = buildOrderLines((await request.json()).lines);
+    const body = await request.json();
+    source = body.source;
+    lines = buildOrderLines(body.lines);
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
@@ -52,8 +55,7 @@ export async function POST(request: Request) {
         },
       }],
       phone_number_collection: { enabled: false },
-      success_url: `${siteUrl()}/shop/thanks?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${siteUrl()}/shop/basket`,
+      ...returnUrls(siteUrl(), source),
     });
 
     await prisma.orders.update({ where: { id: order.id }, data: { stripe_session_id: session.id, updated_at: new Date() } });

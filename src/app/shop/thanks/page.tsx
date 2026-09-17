@@ -8,8 +8,8 @@ import { stripe } from '@/lib/shop/stripe';
 export const metadata: Metadata = { title: 'Thanks | Shop', robots: { index: false } };
 export const dynamic = 'force-dynamic';
 
-export default async function ThanksPage({ searchParams }: { searchParams: Promise<{ session_id?: string }> }) {
-  const { session_id } = await searchParams;
+export default async function ThanksPage({ searchParams }: { searchParams: Promise<{ session_id?: string; app?: string }> }) {
+  const { session_id, app } = await searchParams;
   let email: string | null = null;
   let paid = false;
   if (session_id) {
@@ -31,7 +31,9 @@ export default async function ThanksPage({ searchParams }: { searchParams: Promi
               ? <>It’s printed to order in the UK and usually dispatched in 2 to 5 working days. A confirmation is on its way to <span className="text-foreground">{email}</span>, and you’ll get tracking when it ships.</>
               : 'If you completed a payment, your confirmation email will arrive shortly.'}
           </p>
-          <Link href="/shop" className="inline-block mt-8 text-brand hover:underline">Back to the shop</Link>
+          {app === '1' && session_id
+            ? <a href={`filmmyrun://shop/thanks?session_id=${encodeURIComponent(session_id)}`} className="inline-block mt-8 px-6 py-3 rounded-full bg-brand text-white font-semibold">Back to the app</a>
+            : <Link href="/shop" className="inline-block mt-8 text-brand hover:underline">Back to the shop</Link>}
         </div>
       </main>
       <Footer />
