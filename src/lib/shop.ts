@@ -1,13 +1,21 @@
 /**
  * Shop catalogue. Generated from Printify by the film-my-run-merch project
  * (`npm run export-catalog` there) and committed as data/shop-catalog.json, so
- * the shop builds without any network access. Checkout happens on Etsy for now.
+ * the shop builds without any network access. Checkout is Stripe → Printify (see shop-orders.ts);
+ * the Etsy listing stays as a secondary link.
  */
 import catalog from '../../data/shop-catalog.json';
 
 export interface ShopImage {
   src: string;
   position: string;
+}
+
+export interface ShopVariant {
+  id: number;
+  colour: string | null;
+  size: string | null;
+  price: number;
 }
 
 export interface ShopItem {
@@ -27,6 +35,7 @@ export interface ShopItem {
   colours: string[];
   sizes: string[];
   images: ShopImage[];
+  variants: ShopVariant[];
   etsyUrl: string;
   etsyListingId: string;
   printifyId: string;

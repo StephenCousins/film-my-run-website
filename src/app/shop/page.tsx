@@ -67,19 +67,19 @@ export default function ShopPage() {
               <div className="flex gap-3">
                 <Truck className="w-5 h-5 text-brand shrink-0 mt-0.5" />
                 <p className="text-secondary">
-                  <span className="text-foreground font-semibold">UK and worldwide delivery.</span> Postage is
-                  worked out at checkout and depends on where the item is printed.
+                  <span className="text-foreground font-semibold">UK delivery from £3.59.</span> Postage is
+                  worked out at checkout. Outside the UK, order through the Etsy shop.
                 </p>
               </div>
               <div className="flex gap-3">
                 <ExternalLink className="w-5 h-5 text-brand shrink-0 mt-0.5" />
                 <p className="text-secondary">
-                  <span className="text-foreground font-semibold">Checkout on Etsy.</span> Orders are placed
-                  through the{' '}
+                  <span className="text-foreground font-semibold">Pay securely with Stripe.</span> Every product is
+                  also on the{' '}
                   <a href={etsyShopUrl} target="_blank" rel="noopener noreferrer" className="text-brand hover:underline">
                     Film My Run Etsy shop
                   </a>
-                  , with Etsy&apos;s buyer protection and returns.
+                  {' '}if you&apos;d rather buy there.
                 </p>
               </div>
             </div>

@@ -45,13 +45,13 @@ Related project tracking: `BLOG-POST-PROJECT.md`
 | Layer | Technology | Rationale |
 |-------|------------|-----------|
 | **Framework** | Next.js 15 (App Router) | Full-stack React, great DX, Vercel/Railway deploy |
-| **Styling** | Tailwind CSS 4 | Utility-first, dark mode built-in, fast iteration |
+| **Styling** | Tailwind CSS 3.4 | Utility-first, dark mode built-in, fast iteration |
 | **Animations** | GSAP + ScrollTrigger | Industry standard for scroll animations, now free |
 | **Motion** | Framer Motion | React-native animations, page transitions |
 | **Database** | PostgreSQL (Railway) | Already in use, proven |
 | **ORM** | Prisma | Type-safe, great DX |
-| **Auth** | Existing Marathon Plan App system | Reuse FastAPI auth service |
-| **Payments** | Stripe | Subscriptions + one-time purchases |
+| **Auth** | NextAuth (Google + Credentials) | `src/lib/auth.ts`; users live in this database, no external auth service |
+| **Payments** | Stripe — **not built** | Package installed, but nothing in `src/` imports it yet |
 | **Images** | Cloudflare R2 + Image CDN | 2.6GB of images, free tier covers it |
 | **Deployment** | Railway | Already using, Pro plan |
 
@@ -179,32 +179,51 @@ auto-switches between variants based on the active theme.
 ```
 filmmyrun.com/
 ├── /                           # Homepage - Hero, featured content, stats
-├── /blog                       # Blog listing with filters
-├── /blog/[slug]               # Individual blog posts
-├── /races                      # Race results dashboard
-├── /races/[year]              # Year-specific results
-├── /tools                      # Tools landing page
-│   ├── /tools/calculators     # 7 running calculators
-│   ├── /tools/parkrun         # Parkrun stats
-│   └── /tools/race-map        # Race visualization
-├── /films                      # Documentary showcase
-├── /films/[slug]              # Individual film page
-├── /services                   # Filmmaking services
-├── /training                   # Marathon Plan App (paid)
-│   ├── /training/login
-│   ├── /training/dashboard
-│   └── /training/plans
-├── /shop                       # E-commerce
-│   ├── /shop/[category]
-│   ├── /shop/product/[slug]
-│   └── /shop/cart
 ├── /about                      # About Stephen
-└── /contact                    # Contact form
+├── /contact                    # Contact form
+├── /blog                       # Blog listing with filters
+│   └── /blog/[slug]
+├── /news                       # Synthesised trail/ultra news
+│   └── /news/[slug]
+├── /races                      # Race results dashboard
+│   └── /races/years
+├── /films                      # Documentary showcase
+│   └── /films/[slug]
+├── /services                   # Filmmaking services
+│   ├── /services/documentary-films
+│   ├── /services/pov-race-coverage
+│   ├── /services/master-of-ceremonies
+│   ├── /services/event-live-streaming
+│   └── /services/social-media-coverage
+├── /tools                      # Tools landing page
+│   ├── /tools/calculators      # Running calculators
+│   ├── /tools/parkrun          # Parkrun stats
+│   ├── /tools/race-map         # Race visualisation
+│   ├── /tools/route-comparison # GPX/FIT overlay (login-gated)
+│   ├── /tools/how-fast-am-i
+│   ├── /tools/shoe-finder
+│   ├── /tools/stone-tracker
+│   ├── /tools/runner-quiz
+│   └── /tools/racescript       # Built but unfinished - see below
+├── /training                   # Marathon Plan App - one page so far
+├── /shop                       # Catalogue from data/shop-catalog.json (film-my-run-merch export-catalog)
+│   ├── /shop/[slug]            # BuyBox → localStorage basket → /shop/basket → Stripe Checkout
+│   └── /api/shop/*             # checkout + Stripe/Printify webhooks; logic in src/lib/shop/
+├── /live                       # YouTube live/upcoming streams
+├── /discounts
+├── /login, /register           # Route group (auth)
+├── /privacy, /terms
+└── /admin/newsletter/[token]   # Newsletter approval
 ```
 
 ---
 
 ## Database Schema
+
+**`prisma/schema.prisma` is the source of truth.** The SQL below is the original
+migration design and covers only the core tables; the schema has since grown to
+33 models. Everything not shown here — newsletter, news, shoes, parkrun, po10,
+quiz, saved routes, analytics, YouTube stats — lives only in the Prisma schema.
 
 ### Core Tables
 
@@ -287,6 +306,7 @@ CREATE TABLE films (
     year INTEGER,
     awards TEXT[],
     featured BOOLEAN DEFAULT false,
+    meta JSONB DEFAULT '{}',        -- synopsis, credits, filmmaker_bio, behind_the_scenes_youtube_id
     created_at TIMESTAMP DEFAULT NOW()
 );
 
@@ -350,29 +370,39 @@ CREATE TABLE settings (
 
 ## API Routes
 
-### Content
-- `GET /api/posts` - List posts with pagination, filters
-- `GET /api/posts/[slug]` - Single post
-- `POST /api/posts` - Create post (Claude workflow)
-- `PUT /api/posts/[slug]` - Update post
-- `DELETE /api/posts/[slug]` - Delete post
+Taken from the build output. **There is no `/api/posts`** — blog pages query
+Prisma directly.
 
-### Races
-- `GET /api/races` - All race data with stats
-- `GET /api/races/stats` - Quick stats
-- `POST /api/races/sync` - Sync from Google Sheets
+### Content & media
+- `GET /api/films` — `films` rows plus Ultra races that have a `video_url`
+- `GET /api/featured-video` — rotates daily by day-of-year
+- `GET /api/news/stories`, `POST /api/news/generate`, `/api/news/sync`, `/api/news/stories/publish`
 
-### Shop
-- `GET /api/products` - List products
-- `GET /api/products/[slug]` - Single product
-- `POST /api/checkout` - Create Stripe session
-- `POST /api/webhooks/stripe` - Handle Stripe events
+### Races & stats
+- `GET /api/races`, `POST /api/races/sync` (Google Sheets)
+- `GET /api/stats`, `GET /api/race-map`, `GET /api/age-grading`
+- `GET /api/parkrun`, `GET /api/parkrun/rankings`
+- `/api/how-fast/parkrun`, `/api/how-fast/po10` (each with a `/refresh`)
+- `/api/stone-tracker/runner`, `/api/stone-tracker/search`
 
-### Auth
-- Proxy to Marathon Plan App auth service
-- `POST /api/auth/login`
-- `POST /api/auth/register`
-- `GET /api/auth/me`
+### Shoes
+- `GET /api/shoes`, `/api/shoes/add`, `/api/shoes/rate`, `/api/shoes/weekly-update`
+
+### Newsletter
+- `/api/newsletter/subscribe`, `/unsubscribe`, `/edit/[token]`, `/preview`,
+  `/approve`, `/send`, `/view/[id]`
+
+### RaceScript
+- `/api/racescript/authorize`, `/callback`, `/activity`, `/generate`
+
+### Auth & misc
+- `/api/auth/[...nextauth]` — NextAuth, Google + Credentials providers
+- `/api/auth/register`, `/api/sso/adrian`
+- `/api/contact`, `/api/track`, `/api/track/click`
+- `/api/runner-quiz/results`, `/api/runner-quiz/email`
+
+**Not built:** no `/api/checkout`, `/api/products`, `/api/webhooks/stripe` or
+`/api/auth/me`.
 
 ---
 
@@ -385,7 +415,7 @@ CREATE TABLE settings (
 | Stripe | Payments | `STRIPE_*` keys |
 | Google Sheets | Race data sync | `GOOGLE_CREDENTIALS` |
 | Strava | Activity widget, RaceScript OAuth | `STRAVA_*` tokens |
-| YouTube/Vimeo | Video embeds | API keys |
+| YouTube Data API | Video embeds, live/upcoming streams, cached view + subscriber counts | `YOUTUBE_API_KEY` |
 | OpenRouter | All LLM calls (see "LLM calls") | `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` |
 | Brave Search | Shoe Finder review/image search | `BRAVE_SEARCH_API_KEY` |
 | NextAuth + Google | Sign-in | `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `GOOGLE_CLIENT_*` |
@@ -415,7 +445,10 @@ npx prisma migrate deploy
 npx prisma generate
 
 # Seed database (migrate WordPress content)
-npm run seed
+npm run db:seed
+
+# Tests (vitest)
+npm test
 
 # Type checking
 npm run typecheck
@@ -569,49 +602,54 @@ R2_PUBLIC_URL=https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev
 
 ```
 /
-├── app/                        # Next.js App Router
-│   ├── (marketing)/           # Public pages
-│   │   ├── page.tsx           # Homepage
-│   │   ├── blog/
-│   │   ├── races/
-│   │   ├── tools/
-│   │   ├── films/
-│   │   ├── shop/
-│   │   └── about/
-│   ├── (auth)/                # Auth pages
-│   │   ├── login/
-│   │   └── register/
-│   ├── (dashboard)/           # Protected pages
-│   │   └── training/
-│   ├── api/                   # API routes
-│   └── layout.tsx
-├── components/
-│   ├── ui/                    # Base UI components
-│   ├── sections/              # Page sections
-│   ├── animations/            # GSAP/Framer components
-│   └── layout/                # Header, Footer, etc.
-├── lib/
-│   ├── db.ts                  # Prisma client
-│   ├── auth.ts                # Auth utilities
-│   ├── stripe.ts              # Stripe utilities
-│   └── r2.ts                  # Cloudflare R2 utilities
+├── src/
+│   ├── app/                    # Next.js App Router
+│   │   ├── (auth)/            # login, register
+│   │   ├── admin/             # newsletter approval
+│   │   ├── api/               # API routes
+│   │   ├── blog/ films/ news/ races/ services/ shop/ tools/ training/
+│   │   ├── layout.tsx
+│   │   ├── robots.ts
+│   │   └── sitemap.ts
+│   ├── components/
+│   │   ├── ui/                # Base UI components
+│   │   ├── sections/          # Page sections
+│   │   ├── newsletter/
+│   │   └── layout/            # Header, Footer, etc.
+│   ├── contexts/
+│   ├── data/
+│   ├── hooks/
+│   ├── lib/
+│   │   ├── db.ts              # Prisma client
+│   │   ├── auth.ts            # NextAuth config
+│   │   ├── llm.ts             # OpenRouter wrapper
+│   │   ├── r2.ts              # Cloudflare R2 utilities
+│   │   ├── youtube-stats.ts   # Cached YouTube view/subscriber counts
+│   │   ├── route-comparison/  # GPX/FIT analysis
+│   │   ├── racescript/ race-map/ how-fast/ stone-tracker/
+│   │   └── *.test.ts          # Vitest, colocated
+│   ├── styles/
+│   ├── instrumentation.ts     # Sentry server init
+│   └── middleware.ts
 ├── prisma/
-│   └── schema.prisma
+│   ├── schema.prisma
+│   └── migrations/
 ├── public/
-│   └── fonts/
-├── styles/
-│   └── globals.css
-└── scripts/
-    └── migrate-wordpress.ts   # WordPress migration script
+├── data/                       # Seed and reference JSON
+├── content/
+└── scripts/                    # Standalone .mjs/.ts maintenance scripts
 ```
+
+There are **no `(marketing)` or `(dashboard)` route groups** — `(auth)` is the
+only one. There is no `lib/stripe.ts`.
 
 ---
 
 ## Migration — complete
 
 The WordPress migration is done: Railway project and Postgres live, R2 bucket
-holding the 2.6GB of images, 212 posts and the race results imported, Stripe
-configured, and DNS switched. The site serves from **filmmyrun.com**.
+holding the 2.6GB of images, 212 posts and the race results imported, a Stripe
+account configured (nothing in this repo uses it yet), and DNS switched. The site serves from **filmmyrun.com**.
 
 ---
 
@@ -660,7 +698,7 @@ Run with: `node --env-file=.env scripts/<script>.mjs`
 |--------|---------|-----------|
 | `seed-shoes.mjs` | Import 123 curated shoes from `data/shoes-seed.json` | — |
 | `fetch-shoe-reviews.mjs` | Fetch review scores via Brave Search + Haiku (regex first, then text inference) | `--limit N`, `--slug <slug>`, `--stale-only` |
-| `fetch-shoe-images.mjs` | Fetch product images via Brave Image Search, verified by Opus 4.8 vision | `--limit N`, `--slug <slug>`, `--force` |
+| `fetch-shoe-images.mjs` | Fetch product images via Brave Image Search, verified by Haiku 4.5 vision (`claude-haiku-4-5-20251001`) | `--limit N`, `--slug <slug>`, `--force` |
 | `cleanup-mismatched-reviews.mjs` | Remove review records where summary doesn't mention the exact shoe model | — |
 | `fix-shoe.mjs` | Clear and re-fetch image + reviews for one specific shoe | `--slug <slug>` |
 
@@ -713,6 +751,13 @@ so signed-out visitors see nothing but the `LoginPrompt`.
 
 Six tabs: Overview (stats + full-width map), Charts, Splits, Time Gaps,
 Segments, Insights.
+
+### Map
+The Overview map is **Google Maps** (`@react-google-maps/api`), sharing the
+race map's loader id and `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`. It was Leaflet on
+Carto's free basemap until Sep 2026, when Carto started watermarking those
+tiles "API KEY REQUIRED". `parkrun/VenueMapClient.tsx` still uses Carto and
+has the same problem.
 
 ### Library layout (`src/lib/route-comparison/`)
 | File | Holds |
@@ -827,6 +872,57 @@ features need.
 
 ---
 
+## Documentary film stats — live from YouTube
+
+The view counts on `/services/documentary-films` are fetched from the YouTube
+Data API rather than hand-maintained. They had drifted badly when they were
+hardcoded: the UTMB film read 21K+ against an actual 48.8K, Making Marks 7K+
+against 28.4K.
+
+### How it works
+`src/lib/youtube-stats.ts` owns it:
+
+| Export | Does |
+|---|---|
+| `getVideoViewCounts(ids)` | View counts keyed by YouTube ID |
+| `getChannelStats()` | Subscriber and lifetime-view totals |
+| `formatCount(n)` | `48827` → `48K+`, `1573` → `1.5K+`, `8022632` → `8M+` |
+| `selectStaleIds(...)` | Which IDs are missing or older than `STATS_MAX_AGE_MS` |
+
+Counts are cached in `youtube_video_stats` (keyed by `youtube_id`) and
+`youtube_channel_stats` (keyed by `channel_id`). Any row older than **7 days**
+is refetched on the next request, all stale IDs in one batched `videos.list`
+call. That costs **one quota unit** against a daily 10,000, so the cache is
+about page speed, not rationing quota.
+
+The cache is keyed by YouTube ID rather than hung off the `films` table because
+**only 2 of the 8 showcased films have `films` rows** — 81 Yards, Sub 40 and the
+rest exist only as hardcoded entries in `films.ts`.
+
+### Page structure
+- `films.ts` — plain film data (titles, descriptions, awards, `fallbackViews`)
+- `page.tsx` — server component, fetches stats, wrapped in `unstable_cache`
+- `DocumentaryFilmsClient.tsx` — all the JSX
+
+### Things that will bite you
+- **`formatCount` always rounds down.** A page that overstates a film's reach to
+  a prospective sponsor is worse than one that understates it.
+- **The page must stay `force-dynamic`** — see the build-container gotcha below.
+- **Watch time is not available here.** It needs the YouTube *Analytics* API and
+  OAuth, not the public Data API. Those figures stay hand-maintained in
+  `films.ts`. The `~/Developer/youtube-analytics` CLI already has that auth if
+  it is ever worth wiring up.
+- **`YOUTUBE_API_KEY` is server-side** and set in Railway. Without it the page
+  serves the cache, then the `films.ts` fallbacks — it never breaks, it just
+  stops refreshing. Everything here fails soft the same way: a YouTube outage
+  serves stale numbers rather than an error.
+- **The main channel is `UCjphxoB7x0A_VhB1CUz3AwA`.** The ID hardcoded in
+  `src/app/live/page.tsx` is a *different* channel ("Virtual FMR", ~2K subs).
+  That page also ships the API key to the browser, and the key has no referrer
+  restriction.
+
+---
+
 ## LLM calls
 
 All LLM calls from the site go through **OpenRouter**, not the Anthropic API.
@@ -873,9 +969,18 @@ post. It was built in one commit and has **never worked in production**:
   `meta.strava_embed_token` — `applyStravaEmbedToken()` injects it at render, so
   the token stays data rather than markup. Older activities still embed fine
   without one.
-- **`sitemap.ts` must stay `force-dynamic`.** It queries the database, and the
-  build container can't reach it — as a static route it silently shipped only
-  the 25 hard-coded paths and no posts at all. The catch blocks log now.
+- **The database is unreachable from the build container.** Railway's
+  `DATABASE_URL` points at `postgres.railway.internal`, which only resolves once
+  the app is running. Any page that reads the database and gets statically
+  prerendered will silently ship whatever its error path produces, and the
+  deploy still looks green. This has bitten twice: `sitemap.ts` shipped the 25
+  hard-coded paths and no posts, and `/services/documentary-films` deployed
+  still showing its hardcoded fallback view counts. **Any DB-backed page needs
+  `export const dynamic = 'force-dynamic'`** — check the build output, `ƒ` is
+  right and `○` is the trap — with `unstable_cache` if you want to avoid a query
+  per request. To verify such a page after deploy, read the RSC payload
+  (`curl -H "RSC: 1" <url>`), not the HTML: several pages don't put their body
+  in the prerendered HTML, so grepping it always looks empty.
 - **Next.js metadata `alternates` does not deep-merge.** A page that sets its
   own `alternates` (for a canonical) replaces the parent's wholesale. Put
   document-wide `<link>` tags in the root layout's `<head>`, not in
@@ -893,4 +998,4 @@ Stephen is not a professional coder. When making changes:
 
 ---
 
-*Last updated: 31 August 2026*
+*Last updated: 1 September 2026*

@@ -104,12 +104,16 @@ model orders {
   currency          String   @default("GBP")
   shipping_address  Json?
   items             Json
+  email             String?
+  printify_order_id String?
   created_at        DateTime @default(now())
   updated_at        DateTime
   users             users?   @relation(fields: [user_id], references: [id])
 
   @@index([status])
   @@index([user_id])
+  @@index([stripe_session_id])
+  @@index([printify_order_id])
 }
 
 model parkrun_athletes {

@@ -8,6 +8,7 @@ import { cn } from '@/lib/utils';
 import ThemeToggle from '@/components/ui/ThemeToggle';
 import UserMenu from '@/components/auth/UserMenu';
 import { FilmMyRunLogo } from '@/components/ui/FilmMyRunLogo';
+import BasketLink from '@/components/shop/BasketLink';
 
 // ============================================
 // NAVIGATION DATA
@@ -234,6 +235,7 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-3">
+            <BasketLink />
             <div className="hidden lg:block">
               <ThemeToggle isScrolled={isScrolled} isHeroPage={isHeroPage} />
             </div>
