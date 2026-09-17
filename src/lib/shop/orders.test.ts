@@ -7,8 +7,8 @@ const tee = {
   variants: [{ id: 1, colour: 'Black', size: 'M', price: 29.99 }, { id: 2, colour: 'Black', size: 'L', price: 31.99 }],
 } as unknown as ShopItem;
 const cap = { slug: 'cap', name: 'Cap', printifyId: 'p2', supplier: 'printify', images: [], variants: [{ id: 9, colour: 'Navy', size: 'One size', price: 26.99 }] } as unknown as ShopItem;
-const vest = { slug: 'vest', name: 'Vest', printifyId: '', supplier: 'contrado', contradoProductId: 3097113, images: [],
-  variants: [{ id: '2Y3abc', colour: 'Black', size: 'M', price: 44.95, options: [{ optionId: 653, optionName: 'Vest Size', optionValueId: 3097, optionValueName: 'Medium' }] }] } as unknown as ShopItem;
+const vest = { slug: 'vest', name: 'Vest', printifyId: '', supplier: 'contrado', images: [{ src: 'white', colour: 'White' }, { src: 'black', colour: 'Black' }],
+  variants: [{ id: '2Y3abc', colour: 'Black', size: 'M', price: 44.95, supplierProductId: '3097113', options: [{ optionId: 653, optionName: 'Vest Size', optionValueId: 3097, optionValueName: 'Medium' }] }] } as unknown as ShopItem;
 const items = [tee, cap, vest];
 
 describe('buildOrderLines', () => {
@@ -35,7 +35,7 @@ describe('suppliers', () => {
     const lines = buildOrderLines([{ slug: 'vest', variantId: '2Y3abc', quantity: 1 }, { slug: 'tee', variantId: 1, quantity: 1 }], items);
     expect(linesFor(lines, 'contrado')).toHaveLength(1);
     expect(linesFor(lines, 'printify')).toHaveLength(1);
-    expect(lines[0]).toMatchObject({ supplier: 'contrado', supplierProductId: '3097113', variantId: '2Y3abc', unitPence: 4495 });
+    expect(lines[0]).toMatchObject({ supplier: 'contrado', supplierProductId: '3097113', variantId: '2Y3abc', unitPence: 4495, image: 'black' });
     expect(lines[0].options?.[0].optionValueId).toBe(3097);
   });
   it('prices Contrado postage per item', () => {

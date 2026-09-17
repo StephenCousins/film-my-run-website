@@ -7,9 +7,10 @@ import { addToBasket } from '@/lib/shop/basket';
 
 const sized = (s: string | null) => s && s !== 'One size';
 
-export default function BuyBox({ item }: { item: ShopItem }) {
-  const colours = useMemo(() => [...new Set(item.variants.map((v) => v.colour).filter(Boolean))] as string[], [item]);
-  const [colour, setColour] = useState<string | null>(colours[0] ?? null);
+export const itemColours = (item: ShopItem) => [...new Set(item.variants.map((v) => v.colour).filter(Boolean))] as string[];
+
+export default function BuyBox({ item, colour, setColour }: { item: ShopItem; colour: string | null; setColour: (c: string) => void }) {
+  const colours = useMemo(() => itemColours(item), [item]);
   const sizes = useMemo(
     () => [...new Set(item.variants.filter((v) => v.colour === colour).map((v) => v.size).filter(sized))] as string[],
     [item, colour],

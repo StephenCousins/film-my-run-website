@@ -9,6 +9,8 @@ import catalog from '../../data/shop-catalog.json';
 export interface ShopImage {
   src: string;
   position: string;
+  /** Set when the image shows one colourway; the gallery follows the colour picker. */
+  colour?: string;
 }
 
 export type Supplier = 'printify' | 'contrado';
@@ -27,6 +29,8 @@ export interface ShopVariant {
   size: string | null;
   price: number;
   options?: VariantOption[];
+  /** Contrado: each colour is its own store product, so the id lives on the variant. */
+  supplierProductId?: string;
 }
 
 export interface ShopItem {
@@ -51,7 +55,6 @@ export interface ShopItem {
   etsyListingId: string;
   printifyId: string;
   supplier: Supplier;
-  contradoProductId?: number;
 }
 
 export interface ShopCategory {

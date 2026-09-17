@@ -4,9 +4,8 @@ import { notFound } from 'next/navigation';
 import { ChevronRight, Truck, Shield } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import ProductGallery from '@/components/shop/ProductGallery';
 import ProductCard from '@/components/shop/ProductCard';
-import BuyBox from '@/components/shop/BuyBox';
+import ProductPurchase from '@/components/shop/ProductPurchase';
 import { shopItems, getShopItem } from '@/lib/shop';
 
 interface Props {
@@ -71,14 +70,7 @@ export default async function ProductPage({ params }: Props) {
           </nav>
 
           <div className="grid lg:grid-cols-2 gap-8 lg:gap-14">
-            <ProductGallery images={item.images} name={item.name} />
-
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-brand mb-3">{item.productType}</p>
-              <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground leading-tight">{item.name}</h1>
-              {item.subtitle && <p className="text-secondary mt-2">{item.subtitle}</p>}
-              <BuyBox item={item} />
-
+            <ProductPurchase item={item}>
               <div className="mt-8 space-y-4 text-secondary leading-relaxed">
                 {paragraphs.map((p, i) => (
                   <p key={i} className={i === 0 ? 'text-foreground' : ''}>{p}</p>
@@ -99,7 +91,7 @@ export default async function ProductPage({ params }: Props) {
                   <span className="text-secondary">Paid securely with Stripe. Reply to your order email if anything's wrong.</span>
                 </div>
               </div>
-            </div>
+            </ProductPurchase>
           </div>
 
           {related.length > 0 && (

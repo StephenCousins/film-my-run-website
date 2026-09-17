@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-17T12:42:09.459Z",
+  "generatedAt": "2026-09-17T14:45:45.473Z",
   "shop": {
     "etsyUrl": "https://www.etsy.com/shop/FilmMyRun"
   },
@@ -7,7 +7,7 @@
     {
       "key": "vests",
       "label": "Running Vests",
-      "count": 10
+      "count": 2
     },
     {
       "key": "tees",
@@ -42,237 +42,15 @@
   ],
   "items": [
     {
-      "key": "vest-black-side",
-      "slug": "running-vest-black-side",
-      "name": "Running Vest, Black",
-      "subtitle": "Film strips down the sides",
-      "title": "Film My Run Running Vest, Black",
+      "key": "vest-shoulder",
+      "slug": "running-vest-shoulder-stripe",
+      "name": "Running Vest, shoulder stripe",
+      "subtitle": "One film strip over the right shoulder",
+      "title": "Running Vest, shoulder stripe | Film My Run",
       "category": "vests",
       "categoryLabel": "Running Vests",
       "productType": "Cut-and-sew Sports Airflow vest, made in London",
-      "description": "The Film My Run running vest in black. Sports Airflow fabric (145gsm, breathable, quick-drying), an orange film-strip stripe just in front of each side seam, a small FMR on the chest and the Film My Run logo under the collar at the back. Cut and sewn to order in London. Unisex fit, XS to 4XL.\n\nMade to order by Contrado in London and sent tracked; usually with you within a week.",
-      "tags": [
-        "running vest",
-        "race vest",
-        "film my run",
-        "side stripes"
-      ],
-      "priceFrom": 44.95,
-      "priceTo": 48.424,
-      "currency": "GBP",
-      "colours": [
-        "Black"
-      ],
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL",
-        "3XL",
-        "4XL"
-      ],
-      "images": [
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-side-model.jpg",
-          "position": "model"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097116_film-my-run-running-vest-black_0.jpeg",
-          "position": "front"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097116_film-my-run-running-vest-black_1.jpeg",
-          "position": "back"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097116_film-my-run-running-vest-black_2.jpeg",
-          "position": "view-2"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097116_film-my-run-running-vest-black_3.jpeg",
-          "position": "view-3"
-        }
-      ],
-      "variants": [
-        {
-          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHg0KxsMTQZ",
-          "colour": "Black",
-          "size": "XS",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3095,
-              "optionValueName": "Extra Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2MdzoVKN9DN5",
-          "colour": "Black",
-          "size": "S",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3096,
-              "optionValueName": "Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0JcfgrvxJb",
-          "colour": "Black",
-          "size": "M",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3097,
-              "optionValueName": "Medium"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMdQq3MihG7",
-          "colour": "Black",
-          "size": "L",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3098,
-              "optionValueName": "Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTixF0PrVRCd",
-          "colour": "Black",
-          "size": "XL",
-          "price": 46.108,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3099,
-              "optionValueName": "Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e09EUrzjaQtf",
-          "colour": "Black",
-          "size": "2XL",
-          "price": 47.266,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3100,
-              "optionValueName": "2 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCf2OreyLTQR",
-          "colour": "Black",
-          "size": "3XL",
-          "price": 47.845,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3201,
-              "optionValueName": "3 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1MD21T8DMx",
-          "colour": "Black",
-          "size": "4XL",
-          "price": 48.424,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3202,
-              "optionValueName": "4 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        }
-      ],
-      "etsyUrl": "",
-      "etsyListingId": "",
-      "printifyId": "",
-      "supplier": "contrado",
-      "contradoProductId": 3097116
-    },
-    {
-      "key": "vest-black-shoulder",
-      "slug": "running-vest-black-shoulder",
-      "name": "Running Vest, Black",
-      "subtitle": "Film strip over the shoulder",
-      "title": "Film My Run Running Vest, Black, Shoulder Stripe",
-      "category": "vests",
-      "categoryLabel": "Running Vests",
-      "productType": "Cut-and-sew Sports Airflow vest, made in London",
-      "description": "The Film My Run running vest in black, with a single strip of film running over the right shoulder, front and back, a small FMR on the chest and the Film My Run logo under the collar at the back. Sports Airflow fabric (145gsm, breathable, quick-drying). Cut and sewn to order in London. Unisex fit, XS to 4XL.\n\nMade to order by Contrado in London and sent tracked; usually with you within a week.",
+      "description": "The Film My Run running vest: Sports Airflow fabric (145gsm, breathable, quick-drying), a single strip of film running over the right shoulder, front and back, a small FMR on the chest and the Film My Run logo under the collar at the back. Unisex fit, XS to 4XL, in five colours.\n\nCut and sewn to order by Contrado in London and sent tracked, usually with you within a week.",
       "tags": [
         "running vest",
         "race vest",
@@ -283,7 +61,11 @@
       "priceTo": 48.424,
       "currency": "GBP",
       "colours": [
-        "Black"
+        "Black",
+        "White",
+        "Forest Green",
+        "Navy",
+        "Orange"
       ],
       "sizes": [
         "XS",
@@ -298,23 +80,78 @@
       "images": [
         {
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-shoulder-model.jpg",
-          "position": "model"
+          "position": "model",
+          "colour": "Black"
         },
         {
           "src": "https://static.contrado.com/DesignTemplates/products/3097113_film-my-run-running-vest-black-shoulder-stripe_0.jpeg",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://static.contrado.com/DesignTemplates/products/3097113_film-my-run-running-vest-black-shoulder-stripe_1.jpeg",
-          "position": "back"
+          "position": "back",
+          "colour": "Black"
         },
         {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097113_film-my-run-running-vest-black-shoulder-stripe_2.jpeg",
-          "position": "view-2"
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-shoulder-model-v2.jpg",
+          "position": "model",
+          "colour": "White"
         },
         {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097113_film-my-run-running-vest-black-shoulder-stripe_3.jpeg",
-          "position": "view-3"
+          "src": "https://static.contrado.com/DesignTemplates/products/3097157_film-my-run-running-vest-white-shoulder-stripe_0.jpeg",
+          "position": "front",
+          "colour": "White"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097157_film-my-run-running-vest-white-shoulder-stripe_1.jpeg",
+          "position": "back",
+          "colour": "White"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-shoulder-model.jpg",
+          "position": "model",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097149_film-my-run-running-vest-forest-green-shoulder-stripe_0.jpeg",
+          "position": "front",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097149_film-my-run-running-vest-forest-green-shoulder-stripe_1.jpeg",
+          "position": "back",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-shoulder-model.jpg",
+          "position": "model",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097152_film-my-run-running-vest-navy-shoulder-stripe_0.jpeg",
+          "position": "front",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097152_film-my-run-running-vest-navy-shoulder-stripe_1.jpeg",
+          "position": "back",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-shoulder-model.jpg",
+          "position": "model",
+          "colour": "Orange"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097161_film-my-run-running-vest-orange-shoulder-stripe_0.jpeg",
+          "position": "front",
+          "colour": "Orange"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097161_film-my-run-running-vest-orange-shoulder-stripe_1.jpeg",
+          "position": "back",
+          "colour": "Orange"
         }
       ],
       "variants": [
@@ -323,6 +160,7 @@
           "colour": "Black",
           "size": "XS",
           "price": 44.95,
+          "supplierProductId": "3097113",
           "options": [
             {
               "optionId": 653,
@@ -343,6 +181,7 @@
           "colour": "Black",
           "size": "S",
           "price": 44.95,
+          "supplierProductId": "3097113",
           "options": [
             {
               "optionId": 653,
@@ -363,6 +202,7 @@
           "colour": "Black",
           "size": "M",
           "price": 44.95,
+          "supplierProductId": "3097113",
           "options": [
             {
               "optionId": 653,
@@ -383,6 +223,7 @@
           "colour": "Black",
           "size": "L",
           "price": 44.95,
+          "supplierProductId": "3097113",
           "options": [
             {
               "optionId": 653,
@@ -403,6 +244,7 @@
           "colour": "Black",
           "size": "XL",
           "price": 46.108,
+          "supplierProductId": "3097113",
           "options": [
             {
               "optionId": 653,
@@ -423,6 +265,7 @@
           "colour": "Black",
           "size": "2XL",
           "price": 47.266,
+          "supplierProductId": "3097113",
           "options": [
             {
               "optionId": 653,
@@ -443,6 +286,7 @@
           "colour": "Black",
           "size": "3XL",
           "price": 47.845,
+          "supplierProductId": "3097113",
           "options": [
             {
               "optionId": 653,
@@ -463,6 +307,7 @@
           "colour": "Black",
           "size": "4XL",
           "price": 48.424,
+          "supplierProductId": "3097113",
           "options": [
             {
               "optionId": 653,
@@ -477,1628 +322,13 @@
               "optionValueName": "Sports Airflow 145gsm"
             }
           ]
-        }
-      ],
-      "etsyUrl": "",
-      "etsyListingId": "",
-      "printifyId": "",
-      "supplier": "contrado",
-      "contradoProductId": 3097113
-    },
-    {
-      "key": "vest-forest-side",
-      "slug": "running-vest-forest-green-side",
-      "name": "Running Vest, Forest Green",
-      "subtitle": "Film strips down the sides",
-      "title": "Film My Run Running Vest, Forest Green",
-      "category": "vests",
-      "categoryLabel": "Running Vests",
-      "productType": "Cut-and-sew Sports Airflow vest, made in London",
-      "description": "The Film My Run running vest in forest green. Sports Airflow fabric (145gsm, breathable, quick-drying), an orange film-strip stripe just in front of each side seam, a small FMR on the chest and the Film My Run logo under the collar at the back. Cut and sewn to order in London. Unisex fit, XS to 4XL.\n\nMade to order by Contrado in London and sent tracked; usually with you within a week.",
-      "tags": [
-        "running vest",
-        "race vest",
-        "film my run",
-        "side stripes"
-      ],
-      "priceFrom": 44.95,
-      "priceTo": 48.424,
-      "currency": "GBP",
-      "colours": [
-        "Forest Green"
-      ],
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL",
-        "3XL",
-        "4XL"
-      ],
-      "images": [
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-model.jpg",
-          "position": "model"
         },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097141_film-my-run-running-vest-forest-green_0.jpeg",
-          "position": "front"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097141_film-my-run-running-vest-forest-green_1.jpeg",
-          "position": "back"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097141_film-my-run-running-vest-forest-green_2.jpeg",
-          "position": "view-2"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097141_film-my-run-running-vest-forest-green_3.jpeg",
-          "position": "view-3"
-        }
-      ],
-      "variants": [
-        {
-          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHZZdPgOpxT",
-          "colour": "Forest Green",
-          "size": "XS",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3095,
-              "optionValueName": "Extra Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2MdtNnmBBZtz",
-          "colour": "Forest Green",
-          "size": "S",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3096,
-              "optionValueName": "Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0DBy8fyJqV",
-          "colour": "Forest Green",
-          "size": "M",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3097,
-              "optionValueName": "Medium"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMX08VAl3n1",
-          "colour": "Forest Green",
-          "size": "L",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3098,
-              "optionValueName": "Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTiqoIrfXnjX",
-          "colour": "Forest Green",
-          "size": "XL",
-          "price": 46.108,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3099,
-              "optionValueName": "Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e0984ARXcnQZ",
-          "colour": "Forest Green",
-          "size": "2XL",
-          "price": 47.266,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3100,
-              "optionValueName": "2 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCevyA6mNpxL",
-          "colour": "Forest Green",
-          "size": "3XL",
-          "price": 47.845,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3201,
-              "optionValueName": "3 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1FmKTHAZtr",
-          "colour": "Forest Green",
-          "size": "4XL",
-          "price": 48.424,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3202,
-              "optionValueName": "4 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        }
-      ],
-      "etsyUrl": "",
-      "etsyListingId": "",
-      "printifyId": "",
-      "supplier": "contrado",
-      "contradoProductId": 3097141
-    },
-    {
-      "key": "vest-forest-shoulder",
-      "slug": "running-vest-forest-green-shoulder",
-      "name": "Running Vest, Forest Green",
-      "subtitle": "Film strip over the shoulder",
-      "title": "Film My Run Running Vest, Forest Green, Shoulder Stripe",
-      "category": "vests",
-      "categoryLabel": "Running Vests",
-      "productType": "Cut-and-sew Sports Airflow vest, made in London",
-      "description": "The Film My Run running vest in forest green, with a single strip of film running over the right shoulder, front and back, a small FMR on the chest and the Film My Run logo under the collar at the back. Sports Airflow fabric (145gsm, breathable, quick-drying). Cut and sewn to order in London. Unisex fit, XS to 4XL.\n\nMade to order by Contrado in London and sent tracked; usually with you within a week.",
-      "tags": [
-        "running vest",
-        "race vest",
-        "film my run",
-        "shoulder stripe"
-      ],
-      "priceFrom": 44.95,
-      "priceTo": 48.424,
-      "currency": "GBP",
-      "colours": [
-        "Forest Green"
-      ],
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL",
-        "3XL",
-        "4XL"
-      ],
-      "images": [
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-shoulder-model.jpg",
-          "position": "model"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097149_film-my-run-running-vest-forest-green-shoulder-stripe_0.jpeg",
-          "position": "front"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097149_film-my-run-running-vest-forest-green-shoulder-stripe_1.jpeg",
-          "position": "back"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097149_film-my-run-running-vest-forest-green-shoulder-stripe_2.jpeg",
-          "position": "view-2"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097149_film-my-run-running-vest-forest-green-shoulder-stripe_3.jpeg",
-          "position": "view-3"
-        }
-      ],
-      "variants": [
-        {
-          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHjt3bzOCcV",
-          "colour": "Forest Green",
-          "size": "XS",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3095,
-              "optionValueName": "Extra Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2Me3hDyUAwZ1",
-          "colour": "Forest Green",
-          "size": "S",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3096,
-              "optionValueName": "Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0NVOKyxgVX",
-          "colour": "Forest Green",
-          "size": "M",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3097,
-              "optionValueName": "Medium"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMhJYhTkQS3",
-          "colour": "Forest Green",
-          "size": "L",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3098,
-              "optionValueName": "Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTj17j3yXAOZ",
-          "colour": "Forest Green",
-          "size": "XL",
-          "price": 46.108,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3099,
-              "optionValueName": "Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e09INadqcA5b",
-          "colour": "Forest Green",
-          "size": "2XL",
-          "price": 47.266,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3100,
-              "optionValueName": "2 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCf6HaJ5NCcN",
-          "colour": "Forest Green",
-          "size": "3XL",
-          "price": 47.845,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3201,
-              "optionValueName": "3 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1Q5kfa9wYt",
-          "colour": "Forest Green",
-          "size": "4XL",
-          "price": 48.424,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3202,
-              "optionValueName": "4 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        }
-      ],
-      "etsyUrl": "",
-      "etsyListingId": "",
-      "printifyId": "",
-      "supplier": "contrado",
-      "contradoProductId": 3097149
-    },
-    {
-      "key": "vest-navy-side",
-      "slug": "running-vest-navy-side",
-      "name": "Running Vest, Navy",
-      "subtitle": "Film strips down the sides",
-      "title": "Film My Run Running Vest, Navy",
-      "category": "vests",
-      "categoryLabel": "Running Vests",
-      "productType": "Cut-and-sew Sports Airflow vest, made in London",
-      "description": "The Film My Run running vest in navy. Sports Airflow fabric (145gsm, breathable, quick-drying), an orange film-strip stripe just in front of each side seam, a small FMR on the chest and the Film My Run logo under the collar at the back. Cut and sewn to order in London. Unisex fit, XS to 4XL.\n\nMade to order by Contrado in London and sent tracked; usually with you within a week.",
-      "tags": [
-        "running vest",
-        "race vest",
-        "film my run",
-        "side stripes"
-      ],
-      "priceFrom": 44.95,
-      "priceTo": 48.424,
-      "currency": "GBP",
-      "colours": [
-        "Navy"
-      ],
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL",
-        "3XL",
-        "4XL"
-      ],
-      "images": [
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-side-model.jpg",
-          "position": "model"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097145_film-my-run-running-vest-navy_0.jpeg",
-          "position": "front"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097145_film-my-run-running-vest-navy_1.jpeg",
-          "position": "back"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097145_film-my-run-running-vest-navy_2.jpeg",
-          "position": "view-2"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097145_film-my-run-running-vest-navy_3.jpeg",
-          "position": "view-3"
-        }
-      ],
-      "variants": [
-        {
-          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHejLVptWHz",
-          "colour": "Navy",
-          "size": "XS",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3095,
-              "optionValueName": "Extra Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2MdyXVsKgGEV",
-          "colour": "Navy",
-          "size": "S",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3096,
-              "optionValueName": "Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0ILgEpT0B1",
-          "colour": "Navy",
-          "size": "M",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3097,
-              "optionValueName": "Medium"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMc9qbKFk7X",
-          "colour": "Navy",
-          "size": "L",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3098,
-              "optionValueName": "Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTivy0xp2U43",
-          "colour": "Navy",
-          "size": "XL",
-          "price": 46.108,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3099,
-              "optionValueName": "Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e09DDsXh7Tl5",
-          "colour": "Navy",
-          "size": "2XL",
-          "price": 47.266,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3100,
-              "optionValueName": "2 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCf17sCvsWHr",
-          "colour": "Navy",
-          "size": "3XL",
-          "price": 47.845,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3201,
-              "optionValueName": "3 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1Kw2ZQfGEN",
-          "colour": "Navy",
-          "size": "4XL",
-          "price": 48.424,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3202,
-              "optionValueName": "4 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        }
-      ],
-      "etsyUrl": "",
-      "etsyListingId": "",
-      "printifyId": "",
-      "supplier": "contrado",
-      "contradoProductId": 3097145
-    },
-    {
-      "key": "vest-navy-shoulder",
-      "slug": "running-vest-navy-shoulder",
-      "name": "Running Vest, Navy",
-      "subtitle": "Film strip over the shoulder",
-      "title": "Film My Run Running Vest, Navy, Shoulder Stripe",
-      "category": "vests",
-      "categoryLabel": "Running Vests",
-      "productType": "Cut-and-sew Sports Airflow vest, made in London",
-      "description": "The Film My Run running vest in navy, with a single strip of film running over the right shoulder, front and back, a small FMR on the chest and the Film My Run logo under the collar at the back. Sports Airflow fabric (145gsm, breathable, quick-drying). Cut and sewn to order in London. Unisex fit, XS to 4XL.\n\nMade to order by Contrado in London and sent tracked; usually with you within a week.",
-      "tags": [
-        "running vest",
-        "race vest",
-        "film my run",
-        "shoulder stripe"
-      ],
-      "priceFrom": 44.95,
-      "priceTo": 48.424,
-      "currency": "GBP",
-      "colours": [
-        "Navy"
-      ],
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL",
-        "3XL",
-        "4XL"
-      ],
-      "images": [
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-shoulder-model.jpg",
-          "position": "model"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097152_film-my-run-running-vest-navy-shoulder-stripe_0.jpeg",
-          "position": "front"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097152_film-my-run-running-vest-navy-shoulder-stripe_1.jpeg",
-          "position": "back"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097152_film-my-run-running-vest-navy-shoulder-stripe_2.jpeg",
-          "position": "view-2"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097152_film-my-run-running-vest-navy-shoulder-stripe_3.jpeg",
-          "position": "view-3"
-        }
-      ],
-      "variants": [
-        {
-          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHarsIO4kM7",
-          "colour": "Navy",
-          "size": "XS",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3095,
-              "optionValueName": "Extra Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2Mdug2esrUId",
-          "colour": "Navy",
-          "size": "S",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3096,
-              "optionValueName": "Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0EUD1NeEF9",
-          "colour": "Navy",
-          "size": "M",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3097,
-              "optionValueName": "Medium"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMYINNsQyBf",
-          "colour": "Navy",
-          "size": "L",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3098,
-              "optionValueName": "Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTis6XkNDi8B",
-          "colour": "Navy",
-          "size": "XL",
-          "price": 46.108,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3099,
-              "optionValueName": "Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e099MPKFIhpD",
-          "colour": "Navy",
-          "size": "2XL",
-          "price": 47.266,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3100,
-              "optionValueName": "2 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCexGOzU3kLz",
-          "colour": "Navy",
-          "size": "3XL",
-          "price": 47.845,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3201,
-              "optionValueName": "3 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1H4ZLyqUIV",
-          "colour": "Navy",
-          "size": "4XL",
-          "price": 48.424,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3202,
-              "optionValueName": "4 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        }
-      ],
-      "etsyUrl": "",
-      "etsyListingId": "",
-      "printifyId": "",
-      "supplier": "contrado",
-      "contradoProductId": 3097152
-    },
-    {
-      "key": "vest-orange-side",
-      "slug": "running-vest-orange-side",
-      "name": "Running Vest, Orange",
-      "subtitle": "Film strips down the sides",
-      "title": "Film My Run Running Vest, Orange",
-      "category": "vests",
-      "categoryLabel": "Running Vests",
-      "productType": "Cut-and-sew Sports Airflow vest, made in London",
-      "description": "The Film My Run running vest in the classic Film My Run orange. Sports Airflow fabric (145gsm, breathable, quick-drying), a black film-strip stripe just in front of each side seam, a small FMR on the chest and the Film My Run logo under the collar at the back. Cut and sewn to order in London. Unisex fit, XS to 4XL.\n\nMade to order by Contrado in London and sent tracked; usually with you within a week.",
-      "tags": [
-        "running vest",
-        "race vest",
-        "film my run",
-        "side stripes"
-      ],
-      "priceFrom": 44.95,
-      "priceTo": 48.424,
-      "currency": "GBP",
-      "colours": [
-        "Orange"
-      ],
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL",
-        "3XL",
-        "4XL"
-      ],
-      "images": [
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-model.jpg",
-          "position": "model"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097160_film-my-run-running-vest-orange_0.jpeg",
-          "position": "front"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097160_film-my-run-running-vest-orange_1.jpeg",
-          "position": "back"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097160_film-my-run-running-vest-orange_2.jpeg",
-          "position": "view-2"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097160_film-my-run-running-vest-orange_3.jpeg",
-          "position": "view-3"
-        }
-      ],
-      "variants": [
-        {
-          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHYIKbTd90N",
-          "colour": "Orange",
-          "size": "XS",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3095,
-              "optionValueName": "Extra Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2Mds6UxyPswt",
-          "colour": "Orange",
-          "size": "S",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3096,
-              "optionValueName": "Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0BufKTCctP",
-          "colour": "Orange",
-          "size": "M",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3097,
-              "optionValueName": "Medium"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMVipgxzMpv",
-          "colour": "Orange",
-          "size": "L",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3098,
-              "optionValueName": "Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTipX03Sm6mR",
-          "colour": "Orange",
-          "size": "XL",
-          "price": 46.108,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3099,
-              "optionValueName": "Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e096mrdKr6TT",
-          "colour": "Orange",
-          "size": "2XL",
-          "price": 47.266,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3100,
-              "optionValueName": "2 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCeugrIZc90F",
-          "colour": "Orange",
-          "size": "3XL",
-          "price": 47.845,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3201,
-              "optionValueName": "3 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1EV1f4Oswl",
-          "colour": "Orange",
-          "size": "4XL",
-          "price": 48.424,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3202,
-              "optionValueName": "4 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        }
-      ],
-      "etsyUrl": "",
-      "etsyListingId": "",
-      "printifyId": "",
-      "supplier": "contrado",
-      "contradoProductId": 3097160
-    },
-    {
-      "key": "vest-orange-shoulder",
-      "slug": "running-vest-orange-shoulder",
-      "name": "Running Vest, Orange",
-      "subtitle": "Film strip over the shoulder",
-      "title": "Film My Run Running Vest, Orange, Shoulder Stripe",
-      "category": "vests",
-      "categoryLabel": "Running Vests",
-      "productType": "Cut-and-sew Sports Airflow vest, made in London",
-      "description": "The Film My Run running vest in the classic Film My Run orange, with a single black strip of film running over the right shoulder, front and back, a small FMR on the chest and the Film My Run logo under the collar at the back. Sports Airflow fabric (145gsm, breathable, quick-drying). Cut and sewn to order in London. Unisex fit, XS to 4XL.\n\nMade to order by Contrado in London and sent tracked; usually with you within a week.",
-      "tags": [
-        "running vest",
-        "race vest",
-        "film my run",
-        "shoulder stripe"
-      ],
-      "priceFrom": 44.95,
-      "priceTo": 48.424,
-      "currency": "GBP",
-      "colours": [
-        "Orange"
-      ],
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL",
-        "3XL",
-        "4XL"
-      ],
-      "images": [
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-shoulder-model.jpg",
-          "position": "model"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097161_film-my-run-running-vest-orange-shoulder-stripe_0.jpeg",
-          "position": "front"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097161_film-my-run-running-vest-orange-shoulder-stripe_1.jpeg",
-          "position": "back"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097161_film-my-run-running-vest-orange-shoulder-stripe_2.jpeg",
-          "position": "view-2"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097161_film-my-run-running-vest-orange-shoulder-stripe_3.jpeg",
-          "position": "view-3"
-        }
-      ],
-      "variants": [
-        {
-          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHZaG810JaV",
-          "colour": "Orange",
-          "size": "XS",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3095,
-              "optionValueName": "Extra Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2MdtOQUVn3X1",
-          "colour": "Orange",
-          "size": "S",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3096,
-              "optionValueName": "Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0DCar0ZnTX",
-          "colour": "Orange",
-          "size": "M",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3097,
-              "optionValueName": "Medium"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMX0lDVMXQ3",
-          "colour": "Orange",
-          "size": "L",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3098,
-              "optionValueName": "Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTiqova09HMZ",
-          "colour": "Orange",
-          "size": "XL",
-          "price": 46.108,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3099,
-              "optionValueName": "Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e0984n9sEH3b",
-          "colour": "Orange",
-          "size": "2XL",
-          "price": 47.266,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3100,
-              "optionValueName": "2 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCevymp6zJaN",
-          "colour": "Orange",
-          "size": "3XL",
-          "price": 47.845,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3201,
-              "optionValueName": "3 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1FmxBbm3Wt",
-          "colour": "Orange",
-          "size": "4XL",
-          "price": 48.424,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3202,
-              "optionValueName": "4 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        }
-      ],
-      "etsyUrl": "",
-      "etsyListingId": "",
-      "printifyId": "",
-      "supplier": "contrado",
-      "contradoProductId": 3097161
-    },
-    {
-      "key": "vest-white-side",
-      "slug": "running-vest-white-side",
-      "name": "Running Vest, White",
-      "subtitle": "Film strips down the sides",
-      "title": "Film My Run Running Vest, White",
-      "category": "vests",
-      "categoryLabel": "Running Vests",
-      "productType": "Cut-and-sew Sports Airflow vest, made in London",
-      "description": "The Film My Run running vest in white. Sports Airflow fabric (145gsm, breathable, quick-drying), an orange film-strip stripe just in front of each side seam, a small FMR on the chest and the Film My Run logo under the collar at the back. Cut and sewn to order in London. Unisex fit, XS to 4XL.\n\nMade to order by Contrado in London and sent tracked; usually with you within a week.",
-      "tags": [
-        "running vest",
-        "race vest",
-        "film my run",
-        "side stripes"
-      ],
-      "priceFrom": 44.95,
-      "priceTo": 48.424,
-      "currency": "GBP",
-      "colours": [
-        "White"
-      ],
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL",
-        "3XL",
-        "4XL"
-      ],
-      "images": [
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-side-model.jpg",
-          "position": "model"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097128_film-my-run-running-vest-white_0.jpeg",
-          "position": "front"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097128_film-my-run-running-vest-white_1.jpeg",
-          "position": "back"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097128_film-my-run-running-vest-white_2.jpeg",
-          "position": "view-2"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097128_film-my-run-running-vest-white_3.jpeg",
-          "position": "view-3"
-        }
-      ],
-      "variants": [
-        {
-          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHiaVN7PYPL",
-          "colour": "White",
-          "size": "XS",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3095,
-              "optionValueName": "Extra Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2Me2OfjcCILr",
-          "colour": "White",
-          "size": "S",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3096,
-              "optionValueName": "Small"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0MCq66z2IN",
-          "colour": "White",
-          "size": "M",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3097,
-              "optionValueName": "Medium"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMg10SblmEt",
-          "colour": "White",
-          "size": "L",
-          "price": 44.95,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3098,
-              "optionValueName": "Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTizpAp6YWBP",
-          "colour": "White",
-          "size": "XL",
-          "price": 46.108,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3099,
-              "optionValueName": "Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e09H52OydVsR",
-          "colour": "White",
-          "size": "2XL",
-          "price": 47.266,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3100,
-              "optionValueName": "2 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCf4z24DOYPD",
-          "colour": "White",
-          "size": "3XL",
-          "price": 47.845,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3201,
-              "optionValueName": "3 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        },
-        {
-          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1OnCQiBILj",
-          "colour": "White",
-          "size": "4XL",
-          "price": 48.424,
-          "options": [
-            {
-              "optionId": 653,
-              "optionName": "Vest Size",
-              "optionValueId": 3202,
-              "optionValueName": "4 Extra Large"
-            },
-            {
-              "optionId": 438,
-              "optionName": "Fabric Type",
-              "optionValueId": 2599,
-              "optionValueName": "Sports Airflow 145gsm"
-            }
-          ]
-        }
-      ],
-      "etsyUrl": "",
-      "etsyListingId": "",
-      "printifyId": "",
-      "supplier": "contrado",
-      "contradoProductId": 3097128
-    },
-    {
-      "key": "vest-white-shoulder",
-      "slug": "running-vest-white-shoulder",
-      "name": "Running Vest, White",
-      "subtitle": "Film strip over the shoulder",
-      "title": "Film My Run Running Vest, White, Shoulder Stripe",
-      "category": "vests",
-      "categoryLabel": "Running Vests",
-      "productType": "Cut-and-sew Sports Airflow vest, made in London",
-      "description": "The Film My Run running vest in white, with a single strip of film running over the right shoulder, front and back, a small FMR on the chest and the Film My Run logo under the collar at the back. Sports Airflow fabric (145gsm, breathable, quick-drying). Cut and sewn to order in London. Unisex fit, XS to 4XL.\n\nMade to order by Contrado in London and sent tracked; usually with you within a week.",
-      "tags": [
-        "running vest",
-        "race vest",
-        "film my run",
-        "shoulder stripe"
-      ],
-      "priceFrom": 44.95,
-      "priceTo": 48.424,
-      "currency": "GBP",
-      "colours": [
-        "White"
-      ],
-      "sizes": [
-        "XS",
-        "S",
-        "M",
-        "L",
-        "XL",
-        "2XL",
-        "3XL",
-        "4XL"
-      ],
-      "images": [
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-shoulder-model.jpg",
-          "position": "model"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097157_film-my-run-running-vest-white-shoulder-stripe_0.jpeg",
-          "position": "front"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097157_film-my-run-running-vest-white-shoulder-stripe_1.jpeg",
-          "position": "back"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097157_film-my-run-running-vest-white-shoulder-stripe_2.jpeg",
-          "position": "view-2"
-        },
-        {
-          "src": "https://static.contrado.com/DesignTemplates/products/3097157_film-my-run-running-vest-white-shoulder-stripe_3.jpeg",
-          "position": "view-3"
-        }
-      ],
-      "variants": [
         {
           "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHhJVv4wbGl",
           "colour": "White",
           "size": "XS",
           "price": 44.95,
+          "supplierProductId": "3097157",
           "options": [
             {
               "optionId": 653,
@@ -2119,6 +349,7 @@
           "colour": "White",
           "size": "S",
           "price": 44.95,
+          "supplierProductId": "3097157",
           "options": [
             {
               "optionId": 653,
@@ -2139,6 +370,7 @@
           "colour": "White",
           "size": "M",
           "price": 44.95,
+          "supplierProductId": "3097157",
           "options": [
             {
               "optionId": 653,
@@ -2159,6 +391,7 @@
           "colour": "White",
           "size": "L",
           "price": 44.95,
+          "supplierProductId": "3097157",
           "options": [
             {
               "optionId": 653,
@@ -2179,6 +412,7 @@
           "colour": "White",
           "size": "XL",
           "price": 46.108,
+          "supplierProductId": "3097157",
           "options": [
             {
               "optionId": 653,
@@ -2199,6 +433,7 @@
           "colour": "White",
           "size": "2XL",
           "price": 47.266,
+          "supplierProductId": "3097157",
           "options": [
             {
               "optionId": 653,
@@ -2219,6 +454,7 @@
           "colour": "White",
           "size": "3XL",
           "price": 47.845,
+          "supplierProductId": "3097157",
           "options": [
             {
               "optionId": 653,
@@ -2239,6 +475,511 @@
           "colour": "White",
           "size": "4XL",
           "price": 48.424,
+          "supplierProductId": "3097157",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3202,
+              "optionValueName": "4 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHjt3bzOCcV",
+          "colour": "Forest Green",
+          "size": "XS",
+          "price": 44.95,
+          "supplierProductId": "3097149",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3095,
+              "optionValueName": "Extra Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2Me3hDyUAwZ1",
+          "colour": "Forest Green",
+          "size": "S",
+          "price": 44.95,
+          "supplierProductId": "3097149",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3096,
+              "optionValueName": "Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0NVOKyxgVX",
+          "colour": "Forest Green",
+          "size": "M",
+          "price": 44.95,
+          "supplierProductId": "3097149",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3097,
+              "optionValueName": "Medium"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMhJYhTkQS3",
+          "colour": "Forest Green",
+          "size": "L",
+          "price": 44.95,
+          "supplierProductId": "3097149",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3098,
+              "optionValueName": "Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTj17j3yXAOZ",
+          "colour": "Forest Green",
+          "size": "XL",
+          "price": 46.108,
+          "supplierProductId": "3097149",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3099,
+              "optionValueName": "Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e09INadqcA5b",
+          "colour": "Forest Green",
+          "size": "2XL",
+          "price": 47.266,
+          "supplierProductId": "3097149",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3100,
+              "optionValueName": "2 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCf6HaJ5NCcN",
+          "colour": "Forest Green",
+          "size": "3XL",
+          "price": 47.845,
+          "supplierProductId": "3097149",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3201,
+              "optionValueName": "3 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1Q5kfa9wYt",
+          "colour": "Forest Green",
+          "size": "4XL",
+          "price": 48.424,
+          "supplierProductId": "3097149",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3202,
+              "optionValueName": "4 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHarsIO4kM7",
+          "colour": "Navy",
+          "size": "XS",
+          "price": 44.95,
+          "supplierProductId": "3097152",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3095,
+              "optionValueName": "Extra Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2Mdug2esrUId",
+          "colour": "Navy",
+          "size": "S",
+          "price": 44.95,
+          "supplierProductId": "3097152",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3096,
+              "optionValueName": "Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0EUD1NeEF9",
+          "colour": "Navy",
+          "size": "M",
+          "price": 44.95,
+          "supplierProductId": "3097152",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3097,
+              "optionValueName": "Medium"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMYINNsQyBf",
+          "colour": "Navy",
+          "size": "L",
+          "price": 44.95,
+          "supplierProductId": "3097152",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3098,
+              "optionValueName": "Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTis6XkNDi8B",
+          "colour": "Navy",
+          "size": "XL",
+          "price": 46.108,
+          "supplierProductId": "3097152",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3099,
+              "optionValueName": "Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e099MPKFIhpD",
+          "colour": "Navy",
+          "size": "2XL",
+          "price": 47.266,
+          "supplierProductId": "3097152",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3100,
+              "optionValueName": "2 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCexGOzU3kLz",
+          "colour": "Navy",
+          "size": "3XL",
+          "price": 47.845,
+          "supplierProductId": "3097152",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3201,
+              "optionValueName": "3 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1H4ZLyqUIV",
+          "colour": "Navy",
+          "size": "4XL",
+          "price": 48.424,
+          "supplierProductId": "3097152",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3202,
+              "optionValueName": "4 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHZaG810JaV",
+          "colour": "Orange",
+          "size": "XS",
+          "price": 44.95,
+          "supplierProductId": "3097161",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3095,
+              "optionValueName": "Extra Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2MdtOQUVn3X1",
+          "colour": "Orange",
+          "size": "S",
+          "price": 44.95,
+          "supplierProductId": "3097161",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3096,
+              "optionValueName": "Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0DCar0ZnTX",
+          "colour": "Orange",
+          "size": "M",
+          "price": 44.95,
+          "supplierProductId": "3097161",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3097,
+              "optionValueName": "Medium"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMX0lDVMXQ3",
+          "colour": "Orange",
+          "size": "L",
+          "price": 44.95,
+          "supplierProductId": "3097161",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3098,
+              "optionValueName": "Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTiqova09HMZ",
+          "colour": "Orange",
+          "size": "XL",
+          "price": 46.108,
+          "supplierProductId": "3097161",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3099,
+              "optionValueName": "Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e0984n9sEH3b",
+          "colour": "Orange",
+          "size": "2XL",
+          "price": 47.266,
+          "supplierProductId": "3097161",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3100,
+              "optionValueName": "2 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCevymp6zJaN",
+          "colour": "Orange",
+          "size": "3XL",
+          "price": 47.845,
+          "supplierProductId": "3097161",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3201,
+              "optionValueName": "3 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1FmxBbm3Wt",
+          "colour": "Orange",
+          "size": "4XL",
+          "price": 48.424,
+          "supplierProductId": "3097161",
           "options": [
             {
               "optionId": 653,
@@ -2258,8 +999,967 @@
       "etsyUrl": "",
       "etsyListingId": "",
       "printifyId": "",
-      "supplier": "contrado",
-      "contradoProductId": 3097157
+      "supplier": "contrado"
+    },
+    {
+      "key": "vest-side",
+      "slug": "running-vest-side-stripes",
+      "name": "Running Vest, side stripes",
+      "subtitle": "Film strips down each side",
+      "title": "Running Vest, side stripes | Film My Run",
+      "category": "vests",
+      "categoryLabel": "Running Vests",
+      "productType": "Cut-and-sew Sports Airflow vest, made in London",
+      "description": "The Film My Run running vest: Sports Airflow fabric (145gsm, breathable, quick-drying), an orange film-strip stripe just in front of each side seam, a small FMR on the chest and the Film My Run logo under the collar at the back. Unisex fit, XS to 4XL, in five colours.\n\nCut and sewn to order by Contrado in London and sent tracked, usually with you within a week.",
+      "tags": [
+        "running vest",
+        "race vest",
+        "film my run",
+        "side stripes"
+      ],
+      "priceFrom": 44.95,
+      "priceTo": 48.424,
+      "currency": "GBP",
+      "colours": [
+        "Black",
+        "White",
+        "Forest Green",
+        "Navy",
+        "Orange"
+      ],
+      "sizes": [
+        "XS",
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL",
+        "4XL"
+      ],
+      "images": [
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-side-model.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097116_film-my-run-running-vest-black_0.jpeg",
+          "position": "front",
+          "colour": "Black"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097116_film-my-run-running-vest-black_1.jpeg",
+          "position": "back",
+          "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-side-model.jpg",
+          "position": "model",
+          "colour": "White"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097128_film-my-run-running-vest-white_0.jpeg",
+          "position": "front",
+          "colour": "White"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097128_film-my-run-running-vest-white_1.jpeg",
+          "position": "back",
+          "colour": "White"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-model.jpg",
+          "position": "model",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097141_film-my-run-running-vest-forest-green_0.jpeg",
+          "position": "front",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097141_film-my-run-running-vest-forest-green_1.jpeg",
+          "position": "back",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-side-model.jpg",
+          "position": "model",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097145_film-my-run-running-vest-navy_0.jpeg",
+          "position": "front",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097145_film-my-run-running-vest-navy_1.jpeg",
+          "position": "back",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-model.jpg",
+          "position": "model",
+          "colour": "Orange"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097160_film-my-run-running-vest-orange_0.jpeg",
+          "position": "front",
+          "colour": "Orange"
+        },
+        {
+          "src": "https://static.contrado.com/DesignTemplates/products/3097160_film-my-run-running-vest-orange_1.jpeg",
+          "position": "back",
+          "colour": "Orange"
+        }
+      ],
+      "variants": [
+        {
+          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHg0KxsMTQZ",
+          "colour": "Black",
+          "size": "XS",
+          "price": 44.95,
+          "supplierProductId": "3097116",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3095,
+              "optionValueName": "Extra Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2MdzoVKN9DN5",
+          "colour": "Black",
+          "size": "S",
+          "price": 44.95,
+          "supplierProductId": "3097116",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3096,
+              "optionValueName": "Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0JcfgrvxJb",
+          "colour": "Black",
+          "size": "M",
+          "price": 44.95,
+          "supplierProductId": "3097116",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3097,
+              "optionValueName": "Medium"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMdQq3MihG7",
+          "colour": "Black",
+          "size": "L",
+          "price": 44.95,
+          "supplierProductId": "3097116",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3098,
+              "optionValueName": "Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTixF0PrVRCd",
+          "colour": "Black",
+          "size": "XL",
+          "price": 46.108,
+          "supplierProductId": "3097116",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3099,
+              "optionValueName": "Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e09EUrzjaQtf",
+          "colour": "Black",
+          "size": "2XL",
+          "price": 47.266,
+          "supplierProductId": "3097116",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3100,
+              "optionValueName": "2 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCf2OreyLTQR",
+          "colour": "Black",
+          "size": "3XL",
+          "price": 47.845,
+          "supplierProductId": "3097116",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3201,
+              "optionValueName": "3 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1MD21T8DMx",
+          "colour": "Black",
+          "size": "4XL",
+          "price": 48.424,
+          "supplierProductId": "3097116",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3202,
+              "optionValueName": "4 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHiaVN7PYPL",
+          "colour": "White",
+          "size": "XS",
+          "price": 44.95,
+          "supplierProductId": "3097128",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3095,
+              "optionValueName": "Extra Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2Me2OfjcCILr",
+          "colour": "White",
+          "size": "S",
+          "price": 44.95,
+          "supplierProductId": "3097128",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3096,
+              "optionValueName": "Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0MCq66z2IN",
+          "colour": "White",
+          "size": "M",
+          "price": 44.95,
+          "supplierProductId": "3097128",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3097,
+              "optionValueName": "Medium"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMg10SblmEt",
+          "colour": "White",
+          "size": "L",
+          "price": 44.95,
+          "supplierProductId": "3097128",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3098,
+              "optionValueName": "Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTizpAp6YWBP",
+          "colour": "White",
+          "size": "XL",
+          "price": 46.108,
+          "supplierProductId": "3097128",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3099,
+              "optionValueName": "Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e09H52OydVsR",
+          "colour": "White",
+          "size": "2XL",
+          "price": 47.266,
+          "supplierProductId": "3097128",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3100,
+              "optionValueName": "2 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCf4z24DOYPD",
+          "colour": "White",
+          "size": "3XL",
+          "price": 47.845,
+          "supplierProductId": "3097128",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3201,
+              "optionValueName": "3 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1OnCQiBILj",
+          "colour": "White",
+          "size": "4XL",
+          "price": 48.424,
+          "supplierProductId": "3097128",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3202,
+              "optionValueName": "4 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHZZdPgOpxT",
+          "colour": "Forest Green",
+          "size": "XS",
+          "price": 44.95,
+          "supplierProductId": "3097141",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3095,
+              "optionValueName": "Extra Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2MdtNnmBBZtz",
+          "colour": "Forest Green",
+          "size": "S",
+          "price": 44.95,
+          "supplierProductId": "3097141",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3096,
+              "optionValueName": "Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0DBy8fyJqV",
+          "colour": "Forest Green",
+          "size": "M",
+          "price": 44.95,
+          "supplierProductId": "3097141",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3097,
+              "optionValueName": "Medium"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMX08VAl3n1",
+          "colour": "Forest Green",
+          "size": "L",
+          "price": 44.95,
+          "supplierProductId": "3097141",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3098,
+              "optionValueName": "Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTiqoIrfXnjX",
+          "colour": "Forest Green",
+          "size": "XL",
+          "price": 46.108,
+          "supplierProductId": "3097141",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3099,
+              "optionValueName": "Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e0984ARXcnQZ",
+          "colour": "Forest Green",
+          "size": "2XL",
+          "price": 47.266,
+          "supplierProductId": "3097141",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3100,
+              "optionValueName": "2 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCevyA6mNpxL",
+          "colour": "Forest Green",
+          "size": "3XL",
+          "price": 47.845,
+          "supplierProductId": "3097141",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3201,
+              "optionValueName": "3 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1FmKTHAZtr",
+          "colour": "Forest Green",
+          "size": "4XL",
+          "price": 48.424,
+          "supplierProductId": "3097141",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3202,
+              "optionValueName": "4 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHejLVptWHz",
+          "colour": "Navy",
+          "size": "XS",
+          "price": 44.95,
+          "supplierProductId": "3097145",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3095,
+              "optionValueName": "Extra Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2MdyXVsKgGEV",
+          "colour": "Navy",
+          "size": "S",
+          "price": 44.95,
+          "supplierProductId": "3097145",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3096,
+              "optionValueName": "Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0ILgEpT0B1",
+          "colour": "Navy",
+          "size": "M",
+          "price": 44.95,
+          "supplierProductId": "3097145",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3097,
+              "optionValueName": "Medium"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMc9qbKFk7X",
+          "colour": "Navy",
+          "size": "L",
+          "price": 44.95,
+          "supplierProductId": "3097145",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3098,
+              "optionValueName": "Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTivy0xp2U43",
+          "colour": "Navy",
+          "size": "XL",
+          "price": 46.108,
+          "supplierProductId": "3097145",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3099,
+              "optionValueName": "Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e09DDsXh7Tl5",
+          "colour": "Navy",
+          "size": "2XL",
+          "price": 47.266,
+          "supplierProductId": "3097145",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3100,
+              "optionValueName": "2 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCf17sCvsWHr",
+          "colour": "Navy",
+          "size": "3XL",
+          "price": 47.845,
+          "supplierProductId": "3097145",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3201,
+              "optionValueName": "3 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1Kw2ZQfGEN",
+          "colour": "Navy",
+          "size": "4XL",
+          "price": 48.424,
+          "supplierProductId": "3097145",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3202,
+              "optionValueName": "4 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGtWNSJHGkXaKHYIKbTd90N",
+          "colour": "Orange",
+          "size": "XS",
+          "price": 44.95,
+          "supplierProductId": "3097160",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3095,
+              "optionValueName": "Extra Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGvPMyoaFJm2Mds6UxyPswt",
+          "colour": "Orange",
+          "size": "S",
+          "price": 44.95,
+          "supplierProductId": "3097160",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3096,
+              "optionValueName": "Small"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGxIMVJtDt0UP0BufKTCctP",
+          "colour": "Orange",
+          "size": "M",
+          "price": 44.95,
+          "supplierProductId": "3097160",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3097,
+              "optionValueName": "Medium"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGzBM1pCCSEwRMVipgxzMpv",
+          "colour": "Orange",
+          "size": "L",
+          "price": 44.95,
+          "supplierProductId": "3097160",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3098,
+              "optionValueName": "Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KH14LYKVB1TOTipX03Sm6mR",
+          "colour": "Orange",
+          "size": "XL",
+          "price": 46.108,
+          "supplierProductId": "3097160",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3099,
+              "optionValueName": "Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGk1IwEOhC7e096mrdKr6TT",
+          "colour": "Orange",
+          "size": "2XL",
+          "price": 47.266,
+          "supplierProductId": "3097160",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3100,
+              "optionValueName": "2 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGluIZb9oaJHCeugrIZc90F",
+          "colour": "Orange",
+          "size": "3XL",
+          "price": 47.845,
+          "supplierProductId": "3097160",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3201,
+              "optionValueName": "3 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        },
+        {
+          "id": "2Y3Cslt9Sv6KGnnI66Sn9XjF1EV1f4Oswl",
+          "colour": "Orange",
+          "size": "4XL",
+          "price": 48.424,
+          "supplierProductId": "3097160",
+          "options": [
+            {
+              "optionId": 653,
+              "optionName": "Vest Size",
+              "optionValueId": 3202,
+              "optionValueName": "4 Extra Large"
+            },
+            {
+              "optionId": 438,
+              "optionName": "Fabric Type",
+              "optionValueId": 2599,
+              "optionValueName": "Sports Airflow 145gsm"
+            }
+          ]
+        }
+      ],
+      "etsyUrl": "",
+      "etsyListingId": "",
+      "printifyId": "",
+      "supplier": "contrado"
     },
     {
       "key": "phrase-another-marathon-another-ultra",
@@ -3910,7 +3610,7 @@
       "key": "logo-front",
       "slug": "logo-front",
       "name": "Film My Run Logo T-Shirt",
-      "subtitle": "Running YouTube Channel Tee \u00b7 Unisex Bella+Canvas 3001",
+      "subtitle": "Running YouTube Channel Tee · Unisex Bella+Canvas 3001",
       "title": "Film My Run Logo T-Shirt | Running YouTube Channel Tee | Unisex Bella+Canvas 3001",
       "category": "tees",
       "categoryLabel": "T-Shirts",
@@ -4239,7 +3939,7 @@
       "key": "logo-left-chest",
       "slug": "logo-left-chest",
       "name": "Film My Run Small Logo T-Shirt",
-      "subtitle": "Left Chest Running Tee \u00b7 Unisex Bella+Canvas 3001",
+      "subtitle": "Left Chest Running Tee · Unisex Bella+Canvas 3001",
       "title": "Film My Run Small Logo T-Shirt | Left Chest Running Tee | Unisex Bella+Canvas 3001",
       "category": "tees",
       "categoryLabel": "T-Shirts",
@@ -11058,7 +10758,7 @@
       "key": "hoodie-logo-front",
       "slug": "hoodie-logo-front",
       "name": "Film My Run Logo Hoodie",
-      "subtitle": "Running YouTube Channel Hoodie \u00b7 Unisex Heavy Blend",
+      "subtitle": "Running YouTube Channel Hoodie · Unisex Heavy Blend",
       "title": "Film My Run Logo Hoodie | Running YouTube Channel Hoodie | Unisex Heavy Blend",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -11371,7 +11071,7 @@
       "key": "hoodie-logo-left-chest",
       "slug": "hoodie-logo-left-chest",
       "name": "Film My Run Small Logo Hoodie",
-      "subtitle": "Left Chest Running Hoodie \u00b7 Unisex Heavy Blend",
+      "subtitle": "Left Chest Running Hoodie · Unisex Heavy Blend",
       "title": "Film My Run Small Logo Hoodie | Left Chest Running Hoodie | Unisex Heavy Blend",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
