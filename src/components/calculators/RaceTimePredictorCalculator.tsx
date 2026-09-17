@@ -30,10 +30,10 @@ const TERRAINS = [
 ];
 const CLASS_LABEL: Record<string, string> = { flat: 'Flat', rolling: 'Rolling', hilly: 'Hilly', mountain: 'Mountain' };
 const WARNING_TEXT: Record<string, string> = {
-  softAnchor: 'That known time is slower than most people race the distance flat out, so it says less about you than a longer race would. If you have one, use it.',
-  staleAnchor: 'That race is more than two years old. Runners with an old PB as their anchor come in about 5% slower than the prediction.',
-  outsideBands: 'That time is outside the range we have data for, so the nearest measured runners were used.',
-  nonStandardDistance: 'One of the distances is not a standard one, so we interpolated between the nearest standard distances.',
+  softAnchor: "That's slower than most people race this distance, so it tells us less about you. A longer race would predict better. If you have one, use it.",
+  staleAnchor: 'That race is over two years old. Runners predicting from an old time usually come in about 5% slower.',
+  outsideBands: 'We have no results for a time like that, so we used the nearest runners we do have.',
+  nonStandardDistance: "One of the distances isn't a standard race distance, so we worked it out from the nearest ones.",
 };
 
 const select = 'w-full px-4 py-3 bg-zinc-800 border border-zinc-700 rounded-xl text-white focus:outline-none focus:border-orange-500';
@@ -81,7 +81,7 @@ function UltraTargetFields({ terrain, setTerrain, raceId, setRaceId, climb, setC
             </option>
           ))}
         </select>
-        <p className="text-xs text-zinc-500 mt-1">{PREDICTOR_RACES.length} UK ultras have a cost measured from their own finishers. That beats any climb figure.</p>
+        <p className="text-xs text-zinc-500 mt-1">We have real results from {PREDICTOR_RACES.length} UK ultras. If yours is one of them, pick it. Real finishes beat any estimate.</p>
       </div>
       {!raceId && (
         <div className="grid sm:grid-cols-2 gap-4">
@@ -107,10 +107,10 @@ function Result({ result, cross }: { result: RacePrediction | AdvancedPrediction
   const race = result.method === 'race' ? PREDICTOR_RACES.find((r) => r.name === result.distance) : null;
   const how =
     result.method === 'same' ? 'Your own time.'
-    : result.method === 'race' ? `Cost measured from ${race?.n.toLocaleString('en-GB') ?? 'its'} finishes of this race.`
-    : result.method === 'climb' ? 'Cost from the distance and the climb you gave.'
-    : result.method === 'terrain' ? 'Cost from the distance and the terrain class.'
-    : `Exponent ${result.factor.toFixed(3)} for runners with your time.`;
+    : result.method === 'race' ? `Based on ${race?.n.toLocaleString('en-GB') ?? 'the'} real finishes at this race.`
+    : result.method === 'climb' ? 'Worked out from the distance and the climb you gave.'
+    : result.method === 'terrain' ? 'Worked out from the distance and terrain.'
+    : 'Based on how runners with your time actually did.';
   return (
     <div className={`p-4 rounded-xl border ${result.isUltra ? 'bg-orange-50 dark:bg-orange-500/10 border-orange-200 dark:border-orange-500/30' : 'bg-zinc-800 border-zinc-700'}`}>
       <div className="flex justify-between items-start gap-4">
@@ -136,7 +136,7 @@ function Result({ result, cross }: { result: RacePrediction | AdvancedPrediction
       {result.method !== 'same' && (
         <div className="mt-2">
           <div className="flex justify-between text-xs text-zinc-500 mb-1">
-            <span>Measured accuracy of this method</span>
+            <span>Usually within {100 - result.confidence}% of the real result</span>
             <span>{result.confidence}%</span>
           </div>
           <div className="h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
@@ -285,13 +285,13 @@ export function RaceTimePredictorCalculator() {
             </div>
             {targetIsUltra && <UltraTargetFields terrain={terrain} setTerrain={setTerrain} raceId={raceId} setRaceId={setRaceId} climb={climb} setClimb={setClimb} targetKm={targetKm} />}
             <div>
-              <label className={label}>Among runners with your time, where do you sit?</label>
+              <label className={label}>Compared with runners on your time, where would you be?</label>
               <select value={experience} onChange={(e) => setExperience(e.target.value)} className={select}>
                 <option value="50">Typical (the middle of the field)</option>
                 <option value="25">Faster quarter (high mileage, well trained for the distance)</option>
                 <option value="75">Slower quarter (light training, or a first go at the distance)</option>
               </select>
-              <p className="text-xs text-zinc-500 mt-1">The spread is measured; where you sit in it is your call. The range shown is the same whichever you pick.</p>
+              <p className="text-xs text-zinc-500 mt-1">Runners with the same time as you don&apos;t all finish the next race together. Not sure? Leave it on Typical.</p>
             </div>
             <button onClick={() => requireAuth(calculateQuick)} className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors">
               Predict my time
@@ -330,14 +330,14 @@ export function RaceTimePredictorCalculator() {
               </select>
             </div>
             <div>
-              <label className={label}>Among runners with your times, where do you sit?</label>
+              <label className={label}>Compared with runners on your times, where would you be?</label>
               <select value={experience} onChange={(e) => setExperience(e.target.value)} className={select}>
                 <option value="50">Typical (the middle of the field)</option>
                 <option value="25">Faster quarter</option>
                 <option value="75">Slower quarter</option>
               </select>
             </div>
-            <p className="text-xs text-zinc-500">Each distance is predicted from whichever of your two races is nearer to it, and the other race is shown as a cross-check. No age, weight or height: once we have your times, they add nothing.</p>
+            <p className="text-xs text-zinc-500">We predict each distance from whichever of your two races is closer to it, and use the other as a check. We don&apos;t ask your age, weight or height. Once we have your times, they add nothing.</p>
             <button onClick={() => requireAuth(calculateAdvanced)} className="w-full py-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors">
               Predict every distance
             </button>
@@ -360,8 +360,8 @@ export function RaceTimePredictorCalculator() {
               })}
             </div>
             <p className="text-xs text-zinc-500">
-              {mode === 'quick' && targetIsUltra && raceId ? `${raceById(raceId)?.name}: cost measured from ${raceById(raceId)?.n.toLocaleString('en-GB')} finishes across ${raceById(raceId)?.editions} editions. ` : ''}
-              The range is where the middle half of runners with your time finished. Source: Power of 10 road rankings 2021 to 2025 and DUV ultra results 2015 to 2026, analysed by Film My Run, September 2026. {ADVANCED_DISTANCES.length} standard distances; {PREDICTOR_TABLES.races.length} measured races.
+              {mode === 'quick' && targetIsUltra && raceId ? `${raceById(raceId)?.name}: based on ${raceById(raceId)?.n.toLocaleString('en-GB')} real finishes over ${raceById(raceId)?.editions} years. ` : ''}
+              Half of runners with your time finished inside the range shown. Source: Power of 10 road rankings 2021 to 2025 and DUV ultra results 2015 to 2026, analysed by Film My Run, September 2026. {ADVANCED_DISTANCES.length} standard distances; {PREDICTOR_TABLES.races.length} measured races.
             </p>
           </div>
         )}
