@@ -75,6 +75,10 @@
       ],
       "images": [
         {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-side-model.jpg",
+          "position": "model"
+        },
+        {
           "src": "https://static.contrado.com/DesignTemplates/products/3097116_film-my-run-running-vest-black_0.jpeg",
           "position": "front"
         },
@@ -292,6 +296,10 @@
         "4XL"
       ],
       "images": [
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-shoulder-model.jpg",
+          "position": "model"
+        },
         {
           "src": "https://static.contrado.com/DesignTemplates/products/3097113_film-my-run-running-vest-black-shoulder-stripe_0.jpeg",
           "position": "front"
@@ -511,6 +519,10 @@
       ],
       "images": [
         {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-model.jpg",
+          "position": "model"
+        },
+        {
           "src": "https://static.contrado.com/DesignTemplates/products/3097141_film-my-run-running-vest-forest-green_0.jpeg",
           "position": "front"
         },
@@ -728,6 +740,10 @@
         "4XL"
       ],
       "images": [
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-shoulder-model.jpg",
+          "position": "model"
+        },
         {
           "src": "https://static.contrado.com/DesignTemplates/products/3097149_film-my-run-running-vest-forest-green-shoulder-stripe_0.jpeg",
           "position": "front"
@@ -947,6 +963,10 @@
       ],
       "images": [
         {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-side-model.jpg",
+          "position": "model"
+        },
+        {
           "src": "https://static.contrado.com/DesignTemplates/products/3097145_film-my-run-running-vest-navy_0.jpeg",
           "position": "front"
         },
@@ -1164,6 +1184,10 @@
         "4XL"
       ],
       "images": [
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-shoulder-model.jpg",
+          "position": "model"
+        },
         {
           "src": "https://static.contrado.com/DesignTemplates/products/3097152_film-my-run-running-vest-navy-shoulder-stripe_0.jpeg",
           "position": "front"
@@ -1383,6 +1407,10 @@
       ],
       "images": [
         {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-model.jpg",
+          "position": "model"
+        },
+        {
           "src": "https://static.contrado.com/DesignTemplates/products/3097160_film-my-run-running-vest-orange_0.jpeg",
           "position": "front"
         },
@@ -1600,6 +1628,10 @@
         "4XL"
       ],
       "images": [
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-shoulder-model.jpg",
+          "position": "model"
+        },
         {
           "src": "https://static.contrado.com/DesignTemplates/products/3097161_film-my-run-running-vest-orange-shoulder-stripe_0.jpeg",
           "position": "front"
@@ -1819,6 +1851,10 @@
       ],
       "images": [
         {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-side-model.jpg",
+          "position": "model"
+        },
+        {
           "src": "https://static.contrado.com/DesignTemplates/products/3097128_film-my-run-running-vest-white_0.jpeg",
           "position": "front"
         },
@@ -2036,6 +2072,10 @@
         "4XL"
       ],
       "images": [
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-shoulder-model.jpg",
+          "position": "model"
+        },
         {
           "src": "https://static.contrado.com/DesignTemplates/products/3097157_film-my-run-running-vest-white-shoulder-stripe_0.jpeg",
           "position": "front"
@@ -3870,7 +3910,7 @@
       "key": "logo-front",
       "slug": "logo-front",
       "name": "Film My Run Logo T-Shirt",
-      "subtitle": "Running YouTube Channel Tee · Unisex Bella+Canvas 3001",
+      "subtitle": "Running YouTube Channel Tee \u00b7 Unisex Bella+Canvas 3001",
       "title": "Film My Run Logo T-Shirt | Running YouTube Channel Tee | Unisex Bella+Canvas 3001",
       "category": "tees",
       "categoryLabel": "T-Shirts",
@@ -4199,7 +4239,7 @@
       "key": "logo-left-chest",
       "slug": "logo-left-chest",
       "name": "Film My Run Small Logo T-Shirt",
-      "subtitle": "Left Chest Running Tee · Unisex Bella+Canvas 3001",
+      "subtitle": "Left Chest Running Tee \u00b7 Unisex Bella+Canvas 3001",
       "title": "Film My Run Small Logo T-Shirt | Left Chest Running Tee | Unisex Bella+Canvas 3001",
       "category": "tees",
       "categoryLabel": "T-Shirts",
@@ -11018,7 +11058,7 @@
       "key": "hoodie-logo-front",
       "slug": "hoodie-logo-front",
       "name": "Film My Run Logo Hoodie",
-      "subtitle": "Running YouTube Channel Hoodie · Unisex Heavy Blend",
+      "subtitle": "Running YouTube Channel Hoodie \u00b7 Unisex Heavy Blend",
       "title": "Film My Run Logo Hoodie | Running YouTube Channel Hoodie | Unisex Heavy Blend",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -11331,7 +11371,7 @@
       "key": "hoodie-logo-left-chest",
       "slug": "hoodie-logo-left-chest",
       "name": "Film My Run Small Logo Hoodie",
-      "subtitle": "Left Chest Running Hoodie · Unisex Heavy Blend",
+      "subtitle": "Left Chest Running Hoodie \u00b7 Unisex Heavy Blend",
       "title": "Film My Run Small Logo Hoodie | Left Chest Running Hoodie | Unisex Heavy Blend",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
