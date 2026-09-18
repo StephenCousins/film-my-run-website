@@ -8,9 +8,9 @@ import type { ShopImage, ShopItem } from '@/lib/shop';
 export default function ProductPurchase({ item, children }: { item: ShopItem; children: ReactNode }) {
   const [colour, setColour] = useState<string | null>(itemColours(item)[0] ?? null);
   const [src, setSrc] = useState(item.images[0]?.src);
-  // Every image stays reachable as a thumbnail; the chosen colour's come first. Picking a colour
+  // Every image is a thumbnail, in catalogue order so the strip never shifts. Picking a colour
   // jumps to its first photo, and picking another colour's photo moves the picker to match.
-  const images = [...item.images.filter((i) => i.colour === colour), ...item.images.filter((i) => i.colour !== colour)];
+  const images = item.images;
   const pickColour = (c: string | null) => {
     setColour(c);
     setSrc((item.images.find((i) => i.colour === c) ?? item.images[0])?.src);

@@ -1,11 +1,24 @@
 'use client';
 
+import { useEffect } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import type { ShopImage } from '@/lib/shop';
 
 export default function ProductGallery({ images, current: src, onSelect, name }: { images: ShopImage[]; current?: string; onSelect: (img: ShopImage) => void; name: string }) {
   const current = images.find((i) => i.src === src) ?? images[0];
+  const index = images.indexOf(current);
+  // Left/right arrows step through the strip, unless the user is typing somewhere.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      if ((e.target as HTMLElement)?.closest('input, textarea, select')) return;
+      const next = images[(index + (e.key === 'ArrowRight' ? 1 : -1) + images.length) % images.length];
+      if (next) onSelect(next);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [images, index, onSelect]);
   if (!current) return null;
 
   return (
