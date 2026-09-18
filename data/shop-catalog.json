@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-17T16:29:19.948Z",
+  "generatedAt": "2026-09-18T09:38:11.905Z",
   "shop": {
     "etsyUrl": "https://www.etsy.com/shop/FilmMyRun"
   },
@@ -79,7 +79,32 @@
       ],
       "images": [
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-shoulder-model.jpg",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-shoulder-1.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-shoulder-2.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-shoulder-3.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-shoulder-4.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-shoulder-5.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-shoulder-6.jpg",
           "position": "model",
           "colour": "Black"
         },
@@ -94,7 +119,17 @@
           "colour": "Black"
         },
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-shoulder-model-v2.jpg",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-shoulder-1.jpg",
+          "position": "model",
+          "colour": "White"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-shoulder-2.jpg",
+          "position": "model",
+          "colour": "White"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-shoulder-3.jpg",
           "position": "model",
           "colour": "White"
         },
@@ -109,7 +144,22 @@
           "colour": "White"
         },
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-shoulder-model.jpg",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-shoulder-1.jpg",
+          "position": "model",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-shoulder-2.jpg",
+          "position": "model",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-shoulder-3.jpg",
+          "position": "model",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-shoulder-4.jpg",
           "position": "model",
           "colour": "Forest Green"
         },
@@ -124,7 +174,22 @@
           "colour": "Forest Green"
         },
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-shoulder-model.jpg",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-shoulder-1.jpg",
+          "position": "model",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-shoulder-2.jpg",
+          "position": "model",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-shoulder-3.jpg",
+          "position": "model",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-shoulder-4.jpg",
           "position": "model",
           "colour": "Navy"
         },
@@ -139,7 +204,17 @@
           "colour": "Navy"
         },
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-shoulder-model.jpg",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-shoulder-1.jpg",
+          "position": "model",
+          "colour": "Orange"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-shoulder-2.jpg",
+          "position": "model",
+          "colour": "Orange"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-shoulder-3.jpg",
           "position": "model",
           "colour": "Orange"
         },
@@ -1039,7 +1114,17 @@
       ],
       "images": [
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-side-model.jpg",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-side-1.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-side-2.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-side-3.jpg",
           "position": "model",
           "colour": "Black"
         },
@@ -1054,7 +1139,17 @@
           "colour": "Black"
         },
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-side-model.jpg",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-side-1.jpg",
+          "position": "model",
+          "colour": "White"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-side-2.jpg",
+          "position": "model",
+          "colour": "White"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-side-3.jpg",
           "position": "model",
           "colour": "White"
         },
@@ -1069,7 +1164,22 @@
           "colour": "White"
         },
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-model.jpg",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-1.jpg",
+          "position": "model",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-2.jpg",
+          "position": "model",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-3.jpg",
+          "position": "model",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-4.jpg",
           "position": "model",
           "colour": "Forest Green"
         },
@@ -1084,7 +1194,17 @@
           "colour": "Forest Green"
         },
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-side-model.jpg",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-side-1.jpg",
+          "position": "model",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-side-2.jpg",
+          "position": "model",
+          "colour": "Navy"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-side-3.jpg",
           "position": "model",
           "colour": "Navy"
         },
@@ -1099,7 +1219,17 @@
           "colour": "Navy"
         },
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-model.jpg",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-1.jpg",
+          "position": "model",
+          "colour": "Orange"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-2.jpg",
+          "position": "model",
+          "colour": "Orange"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-3.jpg",
           "position": "model",
           "colour": "Orange"
         },
