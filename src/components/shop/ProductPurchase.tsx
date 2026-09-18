@@ -2,24 +2,33 @@
 import { useState, type ReactNode } from 'react';
 import ProductGallery from '@/components/shop/ProductGallery';
 import BuyBox, { itemColours } from '@/components/shop/BuyBox';
-import type { ShopItem } from '@/lib/shop';
+import type { ShopImage, ShopItem } from '@/lib/shop';
 
 /** Gallery and buy box share the chosen colour, so the photos follow the picker. */
 export default function ProductPurchase({ item, children }: { item: ShopItem; children: ReactNode }) {
   const [colour, setColour] = useState<string | null>(itemColours(item)[0] ?? null);
-  // The colour's own photos; a colour with none (some caps) shows them all. Same rule as the app.
-  const own = item.images.filter((i) => i.colour === colour);
-  const images = own.length ? own : item.images;
+  const [src, setSrc] = useState(item.images[0]?.src);
+  // Every image stays reachable as a thumbnail; the chosen colour's come first. Picking a colour
+  // jumps to its first photo, and picking another colour's photo moves the picker to match.
+  const images = [...item.images.filter((i) => i.colour === colour), ...item.images.filter((i) => i.colour !== colour)];
+  const pickColour = (c: string | null) => {
+    setColour(c);
+    setSrc((item.images.find((i) => i.colour === c) ?? item.images[0])?.src);
+  };
+  const pickImage = (i: ShopImage) => {
+    setSrc(i.src);
+    if (i.colour && i.colour !== colour) setColour(i.colour);
+  };
 
   return (
     <>
-      <ProductGallery key={colour} images={images} name={colour ? `${item.name} in ${colour}` : item.name} />
+      <ProductGallery images={images} current={src} onSelect={pickImage} name={colour ? `${item.name} in ${colour}` : item.name} />
 
       <div>
         <p className="text-xs font-semibold uppercase tracking-wider text-brand mb-3">{item.productType}</p>
         <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground leading-tight">{item.name}</h1>
         {item.subtitle && <p className="text-secondary mt-2">{item.subtitle}</p>}
-        <BuyBox item={item} colour={colour} setColour={setColour} />
+        <BuyBox item={item} colour={colour} setColour={pickColour} />
         {children}
       </div>
     </>

@@ -1,13 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 import type { ShopImage } from '@/lib/shop';
 
-export default function ProductGallery({ images, name }: { images: ShopImage[]; name: string }) {
-  const [index, setIndex] = useState(0);
-  const current = images[index] ?? images[0];
+export default function ProductGallery({ images, current: src, onSelect, name }: { images: ShopImage[]; current?: string; onSelect: (img: ShopImage) => void; name: string }) {
+  const current = images.find((i) => i.src === src) ?? images[0];
   if (!current) return null;
 
   return (
@@ -20,11 +18,11 @@ export default function ProductGallery({ images, name }: { images: ShopImage[]; 
           {images.map((img, i) => (
             <button
               key={img.src}
-              onClick={() => setIndex(i)}
-              aria-label={`View image ${i + 1}`}
+              onClick={() => onSelect(img)}
+              aria-label={img.colour ? `${img.colour}, image ${i + 1}` : `View image ${i + 1}`}
               className={cn(
                 'relative aspect-square rounded-lg overflow-hidden bg-white border-2 transition-colors',
-                i === index ? 'border-brand' : 'border-border hover:border-foreground/40',
+                img.src === current.src ? 'border-brand' : 'border-border hover:border-foreground/40',
               )}
             >
               <Image src={img.src} alt="" fill sizes="10vw" className="object-cover" />
