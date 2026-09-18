@@ -7,7 +7,9 @@ import type { ShopItem } from '@/lib/shop';
 /** Gallery and buy box share the chosen colour, so the photos follow the picker. */
 export default function ProductPurchase({ item, children }: { item: ShopItem; children: ReactNode }) {
   const [colour, setColour] = useState<string | null>(itemColours(item)[0] ?? null);
-  const images = item.images.filter((i) => !i.colour || i.colour === colour);
+  // The colour's own photos; a colour with none (some caps) shows them all. Same rule as the app.
+  const own = item.images.filter((i) => i.colour === colour);
+  const images = own.length ? own : item.images;
 
   return (
     <>

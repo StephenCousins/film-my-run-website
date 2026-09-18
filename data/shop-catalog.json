@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-18T12:58:26.604Z",
+  "generatedAt": "2026-09-18T13:14:04.713Z",
   "shop": {
     "etsyUrl": "https://www.etsy.com/shop/FilmMyRun"
   },
@@ -2040,43 +2040,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa855736398cafc3089b9c/18102/92579/another-marathon-another-ultra-another-crazy-adventure-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa855736398cafc3089b9c/18142/92580/another-marathon-another-ultra-another-crazy-adventure-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa855736398cafc3089b9c/18542/102044/another-marathon-another-ultra-another-crazy-adventure-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa855736398cafc3089b9c/18470/102044/another-marathon-another-ultra-another-crazy-adventure-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa855736398cafc3089b9c/18102/102044/another-marathon-another-ultra-another-crazy-adventure-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa855736398cafc3089b9c/18142/102044/another-marathon-another-ultra-another-crazy-adventure-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa855736398cafc3089b9c/18182/102044/another-marathon-another-ultra-another-crazy-adventure-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa855736398cafc3089b9c/18398/102044/another-marathon-another-ultra-another-crazy-adventure-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa855736398cafc3089b9c/18542/102045/another-marathon-another-ultra-another-crazy-adventure-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa855736398cafc3089b9c/18182/92583/another-marathon-another-ultra-another-crazy-adventure-funny-running-t-shirt-film-my-run.jpg?camera_label=person-6",
-          "position": "person-6"
+          "position": "person-6",
+          "colour": "Forest"
         }
       ],
       "variants": [
@@ -2369,43 +2379,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa85e87f987e28510651c4/18182/92580/ask-me-again-at-halfway-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa85e87f987e28510651c4/18542/102044/ask-me-again-at-halfway-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa85e87f987e28510651c4/18102/92578/ask-me-again-at-halfway-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa85e87f987e28510651c4/18470/102044/ask-me-again-at-halfway-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa85e87f987e28510651c4/18102/102044/ask-me-again-at-halfway-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa85e87f987e28510651c4/18142/102044/ask-me-again-at-halfway-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa85e87f987e28510651c4/18182/102044/ask-me-again-at-halfway-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa85e87f987e28510651c4/18398/102044/ask-me-again-at-halfway-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa85e87f987e28510651c4/18542/102045/ask-me-again-at-halfway-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa85e87f987e28510651c4/18142/92581/ask-me-again-at-halfway-funny-running-t-shirt-film-my-run.jpg?camera_label=person-4",
-          "position": "person-4"
+          "position": "person-4",
+          "colour": "Dark Grey"
         }
       ],
       "variants": [
@@ -2698,43 +2718,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa81281e8e8928e904ff19/18102/92579/bonus-miles-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa81281e8e8928e904ff19/18142/92580/bonus-miles-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa81281e8e8928e904ff19/18542/102044/bonus-miles-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa81281e8e8928e904ff19/18470/102044/bonus-miles-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa81281e8e8928e904ff19/18102/102044/bonus-miles-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa81281e8e8928e904ff19/18142/102044/bonus-miles-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa81281e8e8928e904ff19/18182/102044/bonus-miles-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa81281e8e8928e904ff19/18398/102044/bonus-miles-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa81281e8e8928e904ff19/18542/102045/bonus-miles-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa81281e8e8928e904ff19/18542/92581/bonus-miles-funny-running-t-shirt-film-my-run.jpg?camera_label=person-4",
-          "position": "person-4"
+          "position": "person-4",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -3027,43 +3057,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa86609f975eeaf40e18b4/18102/92582/everything-hurts-funny-running-t-shirt-film-my-run.jpg?camera_label=person-5",
-          "position": "person-5"
+          "position": "person-5",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86609f975eeaf40e18b4/18182/92579/everything-hurts-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86609f975eeaf40e18b4/18542/92581/everything-hurts-funny-running-t-shirt-film-my-run.jpg?camera_label=person-4",
-          "position": "person-4"
+          "position": "person-4",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86609f975eeaf40e18b4/18542/102044/everything-hurts-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86609f975eeaf40e18b4/18470/102044/everything-hurts-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86609f975eeaf40e18b4/18102/102044/everything-hurts-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86609f975eeaf40e18b4/18142/102044/everything-hurts-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86609f975eeaf40e18b4/18182/102044/everything-hurts-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86609f975eeaf40e18b4/18398/102044/everything-hurts-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86609f975eeaf40e18b4/18102/102045/everything-hurts-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "Black"
         }
       ],
       "variants": [
@@ -3356,43 +3396,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa86f141e9069d6d02d2d1/18398/92578/everythings-longer-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86f141e9069d6d02d2d1/18470/92580/everythings-longer-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86f141e9069d6d02d2d1/18142/92580/everythings-longer-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86f141e9069d6d02d2d1/18542/102044/everythings-longer-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86f141e9069d6d02d2d1/18470/102044/everythings-longer-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86f141e9069d6d02d2d1/18102/102044/everythings-longer-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86f141e9069d6d02d2d1/18142/102044/everythings-longer-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86f141e9069d6d02d2d1/18182/102044/everythings-longer-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86f141e9069d6d02d2d1/18398/102044/everythings-longer-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa86f141e9069d6d02d2d1/18398/102045/everythings-longer-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -3685,43 +3735,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8e60377612072d06c915/18102/92579/film-my-run-logo-t-shirt-running-youtube-channel-tee-unisex-bellacanvas-3001.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8e60377612072d06c915/18542/102044/film-my-run-logo-t-shirt-running-youtube-channel-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8e60377612072d06c915/18470/102044/film-my-run-logo-t-shirt-running-youtube-channel-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8e60377612072d06c915/18102/102044/film-my-run-logo-t-shirt-running-youtube-channel-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8e60377612072d06c915/18142/102044/film-my-run-logo-t-shirt-running-youtube-channel-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8e60377612072d06c915/18182/102044/film-my-run-logo-t-shirt-running-youtube-channel-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8e60377612072d06c915/18398/102044/film-my-run-logo-t-shirt-running-youtube-channel-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8e60377612072d06c915/18470/92580/film-my-run-logo-t-shirt-running-youtube-channel-tee-unisex-bellacanvas-3001.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8e60377612072d06c915/18182/92580/film-my-run-logo-t-shirt-running-youtube-channel-tee-unisex-bellacanvas-3001.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8e60377612072d06c915/18542/92579/film-my-run-logo-t-shirt-running-youtube-channel-tee-unisex-bellacanvas-3001.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -4014,43 +4074,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8eb3bfacc682240aa92f/18182/102057/film-my-run-small-logo-t-shirt-left-chest-running-tee-unisex-bellacanvas-3001.jpg?camera_label=person-7-front",
-          "position": "person-7-front"
+          "position": "person-7-front",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8eb3bfacc682240aa92f/18542/92578/film-my-run-small-logo-t-shirt-left-chest-running-tee-unisex-bellacanvas-3001.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8eb3bfacc682240aa92f/18102/92579/film-my-run-small-logo-t-shirt-left-chest-running-tee-unisex-bellacanvas-3001.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8eb3bfacc682240aa92f/18142/92580/film-my-run-small-logo-t-shirt-left-chest-running-tee-unisex-bellacanvas-3001.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8eb3bfacc682240aa92f/18542/102044/film-my-run-small-logo-t-shirt-left-chest-running-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8eb3bfacc682240aa92f/18470/102044/film-my-run-small-logo-t-shirt-left-chest-running-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8eb3bfacc682240aa92f/18102/102044/film-my-run-small-logo-t-shirt-left-chest-running-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8eb3bfacc682240aa92f/18142/102044/film-my-run-small-logo-t-shirt-left-chest-running-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8eb3bfacc682240aa92f/18182/102044/film-my-run-small-logo-t-shirt-left-chest-running-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8eb3bfacc682240aa92f/18398/102044/film-my-run-small-logo-t-shirt-left-chest-running-tee-unisex-bellacanvas-3001.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -4343,43 +4413,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa87683bc2f554150c2594/18470/92579/get-on-with-it-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87683bc2f554150c2594/18142/92579/get-on-with-it-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87683bc2f554150c2594/18398/92578/get-on-with-it-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87683bc2f554150c2594/18542/102044/get-on-with-it-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87683bc2f554150c2594/18470/102044/get-on-with-it-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87683bc2f554150c2594/18102/102044/get-on-with-it-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87683bc2f554150c2594/18142/102044/get-on-with-it-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87683bc2f554150c2594/18182/102044/get-on-with-it-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87683bc2f554150c2594/18398/102044/get-on-with-it-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87683bc2f554150c2594/18470/102045/get-on-with-it-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "Soft Pink"
         }
       ],
       "variants": [
@@ -4672,43 +4752,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa87e0dfdf7a1c750c975e/18142/92580/glorious-up-above-diabolical-down-below-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87e0dfdf7a1c750c975e/18398/92580/glorious-up-above-diabolical-down-below-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87e0dfdf7a1c750c975e/18470/92579/glorious-up-above-diabolical-down-below-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87e0dfdf7a1c750c975e/18542/102044/glorious-up-above-diabolical-down-below-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87e0dfdf7a1c750c975e/18470/102044/glorious-up-above-diabolical-down-below-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87e0dfdf7a1c750c975e/18102/102044/glorious-up-above-diabolical-down-below-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87e0dfdf7a1c750c975e/18142/102044/glorious-up-above-diabolical-down-below-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87e0dfdf7a1c750c975e/18182/102044/glorious-up-above-diabolical-down-below-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87e0dfdf7a1c750c975e/18398/102044/glorious-up-above-diabolical-down-below-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa87e0dfdf7a1c750c975e/18142/102045/glorious-up-above-diabolical-down-below-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "Dark Grey"
         }
       ],
       "variants": [
@@ -5000,35 +5090,43 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa885a71876e950d0dbf63/18470/92578/held-the-demons-back-for-another-day-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa885a71876e950d0dbf63/18142/92580/held-the-demons-back-for-another-day-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa885a71876e950d0dbf63/18542/102044/held-the-demons-back-for-another-day-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa885a71876e950d0dbf63/18470/102044/held-the-demons-back-for-another-day-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa885a71876e950d0dbf63/18102/102044/held-the-demons-back-for-another-day-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa885a71876e950d0dbf63/18142/102044/held-the-demons-back-for-another-day-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa885a71876e950d0dbf63/18182/102044/held-the-demons-back-for-another-day-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa885a71876e950d0dbf63/18398/102045/held-the-demons-back-for-another-day-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -5321,43 +5419,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa84c355f959cbed0671d1/18102/92579/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa84c355f959cbed0671d1/18182/92579/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa84c355f959cbed0671d1/18542/92578/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa84c355f959cbed0671d1/18542/102044/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa84c355f959cbed0671d1/18470/102044/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa84c355f959cbed0671d1/18102/102044/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa84c355f959cbed0671d1/18142/102044/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa84c355f959cbed0671d1/18182/102044/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa84c355f959cbed0671d1/18398/102044/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa84c355f959cbed0671d1/18102/102045/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "Black"
         }
       ],
       "variants": [
@@ -5649,43 +5757,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8973e600ce1ca10a69fa/18542/92578/just-a-parkrun-to-go-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8973e600ce1ca10a69fa/18102/92579/just-a-parkrun-to-go-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8973e600ce1ca10a69fa/18142/92580/just-a-parkrun-to-go-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8973e600ce1ca10a69fa/18542/102044/just-a-parkrun-to-go-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8973e600ce1ca10a69fa/18470/102044/just-a-parkrun-to-go-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8973e600ce1ca10a69fa/18102/102044/just-a-parkrun-to-go-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8973e600ce1ca10a69fa/18142/102044/just-a-parkrun-to-go-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8973e600ce1ca10a69fa/18182/102044/just-a-parkrun-to-go-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8973e600ce1ca10a69fa/18398/102044/just-a-parkrun-to-go-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8973e600ce1ca10a69fa/18542/102045/just-a-parkrun-to-go-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -5978,43 +6096,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8a03e4c6d4129d0d4379/18102/92579/legs-have-gone-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a03e4c6d4129d0d4379/18142/92580/legs-have-gone-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a03e4c6d4129d0d4379/18542/102044/legs-have-gone-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a03e4c6d4129d0d4379/18470/102044/legs-have-gone-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a03e4c6d4129d0d4379/18102/102044/legs-have-gone-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a03e4c6d4129d0d4379/18142/102044/legs-have-gone-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a03e4c6d4129d0d4379/18182/102044/legs-have-gone-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a03e4c6d4129d0d4379/18398/102044/legs-have-gone-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a03e4c6d4129d0d4379/18542/102045/legs-have-gone-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a03e4c6d4129d0d4379/18542/102053/legs-have-gone-funny-running-t-shirt-film-my-run.jpg?camera_label=duo-4",
-          "position": "duo-4"
+          "position": "duo-4",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -6307,43 +6435,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8a7b4f0ea50b28071118/18102/92579/no-coffee-no-cake-no-sympathy-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a7b4f0ea50b28071118/18142/92580/no-coffee-no-cake-no-sympathy-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a7b4f0ea50b28071118/18542/102044/no-coffee-no-cake-no-sympathy-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a7b4f0ea50b28071118/18470/102044/no-coffee-no-cake-no-sympathy-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a7b4f0ea50b28071118/18102/102044/no-coffee-no-cake-no-sympathy-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a7b4f0ea50b28071118/18142/102044/no-coffee-no-cake-no-sympathy-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a7b4f0ea50b28071118/18182/102044/no-coffee-no-cake-no-sympathy-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a7b4f0ea50b28071118/18398/102044/no-coffee-no-cake-no-sympathy-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a7b4f0ea50b28071118/18542/102045/no-coffee-no-cake-no-sympathy-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8a7b4f0ea50b28071118/18470/102057/no-coffee-no-cake-no-sympathy-funny-running-t-shirt-film-my-run.jpg?camera_label=person-7-front",
-          "position": "person-7-front"
+          "position": "person-7-front",
+          "colour": "Soft Pink"
         }
       ],
       "variants": [
@@ -6636,43 +6774,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8ae037f4ecc04c080c4c/18142/92580/not-my-best-not-bad-itll-do-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8ae037f4ecc04c080c4c/18542/92578/not-my-best-not-bad-itll-do-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8ae037f4ecc04c080c4c/18102/92579/not-my-best-not-bad-itll-do-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8ae037f4ecc04c080c4c/18542/102044/not-my-best-not-bad-itll-do-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8ae037f4ecc04c080c4c/18470/102044/not-my-best-not-bad-itll-do-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8ae037f4ecc04c080c4c/18102/102044/not-my-best-not-bad-itll-do-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8ae037f4ecc04c080c4c/18142/102044/not-my-best-not-bad-itll-do-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8ae037f4ecc04c080c4c/18182/102044/not-my-best-not-bad-itll-do-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8ae037f4ecc04c080c4c/18398/102044/not-my-best-not-bad-itll-do-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8ae037f4ecc04c080c4c/18542/102045/not-my-best-not-bad-itll-do-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -6965,43 +7113,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18142/92579/only-100-miles-how-hard-can-it-be-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18398/92581/only-100-miles-how-hard-can-it-be-funny-running-t-shirt-film-my-run.jpg?camera_label=person-4",
-          "position": "person-4"
+          "position": "person-4",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18542/102044/only-100-miles-how-hard-can-it-be-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18470/102044/only-100-miles-how-hard-can-it-be-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18102/102044/only-100-miles-how-hard-can-it-be-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18142/102044/only-100-miles-how-hard-can-it-be-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18182/102044/only-100-miles-how-hard-can-it-be-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18398/102044/only-100-miles-how-hard-can-it-be-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18182/92582/only-100-miles-how-hard-can-it-be-funny-running-t-shirt-film-my-run.jpg?camera_label=person-5",
-          "position": "person-5"
+          "position": "person-5",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18182/92580/only-100-miles-how-hard-can-it-be-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Forest"
         }
       ],
       "variants": [
@@ -7294,43 +7452,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18102/102061/plan-for-today-finish-funny-running-t-shirt-film-my-run.jpg?camera_label=person-9-front",
-          "position": "person-9-front"
+          "position": "person-9-front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18102/92579/plan-for-today-finish-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18142/92580/plan-for-today-finish-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18542/102044/plan-for-today-finish-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18470/102044/plan-for-today-finish-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18102/102044/plan-for-today-finish-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18142/102044/plan-for-today-finish-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18182/102044/plan-for-today-finish-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18398/102044/plan-for-today-finish-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18542/102045/plan-for-today-finish-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -7623,43 +7791,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18470/92583/rapidly-losing-my-patience-with-this-race-funny-running-t-shirt-film-my-run.jpg?camera_label=person-6",
-          "position": "person-6"
+          "position": "person-6",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18542/92578/rapidly-losing-my-patience-with-this-race-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18142/92580/rapidly-losing-my-patience-with-this-race-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18542/102044/rapidly-losing-my-patience-with-this-race-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18470/102044/rapidly-losing-my-patience-with-this-race-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18102/102044/rapidly-losing-my-patience-with-this-race-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18142/102044/rapidly-losing-my-patience-with-this-race-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18182/102044/rapidly-losing-my-patience-with-this-race-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18398/102044/rapidly-losing-my-patience-with-this-race-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18542/102045/rapidly-losing-my-patience-with-this-race-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -7952,43 +8130,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18142/92580/see-you-on-the-start-line-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18542/92578/see-you-on-the-start-line-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18102/92579/see-you-on-the-start-line-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18542/102044/see-you-on-the-start-line-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18470/102044/see-you-on-the-start-line-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18102/102044/see-you-on-the-start-line-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18142/102044/see-you-on-the-start-line-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18182/102044/see-you-on-the-start-line-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18398/102044/see-you-on-the-start-line-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18542/102045/see-you-on-the-start-line-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -8281,43 +8469,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18470/102052/should-be-running-eating-cake-instead-funny-running-t-shirt-film-my-run.jpg?camera_label=duo-3",
-          "position": "duo-3"
+          "position": "duo-3",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18542/92578/should-be-running-eating-cake-instead-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18102/92579/should-be-running-eating-cake-instead-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18542/102044/should-be-running-eating-cake-instead-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18470/102044/should-be-running-eating-cake-instead-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18102/102044/should-be-running-eating-cake-instead-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18142/102044/should-be-running-eating-cake-instead-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18182/102044/should-be-running-eating-cake-instead-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18398/102044/should-be-running-eating-cake-instead-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18542/102045/should-be-running-eating-cake-instead-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -8610,43 +8808,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18398/102059/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-t-shirt-film-my-run.jpg?camera_label=person-8-front",
-          "position": "person-8-front"
+          "position": "person-8-front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18542/92578/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18142/92580/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-t-shirt-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3"
+          "position": "person-3",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18542/102044/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18470/102044/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18102/102044/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18142/102044/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18182/102044/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18398/102044/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18542/102045/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -8939,43 +9147,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaa8de56be5e7b699080cd3/18142/92585/threw-up-now-i-feel-great-funny-running-t-shirt-film-my-run.jpg?camera_label=duo",
-          "position": "duo"
+          "position": "duo",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8de56be5e7b699080cd3/18542/92578/threw-up-now-i-feel-great-funny-running-t-shirt-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8de56be5e7b699080cd3/18102/92579/threw-up-now-i-feel-great-funny-running-t-shirt-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8de56be5e7b699080cd3/18542/102044/threw-up-now-i-feel-great-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8de56be5e7b699080cd3/18470/102044/threw-up-now-i-feel-great-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Soft Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8de56be5e7b699080cd3/18102/102044/threw-up-now-i-feel-great-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8de56be5e7b699080cd3/18142/102044/threw-up-now-i-feel-great-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Dark Grey"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8de56be5e7b699080cd3/18182/102044/threw-up-now-i-feel-great-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Forest"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8de56be5e7b699080cd3/18398/102044/threw-up-now-i-feel-great-funny-running-t-shirt-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2"
+          "position": "front-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8de56be5e7b699080cd3/18542/102045/threw-up-now-i-feel-great-funny-running-t-shirt-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2"
+          "position": "back-2",
+          "colour": "White"
         }
       ],
       "variants": [
@@ -9268,27 +9486,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafc3db04bce6625044bf4/32912/98424/another-marathon-another-ultra-another-crazy-adventure-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc3db04bce6625044bf4/32920/98424/another-marathon-another-ultra-another-crazy-adventure-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc3db04bce6625044bf4/33419/98424/another-marathon-another-ultra-another-crazy-adventure-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc3db04bce6625044bf4/42213/98424/another-marathon-another-ultra-another-crazy-adventure-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc3db04bce6625044bf4/32896/98424/another-marathon-another-ultra-another-crazy-adventure-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc3db04bce6625044bf4/42150/98424/another-marathon-another-ultra-another-crazy-adventure-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -9581,27 +9805,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafc4860d6d313a5013d18/32912/98424/ask-me-again-at-halfway-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc4860d6d313a5013d18/32920/98424/ask-me-again-at-halfway-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc4860d6d313a5013d18/33419/98424/ask-me-again-at-halfway-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc4860d6d313a5013d18/42213/98424/ask-me-again-at-halfway-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc4860d6d313a5013d18/32896/98424/ask-me-again-at-halfway-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc4860d6d313a5013d18/42150/98424/ask-me-again-at-halfway-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -9894,27 +10124,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafbc00cca3e76890b9a30/32912/98424/bonus-miles-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbc00cca3e76890b9a30/32920/98424/bonus-miles-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbc00cca3e76890b9a30/33419/98424/bonus-miles-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbc00cca3e76890b9a30/42213/98424/bonus-miles-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbc00cca3e76890b9a30/32896/98424/bonus-miles-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbc00cca3e76890b9a30/42150/98424/bonus-miles-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -10207,27 +10443,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafc5960d6d313a5013d2c/32912/98424/everything-hurts-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc5960d6d313a5013d2c/32920/98424/everything-hurts-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc5960d6d313a5013d2c/33419/98424/everything-hurts-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc5960d6d313a5013d2c/42213/98424/everything-hurts-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc5960d6d313a5013d2c/32896/98424/everything-hurts-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc5960d6d313a5013d2c/42150/98424/everything-hurts-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -10520,27 +10762,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafc6b332b26efaf03e5dc/32912/98424/everythings-longer-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc6b332b26efaf03e5dc/32920/98424/everythings-longer-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc6b332b26efaf03e5dc/33419/98424/everythings-longer-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc6b332b26efaf03e5dc/42213/98424/everythings-longer-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc6b332b26efaf03e5dc/32896/98424/everythings-longer-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc6b332b26efaf03e5dc/42150/98424/everythings-longer-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -10833,27 +11081,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafd1f26eb1586c207d737/32912/98424/film-my-run-logo-hoodie-running-youtube-channel-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd1f26eb1586c207d737/32920/98424/film-my-run-logo-hoodie-running-youtube-channel-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd1f26eb1586c207d737/33419/98424/film-my-run-logo-hoodie-running-youtube-channel-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd1f26eb1586c207d737/42213/98424/film-my-run-logo-hoodie-running-youtube-channel-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd1f26eb1586c207d737/32896/98424/film-my-run-logo-hoodie-running-youtube-channel-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd1f26eb1586c207d737/42150/98424/film-my-run-logo-hoodie-running-youtube-channel-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -11146,27 +11400,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafbcc08c3e239f80faf7d/32912/98424/film-my-run-small-logo-hoodie-left-chest-running-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbcc08c3e239f80faf7d/32920/98424/film-my-run-small-logo-hoodie-left-chest-running-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbcc08c3e239f80faf7d/33419/98424/film-my-run-small-logo-hoodie-left-chest-running-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbcc08c3e239f80faf7d/42213/98424/film-my-run-small-logo-hoodie-left-chest-running-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbcc08c3e239f80faf7d/32896/98424/film-my-run-small-logo-hoodie-left-chest-running-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbcc08c3e239f80faf7d/42150/98424/film-my-run-small-logo-hoodie-left-chest-running-hoodie-unisex-heavy-blend.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -11459,27 +11719,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafc794ba9c497490386e5/32912/98424/get-on-with-it-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc794ba9c497490386e5/32920/98424/get-on-with-it-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc794ba9c497490386e5/33419/98424/get-on-with-it-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc794ba9c497490386e5/42213/98424/get-on-with-it-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc794ba9c497490386e5/32896/98424/get-on-with-it-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc794ba9c497490386e5/42150/98424/get-on-with-it-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -11772,43 +12038,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafc88332b26efaf03e5f2/42213/127688/glorious-up-above-diabolical-down-below-funny-running-hoodie-film-my-run.jpg?camera_label=lifestyle-2",
-          "position": "lifestyle-2"
+          "position": "lifestyle-2",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc88332b26efaf03e5f2/32912/98424/glorious-up-above-diabolical-down-below-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc88332b26efaf03e5f2/32920/98424/glorious-up-above-diabolical-down-below-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc88332b26efaf03e5f2/33419/98424/glorious-up-above-diabolical-down-below-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc88332b26efaf03e5f2/42213/98424/glorious-up-above-diabolical-down-below-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc88332b26efaf03e5f2/32896/98424/glorious-up-above-diabolical-down-below-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc88332b26efaf03e5f2/42150/98424/glorious-up-above-diabolical-down-below-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc88332b26efaf03e5f2/32912/111847/glorious-up-above-diabolical-down-below-funny-running-hoodie-film-my-run.jpg?camera_label=person-6-front",
-          "position": "person-6-front"
+          "position": "person-6-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc88332b26efaf03e5f2/32920/98427/glorious-up-above-diabolical-down-below-funny-running-hoodie-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1"
+          "position": "person-1",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc88332b26efaf03e5f2/42213/98430/glorious-up-above-diabolical-down-below-funny-running-hoodie-film-my-run.jpg?camera_label=person-4",
-          "position": "person-4"
+          "position": "person-4",
+          "colour": "Charcoal"
         }
       ],
       "variants": [
@@ -12100,43 +12376,53 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafc938af7eb61f5062646/32896/98428/held-the-demons-back-for-another-day-funny-running-hoodie-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2"
+          "position": "person-2",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc938af7eb61f5062646/32912/98424/held-the-demons-back-for-another-day-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc938af7eb61f5062646/32920/98424/held-the-demons-back-for-another-day-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc938af7eb61f5062646/33419/98424/held-the-demons-back-for-another-day-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc938af7eb61f5062646/42213/98424/held-the-demons-back-for-another-day-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc938af7eb61f5062646/32896/98424/held-the-demons-back-for-another-day-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc938af7eb61f5062646/42150/98424/held-the-demons-back-for-another-day-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc938af7eb61f5062646/33419/100683/held-the-demons-back-for-another-day-funny-running-hoodie-film-my-run.jpg?camera_label=person-5-right-sleeve",
-          "position": "person-5-right-sleeve"
+          "position": "person-5-right-sleeve",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc938af7eb61f5062646/32912/102766/held-the-demons-back-for-another-day-funny-running-hoodie-film-my-run.jpg?camera_label=lifestyle",
-          "position": "lifestyle"
+          "position": "lifestyle",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc938af7eb61f5062646/42213/111847/held-the-demons-back-for-another-day-funny-running-hoodie-film-my-run.jpg?camera_label=person-6-front",
-          "position": "person-6-front"
+          "position": "person-6-front",
+          "colour": "Charcoal"
         }
       ],
       "variants": [
@@ -12429,27 +12715,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafc31b04bce6625044be5/32912/98424/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc31b04bce6625044be5/32920/98424/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc31b04bce6625044be5/33419/98424/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc31b04bce6625044be5/42213/98424/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc31b04bce6625044be5/32896/98424/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc31b04bce6625044be5/42150/98424/i-ran-100-miles-and-all-i-got-was-this-lousy-t-shirt-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -12741,27 +13033,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafcaae801ec43fb0e4154/32912/98424/just-a-parkrun-to-go-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcaae801ec43fb0e4154/32920/98424/just-a-parkrun-to-go-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcaae801ec43fb0e4154/33419/98424/just-a-parkrun-to-go-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcaae801ec43fb0e4154/42213/98424/just-a-parkrun-to-go-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcaae801ec43fb0e4154/32896/98424/just-a-parkrun-to-go-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcaae801ec43fb0e4154/42150/98424/just-a-parkrun-to-go-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -13054,27 +13352,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafcb5332b26efaf03e61a/32912/98424/legs-have-gone-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcb5332b26efaf03e61a/32920/98424/legs-have-gone-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcb5332b26efaf03e61a/33419/98424/legs-have-gone-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcb5332b26efaf03e61a/42213/98424/legs-have-gone-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcb5332b26efaf03e61a/32896/98424/legs-have-gone-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcb5332b26efaf03e61a/42150/98424/legs-have-gone-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -13367,27 +13671,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafcc0e801ec43fb0e415d/32912/98424/no-coffee-no-cake-no-sympathy-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcc0e801ec43fb0e415d/32920/98424/no-coffee-no-cake-no-sympathy-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcc0e801ec43fb0e415d/33419/98424/no-coffee-no-cake-no-sympathy-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcc0e801ec43fb0e415d/42213/98424/no-coffee-no-cake-no-sympathy-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcc0e801ec43fb0e415d/32896/98424/no-coffee-no-cake-no-sympathy-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcc0e801ec43fb0e415d/42150/98424/no-coffee-no-cake-no-sympathy-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -13680,27 +13990,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafccde801ec43fb0e4166/32912/98424/not-my-best-not-bad-itll-do-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafccde801ec43fb0e4166/32920/98424/not-my-best-not-bad-itll-do-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafccde801ec43fb0e4166/33419/98424/not-my-best-not-bad-itll-do-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafccde801ec43fb0e4166/42213/98424/not-my-best-not-bad-itll-do-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafccde801ec43fb0e4166/32896/98424/not-my-best-not-bad-itll-do-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafccde801ec43fb0e4166/42150/98424/not-my-best-not-bad-itll-do-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -13993,27 +14309,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafc9efe78403f1f0a7ca6/32912/98424/only-100-miles-how-hard-can-it-be-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc9efe78403f1f0a7ca6/32920/98424/only-100-miles-how-hard-can-it-be-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc9efe78403f1f0a7ca6/33419/98424/only-100-miles-how-hard-can-it-be-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc9efe78403f1f0a7ca6/42213/98424/only-100-miles-how-hard-can-it-be-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc9efe78403f1f0a7ca6/32896/98424/only-100-miles-how-hard-can-it-be-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafc9efe78403f1f0a7ca6/42150/98424/only-100-miles-how-hard-can-it-be-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -14306,27 +14628,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafcd88af7eb61f5062678/32912/98424/plan-for-today-finish-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcd88af7eb61f5062678/32920/98424/plan-for-today-finish-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcd88af7eb61f5062678/33419/98424/plan-for-today-finish-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcd88af7eb61f5062678/42213/98424/plan-for-today-finish-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcd88af7eb61f5062678/32896/98424/plan-for-today-finish-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcd88af7eb61f5062678/42150/98424/plan-for-today-finish-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -14619,27 +14947,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafce30cca3e76890b9ae3/32912/98424/rapidly-losing-my-patience-with-this-race-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafce30cca3e76890b9ae3/32920/98424/rapidly-losing-my-patience-with-this-race-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafce30cca3e76890b9ae3/33419/98424/rapidly-losing-my-patience-with-this-race-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafce30cca3e76890b9ae3/42213/98424/rapidly-losing-my-patience-with-this-race-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafce30cca3e76890b9ae3/32896/98424/rapidly-losing-my-patience-with-this-race-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafce30cca3e76890b9ae3/42150/98424/rapidly-losing-my-patience-with-this-race-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -14932,27 +15266,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafced3a7f75db1703b261/32912/98424/see-you-on-the-start-line-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafced3a7f75db1703b261/32920/98424/see-you-on-the-start-line-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafced3a7f75db1703b261/33419/98424/see-you-on-the-start-line-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafced3a7f75db1703b261/42213/98424/see-you-on-the-start-line-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafced3a7f75db1703b261/32896/98424/see-you-on-the-start-line-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafced3a7f75db1703b261/42150/98424/see-you-on-the-start-line-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -15245,27 +15585,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafcf960d6d313a5013d9c/32912/98424/should-be-running-eating-cake-instead-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcf960d6d313a5013d9c/32920/98424/should-be-running-eating-cake-instead-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcf960d6d313a5013d9c/33419/98424/should-be-running-eating-cake-instead-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcf960d6d313a5013d9c/42213/98424/should-be-running-eating-cake-instead-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcf960d6d313a5013d9c/32896/98424/should-be-running-eating-cake-instead-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcf960d6d313a5013d9c/42150/98424/should-be-running-eating-cake-instead-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -15558,27 +15904,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafd0608c3e239f80fb041/32912/98424/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd0608c3e239f80fb041/32920/98424/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd0608c3e239f80fb041/33419/98424/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd0608c3e239f80fb041/42213/98424/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd0608c3e239f80fb041/32896/98424/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd0608c3e239f80fb041/42150/98424/thats-the-hard-part-done-more-hard-parts-to-come-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -15871,27 +16223,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafd12015594199004ca17/32912/98424/threw-up-now-i-feel-great-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd12015594199004ca17/32920/98424/threw-up-now-i-feel-great-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd12015594199004ca17/33419/98424/threw-up-now-i-feel-great-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Forest Green"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd12015594199004ca17/42213/98424/threw-up-now-i-feel-great-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd12015594199004ca17/32896/98424/threw-up-now-i-feel-great-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd12015594199004ca17/42150/98424/threw-up-now-i-feel-great-funny-running-hoodie-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Light Pink"
         }
       ],
       "variants": [
@@ -16174,83 +16532,103 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135042/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135043/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135044/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135045/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135046/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135047/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135048/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135049/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/110918/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105380/135042/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105380/135043/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105380/135044/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105380/135045/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105380/135046/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105380/135047/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105380/135048/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105380/135049/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105380/110918/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105377/135042/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105377/135043/bonus-miles-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -16329,83 +16707,103 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105381/135042/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105381/135043/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105381/135044/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105381/135045/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105381/135046/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105381/135047/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105381/135048/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105381/135049/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105381/110918/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105380/135042/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105380/135043/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105380/135044/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105380/135045/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105380/135046/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105380/135047/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105380/135048/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105380/135049/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105380/110918/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105377/135042/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105377/135043/everything-hurts-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -16486,83 +16884,103 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118724/110130/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118724/109459/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Black / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118724/110115/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Black / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118724/110118/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Black / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118724/110121/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Black / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118724/110123/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Black / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118728/110130/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Heather Grey / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118728/109459/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Heather Grey / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118728/110115/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Heather Grey / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118728/110118/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Heather Grey / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118728/110121/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Heather Grey / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118728/110123/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Heather Grey / White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118723/110130/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black / Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118723/109459/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Black / Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118723/110115/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Black / Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118723/110118/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Black / Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118723/110121/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Black / Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118723/110123/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Black / Charcoal"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118722/110130/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118722/109459/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Black"
         }
       ],
       "variants": [
@@ -16656,83 +17074,103 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105381/135042/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105381/135043/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105381/135044/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105381/135045/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105381/135046/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105381/135047/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105381/135048/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105381/135049/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105381/110918/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105380/135042/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105380/135043/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105380/135044/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105380/135045/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105380/135046/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105380/135047/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105380/135048/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105380/135049/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105380/110918/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105375/135042/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Khaki"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105375/135043/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Khaki"
         }
       ],
       "variants": [
@@ -16829,83 +17267,103 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/135042/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/135043/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/135044/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/135045/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/135046/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/135047/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/135048/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/135049/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/110918/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105380/135042/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105380/135043/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105380/135044/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105380/135045/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105380/135046/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105380/135047/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105380/135048/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105380/135049/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105380/110918/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105377/135042/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105377/135043/get-on-with-it-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -16983,83 +17441,103 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135042/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135043/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135044/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135045/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135046/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135047/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135048/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135049/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/110918/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105380/135042/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105380/135043/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105380/135044/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105380/135045/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105380/135046/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105380/135047/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105380/135048/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105380/135049/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105380/110918/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105377/135042/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105377/135043/just-a-parkrun-to-go-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -17138,83 +17616,103 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105381/135042/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105381/135043/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105381/135044/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105381/135045/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105381/135046/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105381/135047/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105381/135048/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105381/135049/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105381/110918/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105380/135042/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105380/135043/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105380/135044/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105380/135045/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105380/135046/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105380/135047/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105380/135048/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105380/135049/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105380/110918/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105377/135042/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105377/135043/legs-have-gone-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -17293,83 +17791,103 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105381/135042/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105381/135043/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105381/135044/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105381/135045/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105381/135046/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105381/135047/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105381/135048/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105381/135049/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105381/110918/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105380/135042/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105380/135043/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105380/135044/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105380/135045/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105380/135046/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105380/135047/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105380/135048/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105380/135049/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105380/110918/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105377/135042/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105377/135043/only-100-miles-how-hard-can-it-be-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -17448,83 +17966,103 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135042/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135043/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135044/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135045/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135046/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135047/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135048/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135049/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/110918/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105380/135042/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105380/135043/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105380/135044/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105380/135045/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105380/135046/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105380/135047/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105380/135048/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105380/135049/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105380/110918/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105377/135042/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105377/135043/plan-for-today-finish-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -17603,83 +18141,103 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105381/135042/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105381/135043/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105381/135044/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105381/135045/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105381/135046/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105381/135047/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105381/135048/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105381/135049/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105381/110918/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/135042/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/135043/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/135044/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=left",
-          "position": "left"
+          "position": "left",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/135045/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=right",
-          "position": "right"
+          "position": "right",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/135046/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front"
+          "position": "person-1-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/135047/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back"
+          "position": "person-1-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/135048/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front"
+          "position": "person-2-front",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/135049/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back"
+          "position": "person-2-back",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/110918/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart"
+          "position": "size-chart",
+          "colour": "Stone"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105377/135042/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105377/135043/see-you-on-the-start-line-running-dad-cap-film-my-run.jpg?camera_label=back",
-          "position": "back"
+          "position": "back",
+          "colour": "Navy"
         }
       ],
       "variants": [
@@ -17757,27 +18315,33 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafd263a7f75db1703b27b/73426/18998/clapperboard-tote-bag-scene-mile-20-take-2-film-my-run.jpg?camera_label=flat-lay",
-          "position": "flat-lay"
+          "position": "flat-lay",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd263a7f75db1703b27b/73426/18634/clapperboard-tote-bag-scene-mile-20-take-2-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd263a7f75db1703b27b/73423/18629/clapperboard-tote-bag-scene-mile-20-take-2-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Orange"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd263a7f75db1703b27b/73422/79235/clapperboard-tote-bag-scene-mile-20-take-2-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy Blue"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd263a7f75db1703b27b/73428/18631/clapperboard-tote-bag-scene-mile-20-take-2-film-my-run.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd263a7f75db1703b27b/73428/18916/clapperboard-tote-bag-scene-mile-20-take-2-film-my-run.jpg?camera_label=context-1",
-          "position": "context-1"
+          "position": "context-1",
+          "colour": "Black"
         }
       ],
       "variants": [
@@ -17849,31 +18413,38 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafd2326eb1586c207d738/73422/18918/contact-sheet-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=context-1",
-          "position": "context-1"
+          "position": "context-1",
+          "colour": "Navy Blue"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd2326eb1586c207d738/73426/18634/contact-sheet-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd2326eb1586c207d738/73423/18629/contact-sheet-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Orange"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd2326eb1586c207d738/73422/79235/contact-sheet-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy Blue"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd2326eb1586c207d738/73428/18631/contact-sheet-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd2326eb1586c207d738/73428/18942/contact-sheet-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=context-2",
-          "position": "context-2"
+          "position": "context-2",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd2326eb1586c207d738/73422/19006/contact-sheet-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=flat-lay",
-          "position": "flat-lay"
+          "position": "flat-lay",
+          "colour": "Navy Blue"
         }
       ],
       "variants": [
@@ -17945,19 +18516,23 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafd2cfe78403f1f0a7ce2/73426/18634/keep-rolling-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd2cfe78403f1f0a7ce2/73423/18629/keep-rolling-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Orange"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd2cfe78403f1f0a7ce2/73422/79235/keep-rolling-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy Blue"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafd2cfe78403f1f0a7ce2/73428/18631/keep-rolling-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         }
       ],
       "variants": [
@@ -18028,23 +18603,28 @@
       "images": [
         {
           "src": "https://images.printify.com/mockup/6aaafbd3d6dccab5fb0d9ee1/73426/18634/viewfinder-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbd3d6dccab5fb0d9ee1/73422/79235/viewfinder-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Navy Blue"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbd3d6dccab5fb0d9ee1/73428/18631/viewfinder-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=front",
-          "position": "front"
+          "position": "front",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbd3d6dccab5fb0d9ee1/73426/18910/viewfinder-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=context-1",
-          "position": "context-1"
+          "position": "context-1",
+          "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafbd3d6dccab5fb0d9ee1/73426/18998/viewfinder-runner-tote-bag-film-my-run-cotton-tote.jpg?camera_label=flat-lay",
-          "position": "flat-lay"
+          "position": "flat-lay",
+          "colour": "White"
         }
       ],
       "variants": [
