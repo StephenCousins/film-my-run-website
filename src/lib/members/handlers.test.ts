@@ -1,0 +1,175 @@
+import { NextRequest } from 'next/server';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { hashCode } from './codes';
+import { handleMe, handleRequestCode, handleSignOut, handleVerify, memberFromBearer, resetMemberLimits, type Member, type MemberDeps } from './handlers';
+
+const NOW = Date.UTC(2026, 8, 21, 9, 0, 0);
+
+function fakeDeps() {
+  const codes = new Map<string, { hash: string; expires: Date }[]>();
+  const users = new Map<string, Member>();
+  const sessions = new Map<string, { userId: number; expires: Date }>();
+  const attached: [number, string][] = [];
+  const sent: [string, string][] = [];
+  let nextId = 1;
+  const deps: MemberDeps = {
+    saveCode: async (email, hash, expires) => { codes.set(email, [...(codes.get(email) ?? []), { hash, expires }]); },
+    codeHashes: async (email, now) => (codes.get(email) ?? []).filter((c) => c.expires > now).map((c) => c.hash),
+    deleteCodes: async (email) => { codes.delete(email); },
+    findOrCreateUser: async (email) => {
+      let u = users.get(email);
+      if (!u) { u = { id: nextId++, email, name: null }; users.set(email, u); }
+      return u;
+    },
+    createSession: async (userId, token, expires) => { sessions.set(token, { userId, expires }); },
+    memberForToken: async (token, now) => {
+      const s = sessions.get(token);
+      if (!s || s.expires <= now) return null;
+      return [...users.values()].find((u) => u.id === s.userId) ?? null;
+    },
+    deleteSession: async (token) => { sessions.delete(token); },
+    attachGuestOrders: async (userId, email) => { attached.push([userId, email]); },
+    sendCode: async (email, code) => { sent.push([email, code]); },
+    now: () => NOW,
+  };
+  return { deps, codes, users, sessions, attached, sent };
+}
+
+const post = (path: string, body: unknown, headers: Record<string, string> = {}) =>
+  new NextRequest(`https://filmmyrun.com/api/app/v1/auth/${path}`, { method: 'POST', body: JSON.stringify(body), headers: { 'content-type': 'application/json', ...headers } });
+const get = (path: string, headers: Record<string, string> = {}) =>
+  new NextRequest(`https://filmmyrun.com/api/app/v1/auth/${path}`, { headers });
+
+async function signIn(f: ReturnType<typeof fakeDeps>, email = 'runner@example.com') {
+  await handleRequestCode(post('code', { email }), f.deps);
+  const code = f.sent.at(-1)![1];
+  const res = await handleVerify(post('verify', { email, code }), f.deps);
+  return (await res.json()) as { token: string; member: Member };
+}
+
+beforeEach(() => resetMemberLimits());
+
+describe('handleRequestCode', () => {
+  it('normalises, stores a hash, emails the code, answers ok', async () => {
+    const f = fakeDeps();
+    const res = await handleRequestCode(post('code', { email: ' Runner@Example.com ' }), f.deps);
+    expect(res.status).toBe(200);
+    expect(await res.json()).toEqual({ ok: true });
+    expect(f.sent).toHaveLength(1);
+    const [to, code] = f.sent[0];
+    expect(to).toBe('runner@example.com');
+    expect(code).toMatch(/^\d{6}$/);
+    expect(f.codes.get('runner@example.com')![0].hash).toBe(hashCode('runner@example.com', code));
+    expect(f.codes.get('runner@example.com')![0].expires.getTime()).toBe(NOW + 600_000);
+  });
+
+  it('rejects a bad email with 400', async () => {
+    const f = fakeDeps();
+    const res = await handleRequestCode(post('code', { email: 'nope' }), f.deps);
+    expect(res.status).toBe(400);
+    expect(f.sent).toHaveLength(0);
+  });
+
+  it('limits to five codes an hour per email', async () => {
+    const f = fakeDeps();
+    for (let i = 0; i < 5; i++) expect((await handleRequestCode(post('code', { email: 'a@b.co' }), f.deps)).status).toBe(200);
+    const sixth = await handleRequestCode(post('code', { email: 'a@b.co' }), f.deps);
+    expect(sixth.status).toBe(429);
+    expect(sixth.headers.get('Retry-After')).toMatch(/^\d+$/);
+    expect(f.sent).toHaveLength(5);
+  });
+
+  it('answers 503 when the email cannot be sent', async () => {
+    const f = fakeDeps();
+    f.deps.sendCode = async () => { throw new Error('resend down'); };
+    const res = await handleRequestCode(post('code', { email: 'a@b.co' }), f.deps);
+    expect(res.status).toBe(503);
+    expect(await res.json()).toEqual({ ok: false, error: 'email_unavailable' });
+  });
+});
+
+describe('handleVerify', () => {
+  it('signs in with the right code, creates the user, attaches guest orders, issues a token', async () => {
+    const f = fakeDeps();
+    const { token, member } = await signIn(f);
+    expect(member).toEqual({ id: 1, email: 'runner@example.com', name: null });
+    expect(token).toMatch(/^[A-Za-z0-9_-]{43}$/);
+    expect(f.sessions.get(token)!.expires.getTime()).toBe(NOW + 365 * 86_400_000);
+    expect(f.attached).toEqual([[1, 'runner@example.com']]);
+    expect(f.codes.has('runner@example.com')).toBe(false);
+  });
+
+  it('is case-insensitive on the email', async () => {
+    const f = fakeDeps();
+    await handleRequestCode(post('code', { email: 'a@b.co' }), f.deps);
+    const code = f.sent[0][1];
+    const res = await handleVerify(post('verify', { email: 'A@B.CO', code }), f.deps);
+    expect(res.status).toBe(200);
+  });
+
+  it('answers 401 wrong_code, then 410 expired on the fifth wrong answer', async () => {
+    const f = fakeDeps();
+    await handleRequestCode(post('code', { email: 'a@b.co' }), f.deps);
+    for (let i = 0; i < 4; i++) {
+      const r = await handleVerify(post('verify', { email: 'a@b.co', code: '000000' }), f.deps);
+      expect(r.status).toBe(401);
+      expect(await r.json()).toEqual({ ok: false, error: 'wrong_code' });
+    }
+    const fifth = await handleVerify(post('verify', { email: 'a@b.co', code: '000000' }), f.deps);
+    expect(fifth.status).toBe(410);
+    expect(await fifth.json()).toEqual({ ok: false, error: 'expired' });
+    expect(f.codes.has('a@b.co')).toBe(false);
+    // Even the right code is dead now.
+    const right = await handleVerify(post('verify', { email: 'a@b.co', code: f.sent[0][1] }), f.deps);
+    expect(right.status).toBe(410);
+  });
+
+  it('answers 410 for an expired code', async () => {
+    const f = fakeDeps();
+    await handleRequestCode(post('code', { email: 'a@b.co' }), f.deps);
+    f.deps.now = () => NOW + 600_001;
+    const res = await handleVerify(post('verify', { email: 'a@b.co', code: f.sent[0][1] }), f.deps);
+    expect(res.status).toBe(410);
+  });
+
+  it('answers 400 for a malformed body', async () => {
+    const f = fakeDeps();
+    expect((await handleVerify(post('verify', { email: 'a@b.co' }), f.deps)).status).toBe(400);
+    expect((await handleVerify(post('verify', { email: 'a@b.co', code: '12' }), f.deps)).status).toBe(400);
+  });
+});
+
+describe('handleMe and handleSignOut', () => {
+  it('returns the member for a live token and 401 otherwise', async () => {
+    const f = fakeDeps();
+    const { token } = await signIn(f);
+    const ok = await handleMe(get('me', { authorization: `Bearer ${token}` }), f.deps);
+    expect(ok.status).toBe(200);
+    expect(await ok.json()).toEqual({ ok: true, member: { id: 1, email: 'runner@example.com', name: null } });
+    expect((await handleMe(get('me'), f.deps)).status).toBe(401);
+    expect((await handleMe(get('me', { authorization: 'Bearer nope' }), f.deps)).status).toBe(401);
+    f.deps.now = () => NOW + 366 * 86_400_000;
+    expect((await handleMe(get('me', { authorization: `Bearer ${token}` }), f.deps)).status).toBe(401);
+  });
+
+  it('sign-out deletes only that session', async () => {
+    const f = fakeDeps();
+    const a = await signIn(f);
+    const b = await signIn(f);
+    const res = await handleSignOut(post('signout', {}, { authorization: `Bearer ${a.token}` }), f.deps);
+    expect(res.status).toBe(200);
+    expect(f.sessions.has(a.token)).toBe(false);
+    expect(f.sessions.has(b.token)).toBe(true);
+    expect((await handleSignOut(post('signout', {}), f.deps)).status).toBe(200);
+  });
+});
+
+describe('memberFromBearer', () => {
+  it('reads the header and tolerates its absence', async () => {
+    const f = fakeDeps();
+    const { token } = await signIn(f);
+    expect(await memberFromBearer(new Request('https://x', { headers: { authorization: `Bearer ${token}` } }), f.deps)).toEqual({ id: 1, email: 'runner@example.com', name: null });
+    expect(await memberFromBearer(new Request('https://x'), f.deps)).toBeNull();
+    expect(await memberFromBearer(new Request('https://x', { headers: { authorization: 'Basic abc' } }), f.deps)).toBeNull();
+  });
+});
