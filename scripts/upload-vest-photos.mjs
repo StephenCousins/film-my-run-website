@@ -1,7 +1,8 @@
 /**
  * Uploads Stephen's vest photos to R2 and writes the URLs into
  * film-my-run-merch/config/contrado.json (modelPhotos, one list per colour + layout).
- * Files come from film-my-run-merch/Merch-Images/<Colour> <Side|Stripe>/*.(png|webp|jpg), plus *.mp4 clips
+ * Files come from film-my-run-merch/Merch-Images/Vests/<Colour> - <side stripes|shoulder stripe>/*.(png|webp|jpg)
+ * in file-name order (so number them), plus *.mp4 clips
  * (re-encoded with ffmpeg to a small muted h264 with a poster frame; written to modelVideos).
  * Keys carry a content hash, so a replaced photo gets a new URL and no cache serves the old one.
  *
@@ -27,9 +28,9 @@ const configPath = '../film-my-run-merch/config/contrado.json';
 const config = JSON.parse(await readFile(configPath, 'utf8'));
 
 for (const colour of ['black', 'white', 'forest', 'navy', 'orange']) {
-  for (const [layout, folder] of [['side', 'Side'], ['shoulder', 'Stripe']]) {
+  for (const [layout, folder] of [['side', 'side stripes'], ['shoulder', 'shoulder stripe']]) {
     const name = `vest-${colour}-${layout}`;
-    const dir = `../film-my-run-merch/Merch-Images/${colour[0].toUpperCase()}${colour.slice(1)} ${folder}`;
+    const dir = `../film-my-run-merch/Merch-Images/Vests/${colour[0].toUpperCase()}${colour.slice(1)} - ${folder}`;
     const files = (await readdir(dir)).filter((f) => /\.(png|webp|jpe?g)$/i.test(f)).sort();
     const urls = [];
     for (const [n, f] of files.entries()) {
