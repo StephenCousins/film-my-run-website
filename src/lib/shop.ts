@@ -11,6 +11,8 @@ export interface ShopImage {
   position: string;
   /** Set when the image shows one colourway; the gallery follows the colour picker. */
   colour?: string;
+  /** A clip: src is its poster frame, video the mp4. */
+  video?: string;
 }
 
 export type Supplier = 'printify' | 'contrado';

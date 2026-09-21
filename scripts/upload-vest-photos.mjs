@@ -1,7 +1,8 @@
 /**
  * Uploads Stephen's vest photos to R2 and writes the URLs into
  * film-my-run-merch/config/contrado.json (modelPhotos, one list per colour + layout).
- * Files come from film-my-run-merch/Merch-Images/<Colour> <Side|Stripe>/*.(png|webp|jpg).
+ * Files come from film-my-run-merch/Merch-Images/<Colour> <Side|Stripe>/*.(png|webp|jpg), plus *.mp4 clips
+ * (re-encoded with ffmpeg to a small muted h264 with a poster frame; written to modelVideos).
  * Keys carry a content hash, so a replaced photo gets a new URL and no cache serves the old one.
  *
  *   node scripts/upload-vest-photos.mjs
@@ -10,6 +11,8 @@ import 'dotenv/config';
 import { readFile, readdir, writeFile } from 'node:fs/promises';
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import { createHash } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
+import { tmpdir } from 'node:os';
 import sharp from 'sharp';
 
 const client = new S3Client({
@@ -37,7 +40,20 @@ for (const colour of ['black', 'white', 'forest', 'navy', 'orange']) {
     }
     delete config.products[name].modelPhoto;
     config.products[name].modelPhotos = urls;
-    console.log(`${name}: ${urls.length} photos`);
+    const videos = [];
+    for (const [n, f] of (await readdir(dir)).filter((f) => /\.mp4$/i.test(f)).sort().entries()) {
+      const out = `${tmpdir()}/${name}-${n + 1}.mp4`;
+      execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', `${dir}/${f}`, '-an', '-vf', 'scale=-2:min(720\\,ih)', '-c:v', 'libx264', '-crf', '28', '-preset', 'slow', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out]);
+      const mp4 = await readFile(out);
+      const poster = await sharp(execFileSync('ffmpeg', ['-loglevel', 'error', '-i', out, '-frames:v', '1', '-f', 'image2pipe', '-vcodec', 'png', '-'], { maxBuffer: 64e6 })).jpeg({ quality: 88 }).toBuffer();
+      const hash = createHash('md5').update(mp4).digest('hex').slice(0, 8);
+      const key = `shop/${name}-video-${n + 1}-${hash}`;
+      await client.send(new PutObjectCommand({ Bucket: bucket, Key: `${key}.mp4`, Body: mp4, ContentType: 'video/mp4', CacheControl: 'public, max-age=31536000' }));
+      await client.send(new PutObjectCommand({ Bucket: bucket, Key: `${key}.jpg`, Body: poster, ContentType: 'image/jpeg', CacheControl: 'public, max-age=31536000' }));
+      videos.push({ src: `${base}/${key}.mp4`, poster: `${base}/${key}.jpg` });
+    }
+    if (videos.length) config.products[name].modelVideos = videos; else delete config.products[name].modelVideos;
+    console.log(`${name}: ${urls.length} photos, ${videos.length} videos`);
   }
 }
 await writeFile(configPath, JSON.stringify(config, null, 2) + '\n');

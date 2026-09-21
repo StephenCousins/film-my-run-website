@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-21T20:43:17.950Z",
+  "generatedAt": "2026-09-21T20:51:13.484Z",
   "shop": {
     "etsyUrl": "https://www.etsy.com/shop/FilmMyRun"
   },
@@ -1079,6 +1079,12 @@
           "colour": "Black"
         },
         {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-side-video-1-fa98b28b.jpg",
+          "video": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-black-side-video-1-fa98b28b.mp4",
+          "position": "video",
+          "colour": "Black"
+        },
+        {
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-white-side-1-1054ee21.jpg",
           "position": "model",
           "colour": "White"
@@ -1111,6 +1117,18 @@
         {
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-4-559c15ed.jpg",
           "position": "model",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-video-1-05daffe3.jpg",
+          "video": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-video-1-05daffe3.mp4",
+          "position": "video",
+          "colour": "Forest Green"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-video-2-c9fc1cdd.jpg",
+          "video": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-video-2-c9fc1cdd.mp4",
+          "position": "video",
           "colour": "Forest Green"
         },
         {
@@ -1151,6 +1169,12 @@
         {
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-4-f4b2428e.jpg",
           "position": "model",
+          "colour": "Orange"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-video-1-4ae13897.jpg",
+          "video": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-video-1-4ae13897.mp4",
+          "position": "video",
           "colour": "Orange"
         }
       ],
