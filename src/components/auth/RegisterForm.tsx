@@ -259,6 +259,8 @@ export default function RegisterForm() {
           </button>
         </form>
 
+        <p className="text-sm text-muted mt-4 text-center">Or skip the password: <Link href="/login" className="text-brand hover:underline">sign in with an emailed code</Link>.</p>
+
         <p className="mt-6 text-center text-sm text-secondary">
           Already have an account?{' '}
           <Link

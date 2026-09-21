@@ -73,6 +73,22 @@ export const authOptions: NextAuthOptions = {
         };
       },
     }),
+    // A bearer token freshly issued by /api/app/v1/auth/verify (spec §2.3): the
+    // website's own pages sign the NextAuth session in with it.
+    CredentialsProvider({
+      id: 'code',
+      name: 'code',
+      credentials: { token: { label: 'Token', type: 'text' } },
+      async authorize(credentials) {
+        if (!credentials?.token) return null;
+        const { liveMemberDeps } = await import('./members/store');
+        const member = await liveMemberDeps.memberForToken(credentials.token, new Date());
+        if (!member) return null;
+        const user = await prisma.users.findUnique({ where: { id: member.id } });
+        if (!user) return null;
+        return { id: String(user.id), email: user.email, name: user.name, image: user.image, accessTier: user.access_tier };
+      },
+    }),
   ],
   session: {
     strategy: 'jwt',

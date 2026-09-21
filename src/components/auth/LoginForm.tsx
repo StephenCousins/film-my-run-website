@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+import CodeSignIn from './CodeSignIn';
 
 export default function LoginForm() {
   const router = useRouter();
@@ -66,6 +67,9 @@ export default function LoginForm() {
             {formError}
           </div>
         )}
+
+        <CodeSignIn callbackUrl={callbackUrl} />
+        <div className="my-6 flex items-center gap-3 text-xs text-muted"><span className="flex-1 h-px bg-border" />or<span className="flex-1 h-px bg-border" /></div>
 
         {/* Google Sign In */}
         <button
