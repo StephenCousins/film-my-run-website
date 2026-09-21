@@ -23,7 +23,7 @@ export async function POST(request: Request) {
   if (order.status === 'shipped') return NextResponse.json({ ignored: 'already shipped' });
 
   const s = event.resource.data?.shipment ?? {};
-  await prisma.orders.update({ where: { id: order.id }, data: { status: 'shipped', updated_at: new Date() } });
+  await prisma.orders.update({ where: { id: order.id }, data: { status: 'shipped', tracking_url: s.url || null, updated_at: new Date() } });
   await orderShipped(order.email, order.id, order.items as unknown as OrderLine[], s.carrier ?? '', s.number ?? '', s.url ?? '');
   return NextResponse.json({ result: 'shipped' });
 }

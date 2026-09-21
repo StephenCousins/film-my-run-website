@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
   for (const o of open) {
     const s = await contradoShipment(o.contrado_order_id!);
     if (!s) continue;
-    await prisma.orders.update({ where: { id: o.id }, data: { status: 'shipped', updated_at: new Date() } });
+    await prisma.orders.update({ where: { id: o.id }, data: { status: 'shipped', tracking_url: s.trackingUrl ?? null, updated_at: new Date() } });
     if (o.email) await orderShipped(o.email, o.id, o.items as unknown as OrderLine[], s.courierName ?? '', s.trackingId ?? '', s.trackingUrl ?? '');
     shipped.push(o.id);
   }
