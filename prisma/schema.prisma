@@ -107,6 +107,7 @@ model orders {
   email             String?
   printify_order_id String?
   contrado_order_id String?
+  tracking_url      String?
   created_at        DateTime @default(now())
   updated_at        DateTime
   users             users?   @relation(fields: [user_id], references: [id])
