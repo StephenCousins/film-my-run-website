@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { Check, ExternalLink, ShoppingBag } from 'lucide-react';
 import { swatch, etsyLink, type ShopItem } from '@/lib/shop';
 import { addToBasket } from '@/lib/shop/basket';
+import MemberLine from './MemberLine';
 
 const sized = (s: string | null) => s && s !== 'One size';
 
@@ -30,6 +31,7 @@ export default function BuyBox({ item, colour, setColour }: { item: ShopItem; co
   return (
     <div>
       <p className="font-mono text-2xl text-foreground mt-5">£{(variant ?? item.variants[0]).price.toFixed(2)}</p>
+      <MemberLine pounds={(variant ?? item.variants[0]).price} />
 
       {colours.length > 0 && (
         <div className="mt-6">

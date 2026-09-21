@@ -6,6 +6,9 @@ import { Minus, Plus, Trash2 } from 'lucide-react';
 import { shopItems } from '@/lib/shop';
 import { useBasket } from '@/lib/shop/basket';
 import { variantLabel } from '@/lib/shop/orders';
+import { useAuth } from '@/contexts/AuthContext';
+import { memberPrice } from '@/lib/members/price';
+import MemberLine from './MemberLine';
 
 export default function Basket() {
   const { lines, set } = useBasket();
@@ -18,6 +21,8 @@ export default function Basket() {
     return item && v ? [{ ...l, item, v }] : [];
   });
   const subtotal = rows.reduce((s, r) => s + r.v.price * r.quantity, 0);
+  const { isAuthenticated } = useAuth();
+  const discount = isAuthenticated ? Math.round((subtotal - memberPrice(subtotal)) * 100) / 100 : 0;
 
   const setQty = (slug: string, variantId: number | string, q: number) =>
     set(lines.map((l) => (l.slug === slug && l.variantId === variantId ? { ...l, quantity: q } : l)).filter((l) => l.quantity > 0));
@@ -74,7 +79,12 @@ export default function Basket() {
         <div>
           <p className="text-secondary text-sm">Subtotal</p>
           <p className="font-mono text-2xl text-foreground">£{subtotal.toFixed(2)}</p>
-          <p className="text-xs text-muted mt-1">UK postage added at checkout (from £3.59).</p>
+          {isAuthenticated ? (
+            <p className="text-sm text-foreground">Member discount <span className="font-mono">−£{discount.toFixed(2)}</span> · you pay <span className="font-mono">£{(subtotal - discount).toFixed(2)}</span> plus postage</p>
+          ) : (
+            <MemberLine pounds={subtotal} />
+          )}
+          <p className="text-xs text-muted mt-1">UK postage added at checkout (from £3.59).{isAuthenticated ? ' Member discount applied at checkout.' : ''}</p>
         </div>
         <button
           type="button"
