@@ -13,7 +13,8 @@ async function send(to: string, subject: string, lines: string[]) {
     <div style="border-bottom:3px solid #f88c00;padding-bottom:12px;margin-bottom:20px;font-weight:700">Film My Run</div>
     ${lines.map((l) => (l ? `<p style="margin:0 0 8px">${esc(l)}</p>` : '<br>')).join('')}
   </div>`;
-  await new Resend(key).emails.send({ from: from(), to, bcc: 'stephen@filmmyrun.com', subject, text, html });
+  const { error } = await new Resend(key).emails.send({ from: from(), to, bcc: 'stephen@filmmyrun.com', subject, text, html });
+  if (error) throw new Error(error.message);
 }
 
 const itemLines = (items: OrderLine[]) =>

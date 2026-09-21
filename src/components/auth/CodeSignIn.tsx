@@ -23,7 +23,7 @@ export default function CodeSignIn({ callbackUrl = '/' }: { callbackUrl?: string
 
   const post = async (path: string, body: unknown) => {
     const res = await fetch(`/api/app/v1/auth/${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    const data = (await res.json()) as { ok: boolean; error?: string; token?: string };
+    const data = (await res.json().catch(() => ({ ok: false }))) as { ok: boolean; error?: string; token?: string };
     if (!res.ok || !data.ok) throw new Error(MESSAGES[data.error ?? ''] ?? 'Something went wrong. Please try again.');
     return data;
   };

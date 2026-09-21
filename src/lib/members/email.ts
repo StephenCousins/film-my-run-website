@@ -14,5 +14,6 @@ export async function sendCodeEmail(to: string, code: string) {
     <p style="margin:0 0 8px">It works for 10 minutes. If you did not ask for it, ignore this email.</p>
     <p style="margin:0">Stephen</p>
   </div>`;
-  await new Resend(key).emails.send({ from: from(), to, subject: `Your Film My Run code: ${code}`, text, html });
+  const { error } = await new Resend(key).emails.send({ from: from(), to, subject: `Your Film My Run code: ${code}`, text, html });
+  if (error) throw new Error(error.message);
 }

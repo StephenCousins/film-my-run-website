@@ -14,6 +14,7 @@ export default function Basket() {
   const { lines, set } = useBasket();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [pendingUrl, setPendingUrl] = useState<string | null>(null);
 
   const rows = lines.flatMap((l) => {
     const item = shopItems.find((i) => i.slug === l.slug);
@@ -30,10 +31,16 @@ export default function Basket() {
   const checkout = async () => {
     setBusy(true);
     setError(null);
+    setPendingUrl(null);
     try {
       const res = await fetch('/api/shop/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lines }) });
       const data = await res.json();
       if (!res.ok || !data.url) throw new Error(data.error ?? 'Checkout failed');
+      if (isAuthenticated && data.member === false && data.reason) {
+        setPendingUrl(data.url);
+        setBusy(false);
+        return;
+      }
       window.location.assign(data.url);
     } catch (e) {
       setError((e as Error).message);
@@ -95,7 +102,14 @@ export default function Basket() {
           {busy ? 'Taking you to checkout…' : 'Checkout'}
         </button>
       </div>
-      {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
+      {pendingUrl ? (
+        <div className="mt-4 text-sm text-red-500">
+          <p>Your member discount couldn&apos;t be applied. Sign in again, or continue at full price.</p>
+          <button type="button" onClick={() => window.location.assign(pendingUrl)} className="mt-2 underline hover:no-underline">Continue anyway</button>
+        </div>
+      ) : (
+        error && <p className="mt-4 text-sm text-red-500">{error}</p>
+      )}
     </div>
   );
 }

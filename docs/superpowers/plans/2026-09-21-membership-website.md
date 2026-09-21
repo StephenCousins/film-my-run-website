@@ -13,7 +13,7 @@
 ## Global Constraints
 
 - A push to `main` deploys to Railway. `npm test` and `npm run typecheck` must be green before every commit that will be pushed; check the live site after each push.
-- Migrations are applied by hand: `DATABASE_URL="$(railway variables --service Postgres --json | jq -r .DATABASE_PUBLIC_URL)" npx prisma migrate deploy`. Never write the URL to disk.
+- Migrations run on deploy (`railway.toml` `preDeployCommand = "npx prisma migrate deploy"`); nothing to run by hand.
 - Never commit secrets. The Stripe coupon id goes in Railway as `STRIPE_MEMBER_COUPON`.
 - The Stripe account is the one whose keys are already in this site's Railway env (never the ClubRoute account).
 - Copy is British English, sentence case: "Sign in", "member", "Email me a code".
@@ -1579,13 +1579,7 @@ Expected: `{"id":"MEMBER10","percent_off":10,"duration":"forever","valid":true}`
 railway variables --set STRIPE_MEMBER_COUPON=MEMBER10
 ```
 
-- [ ] **Step 3: Apply the migration**
-
-```bash
-DATABASE_URL="$(railway variables --service Postgres --json | jq -r .DATABASE_PUBLIC_URL)" npx prisma migrate deploy
-```
-
-Expected: "1 migration applied" (`20260921090000_orders_tracking_url`).
+- [ ] ~~Step 3: Apply the migration~~ — not needed: migrations run on deploy (`railway.toml` `preDeployCommand`).
 
 - [ ] **Step 4: Push**
 

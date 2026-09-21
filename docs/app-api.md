@@ -13,6 +13,12 @@ Routes the Film My Run iPhone app calls. Added 11 September 2026 (milestone M5-W
 | GET | `/api/app/v1/latest-video` | new | 60 | 1 h |
 | GET | `/api/app/v1/chat/thread` | new | 30 | none |
 | POST | `/api/app/v1/chat/messages` `{ name, email, text }` | new | 6 | none |
+| POST | `/api/app/v1/auth/code` `{ email }` | new | 20 | none |
+| POST | `/api/app/v1/auth/verify` `{ email, code }` | new | 30 | none |
+| GET | `/api/app/v1/auth/me` | new | 60 | none |
+| POST | `/api/app/v1/auth/signout` | new | 60 | none |
+| GET | `/api/app/v1/orders` | new | 60 | none |
+| GET | `/api/app/v1/orders/{id}` | new | 60 | none |
 
 Over the limit: `429` with `Retry-After` seconds and `{ ok: false, error: "Too many requests" }`. Every response carries `X-FMR-API: v1`. The limiter is in-memory per instance (`src/lib/app-api/rate-limit.ts`), like `/api/track`.
 
@@ -31,5 +37,18 @@ Over the limit: `429` with `Retry-After` seconds and `{ ok: false, error: "Too m
 **chat/thread** — "Ask Stephen" (see `docs/superpowers/specs/2026-09-16-pro-page-chat-design.md` §3 in the app repository). Requires `X-FMR-Install: <uuid>`; no Pro proof needed — a lapsed subscriber can still read what Stephen wrote. `{ ok: true, thread: { id, messages: [{ id, from: "user" | "stephen", text, createdAt }] } | null }`, `null` when the install has no thread yet. `400 { ok: false, error }` when the install header is missing or not a UUID.
 
 **chat/messages** (POST `{ name, email, text }`) — requires `X-FMR-Install` and `X-FMR-Pro: <JWS>` (the StoreKit transaction's `jwsRepresentation`; the server decodes the payload without verifying Apple's signature in v1 — see the design doc for the known gap and the planned follow-up). A Debug build sends `X-FMR-Pro: debug-<installID>`, accepted only when that install id is in the server's `CHAT_DEBUG_INSTALL_IDS` (comma-separated, compared case-insensitively) — how Stephen's own phone is Pro before the App Store products exist. `{ ok: true, message: { id, from, text, createdAt } }`. `403 { ok: false, error: "Pro required" }` when the Pro header fails. `400 { ok: false, error }` when `text` (1–2000 chars, trimmed), `name` (1–80) or `email` fails validation. `429 { ok: false, error: "That's five today, Stephen will get back to you." }` after 5 user messages to the same install in one UTC day (checked against the database, independent of the per-IP limit above). Side effect: emails `CHAT_ADMIN_EMAIL` via Resend with the message and a link to the admin inbox thread (reply-to is the runner's address); a send failure is logged, not returned to the caller.
+
+## Members
+
+Email-code sign-in, no password. Every route but `auth/code` and `auth/verify` needs `Authorization: Bearer <token>` (the token from `auth/verify`); a missing or dead token answers `401 { ok: false, error: "signed_out" }`.
+
+- **`POST /api/app/v1/auth/code` `{ email }`** — always `{ ok: true }` for a well-formed email (no account enumeration). Errors: `400 { ok: false, error: "bad_email" }`, `429 { ok: false, error: "too_many_codes" }` (five an hour per email, `Retry-After` seconds), `503 { ok: false, error: "email_unavailable" }` if Resend fails.
+- **`POST /api/app/v1/auth/verify` `{ email, code }`** — `{ ok: true, token, member: { id, email, name } }`. Errors: `400 { ok: false, error: "bad_request" }` for a malformed body, `401 { ok: false, error: "wrong_code" }`, `410 { ok: false, error: "expired" }` (no code sent, code past its 10 minutes, or five wrong attempts).
+- **`GET /api/app/v1/auth/me`** — `{ ok: true, member: { id, email, name } }` or `401 signed_out`.
+- **`POST /api/app/v1/auth/signout`** — `{ ok: true }`, deletes only the session behind the bearer token.
+- **`GET /api/app/v1/orders`** — `{ ok: true, orders: [{ id, placedAt, status: "paid" | "submitted" | "shipped", items: [{ slug, name, variant, quantity, pricePence, imageUrl }], totalPence, currency, trackingUrl }] }`, newest first. A `pending` order (payment not yet confirmed) never appears.
+- **`GET /api/app/v1/orders/{id}`** — `{ ok: true, order: <same shape> }`. `400 { ok: false, error: "bad_id" }` for a non-numeric id; `404 { ok: false, error: "not_found" }` for someone else's order — deliberately 404, not 403, so a guess reveals nothing about whether the order exists.
+
+`POST /api/shop/checkout` (website only, not app-api) now returns `{ url, member, reason? }`: `member: true` when the signed-in caller's 10% discount (`STRIPE_MEMBER_COUPON`, alongside the other Stripe env vars) was applied at Stripe; `member: false` with `reason: "signed_out"` if a bearer token was sent but is dead, or `reason: "no_coupon"` if `STRIPE_MEMBER_COUPON` isn't set; no `reason` for a guest, who was never offered a discount to lose.
 
 Sample responses are saved in the app repository under `Packages/FMRData/Tests/FMRDataTests/Fixtures/api/`.

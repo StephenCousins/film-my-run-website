@@ -7,6 +7,7 @@ const toMember = (u: { id: number; email: string; name: string | null }): Member
 
 export const liveMemberDeps: MemberDeps = {
   saveCode: async (email, hash, expires) => {
+    await prisma.verification_tokens.deleteMany({ where: { identifier: email, expires: { lt: new Date() } } });
     await prisma.verification_tokens.create({ data: { identifier: email, token: hash, expires } });
   },
   codeHashes: async (email, now) =>
@@ -15,7 +16,7 @@ export const liveMemberDeps: MemberDeps = {
     await prisma.verification_tokens.deleteMany({ where: { identifier: email } });
   },
   findOrCreateUser: async (email, now) => {
-    const existing = await prisma.users.findUnique({ where: { email }, select: { id: true, email: true, name: true, email_verified_at: true } });
+    const existing = await prisma.users.findFirst({ where: { email: { equals: email, mode: 'insensitive' } }, select: { id: true, email: true, name: true, email_verified_at: true } });
     if (existing) {
       if (!existing.email_verified_at) await prisma.users.update({ where: { id: existing.id }, data: { email_verified_at: now, updated_at: now } });
       return toMember(existing);

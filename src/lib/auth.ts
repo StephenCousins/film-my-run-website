@@ -86,6 +86,7 @@ export const authOptions: NextAuthOptions = {
         if (!member) return null;
         const user = await prisma.users.findUnique({ where: { id: member.id } });
         if (!user) return null;
+        await liveMemberDeps.deleteSession(credentials.token);
         return { id: String(user.id), email: user.email, name: user.name, image: user.image, accessTier: user.access_tier };
       },
     }),

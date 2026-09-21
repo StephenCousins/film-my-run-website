@@ -38,7 +38,7 @@ export async function POST(request: Request) {
       const o = await prisma.orders.findFirst({ where: { stripe_session_id: id } });
       return o && { id: o.id, status: o.status, items: o.items as unknown as OrderLine[] };
     },
-    markPaid: (id, email, a) => prisma.orders.update({ where: { id }, data: { status: 'paid', email, shipping_address: a as object, updated_at: new Date() } }).then(() => {}),
+    markPaid: (id, email, a) => prisma.orders.update({ where: { id }, data: { status: 'paid', email, shipping_address: a as object, total_cents: session.amount_total ?? undefined, updated_at: new Date() } }).then(() => {}),
     place: (supplier, lines, o, a) =>
       supplier === 'printify'
         ? createOrder(String(o.id), lines.map((l) => ({ product_id: l.supplierProductId, variant_id: Number(l.variantId), quantity: l.quantity })), a)
