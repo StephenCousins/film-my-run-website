@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-21T20:51:13.484Z",
+  "generatedAt": "2026-09-21T21:22:57.920Z",
   "shop": {
     "etsyUrl": "https://www.etsy.com/shop/FilmMyRun"
   },
@@ -1126,12 +1126,6 @@
           "colour": "Forest Green"
         },
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-video-2-c9fc1cdd.jpg",
-          "video": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-forest-side-video-2-c9fc1cdd.mp4",
-          "position": "video",
-          "colour": "Forest Green"
-        },
-        {
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-navy-side-1-fd40661d.jpg",
           "position": "model",
           "colour": "Navy"
@@ -1169,12 +1163,6 @@
         {
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-4-f4b2428e.jpg",
           "position": "model",
-          "colour": "Orange"
-        },
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-video-1-4ae13897.jpg",
-          "video": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/vest-orange-side-video-1-4ae13897.mp4",
-          "position": "video",
           "colour": "Orange"
         }
       ],
