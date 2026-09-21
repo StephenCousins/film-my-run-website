@@ -7,6 +7,8 @@ import { prisma } from '@/lib/db';
 import { buildOrderLines, subtotalPence, linesFor, contradoShippingPence, returnUrls } from '@/lib/shop/orders';
 import { quoteShippingPence } from '@/lib/shop/printify';
 import { stripe, siteUrl } from '@/lib/shop/stripe';
+import { currentMember } from '@/lib/members/current';
+import { memberCheckout } from '@/lib/members/checkout';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,12 +32,15 @@ export async function POST(request: Request) {
         ? await quoteShippingPence(printifyLines.map((l) => ({ product_id: l.supplierProductId, variant_id: Number(l.variantId), quantity: l.quantity })))
         : 0) + contradoShippingPence(contradoCount);
     const total = subtotalPence(lines) + shippingPence;
+    const { member, hadBearer } = await currentMember(request);
+    const mc = memberCheckout(member, hadBearer, process.env.STRIPE_MEMBER_COUPON);
     const order = await prisma.orders.create({
-      data: { status: 'pending', total_cents: total, currency: 'GBP', items: lines as object[], updated_at: new Date() },
+      data: { status: 'pending', total_cents: total, currency: 'GBP', items: lines as object[], updated_at: new Date(), ...mc.orderFields },
     });
 
     const session = await stripe().checkout.sessions.create({
       mode: 'payment',
+      discounts: mc.discounts,
       client_reference_id: String(order.id),
       line_items: lines.map((l) => ({
         quantity: l.quantity,
@@ -59,7 +64,7 @@ export async function POST(request: Request) {
     });
 
     await prisma.orders.update({ where: { id: order.id }, data: { stripe_session_id: session.id, updated_at: new Date() } });
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: session.url, ...mc.response });
   } catch (e) {
     console.error('Shop checkout failed:', e);
     return NextResponse.json({ error: 'Checkout is not available right now. Please try again shortly.' }, { status: 500 });
