@@ -35,7 +35,7 @@ export async function POST(request: Request) {
     const shippingPence = shippingToCharge(subtotalPence(lines), supplierShipping);
     const total = subtotalPence(lines) + shippingPence;
     const { member, hadBearer, pro } = await currentMember(request);
-    const mc = memberCheckout(member, hadBearer, process.env.STRIPE_MEMBER_COUPON, pro);
+    const mc = memberCheckout(member, hadBearer, { member: process.env.STRIPE_MEMBER_COUPON, club: process.env.STRIPE_CLUB_COUPON }, pro);
     const order = await prisma.orders.create({
       data: { status: 'pending', total_cents: total, currency: 'GBP', items: lines as object[], updated_at: new Date(), ...mc.orderFields },
     });

@@ -22,8 +22,9 @@ export default function Basket() {
     return item && v ? [{ ...l, item, v }] : [];
   });
   const subtotal = rows.reduce((s, r) => s + r.v.price * r.quantity, 0);
-  const { isAuthenticated } = useAuth();
-  const discount = isAuthenticated ? Math.round((subtotal - memberPrice(subtotal)) * 100) / 100 : 0;
+  const { isAuthenticated, hasAccess } = useAuth();
+  const club = hasAccess('PRO');
+  const discount = isAuthenticated ? Math.round((subtotal - memberPrice(subtotal, club)) * 100) / 100 : 0;
 
   const setQty = (slug: string, variantId: number | string, q: number) =>
     set(lines.map((l) => (l.slug === slug && l.variantId === variantId ? { ...l, quantity: q } : l)).filter((l) => l.quantity > 0));
@@ -87,7 +88,7 @@ export default function Basket() {
           <p className="text-secondary text-sm">Subtotal</p>
           <p className="font-mono text-2xl text-foreground">£{subtotal.toFixed(2)}</p>
           {isAuthenticated ? (
-            <p className="text-sm text-foreground">Member discount <span className="font-mono">−£{discount.toFixed(2)}</span> · you pay <span className="font-mono">£{(subtotal - discount).toFixed(2)}</span> plus postage</p>
+            <p className="text-sm text-foreground">{club ? 'Club discount' : 'Member discount'} <span className="font-mono">−£{discount.toFixed(2)}</span> · you pay <span className="font-mono">£{(subtotal - discount).toFixed(2)}</span> plus postage</p>
           ) : (
             <MemberLine pounds={subtotal} />
           )}
