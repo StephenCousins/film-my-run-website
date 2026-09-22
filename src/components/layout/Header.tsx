@@ -53,6 +53,7 @@ const navigation = [
   },
   { name: 'News', href: '/news' },
   { name: 'Shop', href: '/shop' },
+  { name: 'The Club', href: '/club' },
   { name: 'Contact', href: '/contact' },
 ];
 

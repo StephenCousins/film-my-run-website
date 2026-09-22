@@ -26,9 +26,11 @@ export default function MemberLine({ pounds, label = 'Member price' }: { pounds:
         {label} <span className="font-mono">£{memberPrice(pounds, club).toFixed(2)}</span>
         {club && <span className="text-brand"> · Club 15%</span>}
       </p>
-      {/* No link yet: the Club is only sold in the app, so there is nowhere on
-          the site to send them. Add one when web checkout for it exists. */}
-      {!club && <p className="text-xs text-muted mt-0.5">Club members save 15%.</p>}
+      {!club && (
+        <p className="text-xs text-muted mt-0.5">
+          <Link href="/club" className="text-brand hover:underline">The Club</Link> saves 15%.
+        </p>
+      )}
     </>
   );
 }
