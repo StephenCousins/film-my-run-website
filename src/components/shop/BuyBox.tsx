@@ -84,7 +84,7 @@ export default function BuyBox({ item, colour, setColour }: { item: ShopItem; co
         {added ? 'Added to basket' : 'Add to basket'}
       </button>
       <p className="text-xs text-muted mt-3">
-        {added ? <Link href="/shop/basket" className="text-brand hover:underline">Go to basket →</Link> : 'UK postage calculated at checkout. Paid securely with Stripe.'}
+        {added ? <Link href="/shop/basket" className="text-brand hover:underline">Go to basket →</Link> : 'Free UK delivery over £45. Paid securely with Stripe.'}
         {item.etsyUrl && (
           <>
             {' · '}

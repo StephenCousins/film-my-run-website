@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { buildOrderLines, subtotalPence, variantLabel, linesFor, contradoShippingPence, returnUrls } from './orders';
+import { buildOrderLines, subtotalPence, variantLabel, linesFor, contradoShippingPence, returnUrls, shippingToCharge, toFreeShipping } from './orders';
 import type { ShopItem } from '@/lib/shop';
 
 const tee = {
@@ -67,5 +67,22 @@ describe('returnUrls', () => {
   });
   it('anything else counts as web', () => {
     expect(returnUrls('https://x', 'evil').metadata).toEqual({});
+  });
+});
+
+describe('free shipping threshold', () => {
+  it('charges postage under £45 and nothing at or over it', () => {
+    expect(shippingToCharge(4499, 599)).toBe(599);
+    expect(shippingToCharge(4500, 599)).toBe(0);
+    expect(shippingToCharge(9000, 1200)).toBe(0);
+    // Nothing to charge stays nothing.
+    expect(shippingToCharge(1000, 0)).toBe(0);
+  });
+
+  it('says how much more to spend', () => {
+    expect(toFreeShipping(0)).toBe(4500);
+    expect(toFreeShipping(3995)).toBe(505);
+    expect(toFreeShipping(4500)).toBe(0);
+    expect(toFreeShipping(9999)).toBe(0);
   });
 });

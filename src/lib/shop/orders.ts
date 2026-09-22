@@ -62,6 +62,20 @@ export const linesFor = (lines: OrderLine[], supplier: Supplier) => lines.filter
 /** Contrado UK tracked: £5.99 for the first item, 49p each extra (Helix /shipping/en-GB, zone 2). */
 export const contradoShippingPence = (count: number) => (count > 0 ? 599 + 49 * (count - 1) : 0);
 
+/**
+ * Free UK postage from £45 of goods (before any member discount, so the
+ * threshold does not move under people). Set just above a single running tee,
+ * so one item does not qualify and a second one does.
+ */
+export const FREE_SHIPPING_PENCE = 4500;
+
+/** What the buyer pays for postage: nothing once the basket clears the threshold. */
+export const shippingToCharge = (subtotalPence: number, shippingPence: number) =>
+  subtotalPence >= FREE_SHIPPING_PENCE ? 0 : shippingPence;
+
+/** Pence still to spend for free postage, or 0 when it is already free. */
+export const toFreeShipping = (subtotalPence: number) => Math.max(0, FREE_SHIPPING_PENCE - subtotalPence);
+
 /** Where Stripe sends the buyer afterwards. The app flags its pages so they offer "Back to the app". */
 export function returnUrls(base: string, source: unknown) {
   const app = source === 'app';

@@ -2,11 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ChevronRight, Truck, Shield, Droplets } from 'lucide-react';
+import { arrives } from '@/lib/shop/delivery';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ProductCard from '@/components/shop/ProductCard';
 import ProductPurchase from '@/components/shop/ProductPurchase';
-import { shopItems, getShopItem } from '@/lib/shop';
+import { shopItems, getShopItem, completeTheLook } from '@/lib/shop';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -29,12 +30,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+// The arrival dates are computed at render, so the page must not be frozen at
+// build time: an hour is close enough and still cheap.
+export const revalidate = 3600;
+
 export default async function ProductPage({ params }: Props) {
   const { slug } = await params;
   const item = getShopItem(slug);
   if (!item) notFound();
 
   const related = shopItems.filter((i) => i.category === item.category && i.key !== item.key).slice(0, 4);
+  const attach = completeTheLook(item, shopItems);
   const paragraphs = item.description.split('\n').map((s) => s.trim()).filter(Boolean);
 
   const productJsonLd = {
@@ -81,9 +87,11 @@ export default async function ProductPage({ params }: Props) {
                 <div className="flex gap-3 p-4 rounded-xl bg-surface-secondary border border-border">
                   <Truck className="w-5 h-5 text-brand shrink-0" />
                   <span className="text-secondary">
+                    <span className="text-foreground font-semibold">{arrives()}</span>
                     {item.supplier === 'contrado'
-                      ? 'Cut and sewn to order in London, dispatched tracked in about 2 days.'
-                      : 'Printed to order, usually dispatched in 2 to 5 working days.'}
+                      ? ' · cut and sewn to order in London, sent tracked.'
+                      : ' · printed to order in the UK, sent tracked.'}
+                    {' Free UK delivery over £45.'}
                   </span>
                 </div>
                 <div className="flex gap-3 p-4 rounded-xl bg-surface-secondary border border-border">
@@ -99,6 +107,17 @@ export default async function ProductPage({ params }: Props) {
               </div>
             </ProductPurchase>
           </div>
+
+          {attach.length > 0 && (
+            <section className="mt-16 lg:mt-24">
+              <h2 className="font-display text-2xl font-bold text-foreground mb-6">Complete the look</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6">
+                {attach.map((a) => (
+                  <ProductCard key={a.key} item={a} />
+                ))}
+              </div>
+            </section>
+          )}
 
           {related.length > 0 && (
             <section className="mt-16 lg:mt-24">

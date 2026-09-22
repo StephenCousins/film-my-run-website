@@ -69,6 +69,24 @@ export interface ShopItem {
   care?: string;
 }
 
+/**
+ * The attach products: one from each other category, cheapest first, so a tee
+ * page offers a cap and a mug rather than four more tees. Deterministic per
+ * slug, so the page is cacheable and the suggestions do not jump around.
+ */
+export function completeTheLook(item: ShopItem, all: ShopItem[], limit = 4): ShopItem[] {
+  const order = ['caps', 'totes', 'mugs', 'posters', 'running-tees', 'tees', 'hoodies', 'vests'];
+  const seed = [...item.slug].reduce((n, c) => n + c.charCodeAt(0), 0);
+  const picks: ShopItem[] = [];
+  for (const category of order) {
+    if (category === item.category) continue;
+    const mine = all.filter((i) => i.category === category && i.key !== item.key);
+    if (mine.length) picks.push(mine[seed % mine.length]);
+    if (picks.length === limit) break;
+  }
+  return picks;
+}
+
 export interface ShopCategory {
   key: string;
   label: string;

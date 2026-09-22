@@ -3,6 +3,7 @@ import { ShoppingBag, Truck, Shirt, ExternalLink } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ShopGrid from '@/components/shop/ShopGrid';
+import WelcomeOffer from '@/components/shop/WelcomeOffer';
 import { shopItems, shopCategories, etsyShopUrl } from '@/lib/shop';
 
 const breadcrumbJsonLd = {
@@ -51,6 +52,7 @@ export default function ShopPage() {
         <section className="py-10 lg:py-16">
           <div className="container">
             <ShopGrid items={shopItems} categories={shopCategories} />
+            <WelcomeOffer />
           </div>
         </section>
 
@@ -67,8 +69,8 @@ export default function ShopPage() {
               <div className="flex gap-3">
                 <Truck className="w-5 h-5 text-brand shrink-0 mt-0.5" />
                 <p className="text-secondary">
-                  <span className="text-foreground font-semibold">UK delivery from £3.59.</span> Postage is
-                  worked out at checkout. Outside the UK, order through the Etsy shop.
+                  <span className="text-foreground font-semibold">Free UK delivery over £45.</span> Under that,
+                  postage is worked out at checkout, from £3.59. Outside the UK, order through the Etsy shop.
                 </p>
               </div>
               <div className="flex gap-3">

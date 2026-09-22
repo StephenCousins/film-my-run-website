@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { shopItems } from '@/lib/shop';
 import { useBasket } from '@/lib/shop/basket';
-import { variantLabel } from '@/lib/shop/orders';
+import { variantLabel, toFreeShipping } from '@/lib/shop/orders';
 import { useAuth } from '@/contexts/AuthContext';
 import { memberPrice } from '@/lib/members/price';
 import MemberLine from './MemberLine';
@@ -91,7 +91,16 @@ export default function Basket() {
           ) : (
             <MemberLine pounds={subtotal} />
           )}
-          <p className="text-xs text-muted mt-1">UK postage added at checkout (from £3.59).{isAuthenticated ? ' Member discount applied at checkout.' : ''}</p>
+          {toFreeShipping(Math.round(subtotal * 100)) > 0 ? (
+            <p className="text-xs text-muted mt-1">
+              Spend <span className="font-mono text-foreground">£{(toFreeShipping(Math.round(subtotal * 100)) / 100).toFixed(2)}</span> more for free UK delivery.
+              {isAuthenticated ? ' Member discount applied at checkout.' : ''}
+            </p>
+          ) : (
+            <p className="text-xs text-brand mt-1">
+              Free UK delivery on this order.{isAuthenticated ? ' Member discount applied at checkout.' : ''}
+            </p>
+          )}
         </div>
         <button
           type="button"

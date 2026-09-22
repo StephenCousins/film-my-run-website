@@ -4,7 +4,7 @@
  */
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
-import { buildOrderLines, subtotalPence, linesFor, contradoShippingPence, returnUrls } from '@/lib/shop/orders';
+import { buildOrderLines, subtotalPence, linesFor, contradoShippingPence, returnUrls, shippingToCharge } from '@/lib/shop/orders';
 import { quoteShippingPence } from '@/lib/shop/printify';
 import { stripe, siteUrl } from '@/lib/shop/stripe';
 import { currentMember } from '@/lib/members/current';
@@ -27,10 +27,12 @@ export async function POST(request: Request) {
     // Each supplier posts its own parcel: Printify quotes live, Contrado is a fixed UK rate.
     const printifyLines = linesFor(lines, 'printify');
     const contradoCount = linesFor(lines, 'contrado').reduce((n, l) => n + l.quantity, 0);
-    const shippingPence =
+    const supplierShipping =
       (printifyLines.length
         ? await quoteShippingPence(printifyLines.map((l) => ({ product_id: l.supplierProductId, variant_id: Number(l.variantId), quantity: l.quantity })))
         : 0) + contradoShippingPence(contradoCount);
+    // We still pay the supplier; the buyer does not, over the threshold.
+    const shippingPence = shippingToCharge(subtotalPence(lines), supplierShipping);
     const total = subtotalPence(lines) + shippingPence;
     const { member, hadBearer, pro } = await currentMember(request);
     const mc = memberCheckout(member, hadBearer, process.env.STRIPE_MEMBER_COUPON, pro);
@@ -54,7 +56,7 @@ export async function POST(request: Request) {
       shipping_options: [{
         shipping_rate_data: {
           type: 'fixed_amount',
-          display_name: 'Royal Mail, printed to order',
+          display_name: shippingPence === 0 ? 'Free UK delivery' : 'Royal Mail, printed to order',
           fixed_amount: { amount: shippingPence, currency: 'gbp' },
           delivery_estimate: { minimum: { unit: 'business_day', value: 3 }, maximum: { unit: 'business_day', value: 7 } },
         },
