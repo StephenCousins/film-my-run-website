@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ChevronRight, Truck, Shield } from 'lucide-react';
+import { ChevronRight, Truck, Shield, Droplets } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ProductCard from '@/components/shop/ProductCard';
@@ -90,6 +90,12 @@ export default async function ProductPage({ params }: Props) {
                   <Shield className="w-5 h-5 text-brand shrink-0" />
                   <span className="text-secondary">Paid securely with Stripe. Reply to your order email if anything's wrong.</span>
                 </div>
+                {item.care && (
+                  <div className="flex gap-3 p-4 rounded-xl bg-surface-secondary border border-border">
+                    <Droplets className="w-5 h-5 text-brand shrink-0" />
+                    <span className="text-secondary">{item.care}</span>
+                  </div>
+                )}
               </div>
             </ProductPurchase>
           </div>

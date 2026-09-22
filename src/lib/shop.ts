@@ -35,6 +35,13 @@ export interface ShopVariant {
   supplierProductId?: string;
 }
 
+/** Contrado's chest measurements, flattened by export-catalog; absent for other suppliers. */
+export interface SizeGuide {
+  measure: string;
+  howTo: string;
+  rows: { size: string; cm: string | null; inch: string | null }[];
+}
+
 export interface ShopItem {
   key: string;
   slug: string;
@@ -57,6 +64,9 @@ export interface ShopItem {
   etsyListingId: string;
   printifyId: string;
   supplier: Supplier;
+  sizeGuide?: SizeGuide;
+  /** The supplier's washing instructions, one line. */
+  care?: string;
 }
 
 export interface ShopCategory {

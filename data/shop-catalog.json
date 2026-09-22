@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T13:13:28.804Z",
+  "generatedAt": "2026-09-22T13:22:21.641Z",
   "shop": {
     "etsyUrl": "https://www.etsy.com/shop/FilmMyRun"
   },
@@ -1024,7 +1024,54 @@
       "etsyUrl": "",
       "etsyListingId": "",
       "printifyId": "",
-      "supplier": "contrado"
+      "supplier": "contrado",
+      "sizeGuide": {
+        "measure": "Chest",
+        "howTo": "Measure around your fullest part, with the measuring tape under your armpits, making sure the tape is flat across your back.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "86 - 91",
+            "inch": "34 - 36"
+          },
+          {
+            "size": "S",
+            "cm": "91 - 96",
+            "inch": "36 - 38"
+          },
+          {
+            "size": "M",
+            "cm": "96 - 101",
+            "inch": "38 - 40"
+          },
+          {
+            "size": "L",
+            "cm": "101 - 106",
+            "inch": "40 - 42"
+          },
+          {
+            "size": "XL",
+            "cm": "106 - 111",
+            "inch": "42 - 44"
+          },
+          {
+            "size": "2XL",
+            "cm": "111 - 119",
+            "inch": "44 - 47"
+          },
+          {
+            "size": "3XL",
+            "cm": "119 - 127",
+            "inch": "47 - 50"
+          },
+          {
+            "size": "4XL",
+            "cm": "127 - 135",
+            "inch": "50 - 53"
+          }
+        ]
+      },
+      "care": "Turn inside out before washing. 30°C wash. Do not wring. Low heat iron, Iron on the reverse of the printed side. Do not tumble dry."
     },
     {
       "key": "vest-side",
@@ -2011,7 +2058,54 @@
       "etsyUrl": "",
       "etsyListingId": "",
       "printifyId": "",
-      "supplier": "contrado"
+      "supplier": "contrado",
+      "sizeGuide": {
+        "measure": "Chest",
+        "howTo": "Measure around your fullest part, with the measuring tape under your armpits, making sure the tape is flat across your back.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "86 - 91",
+            "inch": "34 - 36"
+          },
+          {
+            "size": "S",
+            "cm": "91 - 96",
+            "inch": "36 - 38"
+          },
+          {
+            "size": "M",
+            "cm": "96 - 101",
+            "inch": "38 - 40"
+          },
+          {
+            "size": "L",
+            "cm": "101 - 106",
+            "inch": "40 - 42"
+          },
+          {
+            "size": "XL",
+            "cm": "106 - 111",
+            "inch": "42 - 44"
+          },
+          {
+            "size": "2XL",
+            "cm": "111 - 119",
+            "inch": "44 - 47"
+          },
+          {
+            "size": "3XL",
+            "cm": "119 - 127",
+            "inch": "47 - 50"
+          },
+          {
+            "size": "4XL",
+            "cm": "127 - 135",
+            "inch": "50 - 53"
+          }
+        ]
+      },
+      "care": "Turn inside out before washing. 30°C wash. Do not wring. Low heat iron, Iron on the reverse of the printed side. Do not tumble dry."
     },
     {
       "key": "phrase-another-marathon-another-ultra",
@@ -9942,7 +10036,74 @@
       "etsyUrl": "",
       "etsyListingId": "",
       "printifyId": "",
-      "supplier": "contrado"
+      "supplier": "contrado",
+      "sizeGuide": {
+        "measure": "Chest",
+        "howTo": "Measure around your fullest part, with the measuring tape under your armpits, making sure the tape is flat across your back.",
+        "rows": [
+          {
+            "size": "2XS",
+            "cm": "88 - 91",
+            "inch": "34.6 - 35.8"
+          },
+          {
+            "size": "XS",
+            "cm": "92 - 95",
+            "inch": "36.2 - 37.4"
+          },
+          {
+            "size": "S",
+            "cm": "96 - 99",
+            "inch": "37.7 - 38.9"
+          },
+          {
+            "size": "M",
+            "cm": "100 - 103",
+            "inch": "39.3 - 40.5"
+          },
+          {
+            "size": "L",
+            "cm": "104 - 107",
+            "inch": "40.9 - 42.1"
+          },
+          {
+            "size": "XL",
+            "cm": "108 - 111",
+            "inch": "42.5 - 43.7"
+          },
+          {
+            "size": "2XL",
+            "cm": "112 - 115",
+            "inch": "44 - 45.2"
+          },
+          {
+            "size": "3XL",
+            "cm": "116 - 119",
+            "inch": "45.6 - 46.8"
+          },
+          {
+            "size": "4XL",
+            "cm": "120 - 123",
+            "inch": "47.2 - 48.4"
+          },
+          {
+            "size": "5XL",
+            "cm": "124 - 129",
+            "inch": "48.8 - 50.7"
+          },
+          {
+            "size": "6XL",
+            "cm": "130 - 135",
+            "inch": "51.2 - 53.1"
+          },
+          {
+            "size": "7XL",
+            "cm": "136 - 141",
+            "inch": "53.5 - 55.5"
+          }
+        ]
+      },
+      "care": "Turn inside out before washing. 30°C wash. Do not wring. Low heat iron, Iron on the reverse of the printed side. Do not tumble dry."
     },
     {
       "key": "tee-side",
@@ -12041,7 +12202,74 @@
       "etsyUrl": "",
       "etsyListingId": "",
       "printifyId": "",
-      "supplier": "contrado"
+      "supplier": "contrado",
+      "sizeGuide": {
+        "measure": "Chest",
+        "howTo": "Measure around your fullest part, with the measuring tape under your armpits, making sure the tape is flat across your back.",
+        "rows": [
+          {
+            "size": "2XS",
+            "cm": "88 - 91",
+            "inch": "34.6 - 35.8"
+          },
+          {
+            "size": "XS",
+            "cm": "92 - 95",
+            "inch": "36.2 - 37.4"
+          },
+          {
+            "size": "S",
+            "cm": "96 - 99",
+            "inch": "37.7 - 38.9"
+          },
+          {
+            "size": "M",
+            "cm": "100 - 103",
+            "inch": "39.3 - 40.5"
+          },
+          {
+            "size": "L",
+            "cm": "104 - 107",
+            "inch": "40.9 - 42.1"
+          },
+          {
+            "size": "XL",
+            "cm": "108 - 111",
+            "inch": "42.5 - 43.7"
+          },
+          {
+            "size": "2XL",
+            "cm": "112 - 115",
+            "inch": "44 - 45.2"
+          },
+          {
+            "size": "3XL",
+            "cm": "116 - 119",
+            "inch": "45.6 - 46.8"
+          },
+          {
+            "size": "4XL",
+            "cm": "120 - 123",
+            "inch": "47.2 - 48.4"
+          },
+          {
+            "size": "5XL",
+            "cm": "124 - 129",
+            "inch": "48.8 - 50.7"
+          },
+          {
+            "size": "6XL",
+            "cm": "130 - 135",
+            "inch": "51.2 - 53.1"
+          },
+          {
+            "size": "7XL",
+            "cm": "136 - 141",
+            "inch": "53.5 - 55.5"
+          }
+        ]
+      },
+      "care": "Turn inside out before washing. 30°C wash. Do not wring. Low heat iron, Iron on the reverse of the printed side. Do not tumble dry."
     },
     {
       "key": "phrase-see-you-on-the-start-line",

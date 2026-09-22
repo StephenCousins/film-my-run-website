@@ -5,6 +5,7 @@ import { Check, ExternalLink, ShoppingBag } from 'lucide-react';
 import { swatch, etsyLink, type ShopItem } from '@/lib/shop';
 import { addToBasket } from '@/lib/shop/basket';
 import MemberLine from './MemberLine';
+import SizeGuide from './SizeGuide';
 
 const sized = (s: string | null) => s && s !== 'One size';
 
@@ -69,6 +70,7 @@ export default function BuyBox({ item, colour, setColour }: { item: ShopItem; co
               </button>
             ))}
           </div>
+          {item.sizeGuide && <SizeGuide guide={item.sizeGuide} />}
         </div>
       )}
 
