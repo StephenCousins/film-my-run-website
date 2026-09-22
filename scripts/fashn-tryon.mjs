@@ -1,15 +1,17 @@
 /**
- * FASHN try-on (tryon-max, quality, 1k) for the Contrado running tees. Reads
- * film-my-run-merch/Merch-Images/Running Tees/pairs.json ({ "<Colour> - <layout>": { garment, models: [{ file, name }] } }),
+ * FASHN try-on (tryon-max, 1k) for the shop's model photos. Reads a pairs file
+ * ({ "<group>": { garment, models: [{ file, name, prompt, out, garment }] } }; a model's own
+ * `garment` wins, for a group whose products each have their own mockup),
  * puts each model photo (Merch-Images/Raw images/<file>) in that garment, and writes
- * Merch-Images/Running Tees/<Colour> - <layout>/<name>.png, the layout upload-vest-photos.mjs reads.
+ * `out` (a path under Merch-Images, for the flat Tees/<key>--<Colour>.png the tee uploader reads)
+ * or Merch-Images/Running Tees/<group>/<name>.png when there is no `out`.
  * Each model may carry a `prompt` (Try-On Max takes text instructions, e.g. recolouring a cap
  * to match the shirt). Skips outputs that already exist, so a re-run only does what is missing.
  *
  * `--mode fast|balanced|quality` (default balanced) is the Try-On Max generation mode: at 1k it
  * costs 1, 2 or 3 credits an image.
  *
- *   node scripts/fashn-tryon.mjs            # everything missing
+ *   node scripts/fashn-tryon.mjs [--pairs "<path under Merch-Images>"]   # everything missing
  *   node scripts/fashn-tryon.mjs --only "Black - shoulder stripe/01"   # one (substring of "<folder>/<name>")
  */
 import 'dotenv/config';
@@ -23,7 +25,8 @@ const root = '../film-my-run-merch/Merch-Images';
 const only = process.argv.includes('--only') ? process.argv[process.argv.indexOf('--only') + 1] : null;
 const mode = process.argv.includes('--mode') ? process.argv[process.argv.indexOf('--mode') + 1] : 'balanced';
 const suffix = process.argv.includes('--suffix') ? process.argv[process.argv.indexOf('--suffix') + 1] : '';
-const pairs = JSON.parse(await readFile(`${root}/Running Tees/pairs.json`, 'utf8'));
+const pairsPath = process.argv.includes('--pairs') ? process.argv[process.argv.indexOf('--pairs') + 1] : 'Running Tees/pairs.json';
+const pairs = JSON.parse(await readFile(`${root}/${pairsPath}`, 'utf8'));
 
 async function dataUri(path, maxSide) {
   // HEIC via sips (sharp on this Mac has no HEIF); everything else straight through sharp, EXIF-rotated.
@@ -61,14 +64,14 @@ async function run(modelPath, garmentPath, prompt) {
 
 let done = 0, spent = 0;
 for (const [folder, { garment, models }] of Object.entries(pairs)) {
-  for (const { file, name, prompt } of models) {
+  for (const { file, name, prompt, out: outPath, garment: own } of models) {
     if (only && !`${folder}/${name}`.includes(only)) continue;
-    const out = `${root}/Running Tees/${folder}/${name}${suffix}.png`;
+    const out = outPath ? `${root}/${outPath}` : `${root}/Running Tees/${folder}/${name}${suffix}.png`;
     if (await access(out).then(() => true, () => false)) { done++; continue; }
-    await mkdir(`${root}/Running Tees/${folder}`, { recursive: true });
+    await mkdir(out.slice(0, out.lastIndexOf('/')), { recursive: true });
     process.stdout.write(`${folder}/${name} ← ${file} … `);
     try {
-      await writeFile(out, await run(`${root}/Raw images/${file}`, `${root}/Running Tees/${garment}`, prompt));
+      await writeFile(out, await run(`${root}/Raw images/${file}`, `${root}/${own ?? garment}`, prompt));
       spent++; done++;
       console.log('ok');
     } catch (e) {

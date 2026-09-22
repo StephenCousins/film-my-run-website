@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-22T13:39:33.804Z",
+  "generatedAt": "2026-09-22T14:52:55.106Z",
   "shop": {
     "etsyUrl": "https://www.etsy.com/shop/FilmMyRun"
   },
@@ -11299,10 +11299,10 @@
       "currency": "GBP",
       "colours": [
         "Soft Pink",
-        "Navy",
         "Black",
         "Dark Grey",
         "Forest",
+        "Navy",
         "White"
       ],
       "sizes": [
@@ -11322,119 +11322,32 @@
           "colour": "Soft Pink"
         },
         {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-how-hard-can-it-be-black-1.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-how-hard-can-it-be-dark-grey-1.jpg",
+          "position": "model",
+          "colour": "Dark Grey"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-how-hard-can-it-be-forest-1.jpg",
+          "position": "model",
+          "colour": "Forest"
+        },
+        {
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-how-hard-can-it-be-navy-1.jpg",
           "position": "model",
           "colour": "Navy"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18142/92579/ultramarathon-t-shirt-only-100-miles-how-hard-can-it-be-funny-ultra-runner-gift-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2",
-          "colour": "Dark Grey"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18542/102044/ultramarathon-t-shirt-only-100-miles-how-hard-can-it-be-funny-ultra-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-how-hard-can-it-be-white-1.jpg",
+          "position": "model",
           "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18102/102044/ultramarathon-t-shirt-only-100-miles-how-hard-can-it-be-funny-ultra-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Black"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18142/102044/ultramarathon-t-shirt-only-100-miles-how-hard-can-it-be-funny-ultra-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Dark Grey"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18182/102044/ultramarathon-t-shirt-only-100-miles-how-hard-can-it-be-funny-ultra-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Forest"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18182/92582/ultramarathon-t-shirt-only-100-miles-how-hard-can-it-be-funny-ultra-runner-gift-film-my-run.jpg?camera_label=person-5",
-          "position": "person-5",
-          "colour": "Forest"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa88e6dfdf7a1c750c978c/18182/92580/ultramarathon-t-shirt-only-100-miles-how-hard-can-it-be-funny-ultra-runner-gift-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3",
-          "colour": "Forest"
         }
       ],
       "variants": [
-        {
-          "id": 18395,
-          "colour": "Navy",
-          "size": "XS",
-          "price": 29.99
-        },
-        {
-          "id": 18396,
-          "colour": "Navy",
-          "size": "S",
-          "price": 29.99
-        },
-        {
-          "id": 18397,
-          "colour": "Navy",
-          "size": "M",
-          "price": 29.99
-        },
-        {
-          "id": 18398,
-          "colour": "Navy",
-          "size": "L",
-          "price": 29.99
-        },
-        {
-          "id": 18399,
-          "colour": "Navy",
-          "size": "XL",
-          "price": 29.99
-        },
-        {
-          "id": 18400,
-          "colour": "Navy",
-          "size": "2XL",
-          "price": 32.99
-        },
-        {
-          "id": 18467,
-          "colour": "Soft Pink",
-          "size": "XS",
-          "price": 29.99
-        },
-        {
-          "id": 18468,
-          "colour": "Soft Pink",
-          "size": "S",
-          "price": 29.99
-        },
-        {
-          "id": 18469,
-          "colour": "Soft Pink",
-          "size": "M",
-          "price": 29.99
-        },
-        {
-          "id": 18470,
-          "colour": "Soft Pink",
-          "size": "L",
-          "price": 29.99
-        },
-        {
-          "id": 18471,
-          "colour": "Soft Pink",
-          "size": "XL",
-          "price": 29.99
-        },
-        {
-          "id": 18472,
-          "colour": "Soft Pink",
-          "size": "2XL",
-          "price": 32.99
-        },
         {
           "id": 18099,
           "colour": "Black",
@@ -11546,6 +11459,78 @@
         {
           "id": 18184,
           "colour": "Forest",
+          "size": "2XL",
+          "price": 32.99
+        },
+        {
+          "id": 18395,
+          "colour": "Navy",
+          "size": "XS",
+          "price": 29.99
+        },
+        {
+          "id": 18396,
+          "colour": "Navy",
+          "size": "S",
+          "price": 29.99
+        },
+        {
+          "id": 18397,
+          "colour": "Navy",
+          "size": "M",
+          "price": 29.99
+        },
+        {
+          "id": 18398,
+          "colour": "Navy",
+          "size": "L",
+          "price": 29.99
+        },
+        {
+          "id": 18399,
+          "colour": "Navy",
+          "size": "XL",
+          "price": 29.99
+        },
+        {
+          "id": 18400,
+          "colour": "Navy",
+          "size": "2XL",
+          "price": 32.99
+        },
+        {
+          "id": 18467,
+          "colour": "Soft Pink",
+          "size": "XS",
+          "price": 29.99
+        },
+        {
+          "id": 18468,
+          "colour": "Soft Pink",
+          "size": "S",
+          "price": 29.99
+        },
+        {
+          "id": 18469,
+          "colour": "Soft Pink",
+          "size": "M",
+          "price": 29.99
+        },
+        {
+          "id": 18470,
+          "colour": "Soft Pink",
+          "size": "L",
+          "price": 29.99
+        },
+        {
+          "id": 18471,
+          "colour": "Soft Pink",
+          "size": "XL",
+          "price": 29.99
+        },
+        {
+          "id": 18472,
+          "colour": "Soft Pink",
           "size": "2XL",
           "price": 32.99
         },
@@ -11656,95 +11641,32 @@
           "colour": "White"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18102/102061/first-marathon-t-shirt-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=person-9-front",
-          "position": "person-9-front",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-plan-for-today-finish-black-1.jpg",
+          "position": "model",
           "colour": "Black"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18102/92579/first-marathon-t-shirt-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2",
-          "colour": "Black"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18142/92580/first-marathon-t-shirt-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-plan-for-today-finish-dark-grey-1.jpg",
+          "position": "model",
           "colour": "Dark Grey"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18470/102044/first-marathon-t-shirt-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Soft Pink"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18102/102044/first-marathon-t-shirt-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Black"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18142/102044/first-marathon-t-shirt-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Dark Grey"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18182/102044/first-marathon-t-shirt-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-plan-for-today-finish-forest-1.jpg",
+          "position": "model",
           "colour": "Forest"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8b58dfdf7a1c750c994c/18398/102044/first-marathon-t-shirt-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-plan-for-today-finish-navy-1.jpg",
+          "position": "model",
           "colour": "Navy"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-plan-for-today-finish-soft-pink-1.jpg",
+          "position": "model",
+          "colour": "Soft Pink"
         }
       ],
       "variants": [
-        {
-          "id": 18539,
-          "colour": "White",
-          "size": "XS",
-          "price": 29.99
-        },
-        {
-          "id": 18540,
-          "colour": "White",
-          "size": "S",
-          "price": 29.99
-        },
-        {
-          "id": 18541,
-          "colour": "White",
-          "size": "M",
-          "price": 29.99
-        },
-        {
-          "id": 18542,
-          "colour": "White",
-          "size": "L",
-          "price": 29.99
-        },
-        {
-          "id": 18543,
-          "colour": "White",
-          "size": "XL",
-          "price": 29.99
-        },
-        {
-          "id": 18544,
-          "colour": "White",
-          "size": "2XL",
-          "price": 32.99
-        },
-        {
-          "id": 18545,
-          "colour": "White",
-          "size": "3XL",
-          "price": 35.99
-        },
-        {
-          "id": 18546,
-          "colour": "White",
-          "size": "4XL",
-          "price": 38.99
-        },
         {
           "id": 18099,
           "colour": "Black",
@@ -11930,6 +11852,54 @@
           "colour": "Soft Pink",
           "size": "2XL",
           "price": 32.99
+        },
+        {
+          "id": 18539,
+          "colour": "White",
+          "size": "XS",
+          "price": 29.99
+        },
+        {
+          "id": 18540,
+          "colour": "White",
+          "size": "S",
+          "price": 29.99
+        },
+        {
+          "id": 18541,
+          "colour": "White",
+          "size": "M",
+          "price": 29.99
+        },
+        {
+          "id": 18542,
+          "colour": "White",
+          "size": "L",
+          "price": 29.99
+        },
+        {
+          "id": 18543,
+          "colour": "White",
+          "size": "XL",
+          "price": 29.99
+        },
+        {
+          "id": 18544,
+          "colour": "White",
+          "size": "2XL",
+          "price": 32.99
+        },
+        {
+          "id": 18545,
+          "colour": "White",
+          "size": "3XL",
+          "price": 35.99
+        },
+        {
+          "id": 18546,
+          "colour": "White",
+          "size": "4XL",
+          "price": 38.99
         }
       ],
       "etsyUrl": "https://www.etsy.com/listing/4576439222/plan-for-today-finish-funny-running-t",
@@ -11990,88 +11960,32 @@
           "colour": "Navy"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18470/92583/funny-ultra-running-t-shirt-rapidly-losing-my-patience-with-this-race-runner-gift-film-my-run.jpg?camera_label=person-6",
-          "position": "person-6",
-          "colour": "Soft Pink"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18542/92578/funny-ultra-running-t-shirt-rapidly-losing-my-patience-with-this-race-runner-gift-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18142/92580/funny-ultra-running-t-shirt-rapidly-losing-my-patience-with-this-race-runner-gift-film-my-run.jpg?camera_label=person-3",
-          "position": "person-3",
-          "colour": "Dark Grey"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18542/102044/funny-ultra-running-t-shirt-rapidly-losing-my-patience-with-this-race-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18470/102044/funny-ultra-running-t-shirt-rapidly-losing-my-patience-with-this-race-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Soft Pink"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18102/102044/funny-ultra-running-t-shirt-rapidly-losing-my-patience-with-this-race-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-rapidly-losing-my-patience-black-1.jpg",
+          "position": "model",
           "colour": "Black"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18142/102044/funny-ultra-running-t-shirt-rapidly-losing-my-patience-with-this-race-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-rapidly-losing-my-patience-dark-grey-1.jpg",
+          "position": "model",
           "colour": "Dark Grey"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18182/102044/funny-ultra-running-t-shirt-rapidly-losing-my-patience-with-this-race-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-rapidly-losing-my-patience-forest-1.jpg",
+          "position": "model",
           "colour": "Forest"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8bd2f4b5fbd104042307/18542/102045/funny-ultra-running-t-shirt-rapidly-losing-my-patience-with-this-race-runner-gift-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-rapidly-losing-my-patience-soft-pink-1.jpg",
+          "position": "model",
+          "colour": "Soft Pink"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-rapidly-losing-my-patience-white-1.jpg",
+          "position": "model",
           "colour": "White"
         }
       ],
       "variants": [
-        {
-          "id": 18395,
-          "colour": "Navy",
-          "size": "XS",
-          "price": 29.99
-        },
-        {
-          "id": 18396,
-          "colour": "Navy",
-          "size": "S",
-          "price": 29.99
-        },
-        {
-          "id": 18397,
-          "colour": "Navy",
-          "size": "M",
-          "price": 29.99
-        },
-        {
-          "id": 18398,
-          "colour": "Navy",
-          "size": "L",
-          "price": 29.99
-        },
-        {
-          "id": 18399,
-          "colour": "Navy",
-          "size": "XL",
-          "price": 29.99
-        },
-        {
-          "id": 18400,
-          "colour": "Navy",
-          "size": "2XL",
-          "price": 32.99
-        },
         {
           "id": 18099,
           "colour": "Black",
@@ -12183,6 +12097,42 @@
         {
           "id": 18184,
           "colour": "Forest",
+          "size": "2XL",
+          "price": 32.99
+        },
+        {
+          "id": 18395,
+          "colour": "Navy",
+          "size": "XS",
+          "price": 29.99
+        },
+        {
+          "id": 18396,
+          "colour": "Navy",
+          "size": "S",
+          "price": 29.99
+        },
+        {
+          "id": 18397,
+          "colour": "Navy",
+          "size": "M",
+          "price": 29.99
+        },
+        {
+          "id": 18398,
+          "colour": "Navy",
+          "size": "L",
+          "price": 29.99
+        },
+        {
+          "id": 18399,
+          "colour": "Navy",
+          "size": "XL",
+          "price": 29.99
+        },
+        {
+          "id": 18400,
+          "colour": "Navy",
           "size": "2XL",
           "price": 32.99
         },
@@ -12329,88 +12279,32 @@
           "colour": "Soft Pink"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18142/92580/running-t-shirt-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=person-3",
-          "position": "person-3",
-          "colour": "Dark Grey"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18542/92578/running-t-shirt-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=person-1",
-          "position": "person-1",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18102/92579/running-t-shirt-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=person-2",
-          "position": "person-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-see-you-on-the-start-line-black-1.jpg",
+          "position": "model",
           "colour": "Black"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18542/102044/running-t-shirt-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18102/102044/running-t-shirt-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Black"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18142/102044/running-t-shirt-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-see-you-on-the-start-line-dark-grey-1.jpg",
+          "position": "model",
           "colour": "Dark Grey"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18182/102044/running-t-shirt-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-see-you-on-the-start-line-forest-1.jpg",
+          "position": "model",
           "colour": "Forest"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18398/102044/running-t-shirt-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-see-you-on-the-start-line-navy-1.jpg",
+          "position": "model",
           "colour": "Navy"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8c4b4f0ea50b28071232/18542/102045/running-t-shirt-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=back-2",
-          "position": "back-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-see-you-on-the-start-line-white-1.jpg",
+          "position": "model",
           "colour": "White"
         }
       ],
       "variants": [
-        {
-          "id": 18467,
-          "colour": "Soft Pink",
-          "size": "XS",
-          "price": 29.99
-        },
-        {
-          "id": 18468,
-          "colour": "Soft Pink",
-          "size": "S",
-          "price": 29.99
-        },
-        {
-          "id": 18469,
-          "colour": "Soft Pink",
-          "size": "M",
-          "price": 29.99
-        },
-        {
-          "id": 18470,
-          "colour": "Soft Pink",
-          "size": "L",
-          "price": 29.99
-        },
-        {
-          "id": 18471,
-          "colour": "Soft Pink",
-          "size": "XL",
-          "price": 29.99
-        },
-        {
-          "id": 18472,
-          "colour": "Soft Pink",
-          "size": "2XL",
-          "price": 32.99
-        },
         {
           "id": 18099,
           "colour": "Black",
@@ -12562,6 +12456,42 @@
           "price": 32.99
         },
         {
+          "id": 18467,
+          "colour": "Soft Pink",
+          "size": "XS",
+          "price": 29.99
+        },
+        {
+          "id": 18468,
+          "colour": "Soft Pink",
+          "size": "S",
+          "price": 29.99
+        },
+        {
+          "id": 18469,
+          "colour": "Soft Pink",
+          "size": "M",
+          "price": 29.99
+        },
+        {
+          "id": 18470,
+          "colour": "Soft Pink",
+          "size": "L",
+          "price": 29.99
+        },
+        {
+          "id": 18471,
+          "colour": "Soft Pink",
+          "size": "XL",
+          "price": 29.99
+        },
+        {
+          "id": 18472,
+          "colour": "Soft Pink",
+          "size": "2XL",
+          "price": 32.99
+        },
+        {
           "id": 18539,
           "colour": "White",
           "size": "XS",
@@ -12644,11 +12574,11 @@
       "priceTo": 38.99,
       "currency": "GBP",
       "colours": [
-        "Soft Pink",
         "Black",
         "Dark Grey",
         "Forest",
         "Navy",
+        "Soft Pink",
         "White"
       ],
       "sizes": [
@@ -12663,53 +12593,33 @@
       ],
       "images": [
         {
-          "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18470/102052/funny-running-t-shirt-should-be-running-eating-cake-instead-rest-day-gift-for-runner-film-my-run.jpg?camera_label=duo-3",
-          "position": "duo-3",
-          "colour": "Soft Pink"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18542/92578/funny-running-t-shirt-should-be-running-eating-cake-instead-rest-day-gift-for-runner-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18102/92579/funny-running-t-shirt-should-be-running-eating-cake-instead-rest-day-gift-for-runner-film-my-run.jpg?camera_label=person-2",
-          "position": "person-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-black-1.jpg",
+          "position": "model",
           "colour": "Black"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18542/102044/funny-running-t-shirt-should-be-running-eating-cake-instead-rest-day-gift-for-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18470/102044/funny-running-t-shirt-should-be-running-eating-cake-instead-rest-day-gift-for-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Soft Pink"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18102/102044/funny-running-t-shirt-should-be-running-eating-cake-instead-rest-day-gift-for-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Black"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18142/102044/funny-running-t-shirt-should-be-running-eating-cake-instead-rest-day-gift-for-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-dark-grey-1.jpg",
+          "position": "model",
           "colour": "Dark Grey"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18182/102044/funny-running-t-shirt-should-be-running-eating-cake-instead-rest-day-gift-for-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-forest-1.jpg",
+          "position": "model",
           "colour": "Forest"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18398/102044/funny-running-t-shirt-should-be-running-eating-cake-instead-rest-day-gift-for-runner-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-navy-1.jpg",
+          "position": "model",
           "colour": "Navy"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8cd94f0ea50b2807127e/18542/102045/funny-running-t-shirt-should-be-running-eating-cake-instead-rest-day-gift-for-runner-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-soft-pink-1.jpg",
+          "position": "model",
+          "colour": "Soft Pink"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-white-1.jpg",
+          "position": "model",
           "colour": "White"
         }
       ],
@@ -12985,10 +12895,10 @@
       "colours": [
         "Navy",
         "Black",
-        "Dark Grey",
-        "Forest",
         "Soft Pink",
-        "White"
+        "White",
+        "Dark Grey",
+        "Forest"
       ],
       "sizes": [
         "XS",
@@ -13007,29 +12917,24 @@
           "colour": "Navy"
         },
         {
-          "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18542/92578/ultra-running-t-shirt-thats-the-hard-part-done-more-hard-parts-to-come-runner-gift-film-my-run.jpg?camera_label=person-1",
-          "position": "person-1",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-thats-the-hard-part-done-black-1.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-thats-the-hard-part-done-soft-pink-1.jpg",
+          "position": "model",
+          "colour": "Soft Pink"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-thats-the-hard-part-done-white-1.jpg",
+          "position": "model",
           "colour": "White"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18142/92580/ultra-running-t-shirt-thats-the-hard-part-done-more-hard-parts-to-come-runner-gift-film-my-run.jpg?camera_label=person-3",
           "position": "person-3",
           "colour": "Dark Grey"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18542/102044/ultra-running-t-shirt-thats-the-hard-part-done-more-hard-parts-to-come-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18470/102044/ultra-running-t-shirt-thats-the-hard-part-done-more-hard-parts-to-come-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Soft Pink"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18102/102044/ultra-running-t-shirt-thats-the-hard-part-done-more-hard-parts-to-come-runner-gift-film-my-run.jpg?camera_label=front-2",
-          "position": "front-2",
-          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18142/102044/ultra-running-t-shirt-thats-the-hard-part-done-more-hard-parts-to-come-runner-gift-film-my-run.jpg?camera_label=front-2",
@@ -13040,50 +12945,9 @@
           "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18182/102044/ultra-running-t-shirt-thats-the-hard-part-done-more-hard-parts-to-come-runner-gift-film-my-run.jpg?camera_label=front-2",
           "position": "front-2",
           "colour": "Forest"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aaa8d56dfdf7a1c750c9a21/18542/102045/ultra-running-t-shirt-thats-the-hard-part-done-more-hard-parts-to-come-runner-gift-film-my-run.jpg?camera_label=back-2",
-          "position": "back-2",
-          "colour": "White"
         }
       ],
       "variants": [
-        {
-          "id": 18395,
-          "colour": "Navy",
-          "size": "XS",
-          "price": 29.99
-        },
-        {
-          "id": 18396,
-          "colour": "Navy",
-          "size": "S",
-          "price": 29.99
-        },
-        {
-          "id": 18397,
-          "colour": "Navy",
-          "size": "M",
-          "price": 29.99
-        },
-        {
-          "id": 18398,
-          "colour": "Navy",
-          "size": "L",
-          "price": 29.99
-        },
-        {
-          "id": 18399,
-          "colour": "Navy",
-          "size": "XL",
-          "price": 29.99
-        },
-        {
-          "id": 18400,
-          "colour": "Navy",
-          "size": "2XL",
-          "price": 32.99
-        },
         {
           "id": 18099,
           "colour": "Black",
@@ -13133,68 +12997,38 @@
           "price": 38.99
         },
         {
-          "id": 18139,
-          "colour": "Dark Grey",
+          "id": 18395,
+          "colour": "Navy",
           "size": "XS",
           "price": 29.99
         },
         {
-          "id": 18141,
-          "colour": "Dark Grey",
-          "size": "M",
-          "price": 29.99
-        },
-        {
-          "id": 18142,
-          "colour": "Dark Grey",
-          "size": "L",
-          "price": 29.99
-        },
-        {
-          "id": 18143,
-          "colour": "Dark Grey",
-          "size": "XL",
-          "price": 29.99
-        },
-        {
-          "id": 18144,
-          "colour": "Dark Grey",
-          "size": "2XL",
-          "price": 32.99
-        },
-        {
-          "id": 18179,
-          "colour": "Forest",
-          "size": "XS",
-          "price": 29.99
-        },
-        {
-          "id": 18180,
-          "colour": "Forest",
+          "id": 18396,
+          "colour": "Navy",
           "size": "S",
           "price": 29.99
         },
         {
-          "id": 18181,
-          "colour": "Forest",
+          "id": 18397,
+          "colour": "Navy",
           "size": "M",
           "price": 29.99
         },
         {
-          "id": 18182,
-          "colour": "Forest",
+          "id": 18398,
+          "colour": "Navy",
           "size": "L",
           "price": 29.99
         },
         {
-          "id": 18183,
-          "colour": "Forest",
+          "id": 18399,
+          "colour": "Navy",
           "size": "XL",
           "price": 29.99
         },
         {
-          "id": 18184,
-          "colour": "Forest",
+          "id": 18400,
+          "colour": "Navy",
           "size": "2XL",
           "price": 32.99
         },
@@ -13281,6 +13115,72 @@
           "colour": "White",
           "size": "4XL",
           "price": 38.99
+        },
+        {
+          "id": 18139,
+          "colour": "Dark Grey",
+          "size": "XS",
+          "price": 29.99
+        },
+        {
+          "id": 18141,
+          "colour": "Dark Grey",
+          "size": "M",
+          "price": 29.99
+        },
+        {
+          "id": 18142,
+          "colour": "Dark Grey",
+          "size": "L",
+          "price": 29.99
+        },
+        {
+          "id": 18143,
+          "colour": "Dark Grey",
+          "size": "XL",
+          "price": 29.99
+        },
+        {
+          "id": 18144,
+          "colour": "Dark Grey",
+          "size": "2XL",
+          "price": 32.99
+        },
+        {
+          "id": 18179,
+          "colour": "Forest",
+          "size": "XS",
+          "price": 29.99
+        },
+        {
+          "id": 18180,
+          "colour": "Forest",
+          "size": "S",
+          "price": 29.99
+        },
+        {
+          "id": 18181,
+          "colour": "Forest",
+          "size": "M",
+          "price": 29.99
+        },
+        {
+          "id": 18182,
+          "colour": "Forest",
+          "size": "L",
+          "price": 29.99
+        },
+        {
+          "id": 18183,
+          "colour": "Forest",
+          "size": "XL",
+          "price": 29.99
+        },
+        {
+          "id": 18184,
+          "colour": "Forest",
+          "size": "2XL",
+          "price": 32.99
         }
       ],
       "etsyUrl": "https://www.etsy.com/listing/4576443596/thats-the-hard-part-done-more-hard-parts",
