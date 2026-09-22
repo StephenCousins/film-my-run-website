@@ -26,12 +26,17 @@ const bucket = process.env.R2_BUCKET_NAME || 'filmmyrun-images';
 const base = process.env.R2_PUBLIC_URL || 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev';
 
 const configPath = '../film-my-run-merch/config/contrado.json';
+// The two Contrado families share this folder layout; `tee` is the running t-shirts.
+const families = { vest: 'Vests', tee: 'Running Tees' };
+const family = process.argv[2] ?? 'vest';
+const source = families[family];
+if (!source) throw new Error(`Unknown family "${family}"; expected ${Object.keys(families).join(' or ')}`);
 const config = JSON.parse(await readFile(configPath, 'utf8'));
 
 for (const colour of ['black', 'white', 'forest', 'navy', 'orange']) {
   for (const [layout, folder] of [['side', 'side stripes'], ['shoulder', 'shoulder stripe']]) {
-    const name = `vest-${colour}-${layout}`;
-    const dir = `../film-my-run-merch/Merch-Images/Vests/${colour[0].toUpperCase()}${colour.slice(1)} - ${folder}`;
+    const name = `${family}-${colour}-${layout}`;
+    const dir = `../film-my-run-merch/Merch-Images/${source}/${colour[0].toUpperCase()}${colour.slice(1)} - ${folder}`;
     const files = (await readdir(dir)).filter((f) => /\.(png|webp|jpe?g)$/i.test(f)).sort();
     const urls = [];
     for (const [n, f] of files.entries()) {

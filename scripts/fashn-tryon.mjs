@@ -6,6 +6,9 @@
  * Each model may carry a `prompt` (Try-On Max takes text instructions, e.g. recolouring a cap
  * to match the shirt). Skips outputs that already exist, so a re-run only does what is missing.
  *
+ * `--mode fast|balanced|quality` (default balanced) is the Try-On Max generation mode: at 1k it
+ * costs 1, 2 or 3 credits an image.
+ *
  *   node scripts/fashn-tryon.mjs            # everything missing
  *   node scripts/fashn-tryon.mjs --only "Black - shoulder stripe/01"   # one (substring of "<folder>/<name>")
  */
@@ -18,6 +21,8 @@ const key = process.env.FASHN_API_KEY;
 if (!key) throw new Error('FASHN_API_KEY missing from .env');
 const root = '../film-my-run-merch/Merch-Images';
 const only = process.argv.includes('--only') ? process.argv[process.argv.indexOf('--only') + 1] : null;
+const mode = process.argv.includes('--mode') ? process.argv[process.argv.indexOf('--mode') + 1] : 'balanced';
+const suffix = process.argv.includes('--suffix') ? process.argv[process.argv.indexOf('--suffix') + 1] : '';
 const pairs = JSON.parse(await readFile(`${root}/Running Tees/pairs.json`, 'utf8'));
 
 async function dataUri(path, maxSide) {
@@ -37,7 +42,7 @@ async function run(modelPath, garmentPath, prompt) {
     inputs: {
       model_image: await dataUri(modelPath, 2048),
       product_image: await dataUri(garmentPath, 2048),
-      generation_mode: 'quality',
+      generation_mode: mode,
       resolution: '1k',
       output_format: 'png',
       ...(prompt ? { prompt } : {}),
@@ -58,7 +63,7 @@ let done = 0, spent = 0;
 for (const [folder, { garment, models }] of Object.entries(pairs)) {
   for (const { file, name, prompt } of models) {
     if (only && !`${folder}/${name}`.includes(only)) continue;
-    const out = `${root}/Running Tees/${folder}/${name}.png`;
+    const out = `${root}/Running Tees/${folder}/${name}${suffix}.png`;
     if (await access(out).then(() => true, () => false)) { done++; continue; }
     await mkdir(`${root}/Running Tees/${folder}`, { recursive: true });
     process.stdout.write(`${folder}/${name} ← ${file} … `);
