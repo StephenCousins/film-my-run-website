@@ -16,9 +16,13 @@ export async function POST() {
   if (!user?.stripe_customer_id) return NextResponse.json({ error: 'No subscription to manage' }, { status: 404 });
 
   try {
+    // Its own configuration, not the account default: Adrian's subscriptions
+    // live on this Stripe account too and must not be offered Club prices.
+    const configuration = process.env.STRIPE_CLUB_PORTAL_CONFIG;
     const portal = await stripe().billingPortal.sessions.create({
       customer: user.stripe_customer_id,
       return_url: `${siteUrl()}/club`,
+      ...(configuration ? { configuration } : {}),
     });
     return NextResponse.json({ url: portal.url });
   } catch (e) {
