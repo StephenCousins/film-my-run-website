@@ -4,8 +4,14 @@
  */
 import { NextRequest, NextResponse } from 'next/server';
 import { CODES_PER_HOUR, CODE_TTL_MS, MAX_CODE_ATTEMPTS, TOKEN_TTL_MS, hashCode, makeCode, makeToken, normaliseEmail } from './codes';
+import { checkProHeader } from '@/lib/chat/pro';
+import { isInstallId } from '@/lib/chat/validate';
 
-export type Member = { id: number; email: string; name: string | null };
+/**
+ * `proUntil`: ISO date while the account's Pro (the app's StoreKit subscription,
+ * reported by `auth/pro`) runs; null otherwise. One account, Pro on every device.
+ */
+export type Member = { id: number; email: string; name: string | null; proUntil: string | null };
 
 export type MemberDeps = {
   saveCode: (email: string, hash: string, expires: Date) => Promise<void>;
@@ -18,6 +24,8 @@ export type MemberDeps = {
   memberForToken: (token: string, now: Date) => Promise<Member | null>;
   deleteSession: (token: string) => Promise<void>;
   attachGuestOrders: (userId: number, email: string) => Promise<void>;
+  /** Marks the account Pro until `until` (never shortens a later date). Returns the member as it now stands. */
+  setPro: (userId: number, until: Date) => Promise<Member>;
   sendCode: (email: string, code: string) => Promise<void>;
   now?: () => number;
 };
@@ -102,6 +110,22 @@ export async function memberFromBearer(req: Request, deps: Pick<MemberDeps, 'mem
 export async function handleMe(req: NextRequest, deps: MemberDeps): Promise<Response> {
   const member = await memberFromBearer(req, deps);
   return member ? json({ ok: true, member }) : bad('signed_out', 401);
+}
+
+/**
+ * POST auth/pro → { ok, member }. Bearer + `X-FMR-Install` + `X-FMR-Pro` (the
+ * chat's proof); stamps the account Pro until the transaction expires so the
+ * website sees it. 401 signed_out, 400 bad install id, 403 when the proof fails.
+ */
+export async function handlePro(req: NextRequest, deps: MemberDeps & { debugIds?: string }): Promise<Response> {
+  const member = await memberFromBearer(req, deps);
+  if (!member) return bad('signed_out', 401);
+  const installId = req.headers.get('X-FMR-Install');
+  if (!isInstallId(installId)) return bad('bad_install', 400);
+  const now = deps.now ? deps.now() : Date.now();
+  const proof = checkProHeader(req.headers.get('X-FMR-Pro'), installId, { debugIds: deps.debugIds, now });
+  if (!proof.ok) return bad('Pro required', 403);
+  return json({ ok: true, member: await deps.setPro(member.id, new Date(proof.expiresDate)) });
 }
 
 /** POST auth/signout → { ok }. Deletes this token's session only. */

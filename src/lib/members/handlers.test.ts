@@ -1,7 +1,8 @@
+import { encodeTestJws } from '@/lib/chat/pro';
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { hashCode } from './codes';
-import { handleMe, handleRequestCode, handleSignOut, handleVerify, memberFromBearer, resetMemberLimits, type Member, type MemberDeps } from './handlers';
+import { handleMe, handlePro, handleRequestCode, handleSignOut, handleVerify, memberFromBearer, resetMemberLimits, type Member, type MemberDeps } from './handlers';
 
 const NOW = Date.UTC(2026, 8, 21, 9, 0, 0);
 
@@ -18,7 +19,7 @@ function fakeDeps() {
     deleteCodes: async (email) => { codes.delete(email); },
     findOrCreateUser: async (email) => {
       let u = users.get(email);
-      if (!u) { u = { id: nextId++, email, name: null }; users.set(email, u); }
+      if (!u) { u = { id: nextId++, email, name: null, proUntil: null }; users.set(email, u); }
       return u;
     },
     createSession: async (userId, token, expires) => { sessions.set(token, { userId, expires }); },
@@ -29,6 +30,11 @@ function fakeDeps() {
     },
     deleteSession: async (token) => { sessions.delete(token); },
     attachGuestOrders: async (userId, email) => { attached.push([userId, email]); },
+    setPro: async (userId, until) => {
+      const u = [...users.values()].find((x) => x.id === userId)!;
+      if (!u.proUntil || new Date(u.proUntil) < until) u.proUntil = until.toISOString();
+      return u;
+    },
     sendCode: async (email, code) => { sent.push([email, code]); },
     now: () => NOW,
   };
@@ -92,7 +98,7 @@ describe('handleVerify', () => {
   it('signs in with the right code, creates the user, attaches guest orders, issues a token', async () => {
     const f = fakeDeps();
     const { token, member } = await signIn(f);
-    expect(member).toEqual({ id: 1, email: 'runner@example.com', name: null });
+    expect(member).toEqual({ id: 1, email: 'runner@example.com', name: null, proUntil: null });
     expect(token).toMatch(/^[A-Za-z0-9_-]{43}$/);
     expect(f.sessions.get(token)!.expires.getTime()).toBe(NOW + 365 * 86_400_000);
     expect(f.attached).toEqual([[1, 'runner@example.com']]);
@@ -145,7 +151,7 @@ describe('handleMe and handleSignOut', () => {
     const { token } = await signIn(f);
     const ok = await handleMe(get('me', { authorization: `Bearer ${token}` }), f.deps);
     expect(ok.status).toBe(200);
-    expect(await ok.json()).toEqual({ ok: true, member: { id: 1, email: 'runner@example.com', name: null } });
+    expect(await ok.json()).toEqual({ ok: true, member: { id: 1, email: 'runner@example.com', name: null, proUntil: null } });
     expect((await handleMe(get('me'), f.deps)).status).toBe(401);
     expect((await handleMe(get('me', { authorization: 'Bearer nope' }), f.deps)).status).toBe(401);
     f.deps.now = () => NOW + 366 * 86_400_000;
@@ -168,8 +174,34 @@ describe('memberFromBearer', () => {
   it('reads the header and tolerates its absence', async () => {
     const f = fakeDeps();
     const { token } = await signIn(f);
-    expect(await memberFromBearer(new Request('https://x', { headers: { authorization: `Bearer ${token}` } }), f.deps)).toEqual({ id: 1, email: 'runner@example.com', name: null });
+    expect(await memberFromBearer(new Request('https://x', { headers: { authorization: `Bearer ${token}` } }), f.deps)).toEqual({ id: 1, email: 'runner@example.com', name: null, proUntil: null });
     expect(await memberFromBearer(new Request('https://x'), f.deps)).toBeNull();
     expect(await memberFromBearer(new Request('https://x', { headers: { authorization: 'Basic abc' } }), f.deps)).toBeNull();
+  });
+});
+
+describe('handlePro', () => {
+  const install = '11111111-1111-1111-1111-111111111111';
+  const proof = encodeTestJws({ bundleId: 'com.filmmyrun.app', productId: 'com.filmmyrun.app.pro.annual', expiresDate: NOW + 86_400_000 });
+
+  it('stamps the account Pro until the transaction expires', async () => {
+    const f = fakeDeps();
+    const { token } = await signIn(f);
+    const r = await handlePro(post('pro', {}, { authorization: `Bearer ${token}`, 'X-FMR-Install': install, 'X-FMR-Pro': proof }), f.deps);
+    expect(r.status).toBe(200);
+    expect((await r.json()).member.proUntil).toBe(new Date(NOW + 86_400_000).toISOString());
+    // A shorter proof later never shortens it.
+    const shorter = encodeTestJws({ bundleId: 'com.filmmyrun.app', productId: 'com.filmmyrun.app.pro.monthly', expiresDate: NOW + 3_600_000 });
+    const r2 = await handlePro(post('pro', {}, { authorization: `Bearer ${token}`, 'X-FMR-Install': install, 'X-FMR-Pro': shorter }), f.deps);
+    expect((await r2.json()).member.proUntil).toBe(new Date(NOW + 86_400_000).toISOString());
+  });
+
+  it('refuses without a session, a valid install id or a good proof', async () => {
+    const f = fakeDeps();
+    const { token } = await signIn(f);
+    expect((await handlePro(post('pro', {}, { 'X-FMR-Install': install, 'X-FMR-Pro': proof }), f.deps)).status).toBe(401);
+    expect((await handlePro(post('pro', {}, { authorization: `Bearer ${token}`, 'X-FMR-Pro': proof }), f.deps)).status).toBe(400);
+    expect((await handlePro(post('pro', {}, { authorization: `Bearer ${token}`, 'X-FMR-Install': install, 'X-FMR-Pro': 'nope' }), f.deps)).status).toBe(403);
+    expect(f.users.get('runner@example.com')?.proUntil).toBeNull();
   });
 });

@@ -7,7 +7,8 @@
 const BUNDLE = 'com.filmmyrun.app';
 const PRODUCTS = new Set(['com.filmmyrun.app.pro.monthly', 'com.filmmyrun.app.pro.annual']);
 
-export type ProCheck = { ok: true; productId: string; source: 'jws' | 'debug' } | { ok: false; reason: string };
+/** `expiresDate` is the transaction's (ms); a debug proof is good for 30 days from now. */
+export type ProCheck = { ok: true; productId: string; source: 'jws' | 'debug'; expiresDate: number } | { ok: false; reason: string };
 
 export function checkProHeader(header: string | null, installId: string, env: { debugIds?: string; now?: number } = {}): ProCheck {
   const now = env.now ?? Date.now();
@@ -16,7 +17,7 @@ export function checkProHeader(header: string | null, installId: string, env: { 
     // Case-insensitive: the app sends an upper-case UUID, the env may hold it either way.
     const allowed = (env.debugIds ?? process.env.CHAT_DEBUG_INSTALL_IDS ?? '').split(',').map(s => s.trim().toLowerCase()).filter(Boolean);
     const id = header.slice('debug-'.length).toLowerCase();
-    return id === installId.toLowerCase() && allowed.includes(id) ? { ok: true, productId: 'debug', source: 'debug' } : { ok: false, reason: 'debug id not allowed' };
+    return id === installId.toLowerCase() && allowed.includes(id) ? { ok: true, productId: 'debug', source: 'debug', expiresDate: now + 30 * 86_400_000 } : { ok: false, reason: 'debug id not allowed' };
   }
   const parts = header.split('.');
   if (parts.length !== 3) return { ok: false, reason: 'malformed' };
@@ -30,7 +31,7 @@ export function checkProHeader(header: string | null, installId: string, env: { 
   if (typeof payload.productId !== 'string' || !PRODUCTS.has(payload.productId)) return { ok: false, reason: 'product' };
   if (typeof payload.revocationDate === 'number') return { ok: false, reason: 'revoked' };
   if (typeof payload.expiresDate !== 'number' || payload.expiresDate <= now) return { ok: false, reason: 'expired' };
-  return { ok: true, productId: payload.productId, source: 'jws' };
+  return { ok: true, productId: payload.productId, source: 'jws', expiresDate: payload.expiresDate };
 }
 
 /** Test helper: an unsigned three-part token with this payload. */

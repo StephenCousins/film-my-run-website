@@ -6,7 +6,7 @@ const payload = { bundleId: 'com.filmmyrun.app', productId: 'com.filmmyrun.app.p
 
 describe('checkProHeader', () => {
   it('accepts a live annual or monthly transaction for our bundle', () => {
-    expect(checkProHeader(encodeTestJws(payload), 'i1', { now })).toEqual({ ok: true, productId: payload.productId, source: 'jws' });
+    expect(checkProHeader(encodeTestJws(payload), 'i1', { now })).toEqual({ ok: true, productId: payload.productId, source: 'jws', expiresDate: payload.expiresDate });
     expect(checkProHeader(encodeTestJws({ ...payload, productId: 'com.filmmyrun.app.pro.monthly' }), 'i1', { now }).ok).toBe(true);
   });
   it('refuses missing, malformed, expired, revoked, wrong-bundle and wrong-product', () => {
@@ -18,7 +18,7 @@ describe('checkProHeader', () => {
     expect(checkProHeader(encodeTestJws({ ...payload, productId: 'com.filmmyrun.app.other' }), 'i1', { now }).ok).toBe(false);
   });
   it('accepts debug-<installId> only when that id is in the allow list', () => {
-    expect(checkProHeader('debug-abc', 'abc', { now, debugIds: 'xyz, abc' })).toEqual({ ok: true, productId: 'debug', source: 'debug' });
+    expect(checkProHeader('debug-abc', 'abc', { now, debugIds: 'xyz, abc' })).toEqual({ ok: true, productId: 'debug', source: 'debug', expiresDate: now + 30 * 86_400_000 });
     expect(checkProHeader('debug-abc', 'abc', { now, debugIds: 'xyz' }).ok).toBe(false);
     expect(checkProHeader('debug-abc', 'other', { now, debugIds: 'abc' }).ok).toBe(false);
     expect(checkProHeader('debug-abc', 'abc', { now }).ok).toBe(false);

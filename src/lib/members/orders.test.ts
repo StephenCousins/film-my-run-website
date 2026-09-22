@@ -24,7 +24,7 @@ function deps(rows: OrderRow[], memberId: number | null = 7): OrderDeps {
   return {
     ordersFor: async (userId) => rows.filter((r) => r.user_id === userId),
     orderById: async (id) => rows.find((r) => r.id === id) ?? null,
-    memberForToken: async (token) => (token === 'good' && memberId ? { id: memberId, email: 'r@e.com', name: null } : null),
+    memberForToken: async (token) => (token === 'good' && memberId ? { id: memberId, email: 'r@e.com', name: null, proUntil: null } : null),
     now: () => NOW,
   };
 }

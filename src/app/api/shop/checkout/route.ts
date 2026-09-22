@@ -32,8 +32,8 @@ export async function POST(request: Request) {
         ? await quoteShippingPence(printifyLines.map((l) => ({ product_id: l.supplierProductId, variant_id: Number(l.variantId), quantity: l.quantity })))
         : 0) + contradoShippingPence(contradoCount);
     const total = subtotalPence(lines) + shippingPence;
-    const { member, hadBearer } = await currentMember(request);
-    const mc = memberCheckout(member, hadBearer, process.env.STRIPE_MEMBER_COUPON);
+    const { member, hadBearer, pro } = await currentMember(request);
+    const mc = memberCheckout(member, hadBearer, process.env.STRIPE_MEMBER_COUPON, pro);
     const order = await prisma.orders.create({
       data: { status: 'pending', total_cents: total, currency: 'GBP', items: lines as object[], updated_at: new Date(), ...mc.orderFields },
     });
