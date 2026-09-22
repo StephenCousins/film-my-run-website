@@ -1,12 +1,13 @@
 /**
- * Uploads Stephen's vest photos to R2 and writes the URLs into
+ * Uploads Stephen's photos of the Contrado products to R2 and writes the URLs into
  * film-my-run-merch/config/contrado.json (modelPhotos, one list per colour + layout).
- * Files come from film-my-run-merch/Merch-Images/Vests/<Colour> - <side stripes|shoulder stripe>/*.(png|webp|jpg)
+ * Files come from film-my-run-merch/Merch-Images/<Vests|Running Tees>/<Colour> - <side stripes|shoulder stripe>/*.(png|webp|jpg)
  * in file-name order (so number them), plus *.mp4 clips
  * (re-encoded with ffmpeg to a small muted h264 with a poster frame; written to modelVideos).
  * Keys carry a content hash, so a replaced photo gets a new URL and no cache serves the old one.
  *
- *   node scripts/upload-vest-photos.mjs
+ *   node scripts/upload-vest-photos.mjs           # vests
+ *   node scripts/upload-vest-photos.mjs tee       # the running tees
  */
 import 'dotenv/config';
 import { readFile, readdir, writeFile } from 'node:fs/promises';
