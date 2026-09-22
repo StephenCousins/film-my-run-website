@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ExternalLink } from 'lucide-react';
@@ -87,11 +88,14 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
       {/* Image / placeholder */}
       <div className="relative bg-[#f4f4f5] dark:bg-[#27272a] h-40 flex items-center justify-center">
         {shoe.imageUrl && !imgError ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          // 324 cards render at once, so lazy + resized (Next serves ~10 KB WebP per card
+          // instead of the 75 KB 1000px JPEG on R2) is what makes the page usable on a phone.
+          <Image
             src={shoe.imageUrl}
             alt={`${shoe.brand} ${shoe.model}`}
-            className="h-full w-full object-cover"
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover"
             onError={() => setImgError(true)}
           />
         ) : (
