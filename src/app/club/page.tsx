@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import JoinTheClub from '@/components/club/JoinTheClub';
@@ -26,14 +27,27 @@ export default function ClubPage() {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main>
-        <section className="border-b border-border">
-          <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-24">
-            <p className="text-sm font-semibold uppercase tracking-wider text-brand">The Club</p>
-            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mt-4 mb-6">
+      <main className="pt-20 lg:pt-24">
+        {/* The same hero shape as the shop: the photo behind, a scrim dark
+            enough for white text, and the join buttons still above the fold. */}
+        <section className="relative border-b border-border overflow-hidden">
+          <div className="absolute inset-0">
+            <Image
+              src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about-hero.jpg"
+              alt="Stephen running a mountain trail in the Canary Islands"
+              fill
+              className="object-cover object-center"
+              priority
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/65 to-[rgb(var(--color-background))]" />
+          </div>
+          <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-24">
+            <p className="text-sm font-semibold uppercase tracking-wider text-orange-400">The Club</p>
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mt-4 mb-6">
               {money(CLUB_MONTHLY_PENCE)} a month, and the running stays free for everyone
             </h1>
-            <p className="text-lg text-secondary leading-relaxed max-w-2xl">
+            <p className="text-lg text-zinc-200 leading-relaxed max-w-2xl">
               Film My Run has always given the tools away: the calculators, the race predictor built on 2.4 million
               results, a training plan for whatever you are aiming at. That does not change. The Club is for the people
               who want to chip in anyway, and it comes with the things that take real work to run.
