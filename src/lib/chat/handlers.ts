@@ -9,6 +9,8 @@ import {
   type ChatThreadDTO,
 } from './store';
 import { notifyStephen as liveNotifyStephen } from './notify';
+import { memberFromBearer } from '@/lib/members/handlers';
+import { liveMemberDeps } from '@/lib/members/store';
 
 export type ChatDeps = {
   getThread: (installId: string) => Promise<ChatThreadDTO | null>;
@@ -22,6 +24,12 @@ export type ChatDeps = {
   notifyStephen: (t: { threadId: string; name: string; email: string; text: string }) => Promise<void>;
   now?: () => number;
   debugIds?: string;
+  /**
+   * The signed-in member behind the request's bearer, if any. An account in
+   * FMR Club (a website subscription, or Pro reported from another phone)
+   * may send without this phone's StoreKit proof, as checkout already allows.
+   */
+  memberForRequest?: (req: Request) => Promise<{ proUntil: string | null } | null>;
 };
 
 /** GET /api/app/v1/chat/thread — install header only, no Pro proof required (spec §3). */
@@ -43,7 +51,12 @@ export async function handlePostMessage(req: NextRequest, deps: ChatDeps): Promi
 
   const now = deps.now ? deps.now() : Date.now();
   const proCheck = checkProHeader(req.headers.get('X-FMR-Pro'), installId, { debugIds: deps.debugIds, now });
-  if (!proCheck.ok) {
+  let isPro = proCheck.ok;
+  if (!isPro && deps.memberForRequest) {
+    const member = await deps.memberForRequest(req);
+    isPro = !!member?.proUntil && Date.parse(member.proUntil) > now;
+  }
+  if (!isPro) {
     return NextResponse.json({ ok: false, error: 'Pro required' }, { status: 403 });
   }
 
@@ -75,4 +88,5 @@ export const liveChatDeps: ChatDeps = {
   getThread,
   addUserMessageIfUnderLimit,
   notifyStephen: liveNotifyStephen,
+  memberForRequest: (req) => memberFromBearer(req, liveMemberDeps),
 };

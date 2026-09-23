@@ -111,6 +111,28 @@ describe('handlePostMessage', () => {
     expect(notifyStephen).not.toHaveBeenCalled();
   });
 
+  it('accepts a signed-in FMR Club member without the StoreKit proof', async () => {
+    const club = { ...deps, memberForRequest: async () => ({ proUntil: new Date(NOW + 86_400_000).toISOString() }) };
+    const res = await handlePostMessage(
+      postReq({ name: 'Jo', email: 'jo@example.com', text: 'hi' }, { 'X-FMR-Install': INSTALL_A, Authorization: 'Bearer t', 'content-type': 'application/json' }),
+      club
+    );
+    expect(res.status).toBe(200);
+    expect(notifyStephen).toHaveBeenCalledTimes(1);
+  });
+
+  it('403s a signed-in member whose Club has lapsed, or who never joined', async () => {
+    for (const proUntil of [new Date(NOW - 1).toISOString(), null]) {
+      const member = { ...deps, memberForRequest: async () => ({ proUntil }) };
+      const res = await handlePostMessage(
+        postReq({ name: 'Jo', email: 'jo@example.com', text: 'hi' }, { 'X-FMR-Install': INSTALL_A, Authorization: 'Bearer t', 'content-type': 'application/json' }),
+        member
+      );
+      expect(res.status).toBe(403);
+    }
+    expect(notifyStephen).not.toHaveBeenCalled();
+  });
+
   it('stores the message and notifies Stephen once, for a Pro request', async () => {
     const res = await handlePostMessage(
       postReq(
