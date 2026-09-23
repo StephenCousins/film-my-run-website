@@ -27,8 +27,17 @@ export type MemberDeps = {
   /** Marks the account Pro until `until` (never shortens a later date). Returns the member as it now stands. */
   setPro: (userId: number, until: Date) => Promise<Member>;
   sendCode: (email: string, code: string) => Promise<void>;
+  /** Sign in with Apple: the verified identity token's claims, or null when Apple would not vouch for it. */
+  verifyApple?: (identityToken: string) => Promise<AppleClaims | null>;
+  /** The member an Apple id is linked to, else null. */
+  memberForApple?: (sub: string, now: Date) => Promise<Member | null>;
+  /** Links an Apple id to an account (idempotent), and fills an empty name. */
+  linkApple?: (userId: number, sub: string, name: string | null) => Promise<void>;
   now?: () => number;
 };
+
+/** What a verified Apple identity token says: its stable id and the email Apple shares (perhaps a private relay). */
+export type AppleClaims = { sub: string; email: string };
 
 // In-memory like rate-limit.ts: resets on deploy, enough to stop a runaway client.
 const requests = new Map<string, number[]>();
@@ -95,6 +104,34 @@ export async function handleVerify(req: NextRequest, deps: MemberDeps): Promise<
   await deps.createSession(member.id, token, new Date(now + TOKEN_TTL_MS));
   await deps.attachGuestOrders(member.id, email);
   return json({ ok: true, token, member });
+}
+
+/**
+ * POST auth/apple { identityToken, name? } → { ok, token, member }, like verify.
+ * Who it is, in order: the account this Apple id is already linked to; the
+ * signed-in member making the request (linking their Apple id); the account
+ * with the email Apple shares; else a new account on that email. Apple has
+ * verified the email, so matching on it is the same proof a code gives.
+ */
+export async function handleApple(req: NextRequest, deps: MemberDeps): Promise<Response> {
+  if (!deps.verifyApple || !deps.memberForApple || !deps.linkApple) return bad('apple_unavailable', 503);
+  const body = await readJson(req);
+  const identityToken = typeof body.identityToken === 'string' ? body.identityToken : '';
+  if (!identityToken) return bad('bad_request', 400);
+  const claims = await deps.verifyApple(identityToken);
+  if (!claims) return bad('apple_rejected', 401);
+  const name = typeof body.name === 'string' && body.name.trim() ? body.name.trim().slice(0, 100) : null;
+  const now = deps.now ? deps.now() : Date.now();
+
+  const member =
+    (await deps.memberForApple(claims.sub, new Date(now))) ??
+    (await memberFromBearer(req, deps)) ??
+    (await deps.findOrCreateUser(normaliseEmail(claims.email) ?? claims.email.toLowerCase(), new Date(now)));
+  await deps.linkApple(member.id, claims.sub, name);
+  const token = makeToken();
+  await deps.createSession(member.id, token, new Date(now + TOKEN_TTL_MS));
+  await deps.attachGuestOrders(member.id, member.email.toLowerCase());
+  return json({ ok: true, token, member: name && !member.name ? { ...member, name } : member });
 }
 
 /** Member from `Authorization: Bearer <token>`, else null. */

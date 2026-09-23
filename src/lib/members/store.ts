@@ -2,6 +2,7 @@
 import { prisma } from '@/lib/db';
 import type { Member, MemberDeps } from './handlers';
 import { sendCodeEmail } from './email';
+import { verifyAppleIdentityToken } from './apple';
 
 type UserRow = { id: number; email: string; name: string | null; access_tier: 'FREE' | 'PREMIUM' | 'PRO'; subscription_end: Date | null };
 const memberSelect = { id: true, email: true, name: true, access_tier: true, subscription_end: true } as const;
@@ -56,4 +57,17 @@ export const liveMemberDeps: MemberDeps = {
     return toMember(await prisma.users.update({ where: { id: userId }, data: { access_tier: 'PRO', subscription_end: until, updated_at: new Date() }, select: memberSelect }));
   },
   sendCode: sendCodeEmail,
+  verifyApple: verifyAppleIdentityToken,
+  memberForApple: async (sub, now) => {
+    const a = await prisma.accounts.findUnique({ where: { provider_provider_account_id: { provider: 'apple', provider_account_id: sub } }, include: { users: { select: memberSelect } } });
+    return a ? toMember(a.users, now) : null;
+  },
+  linkApple: async (userId, sub, name) => {
+    await prisma.accounts.upsert({
+      where: { provider_provider_account_id: { provider: 'apple', provider_account_id: sub } },
+      create: { user_id: userId, type: 'oauth', provider: 'apple', provider_account_id: sub },
+      update: {},
+    });
+    if (name) await prisma.users.updateMany({ where: { id: userId, name: null }, data: { name, updated_at: new Date() } });
+  },
 };

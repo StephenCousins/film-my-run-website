@@ -2,7 +2,7 @@ import { encodeTestJws } from '@/lib/chat/pro';
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { hashCode } from './codes';
-import { handleMe, handlePro, handleRequestCode, handleSignOut, handleVerify, memberFromBearer, resetMemberLimits, type Member, type MemberDeps } from './handlers';
+import { handleApple, handleMe, handlePro, handleRequestCode, handleSignOut, handleVerify, memberFromBearer, resetMemberLimits, type Member, type MemberDeps } from './handlers';
 
 const NOW = Date.UTC(2026, 8, 21, 9, 0, 0);
 
@@ -203,5 +203,57 @@ describe('handlePro', () => {
     expect((await handlePro(post('pro', {}, { authorization: `Bearer ${token}`, 'X-FMR-Pro': proof }), f.deps)).status).toBe(400);
     expect((await handlePro(post('pro', {}, { authorization: `Bearer ${token}`, 'X-FMR-Install': install, 'X-FMR-Pro': 'nope' }), f.deps)).status).toBe(403);
     expect(f.users.get('runner@example.com')?.proUntil).toBeNull();
+  });
+});
+
+describe('handleApple', () => {
+  function withApple(f: ReturnType<typeof fakeDeps>) {
+    const links = new Map<string, number>();
+    f.deps.verifyApple = async (t) => (t === 'good' ? { sub: 'apple-1', email: 'Relay@PrivateRelay.AppleID.com' } : t === 'jo' ? { sub: 'apple-jo', email: 'runner@example.com' } : null);
+    f.deps.memberForApple = async (sub) => { const id = links.get(sub); return id ? [...f.users.values()].find((u) => u.id === id) ?? null : null; };
+    f.deps.linkApple = async (userId, sub, name) => {
+      links.set(sub, userId);
+      const u = [...f.users.values()].find((x) => x.id === userId)!;
+      if (name && !u.name) u.name = name;
+    };
+    return links;
+  }
+
+  it('401s a token Apple does not vouch for, and 400s a missing one', async () => {
+    const f = fakeDeps(); withApple(f);
+    expect((await handleApple(post('apple', { identityToken: 'forged' }), f.deps)).status).toBe(401);
+    expect((await handleApple(post('apple', {}), f.deps)).status).toBe(400);
+  });
+
+  it('creates an account on the shared email, links the Apple id, and returns a session', async () => {
+    const f = fakeDeps(); const links = withApple(f);
+    const res = await handleApple(post('apple', { identityToken: 'good', name: 'Sam Runner' }), f.deps);
+    const body = (await res.json()) as { token: string; member: Member };
+    expect(res.status).toBe(200);
+    expect(body.member.email).toBe('relay@privaterelay.appleid.com');
+    expect(body.member.name).toBe('Sam Runner');
+    expect(links.get('apple-1')).toBe(body.member.id);
+    expect(await handleMe(get('me', { Authorization: `Bearer ${body.token}` }), f.deps).then((r) => r.status)).toBe(200);
+  });
+
+  it('finds the email-code account by the email Apple shares, so one runner has one account', async () => {
+    const f = fakeDeps(); withApple(f);
+    const first = await signIn(f);
+    const body = (await (await handleApple(post('apple', { identityToken: 'jo' }), f.deps)).json()) as { member: Member };
+    expect(body.member.id).toBe(first.member.id);
+  });
+
+  it('links to the signed-in member when Apple hides the email, and comes back to it next time', async () => {
+    const f = fakeDeps(); const links = withApple(f);
+    const me = await signIn(f);
+    await handleApple(post('apple', { identityToken: 'good' }, { Authorization: `Bearer ${me.token}` }), f.deps);
+    expect(links.get('apple-1')).toBe(me.member.id);
+    const again = (await (await handleApple(post('apple', { identityToken: 'good' }), f.deps)).json()) as { member: Member };
+    expect(again.member.id).toBe(me.member.id);
+  });
+
+  it('503s when the server has no Apple support wired', async () => {
+    const f = fakeDeps();
+    expect((await handleApple(post('apple', { identityToken: 'good' }), f.deps)).status).toBe(503);
   });
 });

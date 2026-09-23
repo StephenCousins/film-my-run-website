@@ -15,6 +15,7 @@ Routes the Film My Run iPhone app calls. Added 11 September 2026 (milestone M5-W
 | POST | `/api/app/v1/chat/messages` `{ name, email, text }` | new | 6 | none |
 | POST | `/api/app/v1/auth/code` `{ email }` | new | 20 | none |
 | POST | `/api/app/v1/auth/verify` `{ email, code }` | new | 30 | none |
+| POST | `/api/app/v1/auth/apple` `{ identityToken, name? }` | new | 30 | optional bearer (links Apple to that member) |
 | GET | `/api/app/v1/auth/me` | new | 60 | none |
 | POST | `/api/app/v1/auth/signout` | new | 60 | none |
 | GET | `/api/app/v1/orders` | new | 60 | none |
@@ -44,6 +45,7 @@ Email-code sign-in, no password. Every route but `auth/code` and `auth/verify` n
 
 - **`POST /api/app/v1/auth/code` `{ email }`** — always `{ ok: true }` for a well-formed email (no account enumeration). Errors: `400 { ok: false, error: "bad_email" }`, `429 { ok: false, error: "too_many_codes" }` (five an hour per email, `Retry-After` seconds), `503 { ok: false, error: "email_unavailable" }` if Resend fails.
 - **`POST /api/app/v1/auth/verify` `{ email, code }`** — `{ ok: true, token, member: { id, email, name } }`. Errors: `400 { ok: false, error: "bad_request" }` for a malformed body, `401 { ok: false, error: "wrong_code" }`, `410 { ok: false, error: "expired" }` (no code sent, code past its 10 minutes, or five wrong attempts).
+- **`POST /api/app/v1/auth/apple` `{ identityToken, name? }`** (23 Sep 2026): Sign in with Apple from the app. The identity token is checked against Apple's keys for audience `com.filmmyrun.app`. The member is, in order: the account the Apple id is linked to (`accounts`, provider `apple`); the member signed in with the request's bearer; the account with the email Apple shares; or a new account on that email. Answers like `auth/verify`: `{ ok: true, token, member }`. Errors: `400 bad_request`, `401 apple_rejected`, `503 apple_unavailable`.
 - **`GET /api/app/v1/auth/me`** — `{ ok: true, member: { id, email, name, proUntil } }` or `401 signed_out`. `proUntil` is an ISO date while the account is Pro (`users.access_tier = PRO` and `subscription_end` ahead, or no end for a hand-set account), else null.
 - **`POST /api/app/v1/auth/pro`** — bearer + `X-FMR-Install` + `X-FMR-Pro` (the chat's proof). Stamps the account `access_tier = PRO`, `subscription_end = expiresDate` (never shortening a later date), so a Pro subscriber is Pro on the website and on every device signed into the account. `{ ok: true, member }`; `401 signed_out`, `400 bad_install`, `403 Pro required`. The app posts it after sign-in and whenever its StoreKit state refreshes.
 - **`POST /api/app/v1/auth/signout`** — `{ ok: true }`, deletes only the session behind the bearer token.
