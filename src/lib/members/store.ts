@@ -3,6 +3,7 @@ import { prisma } from '@/lib/db';
 import type { Member, MemberDeps } from './handlers';
 import { sendCodeEmail } from './email';
 import { verifyAppleIdentityToken } from './apple';
+import { stripe } from '@/lib/shop/stripe';
 
 type UserRow = { id: number; email: string; name: string | null; access_tier: 'FREE' | 'PREMIUM' | 'PRO'; subscription_end: Date | null };
 const memberSelect = { id: true, email: true, name: true, access_tier: true, subscription_end: true } as const;
@@ -58,6 +59,23 @@ export const liveMemberDeps: MemberDeps = {
   },
   sendCode: sendCodeEmail,
   verifyApple: verifyAppleIdentityToken,
+  deleteAccount: async (userId) => {
+    const u = await prisma.users.findUniqueOrThrow({ where: { id: userId }, select: { email: true, stripe_customer_id: true } });
+    // Stephen's choice (23 Sep 2026): a live website Club subscription is cancelled now, not left billing a deleted account.
+    if (u.stripe_customer_id) {
+      const subs = await stripe().subscriptions.list({ customer: u.stripe_customer_id, status: 'all', limit: 100 });
+      for (const s of subs.data) {
+        if (s.status !== 'canceled' && s.status !== 'incomplete_expired') await stripe().subscriptions.cancel(s.id);
+      }
+    }
+    await prisma.$transaction([
+      // Orders are the shop's records; they keep their email and lose the account link.
+      prisma.orders.updateMany({ where: { user_id: userId }, data: { user_id: null } }),
+      prisma.verification_tokens.deleteMany({ where: { identifier: u.email.toLowerCase() } }),
+      // Sessions, Apple links, saved routes and shoe ratings cascade.
+      prisma.users.delete({ where: { id: userId } }),
+    ]);
+  },
   memberForApple: async (sub, now) => {
     const a = await prisma.accounts.findUnique({ where: { provider_provider_account_id: { provider: 'apple', provider_account_id: sub } }, include: { users: { select: memberSelect } } });
     return a ? toMember(a.users, now) : null;

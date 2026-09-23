@@ -33,6 +33,12 @@ export type MemberDeps = {
   memberForApple?: (sub: string, now: Date) => Promise<Member | null>;
   /** Links an Apple id to an account (idempotent), and fills an empty name. */
   linkApple?: (userId: number, sub: string, name: string | null) => Promise<void>;
+  /**
+   * Deletes the account (App Store guideline 5.1.1(v)): cancels any live
+   * website FMR Club subscription at once, keeps orders without the account
+   * link, removes the account with its sessions and sign-in links.
+   */
+  deleteAccount?: (userId: number) => Promise<void>;
   now?: () => number;
 };
 
@@ -163,6 +169,20 @@ export async function handlePro(req: NextRequest, deps: MemberDeps & { debugIds?
   const proof = checkProHeader(req.headers.get('X-FMR-Pro'), installId, { debugIds: deps.debugIds, now });
   if (!proof.ok) return bad('Pro required', 403);
   return json({ ok: true, member: await deps.setPro(member.id, new Date(proof.expiresDate)) });
+}
+
+/** POST auth/delete → { ok }. The bearer's account, gone for good; 401 when signed out. */
+export async function handleDelete(req: NextRequest, deps: MemberDeps): Promise<Response> {
+  if (!deps.deleteAccount) return bad('delete_unavailable', 503);
+  const member = await memberFromBearer(req, deps);
+  if (!member) return bad('signed_out', 401);
+  try {
+    await deps.deleteAccount(member.id);
+  } catch (e) {
+    console.error('Account deletion failed for', member.id, e);
+    return bad('delete_failed', 500);
+  }
+  return json({ ok: true });
 }
 
 /** POST auth/signout → { ok }. Deletes this token's session only. */

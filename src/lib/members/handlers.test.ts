@@ -2,7 +2,7 @@ import { encodeTestJws } from '@/lib/chat/pro';
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { hashCode } from './codes';
-import { handleApple, handleMe, handlePro, handleRequestCode, handleSignOut, handleVerify, memberFromBearer, resetMemberLimits, type Member, type MemberDeps } from './handlers';
+import { handleApple, handleDelete, handleMe, handlePro, handleRequestCode, handleSignOut, handleVerify, memberFromBearer, resetMemberLimits, type Member, type MemberDeps } from './handlers';
 
 const NOW = Date.UTC(2026, 8, 21, 9, 0, 0);
 
@@ -255,5 +255,25 @@ describe('handleApple', () => {
   it('503s when the server has no Apple support wired', async () => {
     const f = fakeDeps();
     expect((await handleApple(post('apple', { identityToken: 'good' }), f.deps)).status).toBe(503);
+  });
+});
+
+describe('handleDelete', () => {
+  it('deletes the bearer\'s account and nobody else\'s; a signed-out call is 401', async () => {
+    const f = fakeDeps();
+    const deleted: number[] = [];
+    f.deps.deleteAccount = async (id) => { deleted.push(id); };
+    expect((await handleDelete(post('delete', {}), f.deps)).status).toBe(401);
+    const me = await signIn(f);
+    const res = await handleDelete(post('delete', {}, { Authorization: `Bearer ${me.token}` }), f.deps);
+    expect(res.status).toBe(200);
+    expect(deleted).toEqual([me.member.id]);
+  });
+
+  it('says so when the deletion fails, rather than claiming it worked', async () => {
+    const f = fakeDeps();
+    f.deps.deleteAccount = async () => { throw new Error('db down'); };
+    const me = await signIn(f);
+    expect((await handleDelete(post('delete', {}, { Authorization: `Bearer ${me.token}` }), f.deps)).status).toBe(500);
   });
 });
