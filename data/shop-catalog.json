@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-23T16:15:17.767Z",
+  "generatedAt": "2026-09-23T17:02:27.924Z",
   "shop": {
     "etsyUrl": "https://www.etsy.com/shop/FilmMyRun"
   },
@@ -20600,12 +20600,12 @@
       "currency": "GBP",
       "colours": [
         "Black",
+        "Loden",
         "Black / Charcoal",
         "Black / White",
         "Charcoal / Black",
         "Heather Grey / Black",
-        "Heather Grey / White",
-        "Loden"
+        "Heather Grey / White"
       ],
       "sizes": [],
       "images": [
@@ -20613,6 +20613,11 @@
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/trucker-logo-black-1.jpg",
           "position": "model",
           "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/trucker-logo-loden-1.jpg",
+          "position": "model",
+          "colour": "Loden"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17caab48938cdb06da04/118724/110130/film-my-run-embroidered-logo-trucker-cap-richardson-112-snapback.jpg?camera_label=front",
@@ -20713,6 +20718,12 @@
           "price": 29.99
         },
         {
+          "id": 118729,
+          "colour": "Loden",
+          "size": "One size",
+          "price": 29.99
+        },
+        {
           "id": 118723,
           "colour": "Black / Charcoal",
           "size": "One size",
@@ -20739,12 +20750,6 @@
         {
           "id": 118728,
           "colour": "Heather Grey / White",
-          "size": "One size",
-          "price": 29.99
-        },
-        {
-          "id": 118729,
-          "colour": "Loden",
           "size": "One size",
           "price": 29.99
         }
@@ -20784,13 +20789,13 @@
       "currency": "GBP",
       "colours": [
         "Khaki",
+        "Pink",
         "Black",
         "Navy",
         "White",
         "Stone",
         "Dark Grey",
-        "Spruce",
-        "Pink"
+        "Spruce"
       ],
       "sizes": [],
       "images": [
@@ -20798,6 +20803,11 @@
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-logo-khaki-1.jpg",
           "position": "model",
           "colour": "Khaki"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-logo-pink-1.jpg",
+          "position": "model",
+          "colour": "Pink"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c735e23cd94b03ce7b/105381/135042/film-my-run-logo-cap-classic-dad-cap.jpg?camera_label=front",
@@ -20898,6 +20908,12 @@
           "price": 26.99
         },
         {
+          "id": 105378,
+          "colour": "Pink",
+          "size": "One size",
+          "price": 26.99
+        },
+        {
           "id": 105372,
           "colour": "Black",
           "size": "One size",
@@ -20930,12 +20946,6 @@
         {
           "id": 105379,
           "colour": "Spruce",
-          "size": "One size",
-          "price": 26.99
-        },
-        {
-          "id": 105378,
-          "colour": "Pink",
           "size": "One size",
           "price": 26.99
         }
@@ -20975,8 +20985,8 @@
       "currency": "GBP",
       "colours": [
         "Black",
-        "Navy",
         "White",
+        "Navy",
         "Stone",
         "Dark Grey"
       ],
@@ -20988,48 +20998,8 @@
           "colour": "Black"
         },
         {
-          "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135042/first-marathon-cap-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=front",
-          "position": "front",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135043/first-marathon-cap-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=back",
-          "position": "back",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135044/first-marathon-cap-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=left",
-          "position": "left",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135045/first-marathon-cap-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=right",
-          "position": "right",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135046/first-marathon-cap-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135047/first-marathon-cap-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135048/first-marathon-cap-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/135049/first-marathon-cap-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1bfcc1afb0169b0a2fc4/105381/110918/first-marathon-cap-plan-for-today-finish-gift-for-new-runner-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-plan-for-today-finish-white-1.jpg",
+          "position": "model",
           "colour": "White"
         },
         {
@@ -21096,14 +21066,14 @@
           "price": 26.99
         },
         {
-          "id": 105377,
-          "colour": "Navy",
+          "id": 105381,
+          "colour": "White",
           "size": "One size",
           "price": 26.99
         },
         {
-          "id": 105381,
-          "colour": "White",
+          "id": 105377,
+          "colour": "Navy",
           "size": "One size",
           "price": 26.99
         },
@@ -21155,8 +21125,8 @@
       "currency": "GBP",
       "colours": [
         "Navy",
-        "Black",
         "White",
+        "Black",
         "Stone",
         "Dark Grey"
       ],
@@ -21168,48 +21138,8 @@
           "colour": "Navy"
         },
         {
-          "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135042/funny-running-cap-bonus-miles-gift-for-runner-marathon-and-ultra-runner-cap-film-my-run.jpg?camera_label=front",
-          "position": "front",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135043/funny-running-cap-bonus-miles-gift-for-runner-marathon-and-ultra-runner-cap-film-my-run.jpg?camera_label=back",
-          "position": "back",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135044/funny-running-cap-bonus-miles-gift-for-runner-marathon-and-ultra-runner-cap-film-my-run.jpg?camera_label=left",
-          "position": "left",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135045/funny-running-cap-bonus-miles-gift-for-runner-marathon-and-ultra-runner-cap-film-my-run.jpg?camera_label=right",
-          "position": "right",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135046/funny-running-cap-bonus-miles-gift-for-runner-marathon-and-ultra-runner-cap-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135047/funny-running-cap-bonus-miles-gift-for-runner-marathon-and-ultra-runner-cap-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135048/funny-running-cap-bonus-miles-gift-for-runner-marathon-and-ultra-runner-cap-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/135049/funny-running-cap-bonus-miles-gift-for-runner-marathon-and-ultra-runner-cap-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab187a06f9cdcefb066911/105381/110918/funny-running-cap-bonus-miles-gift-for-runner-marathon-and-ultra-runner-cap-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-bonus-miles-white-1.jpg",
+          "position": "model",
           "colour": "White"
         },
         {
@@ -21266,14 +21196,14 @@
           "price": 26.99
         },
         {
-          "id": 105372,
-          "colour": "Black",
+          "id": 105381,
+          "colour": "White",
           "size": "One size",
           "price": 26.99
         },
         {
-          "id": 105381,
-          "colour": "White",
+          "id": 105372,
+          "colour": "Black",
           "size": "One size",
           "price": 26.99
         },
@@ -21336,6 +21266,11 @@
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-everything-hurts-black-1.jpg",
           "position": "model",
           "colour": "Black"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-everything-hurts-navy-1.jpg",
+          "position": "model",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105381/135042/funny-running-cap-everything-hurts-marathon-runner-gift-race-day-cap-film-my-run.jpg?camera_label=front",
@@ -21426,16 +21361,6 @@
           "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105380/110918/funny-running-cap-everything-hurts-marathon-runner-gift-race-day-cap-film-my-run.jpg?camera_label=size-chart",
           "position": "size-chart",
           "colour": "Stone"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105377/135042/funny-running-cap-everything-hurts-marathon-runner-gift-race-day-cap-film-my-run.jpg?camera_label=front",
-          "position": "front",
-          "colour": "Navy"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab17c9471285d6240ae50a/105377/135043/funny-running-cap-everything-hurts-marathon-runner-gift-race-day-cap-film-my-run.jpg?camera_label=back",
-          "position": "back",
-          "colour": "Navy"
         }
       ],
       "variants": [
@@ -21518,6 +21443,11 @@
           "colour": "White"
         },
         {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-legs-have-gone-black-1.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
           "src": "https://images.printify.com/mockup/6aab197806f9cdcefb066977/105380/135042/funny-running-cap-legs-have-gone-marathon-runner-gift-race-day-cap-film-my-run.jpg?camera_label=front",
           "position": "front",
           "colour": "Stone"
@@ -21575,14 +21505,14 @@
       ],
       "variants": [
         {
-          "id": 105381,
-          "colour": "White",
+          "id": 105372,
+          "colour": "Black",
           "size": "One size",
           "price": 26.99
         },
         {
-          "id": 105372,
-          "colour": "Black",
+          "id": 105381,
+          "colour": "White",
           "size": "One size",
           "price": 26.99
         },
@@ -21640,8 +21570,8 @@
       "currency": "GBP",
       "colours": [
         "Stone",
-        "Black",
         "Navy",
+        "Black",
         "White",
         "Dark Grey"
       ],
@@ -21651,6 +21581,11 @@
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-get-on-with-it-stone-1.jpg",
           "position": "model",
           "colour": "Stone"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-get-on-with-it-navy-1.jpg",
+          "position": "model",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/135042/motivational-running-cap-get-on-with-it-funny-gift-for-runner-film-my-run.jpg?camera_label=front",
@@ -21696,19 +21631,15 @@
           "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105381/110918/motivational-running-cap-get-on-with-it-funny-gift-for-runner-film-my-run.jpg?camera_label=size-chart",
           "position": "size-chart",
           "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105377/135042/motivational-running-cap-get-on-with-it-funny-gift-for-runner-film-my-run.jpg?camera_label=front",
-          "position": "front",
-          "colour": "Navy"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab19f9b549144c6a0d9d83/105377/135043/motivational-running-cap-get-on-with-it-funny-gift-for-runner-film-my-run.jpg?camera_label=back",
-          "position": "back",
-          "colour": "Navy"
         }
       ],
       "variants": [
+        {
+          "id": 105377,
+          "colour": "Navy",
+          "size": "One size",
+          "price": 26.99
+        },
         {
           "id": 105380,
           "colour": "Stone",
@@ -21718,12 +21649,6 @@
         {
           "id": 105372,
           "colour": "Black",
-          "size": "One size",
-          "price": 26.99
-        },
-        {
-          "id": 105377,
-          "colour": "Navy",
           "size": "One size",
           "price": 26.99
         },
@@ -21775,8 +21700,8 @@
       "currency": "GBP",
       "colours": [
         "Navy",
-        "Black",
         "White",
+        "Black",
         "Stone",
         "Dark Grey"
       ],
@@ -21788,48 +21713,8 @@
           "colour": "Navy"
         },
         {
-          "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135042/parkrun-cap-just-a-parkrun-to-go-funny-marathon-runner-gift-film-my-run.jpg?camera_label=front",
-          "position": "front",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135043/parkrun-cap-just-a-parkrun-to-go-funny-marathon-runner-gift-film-my-run.jpg?camera_label=back",
-          "position": "back",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135044/parkrun-cap-just-a-parkrun-to-go-funny-marathon-runner-gift-film-my-run.jpg?camera_label=left",
-          "position": "left",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135045/parkrun-cap-just-a-parkrun-to-go-funny-marathon-runner-gift-film-my-run.jpg?camera_label=right",
-          "position": "right",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135046/parkrun-cap-just-a-parkrun-to-go-funny-marathon-runner-gift-film-my-run.jpg?camera_label=person-1-front",
-          "position": "person-1-front",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135047/parkrun-cap-just-a-parkrun-to-go-funny-marathon-runner-gift-film-my-run.jpg?camera_label=person-1-back",
-          "position": "person-1-back",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135048/parkrun-cap-just-a-parkrun-to-go-funny-marathon-runner-gift-film-my-run.jpg?camera_label=person-2-front",
-          "position": "person-2-front",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/135049/parkrun-cap-just-a-parkrun-to-go-funny-marathon-runner-gift-film-my-run.jpg?camera_label=person-2-back",
-          "position": "person-2-back",
-          "colour": "White"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1af8f1a65ab1360c0b0c/105381/110918/parkrun-cap-just-a-parkrun-to-go-funny-marathon-runner-gift-film-my-run.jpg?camera_label=size-chart",
-          "position": "size-chart",
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-just-a-parkrun-to-go-white-1.jpg",
+          "position": "model",
           "colour": "White"
         },
         {
@@ -21886,14 +21771,14 @@
           "price": 26.99
         },
         {
-          "id": 105372,
-          "colour": "Black",
+          "id": 105381,
+          "colour": "White",
           "size": "One size",
           "price": 26.99
         },
         {
-          "id": 105381,
-          "colour": "White",
+          "id": 105372,
+          "colour": "Black",
           "size": "One size",
           "price": 26.99
         },
@@ -21945,8 +21830,8 @@
       "currency": "GBP",
       "colours": [
         "White",
-        "Black",
         "Navy",
+        "Black",
         "Stone",
         "Dark Grey"
       ],
@@ -21956,6 +21841,11 @@
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-see-you-on-the-start-line-white-1.jpg",
           "position": "model",
           "colour": "White"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-see-you-on-the-start-line-navy-1.jpg",
+          "position": "model",
+          "colour": "Navy"
         },
         {
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/135042/running-cap-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=front",
@@ -22001,19 +21891,15 @@
           "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105380/110918/running-cap-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=size-chart",
           "position": "size-chart",
           "colour": "Stone"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105377/135042/running-cap-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=front",
-          "position": "front",
-          "colour": "Navy"
-        },
-        {
-          "src": "https://images.printify.com/mockup/6aab1b7d351326d3350edade/105377/135043/running-cap-see-you-on-the-start-line-film-my-run-merch-gift-for-runner.jpg?camera_label=back",
-          "position": "back",
-          "colour": "Navy"
         }
       ],
       "variants": [
+        {
+          "id": 105377,
+          "colour": "Navy",
+          "size": "One size",
+          "price": 26.99
+        },
         {
           "id": 105381,
           "colour": "White",
@@ -22023,12 +21909,6 @@
         {
           "id": 105372,
           "colour": "Black",
-          "size": "One size",
-          "price": 26.99
-        },
-        {
-          "id": 105377,
-          "colour": "Navy",
           "size": "One size",
           "price": 26.99
         },
@@ -22093,6 +21973,11 @@
           "colour": "Stone"
         },
         {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/cap-how-hard-can-it-be-black-1.jpg",
+          "position": "model",
+          "colour": "Black"
+        },
+        {
           "src": "https://images.printify.com/mockup/6aab1a773a7f75db1703bee4/105381/135042/ultramarathon-cap-only-100-miles-how-hard-can-it-be-funny-ultra-runner-gift-film-my-run.jpg?camera_label=front",
           "position": "front",
           "colour": "White"
@@ -22150,14 +22035,14 @@
       ],
       "variants": [
         {
-          "id": 105380,
-          "colour": "Stone",
+          "id": 105372,
+          "colour": "Black",
           "size": "One size",
           "price": 26.99
         },
         {
-          "id": 105372,
-          "colour": "Black",
+          "id": 105380,
+          "colour": "Stone",
           "size": "One size",
           "price": 26.99
         },
