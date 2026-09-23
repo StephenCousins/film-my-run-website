@@ -57,7 +57,7 @@ export async function handlePostMessage(req: NextRequest, deps: ChatDeps): Promi
     isPro = !!member?.proUntil && Date.parse(member.proUntil) > now;
   }
   if (!isPro) {
-    return NextResponse.json({ ok: false, error: 'Pro required' }, { status: 403 });
+    return NextResponse.json({ ok: false, error: 'FMR Club required' }, { status: 403 });
   }
 
   let body: unknown = null;

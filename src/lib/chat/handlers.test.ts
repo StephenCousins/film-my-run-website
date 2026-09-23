@@ -107,7 +107,7 @@ describe('handlePostMessage', () => {
       deps
     );
     expect(res.status).toBe(403);
-    expect(await res.json()).toEqual({ ok: false, error: 'Pro required' });
+    expect(await res.json()).toEqual({ ok: false, error: 'FMR Club required' });
     expect(notifyStephen).not.toHaveBeenCalled();
   });
 
