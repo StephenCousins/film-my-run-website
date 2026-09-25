@@ -32,6 +32,22 @@ export type ChatDeps = {
   memberForRequest?: (req: Request) => Promise<{ proUntil: string | null } | null>;
 };
 
+/**
+ * FMR Club: this phone's StoreKit proof (X-FMR-Pro), or a signed-in account
+ * in FMR Club (bearer). Chat and race pacing (`lib/races`) both ask this.
+ */
+export async function isFmrClub(
+  req: Request,
+  installId: string,
+  deps: Pick<ChatDeps, 'memberForRequest' | 'debugIds'>,
+  now: number
+): Promise<boolean> {
+  if (checkProHeader(req.headers.get('X-FMR-Pro'), installId, { debugIds: deps.debugIds, now }).ok) return true;
+  if (!deps.memberForRequest) return false;
+  const member = await deps.memberForRequest(req);
+  return !!member?.proUntil && Date.parse(member.proUntil) > now;
+}
+
 /** GET /api/app/v1/chat/thread — install header only, no Pro proof required (spec §3). */
 export async function handleGetThread(req: NextRequest, deps: ChatDeps): Promise<Response> {
   const installId = req.headers.get('X-FMR-Install');
@@ -50,13 +66,7 @@ export async function handlePostMessage(req: NextRequest, deps: ChatDeps): Promi
   }
 
   const now = deps.now ? deps.now() : Date.now();
-  const proCheck = checkProHeader(req.headers.get('X-FMR-Pro'), installId, { debugIds: deps.debugIds, now });
-  let isPro = proCheck.ok;
-  if (!isPro && deps.memberForRequest) {
-    const member = await deps.memberForRequest(req);
-    isPro = !!member?.proUntil && Date.parse(member.proUntil) > now;
-  }
-  if (!isPro) {
+  if (!(await isFmrClub(req, installId, deps, now))) {
     return NextResponse.json({ ok: false, error: 'FMR Club required' }, { status: 403 });
   }
 

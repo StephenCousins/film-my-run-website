@@ -56,3 +56,19 @@ Email-code sign-in, no password. Every route but `auth/code` and `auth/verify` n
 `POST /api/shop/checkout` (website only, not app-api) now returns `{ url, member, reason? }`: `member: true` when the 10% discount (`STRIPE_MEMBER_COUPON`, alongside the other Stripe env vars) was applied at Stripe, for a signed-in member or for a valid `X-FMR-Pro` + `X-FMR-Install` proof from a subscriber who has not signed in; `club: true` alongside it when the account is a Club subscriber (15% via `STRIPE_CLUB_COUPON`, falling back to the member coupon when that is not set); `member: false` with `reason: "signed_out"` if a bearer token was sent but is dead, or `reason: "no_coupon"` if `STRIPE_MEMBER_COUPON` isn't set; no `reason` for a guest, who was never offered a discount to lose.
 
 Sample responses are saved in the app repository under `Packages/FMRData/Tests/FMRDataTests/Fixtures/api/`.
+
+## Races (race-day pacing, 25 Sep 2026)
+
+One race database for Film My Run and Crew Notes: the Crew Notes race library,
+read server to server (`/v1/partner` on the Crew Notes API, header
+`X-Service-Key` = `CREWNOTES_PARTNER_KEY` here, `PARTNER_API_KEY` there) and
+cached here for a day. Logic in `src/lib/races/handlers.ts`.
+
+- `GET /api/app/v1/races` → `{ ok, races: [{ slug, name, courseName, country, distanceKm, elevationGainM, checkpointCount, verified }] }`.
+  Anyone. Races with fewer than two checkpoints are left out.
+- `GET /api/app/v1/races?slug=utmb-occ` → `{ ok, course: { …summary, provenance, hasProfile, checkpoints: [{ name, distanceFromStartKm, elevationM, climbFromPrevM, cutoffElapsedMin }] } }`.
+  FMR Club (X-FMR-Pro proof or a bearer for an FMR Club account), else 403.
+  `climbFromPrevM` is the GPX climb on the leg into that checkpoint; null when
+  the race has no track. `cutoffElapsedMin` is minutes from the gun.
+- Crew Notes unreachable and nothing cached: 503.
+
