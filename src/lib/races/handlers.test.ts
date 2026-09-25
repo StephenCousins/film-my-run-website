@@ -7,7 +7,7 @@ const race = (slug: string, checkpointCount: number): RaceSummary => ({
 });
 const course = { slug: 'utmb-occ', checkpoints: [{ name: 'Orsières' }, { name: 'Chamonix' }] };
 const deps = (over: Partial<RacesDeps> = {}): RacesDeps => ({
-  list: async () => [race('utmb-occ', 15), race('no-checkpoints', 1)],
+  list: async () => [race('utmb-occ', 15), race('no-checkpoints', 1), { ...race('a-marathon', 6), distanceKm: 42.2 }, { ...race('arc-50', 8), distanceKm: 49 }],
   course: async (slug) => (slug === 'utmb-occ' ? course : null),
   memberForRequest: async (req) => (req.headers.get('Authorization') === 'Bearer club' ? { proUntil: '2099-01-01T00:00:00Z' } : null),
   now: () => Date.parse('2026-09-25T12:00:00Z'),
@@ -17,10 +17,10 @@ const get = (q = '', headers: Record<string, string> = {}) =>
   new NextRequest(`https://filmmyrun.com/api/app/v1/races${q}`, { headers });
 
 describe('race library', () => {
-  it('lists races for anyone, only those with a start and a finish', async () => {
+  it('lists ultras for anyone: a start and a finish, 45 km or more', async () => {
     const res = await handleRaces(get(), deps());
     expect(res.status).toBe(200);
-    expect((await res.json()).races.map((r: RaceSummary) => r.slug)).toEqual(['utmb-occ']);
+    expect((await res.json()).races.map((r: RaceSummary) => r.slug)).toEqual(['utmb-occ', 'arc-50']);
   });
 
   it('a course needs FMR Club', async () => {

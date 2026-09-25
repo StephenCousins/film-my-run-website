@@ -65,7 +65,7 @@ read server to server (`/v1/partner` on the Crew Notes API, header
 cached here for a day. Logic in `src/lib/races/handlers.ts`.
 
 - `GET /api/app/v1/races` → `{ ok, races: [{ slug, name, courseName, country, distanceKm, elevationGainM, checkpointCount, verified }] }`.
-  Anyone. Races with fewer than two checkpoints are left out.
+  Anyone. Ultras only: races under 45 km or with fewer than two checkpoints are left out.
 - `GET /api/app/v1/races?slug=utmb-occ` → `{ ok, course: { …summary, provenance, hasProfile, checkpoints: [{ name, distanceFromStartKm, elevationM, climbFromPrevM, cutoffElapsedMin }] } }`.
   FMR Club (X-FMR-Pro proof or a bearer for an FMR Club account), else 403.
   `climbFromPrevM` is the GPX climb on the leg into that checkpoint; null when

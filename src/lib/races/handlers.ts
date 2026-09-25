@@ -32,13 +32,21 @@ export type RacesDeps = {
   now?: () => number;
 };
 
+/** Shorter races are left out of Ultra Race Pacing. */
+export const MIN_ULTRA_KM = 45;
+
 export async function handleRaces(req: NextRequest, deps: RacesDeps): Promise<Response> {
   const slug = req.nextUrl.searchParams.get('slug');
   if (!slug) {
     const races = await deps.list();
     if (!races) return NextResponse.json({ ok: false, error: 'Race library unavailable' }, { status: 503 });
-    // A pacer needs somewhere to pace to: a start and a finish at least.
-    return NextResponse.json({ ok: true, races: races.filter((r) => r.checkpointCount >= 2) });
+    // A pacer needs somewhere to pace to: a start and a finish at least. And
+    // it paces ultras only (Stephen, 25 Sep: "Ultra Race Pacing"); 45 km, not
+    // 50, because a 50K's GPX often measures short (the Arc 50 is 49.0 km).
+    return NextResponse.json({
+      ok: true,
+      races: races.filter((r) => r.checkpointCount >= 2 && (r.distanceKm ?? 0) >= MIN_ULTRA_KM),
+    });
   }
   const installId = req.headers.get('X-FMR-Install') ?? '';
   const now = deps.now ? deps.now() : Date.now();
