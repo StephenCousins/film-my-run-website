@@ -22,7 +22,10 @@
     "test": "vitest run",
     "shoes": "node --env-file=.env node_modules/.bin/tsx scripts/shoes.ts",
     "test:watch": "vitest",
-    "fetch-routes": "node scripts/fetch-routes.js"
+    "fetch-routes": "node scripts/fetch-routes.js",
+    "news:daily": "tsx --tsconfig tsconfig.json scripts/news-daily.ts",
+    "news:publish": "tsx --tsconfig tsconfig.json scripts/news-publish.ts",
+    "news:unimage": "tsx --tsconfig tsconfig.json scripts/news-unimage.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.77.0",

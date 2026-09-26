@@ -51,3 +51,6 @@ public/images/blog/
 
 # Transcripts (local working files for blog writing)
 transcripts/
+
+# News pipeline dry runs (stories, images, log)
+news-dry-run/

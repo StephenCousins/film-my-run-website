@@ -58,7 +58,11 @@ export interface RunLog {
   itemsSeen: number;
   sortedOut: { url: string; type: ItemType; confidence: number }[];
   borderline: { url: string; confidence: number }[];
-  held: { headline: string; reason: string }[];
+  /** Passed the sort but the grouper put them in no bundle; left unseen so the next run retries them. */
+  ungrouped: { url: string; title: string }[];
+  /** Bundles not written this run (already covered, over the cap, or the ceiling); the last two stay unseen. */
+  skipped: { headline: string; reason: string }[];
+  held: { headline: string; reason: string; storyId?: number }[];
   published: { slug: string; title: string }[];
   costUsd: number;
   stoppedByCeiling: boolean;
