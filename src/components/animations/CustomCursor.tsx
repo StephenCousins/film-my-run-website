@@ -105,10 +105,11 @@ export default function CustomCursor() {
       const dt = Math.min(50, now - frameT);
       frameT = now;
       speed *= Math.pow(0.9, dt / 16);
-      // Square root: a gentle mouse still reads as a jog, a fast one as a full stride.
-      const target = reducedMotion ? 0 : Math.min(1, Math.sqrt(speed / 0.9));
-      amount += (target - amount) * Math.min(1, dt / 120);
-      if (amount > 0.02) phase += dt * 0.01 * (0.7 + 1.5 * amount);
+      // Full stride the moment the mouse moves (Stephen: "a much more pronounced running
+      // action"); the mouse's speed sets the cadence, not the size of the stride.
+      const target = reducedMotion ? 0 : speed > 0.04 ? 1 : 0;
+      amount += (target - amount) * Math.min(1, dt / 70);
+      if (amount > 0.02) phase += dt * (0.008 + 0.012 * Math.min(1, speed)); // 1.3-3 strides a second, as the first runner
       const j = getJoints();
       if (!j) return;
       const p = runnerPose(phase, amount);
@@ -255,7 +256,7 @@ export default function CustomCursor() {
           )}
         >
           <div ref={runnerRef} className="fmr-runner" aria-hidden="true">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#f88c00" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#f88c00" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <g data-j="fig">
                 {/* Far arm and leg first, fainter, so the near ones read in front */}
                 <g opacity="0.5">

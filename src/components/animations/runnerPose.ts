@@ -16,11 +16,11 @@ export interface Pose { near: Limb; far: Limb; bob: number }
 function limb(phase: number, amount: number): Limb {
   const swing = Math.max(0, Math.cos(phase + Math.PI / 4));
   return {
-    thigh: 4 + amount * 32 * Math.sin(phase),
-    knee: 8 + amount * (8 + 85 * swing * swing),
+    thigh: 4 + amount * 45 * Math.sin(phase),
+    knee: 8 + amount * (10 + 105 * swing * swing),
     // Arms swing against the legs, bent near a right angle, a touch more on the forward swing.
-    arm: amount * -34 * Math.sin(phase) + 0, // + 0: no "-0" when standing
-    elbow: 70 + amount * (18 + 12 * Math.sin(phase + Math.PI)),
+    arm: amount * -50 * Math.sin(phase) + 0, // + 0: no "-0" when standing
+    elbow: 70 + amount * (20 + 15 * Math.sin(phase + Math.PI)),
   };
 }
 
@@ -30,6 +30,6 @@ export function runnerPose(phase: number, amount: number): Pose {
     near: limb(phase, a),
     far: limb(phase + Math.PI, a),
     // Up at mid-flight, twice a stride.
-    bob: -a * 0.9 * Math.abs(Math.sin(phase)),
+    bob: -a * 1.5 * Math.abs(Math.sin(phase)),
   };
 }
