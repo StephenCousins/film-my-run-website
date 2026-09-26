@@ -68,7 +68,13 @@ export default function UserMenu({ isScrolled = true, isHeroPage = false }: { is
         </Link>
         <Link
           href="/register"
-          className="px-4 py-2 bg-orange-500 text-white text-sm font-semibold rounded-full hover:bg-orange-600 transition-colors"
+          className={cn(
+            // An outline, so the orange Shop pill is the one filled button in the header.
+            'px-4 py-2 text-sm font-semibold rounded-full border transition-colors',
+            !isScrolled && isHeroPage
+              ? 'border-white/70 text-white hover:bg-white/10'
+              : 'border-orange-500 text-orange-600 dark:text-orange-400 hover:bg-orange-500 hover:text-white dark:hover:text-white'
+          )}
         >
           Sign up
         </Link>
