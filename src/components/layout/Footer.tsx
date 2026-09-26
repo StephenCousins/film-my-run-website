@@ -182,11 +182,11 @@ export default function Footer() {
               <p className="text-muted text-xs mt-1">Years Running</p>
             </div>
             <div>
-              <span className="font-display text-2xl font-bold text-brand">250K</span>
-              <p className="text-muted text-xs mt-1">Weekly Tool Users</p>
+              <span className="font-display text-2xl font-bold text-brand">60K+</span>
+              <p className="text-muted text-xs mt-1">YouTube Subscribers</p>
             </div>
             <div>
-              <span className="font-display text-2xl font-bold text-brand">1M+</span>
+              <span className="font-display text-2xl font-bold text-brand">8M+</span>
               <p className="text-muted text-xs mt-1">Video Views</p>
             </div>
           </div>

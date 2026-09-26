@@ -362,7 +362,7 @@ export default function CalculatorsPage() {
                 Running Calculators
               </h1>
               <p className="text-lg text-zinc-300">
-                Free tools used by over 250,000 runners every week. Calculate pace, predict
+                Free tools I built for my own running. Calculate pace, predict
                 race times, age-grade your results, plan nutrition, and more.
               </p>
             </div>

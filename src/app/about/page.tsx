@@ -63,7 +63,7 @@ const personJsonLd = {
   image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about/stephen.jpg',
   jobTitle: 'Documentary Filmmaker & Ultra Runner',
   description:
-    'Award-winning documentary filmmaker, ultra-marathoner, and creator of running tools used by 250,000+ runners weekly.',
+    'Award-winning documentary filmmaker, ultra-marathoner, and creator of free running tools.',
   sameAs: [
     'https://www.youtube.com/@filmmyrun',
     'https://www.instagram.com/filmmyrun',
@@ -180,8 +180,8 @@ export default function AboutPage() {
                     Film My Run started as a way to document these adventures. Now it's
                     grown into something bigger - a platform for sharing stories, building
                     tools, and connecting with the running community. The calculators,
-                    dashboards, and other tools on this site are used by over 250,000
-                    runners every week.
+                    dashboards and other tools on this site are free, and most need
+                    no account.
                   </p>
                   <p>
                     Whether you're training for your first 5K or your tenth 100-miler,
@@ -236,8 +236,7 @@ export default function AboutPage() {
                   Running Tools
                 </h3>
                 <p className="text-muted mb-6">
-                  Free calculators, dashboards, and apps built for runners.
-                  Used by 250,000+ people every week.
+                  Free calculators, dashboards and apps built for runners.
                 </p>
                 <Link
                   href="/tools/calculators"
