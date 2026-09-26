@@ -5,7 +5,7 @@ import { NEWS_CONFIG } from './config';
 import { gatherCandidates } from './gather';
 import { bundleImportance, groupItems } from './group';
 import { storyImage } from './image';
-import { pickBundles, STORY_ESTIMATE_USD, uniqueSlug, withinCeiling } from './plan';
+import { pickBundles, slugBase, STORY_ESTIMATE_USD, uniqueSlug, withinCeiling } from './plan';
 import { ruleProblems } from './rules';
 import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
@@ -24,8 +24,11 @@ export interface RunDeps {
   /** Saves the story unpublished with its reason; returns its id for `npm run news:publish <id>`. */
   hold: (s: StoryToPublish, reason: string) => Promise<number>;
   monthSpentUsd: (now: Date) => Promise<number>;
+  /** Titles from the last 14 days, published or held: what the grouper's alreadyCovered check must see. */
   recentHeadlines: (now: Date) => Promise<string[]>;
   takenSlugs: () => Promise<Set<string>>;
+  /** Slugs of news_stories rows created in the last 14 days, used to catch a same-event duplicate before it publishes as -2. */
+  recentSlugs: (now: Date) => Promise<Set<string>>;
   markSeen: (items: Seen[]) => Promise<void>;
 }
 
@@ -60,8 +63,9 @@ const liveDeps: RunDeps = {
     const r = await prisma.news_runs.aggregate({ _sum: { cost_usd: true }, where: { started_at: { gte: from } } });
     return r._sum.cost_usd ?? 0;
   },
-  recentHeadlines: async (now) => (await prisma.news_stories.findMany({ where: { published_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { title: true } })).map((s) => s.title),
+  recentHeadlines: async (now) => (await prisma.news_stories.findMany({ where: { status: { in: ['published', 'held'] }, created_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { title: true } })).map((s) => s.title),
   takenSlugs: async () => new Set((await prisma.news_stories.findMany({ select: { slug: true } })).map((s) => s.slug)),
+  recentSlugs: async (now) => new Set((await prisma.news_stories.findMany({ where: { created_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { slug: true } })).map((s) => s.slug)),
   markSeen: async (items) => {
     for (const { c, v, bundleKey } of items) {
       const verdict = (v ?? undefined) as Prisma.InputJsonValue | undefined;
@@ -136,6 +140,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {} }: RunOpts): Pr
   }
 
   const taken = await d.takenSlugs();
+  const recentSlugs = await d.recentSlugs(now);
   const monthBefore = await d.monthSpentUsd(now);
   for (const b of picked) {
     if (log.stoppedByCeiling || !withinCeiling(monthBefore + log.costUsd, STORY_ESTIMATE_USD)) {
@@ -157,13 +162,19 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {} }: RunOpts): Pr
         sources: b.items.map((i) => ({ site: i.source, url: i.url })), imageUrl: null, photoCredit: null,
         bundleKey: b.key, articleIds: b.items.map((i) => i.articleId),
       };
-      // The full text, not the writer's 12,000-character slice: a copied sentence can sit anywhere.
-      const problems = ruleProblems(w.draft, b.items.map((i) => i.text ?? ''));
-      let reason = problems.length ? problems.join(', ') : null;
-      if (!reason) {
-        const c = await d.check(w.draft, b);
-        log.costUsd += c.costUsd;
-        if (!c.ok) reason = `unsupported: ${c.unsupported.join('; ')}`;
+      let reason: string | null = null;
+      if (recentSlugs.has(slugBase(w.draft.title))) {
+        // The same event slugged again within the window: a duplicate, not a fresh -2 story.
+        reason = 'duplicate slug';
+      } else {
+        // The full text, not the writer's 12,000-character slice: a copied sentence can sit anywhere.
+        const problems = ruleProblems(w.draft, b.items.map((i) => i.text ?? ''));
+        reason = problems.length ? problems.join(', ') : null;
+        if (!reason) {
+          const c = await d.check(w.draft, b);
+          log.costUsd += c.costUsd;
+          if (!c.ok) reason = `unsupported: ${c.unsupported.join('; ')}`;
+        }
       }
       if (reason) {
         const storyId = dryRun ? undefined : await d.hold(story, reason);

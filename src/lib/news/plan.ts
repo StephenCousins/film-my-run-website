@@ -13,9 +13,15 @@ export function withinCeiling(monthSpentUsd: number, nextEstimateUsd: number): b
   return monthSpentUsd + nextEstimateUsd <= NEWS_CONFIG.monthlyCeilingGbp * NEWS_CONFIG.usdPerGbp;
 }
 
-export function uniqueSlug(title: string, taken: Set<string>): string {
+/** The slug's base, before any `-2` suffix uniqueSlug adds for a collision. */
+export function slugBase(title: string): string {
   let base = title.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 70).replace(/-$/, '');
   if (base === '') base = 'story';
+  return base;
+}
+
+export function uniqueSlug(title: string, taken: Set<string>): string {
+  const base = slugBase(title);
   if (!taken.has(base)) return base;
   let n = 2;
   while (taken.has(`${base}-${n}`)) n++;

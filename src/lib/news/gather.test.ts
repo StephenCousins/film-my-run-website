@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { extractPage } from './gather';
+import { extractPage, pickImageUrl } from './gather';
+import { SOURCE_PLACEHOLDERS } from '@/lib/rss-fetcher';
 
 const html = readFileSync(new URL('./fixtures/irunfar-article.html', import.meta.url), 'utf8');
 
@@ -32,5 +33,28 @@ describe('extractPage', () => {
       'X',
     );
     expect(p.photoCredit).toBe('Jane Doe');
+  });
+});
+
+describe('pickImageUrl', () => {
+  it('prefers the page image when the page has one', () => {
+    expect(pickImageUrl('https://example.test/real.jpg', 'https://example.test/feed.jpg')).toBe('https://example.test/real.jpg');
+  });
+
+  it('falls back to the feed image when the page has none', () => {
+    expect(pickImageUrl(null, 'https://example.test/feed.jpg')).toBe('https://example.test/feed.jpg');
+  });
+
+  it('never falls back to a stock Unsplash placeholder', () => {
+    expect(pickImageUrl(null, 'https://images.unsplash.com/photo-123?w=800&q=80')).toBeNull();
+  });
+
+  it('never falls back to a known SOURCE_PLACEHOLDERS value', () => {
+    const placeholder = SOURCE_PLACEHOLDERS['Athletics Weekly'];
+    expect(pickImageUrl(null, placeholder)).toBeNull();
+  });
+
+  it('returns null when neither image exists', () => {
+    expect(pickImageUrl(null, null)).toBeNull();
   });
 });

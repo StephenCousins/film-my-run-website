@@ -1,8 +1,27 @@
 import * as cheerio from 'cheerio';
 import { prisma } from '@/lib/db';
-import { fetchAndStoreArticles } from '@/lib/rss-fetcher';
+import { fetchAndStoreArticles, SOURCE_PLACEHOLDERS } from '@/lib/rss-fetcher';
 import { NEWS_CONFIG } from './config';
 import type { Candidate } from './types';
+
+const PLACEHOLDER_IMAGE_URLS = new Set(Object.values(SOURCE_PLACEHOLDERS));
+
+/**
+ * A feed image is untrustworthy as a fallback when it's one of the stock
+ * Unsplash placeholders rss-fetcher fills in for feeds without their own
+ * images: that photo has nothing to do with the story, so crediting it (via
+ * the image step's source-image heuristics) would be a false credit.
+ */
+function isPlaceholderImage(url: string): boolean {
+  return url.includes('images.unsplash.com') || PLACEHOLDER_IMAGE_URLS.has(url);
+}
+
+/** The page's own image if it found one; otherwise the feed's image, unless that's a stock placeholder. */
+export function pickImageUrl(pageImageUrl: string | null, feedImageUrl: string | null): string | null {
+  if (pageImageUrl) return pageImageUrl;
+  if (feedImageUrl && !isPlaceholderImage(feedImageUrl)) return feedImageUrl;
+  return null;
+}
 
 /** The article's words, main photo and photo credit from its page. */
 export function extractPage(html: string, pageUrl: string, site: string) {
@@ -58,7 +77,7 @@ export async function gatherCandidates(now: Date): Promise<Candidate[]> {
     const page = html ? extractPage(html, a.link, a.source) : { text: null, imageUrl: null, photoCredit: null };
     out.push({
       articleId: a.id, url: a.link, source: a.source, title: a.title, pubDate: a.pub_date,
-      summary: a.description ?? '', text: page.text, imageUrl: page.imageUrl ?? a.image_url, photoCredit: page.photoCredit,
+      summary: a.description ?? '', text: page.text, imageUrl: pickImageUrl(page.imageUrl, a.image_url), photoCredit: page.photoCredit,
     });
   }
   return out;

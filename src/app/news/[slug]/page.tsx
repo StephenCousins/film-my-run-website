@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import { prisma } from '@/lib/db';
 import { sanitizeContent } from '@/lib/sanitize';
+import { buildArticleJsonLd } from '@/lib/news/article-jsonld';
 
 export const dynamic = 'force-dynamic';
 
@@ -117,21 +118,7 @@ export default async function NewsStoryPage({ params }: PageProps) {
   const relatedStories = await getRelatedStories(slug);
   const storyUrl = `https://filmmyrun.com/news/${story.slug}`;
 
-  const articleJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'NewsArticle',
-    headline: story.title,
-    datePublished: story.publishedAt,
-    image: story.imageUrl ? [story.imageUrl] : [],
-    author: {
-      '@type': 'Organization',
-      name: 'Film My Run',
-    },
-    publisher: {
-      '@type': 'Organization',
-      name: 'Film My Run',
-    },
-  };
+  const articleJsonLd = buildArticleJsonLd(story, storyUrl);
 
   const breadcrumbJsonLd = {
     '@context': 'https://schema.org',

@@ -24,6 +24,7 @@ function deps(over: Record<string, unknown> = {}) {
     monthSpentUsd: async () => 0,
     recentHeadlines: async () => [],
     takenSlugs: async () => new Set<string>(),
+    recentSlugs: async () => new Set<string>(),
     markSeen: async (items: { c: Candidate }[]) => { seen.push(...items.map((i) => i.c.articleId)); },
     ...over,
   };
@@ -86,6 +87,41 @@ describe('a news run', () => {
     });
     await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(published.map((p) => p.slug)).toEqual(['same-title-2', 'same-title-3', 'same-title-4', 'same-title-5']);
+  });
+  it('holds a story as duplicate slug instead of publishing it as -2, when the base slug belongs to a story from the last 14 days', async () => {
+    const { d, published, held } = deps({
+      gather: async () => [cand(5)],
+      write: async () => ({ draft: { title: 'Same title', excerpt: 'E.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }),
+      takenSlugs: async () => new Set(['same-title']),
+      recentSlugs: async () => new Set(['same-title']),
+    });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(published).toHaveLength(0);
+    expect(held).toHaveLength(1);
+    expect(log.held[0].reason).toBe('duplicate slug');
+  });
+  it('still suffixes a same-base slug that belongs to an older story (not from the last 14 days)', async () => {
+    const { d, published } = deps({
+      gather: async () => [cand(5)],
+      write: async () => ({ draft: { title: 'Same title', excerpt: 'E.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }),
+      takenSlugs: async () => new Set(['same-title']),
+      recentSlugs: async () => new Set<string>(),
+    });
+    await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(published.map((p) => p.slug)).toEqual(['same-title-2']);
+  });
+  it('passes recentHeadlines straight through to the grouper (the live dep also includes held stories)', async () => {
+    let recentSeenByGroup: string[] = [];
+    const { d } = deps({
+      gather: async () => [cand(5)],
+      recentHeadlines: async () => ['A held story title', 'A published story title'],
+      group: async (items: { c: Candidate; v: Verdict }[], recent: string[]) => {
+        recentSeenByGroup = recent;
+        return { costUsd: 0, bundles: items.map(({ c, v }) => ({ key: `e${c.articleId}`, headline: `E${c.articleId}`, items: [c], verdicts: [v], alreadyCovered: false })) };
+      },
+    });
+    await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(recentSeenByGroup).toEqual(['A held story title', 'A published story title']);
   });
   it('one bundle throwing holds that story and the run carries on', async () => {
     let n = 0;
