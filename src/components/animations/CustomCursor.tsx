@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { runnerPose, type Limb } from './runnerPose';
 
 // ============================================
 // CUSTOM CURSOR COMPONENT
@@ -12,6 +13,10 @@ import { cn } from '@/lib/utils';
 // - Expands on hover over interactive elements
 // - Changes style based on element type
 // - Hidden on mobile/touch devices
+
+// The runner's joints in its 24x24 drawing, facing right.
+const HIP = [11.8, 12.4], KNEE = [11.8, 16.8], FOOT = [11.8, 21.2];
+const SHOULDER = [13.4, 7.0], ELBOW = [13.4, 10.0], HAND = [13.4, 12.8];
 
 interface CursorState {
   x: number;
@@ -66,15 +71,51 @@ export default function CustomCursor() {
         cursorDotRef.current.style.transform = `translate(${targetX}px, ${targetY}px)`;
       }
 
+      stepRunner(performance.now());
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    // The runner runs while the mouse moves, faces the way it is going, and
-    // strides quicker the faster it goes; it stops a moment after the mouse does.
+    // The runner: stride speed follows the mouse, eases to a stand when it stops,
+    // and faces the way it is going. Joints are posed every frame from runnerPose.
     let lastX = 0;
+    let lastY = 0;
     let lastT = 0;
-    let stopTimer: ReturnType<typeof setTimeout> | undefined;
+    let speed = 0; // px per ms, smoothed
+    let amount = 0; // 0 standing .. 1 flat out
+    let phase = 0;
+    let frameT = performance.now();
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Looked up on the first frame the runner exists: it renders only after this effect finds a mouse.
+    type Joints = Record<'fig' | 'nThigh' | 'nShin' | 'nArm' | 'nFore' | 'fThigh' | 'fShin' | 'fArm' | 'fFore', SVGGElement | null>;
+    let joints: Joints | null = null;
+    const getJoints = (): Joints | null => {
+      if (joints || !runnerRef.current) return joints;
+      const q = (k: string) => runnerRef.current!.querySelector<SVGGElement>(`[data-j="${k}"]`);
+      joints = { fig: q('fig'), nThigh: q('n-thigh'), nShin: q('n-shin'), nArm: q('n-arm'), nFore: q('n-fore'), fThigh: q('f-thigh'), fShin: q('f-shin'), fArm: q('f-arm'), fFore: q('f-fore') };
+      return joints;
+    };
+    const rot = (el: SVGGElement | null, deg: number, at: number[]) => el?.setAttribute('transform', `rotate(${deg.toFixed(1)} ${at[0]} ${at[1]})`);
+    const poseLimb = (l: Limb, thigh: SVGGElement | null, shin: SVGGElement | null, arm: SVGGElement | null, fore: SVGGElement | null) => {
+      rot(thigh, -l.thigh, HIP);
+      rot(shin, l.knee, KNEE);
+      rot(arm, -l.arm, SHOULDER);
+      rot(fore, -l.elbow, ELBOW);
+    };
+    const stepRunner = (now: number) => {
+      const dt = Math.min(50, now - frameT);
+      frameT = now;
+      speed *= Math.pow(0.9, dt / 16);
+      // Square root: a gentle mouse still reads as a jog, a fast one as a full stride.
+      const target = reducedMotion ? 0 : Math.min(1, Math.sqrt(speed / 0.9));
+      amount += (target - amount) * Math.min(1, dt / 120);
+      if (amount > 0.02) phase += dt * 0.01 * (0.7 + 1.5 * amount);
+      const j = getJoints();
+      if (!j) return;
+      const p = runnerPose(phase, amount);
+      j.fig?.setAttribute('transform', `translate(0 ${p.bob.toFixed(2)})`);
+      poseLimb(p.near, j.nThigh, j.nShin, j.nArm, j.nFore);
+      poseLimb(p.far, j.fThigh, j.fShin, j.fArm, j.fFore);
+    };
 
     // Mouse move handler
     const handleMouseMove = (e: MouseEvent) => {
@@ -82,19 +123,14 @@ export default function CustomCursor() {
       targetY = e.clientY;
       setState(prev => (prev.isVisible ? prev : { ...prev, isVisible: true }));
 
-      const runner = runnerRef.current;
-      if (runner && !reducedMotion) {
-        const now = performance.now();
-        const dx = e.clientX - lastX;
-        const speed = Math.abs(dx) / Math.max(1, now - lastT); // px per ms
-        if (Math.abs(dx) > 1) runner.style.setProperty('--face', dx < 0 ? '-1' : '1');
-        runner.style.setProperty('--stride', `${Math.max(0.16, Math.min(0.4, 0.4 - speed * 0.12)).toFixed(2)}s`);
-        runner.classList.add('running');
-        clearTimeout(stopTimer);
-        stopTimer = setTimeout(() => runner.classList.remove('running'), 140);
-        lastX = e.clientX;
-        lastT = now;
-      }
+      const now = performance.now();
+      const dx = e.clientX - lastX;
+      const inst = Math.hypot(dx, e.clientY - lastY) / Math.max(1, now - lastT);
+      speed = speed * 0.6 + Math.min(inst, 3) * 0.4;
+      if (Math.abs(dx) > 1) runnerRef.current?.style.setProperty('--face', dx < 0 ? '-1' : '1');
+      lastX = e.clientX;
+      lastY = e.clientY;
+      lastT = now;
     };
 
     // Mouse enter/leave window
@@ -162,7 +198,6 @@ export default function CustomCursor() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      clearTimeout(stopTimer);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mousemove', handleElementHover);
       document.removeEventListener('mouseenter', handleMouseEnter);
@@ -207,7 +242,7 @@ export default function CustomCursor() {
       <div
         ref={cursorDotRef}
         className={cn(
-          'fixed top-0 left-0 pointer-events-none z-[9999] -ml-[13px] -mt-[13px]',
+          'fixed top-0 left-0 pointer-events-none z-[9999] -ml-[15px] -mt-[15px]',
           'transition-opacity duration-300',
           state.isVisible ? 'opacity-100' : 'opacity-0'
         )}
@@ -220,14 +255,17 @@ export default function CustomCursor() {
           )}
         >
           <div ref={runnerRef} className="fmr-runner" aria-hidden="true">
-            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f88c00" strokeWidth="2.2" strokeLinecap="round">
-              <g className="fmr-runner-body">
-                <circle cx="13.5" cy="4" r="2.2" fill="#f88c00" stroke="none" />
-                <line x1="12.6" y1="7.2" x2="11" y2="13" />
-                <line className="fmr-arm-a" x1="12.3" y1="8.5" x2="15.5" y2="11.5" />
-                <line className="fmr-arm-b" x1="12.3" y1="8.5" x2="9" y2="11" />
-                <line className="fmr-leg-a" x1="11" y1="13" x2="13.5" y2="20.5" />
-                <line className="fmr-leg-b" x1="11" y1="13" x2="8.5" y2="20.5" />
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#f88c00" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round">
+              <g data-j="fig">
+                {/* Far arm and leg first, fainter, so the near ones read in front */}
+                <g opacity="0.5">
+                  <g data-j="f-arm"><line x1={SHOULDER[0]} y1={SHOULDER[1]} x2={ELBOW[0]} y2={ELBOW[1]} /><g data-j="f-fore"><line x1={ELBOW[0]} y1={ELBOW[1]} x2={HAND[0]} y2={HAND[1]} /></g></g>
+                  <g data-j="f-thigh"><line x1={HIP[0]} y1={HIP[1]} x2={KNEE[0]} y2={KNEE[1]} /><g data-j="f-shin"><polyline points={`${KNEE[0]},${KNEE[1]} ${FOOT[0]},${FOOT[1]} ${FOOT[0] + 1.3},${FOOT[1] + 0.2}`} /></g></g>
+                </g>
+                <circle cx="14.6" cy="3.8" r="2.1" fill="#f88c00" stroke="none" />
+                <line x1={SHOULDER[0]} y1={SHOULDER[1]} x2={HIP[0]} y2={HIP[1]} strokeWidth="2.3" />
+                <g data-j="n-thigh"><line x1={HIP[0]} y1={HIP[1]} x2={KNEE[0]} y2={KNEE[1]} /><g data-j="n-shin"><polyline points={`${KNEE[0]},${KNEE[1]} ${FOOT[0]},${FOOT[1]} ${FOOT[0] + 1.3},${FOOT[1] + 0.2}`} /></g></g>
+                <g data-j="n-arm"><line x1={SHOULDER[0]} y1={SHOULDER[1]} x2={ELBOW[0]} y2={ELBOW[1]} /><g data-j="n-fore"><line x1={ELBOW[0]} y1={ELBOW[1]} x2={HAND[0]} y2={HAND[1]} /></g></g>
               </g>
             </svg>
           </div>
@@ -241,23 +279,7 @@ export default function CustomCursor() {
             cursor: none !important;
           }
         }
-        .fmr-runner { --face: 1; --stride: 0.3s; transform: scaleX(var(--face)); transition: transform 0.15s; }
-        .fmr-runner line { transform-box: view-box; }
-        .fmr-arm-a, .fmr-arm-b { transform-origin: 12.3px 8.5px; }
-        .fmr-leg-a, .fmr-leg-b { transform-origin: 11px 13px; }
-        /* Standing: legs a little apart, arms loose */
-        .fmr-leg-a { transform: rotate(-12deg); }
-        .fmr-leg-b { transform: rotate(12deg); }
-        .fmr-arm-a { transform: rotate(35deg); }
-        .fmr-arm-b { transform: rotate(-25deg); }
-        .fmr-runner.running .fmr-leg-a { animation: fmr-swing var(--stride) ease-in-out infinite alternate; }
-        .fmr-runner.running .fmr-leg-b { animation: fmr-swing var(--stride) ease-in-out infinite alternate-reverse; }
-        .fmr-runner.running .fmr-arm-a { animation: fmr-swing-arm var(--stride) ease-in-out infinite alternate-reverse; }
-        .fmr-runner.running .fmr-arm-b { animation: fmr-swing-arm var(--stride) ease-in-out infinite alternate; }
-        .fmr-runner.running .fmr-runner-body { animation: fmr-bob calc(var(--stride) / 2) ease-in-out infinite alternate; }
-        @keyframes fmr-swing { from { transform: rotate(-40deg); } to { transform: rotate(40deg); } }
-        @keyframes fmr-swing-arm { from { transform: rotate(-45deg); } to { transform: rotate(45deg); } }
-        @keyframes fmr-bob { from { transform: translateY(0); } to { transform: translateY(-1px); } }
+        .fmr-runner { --face: 1; transform: scaleX(var(--face)); transition: transform 0.15s; }
       `}</style>
     </>
   );
