@@ -94,11 +94,6 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
       )}>
         {article.source}
       </span>
-      {article.isOriginal && (
-        <span className="px-2.5 py-1 bg-[#f88c00] text-white text-xs font-bold rounded-md uppercase tracking-wide">
-          FMR Original
-        </span>
-      )}
       <span className="flex items-center gap-1.5 text-xs text-muted">
         <Calendar className="w-3 h-3" />
         {pubDate.toLocaleDateString('en-GB', {
@@ -191,13 +186,6 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
             <div className="absolute top-3 left-3">
               <span className="px-2.5 py-1 bg-brand text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
                 New
-              </span>
-            </div>
-          )}
-          {article.isOriginal && (
-            <div className="absolute top-3 right-3">
-              <span className="px-2.5 py-1 bg-[#f88c00] text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
-                FMR Original
               </span>
             </div>
           )}

@@ -174,10 +174,6 @@ export default async function NewsStoryPage({ params }: PageProps) {
                 <span className="text-muted truncate">{story.title}</span>
               </nav>
 
-              {/* FMR Original badge */}
-              <span className="inline-block px-3 py-1.5 bg-orange-500 text-white text-xs font-semibold rounded-full mb-4">
-                FMR Original
-              </span>
 
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">
                 {story.title}
@@ -223,7 +219,7 @@ export default async function NewsStoryPage({ params }: PageProps) {
                 <div className="mt-10 pt-8 border-t border-border text-sm text-secondary">
                   {story.sources && story.sources.length > 0 ? (
                     <p>
-                      Reported from{' '}
+                      Originally reported in{' '}
                       {story.sources.map((source, index, sources) => (
                         <span key={source.url}>
                           <a
@@ -240,7 +236,7 @@ export default async function NewsStoryPage({ params }: PageProps) {
                     </p>
                   ) : (
                     <p>
-                      Reported from{' '}
+                      Originally reported in{' '}
                       <a
                         href={story.sourceUrl}
                         rel="nofollow noopener"
@@ -291,10 +287,7 @@ export default async function NewsStoryPage({ params }: PageProps) {
                               )}
                             </div>
                             <div>
-                              <span className="text-xs text-orange-500 font-medium">
-                                FMR Original
-                              </span>
-                              <h4 className="font-medium text-foreground group-hover:text-brand transition-colors line-clamp-2 text-sm mt-1">
+                              <h4 className="font-medium text-foreground group-hover:text-brand transition-colors line-clamp-2 text-sm">
                                 {related.title}
                               </h4>
                               <span className="text-xs text-muted mt-1 block">
