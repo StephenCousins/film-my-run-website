@@ -56,7 +56,7 @@ export default function BuyBox({ item, colour, setColour }: { item: ShopItem; co
 
       {sizes.length > 0 && (
         <div className="mt-5">
-          <p className="text-sm text-secondary mb-2">Size{chosenSize ? '' : ' — choose one'}</p>
+          <p className="text-sm text-secondary mb-2">Size{chosenSize ? '' : ': choose one'}</p>
           <div className="flex flex-wrap gap-2">
             {sizes.map((s) => (
               <button

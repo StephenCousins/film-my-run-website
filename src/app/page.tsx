@@ -19,6 +19,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CustomCursor from '@/components/animations/CustomCursor';
 import { prisma } from '@/lib/db';
+import { getChannelStats } from '@/lib/youtube-stats';
 
 export const metadata: Metadata = {
   title: 'Film My Run | Documentary Filmmaker & Ultra Runner',
@@ -85,7 +86,7 @@ async function getLatestPosts() {
 }
 
 export default async function HomePage() {
-  const latestPosts = await getLatestPosts();
+  const [latestPosts, channel] = await Promise.all([getLatestPosts(), getChannelStats()]);
 
   return (
     <>
@@ -100,7 +101,7 @@ export default async function HomePage() {
         <Hero />
 
         {/* Section 2: Stats Banner with animated counters */}
-        <StatsBanner filmCount={900} />
+        <StatsBanner filmCount={900} subscribers={channel?.subscribers} videoViews={channel?.totalViews} />
 
         {/* Section 3: Featured Film showcase */}
         <FeaturedFilm />

@@ -159,20 +159,19 @@ export default async function NewsPage() {
                 Trail & Ultra Running News
               </h1>
               <p className="text-lg lg:text-xl text-white/80 max-w-2xl leading-relaxed">
-                The latest stories from the world of trail and ultra running.
-                Curated from trusted sources and updated daily.
+                Our own reports on the latest running news, trail and ultra first, written every morning
+                from the races and the people in them.
               </p>
 
               {/* Last updated */}
               <div className="flex items-center gap-2 mt-8 text-sm text-white/50">
                 <RefreshCw className="w-4 h-4" />
                 <span>
-                  Last updated: {new Date().toLocaleDateString('en-GB', {
+                  {/* The newest story's own date, not the time the page was loaded. */}
+                  Latest story: {new Date(articles[0]?.pubDate ?? Date.now()).toLocaleDateString('en-GB', {
                     weekday: 'long',
                     day: 'numeric',
                     month: 'long',
-                    hour: '2-digit',
-                    minute: '2-digit',
                   })}
                 </span>
               </div>

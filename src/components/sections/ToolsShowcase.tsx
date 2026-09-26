@@ -7,9 +7,8 @@ import {
   Timer,
   Trophy,
   Map,
-  BarChart3,
+  Footprints,
   Target,
-  Zap,
   ArrowRight,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -18,62 +17,50 @@ import { cn } from '@/lib/utils';
 // TOOLS DATA
 // ============================================
 
+// Tools that exist on the site, with what they do. No usage figures: the old
+// "50K+ weekly users" numbers were invented (removed 26 Sep 2026).
 const tools = [
   {
     name: 'Pace Calculator',
-    description: 'Convert between pace, speed, and time for any distance',
+    description: 'Convert between pace, speed and time for any distance, in km or miles.',
     icon: Calculator,
     color: 'from-orange-500 to-orange-600',
     href: '/tools/calculators#pace',
-    users: '50K+',
   },
   {
     name: 'Race Predictor',
-    description: 'Your next race time, from 2.4 million real UK results',
+    description: 'Your next race time, from 2.4 million real UK results. Ultras too.',
     icon: Target,
     color: 'from-blue-500 to-blue-600',
     href: '/tools/calculators#predictor',
-    users: '35K+',
   },
   {
-    name: 'Splits Calculator',
-    description: 'Plan your race with custom split strategies',
+    name: 'Age Grading',
+    description: "How your time compares with the world's best at your age.",
     icon: Timer,
     color: 'from-purple-500 to-purple-600',
-    href: '/tools/calculators#splits',
-    users: '28K+',
+    href: '/tools/calculators#age-grade',
   },
   {
     name: 'Route Comparison',
-    description: 'Compare race routes side by side with elevation and distance',
+    description: 'Upload GPX or FIT files and compare runs side by side. Free account needed.',
     icon: Map,
     color: 'from-green-500 to-green-600',
     href: '/tools/route-comparison',
-    users: '45K+',
   },
   {
     name: 'How Fast Are You',
-    description: 'Look up any runner and see how their times compare',
+    description: 'Look up any runner and see how their times compare.',
     icon: Trophy,
     color: 'from-amber-500 to-amber-600',
     href: '/tools/how-fast-am-i',
-    users: '60K+',
   },
   {
-    name: 'Training Plan App',
-    description: 'Personalized marathon training plans tailored to your goals',
-    icon: BarChart3,
+    name: 'Shoe Finder',
+    description: 'Review scores for 300-plus running shoes, from the sites that test them.',
+    icon: Footprints,
     color: 'from-red-500 to-red-600',
-    href: '/training',
-    users: '22K+',
-  },
-  {
-    name: 'Power Calculator',
-    description: 'Estimate running power and training zones',
-    icon: Zap,
-    color: 'from-cyan-500 to-cyan-600',
-    href: '/tools/calculators#power',
-    users: '15K+',
+    href: '/tools/shoe-finder',
   },
 ];
 
@@ -83,43 +70,35 @@ const tools = [
 
 interface ToolCardProps {
   tool: typeof tools[0];
-  index: number;
+  className?: string;
 }
 
-function ToolCard({ tool, index }: ToolCardProps) {
+// A plain solid card: the shared card-interactive (transition-all plus a hover
+// transform) drew as a see-through card with white slivers inside the mobile
+// scroller on iOS Safari (26 Sep 2026). The lift on hover is desktop only.
+function ToolCard({ tool, className }: ToolCardProps) {
   const Icon = tool.icon;
 
   return (
     <Link
       href={tool.href}
-      className="tool-card card-interactive p-6 w-[280px] sm:w-[320px] flex-shrink-0"
+      className={cn(
+        'tool-card group block flex-shrink-0 p-6 rounded-2xl border border-border bg-white dark:bg-zinc-900',
+        'lg:transition-[transform,box-shadow,border-color] lg:duration-300 lg:hover:-translate-y-1 lg:hover:shadow-xl lg:hover:border-brand/50',
+        className
+      )}
     >
-      {/* Icon */}
-      <div
-        className={cn(
-          'w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center mb-4 group-hover:scale-110 transition-transform',
-          tool.color
-        )}
-      >
+      <div className={cn('w-14 h-14 rounded-xl bg-gradient-to-br flex items-center justify-center mb-4', tool.color)}>
         <Icon className="w-7 h-7 text-white" />
       </div>
-
-      {/* Content */}
       <h3 className="font-display text-xl font-semibold text-foreground mb-2 group-hover:text-brand transition-colors">
         {tool.name}
       </h3>
-      <p className="text-sm text-secondary mb-4 line-clamp-2">
-        {tool.description}
-      </p>
-
-      {/* Footer */}
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-medium text-muted">
-          {tool.users} weekly users
-        </span>
-        <div className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center group-hover:bg-brand transition-colors">
+      <p className="text-sm text-secondary mb-4">{tool.description}</p>
+      <div className="flex items-center justify-end">
+        <span className="w-8 h-8 rounded-full bg-brand/10 flex items-center justify-center group-hover:bg-brand transition-colors">
           <ArrowRight className="w-4 h-4 text-brand group-hover:text-white transition-colors" />
-        </div>
+        </span>
       </div>
     </Link>
   );
@@ -197,21 +176,15 @@ export default function ToolsShowcase() {
             Built for <span className="text-brand">Runners</span>
           </h2>
           <p className="text-zinc-300 text-base mb-6 leading-relaxed">
-            Powerful calculators and tools used by over 250,000 runners every week.
-            All free, no signup required.
+            Calculators and tools I built for my own running. All free, and most need no account.
           </p>
         </div>
 
-        {/* Horizontal snap-scroll cards */}
-        <div className="relative overflow-x-auto overflow-y-hidden -mx-0">
-          <div className="flex gap-4 snap-x snap-mandatory pl-6 pb-4 scrollbar-hide" style={{ WebkitOverflowScrolling: 'touch' }}>
-            {tools.map((tool, index) => (
-              <div key={tool.name} className="snap-start flex-shrink-0">
-                <ToolCard tool={tool} index={index} />
-              </div>
-            ))}
-            <div className="flex-shrink-0 w-6" />
-          </div>
+        {/* Horizontal snap-scroll cards: the flex row is itself the scroller, so snapping works */}
+        <div className="relative flex gap-4 overflow-x-auto snap-x snap-mandatory scroll-px-6 px-6 pb-4 scrollbar-hide">
+          {tools.map((tool) => (
+            <ToolCard key={tool.name} tool={tool} className="snap-start w-[78vw] max-w-[300px]" />
+          ))}
         </div>
 
         {/* CTA */}
@@ -261,8 +234,7 @@ export default function ToolsShowcase() {
                   <span className="text-brand">Runners</span>
                 </h2>
                 <p className="text-zinc-300 text-lg mb-8 leading-relaxed">
-                  Powerful calculators and tools used by over 250,000 runners every week.
-                  All free, no signup required.
+                  Calculators and tools I built for my own running. All free, and most need no account.
                 </p>
                 <Link
                   href="/tools/calculators"
@@ -284,8 +256,8 @@ export default function ToolsShowcase() {
                   transition: 'transform 0.1s ease-out',
                 }}
               >
-                {tools.map((tool, index) => (
-                  <ToolCard key={tool.name} tool={tool} index={index} />
+                {tools.map((tool) => (
+                  <ToolCard key={tool.name} tool={tool} className="w-[320px]" />
                 ))}
               </div>
             </div>

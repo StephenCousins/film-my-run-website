@@ -23,7 +23,7 @@ export const metadata: Metadata = {
   title: 'Running Tools',
   alternates: { canonical: 'https://filmmyrun.com/tools' },
   description:
-    'Free running tools used by 250,000+ runners every week. Pace calculators, parkrun statistics, race visualization, and more.',
+    'Free running tools: pace and race-time calculators, parkrun statistics, a shoe finder, race maps and more.',
   openGraph: {
     title: 'Running Tools | Film My Run',
     description: 'Free tools for runners: calculators, parkrun stats, race maps.',
@@ -48,11 +48,11 @@ const tools = [
   {
     name: 'Running Calculators',
     description:
-      'Pace calculator, race predictor, splits calculator, age grading, VO2 max estimator, and training zones.',
+      'Pace calculator, race predictor, age grading, VO2 max estimator, training zones, elevation and nutrition.',
     href: '/tools/calculators',
     icon: Calculator,
     color: 'from-orange-500 to-orange-600',
-    stats: '250K+ weekly users',
+    stats: 'Seven calculators',
     popular: true,
   },
   {
@@ -72,7 +72,7 @@ const tools = [
     href: '/tools/shoe-finder',
     icon: Footprints,
     color: 'from-teal-500 to-teal-600',
-    stats: '130+ shoes ranked',
+    stats: '300+ shoes ranked',
     popular: true,
   },
   {
@@ -101,10 +101,10 @@ const calculatorTools = [
     href: '/tools/calculators#predictor',
   },
   {
-    name: 'Splits Calculator',
-    description: 'Plan even or negative splits',
+    name: 'VO2 Max Estimator',
+    description: 'Estimate your VO2 max from a race time',
     icon: Timer,
-    href: '/tools/calculators#splits',
+    href: '/tools/calculators#vo2max',
   },
   {
     name: 'Training Zones',
@@ -130,7 +130,7 @@ const webAppJsonLd = {
   name: 'Film My Run Running Tools',
   url: 'https://filmmyrun.com/tools',
   description:
-    'Free running tools used by 250,000+ runners every week. Pace calculators, parkrun statistics, race visualization, and more.',
+    'Free running tools: pace and race-time calculators, parkrun statistics, a shoe finder, race maps and more.',
   applicationCategory: 'SportsApplication',
   operatingSystem: 'Any',
   offers: {
@@ -172,8 +172,8 @@ export default function ToolsPage() {
                 Running <span className="text-orange-500">Tools</span>
               </h1>
               <p className="text-xl text-secondary">
-                Free tools used by over 250,000 runners every week. Calculate pace, predict
-                race times, track parkrun stats, and visualize your routes.
+                Free tools I built for my own running. Calculate pace, predict race times, track
+                parkrun stats and compare your routes.
               </p>
             </div>
           </div>
@@ -192,7 +192,7 @@ export default function ToolsPage() {
                   <Link
                     key={tool.name}
                     href={tool.href}
-                    className="group bg-surface rounded-2xl border border-border p-6 hover:border-orange-500/50 hover:-translate-y-1 transition-all duration-300"
+                    className="group relative bg-surface rounded-2xl border border-border p-6 hover:border-orange-500/50 lg:hover:-translate-y-1 transition-[transform,border-color] duration-300"
                   >
                     {/* Icon */}
                     <div

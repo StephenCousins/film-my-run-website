@@ -123,18 +123,21 @@ function StatCard({ value, suffix, label, description, index }: StatCardProps) {
 export interface StatsBannerProps {
   filmCount?: number;
   yearsRunning?: number;
-  weeklyUsers?: number;
-  videoViews?: number;
+  /** Live from the YouTube channel (youtube-stats); the card is left out when unknown. */
+  subscribers?: number | null;
+  videoViews?: number | null;
 }
 
 export default function StatsBanner({
   filmCount = 900,
   yearsRunning = 15,
-  weeklyUsers = 50,
-  videoViews = 7,
+  subscribers = null,
+  videoViews = null,
 }: StatsBannerProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
+  // Real figures only: "Weekly Users" (a fixed 50K) and "Video Views" (a fixed 7M)
+  // were guesses; both now come from the channel, rounded down (26 Sep 2026).
   const stats = [
     {
       value: filmCount,
@@ -148,18 +151,12 @@ export default function StatsBanner({
       label: 'Years Running',
       description: 'Documenting since 2011',
     },
-    {
-      value: weeklyUsers,
-      suffix: 'K',
-      label: 'Weekly Users',
-      description: 'Using our tools',
-    },
-    {
-      value: videoViews,
-      suffix: 'M+',
-      label: 'Video Views',
-      description: 'Across all platforms',
-    },
+    ...(subscribers
+      ? [{ value: Math.floor(subscribers / 1000), suffix: 'K+', label: 'Subscribers', description: 'On YouTube' }]
+      : []),
+    ...(videoViews
+      ? [{ value: Math.floor(videoViews / 1_000_000), suffix: 'M+', label: 'Video Views', description: 'On YouTube' }]
+      : []),
   ];
 
   useEffect(() => {

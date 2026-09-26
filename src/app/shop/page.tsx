@@ -42,8 +42,8 @@ export default function ShopPage() {
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-5">The Shop</h1>
               <p className="text-lg text-zinc-300 leading-relaxed">
                 The running vests and running t-shirts are technical kit: Sports Airflow fabric, breathable and
-                quick-drying, cut and sewn to order in London. Everything after them is casual cotton — every
-                phrase said out loud, on camera, somewhere between a start line and a finish line.
+                quick-drying, cut and sewn to order in London. Everything after them is casual cotton. Every
+                phrase was said out loud, on camera, somewhere between a start line and a finish line.
               </p>
             </div>
           </div>

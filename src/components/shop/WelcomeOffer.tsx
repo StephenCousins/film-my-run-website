@@ -57,7 +57,7 @@ export default function WelcomeOffer() {
           10% off, every order
         </p>
         <p className="text-sm text-secondary mt-2">
-          A Film My Run account is free and takes 10% off everything in the shop — not just the first order.
+          A Film My Run account is free and takes 10% off everything in the shop, not just the first order.
           It keeps your order history too, and works in the app.
         </p>
         <div className="mt-4 flex gap-3">

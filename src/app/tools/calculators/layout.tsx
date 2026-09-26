@@ -4,19 +4,18 @@ export const metadata: Metadata = {
   title: 'Running Calculators',
   alternates: { canonical: 'https://filmmyrun.com/tools/calculators' },
   description:
-    'Free running calculators used by 250,000+ runners every week. Pace calculator, a race predictor built on 2.4 million real UK results, splits calculator, age grading, VO2 max estimator, and more.',
+    'Free running calculators used by 250,000+ runners every week. Pace calculator, a race predictor built on 2.4 million real UK results, age grading, VO2 max estimator, and more.',
   keywords: [
     'pace calculator',
     'running calculator',
     'race predictor',
-    'splits calculator',
     'age grading calculator',
     'VO2 max calculator',
   ],
   openGraph: {
     title: 'Running Calculators | Film My Run',
     description:
-      'Free tools used by 250,000+ runners weekly. Calculate pace, predict times, plan splits.',
+      'Free tools used by 250,000+ runners weekly. Calculate pace, predict race times, age-grade your results.',
     images: ['https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/og/calculators-og.jpg'],
   },
 };
