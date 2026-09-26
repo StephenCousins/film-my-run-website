@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run: { description: 'Dry run (publish nothing)', type: boolean, default: true }
+      max_stories: { description: 'One-off story cap (blank = the daily 4)', type: string, default: '' }
 # One run at a time: two overlapping runs could publish the same event twice.
 concurrency: { group: news-daily, cancel-in-progress: false }
 permissions: { contents: read }
@@ -18,7 +19,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci && npx prisma generate
-      - run: npm run news:daily -- ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }}
+      - run: npm run news:daily -- ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }} ${{ (github.event_name == 'workflow_dispatch' && inputs.max_stories != '') && format('--max {0}', inputs.max_stories) || '' }}
         env:
           DATABASE_URL: ${{ secrets.DATABASE_PUBLIC_URL }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}

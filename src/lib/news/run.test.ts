@@ -180,6 +180,13 @@ describe('a news run', () => {
     expect(JSON.parse(await readFile(path.join(outDir, `${log.published[0].slug}.json`), 'utf8')).imageUrl).toBe(file);
     await rm(outDir, { recursive: true });
   });
+  it("takes a one-off story cap", async () => {
+    const { d, published } = deps();
+    // Five news items (the sixth is a review): the daily cap stops at 4, a one-off cap of 10 takes all five.
+    await runNews({ now: new Date(), dryRun: false, deps: d, maxStories: 10 });
+    expect(published.length).toBe(5);
+  });
+
   it('rewrites a near-copy once with the phrases to avoid, then publishes', async () => {
     const copied = 'death comes less than three weeks after canadian skyrunner kalie mccrystal went missing';
     const calls: (string[] | undefined)[] = [];

@@ -8,15 +8,17 @@ import { NEWS_CONFIG } from '@/lib/news/config';
 import { errorText, NewsRunError, runNews } from '@/lib/news/run';
 
 if (process.argv.includes('--help')) {
-  console.log('Usage: npm run news:daily [-- --dry-run]');
+  console.log('Usage: npm run news:daily [-- --dry-run] [--max N]   (--max: a one-off larger run, e.g. the launch fill)');
   process.exit(0);
 }
 
 const dryRun = process.argv.includes('--dry-run');
+const maxArg = process.argv.indexOf('--max');
+const maxStories = maxArg > 0 ? Math.min(20, Math.max(1, parseInt(process.argv[maxArg + 1], 10) || 0)) : undefined;
 const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` : undefined;
 
 (async () => {
-  const log = await runNews({ now: new Date(), dryRun, outDir });
+  const log = await runNews({ now: new Date(), dryRun, outDir, maxStories });
   await prisma.news_runs.create({ data: { dry_run: dryRun, cost_usd: log.costUsd, summary: log as never } });
   const text = [
     `${dryRun ? `DRY RUN (stories in ${outDir}). ` : ''}${log.published.length} published, ${log.held.length} held, ${log.itemsSeen} items seen, $${log.costUsd.toFixed(3)}.`,

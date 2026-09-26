@@ -94,7 +94,7 @@ export class NewsRunError extends Error {
   }
 }
 
-type RunOpts = { now: Date; dryRun: boolean; outDir?: string; deps?: Partial<RunDeps> };
+type RunOpts = { now: Date; dryRun: boolean; outDir?: string; deps?: Partial<RunDeps>; maxStories?: number };
 
 export async function runNews(opts: RunOpts): Promise<RunLog> {
   const log: RunLog = { dryRun: opts.dryRun, itemsSeen: 0, sortedOut: [], borderline: [], ungrouped: [], skipped: [], held: [], published: [], costUsd: 0, stoppedByCeiling: false };
@@ -105,7 +105,7 @@ export async function runNews(opts: RunOpts): Promise<RunLog> {
   }
 }
 
-async function run(log: RunLog, { now, dryRun, outDir, deps = {} }: RunOpts): Promise<RunLog> {
+async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: RunOpts): Promise<RunLog> {
   const d: RunDeps = { ...liveDeps, ...deps };
   const markSeen = (items: Seen[]) => (dryRun || items.length === 0 ? Promise.resolve() : d.markSeen(items));
   const save = async (name: string, data: unknown) => { if (outDir) await writeFile(`${outDir}/${name}`, JSON.stringify(data, null, 2)); };
@@ -134,9 +134,11 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {} }: RunOpts): Pr
   for (const b of covered) log.skipped.push({ headline: b.headline, reason: 'already covered' });
   await markSeen([...sorted.filter((s) => !passesSort(s.v)), ...covered.flatMap(bundleSeen)]);
 
-  const picked = pickBundles(grouped.bundles, NEWS_CONFIG.maxStoriesPerRun);
+  // maxStories: a one-off larger run (the launch fill); the daily cap otherwise.
+  const cap = maxStories ?? NEWS_CONFIG.maxStoriesPerRun;
+  const picked = pickBundles(grouped.bundles, cap);
   for (const b of grouped.bundles) {
-    if (!b.alreadyCovered && !picked.includes(b)) log.skipped.push({ headline: b.headline, reason: `over the ${NEWS_CONFIG.maxStoriesPerRun}-story cap` });
+    if (!b.alreadyCovered && !picked.includes(b)) log.skipped.push({ headline: b.headline, reason: `over the ${cap}-story cap` });
   }
 
   const taken = await d.takenSlugs();

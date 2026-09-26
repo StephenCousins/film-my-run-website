@@ -32,7 +32,7 @@ export async function writeStory(b: Bundle, now: Date, call: typeof completeJson
 
 Today is ${now.toISOString().slice(0, 10)}. First decide: is this genuinely running NEWS from the last 14 days (something that happened, not a preview, review, training piece or opinion)? If not, set isNews false, give the reason, and leave the other fields empty.
 
-If it is: write one story about this event: ${b.headline}. Combine every source that reports it. If a source is about a different race or incident, leave it out entirely: one event per story.
+If it is: write one story about this event: ${b.headline}. (That label is our desk's, not a source's: take every name and its spelling from the sources.) Combine every source that reports it. Add nothing from your own knowledge, however well known (where a route runs, a runner's past results): only what the sources say. If a source is about a different race or incident, leave it out entirely: one event per story.
 - When British athletes or UK races feature (a British record, a British medal, a UK race), say so early.
 - title: specific, not clickbait, no colon-subtitle.
 - excerpt: one sentence, at most 160 characters.
