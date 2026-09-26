@@ -4,7 +4,7 @@ import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
-import { CalendarDays, Target, Mountain, Gauge, ArrowRight, Smartphone } from 'lucide-react';
+import { CalendarDays, Target, Mountain, ShoppingBag, ArrowRight, Smartphone } from 'lucide-react';
 
 // ============================================
 // FEATURES DATA
@@ -12,7 +12,7 @@ import { CalendarDays, Target, Mountain, Gauge, ArrowRight, Smartphone } from 'l
 
 // The Film My Run app, in the words of its App Store listing (filmmyrun-ios
 // docs/app-store-listing.md). Every figure is the app's own.
-const features = [
+const features: { icon: typeof CalendarDays; title: string; description: string; href?: string }[] = [
   {
     icon: CalendarDays,
     title: 'Training plans',
@@ -26,14 +26,15 @@ const features = [
   {
     icon: Mountain,
     title: 'Ultra Race Pacing',
-    description: 'Checkpoint schedules from 7,687 real Centurion finishes. Part of FMR Club.',
+    description: 'Your arrival time at every checkpoint, built from 7,687 real race finishes. Part of FMR Club.',
   },
   {
-    icon: Gauge,
-    title: 'How fast are you?',
-    description: 'Your parkrun or Power of 10 results, and where they put you. Free.',
+    icon: ShoppingBag,
+    title: 'The shop',
+    description: 'Running vests, tees, hoodies and caps, printed to order in the UK. FMR Club saves 15%.',
+    href: '/shop',
   },
-];
+]
 
 // Real screens, from the app's screenshot simulator (26 Sep 2026). The side two
 // sit tucked behind Today and swing out on hover; on touch screens, with no
@@ -41,7 +42,7 @@ const features = [
 const APP_SCREENS = [
   {
     src: '/images/app/raceplan.webp',
-    alt: 'Ultra Race Pacing: a Thames Path 100 checkpoint schedule for a 24-hour finish',
+    alt: 'Ultra Race Pacing: a 100-mile checkpoint schedule for a 24-hour finish',
     className: 'z-0 -translate-x-[18%] -rotate-[6deg] group-hover:-translate-x-[80%] group-hover:-rotate-[12deg] group-focus:-translate-x-[80%] group-focus:-rotate-[12deg]',
   },
   {
@@ -176,9 +177,9 @@ export default function TrainingCTA() {
 
             {/* Description */}
             <p className="text-zinc-300 text-lg leading-relaxed mb-8 max-w-lg">
-              Training plans from 5K to 100 miles. Race pacing for the Centurion 100s. A race predictor that
-              looked at 2.37 million UK results to see how runners with your time actually did. The tools from my
-              videos, free, in your pocket.
+              Training plans from 5K to 100 miles. Ultra race pacing, checkpoint by checkpoint. A race predictor
+              that looked at 2.37 million UK results to see how runners with your time actually did. The tools
+              from my videos, free, in your pocket.
             </p>
 
             {/* Stats: the app's own figures */}
@@ -213,50 +214,47 @@ export default function TrainingCTA() {
             </div>
           </div>
 
-          {/* Right column - Features */}
-          <div className="training-features">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {features.map((feature, index) => {
-                const Icon = feature.icon;
-                return (
-                  <div
-                    key={feature.title}
-                    className="training-feature p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-orange-500/30 transition-colors"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center mb-4">
-                      <Icon className="w-6 h-6 text-orange-500" />
-                    </div>
-                    <h3 className="font-display text-lg font-semibold text-white mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-zinc-400 text-sm leading-relaxed">
-                      {feature.description}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Three real screens from the app, stacked; they fan out on hover */}
-            <div className="mt-10 flex justify-center">
-              <div className="app-fan group relative h-[420px] w-[200px] sm:h-[460px] sm:w-[220px]" tabIndex={0} aria-label="Screens from the Film My Run app">
-                {APP_SCREENS.map((screen) => (
-                  <div
-                    key={screen.src}
-                    className={cn(
-                      'absolute inset-0 rounded-[2rem] border-[5px] border-zinc-800 bg-zinc-900 overflow-hidden shadow-2xl',
-                      'transition-transform duration-500 ease-out motion-reduce:transition-none',
-                      screen.className
-                    )}
-                  >
-                    <Image src={screen.src} alt={screen.alt} fill sizes="220px" className="object-cover object-top" />
-                  </div>
-                ))}
-                {/* Glow effect */}
-                <div className="absolute inset-0 -z-10 blur-3xl opacity-30 bg-orange-500 rounded-full scale-90" />
-              </div>
+          {/* Right column: three real screens from the app, stacked; they fan out on hover */}
+          <div className="flex justify-center lg:justify-center py-6">
+            <div className="app-fan group relative h-[440px] w-[210px] sm:h-[500px] sm:w-[240px]" tabIndex={0} aria-label="Screens from the Film My Run app">
+              {APP_SCREENS.map((screen) => (
+                <div
+                  key={screen.src}
+                  className={cn(
+                    'absolute inset-0 rounded-[2rem] border-[5px] border-zinc-800 bg-zinc-900 overflow-hidden shadow-2xl',
+                    'transition-transform duration-500 ease-out motion-reduce:transition-none',
+                    screen.className
+                  )}
+                >
+                  <Image src={screen.src} alt={screen.alt} fill sizes="240px" className="object-cover object-top" />
+                </div>
+              ))}
+              {/* Glow effect */}
+              <div className="absolute inset-0 -z-10 blur-3xl opacity-30 bg-orange-500 rounded-full scale-90" />
             </div>
           </div>
+        </div>
+
+        {/* Features: one row across both columns, so neither column runs long */}
+        <div className="training-features mt-16 lg:mt-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {features.map((feature) => {
+            const Icon = feature.icon;
+            const card = (
+              <>
+                <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center mb-4">
+                  <Icon className="w-6 h-6 text-orange-500" />
+                </div>
+                <h3 className="font-display text-lg font-semibold text-white mb-2">{feature.title}</h3>
+                <p className="text-zinc-400 text-sm leading-relaxed">{feature.description}</p>
+              </>
+            );
+            const cls = 'training-feature block p-6 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-orange-500/30 transition-colors';
+            return feature.href ? (
+              <Link key={feature.title} href={feature.href} className={cls}>{card}</Link>
+            ) : (
+              <div key={feature.title} className={cls}>{card}</div>
+            );
+          })}
         </div>
       </div>
     </section>
