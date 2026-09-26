@@ -53,9 +53,11 @@ const navigation = [
   },
   { name: 'News', href: '/news' },
   { name: 'Shop', href: '/shop' },
-  { name: 'The Club', href: '/club' },
+  { name: 'FMR Club', href: '/club' },
   { name: 'Contact', href: '/contact' },
 ];
+
+const SHOP_HREF = '/shop';
 
 // Pages where the hero extends behind the header (no pt-20 gap)
 const HERO_PAGES = ['/'];
@@ -174,6 +176,21 @@ function DesktopNavItem({ item, isActive, variant }: NavItemProps) {
           </div>
         </div>
       </div>
+    );
+  }
+
+  // The shop is the one nav link that sells: an orange pill, on every header variant.
+  if (item.href === SHOP_HREF) {
+    return (
+      <Link
+        href={item.href}
+        className={cn(
+          'mx-1 px-4 py-2 text-sm font-semibold rounded-full bg-[#f88c00] text-white shadow-sm transition-colors duration-300 hover:bg-[#ff9f1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f88c00]',
+          isActive && 'bg-[#e07800]'
+        )}
+      >
+        {item.name}
+      </Link>
     );
   }
 
