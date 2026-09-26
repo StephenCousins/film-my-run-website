@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db';
 import { getAllParkruns, getVenueCoordinates, getMetadata, formatTime } from '@/lib/parkrun-db';
 import type { NewsletterPayload } from '@/lib/newsletter-template';
+import { NEWS_PAGE_OURS_ONLY } from '@/lib/news/present';
 
 const WMO_DESCRIPTIONS: Record<number, string> = {
   0: 'clear skies', 1: 'mostly clear skies', 2: 'partly cloudy skies',
@@ -119,10 +120,45 @@ async function pickFromPool(
   };
 }
 
+/** Once true (go-live), pull the newsletter's news section from our own published stories. */
+async function autoPopulateNewsFromOurStories(
+  payload: NewsletterPayload,
+  baseUrl: string
+): Promise<void> {
+  const usedLinks = await getRecentlyUsedArticleLinks(4);
+
+  const stories = await prisma.news_stories.findMany({
+    where: { status: 'published' },
+    orderBy: { published_at: 'desc' },
+    take: 20, // fetch extras so we can filter
+    select: { title: true, slug: true, excerpt: true, image_url: true },
+  });
+
+  const toUrl = (slug: string) => `${baseUrl}/news/${slug}`;
+  const fresh = stories.filter((s) => !usedLinks.has(toUrl(s.slug)));
+  const selected = fresh.length >= 3 ? fresh.slice(0, 3) : stories.slice(0, 3);
+
+  if (selected.length > 0) {
+    payload.news = selected.map((s) => ({
+      title: s.title,
+      url: toUrl(s.slug),
+      source: 'Film My Run',
+      description: s.excerpt || undefined,
+      imageUrl: s.image_url || undefined,
+    }));
+  }
+}
+
 async function autoPopulateNews(
-  payload: NewsletterPayload
+  payload: NewsletterPayload,
+  baseUrl: string
 ): Promise<void> {
   if (payload.news && payload.news.length > 0) return;
+
+  if (NEWS_PAGE_OURS_ONLY) {
+    await autoPopulateNewsFromOurStories(payload, baseUrl);
+    return;
+  }
 
   const usedLinks = await getRecentlyUsedArticleLinks(4);
 
@@ -434,7 +470,7 @@ export async function autoPopulateNewsletter(
 ): Promise<NewsletterPayload> {
   // Auto-populate all sections in parallel where possible
   await Promise.all([
-    autoPopulateNews(payload),
+    autoPopulateNews(payload, baseUrl),
     autoPopulateBlogPost(payload, baseUrl),
     autoPopulateVideo(payload),
     autoPopulateArchives(payload, baseUrl),

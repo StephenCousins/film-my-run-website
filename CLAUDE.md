@@ -376,7 +376,7 @@ Prisma directly.
 ### Content & media
 - `GET /api/films` — `films` rows plus Ultra races that have a `video_url`
 - `GET /api/featured-video` — rotates daily by day-of-year
-- `GET /api/news/stories`, `POST /api/news/generate`, `/api/news/sync`, `/api/news/stories/publish`
+- `GET /api/news/stories`, `/api/news/sync`, `/api/news/stories/publish`
 
 ### Races & stats
 - `GET /api/races`, `POST /api/races/sync` (Google Sheets)
