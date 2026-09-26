@@ -111,3 +111,53 @@ export async function completeTextWithImage({
 
   return completion.choices[0]?.message?.content?.trim() ?? '';
 }
+
+/** JSON from a model reply: plain or in a ```json fence; null when it isn't JSON. */
+export function parseJson<T>(raw: string): T | null {
+  const unfenced = raw.replace(/^```(?:json)?\s*/i, '').replace(/```\s*$/, '').trim();
+  try {
+    return JSON.parse(unfenced) as T;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * A structured reply and what it cost. OpenRouter reports the cost of each
+ * call when asked (`usage: { include: true }`), so the news pipeline can keep
+ * to its monthly ceiling on real figures, not estimates.
+ */
+export async function completeJson<T>({
+  model,
+  prompt,
+  system,
+  maxTokens,
+  temperature = 0,
+  schemaName,
+  schema,
+}: {
+  model: string;
+  prompt: string;
+  system?: string;
+  maxTokens: number;
+  temperature?: number;
+  schemaName: string;
+  schema: object;
+}): Promise<{ data: T | null; costUsd: number; raw: string }> {
+  const client = getClient();
+  const completion = await client.chat.completions.create({
+    model,
+    max_tokens: maxTokens,
+    temperature,
+    messages: [
+      ...(system ? [{ role: 'system' as const, content: system }] : []),
+      { role: 'user' as const, content: prompt },
+    ],
+    response_format: { type: 'json_schema', json_schema: { name: schemaName, strict: true, schema: schema as Record<string, unknown> } },
+    // OpenRouter-only field: include the call's cost in `usage.cost`.
+    ...({ usage: { include: true } } as Record<string, unknown>),
+  });
+  const raw = completion.choices[0]?.message?.content?.trim() ?? '';
+  const costUsd = Number((completion.usage as { cost?: number } | undefined)?.cost ?? 0);
+  return { data: parseJson<T>(raw), costUsd, raw };
+}
