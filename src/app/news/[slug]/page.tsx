@@ -30,7 +30,7 @@ async function getStoryBySlug(slug: string) {
     content: story.content,
     imageUrl: story.image_url,
     sourceUrl: story.source_url,
-    roundupDate: story.roundup_date.toISOString(),
+    roundupDate: (story.published_at ?? story.created_at).toISOString(),
     publishedAt: story.published_at?.toISOString() || story.created_at.toISOString(),
   };
 }

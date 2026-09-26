@@ -57,7 +57,9 @@ that stayed in the database, and the page's current list of other sites' links.
 photo credit) and `held_reason`; `source_heading` and `roundup_date` become
 optional (they were the round-up's). A new `news_items` table records each feed
 item processed (id, url, sorter verdict and confidence, bundle), so nothing is
-sorted twice and the log can explain every decision. One Prisma migration.
+sorted twice and the log can explain every decision. A `news_runs` table records
+each run's date, dry-run flag, cost in USD and summary for the monthly ceiling
+and the log. One Prisma migration.
 
 ## Gates (all must pass to publish)
 

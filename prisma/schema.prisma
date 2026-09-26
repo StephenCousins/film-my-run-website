@@ -419,8 +419,14 @@ model news_stories {
   content        String
   image_url      String?
   source_url     String
-  source_heading String
-  roundup_date   DateTime
+  source_heading String?
+  roundup_date   DateTime?
+  topic          String?   // trail_ultra | road | track
+  is_uk          Boolean   @default(false)
+  importance     Int?
+  sources        Json?     // [{ site, url }]
+  photo_credit   String?
+  held_reason    String?
   priority       Int       @default(50)
   status         String    @default("draft")
   published_at   DateTime?
@@ -430,6 +436,30 @@ model news_stories {
   @@index([status, roundup_date])
   @@index([slug])
   @@index([roundup_date])
+}
+
+/// Every feed item the news pipeline has looked at, so nothing is sorted twice
+/// and a run's log can explain each decision.
+model news_items {
+  id          Int      @id @default(autoincrement())
+  article_id  Int      @unique
+  url         String
+  source      String
+  verdict     Json?    // { type, confidence, isRunning, topic, isUk, importance }
+  bundle_key  String?
+  story_id    Int?
+  created_at  DateTime @default(now())
+
+  @@index([bundle_key])
+}
+
+/// One row per pipeline run: what it did and what it cost.
+model news_runs {
+  id         Int      @id @default(autoincrement())
+  started_at DateTime @default(now())
+  dry_run    Boolean
+  cost_usd   Float    @default(0)
+  summary    Json
 }
 
 model quiz_results {
