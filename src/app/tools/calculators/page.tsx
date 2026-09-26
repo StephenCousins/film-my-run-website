@@ -463,10 +463,10 @@ export default function CalculatorsPage() {
                 className="group p-6 bg-black/40 backdrop-blur-sm rounded-2xl border border-white/10 hover:border-brand/50 transition-all"
               >
                 <h3 className="font-display text-base font-bold text-white mb-2 group-hover:text-brand transition-colors">
-                  Marathon Training Plans
+                  Training Plans
                 </h3>
                 <p className="text-sm text-white/70">
-                  Personalized training plans to help you reach your marathon goals.
+                  5K to 100 miles, built to the 80/20 method, in the Film My Run app.
                 </p>
               </Link>
             </div>

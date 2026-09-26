@@ -1,592 +1,189 @@
-'use client';
-
 import Link from 'next/link';
-import {
-  Calendar,
-  Target,
-  TrendingUp,
-  Zap,
-  Activity,
-  BarChart3,
-  CheckCircle2,
-  ChevronRight,
-  ArrowRight,
-  Award,
-  Heart,
-  MessageCircle,
-  Youtube,
-  Sparkles,
-  Crown,
-  Lock,
-} from 'lucide-react';
+import { ArrowRight, Smartphone, Scale, TrendingUp, Timer, Mountain, Zap, Gauge } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { cn } from '@/lib/utils';
+import AppScreensFan, { type AppScreen } from '@/components/sections/AppScreensFan';
 
-// ============================================
-// ADRIAN APP (kept as a separate app — link out for sign-up & training)
-// ============================================
+// The training plans in the Film My Run iPhone app (FMRCore's PlanGenerator).
+// This page replaced the Adrian AI-coach page on 26 Sep 2026 (Stephen: "remove
+// Adrian from the site and replace it with the training plans we developed on
+// the iOS app"). Every rule below is what the generator does; the method and
+// its sources are in filmmyrun-ios docs/TRAINING-METHOD.md.
 
-const ADRIAN_APP_URL =
-  process.env.NEXT_PUBLIC_ADRIAN_APP_URL ||
-  'https://marathon-plan-app-production.up.railway.app';
-const LOGIN_URL = `${ADRIAN_APP_URL}/login`;
-// Sign-up funnels through the seamless SSO hand-off: signed-in Film My Run
-// members go straight into Adrian; everyone else falls back to Adrian signup.
-const START_URL = '/api/sso/adrian';
+const SCREENS: [AppScreen, AppScreen, AppScreen] = [
+  { src: '/images/app/builder.webp', alt: 'Choosing a plan: every race from 5K to 100 miles' },
+  { src: '/images/app/detail.webp', alt: 'A 16-week intermediate marathon plan, with its running time by week' },
+  { src: '/images/app/plan.webp', alt: "This week's runs in a half marathon plan" },
+];
 
-// ============================================
-// TYPES
-// ============================================
+const DISTANCES = [
+  ['5K', 'From nothing to a parkrun'],
+  ['10K', 'The next step up'],
+  ['Half marathon', 'The distance most people love'],
+  ['Marathon', '8 to 24 weeks'],
+  ['50K', 'Your first ultra'],
+  ['100K', 'A long day out'],
+  ['100 miles', 'The long night'],
+];
 
-interface PricingPlan {
-  id: string;
-  name: string;
-  price: number;
-  period: string;
-  description: string;
-  features: string[];
-  cta: string;
-  highlighted?: boolean;
-  badge?: string;
-}
-
-// ============================================
-// DATA
-// ============================================
-
-const features = [
+const METHOD = [
   {
-    icon: Calendar,
-    title: 'Personalised Plans',
-    description:
-      'Fully periodised training built around your goal race, current fitness, and the days you can actually run.',
+    icon: Scale,
+    title: '80/20, by time',
+    body: 'Around four fifths of your running is easy enough to talk through. Every week is checked, and if a session would tip the balance, the hard work is trimmed first.',
   },
   {
-    icon: Target,
-    title: 'Four Proven Methods',
-    description:
-      'Choose Starrett, Hansons, 80/20 Polarised or Pfitzinger — each with a distinct philosophy for how you like to train.',
+    icon: TrendingUp,
+    title: 'Builds without the spikes',
+    body: 'The long run never grows more than 10% past your longest of the last four weeks, which is where the injury research says the risk lives. Three weeks up, one easier.',
   },
   {
-    icon: Sparkles,
-    title: 'Adrian, Your AI Coach',
-    description:
-      'Instant feedback after every run, weekly reviews, and answers to your training questions the moment you have them.',
+    icon: Timer,
+    title: 'A proper taper',
+    body: 'Ten days for a 5K or 10K, two weeks for a half, three for a marathon or an ultra. Less running, the same intensity, fresh legs on the day.',
+  },
+  {
+    icon: Mountain,
+    title: 'Ultras counted in hours',
+    body: 'Long runs that build to five to seven hours, back-to-back weekends, a weekly hill session and time on your feet, not just miles.',
   },
   {
     icon: Zap,
-    title: 'Adapts to Real Life',
-    description:
-      'Miss a session or have a rough week? Adrian adjusts your plan using your wellness and progress to keep you on track.',
+    title: 'Strides and strength',
+    body: 'Short strides on an easy run each week, and an optional strength session on rest days for the intermediate and advanced plans.',
   },
   {
-    icon: Activity,
-    title: 'Strava & Garmin Sync',
-    description:
-      'Connect your watch to auto-complete sessions and feed sleep, HRV and recovery into smarter coaching.',
-  },
-  {
-    icon: BarChart3,
-    title: 'Paces & Predictions',
-    description:
-      'Every pace is calculated from your goal time, with race predictions and VO2max insights as you improve.',
+    icon: Gauge,
+    title: 'Paces from your own racing',
+    body: 'Give it a recent race and every session gets a pace. Ultra plans take theirs from a road race, because a 100-mile finish time is mostly the course.',
   },
 ];
 
-const plans: PricingPlan[] = [
-  {
-    id: 'free',
-    name: 'Free',
-    price: 0,
-    period: '/month',
-    description: 'Build a real training plan and get started — no card needed.',
-    cta: 'Start free',
-    features: [
-      '1 training plan — any distance',
-      'Beginner 5K, 5K, 10K & marathon',
-      'Starrett marathon method',
-      'Session tracking',
-    ],
-  },
-  {
-    id: 'pro',
-    name: 'Pro',
-    price: 9.99,
-    period: '/month',
-    description: 'For runners who want the full AI coaching experience.',
-    cta: 'Get Pro',
-    highlighted: true,
-    badge: 'Most Popular',
-    features: [
-      'Unlimited training plans',
-      'All 4 methodologies',
-      'Adrian AI coach',
-      'Strava & Garmin sync',
-      'Wellness tracking',
-      'AI weekly reviews',
-    ],
-  },
-  {
-    id: 'premium',
-    name: 'Premium',
-    price: 19.99,
-    period: '/month',
-    description: 'AI coaching plus a real coach in your corner.',
-    cta: 'Get Premium',
-    badge: 'Personal Coaching',
-    features: [
-      'Everything in Pro',
-      '1-to-1 WhatsApp coaching with Stephen',
-      'Personal race-day strategy',
-      'Advanced analytics',
-      'VO2max predictions',
-      'Priority AI responses',
-    ],
-  },
-];
-
-const stats = [
-  { value: '5K–Marathon', label: 'Every distance' },
-  { value: '4', label: 'Proven methods' },
-  { value: '24/7', label: 'AI coaching' },
-  { value: '60K+', label: 'Film My Run community' },
-];
-
-const methodologies = ['Starrett', 'Hansons', '80/20 Polarised', 'Pfitzinger'];
-
-// ============================================
-// PRICING CARD
-// ============================================
-
-function PricingCard({ plan }: { plan: PricingPlan }) {
-  // Free → plain signup; paid tiers carry the selection so the app sends the
-  // user straight to checkout for that tier after they create an account.
-  const href = plan.id === 'free' ? START_URL : `${START_URL}?plan=${plan.id}`;
+function StoreButtons() {
   return (
-    <div
-      className={cn(
-        'relative rounded-2xl p-8 transition-all duration-300 flex flex-col',
-        plan.highlighted
-          ? 'bg-orange-500 text-white scale-105 shadow-2xl shadow-orange-500/30'
-          : 'bg-surface border border-border hover:border-orange-500/50'
-      )}
-    >
-      {/* Badge */}
-      {plan.badge && (
-        <div className="absolute -top-3 right-6">
-          <span
-            className={cn(
-              'px-3 py-1 text-xs font-bold rounded-full',
-              plan.highlighted ? 'bg-white text-orange-500' : 'bg-orange-500 text-white'
-            )}
-          >
-            {plan.badge}
-          </span>
-        </div>
-      )}
-
-      {/* Plan name */}
-      <h3
-        className={cn(
-          'font-display text-xl font-bold mb-2',
-          plan.highlighted ? 'text-white' : 'text-foreground'
-        )}
+    <div className="flex flex-wrap items-center gap-4">
+      <span className="inline-flex items-center gap-2 px-7 py-3.5 bg-white/10 text-white font-semibold rounded-full border border-white/20">
+        <Smartphone className="w-5 h-5" />
+        Coming soon to the App Store
+      </span>
+      <Link
+        href="/club"
+        className="inline-flex items-center gap-2 px-7 py-3.5 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
       >
-        {plan.name}
-      </h3>
-
-      {/* Price */}
-      <div className="mb-4">
-        <span
-          className={cn(
-            'font-mono text-4xl font-bold',
-            plan.highlighted ? 'text-white' : 'text-orange-500'
-          )}
-        >
-          £{plan.price}
-        </span>
-        <span className={cn('text-sm ml-1', plan.highlighted ? 'text-white/80' : 'text-muted')}>
-          {plan.period}
-        </span>
-      </div>
-
-      {/* Description */}
-      <p className={cn('text-sm mb-6', plan.highlighted ? 'text-white/90' : 'text-secondary')}>
-        {plan.description}
-      </p>
-
-      {/* Features */}
-      <ul className="space-y-3 mb-8 flex-1">
-        {plan.features.map((feature, index) => (
-          <li key={index} className="flex items-start gap-2">
-            <CheckCircle2
-              className={cn(
-                'w-5 h-5 flex-shrink-0 mt-0.5',
-                plan.highlighted ? 'text-white' : 'text-orange-500'
-              )}
-            />
-            <span
-              className={cn('text-sm', plan.highlighted ? 'text-white/90' : 'text-secondary')}
-            >
-              {feature}
-            </span>
-          </li>
-        ))}
-      </ul>
-
-      {/* CTA — sign up in the Adrian app (paid tiers go straight to checkout) */}
-      <a
-        href={href}
-        className={cn(
-          'w-full py-3 font-semibold rounded-full transition-all text-center',
-          plan.highlighted
-            ? 'bg-white text-orange-500 hover:bg-surface-tertiary'
-            : 'bg-orange-500 text-white hover:bg-orange-600'
-        )}
-      >
-        {plan.cta}
-      </a>
+        Join FMR Club
+        <ArrowRight className="w-5 h-5" />
+      </Link>
     </div>
   );
 }
 
-// ============================================
-// TRAINING PAGE
-// ============================================
-
 export default function TrainingPage() {
   return (
-    <>
+    <div className="min-h-screen bg-background">
       <Header />
 
       <main className="pt-20 lg:pt-24">
-        {/* Hero */}
-        <section className="relative py-20 lg:py-32 overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 via-transparent to-purple-500/10" />
-          <div
-            className="absolute inset-0 opacity-30"
-            style={{
-              backgroundImage: `radial-gradient(circle at 1px 1px, rgba(251,146,60,0.3) 1px, transparent 0)`,
-              backgroundSize: '40px 40px',
-            }}
-          />
-
-          <div className="container relative">
-            <div className="max-w-3xl mx-auto text-center">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 rounded-full mb-6">
-                <Zap className="w-4 h-4 text-orange-500" />
-                <span className="text-sm font-medium text-orange-500">
-                  Adrian · the Film My Run training app
-                </span>
+        {/* Hero: what the plans are, and the app they live in */}
+        <section className="bg-zinc-950 border-b border-border">
+          <div className="container py-16 lg:py-24 grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 rounded-full border border-orange-500/30 mb-6">
+                <Smartphone className="w-4 h-4 text-orange-500" />
+                <span className="text-orange-400 text-sm font-medium">Training plans in the Film My Run app</span>
               </div>
-
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-foreground mb-6">
-                Train Smarter.
+              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
+                A plan for every race,
                 <br />
-                <span className="text-orange-500">Race Faster.</span>
+                <span className="text-orange-500">5K to 100 miles</span>
               </h1>
-
-              <p className="text-lg lg:text-xl text-secondary mb-8 max-w-2xl mx-auto">
-                Meet Adrian — an AI running coach that builds a fully periodised plan around your
-                goal, adapts to your life, and gives feedback after every run. Built on the methods
-                Stephen has tested over 15+ years of racing.
+              <p className="text-zinc-300 text-lg leading-relaxed mb-8 max-w-xl">
+                Pick your race, your level and how many days a week you can run. The app builds the whole
+                block, week by week: most of your running easy, the hard days properly hard, and a taper
+                that gets you to the start line fresh. Move a run, skip one, tick it off from Apple Health.
               </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <a
-                  href={START_URL}
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
-                >
-                  Start free
-                  <ArrowRight className="w-5 h-5" />
-                </a>
-                <Link
-                  href="#pricing"
-                  className="inline-flex items-center gap-2 px-8 py-4 border border-border-secondary rounded-full hover:border-orange-500 transition-colors group"
-                >
-                  <span className="group-hover:text-orange-500 transition-colors">See pricing</span>
-                </Link>
-              </div>
-
-              <p className="text-sm text-muted mt-6">
-                Free plan available — no card needed. Continues to Adrian, your Film My Run
-                training app.{' '}
-                <a href={LOGIN_URL} className="text-orange-500 hover:text-orange-600 font-medium">
-                  Already have an account? Sign in
-                </a>
-              </p>
+              <StoreButtons />
             </div>
+            <AppScreensFan screens={SCREENS} label="Training plan screens from the Film My Run app" />
           </div>
         </section>
 
-        {/* Stats */}
-        <section className="py-12 bg-surface-secondary">
+        {/* The races */}
+        <section className="py-16 lg:py-20">
           <div className="container">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-              {stats.map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="font-mono text-2xl lg:text-3xl font-bold text-orange-500 mb-1">
-                    {stat.value}
-                  </div>
-                  <div className="text-sm text-secondary">{stat.label}</div>
+            <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-3">Seven races, three levels</h2>
+            <p className="text-secondary text-lg max-w-2xl mb-10">
+              Beginner, intermediate or advanced, three or four days a week or five or six, over 8 to 24
+              weeks. Pick a goal time, a custom one, or just aim to finish.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {DISTANCES.map(([name, line]) => (
+                <div key={name} className="p-5 rounded-2xl border border-border bg-surface">
+                  <div className="font-display text-xl font-bold text-foreground">{name}</div>
+                  <div className="text-sm text-secondary mt-1">{line}</div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* Features */}
-        <section className="py-20 lg:py-32 bg-background">
+        {/* The method */}
+        <section className="py-16 lg:py-20 bg-surface-secondary border-y border-border">
           <div className="container">
-            <div className="text-center mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
-                Everything You Need to
-                <span className="text-orange-500"> Reach Your Goal</span>
-              </h2>
-              <p className="text-lg text-secondary max-w-2xl mx-auto">
-                A complete training platform that adapts to your life, not the other way around.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {features.map((feature) => {
-                const Icon = feature.icon;
-                return (
-                  <div
-                    key={feature.title}
-                    className="group p-6 bg-surface rounded-2xl hover:bg-orange-500 transition-all duration-300"
-                  >
-                    <div className="w-12 h-12 rounded-xl bg-orange-500/10 group-hover:bg-white/20 flex items-center justify-center mb-4 transition-colors">
-                      <Icon className="w-6 h-6 text-orange-500 group-hover:text-white transition-colors" />
-                    </div>
-                    <h3 className="font-display text-lg font-bold text-foreground group-hover:text-white mb-2 transition-colors">
-                      {feature.title}
-                    </h3>
-                    <p className="text-secondary group-hover:text-white/80 transition-colors">
-                      {feature.description}
-                    </p>
+            <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-3">How the plans are built</h2>
+            <p className="text-secondary text-lg max-w-2xl mb-10">
+              Built on what the research says, not on what sounds impressive. Every plan follows the same
+              rules, whatever the distance.
+            </p>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {METHOD.map(({ icon: Icon, title, body }) => (
+                <div key={title} className="p-6 rounded-2xl border border-border bg-surface">
+                  <div className="w-12 h-12 rounded-xl bg-orange-500/15 flex items-center justify-center mb-4">
+                    <Icon className="w-6 h-6 text-orange-500" />
                   </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* App preview */}
-        <section className="py-20 lg:py-32 bg-surface-secondary overflow-hidden">
-          <div className="container">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-6">
-                  Your Personal Coach,
-                  <br />
-                  <span className="text-orange-500">Always Available</span>
-                </h2>
-                <p className="text-lg text-secondary mb-8">
-                  Adrian combines proven coaching methodology with modern AI to deliver training
-                  that adapts to your progress, your schedule, and your goals.
-                </p>
-
-                <ul className="space-y-4 mb-8">
-                  {[
-                    'Plans for beginner 5K through to the marathon',
-                    'Syncs with Strava and Garmin',
-                    'Adjusts automatically when you miss workouts',
-                    'Built-in pace calculator and race predictor',
-                  ].map((item) => (
-                    <li key={item} className="flex items-center gap-3">
-                      <CheckCircle2 className="w-5 h-5 text-orange-500 flex-shrink-0" />
-                      <span className="text-secondary">{item}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <a
-                  href={START_URL}
-                  className="inline-flex items-center gap-2 text-orange-500 font-semibold hover:text-orange-600 transition-colors"
-                >
-                  Start free
-                  <ChevronRight className="w-5 h-5" />
-                </a>
-              </div>
-
-              {/* App mockup */}
-              <div className="relative">
-                <div className="relative mx-auto w-64 lg:w-80">
-                  <div className="relative bg-surface rounded-[3rem] p-3 shadow-2xl">
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-6 bg-surface rounded-b-2xl" />
-                    <div className="aspect-[9/19] bg-gradient-to-br from-orange-500/20 to-purple-500/20 rounded-[2.5rem] overflow-hidden">
-                      <div className="h-full flex flex-col p-4">
-                        <div className="text-white text-sm font-medium mb-4">Today&apos;s Workout</div>
-                        <div className="bg-white/10 backdrop-blur rounded-xl p-4 mb-3">
-                          <div className="text-orange-400 text-xs mb-1">EASY RUN</div>
-                          <div className="text-white font-bold text-lg">8km @ 5:30/km</div>
-                        </div>
-                        <div className="bg-white/10 backdrop-blur rounded-xl p-4">
-                          <div className="text-white/60 text-xs mb-2">This Week</div>
-                          <div className="flex gap-1">
-                            {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map((day, i) => (
-                              <div
-                                key={day + i}
-                                className={cn(
-                                  'flex-1 h-8 rounded text-xs flex items-center justify-center',
-                                  i < 3 ? 'bg-orange-500 text-white' : 'bg-white/10 text-white/60'
-                                )}
-                              >
-                                {day}
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="absolute -top-8 -right-8 w-32 h-32 bg-orange-500/20 rounded-full blur-2xl" />
-                  <div className="absolute -bottom-8 -left-8 w-40 h-40 bg-purple-500/20 rounded-full blur-2xl" />
+                  <h3 className="font-display text-lg font-semibold text-foreground mb-2">{title}</h3>
+                  <p className="text-secondary text-sm leading-relaxed">{body}</p>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Coached by a real runner */}
-        <section className="py-20 lg:py-32 bg-background">
-          <div className="container">
-            <div className="max-w-5xl mx-auto">
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                <div>
-                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/10 rounded-full mb-6">
-                    <Youtube className="w-4 h-4 text-orange-500" />
-                    <span className="text-sm font-medium text-orange-500">Built by a real runner</span>
-                  </div>
-                  <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-6">
-                    Methods proven on the road and trail
-                  </h2>
-                  <p className="text-lg text-secondary mb-6">
-                    Adrian isn&apos;t generic AI. Its plans are built on established coaching
-                    methodologies and shaped by Stephen Cousins — ultra-marathoner, award-winning
-                    filmmaker, and the runner behind Film My Run.
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-8">
-                    {methodologies.map((m) => (
-                      <span
-                        key={m}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-surface border border-border rounded-full text-sm text-secondary"
-                      >
-                        <Award className="w-3.5 h-3.5 text-orange-500" />
-                        {m}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="p-5 rounded-2xl bg-surface border border-border">
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-orange-500/10 flex items-center justify-center flex-shrink-0">
-                        <MessageCircle className="w-5 h-5 text-orange-500" />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-foreground">
-                          Want a human coach too?
-                        </p>
-                        <p className="text-sm text-secondary mt-1">
-                          Premium members get Stephen 1-to-1 on WhatsApp — real answers about your
-                          training, niggles, and race-day nerves from someone who&apos;s run it.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="relative">
-                  <div className="aspect-square rounded-3xl overflow-hidden bg-surface-secondary border border-border">
-                    <div className="w-full h-full flex flex-col items-center justify-center text-center p-8">
-                      <div className="w-20 h-20 rounded-full bg-orange-500/15 flex items-center justify-center mb-4">
-                        <Youtube className="w-10 h-10 text-orange-500" />
-                      </div>
-                      <p className="font-display text-2xl font-bold text-foreground">Stephen Cousins</p>
-                      <p className="text-secondary mt-1">Film My Run</p>
-                      <p className="text-sm text-muted mt-3 max-w-xs">
-                        15+ years racing everything from parkruns to 100-mile ultras, shared with a
-                        community of 60,000+ runners.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="absolute -top-6 -right-6 w-28 h-28 bg-orange-500/20 rounded-full blur-2xl" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Pricing */}
-        <section id="pricing" className="py-20 lg:py-32 bg-surface-secondary">
-          <div className="container">
-            <div className="text-center mb-16">
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-foreground mb-4">
-                Simple, <span className="text-orange-500">Transparent</span> Pricing
-              </h2>
-              <p className="text-lg text-secondary max-w-2xl mx-auto">
-                Start on the free plan and build a real training plan today. Upgrade when you want
-                the AI coach, device sync, and personal coaching.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto items-start">
-              {plans.map((plan) => (
-                <PricingCard key={plan.id} plan={plan} />
               ))}
             </div>
+          </div>
+        </section>
 
-            <div className="mt-12 text-center">
-              <div className="inline-flex items-center gap-2 text-muted">
-                <Lock className="w-4 h-4" />
-                <span className="text-sm">
-                  No card required for the free plan. Upgrade or cancel anytime — you&apos;ll
-                  continue to Adrian, the Film My Run training app.
-                </span>
-              </div>
+        {/* Free, and what FMR Club adds */}
+        <section className="py-16 lg:py-20">
+          <div className="container grid lg:grid-cols-2 gap-10 items-start">
+            <div>
+              <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4">Free, for good</h2>
+              <p className="text-secondary text-lg leading-relaxed">
+                Every plan, every distance, the calendar, the reminders and the Apple Health tick-offs are free
+                in the app. So are the calculators and the race predictor.
+              </p>
+            </div>
+            <div className="p-6 lg:p-8 rounded-2xl border border-orange-500/30 bg-orange-500/5">
+              <h3 className="font-display text-2xl font-bold text-foreground mb-3">FMR Club adds</h3>
+              <ul className="space-y-2 text-secondary">
+                <li>Your own paces on every session, from your racing</li>
+                <li>Ultra Race Pacing: your arrival time at every checkpoint</li>
+                <li>Ask Stephen: a one-to-one thread with me about anything running</li>
+                <li>15% off everything in the shop</li>
+              </ul>
+              <p className="text-sm text-muted mt-4">£2.99 a month or £29 a year.</p>
             </div>
           </div>
         </section>
 
-        {/* Final CTA */}
-        <section className="py-20 lg:py-32 bg-background relative overflow-hidden">
-          <div
-            className="absolute inset-0 opacity-10"
-            style={{
-              backgroundImage: `radial-gradient(circle at 1px 1px, currentColor 1px, transparent 0)`,
-              backgroundSize: '32px 32px',
-            }}
-          />
-
-          <div className="container relative">
-            <div className="max-w-3xl mx-auto text-center">
-              <Heart className="w-12 h-12 text-orange-500 mx-auto mb-6" />
-              <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-6">
-                Ready to Transform
-                <br />
-                Your Running?
-              </h2>
-              <p className="text-lg text-secondary mb-8">
-                Join the Film My Run community and start training with purpose. Your next race is
-                closer than you think.
-              </p>
-              <a
-                href={START_URL}
-                className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"
-              >
-                Start free
-                <ArrowRight className="w-5 h-5" />
-              </a>
+        {/* Closing call */}
+        <section className="bg-zinc-950">
+          <div className="container py-14 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            <div>
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white">The Film My Run app is coming to iPhone</h2>
+              <p className="text-zinc-400 mt-2">Join FMR Club now and it follows your account into the app.</p>
             </div>
+            <StoreButtons />
           </div>
         </section>
       </main>
 
       <Footer />
-    </>
+    </div>
   );
 }

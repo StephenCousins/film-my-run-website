@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { cn } from '@/lib/utils';
+import AppScreensFan, { type AppScreen } from '@/components/sections/AppScreensFan';
 import { CalendarDays, Target, Mountain, ShoppingBag, ArrowRight, Smartphone } from 'lucide-react';
 
 // ============================================
@@ -36,25 +36,11 @@ const features: { icon: typeof CalendarDays; title: string; description: string;
   },
 ]
 
-// Real screens, from the app's screenshot simulator (26 Sep 2026). The side two
-// sit tucked behind Today and swing out on hover; on touch screens, with no
-// hover, they stay a little fanned so all three show.
-const APP_SCREENS = [
-  {
-    src: '/images/app/raceplan.webp',
-    alt: 'Ultra Race Pacing: a 100-mile checkpoint schedule for a 24-hour finish',
-    className: 'z-0 -translate-x-[18%] -rotate-[6deg] group-hover:-translate-x-[80%] group-hover:-rotate-[12deg] group-focus:-translate-x-[80%] group-focus:-rotate-[12deg]',
-  },
-  {
-    src: '/images/app/plan.webp',
-    alt: "A training plan: this week's runs with their distances",
-    className: 'z-0 translate-x-[18%] rotate-[6deg] group-hover:translate-x-[80%] group-hover:rotate-[12deg] group-focus:translate-x-[80%] group-focus:rotate-[12deg]',
-  },
-  {
-    src: '/images/app/today.webp',
-    alt: "The Today screen: today's run, its pace and the race countdown",
-    className: 'z-10 group-hover:-translate-y-3 group-focus:-translate-y-3',
-  },
+// Real screens, from the app's screenshot simulator (26 Sep 2026): pacing, Today, a training week.
+const APP_SCREENS: [AppScreen, AppScreen, AppScreen] = [
+  { src: '/images/app/raceplan.webp', alt: 'Ultra Race Pacing: a 100-mile checkpoint schedule for a 24-hour finish' },
+  { src: '/images/app/today.webp', alt: "The Today screen: today's run, its pace and the race countdown" },
+  { src: '/images/app/plan.webp', alt: "A training plan: this week's runs with their distances" },
 ];
 
 // ============================================
@@ -214,25 +200,8 @@ export default function TrainingCTA() {
             </div>
           </div>
 
-          {/* Right column: three real screens from the app, stacked; they fan out on hover */}
-          <div className="flex justify-center lg:justify-center py-6">
-            <div className="app-fan group relative h-[440px] w-[210px] sm:h-[500px] sm:w-[240px]" tabIndex={0} aria-label="Screens from the Film My Run app">
-              {APP_SCREENS.map((screen) => (
-                <div
-                  key={screen.src}
-                  className={cn(
-                    'absolute inset-0 rounded-[2rem] border-[5px] border-zinc-800 bg-zinc-900 overflow-hidden shadow-2xl',
-                    'transition-transform duration-500 ease-out motion-reduce:transition-none',
-                    screen.className
-                  )}
-                >
-                  <Image src={screen.src} alt={screen.alt} fill sizes="240px" className="object-cover object-top" />
-                </div>
-              ))}
-              {/* Glow effect */}
-              <div className="absolute inset-0 -z-10 blur-3xl opacity-30 bg-orange-500 rounded-full scale-90" />
-            </div>
-          </div>
+          {/* Right column: three real screens from the app; they fan out on hover */}
+          <AppScreensFan screens={APP_SCREENS} label="Screens from the Film My Run app" />
         </div>
 
         {/* Features: one row across both columns, so neither column runs long */}
