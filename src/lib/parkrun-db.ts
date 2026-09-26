@@ -296,27 +296,53 @@ export async function getAgeCategoryStats(): Promise<AgeCategoryStats[]> {
   }
 }
 
+/**
+ * parkruns that have closed and so left parkrun's events.json, which is what
+ * fills venue_coordinates. Positions from archived copies of that file
+ * (web.archive.org, June 2020 and 2022); Bois de Boulogne's start moved in
+ * 2020 and this is the later one. Stephen, 26 Sep 2026: "no dot on Paris".
+ */
+export const CLOSED_VENUES: Record<string, { lat: number; lng: number }> = {
+  'bois de boulogne': { lat: 48.859573, lng: 2.257737 },
+  'yeovil montacute': { lat: 50.951485, lng: -2.712979 },
+};
+
+/** Every visited venue with a position: the database's, else a closed venue's. */
+export function placeVenues(
+  rows: { event: string; latitude: string | number | null; longitude: string | number | null; visit_count: number | null }[]
+): VenueCoordinate[] {
+  return rows.flatMap((row) => {
+    const closed = CLOSED_VENUES[row.event.toLowerCase()];
+    const lat = row.latitude != null ? Number(row.latitude) : closed?.lat;
+    const lng = row.longitude != null ? Number(row.longitude) : closed?.lng;
+    if (lat == null || lng == null || Number.isNaN(lat) || Number.isNaN(lng)) return [];
+    return [{ event: row.event, latitude: lat, longitude: lng, visit_count: row.visit_count || 0 }];
+  });
+}
+
 export async function getVenueCoordinates(): Promise<VenueCoordinate[]> {
   const client = await getPool().connect();
   try {
-    // Join venue_coordinates with venues to get visit counts
+    // Every visited venue, with its position when parkrun lists it. A venue
+    // parkrun has since renamed "Name, Place" ("Downs Link, Shoreham-by-Sea")
+    // still matches; an exact name wins over a renamed one.
     const result = await client.query(`
       SELECT
-        vc.name as event,
+        v.name as event,
         vc.lat as latitude,
         vc.lng as longitude,
-        COALESCE(v.visit_count, 0) as visit_count
-      FROM venue_coordinates vc
-      LEFT JOIN venues v ON LOWER(v.name) = LOWER(vc.name)
+        v.visit_count as visit_count
+      FROM venues v
+      LEFT JOIN LATERAL (
+        SELECT c.lat, c.lng FROM venue_coordinates c
+        WHERE LOWER(c.name) = LOWER(v.name) OR LOWER(c.name) LIKE LOWER(v.name) || ', %'
+        ORDER BY (LOWER(c.name) = LOWER(v.name)) DESC
+        LIMIT 1
+      ) vc ON true
       WHERE v.visit_count > 0
     `);
 
-    return result.rows.map(row => ({
-      event: row.event,
-      latitude: parseFloat(row.latitude),
-      longitude: parseFloat(row.longitude),
-      visit_count: row.visit_count || 0,
-    }));
+    return placeVenues(result.rows);
   } finally {
     client.release();
   }
