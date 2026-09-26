@@ -24,4 +24,9 @@ describe('sorting', () => {
     expect(r.verdict).toBeNull();
     expect(r.costUsd).toBe(0.001);
   });
+  it('a confidence outside [0, 1] fails closed', async () => {
+    const call = async () => ({ data: v({ confidence: 1.5 }), costUsd: 0.001, raw: '' });
+    const r = await sortItem(c, call as never);
+    expect(r.verdict).toBeNull();
+  });
 });

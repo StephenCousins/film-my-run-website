@@ -36,6 +36,6 @@ Summary: ${c.summary.slice(0, 1200)}
 Opening: ${(c.text ?? '').slice(0, 1500)}`;
   const r = await call<Verdict>({ model: SORT_MODEL, prompt, maxTokens: 300, schemaName: 'verdict', schema: SCHEMA });
   const d = r.data;
-  const valid = d && typeof d.confidence === 'number' && typeof d.importance === 'number';
+  const valid = d && typeof d.confidence === 'number' && d.confidence >= 0 && d.confidence <= 1 && typeof d.importance === 'number';
   return { verdict: valid ? { ...d, importance: Math.max(1, Math.min(10, Math.round(d.importance))) } : null, costUsd: r.costUsd };
 }

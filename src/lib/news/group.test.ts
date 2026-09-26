@@ -16,6 +16,16 @@ describe('grouping', () => {
     expect(r.bundles[0].items.map((i) => i.articleId)).toEqual([1, 2]);
     expect(r.bundles[1].alreadyCovered).toBe(true);
   });
+  it('an articleId in more than one group stays only in the first', async () => {
+    const call = async () => ({ costUsd: 0.002, raw: '', data: { groups: [
+      { key: 'first', headline: 'First', articleIds: [1], alreadyCovered: false },
+      { key: 'second', headline: 'Second', articleIds: [1], alreadyCovered: false },
+    ] } });
+    const r = await groupItems([{ c: cand(1), v: v(9) }], [], call as never);
+    expect(r.bundles).toHaveLength(1);
+    expect(r.bundles[0].key).toBe('first');
+    expect(r.bundles[0].items.map((i) => i.articleId)).toEqual([1]);
+  });
   it('a bundle is as important as its most important item, plus 1 for UK', () => {
     expect(bundleImportance({ key: 'k', headline: 'h', items: [], verdicts: [v(6), v(8)], alreadyCovered: false })).toBe(8);
     expect(bundleImportance({ key: 'k', headline: 'h', items: [], verdicts: [v(6, true)], alreadyCovered: false })).toBe(7);

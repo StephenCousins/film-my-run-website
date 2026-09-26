@@ -30,8 +30,13 @@ Already published in the last 14 days:
 ${recentHeadlines.map((h) => `- ${h}`).join('\n') || '- none'}`;
   const r = await call<{ groups: { key: string; headline: string; articleIds: number[]; alreadyCovered: boolean }[] }>({ model: GROUP_MODEL, prompt, maxTokens: 4000, schemaName: 'groups', schema: SCHEMA });
   const byId = new Map(items.map((i) => [i.c.articleId, i]));
+  const used = new Set<number>();
   const bundles: Bundle[] = (r.data?.groups ?? []).flatMap((g) => {
-    const members = g.articleIds.map((id) => byId.get(id)).filter((m): m is { c: Candidate; v: Verdict } => !!m);
+    const members = g.articleIds
+      .filter((id) => !used.has(id))
+      .map((id) => byId.get(id))
+      .filter((m): m is { c: Candidate; v: Verdict } => !!m);
+    members.forEach((m) => used.add(m.c.articleId));
     return members.length ? [{ key: g.key, headline: g.headline, items: members.map((m) => m.c), verdicts: members.map((m) => m.v), alreadyCovered: g.alreadyCovered }] : [];
   });
   return { bundles, costUsd: r.costUsd };
