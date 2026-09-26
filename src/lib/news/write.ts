@@ -26,17 +26,19 @@ function sourcesBlock(b: Bundle): string {
   return b.items.filter((i) => i.text).map((i, n) => `SOURCE ${n + 1} (${i.source}, ${i.pubDate.toISOString().slice(0, 10)}, ${i.url}):\n${i.text!.slice(0, 12000)}`).join('\n\n');
 }
 
-export async function writeStory(b: Bundle, now: Date, call: typeof completeJson = completeJson) {
+export async function writeStory(b: Bundle, now: Date, call: typeof completeJson = completeJson, avoid: string[] = []) {
   if (!b.items.some((i) => i.text)) return { draft: null, refusal: 'no full text', costUsd: 0 };
   const prompt = `${VOICE}
 
 Today is ${now.toISOString().slice(0, 10)}. First decide: is this genuinely running NEWS from the last 14 days (something that happened, not a preview, review, training piece or opinion)? If not, set isNews false, give the reason, and leave the other fields empty.
 
-If it is: write one story combining every source below.
+If it is: write one story about this event: ${b.headline}. Combine every source that reports it. If a source is about a different race or incident, leave it out entirely: one event per story.
+- When British athletes or UK races feature (a British record, a British medal, a UK race), say so early.
 - title: specific, not clickbait, no colon-subtitle.
 - excerpt: one sentence, at most 160 characters.
 - paragraphs: 3 to 6 plain-text paragraphs. Lead with what happened. Only facts that appear in the sources.
 
+${avoid.length ? `\nA previous draft was too close to a source's wording. None of these phrases may appear, even lightly reworded; say the same facts in new sentences:\n${avoid.map((a) => `- "${a}"`).join('\n')}\n` : ''}
 ${sourcesBlock(b)}`;
   const r = await call<{ isNews: boolean; reason: string; title: string; excerpt: string; paragraphs: string[] }>({ model: WRITE_MODEL, prompt, maxTokens: 3000, temperature: 0.6, schemaName: 'story', schema: DRAFT_SCHEMA });
   if (!r.data) return { draft: null, refusal: 'unreadable reply', costUsd: r.costUsd };

@@ -6,7 +6,7 @@ import { gatherCandidates } from './gather';
 import { bundleImportance, groupItems } from './group';
 import { storyImage } from './image';
 import { pickBundles, slugBase, STORY_ESTIMATE_USD, uniqueSlug, withinCeiling } from './plan';
-import { ruleProblems } from './rules';
+import { nearCopyPhrases, ruleProblems } from './rules';
 import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
 import { checkFacts, writeStory } from './write';
@@ -17,7 +17,7 @@ export interface RunDeps {
   gather: (now: Date) => Promise<Candidate[]>;
   sort: (c: Candidate) => ReturnType<typeof sortItem>;
   group: (items: { c: Candidate; v: Verdict }[], recent: string[]) => ReturnType<typeof groupItems>;
-  write: (b: Bundle, now: Date) => ReturnType<typeof writeStory>;
+  write: (b: Bundle, now: Date, avoid?: string[]) => ReturnType<typeof writeStory>;
   check: (d: Draft, b: Bundle) => ReturnType<typeof checkFacts>;
   image: typeof storyImage;
   publish: (s: StoryToPublish) => Promise<void>;
@@ -53,7 +53,7 @@ const liveDeps: RunDeps = {
   gather: gatherCandidates,
   sort: (c) => sortItem(c),
   group: (items, recent) => groupItems(items, recent),
-  write: (b, now) => writeStory(b, now),
+  write: (b, now, avoid) => writeStory(b, now, undefined, avoid),
   check: (d, b) => checkFacts(d, b),
   image: storyImage,
   publish: async (s) => { await saveStory(s, 'published', null); },
@@ -168,7 +168,18 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {} }: RunOpts): Pr
         reason = 'duplicate slug';
       } else {
         // The full text, not the writer's 12,000-character slice: a copied sentence can sit anywhere.
-        const problems = ruleProblems(w.draft, b.items.map((i) => i.text ?? ''));
+        const texts = b.items.map((i) => i.text ?? '');
+        let problems = ruleProblems(w.draft, texts);
+        // A near-copy and nothing else: one rewrite with the lifted phrases named, then the gates again.
+        if (problems.length === 1 && problems[0] === 'near-copy of a source') {
+          const again = await d.write(b, now, nearCopyPhrases(w.draft, texts));
+          log.costUsd += again.costUsd;
+          if (again.draft) {
+            w.draft = again.draft;
+            Object.assign(story, again.draft);
+            problems = ruleProblems(again.draft, texts);
+          }
+        }
         reason = problems.length ? problems.join(', ') : null;
         if (!reason) {
           const c = await d.check(w.draft, b);

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ruleProblems } from './rules';
+import { nearCopyPhrases, ruleProblems } from './rules';
 
 const good = { title: 'Evans wins UTMB', excerpt: 'Tom Evans took the title in 19:37.', paragraphs: ['a b c', 'd e f', 'g h i'] };
 
@@ -30,5 +30,17 @@ describe('code-rule gate', () => {
     const draft = { ...good, paragraphs: ["Evans's remarkable run continued into the night as fatigue set in.", 'b', 'c'] };
     const source = 'Race report: Evans’s remarkable run continued into the night as fatigue set in cold conditions.';
     expect(ruleProblems(draft, [source])).toContain('near-copy of a source');
+  });
+  it('counts a time or number as one word, so a result line is not a near-copy', () => {
+    // 26 Sep 2026 dry run: "Zhao won in a course record of 65:55:22" was held as ten words.
+    const draft = { ...good, paragraphs: ['Jiaju Zhao won in a course record of 65:55:22 on Sunday.', 'b', 'c'] };
+    expect(ruleProblems(draft, ['Jiaju Zhao won in a course record of 65:55:22, the organisers said.'])).not.toContain('near-copy of a source');
+  });
+  it('names the phrases a near-copy shares with a source', () => {
+    const lifted = 'death comes less than three weeks after canadian skyrunner kalie mccrystal went missing';
+    const draft = { ...good, paragraphs: [`Her ${lifted}.`, 'b', 'c'] };
+    const phrases = nearCopyPhrases(draft, [`The ${lifted} on the Matterhorn.`]);
+    expect(phrases.length).toBeGreaterThan(0);
+    expect(phrases.join(' ')).toContain('three weeks after canadian skyrunner');
   });
 });

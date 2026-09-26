@@ -180,4 +180,20 @@ describe('a news run', () => {
     expect(JSON.parse(await readFile(path.join(outDir, `${log.published[0].slug}.json`), 'utf8')).imageUrl).toBe(file);
     await rm(outDir, { recursive: true });
   });
+  it('rewrites a near-copy once with the phrases to avoid, then publishes', async () => {
+    const copied = 'death comes less than three weeks after canadian skyrunner kalie mccrystal went missing';
+    const calls: (string[] | undefined)[] = [];
+    const { d, published } = deps({
+      gather: async () => [{ ...cand(1), text: `The ${copied} on the Matterhorn.` }],
+      write: async (_b: Bundle, _now: Date, avoid?: string[]) => {
+        calls.push(avoid);
+        return { draft: { title: 'T', excerpt: 'E.', paragraphs: [avoid ? 'Reworded.' : `Her ${copied}.`, 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 };
+      },
+    });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d });
+    expect(calls).toHaveLength(2);
+    expect(calls[1]?.join(' ')).toContain('three weeks after');
+    expect(published).toHaveLength(1);
+    expect(log.held).toHaveLength(0);
+  });
 });

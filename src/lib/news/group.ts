@@ -19,7 +19,7 @@ const SCHEMA = {
 export async function groupItems(items: { c: Candidate; v: Verdict }[], recentHeadlines: string[], call: typeof completeJson = completeJson) {
   if (items.length === 0) return { bundles: [], costUsd: 0 };
   const list = items.map(({ c }) => `${c.articleId} | ${c.source} | ${c.pubDate.toISOString().slice(0, 10)} | ${c.title}`).join('\n');
-  const prompt = `Group these running news items by the single event they report (the same race result, record or announcement). One group per event; an item in exactly one group.
+  const prompt = `Group these running news items by the single event they report (the same race result, record or announcement). One group per event; an item in exactly one group. Never put two different races or incidents in one group, even on the same weekend or in the same round-up: a backyard ultra in Derbyshire and the Tor des Géants are two groups.
 "key": a short stable slug for the event, e.g. "utmb-2026-womens-result".
 "alreadyCovered": true only when one of the stories we have already published (below) reports this same development. A result after we published a preview is NOT already covered.
 

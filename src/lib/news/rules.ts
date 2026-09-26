@@ -1,7 +1,9 @@
 import { NEWS_CONFIG } from './config';
 import type { Draft } from './types';
 
-const words = (s: string) => s.replace(/[’‘]/g, "'").toLowerCase().replace(/<[^>]+>/g, ' ').match(/[a-z0-9']+/g) ?? [];
+// A time or number is one word ("65:55:22", "1,329", "2.5"): counted as three, a
+// plain result line ("won in a course record of 65:55:22") read as a ten-word copy.
+const words = (s: string) => s.replace(/[’‘]/g, "'").toLowerCase().replace(/<[^>]+>/g, ' ').match(/[a-z0-9']+(?:[:.,][0-9]+)*/g) ?? [];
 
 function shingles(text: string, n: number): Set<string> {
   const w = words(text);
@@ -23,7 +25,14 @@ export function ruleProblems(d: Draft, sourceTexts: string[]): string[] {
   // en dash ("5–10") is a legitimate range and stays allowed.
   if (/—/.test(all) || /\s–\s/.test(all)) problems.push('em dash');
   if (/;/.test(all)) problems.push('semicolon');
-  const mine = shingles(all, NEWS_CONFIG.nearCopyWords);
-  if (sourceTexts.some((t) => [...shingles(t, NEWS_CONFIG.nearCopyWords)].some((s) => mine.has(s)))) problems.push('near-copy of a source');
+  if (nearCopyPhrases(d, sourceTexts).length) problems.push('near-copy of a source');
   return problems;
+}
+
+/** The runs of words (NEWS_CONFIG.nearCopyWords long) a draft shares with any source. */
+export function nearCopyPhrases(d: Draft, sourceTexts: string[]): string[] {
+  const mine = shingles([d.title, d.excerpt, ...d.paragraphs].join('\n'), NEWS_CONFIG.nearCopyWords);
+  const hits = new Set<string>();
+  for (const t of sourceTexts) for (const s of shingles(t, NEWS_CONFIG.nearCopyWords)) if (mine.has(s)) hits.add(s);
+  return [...hits];
 }
