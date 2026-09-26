@@ -17,4 +17,20 @@ describe('extractPage', () => {
     const p = extractPage('<html><body><nav>Home Races</nav></body></html>', 'https://x.test/a', 'X');
     expect(p.text).toBeNull();
   });
+
+  it('reads the full handle from a WordPress caption, not a dot-truncated prefix', () => {
+    const p = extractPage(html, 'https://www.irunfar.com/some-article', 'iRunFar');
+    expect(p.photoCredit).toBe('@rising.story');
+    expect(p.text).not.toContain('Photo: @rising.story');
+  });
+
+  it('stops a credit at a sentence-ending period, not just any dot', () => {
+    const p = extractPage(
+      '<html><body><article><figcaption>Photo: Jane Doe. Runners at the start</figcaption><p>' +
+        'x'.repeat(41) + '</p><p>' + 'y'.repeat(41) + '</p><p>' + 'z'.repeat(41) + '</p></article></body></html>',
+      'https://x.test/a',
+      'X',
+    );
+    expect(p.photoCredit).toBe('Jane Doe');
+  });
 });

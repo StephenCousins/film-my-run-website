@@ -9,7 +9,18 @@ export function extractPage(html: string, pageUrl: string, site: string) {
   const $ = cheerio.load(html);
   $('script, style, nav, header, footer, aside, form, .comments, .related, .newsletter, .share, .sidebar').remove();
   const body = $('article').first().length ? $('article').first() : $('main').first();
-  const paragraphs = body.find('p').map((_, p) => $(p).text().trim()).get().filter((t) => t.length > 40);
+
+  // Read the caption before excluding its paragraph below, so its "Photo: ..." credit
+  // isn't lost along with it. WordPress captions land as a <p class="wp-caption-text">
+  // inside a <div class="wp-caption">, not always inside a <figcaption>.
+  const caption = body.find('figcaption, .wp-caption-text, .wp-element-caption').first().text().trim();
+
+  // Caption paragraphs are credit lines, not article prose — keep them out of the text.
+  const paragraphs = body.find('p')
+    .filter((_, p) => $(p).closest('figcaption, .wp-caption, .wp-caption-text, figure').length === 0)
+    .map((_, p) => $(p).text().trim())
+    .get()
+    .filter((t) => t.length > 40);
   const text = paragraphs.length >= 3 ? paragraphs.join('\n\n') : null;
 
   const og = $('meta[property="og:image"]').attr('content') ?? null;
@@ -18,8 +29,9 @@ export function extractPage(html: string, pageUrl: string, site: string) {
   const imageUrl = rawImage ? new URL(rawImage, pageUrl).toString() : null;
 
   // Credits live in a figure caption or a "Photo:" line; keep it short and plain.
-  const caption = body.find('figcaption').first().text().trim();
-  const match = (caption || body.text()).match(/(?:photo|image)(?:\s*credit)?\s*[:©]\s*([^|.\n]{3,60})/i);
+  // A dot may sit inside a handle or domain (@rising.story, irunfar.com) so it's only
+  // a boundary when followed by whitespace, same as a sentence ending would be.
+  const match = (caption || body.text()).match(/(?:photo|image)(?:\s*credit)?\s*[:©]\s*((?:[^|.\n]|\.(?=\S)){3,60})/i);
   const photoCredit = match ? match[1].trim() : null;
   void site;
   return { text, imageUrl, photoCredit };
