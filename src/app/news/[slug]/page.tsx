@@ -27,6 +27,15 @@ async function getStoryBySlug(slug: string) {
 
   if (!story || story.status !== 'published') return null;
 
+  const sources = Array.isArray(story.sources)
+    ? (story.sources as unknown[]).filter(
+        (s): s is StorySource =>
+          !!s &&
+          typeof (s as StorySource).url === 'string' &&
+          typeof (s as StorySource).site === 'string'
+      )
+    : null;
+
   return {
     id: story.id,
     title: story.title,
@@ -35,7 +44,7 @@ async function getStoryBySlug(slug: string) {
     content: story.content,
     imageUrl: story.image_url,
     sourceUrl: story.source_url,
-    sources: (story.sources as unknown as StorySource[] | null) ?? null,
+    sources,
     photoCredit: story.photo_credit,
     roundupDate: (story.published_at ?? story.created_at).toISOString(),
     publishedAt: story.published_at?.toISOString() || story.created_at.toISOString(),
@@ -138,11 +147,11 @@ export default async function NewsStoryPage({ params }: PageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd).replace(/</g, '\\u003c') }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }}
       />
       <Header />
 
@@ -201,13 +210,19 @@ export default async function NewsStoryPage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* Photo credit */}
+        {story.photoCredit && (
+          <div className="container">
+            <p className="text-xs text-muted text-right mt-2">{story.photoCredit}</p>
+          </div>
+        )}
+
         {/* Content */}
         <section className="py-12 lg:py-16 bg-background">
           <div className="container">
             <div className="grid lg:grid-cols-12 gap-12">
               {/* Main content */}
               <article className="lg:col-span-8">
-                {story.photoCredit && <p className="text-xs text-muted mt-2">{story.photoCredit}</p>}
                 <div
                   className="prose prose-lg dark:prose-invert prose-orange max-w-none
                     prose-headings:font-display prose-headings:font-bold

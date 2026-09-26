@@ -180,7 +180,7 @@ export default async function NewsPage() {
           </div>
         </section>
 
-        <NewsContent articles={articles} />
+        <NewsContent articles={articles} topicChips={NEWS_PAGE_OURS_ONLY} />
 
         {/* Newsletter CTA */}
         <section className="relative py-16 lg:py-24 overflow-hidden">

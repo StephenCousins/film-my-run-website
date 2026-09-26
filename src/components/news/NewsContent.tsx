@@ -292,14 +292,19 @@ function SourceFilter({
 // NEWS CONTENT (exported client component)
 // ============================================
 
-export default function NewsContent({ articles }: { articles: Article[] }) {
+export default function NewsContent({
+  articles,
+  topicChips = false,
+}: {
+  articles: Article[];
+  /** true only from go-live (Task 12): chips/counts/filter run on topic tags,
+   * fixed order, instead of on `article.source`. */
+  topicChips?: boolean;
+}) {
   const [selectedSource, setSelectedSource] = useState<string | null>(null);
 
-  // Once every article carries topic tags (go-live), filter by those instead
-  // of by source, in the fixed topic order. Until then (a mix of our tagged
-  // stories and untagged feed articles) the page behaves exactly as before.
-  const allTagged = articles.length > 0 && articles.every((a) => a.tags !== undefined);
-  const chipsOf = (article: Article) => article.tags ?? [article.source];
+  const chipsOf = (article: Article): string[] =>
+    topicChips ? article.tags ?? [] : [article.source];
 
   const sourceCounts: Record<string, number> = {};
   articles.forEach((article) => {
@@ -307,7 +312,7 @@ export default function NewsContent({ articles }: { articles: Article[] }) {
       sourceCounts[tag] = (sourceCounts[tag] || 0) + 1;
     });
   });
-  const sources = allTagged
+  const sources = topicChips
     ? TAG_ORDER.filter((tag) => sourceCounts[tag])
     : Object.keys(sourceCounts).sort();
   const totalCount = articles.length;
