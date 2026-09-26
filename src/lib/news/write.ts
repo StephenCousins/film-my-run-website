@@ -8,7 +8,8 @@ const VOICE = `You are a reporter on the Film My Run news desk (filmmyrun.com), 
 - Specific numbers: finish times to the second where given, distances, climb in metres, positions, dates.
 - Name people with their times and results. At least one concrete detail about the place or the course.
 - No em dashes. No semicolons. None of: "journey", "dive in", "game-changer", "unpack", "leverage", "It's not just X, it's Y", stacked lists of three adjectives.
-- Original wording throughout: report the facts in your own sentences, never a sentence lifted or lightly reworded from a source.`;
+- Original wording throughout: report the facts in your own sentences, never a sentence lifted or lightly reworded from a source.
+- Quote at most a few words directly from any source; write everything else in your own words.`;
 
 const DRAFT_SCHEMA = {
   type: 'object', additionalProperties: false, required: ['isNews', 'reason', 'title', 'excerpt', 'paragraphs'],
@@ -20,6 +21,8 @@ const DRAFT_SCHEMA = {
 };
 
 function sourcesBlock(b: Bundle): string {
+  // ponytail: writer and checker must slice sources to the same 12,000 chars, or
+  // the checker can fail (or wrongly pass) facts the writer never actually saw.
   return b.items.filter((i) => i.text).map((i, n) => `SOURCE ${n + 1} (${i.source}, ${i.pubDate.toISOString().slice(0, 10)}, ${i.url}):\n${i.text!.slice(0, 12000)}`).join('\n\n');
 }
 
@@ -37,8 +40,11 @@ If it is: write one story combining every source below.
 ${sourcesBlock(b)}`;
   const r = await call<{ isNews: boolean; reason: string; title: string; excerpt: string; paragraphs: string[] }>({ model: WRITE_MODEL, prompt, maxTokens: 3000, temperature: 0.6, schemaName: 'story', schema: DRAFT_SCHEMA });
   if (!r.data) return { draft: null, refusal: 'unreadable reply', costUsd: r.costUsd };
-  if (!r.data.isNews) return { draft: null, refusal: `not news: ${r.data.reason}`, costUsd: r.costUsd };
+  if (r.data.isNews === false) return { draft: null, refusal: `not news: ${r.data.reason}`, costUsd: r.costUsd };
   const { title, excerpt, paragraphs } = r.data;
+  const usable = r.data.isNews === true && typeof title === 'string' && typeof excerpt === 'string'
+    && Array.isArray(paragraphs) && paragraphs.every((p) => typeof p === 'string');
+  if (!usable) return { draft: null, refusal: 'unreadable reply', costUsd: r.costUsd };
   return { draft: { title, excerpt, paragraphs } as Draft, refusal: null, costUsd: r.costUsd };
 }
 
@@ -54,6 +60,7 @@ ${d.paragraphs.join('\n\n')}
 
 ${sourcesBlock(b)}`;
   const r = await call<{ unsupported: string[] }>({ model: CHECK_MODEL, prompt, maxTokens: 1500, schemaName: 'check', schema: CHECK_SCHEMA });
-  const unsupported = r.data?.unsupported ?? ['checker reply unreadable'];
+  const u = r.data?.unsupported;
+  const unsupported = Array.isArray(u) && u.every((x) => typeof x === 'string') ? u : ['checker reply unreadable'];
   return { ok: unsupported.length === 0, unsupported, costUsd: r.costUsd };
 }
