@@ -3,33 +3,56 @@
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Brain, Target, Calendar, Zap, ArrowRight, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { CalendarDays, Target, Mountain, Gauge, ArrowRight, Smartphone } from 'lucide-react';
 
 // ============================================
 // FEATURES DATA
 // ============================================
 
+// The Film My Run app, in the words of its App Store listing (filmmyrun-ios
+// docs/app-store-listing.md). Every figure is the app's own.
 const features = [
   {
-    icon: Brain,
-    title: 'AI-Powered Plans',
-    description: 'Personalized training adapted to your goals and fitness level',
+    icon: CalendarDays,
+    title: 'Training plans',
+    description: '5K to 100 miles, built to the 80/20 method. Tick runs off from Apple Health.',
   },
   {
     icon: Target,
-    title: 'Smart Adjustments',
-    description: 'Plans that adapt based on your progress and recovery',
+    title: 'Race predictor',
+    description: 'Any distance to any distance, from 2.37 million real UK results. Ultras too.',
   },
   {
-    icon: Calendar,
-    title: 'Flexible Scheduling',
-    description: 'Fits around your life, not the other way around',
+    icon: Mountain,
+    title: 'Ultra Race Pacing',
+    description: 'Checkpoint schedules from 7,687 real Centurion finishes. Part of FMR Club.',
   },
   {
-    icon: Zap,
-    title: 'Race-Ready',
-    description: 'Proven periodization for peak performance on race day',
+    icon: Gauge,
+    title: 'How fast are you?',
+    description: 'Your parkrun or Power of 10 results, and where they put you. Free.',
+  },
+];
+
+// Real screens, from the app's screenshot simulator (26 Sep 2026). The side two
+// sit tucked behind Today and swing out on hover; on touch screens, with no
+// hover, they stay a little fanned so all three show.
+const APP_SCREENS = [
+  {
+    src: '/images/app/raceplan.webp',
+    alt: 'Ultra Race Pacing: a Thames Path 100 checkpoint schedule for a 24-hour finish',
+    className: 'z-0 -translate-x-[18%] -rotate-[6deg] group-hover:-translate-x-[80%] group-hover:-rotate-[12deg] group-focus:-translate-x-[80%] group-focus:-rotate-[12deg]',
+  },
+  {
+    src: '/images/app/plan.webp',
+    alt: "A training plan: this week's runs with their distances",
+    className: 'z-0 translate-x-[18%] rotate-[6deg] group-hover:translate-x-[80%] group-hover:rotate-[12deg] group-focus:translate-x-[80%] group-focus:rotate-[12deg]',
+  },
+  {
+    src: '/images/app/today.webp',
+    alt: "The Today screen: today's run, its pace and the race countdown",
+    className: 'z-10 group-hover:-translate-y-3 group-focus:-translate-y-3',
   },
 ];
 
@@ -124,7 +147,7 @@ export default function TrainingCTA() {
         <div className="absolute inset-0 bg-zinc-950">
           <Image
             src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/training-bg.svg"
-            alt="Runner training"
+            alt=""
             fill
             className="object-cover opacity-40"
           />
@@ -140,54 +163,52 @@ export default function TrainingCTA() {
           <div className="training-content">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
-              <Sparkles className="w-4 h-4 text-orange-500" />
-              <span className="text-orange-400 text-sm font-medium">AI-Powered Training</span>
+              <Smartphone className="w-4 h-4 text-orange-500" />
+              <span className="text-orange-400 text-sm font-medium">The Film My Run app for iPhone</span>
             </div>
 
             {/* Title */}
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              Train Smarter,
+              Built on Real Results,
               <br />
-              <span className="text-orange-500">Run Faster</span>
+              <span className="text-orange-500">Not Guesses</span>
             </h2>
 
             {/* Description */}
             <p className="text-zinc-300 text-lg leading-relaxed mb-8 max-w-lg">
-              The Marathon Plan App uses AI to create personalized training plans
-              that adapt to your progress. Whether you're targeting your first 5K or
-              chasing a Boston Qualifier, we've got you covered.
+              Training plans from 5K to 100 miles. Race pacing for the Centurion 100s. A race predictor that
+              looked at 2.37 million UK results to see how runners with your time actually did. The tools from my
+              videos, free, in your pocket.
             </p>
 
-            {/* Stats */}
-            <div className="flex gap-8 mb-10">
+            {/* Stats: the app's own figures */}
+            <div className="flex flex-wrap gap-x-8 gap-y-4 mb-10">
               <div>
-                <div className="font-mono text-3xl font-bold text-orange-500">93%</div>
-                <div className="text-zinc-400 text-sm">Hit their goal</div>
+                <div className="font-mono text-3xl font-bold text-orange-500">2.37M</div>
+                <div className="text-zinc-400 text-sm">UK race results</div>
               </div>
               <div>
-                <div className="font-mono text-3xl font-bold text-orange-500">12K+</div>
-                <div className="text-zinc-400 text-sm">Active users</div>
+                <div className="font-mono text-3xl font-bold text-orange-500">5K–100mi</div>
+                <div className="text-zinc-400 text-sm">Training plans</div>
               </div>
               <div>
-                <div className="font-mono text-3xl font-bold text-orange-500">4.8</div>
-                <div className="text-zinc-400 text-sm">Star rating</div>
+                <div className="font-mono text-3xl font-bold text-orange-500">Free</div>
+                <div className="text-zinc-400 text-sm">Core tools, for good</div>
               </div>
             </div>
 
-            {/* CTA */}
-            <div className="flex flex-wrap gap-4">
+            {/* CTA: not on the App Store yet */}
+            <div className="flex flex-wrap items-center gap-4">
+              <span className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20">
+                <Smartphone className="w-5 h-5" />
+                Coming soon to the App Store
+              </span>
               <Link
-                href="/training"
+                href="/club"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-all hover:scale-105"
               >
-                Start Free Trial
+                Join FMR Club
                 <ArrowRight className="w-5 h-5" />
-              </Link>
-              <Link
-                href="/training/how-it-works"
-                className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-all"
-              >
-                How It Works
               </Link>
             </div>
           </div>
@@ -216,29 +237,23 @@ export default function TrainingCTA() {
               })}
             </div>
 
-            {/* App preview mockup */}
-            <div className="mt-8 relative">
-              <div className="relative mx-auto max-w-[280px]">
-                {/* Phone frame */}
-                <div className="relative aspect-[9/19] rounded-[2.5rem] border-4 border-zinc-700 bg-zinc-900 overflow-hidden shadow-2xl">
-                  <div className="absolute inset-0 bg-gradient-to-b from-orange-500/20 to-transparent" />
-                  <div className="absolute top-4 left-1/2 -translate-x-1/2 w-24 h-6 bg-zinc-800 rounded-full" />
-
-                  {/* App content placeholder */}
-                  <div className="absolute inset-6 top-12 rounded-2xl bg-zinc-800/80 flex items-center justify-center">
-                    <div className="text-center">
-                      <div className="font-display text-2xl font-bold text-white mb-2">
-                        Marathon Plan
-                      </div>
-                      <div className="text-orange-500 font-mono text-sm">
-                        AI Coach
-                      </div>
-                    </div>
+            {/* Three real screens from the app, stacked; they fan out on hover */}
+            <div className="mt-10 flex justify-center">
+              <div className="app-fan group relative h-[420px] w-[200px] sm:h-[460px] sm:w-[220px]" tabIndex={0} aria-label="Screens from the Film My Run app">
+                {APP_SCREENS.map((screen) => (
+                  <div
+                    key={screen.src}
+                    className={cn(
+                      'absolute inset-0 rounded-[2rem] border-[5px] border-zinc-800 bg-zinc-900 overflow-hidden shadow-2xl',
+                      'transition-transform duration-500 ease-out motion-reduce:transition-none',
+                      screen.className
+                    )}
+                  >
+                    <Image src={screen.src} alt={screen.alt} fill sizes="220px" className="object-cover object-top" />
                   </div>
-                </div>
-
+                ))}
                 {/* Glow effect */}
-                <div className="absolute inset-0 -z-10 blur-3xl opacity-30 bg-orange-500 rounded-full scale-75" />
+                <div className="absolute inset-0 -z-10 blur-3xl opacity-30 bg-orange-500 rounded-full scale-90" />
               </div>
             </div>
           </div>
