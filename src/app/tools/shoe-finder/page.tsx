@@ -42,7 +42,7 @@ export default function ShoeFinderPage() {
             <div className="max-w-3xl mx-auto text-center">
               <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-500/20 backdrop-blur-sm rounded-full border border-orange-500/30 mb-6">
                 <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse" />
-                <span className="text-orange-400 text-sm font-medium">130+ Shoes Ranked</span>
+                <span className="text-orange-400 text-sm font-medium">300+ Shoes Ranked</span>
               </div>
 
               <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 drop-shadow-lg">
