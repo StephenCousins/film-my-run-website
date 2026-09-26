@@ -80,12 +80,13 @@ export default function ShopTeaser() {
     <section className="relative overflow-hidden bg-background py-16 lg:py-24" aria-labelledby="shop-teaser-heading">
       <div className="container">
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-10">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl lg:max-w-none">
             <span className="text-brand text-sm font-semibold uppercase tracking-wider">The Shop</span>
-            <h2 id="shop-teaser-heading" className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mt-2">
+            {/* One line from lg up, sized to the viewport so it always fits beside the button; wraps below that. */}
+            <h2 id="shop-teaser-heading" className="font-display text-3xl sm:text-4xl lg:text-[clamp(2rem,3.1vw,2.75rem)] lg:whitespace-nowrap font-bold text-foreground mt-2">
               Things said out loud, now on a t-shirt
             </h2>
-            <p className="text-secondary mt-3 text-lg">
+            <p className="text-secondary mt-3 text-lg max-w-2xl">
               {shopItems.length} designs across {categories.join(', ').replace(/, ([^,]*)$/, ' and $1').toLowerCase()}.
               Every phrase came from a race video. Printed to order in the UK.
             </p>

@@ -249,12 +249,8 @@ export default function CustomCursor() {
         )}
         style={{ willChange: 'transform' }}
       >
-        <div
-          className={cn(
-            'transition-transform duration-200',
-            state.isHovering && state.hoverType !== 'text' ? 'scale-0' : 'scale-100'
-          )}
-        >
+        {/* The runner stays visible over links and cards too (Stephen, 26 Sep): only the ring reacts. */}
+        <div>
           <div ref={runnerRef} className="fmr-runner" aria-hidden="true">
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#f88c00" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <g data-j="fig">
