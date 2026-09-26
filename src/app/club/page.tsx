@@ -9,18 +9,20 @@ export const metadata: Metadata = {
   title: 'FMR Club',
   alternates: { canonical: 'https://filmmyrun.com/club' },
   description:
-    'Support Film My Run for £2.99 a month: structured training plans, personalised paces, race-day pacing, Ask Stephen, and 15% off everything in the shop.',
+    'Support Film My Run for £2.99 a month: your own paces on every training session, Ultra Race Pacing, Ask Stephen, and 15% off everything in the shop. The plans themselves stay free.',
 };
 
 const money = (pence: number) => `£${(pence / 100).toFixed(2).replace(/\.00$/, '')}`;
 
 const perks = [
-  ['Training plans that explain themselves', 'Every plan built from 2.4 million real race results, with pace charts and a guide to each session, not just a grid of numbers.'],
-  ['Paces that are yours', 'Sessions worked out from what you have actually run, rather than a percentage of a time you hope to hit.'],
-  ['Race-day pacing', 'Save a pacing plan, take the checkpoint schedule and wrist band to the start line, and keep the widget on your phone.'],
+  // In line with the app's FMR Club (Stephen, 26 Sep 2026): the training plans are free for
+  // everyone; Club adds the paces, race pacing and the rest.
+  ['Paces that are yours', 'Every session in your training plan at your own paces, worked out from what you have actually run, rather than a percentage of a time you hope to hit.'],
+  ['Ultra Race Pacing', 'Your arrival time at every checkpoint, for ultras in our race library or your own course, built from 7,687 real race finishes.'],
+  ['On the day', 'Check in at each aid station and it tells you how far ahead or behind you are. Print a wrist band, and keep the widget on your Lock Screen.'],
   ['Ask Stephen', 'A one-to-one thread with me about anything running. I read and answer them myself.'],
   ['15% off the shop', 'On everything, for as long as you are a member. A free account gets 10%.'],
-  ['It keeps the lights on', 'The films, the calculators and the predictor are free and stay free. This is what pays for them.'],
+  ['It keeps the lights on', 'The films, the calculators, the predictor and the training plans are free and stay free. This is what pays for them.'],
 ];
 
 export default function ClubPage() {
