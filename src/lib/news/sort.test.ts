@@ -30,3 +30,14 @@ describe('sorting', () => {
     expect(r.verdict).toBeNull();
   });
 });
+
+describe('sortItem media pages', () => {
+  it('settles a video page as media without calling the model', async () => {
+    let called = false;
+    const call = (async () => { called = true; return { data: null, costUsd: 0.001, raw: '' }; }) as never;
+    const r = await sortItem({ ...c, url: 'https://www.bbc.co.uk/sport/athletics/videos/cv2dw8p0g12ro?at_medium=RSS' }, call);
+    expect(called).toBe(false);
+    expect(passesSort(r.verdict)).toBe(false);
+    expect(r.costUsd).toBe(0);
+  });
+});

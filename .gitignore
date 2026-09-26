@@ -54,3 +54,6 @@ transcripts/
 
 # News pipeline dry runs (stories, images, log)
 news-dry-run/
+
+# Sorter check cache (regenerable; costs money to rebuild)
+docs/news/.sorter-cache.json

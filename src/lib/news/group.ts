@@ -28,7 +28,7 @@ ${list}
 
 Already published in the last 14 days:
 ${recentHeadlines.map((h) => `- ${h}`).join('\n') || '- none'}`;
-  const r = await call<{ groups: { key: string; headline: string; articleIds: number[]; alreadyCovered: boolean }[] }>({ model: GROUP_MODEL, prompt, maxTokens: 4000, schemaName: 'groups', schema: SCHEMA });
+  const r = await call<{ groups: { key: string; headline: string; articleIds: number[]; alreadyCovered: boolean }[] }>({ model: GROUP_MODEL, prompt, maxTokens: 12000, schemaName: 'groups', schema: SCHEMA });
   const byId = new Map(items.map((i) => [i.c.articleId, i]));
   const used = new Set<number>();
   const bundles: Bundle[] = (r.data?.groups ?? []).flatMap((g) => {
