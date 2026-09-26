@@ -25,7 +25,7 @@
 
 ## Review Focus
 
-1. **A feed item whose page can't be fetched (paywall, 403, timeout)**: it is still sortable from its RSS summary, but must not be written from the summary alone; the bundle needs at least one full text or it is held ("no full text"). Tested in Task 4.
+1. **A feed item whose page can't be fetched (paywall, 403, timeout)**: it is still sortable from its RSS summary, but must not be written from the summary alone; the bundle needs at least one full text or it is held ("no full text"). Tested in Task 6.
 2. **The same event on consecutive days** (preview Monday, result Tuesday): Tuesday's result is a new story, a second preview is not. Tested in Task 5 (grouping prompt contract and the `alreadyCovered` handling).
 3. **A model reply that is not valid JSON or misses fields**: that item or story is skipped and logged, the run carries on. Tested in Task 2.
 4. **A month that hits the ceiling mid-run**: stories already written stay; the rest are not started. Tested in Task 7.
@@ -947,6 +947,7 @@ const news = (importance: number): Verdict => ({ type: 'news', confidence: 0.95,
 
 function deps(over: Record<string, unknown> = {}) {
   const published: string[] = [];
+  const held: string[] = [];
   const d = {
     gather: async () => [cand(1), cand(2), cand(3), cand(4), cand(5), cand(6)],
     sort: async (c: Candidate) => ({ verdict: c.articleId === 6 ? { ...news(9), type: 'review' as const } : news(c.articleId), costUsd: 0.001 }),
@@ -955,13 +956,14 @@ function deps(over: Record<string, unknown> = {}) {
     check: async () => ({ ok: true, unsupported: [], costUsd: 0.03 }),
     image: async () => ({ url: 'https://r2.test/x.webp', credit: 'Photo: iRunFar' }),
     publish: async (s: { slug: string }) => { published.push(s.slug); },
+    hold: async (s: { slug: string }) => { held.push(s.slug); },
     monthSpentUsd: async () => 0,
     recentHeadlines: async () => [],
     takenSlugs: async () => new Set<string>(),
     markSeen: async () => {},
     ...over,
   };
-  return { d, published };
+  return { d, published, held };
 }
 
 describe('a news run', () => {
@@ -973,10 +975,11 @@ describe('a news run', () => {
     expect(log.sortedOut.map((s) => s.type)).toContain('review');
     expect(log.costUsd).toBeCloseTo(6 * 0.001 + 0.002 + 4 * 0.09, 5);
   });
-  it('holds a story that fails the fact check', async () => {
-    const { d, published } = deps({ check: async () => ({ ok: false, unsupported: ['19:37'], costUsd: 0.03 }) });
+  it('holds (saves, unpublished) a story that fails the fact check', async () => {
+    const { d, published, held } = deps({ check: async () => ({ ok: false, unsupported: ['19:37'], costUsd: 0.03 }) });
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(published).toHaveLength(0);
+    expect(held).toHaveLength(4);
     expect(log.held[0].reason).toMatch(/unsupported: 19:37/);
   });
   it('stops writing at the ceiling but keeps what it wrote', async () => {
@@ -1004,14 +1007,13 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { prisma } from '@/lib/db';
 import { NEWS_CONFIG } from './config';
 import { gatherCandidates } from './gather';
-import { groupItems } from './group';
+import { bundleImportance, groupItems } from './group';
 import { storyImage } from './image';
 import { pickBundles, STORY_ESTIMATE_USD, uniqueSlug, withinCeiling } from './plan';
 import { ruleProblems } from './rules';
 import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, RunLog, StoryToPublish, Verdict } from './types';
 import { checkFacts, writeStory } from './write';
-import { bundleImportance } from './group';
 
 export interface RunDeps {
   gather: (now: Date) => Promise<Candidate[]>;
@@ -1021,6 +1023,7 @@ export interface RunDeps {
   check: typeof checkFacts;
   image: typeof storyImage;
   publish: (s: StoryToPublish) => Promise<void>;
+  hold: (s: StoryToPublish, reason: string) => Promise<void>;
   monthSpentUsd: (now: Date) => Promise<number>;
   recentHeadlines: (now: Date) => Promise<string[]>;
   takenSlugs: () => Promise<Set<string>>;
@@ -1043,6 +1046,14 @@ const liveDeps: RunDeps = {
       status: 'published', published_at: new Date(),
     } });
     await prisma.news_items.updateMany({ where: { article_id: { in: s.articleIds } }, data: { story_id: story.id } });
+  },
+  hold: async (s, reason) => {
+    await prisma.news_stories.create({ data: {
+      slug: s.slug, title: s.title, excerpt: s.excerpt,
+      content: s.paragraphs.map((p) => `<p>${p.replace(/[<>&]/g, (c) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' })[c]!)}</p>`).join('\n'),
+      source_url: s.sources[0]?.url ?? '', sources: s.sources, topic: s.topic, is_uk: s.isUk, importance: s.importance,
+      status: 'held', held_reason: reason,
+    } });
   },
   monthSpentUsd: async (now) => {
     const from = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
@@ -1087,20 +1098,29 @@ export async function runNews({ now, dryRun, outDir, deps = {} }: { now: Date; d
     const w = await d.write(b, now);
     log.costUsd += w.costUsd;
     if (!w.draft) { log.held.push({ headline: b.headline, reason: w.refusal ?? 'no draft' }); continue; }
-    const problems = ruleProblems(w.draft, b.items.map((i) => i.text ?? ''));
-    if (problems.length) { log.held.push({ headline: b.headline, reason: problems.join(', ') }); continue; }
-    const c = await d.check(w.draft, b);
-    log.costUsd += c.costUsd;
-    if (!c.ok) { log.held.push({ headline: b.headline, reason: `unsupported: ${c.unsupported.join('; ')}` }); continue; }
     const slug = uniqueSlug(w.draft.title, taken);
     taken.add(slug);
     const lead = b.verdicts.reduce((a, v) => (v.importance > a.importance ? v : a), b.verdicts[0]);
-    const img = dryRun ? { url: '', credit: null } : await d.image(b, slug);
     const story: StoryToPublish = {
       ...w.draft, slug, topic: lead.topic, isUk: b.verdicts.some((v) => v.isUk), importance: bundleImportance(b),
-      sources: b.items.map((i) => ({ site: i.source, url: i.url })), imageUrl: img.url || null, photoCredit: img.credit,
+      sources: b.items.map((i) => ({ site: i.source, url: i.url })), imageUrl: null, photoCredit: null,
       bundleKey: b.key, articleIds: b.items.map((i) => i.articleId),
     };
+    const problems = ruleProblems(w.draft, b.items.map((i) => i.text ?? ''));
+    let reason = problems.length ? problems.join(', ') : null;
+    if (!reason) {
+      const c = await d.check(w.draft, b);
+      log.costUsd += c.costUsd;
+      if (!c.ok) reason = `unsupported: ${c.unsupported.join('; ')}`;
+    }
+    if (reason) {
+      log.held.push({ headline: b.headline, reason });
+      if (!dryRun) await d.hold(story, reason);
+      continue;
+    }
+    const img = dryRun ? { url: '', credit: null } : await d.image(b, slug);
+    story.imageUrl = img.url || null;
+    story.photoCredit = img.credit;
     if (!dryRun) await d.publish(story);
     if (outDir) { await mkdir(outDir, { recursive: true }); await writeFile(`${outDir}/${slug}.json`, JSON.stringify(story, null, 2)); }
     log.published.push({ slug, title: story.title });
@@ -1131,7 +1151,7 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
     `${dryRun ? 'DRY RUN. ' : ''}${log.published.length} published, ${log.held.length} held, ${log.itemsSeen} items seen, $${log.costUsd.toFixed(3)}.`,
     log.stoppedByCeiling ? 'Stopped at the £10 monthly ceiling.' : '',
     ...log.published.map((p) => `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
-    ...log.held.map((h) => `Held: ${h.headline} (${h.reason})`),
+    ...log.held.map((h) => `Held: ${h.headline} (${h.reason}); publish by hand with npm run news:publish <id>`),
     ...log.borderline.map((b) => `Borderline (${b.confidence.toFixed(2)}): ${b.url}`),
   ].filter(Boolean).join('\n');
   console.log(text);
@@ -1142,9 +1162,23 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
 })().catch(async (e) => { console.error(e); await prisma.$disconnect(); process.exit(1); });
 ```
 
-`scripts/news-publish.ts` (publish a held story by id is not possible: held stories are not stored as rows in this plan; instead re-run for one bundle is out of scope). Replace with the image tool only, and record in the spec that "publish a held story" becomes "held stories are listed in the email; publish one by hand with the admin inbox later":
+`scripts/news-publish.ts` (publish a held story by hand, with the branded card as its image):
 
-> Correction to the spec's `news:publish`: held drafts are not persisted, so there is nothing to publish by id. Update the spec's Gates section to: "A failing story is held, listed with its reason in the run email, and not stored." Commit that spec edit in this step.
+```ts
+import { prisma } from '@/lib/db';
+import { uploadToR2 } from '@/lib/r2';
+import { brandedCard } from '@/lib/news/image';
+
+(async () => {
+  const id = Number(process.argv[2]);
+  const s = await prisma.news_stories.findUniqueOrThrow({ where: { id } });
+  if (s.status !== 'held') throw new Error(`Story ${id} is ${s.status}, not held`);
+  const url = await uploadToR2(`news/${s.slug}.webp`, await brandedCard(s.title), 'image/webp');
+  await prisma.news_stories.update({ where: { id }, data: { status: 'published', published_at: new Date(), image_url: url, held_reason: null } });
+  console.log(`Published story ${id}: https://filmmyrun.com/news/${s.slug}`);
+  await prisma.$disconnect();
+})();
+```
 
 `scripts/news-unimage.ts`:
 
@@ -1163,7 +1197,7 @@ import { brandedCard } from '@/lib/news/image';
 })();
 ```
 
-`package.json` scripts: `"news:daily": "tsx --tsconfig tsconfig.json scripts/news-daily.ts"`, `"news:unimage": "tsx --tsconfig tsconfig.json scripts/news-unimage.ts"`. Add `news-dry-run/` to `.gitignore`.
+`package.json` scripts: `"news:daily": "tsx --tsconfig tsconfig.json scripts/news-daily.ts"`, `"news:publish": "tsx --tsconfig tsconfig.json scripts/news-publish.ts"`, `"news:unimage": "tsx --tsconfig tsconfig.json scripts/news-unimage.ts"`. Add `news-dry-run/` to `.gitignore`.
 
 - [ ] **Step 6: The workflow** `.github/workflows/news-daily.yml`
 
@@ -1208,7 +1242,7 @@ The scheduled run is **disabled until go-live** (Task 12): comment out the `sche
 - [ ] **Step 8: Commit**
 
 ```bash
-git add src/lib/news/run.ts src/lib/news/run.test.ts scripts/news-daily.ts scripts/news-unimage.ts .github/workflows/news-daily.yml package.json .gitignore docs/superpowers/specs/2026-09-26-running-news-design.md
+git add src/lib/news/run.ts src/lib/news/run.test.ts scripts/news-daily.ts scripts/news-publish.ts scripts/news-unimage.ts .github/workflows/news-daily.yml package.json .gitignore
 git commit -m "News pipeline: the daily run, dry-run folder, report email, workflow (schedule off)"
 ```
 
