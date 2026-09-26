@@ -77,9 +77,32 @@ const saveLocally = (dir: string) => async (key: string, body: Buffer) => {
   return file;
 };
 
-export async function runNews({ now, dryRun, outDir, deps = {} }: { now: Date; dryRun: boolean; outDir?: string; deps?: Partial<RunDeps> }): Promise<RunLog> {
+/** An error's message, cut to 300 characters for the log and the email. */
+export function errorText(e: unknown): string {
+  const m = e instanceof Error ? e.message : String(e);
+  return m.length > 300 ? `${m.slice(0, 300)}…` : m;
+}
+
+/** Thrown when a run fails partway; `log` holds what was done and spent before the failure. */
+export class NewsRunError extends Error {
+  constructor(readonly cause: unknown, readonly log: RunLog) {
+    super(errorText(cause));
+  }
+}
+
+type RunOpts = { now: Date; dryRun: boolean; outDir?: string; deps?: Partial<RunDeps> };
+
+export async function runNews(opts: RunOpts): Promise<RunLog> {
+  const log: RunLog = { dryRun: opts.dryRun, itemsSeen: 0, sortedOut: [], borderline: [], ungrouped: [], skipped: [], held: [], published: [], costUsd: 0, stoppedByCeiling: false };
+  try {
+    return await run(log, opts);
+  } catch (e) {
+    throw new NewsRunError(e, log);
+  }
+}
+
+async function run(log: RunLog, { now, dryRun, outDir, deps = {} }: RunOpts): Promise<RunLog> {
   const d: RunDeps = { ...liveDeps, ...deps };
-  const log: RunLog = { dryRun, itemsSeen: 0, sortedOut: [], borderline: [], ungrouped: [], skipped: [], held: [], published: [], costUsd: 0, stoppedByCeiling: false };
   const markSeen = (items: Seen[]) => (dryRun || items.length === 0 ? Promise.resolve() : d.markSeen(items));
   const save = async (name: string, data: unknown) => { if (outDir) await writeFile(`${outDir}/${name}`, JSON.stringify(data, null, 2)); };
   if (outDir) await mkdir(outDir, { recursive: true });
@@ -155,7 +178,7 @@ export async function runNews({ now, dryRun, outDir, deps = {} }: { now: Date; d
       await save(`${slug}.json`, story);
       log.published.push({ slug, title: story.title });
     } catch (e) {
-      const reason = `error: ${e instanceof Error ? e.message : String(e)}`;
+      const reason = `error: ${errorText(e)}`;
       const storyId = story && !dryRun ? await d.hold(story, reason).catch(() => undefined) : undefined;
       log.held.push({ headline: b.headline, reason, ...(storyId ? { storyId } : {}) });
     }

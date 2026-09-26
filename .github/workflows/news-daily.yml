@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
     inputs:
       dry_run: { description: 'Dry run (publish nothing)', type: boolean, default: true }
+# One run at a time: two overlapping runs could publish the same event twice.
+concurrency: { group: news-daily, cancel-in-progress: false }
+permissions: { contents: read }
 jobs:
   news:
     runs-on: ubuntu-latest

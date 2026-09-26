@@ -1,5 +1,7 @@
 // Swap a news story's photo for the branded card (e.g. a photographer asks for it back).
 // Run: npm run news:unimage <story id>
+// The original photo stays on R2 at news/<slug>.webp (only the story stops pointing at it).
+// If an owner asks for it to be removed, delete that object by hand in R2.
 import { prisma } from '@/lib/db';
 import { brandedCard } from '@/lib/news/image';
 import { uploadToR2 } from '@/lib/r2';

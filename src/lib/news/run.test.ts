@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { runNews } from './run';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+import { NewsRunError, runNews } from './run';
 import type { Bundle, Candidate, Verdict } from './types';
 
 const cand = (id: number): Candidate => ({ articleId: id, url: `https://x.test/${id}`, source: 'iRunFar', title: `T${id}`, pubDate: new Date(), summary: 's', text: `full text ${id}`, imageUrl: null, photoCredit: null });
@@ -46,11 +49,13 @@ describe('a news run', () => {
     expect(log.held[0].storyId).toBe(42);
   });
   it('stops writing at the ceiling but keeps what it wrote', async () => {
-    let spent = 12.5;
-    const { d, published } = deps({ monthSpentUsd: async () => spent, publish: async (s: { slug: string; photoCredit: string | null }) => { published.push(s); spent += 0.09; } });
+    // $12.50 already spent this month; the ceiling is £10 x 1.27 = $12.70. The first story fits,
+    // and what this run has spent (sorting, grouping, that story) stops the second.
+    const { d, published } = deps({ monthSpentUsd: async () => 12.5 });
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
-    expect(published.length).toBeLessThan(4);
+    expect(published).toHaveLength(1);
     expect(log.stoppedByCeiling).toBe(true);
+    expect(log.skipped.filter((s) => s.reason === 'monthly ceiling')).toHaveLength(3);
   });
   it('a dry run publishes nothing and marks nothing seen', async () => {
     const { d, published, seen } = deps();
@@ -113,5 +118,30 @@ describe('a news run', () => {
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(published).toHaveLength(0);
     expect(log.held[0].reason).toMatch(/near-copy/);
+  });
+  it('a run that fails partway still reports what it spent', async () => {
+    let calls = 0;
+    const { d } = deps({ sort: async () => { if (calls++ > 0) throw new Error('OpenRouter 502'); return { verdict: news(5), costUsd: 0.001 }; } });
+    const err = await runNews({ now: new Date(), dryRun: false, deps: d as never }).catch((e) => e);
+    expect(err).toBeInstanceOf(NewsRunError);
+    expect(err.message).toBe('OpenRouter 502');
+    expect(err.log.costUsd).toBeCloseTo(0.001, 6);
+  });
+  it('a dry run with a folder saves its images there instead of uploading them', async () => {
+    const outDir = await mkdtemp(path.join(tmpdir(), 'news-dry-'));
+    let upload: ((key: string, body: Buffer, type: string) => Promise<string>) | undefined;
+    const { d } = deps({
+      gather: async () => [cand(5)],
+      image: async (_b: Bundle, slug: string, imgDeps?: { upload?: typeof upload }) => {
+        upload = imgDeps?.upload;
+        return { url: await upload!(`news/${slug}.webp`, Buffer.from('webp'), 'image/webp'), credit: null };
+      },
+    });
+    const log = await runNews({ now: new Date(), dryRun: true, outDir, deps: d as never });
+    expect(upload).toBeTypeOf('function');
+    const file = path.join(outDir, `${log.published[0].slug}.webp`);
+    expect(await readFile(file, 'utf8')).toBe('webp');
+    expect(JSON.parse(await readFile(path.join(outDir, `${log.published[0].slug}.json`), 'utf8')).imageUrl).toBe(file);
+    await rm(outDir, { recursive: true });
   });
 });
