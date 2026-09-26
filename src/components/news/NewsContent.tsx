@@ -19,7 +19,10 @@ interface Article {
   source: string;
   category: string;
   isOriginal?: boolean;
+  tags?: string[];
 }
+
+const TAG_ORDER = ['Trail & Ultra', 'Road', 'Track', 'UK'];
 
 // ============================================
 // SOURCE BADGE COLORS
@@ -292,17 +295,26 @@ function SourceFilter({
 export default function NewsContent({ articles }: { articles: Article[] }) {
   const [selectedSource, setSelectedSource] = useState<string | null>(null);
 
-  // Compute source counts from all articles (not filtered)
+  // Once every article carries topic tags (go-live), filter by those instead
+  // of by source, in the fixed topic order. Until then (a mix of our tagged
+  // stories and untagged feed articles) the page behaves exactly as before.
+  const allTagged = articles.length > 0 && articles.every((a) => a.tags !== undefined);
+  const chipsOf = (article: Article) => article.tags ?? [article.source];
+
   const sourceCounts: Record<string, number> = {};
   articles.forEach((article) => {
-    sourceCounts[article.source] = (sourceCounts[article.source] || 0) + 1;
+    chipsOf(article).forEach((tag) => {
+      sourceCounts[tag] = (sourceCounts[tag] || 0) + 1;
+    });
   });
-  const sources = Object.keys(sourceCounts).sort();
+  const sources = allTagged
+    ? TAG_ORDER.filter((tag) => sourceCounts[tag])
+    : Object.keys(sourceCounts).sort();
   const totalCount = articles.length;
 
   // Filter articles
   const filteredArticles = selectedSource
-    ? articles.filter((a) => a.source === selectedSource)
+    ? articles.filter((a) => chipsOf(a).includes(selectedSource))
     : articles;
 
   return (

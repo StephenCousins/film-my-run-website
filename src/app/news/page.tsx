@@ -43,6 +43,7 @@ interface Article {
   source: string;
   category: string;
   isOriginal?: boolean;
+  tags?: string[];
 }
 
 // ============================================
@@ -51,12 +52,13 @@ interface Article {
 
 import { getArticles as fetchArticles } from '@/lib/rss-fetcher';
 import { prisma } from '@/lib/db';
+import { NEWS_PAGE_OURS_ONLY, storyTags } from '@/lib/news/present';
 
 async function getOriginalStories(): Promise<Article[]> {
   try {
     const stories = await prisma.news_stories.findMany({
       where: { status: 'published' },
-      orderBy: [{ priority: 'asc' }, { published_at: 'desc' }],
+      orderBy: { published_at: 'desc' },
     });
 
     return stories.map((story) => ({
@@ -69,6 +71,7 @@ async function getOriginalStories(): Promise<Article[]> {
       source: 'Film My Run',
       category: 'trail',
       isOriginal: true,
+      tags: storyTags(story.topic, story.is_uk),
     }));
   } catch (error) {
     console.error('Error fetching original stories:', error);
@@ -78,6 +81,10 @@ async function getOriginalStories(): Promise<Article[]> {
 
 async function getArticles(): Promise<Article[]> {
   try {
+    if (NEWS_PAGE_OURS_ONLY) {
+      return await getOriginalStories();
+    }
+
     const [rssArticles, originalStories] = await Promise.all([
       fetchArticles(14, 100).then((articles) =>
         articles.map((article) => ({
