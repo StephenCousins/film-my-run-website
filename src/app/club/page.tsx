@@ -6,7 +6,7 @@ import JoinTheClub from '@/components/club/JoinTheClub';
 import { CLUB_MONTHLY_PENCE, CLUB_YEARLY_PENCE } from '@/lib/club/subscription';
 
 export const metadata: Metadata = {
-  title: 'The Club',
+  title: 'FMR Club',
   alternates: { canonical: 'https://filmmyrun.com/club' },
   description:
     'Support Film My Run for £2.99 a month: structured training plans, personalised paces, race-day pacing, Ask Stephen, and 15% off everything in the shop.',
@@ -43,13 +43,13 @@ export default function ClubPage() {
             <div className="absolute inset-0 bg-gradient-to-b from-black/75 via-black/65 to-[rgb(var(--color-background))]" />
           </div>
           <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-24">
-            <p className="text-sm font-semibold uppercase tracking-wider text-orange-400">The Club</p>
+            <p className="text-sm font-semibold uppercase tracking-wider text-orange-400">FMR Club</p>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mt-4 mb-6">
               {money(CLUB_MONTHLY_PENCE)} a month, and the running stays free for everyone
             </h1>
             <p className="text-lg text-zinc-200 leading-relaxed max-w-2xl">
               Film My Run has always given the tools away: the calculators, the race predictor built on 2.4 million
-              results, a training plan for whatever you are aiming at. That does not change. The Club is for the people
+              results, a training plan for whatever you are aiming at. That does not change. FMR Club is for the people
               who want to chip in anyway, and it comes with the things that take real work to run.
             </p>
             <div className="mt-10">
@@ -69,7 +69,7 @@ export default function ClubPage() {
             ))}
           </div>
           <p className="text-sm text-muted mt-8 max-w-2xl">
-            Cancel whenever you like and you keep the Club until the period you have paid for runs out. Your membership
+            Cancel whenever you like and you keep FMR Club until the period you have paid for runs out. Your membership
             works in the app as well as here — sign in with the same email.
           </p>
         </section>

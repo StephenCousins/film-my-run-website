@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     interval = 'month';
   }
   const price = interval === 'year' ? process.env.STRIPE_CLUB_PRICE_YEAR : process.env.STRIPE_CLUB_PRICE_MONTH;
-  if (!price) return NextResponse.json({ error: 'The Club is not on sale yet' }, { status: 503 });
+  if (!price) return NextResponse.json({ error: 'FMR Club is not on sale yet' }, { status: 503 });
 
   const user = await prisma.users.findUnique({ where: { id }, select: { stripe_customer_id: true } });
   const base = siteUrl();

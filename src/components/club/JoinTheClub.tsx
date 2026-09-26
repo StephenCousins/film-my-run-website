@@ -40,7 +40,7 @@ export default function JoinTheClub({ monthlyPence, yearlyPence }: { monthlyPenc
           Sign in to join
         </Link>
         <p className="text-sm text-muted mt-3">
-          A free account first, so the Club follows you into the app. {money(monthlyPence)} a month or {money(yearlyPence)} a year.
+          A free account first, so FMR Club follows you into the app. {money(monthlyPence)} a month or {money(yearlyPence)} a year.
         </p>
       </div>
     );
@@ -49,7 +49,7 @@ export default function JoinTheClub({ monthlyPence, yearlyPence }: { monthlyPenc
   if (hasAccess('PRO')) {
     return (
       <div>
-        <p className="text-lg text-foreground font-semibold">You are in the Club. Thank you.</p>
+        <p className="text-lg text-foreground font-semibold">You are in FMR Club. Thank you.</p>
         <button
           type="button"
           onClick={() => go('/api/club/portal')}

@@ -24,11 +24,11 @@ export default function MemberLine({ pounds, label = 'Member price' }: { pounds:
     <>
       <p className="text-sm text-foreground mt-1">
         {label} <span className="font-mono">£{memberPrice(pounds, club).toFixed(2)}</span>
-        {club && <span className="text-brand"> · Club 15%</span>}
+        {club && <span className="text-brand"> · FMR Club 15%</span>}
       </p>
       {!club && (
         <p className="text-xs text-muted mt-0.5">
-          <Link href="/club" className="text-brand hover:underline">The Club</Link> saves 15%.
+          <Link href="/club" className="text-brand hover:underline">FMR Club</Link> saves 15%.
         </p>
       )}
     </>

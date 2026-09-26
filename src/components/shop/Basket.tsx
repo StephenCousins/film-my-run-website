@@ -88,7 +88,7 @@ export default function Basket() {
           <p className="text-secondary text-sm">Subtotal</p>
           <p className="font-mono text-2xl text-foreground">£{subtotal.toFixed(2)}</p>
           {isAuthenticated ? (
-            <p className="text-sm text-foreground">{club ? 'Club discount' : 'Member discount'} <span className="font-mono">−£{discount.toFixed(2)}</span> · you pay <span className="font-mono">£{(subtotal - discount).toFixed(2)}</span> plus postage</p>
+            <p className="text-sm text-foreground">{club ? 'FMR Club discount' : 'Member discount'} <span className="font-mono">−£{discount.toFixed(2)}</span> · you pay <span className="font-mono">£{(subtotal - discount).toFixed(2)}</span> plus postage</p>
           ) : (
             <MemberLine pounds={subtotal} />
           )}
