@@ -21,15 +21,18 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
   const text = [
     `${dryRun ? `DRY RUN (stories in ${outDir}). ` : ''}${log.published.length} published, ${log.held.length} held, ${log.itemsSeen} items seen, $${log.costUsd.toFixed(3)}.`,
     log.stoppedByCeiling ? `Stopped at the £${NEWS_CONFIG.monthlyCeilingGbp} monthly ceiling.` : '',
-    ...log.published.map((p) => `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
+    ...log.published.map((p) => dryRun ? `Would publish: ${p.title}` : `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
     ...log.held.map((h) => `Held: ${h.headline} (${h.reason})${h.storyId ? `; publish by hand with npm run news:publish ${h.storyId}` : ''}`),
     ...log.skipped.map((s) => `Not written: ${s.headline} (${s.reason})`),
     ...log.ungrouped.map((u) => `Passed the sort but in no group (retried tomorrow): ${u.title} ${u.url}`),
     ...log.borderline.map((b) => `Borderline (${b.confidence.toFixed(2)}): ${b.url}`),
   ].filter(Boolean).join('\n');
   console.log(text);
-  await report(`Film My Run news${dryRun ? ' (dry run)' : ''}: ${log.published.length} published, ${log.held.length} held`, text);
+  await report(`Film My Run news${dryRun ? ' (dry run)' : ''}: ${log.published.length} ${dryRun ? 'would publish' : 'published'}, ${log.held.length} held`, text);
   await prisma.$disconnect();
+  // Something (an HTTP keep-alive pool) holds the event loop open after the work is done;
+  // the first run sat idle until the workflow's 30-minute timeout. Done is done.
+  process.exit(0);
 })().catch(async (e) => {
   console.error(e);
   // Best effort from here on: record what the failed run spent, and say it failed. Neither may hide the original error.
