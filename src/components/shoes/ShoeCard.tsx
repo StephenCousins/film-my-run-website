@@ -94,7 +94,7 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
             src={shoe.imageUrl}
             alt={`${shoe.brand} ${shoe.model}`}
             fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 400px"
             className="object-cover"
             onError={() => setImgError(true)}
           />
