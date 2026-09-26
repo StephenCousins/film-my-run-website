@@ -34,8 +34,8 @@ that stayed in the database, and the page's current list of other sites' links.
 2. **Sort.** One decision per item: type (news, preview, race report, review,
    training, opinion, podcast/video, sponsored, other), running or not, topic
    (trail & ultra, road, track), UK-related (yes/no), importance 1-10 with the lean above. Only type
-   = news at confidence >= 0.90 goes on. The sorter is Jev (TypeSafe) or Gemini
-   Flash, decided by the bake-off below.
+   = news at confidence >= 0.90 goes on. The sorter is Gemini Flash (Stephen,
+   26 Sep: Jev another time).
 3. **Group** (Gemini Flash). Items about the same event become one bundle,
    across days. An event we have already written about gets a new story only
    when there is genuinely new news (results after a preview); otherwise it is
@@ -63,7 +63,7 @@ sorted twice and the log can explain every decision. One Prisma migration.
 
 | Gate | Fails when |
 |---|---|
-| 1. Sorter | Not news, or confidence below 0.90 |
+| 1. Sorter (Gemini Flash) | Not news, or confidence below 0.90 |
 | 2a. Opus before writing | It judges the bundle not genuine news of the last 14 days |
 | 2b. Opus after writing | Any fact in the story is not found in a source |
 | 3. Rules in code | Missing title/body, not 3-6 paragraphs, an em dash, a duplicate slug, or a long phrase shared with a source (near-copy) |
@@ -72,13 +72,16 @@ sorted twice and the log can explain every decision. One Prisma migration.
 - A failing story is **held**, not published, with its reason; `npm run news:publish <id>` publishes one by hand.
 - The threshold is a setting. For the first two weeks the log lists every item rejected at 0.50-0.90, to check real news is not being missed.
 
-## Bake-off (before launch)
+## Sorter check (before launch)
 
-Label about 800 recent feed items by hand (Claude, reviewed where unsure). Jev
-and Gemini Flash each sort them. The deciding measure is how often each would
-have passed something that is not news at the 0.90 threshold; then how much real
-news each misses. Jev needs a key (Vercel AI Gateway or TypeSafe's waitlist);
-without one, Gemini is used and nothing else changes.
+Label about 800 recent feed items by hand (Claude, reviewed where unsure) and
+have Gemini Flash sort them. The measure that matters for auto-publishing: how
+often it passes something that is not news at the 0.90 threshold; then how much
+real news it misses. The threshold is set from this.
+
+Later: Jev (TypeSafe's System One model, calibrated typed decisions, about
+$0.002 a day here) can be tried on the same labelled set; it needs a key from
+Vercel AI Gateway or TypeSafe's waitlist.
 
 ## Images
 
@@ -109,7 +112,7 @@ About $0.09 a story (Opus writing and checking), sorting about $0.002 a day.
 ## Testing and rollout
 
 - Unit tests (vitest): grouping, the 14-day rule, the code-rule gate (paragraphs, em dash, near-copy), the credit stamp, cap and ceiling.
-- The bake-off.
+- The sorter check.
 - `--dry-run`: everything but publishing; stories, images and log to a folder.
 - Rollout: build and test; three days of dry runs that Stephen reads (about 12 stories) to tune voice, threshold and ranking; then publishing goes live and the page switches. A daily email for two weeks (published, held and why, cost), weekly after.
 
