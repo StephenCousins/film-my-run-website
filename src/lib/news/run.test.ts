@@ -26,6 +26,7 @@ function deps(over: Record<string, unknown> = {}) {
     takenSlugs: async () => new Set<string>(),
     recentSlugs: async () => new Set<string>(),
     markSeen: async (items: { c: Candidate }[]) => { seen.push(...items.map((i) => i.c.articleId)); },
+    more: async () => ({ items: [], costUsd: 0 }),
     ...over,
   };
   return { d, published, held, seen };
@@ -202,5 +203,33 @@ describe('a news run', () => {
     expect(calls[1]?.join(' ')).toContain('three weeks after');
     expect(published).toHaveLength(1);
     expect(log.held).toHaveLength(0);
+  });
+  it('looks for more coverage when the source cannot be read, and credits it', async () => {
+    const found = { ...cand(0), articleId: 0, url: 'https://fellrunner.test/gossage', source: 'Fell Runner', text: 'Lucy Gossage ran the Pennine Way.' };
+    let asked = 0;
+    const { d, published } = deps({
+      gather: async () => [{ ...cand(1), text: null }],
+      more: async () => { asked++; return { items: [found], costUsd: 0.02 }; },
+      write: async (b: Bundle) => b.items.some((i) => i.text) ? { draft: { title: 'Gossage', excerpt: 'E.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 } : { draft: null, refusal: 'no full text', costUsd: 0 },
+    });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d });
+    expect(asked).toBe(1);
+    expect(published).toHaveLength(1);
+    expect((published[0] as unknown as { sources: { site: string }[] }).sources.map((s) => s.site)).toContain('Fell Runner');
+    expect((published[0] as unknown as { articleIds: number[] }).articleIds).toEqual([1]);
+    expect(log.costUsd).toBeGreaterThan(0.08);
+  });
+
+  it('rewrites once to drop the facts the checker could not find, then publishes', async () => {
+    const asks: (string[] | undefined)[] = [];
+    let checks = 0;
+    const { d, published } = deps({
+      gather: async () => [cand(1)],
+      write: async (_b: Bundle, _n: Date, _avoid?: string[], unsupported?: string[]) => { asks.push(unsupported); return { draft: { title: 'T', excerpt: 'E.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }; },
+      check: async () => (checks++ === 0 ? { ok: false, unsupported: ['Lake District'], costUsd: 0.03 } : { ok: true, unsupported: [], costUsd: 0.03 }),
+    });
+    await runNews({ now: new Date(), dryRun: false, deps: d });
+    expect(asks[1]).toEqual(['Lake District']);
+    expect(published).toHaveLength(1);
   });
 });

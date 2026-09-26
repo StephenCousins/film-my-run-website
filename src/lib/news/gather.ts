@@ -56,13 +56,20 @@ export function extractPage(html: string, pageUrl: string, site: string) {
   return { text, imageUrl, photoCredit };
 }
 
-async function fetchHtml(url: string): Promise<string | null> {
-  try {
-    const res = await fetch(url, { headers: { 'User-Agent': 'FilmMyRun-News/1.0 (+https://filmmyrun.com)' }, signal: AbortSignal.timeout(15000) });
-    return res.ok ? await res.text() : null;
-  } catch {
-    return null;
+/** A page's HTML, or null. One retry: the first live dry run lost Lucy Gossage's Pennine
+ * Way FKT to a single failed fetch of a page that reads fine (26 Sep 2026). */
+export async function fetchHtml(url: string): Promise<string | null> {
+  for (let attempt = 0; attempt < 2; attempt++) {
+    try {
+      const res = await fetch(url, { headers: { 'User-Agent': 'FilmMyRun-News/1.0 (+https://filmmyrun.com)' }, signal: AbortSignal.timeout(15000) });
+      if (res.ok) return await res.text();
+      if (res.status < 500 && res.status !== 429) return null;
+    } catch {
+      // timeout or network: retry once
+    }
+    if (attempt === 0) await new Promise((r) => setTimeout(r, 2000));
   }
+  return null;
 }
 
 /** Refresh the feeds, then every item of the last 14 days not yet looked at, with its page read. */

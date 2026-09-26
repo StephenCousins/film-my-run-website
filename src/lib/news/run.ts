@@ -7,6 +7,7 @@ import { bundleImportance, groupItems } from './group';
 import { storyImage } from './image';
 import { pickBundles, slugBase, STORY_ESTIMATE_USD, uniqueSlug, withinCeiling } from './plan';
 import { nearCopyPhrases, ruleProblems } from './rules';
+import { moreCoverage } from './search';
 import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
 import { checkFacts, writeStory } from './write';
@@ -17,7 +18,9 @@ export interface RunDeps {
   gather: (now: Date) => Promise<Candidate[]>;
   sort: (c: Candidate) => ReturnType<typeof sortItem>;
   group: (items: { c: Candidate; v: Verdict }[], recent: string[]) => ReturnType<typeof groupItems>;
-  write: (b: Bundle, now: Date, avoid?: string[]) => ReturnType<typeof writeStory>;
+  write: (b: Bundle, now: Date, avoid?: string[], unsupported?: string[]) => ReturnType<typeof writeStory>;
+  /** Other sites' reports of the event, when its own source can't be read or stands alone. */
+  more: (b: Bundle, now: Date) => Promise<{ items: Candidate[]; costUsd: number }>;
   check: (d: Draft, b: Bundle) => ReturnType<typeof checkFacts>;
   image: typeof storyImage;
   publish: (s: StoryToPublish) => Promise<void>;
@@ -53,7 +56,8 @@ const liveDeps: RunDeps = {
   gather: gatherCandidates,
   sort: (c) => sortItem(c),
   group: (items, recent) => groupItems(items, recent),
-  write: (b, now, avoid) => writeStory(b, now, undefined, avoid),
+  write: (b, now, avoid, unsupported) => writeStory(b, now, undefined, avoid, unsupported),
+  more: (b, now) => moreCoverage(b, now),
   check: (d, b) => checkFacts(d, b),
   image: storyImage,
   publish: async (s) => { await saveStory(s, 'published', null); },
@@ -153,6 +157,13 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
     let story: StoryToPublish | null = null;
     try {
       await markSeen(bundleSeen(b));
+      // Its own source unreadable or alone: look for other sites' reports first (after
+      // markSeen, so web finds, articleId 0, are never recorded as feed items).
+      if (b.items.filter((i) => i.text).length < 2) {
+        const more = await d.more(b, now);
+        log.costUsd += more.costUsd;
+        b.items.push(...more.items);
+      }
       const w = await d.write(b, now);
       log.costUsd += w.costUsd;
       if (!w.draft) { log.held.push({ headline: b.headline, reason: w.refusal ?? 'no draft' }); continue; }
@@ -162,7 +173,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       story = {
         ...w.draft, slug, topic: lead.topic, isUk: b.verdicts.some((v) => v.isUk), importance: bundleImportance(b),
         sources: b.items.map((i) => ({ site: i.source, url: i.url })), imageUrl: null, photoCredit: null,
-        bundleKey: b.key, articleIds: b.items.map((i) => i.articleId),
+        bundleKey: b.key, articleIds: b.items.map((i) => i.articleId).filter((id) => id > 0),
       };
       let reason: string | null = null;
       if (recentSlugs.has(slugBase(w.draft.title))) {
@@ -184,8 +195,19 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
         }
         reason = problems.length ? problems.join(', ') : null;
         if (!reason) {
-          const c = await d.check(w.draft, b);
+          let c = await d.check(w.draft, b);
           log.costUsd += c.costUsd;
+          // A few facts the checker can't find: one rewrite told to drop or correct exactly those, then every gate again.
+          if (!c.ok && c.unsupported.length <= 5 && !c.unsupported.includes('checker reply unreadable')) {
+            const again = await d.write(b, now, undefined, c.unsupported);
+            log.costUsd += again.costUsd;
+            if (again.draft && ruleProblems(again.draft, texts).length === 0) {
+              w.draft = again.draft;
+              Object.assign(story, again.draft);
+              c = await d.check(again.draft, b);
+              log.costUsd += c.costUsd;
+            }
+          }
           if (!c.ok) reason = `unsupported: ${c.unsupported.join('; ')}`;
         }
       }

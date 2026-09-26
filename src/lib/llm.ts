@@ -161,3 +161,23 @@ export async function completeJson<T>({
   const costUsd = Number((completion.usage as { cost?: number } | undefined)?.cost ?? 0);
   return { data: parseJson<T>(raw), costUsd, raw };
 }
+
+/**
+ * A web search through OpenRouter's web plugin: the URLs a cheap model cites
+ * for a query, and what it cost (5 results is about $0.02 plus the model).
+ * The news pipeline uses it to find more reports of an event when its own
+ * feed source can't be read.
+ */
+export async function searchWeb(model: string, query: string, maxResults = 5): Promise<{ urls: string[]; costUsd: number }> {
+  const client = getClient();
+  const completion = await client.chat.completions.create({
+    model,
+    max_tokens: 2000,
+    temperature: 0,
+    messages: [{ role: 'user', content: `Find recent news reports of: ${query}. List the article URLs.` }],
+    ...({ plugins: [{ id: 'web', engine: 'exa', max_results: maxResults }], usage: { include: true } } as Record<string, unknown>),
+  });
+  const message = completion.choices[0]?.message as { annotations?: { type: string; url_citation?: { url: string } }[] } | undefined;
+  const urls = [...new Set((message?.annotations ?? []).filter((a) => a.type === 'url_citation' && a.url_citation?.url).map((a) => a.url_citation!.url))];
+  return { urls, costUsd: Number((completion.usage as { cost?: number } | undefined)?.cost ?? 0) };
+}
