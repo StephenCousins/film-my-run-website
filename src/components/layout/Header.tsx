@@ -54,7 +54,6 @@ const navigation = [
   { name: 'News', href: '/news' },
   { name: 'Shop', href: '/shop' },
   { name: 'FMR Club', href: '/club' },
-  { name: 'Contact', href: '/contact' },
 ];
 
 const SHOP_HREF = '/shop';

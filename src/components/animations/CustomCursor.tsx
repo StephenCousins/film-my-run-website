@@ -25,6 +25,9 @@ interface CursorState {
 export default function CustomCursor() {
   const cursorRef = useRef<HTMLDivElement>(null);
   const cursorDotRef = useRef<HTMLDivElement>(null);
+  // The runner in the middle of the ring: its class and facing change on every
+  // mouse move, so they are set on the DOM directly rather than through state.
+  const runnerRef = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<CursorState>({
     x: 0,
     y: 0,
@@ -66,11 +69,32 @@ export default function CustomCursor() {
       animationFrameId = requestAnimationFrame(animate);
     };
 
+    // The runner runs while the mouse moves, faces the way it is going, and
+    // strides quicker the faster it goes; it stops a moment after the mouse does.
+    let lastX = 0;
+    let lastT = 0;
+    let stopTimer: ReturnType<typeof setTimeout> | undefined;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     // Mouse move handler
     const handleMouseMove = (e: MouseEvent) => {
       targetX = e.clientX;
       targetY = e.clientY;
-      setState(prev => ({ ...prev, isVisible: true }));
+      setState(prev => (prev.isVisible ? prev : { ...prev, isVisible: true }));
+
+      const runner = runnerRef.current;
+      if (runner && !reducedMotion) {
+        const now = performance.now();
+        const dx = e.clientX - lastX;
+        const speed = Math.abs(dx) / Math.max(1, now - lastT); // px per ms
+        if (Math.abs(dx) > 1) runner.style.setProperty('--face', dx < 0 ? '-1' : '1');
+        runner.style.setProperty('--stride', `${Math.max(0.16, Math.min(0.4, 0.4 - speed * 0.12)).toFixed(2)}s`);
+        runner.classList.add('running');
+        clearTimeout(stopTimer);
+        stopTimer = setTimeout(() => runner.classList.remove('running'), 140);
+        lastX = e.clientX;
+        lastT = now;
+      }
     };
 
     // Mouse enter/leave window
@@ -138,6 +162,7 @@ export default function CustomCursor() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      clearTimeout(stopTimer);
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mousemove', handleElementHover);
       document.removeEventListener('mouseenter', handleMouseEnter);
@@ -178,11 +203,11 @@ export default function CustomCursor() {
         />
       </div>
 
-      {/* Center dot */}
+      {/* The runner at the centre (it was a dot) */}
       <div
         ref={cursorDotRef}
         className={cn(
-          'fixed top-0 left-0 pointer-events-none z-[9999] -ml-1 -mt-1',
+          'fixed top-0 left-0 pointer-events-none z-[9999] -ml-[13px] -mt-[13px]',
           'transition-opacity duration-300',
           state.isVisible ? 'opacity-100' : 'opacity-0'
         )}
@@ -190,15 +215,23 @@ export default function CustomCursor() {
       >
         <div
           className={cn(
-            'w-2 h-2 rounded-full transition-all duration-200',
-            // Default
-            !state.isHovering && 'bg-orange-500',
-            // Hovering
-            state.isHovering && 'bg-orange-500 scale-0',
-            // Text input - show as line
-            state.isHovering && state.hoverType === 'text' && 'bg-orange-500 scale-100'
+            'transition-transform duration-200',
+            state.isHovering && state.hoverType !== 'text' ? 'scale-0' : 'scale-100'
           )}
-        />
+        >
+          <div ref={runnerRef} className="fmr-runner" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#f88c00" strokeWidth="2.2" strokeLinecap="round">
+              <g className="fmr-runner-body">
+                <circle cx="13.5" cy="4" r="2.2" fill="#f88c00" stroke="none" />
+                <line x1="12.6" y1="7.2" x2="11" y2="13" />
+                <line className="fmr-arm-a" x1="12.3" y1="8.5" x2="15.5" y2="11.5" />
+                <line className="fmr-arm-b" x1="12.3" y1="8.5" x2="9" y2="11" />
+                <line className="fmr-leg-a" x1="11" y1="13" x2="13.5" y2="20.5" />
+                <line className="fmr-leg-b" x1="11" y1="13" x2="8.5" y2="20.5" />
+              </g>
+            </svg>
+          </div>
+        </div>
       </div>
 
       {/* Global style to hide default cursor */}
@@ -208,6 +241,23 @@ export default function CustomCursor() {
             cursor: none !important;
           }
         }
+        .fmr-runner { --face: 1; --stride: 0.3s; transform: scaleX(var(--face)); transition: transform 0.15s; }
+        .fmr-runner line { transform-box: view-box; }
+        .fmr-arm-a, .fmr-arm-b { transform-origin: 12.3px 8.5px; }
+        .fmr-leg-a, .fmr-leg-b { transform-origin: 11px 13px; }
+        /* Standing: legs a little apart, arms loose */
+        .fmr-leg-a { transform: rotate(-12deg); }
+        .fmr-leg-b { transform: rotate(12deg); }
+        .fmr-arm-a { transform: rotate(35deg); }
+        .fmr-arm-b { transform: rotate(-25deg); }
+        .fmr-runner.running .fmr-leg-a { animation: fmr-swing var(--stride) ease-in-out infinite alternate; }
+        .fmr-runner.running .fmr-leg-b { animation: fmr-swing var(--stride) ease-in-out infinite alternate-reverse; }
+        .fmr-runner.running .fmr-arm-a { animation: fmr-swing-arm var(--stride) ease-in-out infinite alternate-reverse; }
+        .fmr-runner.running .fmr-arm-b { animation: fmr-swing-arm var(--stride) ease-in-out infinite alternate; }
+        .fmr-runner.running .fmr-runner-body { animation: fmr-bob calc(var(--stride) / 2) ease-in-out infinite alternate; }
+        @keyframes fmr-swing { from { transform: rotate(-40deg); } to { transform: rotate(40deg); } }
+        @keyframes fmr-swing-arm { from { transform: rotate(-45deg); } to { transform: rotate(45deg); } }
+        @keyframes fmr-bob { from { transform: translateY(0); } to { transform: translateY(-1px); } }
       `}</style>
     </>
   );
