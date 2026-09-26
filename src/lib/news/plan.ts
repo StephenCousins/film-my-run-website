@@ -14,7 +14,8 @@ export function withinCeiling(monthSpentUsd: number, nextEstimateUsd: number): b
 }
 
 export function uniqueSlug(title: string, taken: Set<string>): string {
-  const base = title.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 70).replace(/-$/, '');
+  let base = title.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 70).replace(/-$/, '');
+  if (base === '') base = 'story';
   if (!taken.has(base)) return base;
   let n = 2;
   while (taken.has(`${base}-${n}`)) n++;

@@ -19,4 +19,22 @@ describe('choosing what to write', () => {
     expect(uniqueSlug('Evans wins UTMB!', taken)).toBe('evans-wins-utmb-2');
     expect(uniqueSlug('Évans — wins, UTMB', new Set())).toBe('evans-wins-utmb');
   });
+  it('uses fallback slug for all-non-ASCII titles', () => {
+    expect(uniqueSlug('東京マラソン', new Set())).toBe('story');
+  });
+  it('suffixes fallback slug when taken', () => {
+    const taken = new Set(['story']);
+    const slug = uniqueSlug('!!!', taken);
+    expect(slug).not.toBe('');
+    expect(slug).not.toBe('story');
+    expect(slug).toBe('story-2');
+  });
+  it('caps at 0 yields empty list', () => {
+    const picked = pickBundles([b('a', 5), b('b', 9)], 0);
+    expect(picked).toEqual([]);
+  });
+  it('returns all non-covered when fewer than cap', () => {
+    const picked = pickBundles([b('a', 3), b('b', 9, true)], 10);
+    expect(picked.map((x) => x.key)).toEqual(['a']);
+  });
 });
