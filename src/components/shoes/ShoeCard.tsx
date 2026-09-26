@@ -37,6 +37,7 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
   const { ratings, rate, remove, labels } = useShoeList();
   const [expanded, setExpanded] = useState(false);
   const [imgError, setImgError] = useState(false);
+  const [cardError, setCardError] = useState(false);
   // Per-card aggregates change when this user rates; the rating itself comes from the shared hook.
   const [userAvgScore, setUserAvgScore] = useState(shoe.userAvgScore);
   const [userRatingCount, setUserRatingCount] = useState(shoe.userRatingCount);
@@ -87,9 +88,20 @@ export default function ShoeCard({ shoe, rank }: { shoe: Shoe; rank: number | nu
     <div className="bg-white dark:bg-[#18181b] border border-[#e4e4e7] dark:border-[#27272a] rounded-2xl overflow-hidden hover:border-orange-300 dark:hover:border-orange-800 transition-colors">
       {/* Image / placeholder */}
       <div className="relative bg-[#f4f4f5] dark:bg-[#27272a] h-40 flex items-center justify-center">
-        {shoe.imageUrl && !imgError ? (
-          // 324 cards render at once, so lazy + resized (Next serves ~10 KB WebP per card
-          // instead of the 75 KB 1000px JPEG on R2) is what makes the page usable on a phone.
+        {shoe.cardImageUrl && !cardError ? (
+          // Ready-sized WebP straight from R2: no resizing on request, so no cold wait after a deploy.
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={shoe.cardImageUrl}
+            alt={`${shoe.brand} ${shoe.model}`}
+            loading="lazy"
+            decoding="async"
+            className="absolute inset-0 w-full h-full object-cover"
+            onError={() => setCardError(true)}
+          />
+        ) : shoe.imageUrl && !imgError ? (
+          // No card copy (or it failed): lazy + resized by Next (~10 KB WebP per card
+          // instead of the 75 KB 1000px JPEG on R2).
           <Image
             src={shoe.imageUrl}
             alt={`${shoe.brand} ${shoe.model}`}

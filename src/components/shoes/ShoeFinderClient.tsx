@@ -33,6 +33,8 @@ export interface Shoe {
   releaseYear: number | null;
   description: string | null;
   imageUrl: string | null;
+  /** Ready-sized WebP on R2 for the card; null when the photo isn't one we stored. */
+  cardImageUrl?: string | null;
   buyUrl: string | null;
   avgScore: number | null;
   reviewCount: number;

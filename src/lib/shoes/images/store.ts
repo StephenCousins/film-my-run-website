@@ -35,6 +35,16 @@ export function imageKey(slug: string): string {
   return `shoes/${slug}.jpg`;
 }
 
+/** The Shoe Finder card copy: served straight to browsers, so nothing is resized on request. */
+export function cardKey(slug: string): string {
+  return `shoes/card/${slug}.webp`;
+}
+
+/** An 800px WebP (a 400px card at 2x): ~20 KB against the 75 KB 1000px JPEG. */
+export function makeCard(image: Buffer): Promise<Buffer> {
+  return sharp(image).resize({ width: 800, withoutEnlargement: true }).webp({ quality: 80 }).toBuffer();
+}
+
 /** Where every image this pipeline stores lives; the one test for "ours, not a hotlink". */
 export const R2_SHOES_PREFIX = getR2Url('shoes/');
 
@@ -45,6 +55,17 @@ export const R2_SHOES_PREFIX = getR2Url('shoes/');
  */
 export function isR2ImageUrl(url: string): boolean {
   return url.startsWith(R2_SHOES_PREFIX);
+}
+
+/**
+ * The card copy of a photo this pipeline stored, or null for anything else.
+ * ponytail: derived from the key, not stored, so a replaced photo keeps the same card URL and
+ * browsers may show the old card for up to a year (R2 serves max-age=31536000). Add a hash to the
+ * key if replacements become common.
+ */
+export function cardUrlFor(imageUrl: string | null): string | null {
+  const m = imageUrl && isR2ImageUrl(imageUrl) ? imageUrl.slice(R2_SHOES_PREFIX.length).match(/^([^/]+)\.jpg$/) : null;
+  return m ? getR2Url(cardKey(m[1])) : null;
 }
 
 /**
@@ -60,5 +81,7 @@ export async function storeImage(slug: string, sourceUrl: string, deps: StoreDep
     .flatten({ background: '#ffffff' }) // JPEG has no alpha; transparent PNGs would otherwise go black
     .jpeg({ quality: 85 })
     .toBuffer();
+  // Card first, so a failure here leaves no photo pointing at a missing card.
+  await deps.upload(cardKey(slug), await makeCard(jpeg), 'image/webp');
   return deps.upload(imageKey(slug), jpeg, 'image/jpeg');
 }

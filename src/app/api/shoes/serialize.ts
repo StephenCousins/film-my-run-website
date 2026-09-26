@@ -1,4 +1,5 @@
 import type { Prisma } from '@prisma/client';
+import { cardUrlFor } from '@/lib/shoes/images/store';
 
 /** Catalogue columns only: no reviews, no per-user ratings, so the list is cacheable. */
 export const shoeSelect = {
@@ -43,6 +44,7 @@ export function serializeShoe(s: ShoeRow) {
     releaseYear: s.release_year,
     description: s.description,
     imageUrl: s.image_url,
+    cardImageUrl: cardUrlFor(s.image_url),
     buyUrl: s.buy_url,
     avgScore: num(s.avg_score),
     reviewCount: s.review_count,

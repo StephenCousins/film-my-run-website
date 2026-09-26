@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import sharp from 'sharp';
-import { storeImage, isR2ImageUrl, R2_SHOES_PREFIX } from './store';
+import { storeImage, isR2ImageUrl, R2_SHOES_PREFIX, cardUrlFor } from './store';
 
 describe('storeImage', () => {
   it('resizes to ≤1000px JPEG and uploads under shoes/{slug}.jpg', async () => {
@@ -34,5 +34,23 @@ describe('isR2ImageUrl', () => {
     expect(isR2ImageUrl('https://www.runningzap.com/images/shoes/x/hero.webp')).toBe(false);
     expect(isR2ImageUrl(`${R2_SHOES_PREFIX.replace('/shoes/', '/blog/')}shoes/x.jpg`)).toBe(false);
     expect(isR2ImageUrl('')).toBe(false);
+  });
+});
+
+describe('card copies', () => {
+  it('storeImage also uploads an 800px WebP card copy', async () => {
+    const png = await sharp({ create: { width: 2400, height: 1200, channels: 3, background: '#fff' } }).png().toBuffer();
+    const uploads: { key: string; type: string; w: number }[] = [];
+    await storeImage('hoka-clifton-10', 'https://x/a.png', {
+      download: async () => png,
+      upload: async (key, body, type) => { uploads.push({ key, type, w: (await sharp(body).metadata()).width! }); return `https://r2/${key}`; },
+    });
+    expect(uploads).toContainEqual({ key: 'shoes/card/hoka-clifton-10.webp', type: 'image/webp', w: 800 });
+  });
+
+  it('cardUrlFor maps a stored photo to its card, and anything else to null', () => {
+    expect(cardUrlFor(`${R2_SHOES_PREFIX}hoka-clifton-10.jpg`)).toBe(`${R2_SHOES_PREFIX}card/hoka-clifton-10.webp`);
+    expect(cardUrlFor('https://www.runningzap.com/images/shoes/x.jpg')).toBeNull();
+    expect(cardUrlFor(null)).toBeNull();
   });
 });
