@@ -25,20 +25,21 @@ describe('a story on demand', () => {
     const bundles: Bundle[] = [];
     const published: { title: string }[] = [];
     const story = storyDeps(cands, { note: 'Lead with the British angle', sort: async () => ({ verdict: opinion, costUsd: 0.002 }) });
-    const log = await runNews({
-      now, dryRun: false, maxStories: 1,
-      deps: {
-        ...story,
-        write: async (b) => { bundles.push(b); return { draft: { title: 'Evans wins UTMB', excerpt: 'E.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }; },
-        check: async () => ({ ok: true, unsupported: [], costUsd: 0.03 }),
-        image: async () => ({ url: 'https://r2.test/x.webp', credit: 'Photo: BBC Sport' }),
-        publish: async (s) => { published.push(s); },
-        hold: async () => 1,
-        more: async () => ({ items: [], costUsd: 0 }),
-        monthSpentUsd: async () => 0, recentHeadlines: async () => [], takenSlugs: async () => new Set(), recentSlugs: async () => new Set(),
-        markSeen: async () => {},
-      },
-    });
+    const storyRunDeps = {
+      ...story,
+      write: async (b: Bundle) => { bundles.push(b); return { draft: { title: 'Evans wins UTMB', excerpt: 'E.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }; },
+      check: async () => ({ ok: true, unsupported: [], costUsd: 0.03 }),
+      image: async () => ({ url: 'https://r2.test/x.webp', credit: 'Photo: BBC Sport' }),
+      publish: async (s: { title: string }) => { published.push(s); },
+      hold: async () => 1,
+      more: async () => ({ items: [], costUsd: 0 }),
+      // Without these, run() falls back to the live deps (runnerFiles hits the DB).
+      runnerFiles: async () => [],
+      autoProfiles: async () => ({ log: [], costUsd: 0 }),
+      monthSpentUsd: async () => 0, recentHeadlines: async () => [], takenSlugs: async () => new Set(), recentSlugs: async () => new Set(),
+      markSeen: async () => {},
+    };
+    const log = await runNews({ now, dryRun: false, maxStories: 1, deps: storyRunDeps as never });
     expect(published.map((p) => p.title)).toEqual(['Evans wins UTMB']);
     expect(bundles[0].note).toBe('Lead with the British angle');
     expect(bundles[0].onDemand).toBe(true);

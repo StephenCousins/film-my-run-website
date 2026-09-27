@@ -52,7 +52,11 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
   if (dryRun) await report(`Film My Run news (dry run): ${log.published.length} would publish, ${log.notPublished.length} not published`, text);
   else if (new Date().getUTCDay() === 1) {
     const utmb = await refreshUtmbIndexes().then(
-      (r) => `UTMB Index refreshed for ${r.updated} runners${r.missing.length ? `; not found on UTMB: ${r.missing.join(', ')}` : ''}.`,
+      (r) => [
+        r.note ?? `UTMB Index refreshed for ${r.updated} runners`,
+        r.missing.length ? `not found on UTMB: ${r.missing.join(', ')}` : '',
+        r.cutShort ? `refresh cut short, ${r.cutShort} not checked` : '',
+      ].filter(Boolean).join('; ') + '.',
       (e) => `UTMB Index refresh FAILED: ${errorText(e)}`,
     );
     console.log(utmb);

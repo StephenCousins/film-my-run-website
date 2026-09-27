@@ -15,4 +15,11 @@ describe('a runner file as a news source', () => {
     const c = toCandidate(row, new Date('2026-09-27T00:00:00Z'));
     expect(c).toMatchObject({ articleId: 0, source: RUNNER_FILE_SOURCE, url: 'https://filmmyrun.com/runners/ruth-croft', imageUrl: null });
   });
+  it('drops a fact marked unverified, and the note itself, but keeps the rest of the bio', () => {
+    const unverified = { ...row, bio: '<p>She won in 2019.* She lives in Leeds.</p><p>* Film My Run could not verify this information.</p>' };
+    const t = profileText(unverified);
+    expect(t).not.toContain('2019');
+    expect(t).not.toContain('*');
+    expect(t).toContain('She lives in Leeds.');
+  });
 });

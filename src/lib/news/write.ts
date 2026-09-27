@@ -36,7 +36,7 @@ Today is ${now.toISOString().slice(0, 10)}. ${b.onDemand ? 'The editor has asked
 
 Also not for us: a story that accuses a named private individual (not a professional or elite athlete) of cheating when no race or governing body has acted on it. A disqualification or ban by a race, federation or the AIU is fine; say who took the action.
 
-If it is: write one story about this event: ${b.headline}. (That label is our desk's, not a source's: take every name and its spelling from the sources.) Combine every source that reports it. Add nothing from your own knowledge, however well known (where a route runs, a runner's past results): only what the sources say. If a source is about a different race or incident, leave it out entirely: one event per story.
+If it is: write one story about this event: ${b.headline}. (That label is our desk's, not a source's: take every name and its spelling from the sources.) Combine every source that reports it. Add nothing from your own knowledge, however well known (where a route runs, a runner's past results): only what the sources say. If a source is about a different race or incident, leave it out entirely: one event per story. A source named "Film My Run runner file" is our own background file on a runner: use it for facts about that runner (records, past results), not as a report of this event.
 - When British athletes or UK races feature (a British record, a British medal, a UK race), say so early.
 - title: specific, not clickbait, no colon-subtitle.
 - excerpt: one sentence, at most 160 characters.

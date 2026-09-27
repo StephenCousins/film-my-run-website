@@ -178,7 +178,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
     try {
       await markSeen(bundleSeen(b));
       // Our own runner files first: facts the writer can use without a web search.
-      b.items.push(...(await d.runnerFiles(b).catch(() => [])));
+      b.items.push(...(await d.runnerFiles(b).catch((e) => { console.error('runnerFiles failed:', e); return []; })));
       // Its own source unreadable or alone: look for other sites' reports first (after
       // markSeen, so web finds, articleId 0, are never recorded as feed items).
       if (b.items.filter((i) => i.text && i.source !== RUNNER_FILE_SOURCE).length < 2) {
@@ -207,7 +207,9 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       // NEWS_CONFIG.fixRounds of edits. A fact nobody can find is first looked for (more
       // coverage), then taken out or corrected, and in the last round kept with an asterisk
       // and "Film My Run could not verify this information" if the story needs it.
-      const texts = () => b.items.map((i) => i.text ?? '');
+      // Our own bio reusing its own words is not a near-copy; the fact-checker (which
+      // reads the whole bundle) still sees the runner file.
+      const texts = () => b.items.filter((i) => i.source !== RUNNER_FILE_SOURCE).map((i) => i.text ?? '');
       let draft = tidyPunctuation(w.draft);
       let reason: string | null = null;
       let searched = b.items.filter((i) => i.text && i.source !== RUNNER_FILE_SOURCE).length >= 2 ? false : true; // `more` already ran above
