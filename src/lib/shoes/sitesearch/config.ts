@@ -68,4 +68,6 @@ export const BRAND_SITE_ADAPTERS: Record<string, SiteAdapter> = {
   Scarpa: { kind: 'shopify', store: 'www.scarpa.co.uk' },
   RaidLight: { kind: 'shopify', store: 'www.raidlight.com' },
   Reebok: { kind: 'shopify', store: 'www.reebok.eu' },
+  // topoathletic.com's search is an HTML page; the UK store is Shopify.
+  'Topo Athletic': { kind: 'shopify', store: 'www.topoathletic.co.uk' },
 };
