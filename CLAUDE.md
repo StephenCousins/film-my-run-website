@@ -185,6 +185,8 @@ filmmyrun.com/
 │   └── /blog/[slug]
 ├── /news                       # Synthesised trail/ultra news
 │   └── /news/[slug]
+├── /runners                    # Runner profiles (bio, best finishes, UTMB index)
+│   └── /runners/[slug]
 ├── /races                      # Race results dashboard
 │   └── /races/years
 ├── /films                      # Documentary showcase
@@ -922,6 +924,38 @@ rest exist only as hardcoded entries in `films.ts`.
   restriction.
 
 ---
+
+## Runner profiles
+
+`/runners` and `/runners/[slug]` show a page per runner. Each page has a bio, up
+to two photos, best finishes, a live UTMB index and "In the news". The spec is
+`docs/superpowers/specs/2026-09-27-runner-profiles-design.md`. **The recipe for
+adding runners is `docs/runners/HOW-TO.md`.**
+
+- **Table:** `runners`. `photos`, `best_finishes` and `sources` are jsonb, and
+  `written_by` is `session` or `auto`. The code lives in `src/lib/runners/`.
+- **Links:** `linkRunners` links runner names in news stories when the page is
+  shown. The stored story HTML is never changed. "In the news" uses the same
+  matcher (`mentionedSlugs`), so the two directions always agree.
+- **The news writer reads our runner file.**
+  - `RUNNER_FILE_SOURCE` joins the bundle's sources for the writer and the
+    fact-checker.
+  - It is left out of the published sources, the near-copy check and the
+    "second report" count.
+  - Sentences marked `*` in a bio are dropped from it.
+- **Monday:** `news:daily` refreshes every runner's UTMB index before the
+  weekly email. It has a 5-minute limit and a guard for UTMB changing its page
+  shape.
+- **Automatic pages:** `src/lib/runners/auto.ts` writes pages for runners new
+  stories are about.
+  - At most 3 attempts a day and $1 per run, inside the £10 ceiling.
+  - An 8-minute limit.
+  - It never overwrites an existing slug and skips names that failed in the
+    last 14 days.
+  - Pages carry no photos until a session adds them.
+- **Photos:** only free-licence Commons photos or others with a named
+  photographer. `AGENCY_CREDITS` refuses agency credits.
+- **ITRA is out of scope:** itra.run blocks automated requests.
 
 ## LLM calls
 
