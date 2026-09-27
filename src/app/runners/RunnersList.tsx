@@ -35,7 +35,7 @@ export default function RunnersList({ runners }: { runners: Row[] }) {
       <div className="mt-8 flex flex-wrap gap-3 items-center">
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search runners" aria-label="Search runners" className="px-4 py-2 rounded-lg border border-border bg-background text-foreground w-full sm:w-64" />
         {FILTERS.map(([k, label]) => (
-          <button key={k} onClick={() => setD(k)} className={`px-3 py-1.5 rounded-full text-sm border ${d === k ? 'bg-[#f88c00] border-[#f88c00] text-white' : 'border-border text-foreground'}`}>{label}</button>
+          <button key={k} onClick={() => setD(k)} aria-pressed={d === k} className={`px-3 py-1.5 rounded-full text-sm border ${d === k ? 'bg-[#f88c00] border-[#f88c00] text-white' : 'border-border text-foreground'}`}>{label}</button>
         ))}
       </div>
       {current.length > 0 && grid(current)}

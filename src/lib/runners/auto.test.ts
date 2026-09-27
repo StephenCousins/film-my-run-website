@@ -126,6 +126,20 @@ describe('automatic runner pages', () => {
     expect(d.write).toHaveBeenCalledTimes(1);
   });
 
+  it('best finishes: sorted by position (winners first), then newest year, capped at 10', async () => {
+    const f = file('Jasmin Paris');
+    f.results = [
+      { race: 'Race A', year: 2020, distance: null, time: null, position: '3rd', source: 'UTMB' },
+      { race: 'Race B', year: 2023, distance: null, time: null, position: '1st woman', source: 'UTMB' },
+      { race: 'Race C', year: 2019, distance: null, time: null, position: null, source: 'UTMB' },
+      { race: 'Race D', year: 2021, distance: null, time: null, position: '1st', source: 'UTMB' },
+    ];
+    const d = deps({ gather: vi.fn(async () => f) });
+    await autoProfiles(['Jasmin Paris'], 10, d);
+    const saved = d.save.mock.calls[0][0] as RunnerFile;
+    expect(saved.bestFinishes!.map((b) => b.race)).toEqual(['Race B', 'Race D', 'Race A', 'Race C']);
+  });
+
   it('a name that failed for a real reason in the last 14 days is not retried', async () => {
     const d = deps({ recentFailures: async () => new Set(['Jasmin Paris']) });
     const out = await autoProfiles(['Jasmin Paris'], 10, d);

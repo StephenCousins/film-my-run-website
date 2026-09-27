@@ -15,7 +15,9 @@ interface RefreshDeps {
 }
 
 const liveDeps = (): RefreshDeps => ({
-  runners: () => prisma.runners.findMany({ where: { utmb_uri: { not: null } }, select: { slug: true, utmb_uri: true, utmb_index: true } }),
+  // Oldest-checked (and never-checked) runners first, so a run cut short by the
+  // deadline doesn't starve the same tail of runners every week.
+  runners: () => prisma.runners.findMany({ where: { utmb_uri: { not: null } }, select: { slug: true, utmb_uri: true, utmb_index: true }, orderBy: { utmb_index_at: { sort: 'asc', nulls: 'first' } } }),
   read: (uri) => utmbRunner(uri),
   update: async (slug, index, at) => { await prisma.runners.update({ where: { slug }, data: { utmb_index: index, utmb_index_at: at } }); },
   now: new Date(),

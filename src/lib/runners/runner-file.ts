@@ -11,14 +11,15 @@ type Row = { slug: string; name: string; nationality: string | null; utmb_index:
  * A bio may keep a fact nobody could verify, marked with a trailing `*` (a whole
  * paragraph of just the note, or an asterisk straight after the sentence: see
  * UNVERIFIED_NOTE in news/write.ts). As a source fed to the news writer and
- * fact-checker, that fact must not survive unmarked: drop every sentence carrying
- * an asterisk, paragraph breaks kept for the rest.
+ * fact-checker, that fact must not survive unmarked: drop the whole paragraph it's
+ * in (a sentence-level split breaks on a decimal like "2:05.3*." and can let the
+ * marked fact through), which also removes the note paragraph itself.
  */
 function verifiedBioText(bioHtml: string): string {
   const paragraphs = bioHtml.replace(/<\/p>\s*<p>/g, '\n\n').replace(/<[^>]+>/g, '').trim().split(/\n\n+/);
   return paragraphs
-    .map((p) => (p.match(/[^.!?]*[.!?]+\*?/g) ?? [p]).filter((s) => !s.includes('*')).map((s) => s.trim()).filter(Boolean).join(' '))
-    .filter(Boolean)
+    .map((p) => p.trim())
+    .filter((p) => p && !p.includes('*'))
     .join('\n\n');
 }
 

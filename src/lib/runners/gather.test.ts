@@ -53,4 +53,32 @@ describe('gathering a runner', () => {
     });
     expect(f).toBeNull();
   });
+
+  const utmbResultPage = (fullname: string, race: { race: string; eventName?: string }) => `<script id="__NEXT_DATA__" type="application/json">${JSON.stringify({ props: { pageProps: { fullname, nationalityCode: 'GB', gender: 'M', website: '', team: '', performanceIndexes: [{ piCategory: 'general', index: 700 }], results: { results: [{ dateIso: '2024-06-01', race: race.race, eventName: race.eventName ?? '', raceName: race.race, distance: '100', elevationGain: 6000, time: '20:00:00', isDnf: false, rank: 50, rankGender: 40 }] } } } })}</script>`;
+
+  it('a UTMB namesake whose races the article never mentions is dropped: Wikipedia is kept alone', async () => {
+    const search = JSON.stringify({ runners: [{ id: 5, fullname: 'Chris Runner', uri: '5.chris.runner', ip: 700, nationality: 'GB', sex: 'M' }] });
+    const page = utmbResultPage('Chris Runner', { race: 'UTMB Mont-Blanc CCC', eventName: 'UTMB Mont-Blanc' });
+    const text = 'Chris Runner is a British marathon runner who competed in road races across Europe and once ran the London Marathon. '.repeat(15);
+    const f = await gatherRunner({ name: 'Chris Runner' }, {
+      get: get({ 'search=': search, '/en/runner/5.chris.runner': page, '/api/rest_v1/page/summary/': wikiSummary('Chris Runner'), 'action=query': wikiExtract(text) }),
+      ourStories: none,
+    });
+    expect(f).not.toBeNull();
+    expect(f!.utmb).toBeNull();
+    expect(f!.texts.map((t) => t.source.name)).toEqual(['Wikipedia']);
+  });
+
+  it('Ann Trason-style data: UTMB Western States results, the article mentions Western States, keeps both', async () => {
+    const search = JSON.stringify({ runners: [{ id: 8, fullname: 'Ann Trason', uri: '8.ann.trason', ip: 850, nationality: 'US', sex: 'F' }] });
+    const page = utmbResultPage('Ann Trason', { race: 'Western States Endurance Run' });
+    const text = 'Ann Trason is an American ultramarathon runner who won the Western States Endurance Run fourteen times. '.repeat(15);
+    const f = await gatherRunner({ name: 'Ann Trason' }, {
+      get: get({ 'search=': search, '/en/runner/8.ann.trason': page, '/api/rest_v1/page/summary/': wikiSummary('Ann Trason'), 'action=query': wikiExtract(text) }),
+      ourStories: none,
+    });
+    expect(f).not.toBeNull();
+    expect(f!.utmb).not.toBeNull();
+    expect(f!.texts.map((t) => t.source.name)).toEqual(['UTMB', 'Wikipedia']);
+  });
 });

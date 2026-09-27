@@ -1,10 +1,24 @@
 import { ruleProblems } from '@/lib/news/rules';
 import { AGENCY_CREDITS, type RunnerFile } from './types';
 
+/** An agency's own domain, whatever the credit line says (spec: automated invoices). */
+const AGENCY_HOSTS = /gettyimages|shutterstock|alamy|reuters|apnews|afp|pa-?images/i;
+
+function agencyHost(url: string): boolean {
+  try {
+    return AGENCY_HOSTS.test(new URL(url).hostname);
+  } catch {
+    return false;
+  }
+}
+
+const SLUG_RE = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
 /** Everything code checks before a profile is saved. Empty means it can be published. */
 export function profileProblems(f: RunnerFile): string[] {
   const problems: string[] = [];
   if (!f.name.trim() || !f.slug.trim()) problems.push('no name or slug');
+  else if (!SLUG_RE.test(f.slug)) problems.push(`invalid slug: ${f.slug}`);
   const bio = (f.bio ?? []).map((p) => p.trim()).filter(Boolean);
   const paragraphs = bio.filter((p) => !p.startsWith('* '));
   if (paragraphs.length < 3 || paragraphs.length > 5) problems.push(`${paragraphs.length} paragraphs (3-5)`);
@@ -25,6 +39,7 @@ export function profileProblems(f: RunnerFile): string[] {
       if (!p.credit.trim()) problems.push(`${kind} photo has no credit`);
       if (!p.source_url.trim()) problems.push(`${kind} photo has no source page`);
       if (AGENCY_CREDITS.test(p.credit)) problems.push(`agency photo (${kind}): ${p.credit}`);
+      if (agencyHost(p.source_url) || agencyHost(p.url)) problems.push(`agency photo host (${kind}): ${p.source_url || p.url}`);
     }
   }
   return problems;

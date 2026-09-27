@@ -6,8 +6,20 @@ import { profileProblems } from './checks';
 import { gatherRunner } from './gather';
 import { loadNameIndex } from './names';
 import { saveRunner } from './save';
-import type { RunnerFile } from './types';
+import type { BestFinish, RunnerFile } from './types';
 import { checkProfile, editProfile, writeProfile } from './write';
+
+/** 1st, then 2nd, 3rd… by the leading number in `position`; no position (or none
+ * parseable) sorts last. */
+const positionRank = (position: string | null): number => {
+  const m = position?.match(/^(\d+)/);
+  return m ? Number(m[1]) : Infinity;
+};
+
+/** Best finishes for an auto page: winners first, then newest year, capped at 10. */
+function topFinishes(results: BestFinish[]): BestFinish[] {
+  return [...results].sort((a, b) => positionRank(a.position) - positionRank(b.position) || b.year - a.year).slice(0, 10);
+}
 
 export const AUTO_PROFILES_PER_DAY = 3;
 /** Write, check and up to NEWS_CONFIG.fixRounds rounds of edits on Opus, several pence; rounded up for the ceiling check. */
@@ -126,7 +138,7 @@ export async function autoProfiles(names: string[], budgetUsd: number, deps: Aut
       if (!w.bio) { log.push({ name, reason: 'the writer returned nothing' }); continue; }
       let bio = tidy(w.bio);
       const texts = f.texts.map((t) => t.text);
-      const file = (b: string[]): RunnerFile => ({ ...f, bio: b, bestFinishes: f.results.slice(0, 10), photos: [], sources: f.texts.map((t) => t.source) });
+      const file = (b: string[]): RunnerFile => ({ ...f, bio: b, bestFinishes: topFinishes(f.results), photos: [], sources: f.texts.map((t) => t.source) });
       let reason: string | null = null;
       for (let round = 0; ; round++) {
         const last = round >= NEWS_CONFIG.fixRounds;

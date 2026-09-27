@@ -1,7 +1,7 @@
 import { prisma } from '@/lib/db';
 import { slugBase } from '@/lib/news/plan';
 import type { RunnerFile, RunnerSource } from './types';
-import { findUtmb, httpGet, utmbRunner, type Getter } from './utmb';
+import { findUtmb, httpGet, utmbRunner, type Getter, type UtmbRunner } from './utmb';
 import { wikipediaArticle } from './wikipedia';
 
 export interface GatherDeps {
@@ -11,6 +11,29 @@ export interface GatherDeps {
 }
 
 const RUNNING_WORDS = /\b(runner|runners|running|ran|marathons?|ultramarathons?|ultra-trail|ultrarunning|ultrarunner|athlete|athletics|trail running|track and field|middle-distance|long-distance|mile)\b/i;
+
+/** A race name's first two words, lowercased and stripped of punctuation (hyphens
+ * kept: "Mont-Blanc" is one word). "UTMB Mont-Blanc CCC" -> "utmb mont-blanc". */
+const raceKey = (race: string) =>
+  race.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, '').trim().split(/\s+/).slice(0, 2).join(' ');
+
+/**
+ * Whether a Wikipedia article actually talks about (at least one of) the races a
+ * UTMB profile lists results for — the guard against two different people sharing
+ * a name (a namesake's UTMB profile, a musician's Wikipedia page). Case-insensitive
+ * on each race's first two distinctive words ("Western States", "Hardrock"), plus
+ * "UTMB"/"Ultra-Trail du Mont-Blanc" in the text counting for any result whose race
+ * itself contains "UTMB".
+ */
+function utmbRacesInText(utmb: UtmbRunner, wikiText: string): boolean {
+  const text = wikiText.toLowerCase();
+  const mentionsUtmb = text.includes('utmb') || text.includes('ultra-trail du mont-blanc');
+  return utmb.results.some((r) => {
+    if (mentionsUtmb && /utmb/i.test(r.race)) return true;
+    const key = raceKey(r.race);
+    return key.length > 0 && text.includes(key);
+  });
+}
 
 const liveDeps: GatherDeps = {
   get: httpGet,
@@ -27,7 +50,7 @@ const liveDeps: GatherDeps = {
  */
 export async function gatherRunner(input: { name?: string; utmbUri?: string; era?: 'current' | 'historic' }, deps: GatherDeps = liveDeps): Promise<RunnerFile | null> {
   const uri = input.utmbUri ?? (input.name ? (await findUtmb(input.name, deps.get))?.uri : undefined);
-  const utmb = uri ? await utmbRunner(uri, deps.get) : null;
+  let utmb = uri ? await utmbRunner(uri, deps.get) : null;
   const name = utmb?.name ?? input.name?.trim();
   if (!name) return null;
   const wikiPage = await wikipediaArticle(name, deps.get);
@@ -36,6 +59,10 @@ export async function gatherRunner(input: { name?: string; utmbUri?: string; era
   // record", "ultrasound" and "Milestone" don't count; "running mate" is stripped first so
   // a politician's own running mate doesn't count as the article being about running.
   const wiki = wikiPage && RUNNING_WORDS.test(wikiPage.text.slice(0, 2000).replace(/running mate/gi, '')) ? wikiPage : null;
+  // Two different people can share a name: a UTMB namesake and an unrelated
+  // Wikipedia subject. On a name lookup only (an explicit utmbUri is trusted
+  // outright), drop the UTMB entry unless the article actually names one of its races.
+  if (utmb && wiki && !input.utmbUri && !utmbRacesInText(utmb, wiki.text)) utmb = null;
   if (!utmb && !wiki) return null;
 
   const texts: RunnerFile['texts'] = [];

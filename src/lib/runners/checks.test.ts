@@ -42,7 +42,19 @@ describe('the save checks', () => {
     const p = { kind: 'portrait' as const, url: 'https://x/y.jpg', credit: 'Photo: PA', licence: null, source_url: 'https://pa.media/a' };
     expect(profileProblems(base({ photos: [p] }))).toContain('agency photo (portrait): Photo: PA');
   });
+  it('a photo hosted on an agency domain is refused even with a clean credit', () => {
+    const p = { kind: 'portrait' as const, url: 'https://x/y.jpg', credit: 'Photo: Jane Smith', licence: null, source_url: 'https://www.gettyimages.com/photo/123' };
+    expect(profileProblems(base({ photos: [p] }))).toContain('agency photo host (portrait): https://www.gettyimages.com/photo/123');
+    const q = { kind: 'action' as const, url: 'https://media.apnews.com/photo/456.jpg', credit: 'Photo: Jane Smith', licence: null, source_url: 'https://example.com/a' };
+    expect(profileProblems(base({ photos: [q] }))).toContain('agency photo host (action): https://example.com/a');
+  });
   it('a profile needs a name, a slug and at least one source', () => {
     expect(profileProblems(base({ sources: [] }))).toContain('no sources');
+  });
+  it('a slug that is not lowercase words joined by single hyphens is refused', () => {
+    expect(profileProblems(base({ slug: 'Ann_Trason' }))).toContain('invalid slug: Ann_Trason');
+    expect(profileProblems(base({ slug: 'ann--trason' }))).toContain('invalid slug: ann--trason');
+    expect(profileProblems(base({ slug: 'ann-trason-' }))).toContain('invalid slug: ann-trason-');
+    expect(profileProblems(base({ slug: 'ann-trason' }))).toEqual([]);
   });
 });
