@@ -37,7 +37,7 @@ A new Prisma model, `runners`. It uses snake_case like the rest of the schema.
 | `best_finishes` jsonb | `[{race, year, distance, time, position, source}]` |
 | `sources` jsonb | `[{name, url}]`, shown on the page |
 | `utmb_id`, `utmb_uri`, `utmb_index`, `utmb_index_at` | Refreshed weekly |
-| `photo_url`, `photo_credit`, `photo_licence`, `photo_source_url` | Null means the branded card is shown |
+| `photos` jsonb | Up to two: `[{kind: 'portrait'|'action', url, credit, licence, source_url}]`; none means the branded card |
 | `status` | `published` or `draft` |
 | `written_by` | `session` or `auto` |
 | `created_at`, `updated_at`, `bio_checked_at` | |
@@ -83,11 +83,25 @@ Every fact in a bio must come from one of these. The news rules apply unchanged:
 
 ## Photos
 
-- **Only** Wikimedia Commons photos under a free licence (credit and licence
-  shown on the page), or Stephen's own photos and film stills.
-- UTMB profile pictures and press photos are **not** used.
-- A runner with neither gets a branded Film My Run card showing their name,
-  flag and UTMB index.
+Stephen's call (27 Sep), made knowing the risk: crediting a photographer does
+not license the photo, and a profile page has no news-reporting defence.
+
+- **Two photos per runner:** a head-and-shoulders portrait and an action shot,
+  the best available from anywhere, each credited to the photographer (and the
+  outlet), with a link to where it was found.
+- **Agency photos are never used:** anything credited to Getty, AFP, Reuters,
+  AP, PA, Shutterstock or Alamy. These are the ones that send automated invoices
+  (PicRights, Pixsy). `runners:save` rejects a credit that names one of them.
+- A free-licence Wikimedia Commons photo, or one of Stephen's own, is preferred
+  whenever it is as good.
+- Every photo records `photo_source_url`, credit and (where known) licence, so a
+  takedown or invoice is answered in minutes: that photo is removed and the
+  branded card takes its place (`npm run runners:photo -- <slug> --remove
+  portrait|action`).
+- The page's credit line carries a short "Photographer? Ask us to remove or
+  change a photo" note with the contact address.
+- A runner with no usable photo gets a branded Film My Run card showing their
+  name, flag and UTMB index.
 - Photos are copied to R2 under `runners/`, never hotlinked.
 
 ## Pages
@@ -180,7 +194,7 @@ subscription, so it has no per-bio cost:
 - Automatic bio rewrites.
 - A runner comparison tool.
 - Runner pages in the iOS app.
-- Photos from UTMB, sponsors or press kits.
+- Agency photos (Getty, AFP, Reuters, AP, PA, Shutterstock, Alamy).
 
 ## Success
 
@@ -201,5 +215,6 @@ subscription, so it has no per-bio cost:
   always shown.
 - **UTMB changes its API.** The weekly job fails loudly in the Monday email and
   the page keeps the last index with its date.
-- **Copyright.** Text is rewritten and checked for near-copies; photos only
-  under a free licence or Stephen's own.
+- **Copyright.** Text is rewritten and checked for near-copies. Photos are the
+  accepted risk: no agency images, every source recorded, one command swaps a
+  photo for the card, and photographers are invited to ask first.
