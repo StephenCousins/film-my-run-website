@@ -4,7 +4,7 @@ import { linkRunners, mentionedSlugs, nameIndex } from './names';
 const idx = nameIndex([
   { slug: 'jim-walmsley', name: 'Jim Walmsley', aliases: ['James Walmsley'] },
   { slug: 'kilian-jornet', name: 'Kilian Jornet', aliases: ['Kilian Jornet Burgada', 'Kilian'] },
-  { slug: 'ruth-oneill', name: `Ruth O’Neill`, aliases: [] },
+  { slug: 'ruth-oneill', name: "Ruth O'Neill", aliases: [] },
   { slug: 'david-roche-a', name: 'David Roche', aliases: [] },
   { slug: 'david-roche-b', name: 'David Roche', aliases: [] },
 ]);
@@ -26,6 +26,7 @@ describe('linking a story', () => {
   it('links a possessive and a curly apostrophe', () => {
     expect(linkRunners("<p>Jim Walmsley's win</p>", idx)).toBe(`<p>${link('jim-walmsley', 'Jim Walmsley')}'s win</p>`);
     expect(linkRunners(`<p>Ruth O’Neill led</p>`, idx)).toBe(`<p>${link('ruth-oneill', `Ruth O’Neill`)} led</p>`);
+    expect(linkRunners(`<p>x</p><p>Ruth O‘Neill led</p>`, idx)).toContain(`href="/runners/ruth-oneill"`);
   });
   it('prefers the longest alias and counts it as the runner', () => {
     const out = linkRunners('<p>Kilian Jornet Burgada ran. Kilian Jornet again.</p>', idx);

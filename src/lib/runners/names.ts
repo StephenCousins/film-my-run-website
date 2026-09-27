@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 export interface RunnerName { slug: string; name: string; aliases: string[] }
 
 /** Straight and curly apostrophes are the same letter for matching. */
-const norm = (s: string) => s.trim().replace(/['’]/g, "'");
+const norm = (s: string) => s.trim().replace(/['\u2018\u2019]/g, "'");
 
 /**
  * Every name and alias to the slug it belongs to. A single word ("Kilian") is too
@@ -27,7 +27,7 @@ export function nameIndex(runners: RunnerName[]): Map<string, string> {
 function nameRegex(names: string[]): RegExp {
   const alts = [...names]
     .sort((a, b) => b.length - a.length) // longest first: "Kilian Jornet Burgada" before "Kilian Jornet"
-    .map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/['’]/g, "['’]"));
+    .map((n) => n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/'/g, "['\u2018\u2019]"));
   return new RegExp(`(?<![\\p{L}\\p{N}])(${alts.join('|')})(?![\\p{L}\\p{N}])`, 'gu');
 }
 
