@@ -125,7 +125,10 @@ export default async function RunnerPage({ params }: PageProps) {
                 {stories.map((s) => (
                   <li key={s.slug}>
                     <Link href={`/news/${s.slug}`} className="flex gap-4 items-center group">
-                      {s.imageUrl && (/* eslint-disable-next-line @next/next/no-img-element */ <img src={s.imageUrl} alt="" className="w-28 aspect-video object-cover rounded-lg shrink-0" />)}
+                      {s.imageUrl && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={s.imageUrl} alt="" className="w-28 aspect-video object-cover rounded-lg shrink-0" />
+                      )}
                       <span>
                         <span className="block text-xs text-secondary">{new Date(s.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
                         <span className="font-semibold text-foreground group-hover:text-[#f88c00]">{s.title}</span>

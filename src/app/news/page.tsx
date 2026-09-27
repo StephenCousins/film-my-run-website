@@ -169,7 +169,7 @@ export default async function NewsPage() {
                 Our own reports on the latest running news, trail and ultra first, written every morning
                 from the races and the people in them.
               </p>
-              <p className="mt-3 text-sm"><Link href="/runners" className="underline hover:text-[#f88c00]">Runner profiles: bios, best finishes and UTMB Index</Link></p>
+              <p className="mt-3 text-sm text-white/80"><Link href="/runners" className="underline hover:text-[#f88c00]">Runner profiles: bios, best finishes and UTMB Index</Link></p>
 
               {/* Last updated */}
               <div className="flex items-center gap-2 mt-8 text-sm text-white/50">

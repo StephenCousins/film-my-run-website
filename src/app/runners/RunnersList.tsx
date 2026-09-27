@@ -18,7 +18,10 @@ export default function RunnersList({ runners }: { runners: Row[] }) {
         <li key={r.slug}>
           <Link href={`/runners/${r.slug}`} className="block group">
             {r.photo
-              ? (/* eslint-disable-next-line @next/next/no-img-element */ <img src={r.photo} alt="" className="w-full aspect-[4/5] object-cover rounded-xl" />)
+              ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={r.photo} alt="" className="w-full aspect-[4/5] object-cover rounded-xl" />
+              )
               : <div className="w-full aspect-[4/5] rounded-xl bg-zinc-900 border-b-4 border-[#f88c00] flex items-end p-3 text-white font-display font-bold">{r.name}</div>}
             <span className="block mt-2 font-semibold text-foreground group-hover:text-[#f88c00]">{flagEmoji(r.nationality)} {r.name}</span>
             {r.utmbIndex !== null && <span className="block text-sm text-secondary tabular-nums">UTMB Index {r.utmbIndex}</span>}
