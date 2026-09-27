@@ -196,6 +196,15 @@ describe('runWeekly', () => {
     expect(writes.store).toEqual([]);
     expect(writes.imageAttempt).toEqual([]);
   });
+  it('an out-of-quota brand-page search still lets the retailer stores supply the image; with none, the quota error is reported', async () => {
+    const quota = async () => { throw new Error('search:429'); };
+    const found = fakeDeps({ findBrandProductPage: quota, findAndStoreImage: async () => ({ url: 'https://r2/x.jpg', method: 'retailer-jsonld' }) as never });
+    expect((await runWeekly({}, found.deps)).imagesStored).toContain('nike-vomero-18');
+    const none = fakeDeps({ findBrandProductPage: quota, findAndStoreImage: async () => null });
+    const r = await runWeekly({}, none.deps);
+    expect(r.errored.find(e => e.slug === 'search')?.error).toContain('nike-vomero-18');
+    expect(none.writes.imageAttempt).not.toContain('nike-vomero-18');
+  });
   it('search-quota failures collapse into one errored line naming every item they cost', async () => {
     const { deps } = fakeDeps({
       evaluate: async () => { throw new Error('search:429'); },

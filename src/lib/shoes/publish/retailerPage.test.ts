@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+
 import { findRetailerProductPage, searchRetailerPages, retailersFor, RETAILER_DOMAINS, UK_RETAILERS, RETAILERS_BY_BRAND } from './retailerPage';
 import { pageNamesExactModel } from './brandPage';
 import { findShopifyProductPages } from './shopifyLookup';
@@ -9,6 +10,8 @@ const qiaodan = { id: 3, name: 'Qiaodan', aliases: ['qiaodan'], domain: 'qiaodan
 const noShopify = async () => { throw new Error('unreachable:403'); };
 const noResults = async () => [];
 const jsonld = (name: string, img: string) => `<script type="application/ld+json">{"@type":"Product","name":"${name}","image":"${img}","releaseDate":"2026-03-01"}</script>`;
+const SHOPIFY = UK_RETAILERS.filter(r => r.lookup === 'shopify').length;
+const SEARCHED = UK_RETAILERS.length - SHOPIFY;
 const result = (url: string) => ({ title: 'x', url, description: '' });
 
 describe('findRetailerProductPage', () => {
@@ -20,7 +23,7 @@ describe('findRetailerProductPage', () => {
       webSearch: async q => { queries.push(q); return q.startsWith('site:runnersneed.com') ? [result('https://www.runnersneed.com/p/brooks-ghost-16')] : []; },
       fetchPage: async () => ({ html: jsonld('Ghost 16', 'https://c/16.jpg'), title: 'Brooks Ghost 16 | Runners Need' }),
     });
-    expect(lookups).toEqual(['startfitness.co.uk Brooks Ghost 16']);
+    expect(lookups).toEqual(UK_RETAILERS.filter(r => r.lookup === 'shopify').map(r => `${r.domain} Brooks Ghost 16`));
     expect(queries).toEqual(['site:sportsshoes.com "Brooks Ghost 16"', 'site:runnersneed.com "Brooks Ghost 16"']);
     expect(r).toMatchObject({ url: 'https://www.runnersneed.com/p/brooks-ghost-16', title: 'Brooks Ghost 16 | Runners Need', source: 'retailer' });
     expect(r?.product?.image).toEqual(['https://c/16.jpg']);
@@ -62,7 +65,7 @@ describe('searchRetailerPages', () => {
     expect(r).toBeNull();
     expect(seen).toEqual(RETAILER_DOMAINS.map(d => [d]));
     // One Shopify lookup and seven searches: the pause is only between searches.
-    expect(pauses).toEqual(Array(RETAILER_DOMAINS.length - 2).fill(1100));
+    expect(pauses).toEqual(Array(SEARCHED - 1).fill(1100));
   });
   it('drops results off the searched domain and article-shaped URLs before fetching', async () => {
     const fetched: string[] = [];
@@ -128,7 +131,7 @@ describe('per-brand retailers', () => {
       fetchPage: async () => null,
       sleep: async ms => { pauses.push(ms); },
     });
-    expect(queries).toHaveLength(3 + RETAILER_DOMAINS.length - 1); // startfitness is a Shopify lookup, not a search
+    expect(queries).toHaveLength(3 + SEARCHED); // the Shopify stores are lookups, not searches
     expect(queries[3]).toBe('site:sportsshoes.com "Li-Ning Feidian 6 Elite"');
     expect(pauses).toHaveLength(queries.length - 1);
   });

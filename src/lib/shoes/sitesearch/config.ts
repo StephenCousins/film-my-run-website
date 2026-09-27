@@ -59,4 +59,13 @@ export const BRAND_SITE_ADAPTERS: Record<string, SiteAdapter> = {
   // Probed 27 September 2026.
   Tarkine: { kind: 'shopify', store: 'www.tarkine.com' },
   TYR: { kind: 'shopify', store: 'tyr.com' },
+  'Luna Sandals': { kind: 'shopify', store: 'lunasandals.com' },
+  'Shamma Sandals': { kind: 'shopify', store: 'shammasandals.com' },
+  'Bedrock Sandals': { kind: 'shopify', store: 'www.bedrocksandals.com' },
+  VJ: { kind: 'shopify', store: 'www.vjshoes.com' },
+  // Refused with 503 on 14 September, answering on 27 September.
+  Karhu: { kind: 'shopify', store: 'www.karhu.com' },
+  Scarpa: { kind: 'shopify', store: 'www.scarpa.co.uk' },
+  RaidLight: { kind: 'shopify', store: 'www.raidlight.com' },
+  Reebok: { kind: 'shopify', store: 'www.reebok.eu' },
 };

@@ -90,7 +90,8 @@ export function pageNamesExactModel(model: string, url: string, title: string): 
   const modelSlug = shoeToSlug('', model).replace(/^-/, '');
   // Whole-word matches only: "Titan" must not match "Titanium", "Ride" must not match "Rider".
   const urlWord = new RegExp(`(?:^|[^a-z0-9])${escapeRegExp(modelSlug)}(?![a-z0-9])`);
-  const titleWord = new RegExp(`(?:^|[^a-z0-9])${escapeRegExp(model.toLowerCase())}(?![a-z0-9])`);
+  // Stores close the gap before a version number ("VJ XTRM2", "MAXx2"): the space is optional there.
+  const titleWord = new RegExp(`(?:^|[^a-z0-9])${escapeRegExp(model.toLowerCase()).replace(/ (?=v?\d)/g, '[\\s-]?')}(?![a-z0-9])`);
   const urlMatches = urlWord.test(url.toLowerCase()) && !urlNamesLaterVersion(modelSlug, url);
   const titleMatches = titleWord.test(title.toLowerCase()) && !titleNamesLaterVersion(model, title);
   if (!urlMatches && !titleMatches) return false;

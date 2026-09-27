@@ -29,12 +29,21 @@ export type RetailerLookup = 'search' | 'shopify';
 export interface Retailer { domain: string; lookup: RetailerLookup }
 
 /**
- * The UK retailers, Shopify stores first: startfitness.co.uk answers
- * `/search/suggest.json` (probed 14 September 2026), so it is asked before
- * any Brave query is spent. The rest are found by `site:` search.
+ * The retailers, Shopify stores first: they answer `/search/suggest.json`, so
+ * all of them are asked before any Brave query is spent. The rest are found
+ * by `site:` search.
  */
 export const UK_RETAILERS: Retailer[] = [
   { domain: 'startfitness.co.uk', lookup: 'shopify' },
+  // Shopify stores found answering /search/suggest.json on 27 September 2026:
+  // UK running and outdoor shops, then two US barefoot specialists (Vivobarefoot,
+  // Xero, Vibram, Lems, sandals) whose stock the UK list barely covers.
+  { domain: 'run4it.com', lookup: 'shopify' },
+  { domain: 'www.upandrunning.co.uk', lookup: 'shopify' },
+  { domain: 'www.runningbear.co.uk', lookup: 'shopify' },
+  { domain: 'www.gooutdoors.co.uk', lookup: 'shopify' },
+  { domain: 'www.luckyfeetshoes.com', lookup: 'shopify' },
+  { domain: 'www.naturalfootgear.com', lookup: 'shopify' },
   { domain: 'sportsshoes.com', lookup: 'search' },
   { domain: 'runnersneed.com', lookup: 'search' },
   { domain: 'wiggle.com', lookup: 'search' },

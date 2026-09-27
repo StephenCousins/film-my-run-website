@@ -372,9 +372,16 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
   }
   for (const shoe of needImage) {
     try {
-      const brandPage = await deps.findBrandProductPage(shoe.brand, shoe.model);
+      // Out of search quota, the retailers' own Shopify searches still work: ask them, and only report the search error if they find nothing.
+      let searchErr: unknown = null;
+      const brandPage = await deps.findBrandProductPage(shoe.brand, shoe.model).catch(err => {
+        if (!/^search:/.test(errorMessage(err))) throw err;
+        searchErr = err;
+        return null;
+      });
       const image = await deps.findAndStoreImage({ slug: shoe.slug, brand: shoe.brand, model: shoe.model }, brandPage);
       if (image) { report.imagesStored.push(shoe.slug); deps.log(`${shoe.slug}: image stored (${image.method})`); }
+      else if (searchErr) throw searchErr;
       else { await deps.markImageAttempt(shoe.slug); deps.log(`${shoe.slug}: no image passed verification`); }
     } catch (err) {
       fail(shoe.slug, err);

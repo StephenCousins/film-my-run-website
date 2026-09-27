@@ -238,3 +238,12 @@ describe('pageNamesExactModel refuses a title that continues into another produc
     expect(pageNamesExactModel('Feidian 6 Elite', 'https://x/p/7', "LiNing Feidian 6 ELITE 'Black' | Running Shoes")).toBe(true);
   });
 });
+
+describe('pageNamesExactModel with no space before the version', () => {
+  it('accepts "XTRM2" and "1080v14" for "XTRM 2" and "1080 v14", and still refuses other versions', () => {
+    expect(pageNamesExactModel('XTRM 2', 'https://x/p/1', 'VJ XTRM2')).toBe(true);
+    expect(pageNamesExactModel('1080 v14', 'https://x/p/2', 'New Balance 1080v14')).toBe(true);
+    expect(pageNamesExactModel('XTRM 2', 'https://x/p/3', 'VJ XTRM22')).toBe(false);
+    expect(pageNamesExactModel('1080 v14', 'https://x/p/4', 'New Balance 1080v15')).toBe(false);
+  });
+});

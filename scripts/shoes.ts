@@ -35,7 +35,7 @@ import { recomputeShoeScore } from '@/lib/shoes/scores';
 import { shoeToSlug } from '@/lib/shoes/slug';
 import { isSameLine, parseModelVersion } from '@/lib/shoes/versions';
 import { CATEGORY_LABELS, TERRAIN_LABELS, isShoeCategory, isShoeTerrain } from '@/lib/shoes/taxonomy';
-import { findBrandProductPage } from '@/lib/shoes/publish/brandPage';
+import { findBrandProductPage, type BrandPageResult } from '@/lib/shoes/publish/brandPage';
 import { evaluate, type CandidateInput, type HoldReason } from '@/lib/shoes/publish/gate';
 import { publishCandidate } from '@/lib/shoes/publish/publish';
 import { findAndStoreImage, auditImages, isR2ImageUrl, R2_SHOES_PREFIX } from '@/lib/shoes/images';
@@ -128,10 +128,17 @@ async function clearImage(slug: string): Promise<void> {
 
 /** Brand page then find+store; returns the one-line outcome for the log. */
 async function imageForShoe(shoe: ShoeRef): Promise<{ stored: boolean; line: string }> {
-  const found = await findBrandProductPage(shoe.brand, shoe.model);
+  // Out of search quota, the retailers' own Shopify searches still work: ask them, and only report the search error if they find nothing.
+  let searchErr: unknown = null;
+  const found = await findBrandProductPage(shoe.brand, shoe.model).catch((err): BrandPageResult => {
+    if (!/^search:/.test(errorMessage(err))) throw err;
+    searchErr = err;
+    return { kind: 'absent' };
+  });
   const brandPage = found.kind === 'found' ? found.page : null;
   const outcome = await findAndStoreImage({ slug: shoe.slug, brand: shoe.brand, model: shoe.model }, brandPage);
   if (outcome) return { stored: true, line: `${shoe.slug} → ${outcome.method}` };
+  if (searchErr) throw searchErr;
   const reason = found.kind === 'found' ? 'brand page found, no candidate passed verification'
     : found.kind === 'unreachable' ? `brand site ${found.reason}, no retailer candidate passed verification`
       : 'no brand page, no retailer candidate passed verification';
