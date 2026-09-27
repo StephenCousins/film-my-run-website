@@ -28,6 +28,8 @@ export interface Bundle {
   items: Candidate[];
   verdicts: Verdict[];
   alreadyCovered: boolean;
+  /** Stephen's steer for a story he asked for by hand (news:story --note). */
+  note?: string;
 }
 
 export interface Draft {

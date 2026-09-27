@@ -57,4 +57,16 @@ describe('pickImageUrl', () => {
   it('returns null when neither image exists', () => {
     expect(pickImageUrl(null, null)).toBeNull();
   });
+  it('reads a page with no <article> or <main>, as Athletics Weekly builds them', () => {
+    const para = (t: string) => `<p dir="ltr">${t}</p>`;
+    const html = `<html><body><nav><p>${'Menu item that is long enough to count as a paragraph here'}</p></nav>
+      <div class="hustle-inline-content">${para('Niels Laros has revealed he underwent Achilles tendon surgery four weeks ago in the Netherlands.')}
+      ${para('The 21-year-old Dutchman has not raced since finishing second in the Paris Diamond League on June 28.')}
+      ${para('It was only the second race of a season badly disrupted by the same problem as last year.')}</div>
+      <footer><p>Footer text that is long enough to count as a paragraph on its own</p></footer></body></html>`;
+    const p = extractPage(html, 'https://athleticsweekly.com/news/laros', 'Athletics Weekly');
+    expect(p.text).toContain('Achilles tendon surgery');
+    expect(p.text).not.toContain('Menu item');
+    expect(p.text).not.toContain('Footer text');
+  });
 });

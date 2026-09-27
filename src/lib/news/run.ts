@@ -72,6 +72,7 @@ const liveDeps: RunDeps = {
   recentSlugs: async (now) => new Set((await prisma.news_stories.findMany({ where: { created_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { slug: true } })).map((s) => s.slug)),
   markSeen: async (items) => {
     for (const { c, v, bundleKey } of items) {
+      if (c.articleId <= 0) continue; // a page found on the web or handed in, not a feed item
       const verdict = (v ?? undefined) as Prisma.InputJsonValue | undefined;
       await prisma.news_items.upsert({ where: { article_id: c.articleId }, update: { verdict, bundle_key: bundleKey }, create: { article_id: c.articleId, url: c.url, source: c.source, verdict, bundle_key: bundleKey } });
     }

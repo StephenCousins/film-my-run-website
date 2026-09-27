@@ -38,7 +38,7 @@ If it is: write one story about this event: ${b.headline}. (That label is our de
 - excerpt: one sentence, at most 160 characters.
 - paragraphs: 3 to 6 plain-text paragraphs. Lead with what happened. Only facts that appear in the sources.
 
-${unsupported.length ? `\nA previous draft was held because the fact-checker could not find these in the sources. Leave each out, or state it exactly as a source does:\n${unsupported.map((u) => `- ${u}`).join('\n')}\n` : ''}${avoid.length ? `\nA previous draft was too close to a source's wording. None of these phrases may appear, even lightly reworded; say the same facts in new sentences:\n${avoid.map((a) => `- "${a}"`).join('\n')}\n` : ''}
+${b.note ? `\nA note from the editor for this story: ${b.note}\n` : ''}${unsupported.length ? `\nA previous draft was held because the fact-checker could not find these in the sources. Leave each out, or state it exactly as a source does:\n${unsupported.map((u) => `- ${u}`).join('\n')}\n` : ''}${avoid.length ? `\nA previous draft was too close to a source's wording. None of these phrases may appear, even lightly reworded; say the same facts in new sentences:\n${avoid.map((a) => `- "${a}"`).join('\n')}\n` : ''}
 ${sourcesBlock(b)}`;
   const r = await call<{ isNews: boolean; reason: string; title: string; excerpt: string; paragraphs: string[] }>({ model: WRITE_MODEL, prompt, maxTokens: 3000, temperature: 0.6, schemaName: 'story', schema: DRAFT_SCHEMA });
   if (!r.data) return { draft: null, refusal: 'unreadable reply', costUsd: r.costUsd };

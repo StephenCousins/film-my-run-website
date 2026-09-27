@@ -27,7 +27,9 @@ export function pickImageUrl(pageImageUrl: string | null, feedImageUrl: string |
 export function extractPage(html: string, pageUrl: string, site: string) {
   const $ = cheerio.load(html);
   $('script, style, nav, header, footer, aside, form, .comments, .related, .newsletter, .share, .sidebar').remove();
-  const body = $('article').first().length ? $('article').first() : $('main').first();
+  // <article>, else <main>, else the whole page with its menus, header and footer already
+  // removed above: Athletics Weekly has neither, and every one of its stories came back unread.
+  const body = $('article').first().length ? $('article').first() : $('main').first().length ? $('main').first() : $('body');
 
   // Read the caption before excluding its paragraph below, so its "Photo: ..." credit
   // isn't lost along with it. WordPress captions land as a <p class="wp-caption-text">
