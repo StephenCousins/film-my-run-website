@@ -93,7 +93,12 @@ export async function evaluate(
   const ignore = new Set(opts.override ?? []);
   if (!c.brand) return { publish: false, reasons: ['brand_unresolved'], partial: {} };
 
-  const found = await deps.findBrandProductPage(c.brand, c.model);
+  // Out of search quota, the brand site counts as unreachable so the retailers' own Shopify searches are still asked; if they find nothing either, their own search call fails loudly.
+  const found: BrandPageResult = await deps.findBrandProductPage(c.brand, c.model).catch(err => {
+    const reason = err instanceof Error ? err.message : String(err);
+    if (!/^search:/.test(reason)) throw err;
+    return { kind: 'unreachable', reason };
+  });
   // A brand with curated importers is asked about them even when its own site answered and had nothing: that is the normal case for those brands.
   const askRetailers = found.kind === 'unreachable' || c.brand.name in RETAILERS_BY_BRAND || ignore.has('no_brand_page');
   if (found.kind === 'absent' && !askRetailers) return { publish: false, reasons: ['no_brand_page'], partial: {} };

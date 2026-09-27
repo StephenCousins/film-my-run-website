@@ -46,6 +46,12 @@ describe('evaluate', () => {
     expect(r.publish).toBe(true);
     if (r.publish) expect(r.brandPage).toEqual(retailerPage);
   });
+  it('an out-of-quota brand-page search still asks the retailers; a non-search error still throws', async () => {
+    const retailerPage = { ...page, url: 'https://startfitness.co.uk/products/hoka-clifton-10', source: 'retailer' as const };
+    const r = await evaluate(cand(), { ...ok(), findBrandProductPage: async () => { throw new Error('search:429'); }, findRetailerProductPage: async () => retailerPage });
+    expect(r.publish).toBe(true);
+    await expect(evaluate(cand(), { ...ok(), findBrandProductPage: async () => { throw new Error('db down'); } })).rejects.toThrow('db down');
+  });
   it('an unreachable brand site with no retailer page holds no_brand_page and records the refusal', async () => {
     const r = await evaluate(cand(), { ...ok(), findBrandProductPage: async () => ({ kind: 'unreachable', reason: 'unreachable:403' }), findRetailerProductPage: async () => null });
     expect(r).toEqual({ publish: false, reasons: ['no_brand_page'], partial: { brandUnreachable: 'unreachable:403' } });
