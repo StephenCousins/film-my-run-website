@@ -462,6 +462,33 @@ model news_runs {
   summary    Json
 }
 
+model runners {
+  id             Int       @id @default(autoincrement())
+  slug           String    @unique
+  name           String
+  aliases        String[]  @default([])
+  nationality    String?   // ISO 3166 alpha-2
+  sex            String?   // M | F
+  birth_year     Int?
+  disciplines    String[]  @default([]) // trail_ultra | road | track
+  era            String    @default("current") // current | historic
+  bio            String    @default("") // HTML <p> paragraphs
+  best_finishes  Json      @default("[]") // BestFinish[]
+  sources        Json      @default("[]") // RunnerSource[]
+  photos         Json      @default("[]") // RunnerPhoto[]
+  utmb_id        Int?      @unique
+  utmb_uri       String?
+  utmb_index     Int?
+  utmb_index_at  DateTime?
+  status         String    @default("draft") // draft | published
+  written_by     String    @default("session") // session | auto
+  bio_checked_at DateTime?
+  created_at     DateTime  @default(now())
+  updated_at     DateTime  @updatedAt
+
+  @@index([status])
+}
+
 model quiz_results {
   id         Int      @id @default(autoincrement())
   tribe      String
