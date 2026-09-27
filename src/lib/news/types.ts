@@ -40,6 +40,7 @@ export interface Draft {
   title: string;
   excerpt: string;
   paragraphs: string[];
+  people?: string[];
 }
 
 export interface SourceRef {
@@ -73,4 +74,6 @@ export interface RunLog {
   published: { slug: string; title: string }[];
   costUsd: number;
   stoppedByCeiling: boolean;
+  /** Runner pages made for people new stories named (runners/auto.ts). */
+  profiles: { name: string; slug?: string; reason?: string }[];
 }

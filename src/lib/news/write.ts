@@ -2,7 +2,7 @@ import { completeJson } from '@/lib/llm';
 import { CHECK_MODEL, WRITE_MODEL } from './models';
 import type { Bundle, Draft } from './types';
 
-const VOICE = `You are a reporter on the Film My Run news desk (filmmyrun.com), a British trail and ultra running site. Write in Stephen Cousins's style, third person, from the newsroom (never "I", never as if you were there):
+export const VOICE = `You are a reporter on the Film My Run news desk (filmmyrun.com), a British trail and ultra running site. Write in Stephen Cousins's style, third person, from the newsroom (never "I", never as if you were there):
 - Short declarative sentences, about 16 words on average; the occasional longer one carries the detail.
 - British English and British mild vocabulary. Dry, understated, never hyped.
 - Specific numbers: finish times to the second where given, distances, climb in metres, positions, dates.
@@ -13,11 +13,12 @@ const VOICE = `You are a reporter on the Film My Run news desk (filmmyrun.com), 
 - Match the tone to the story. A death or serious accident: plain and respectful, no dry humour, nothing beyond what has been reported about how it happened, and room for what the runner achieved and who they leave behind. Gossip or controversy: say what happened and what the person said, without sneering or sensationalising.`;
 
 const DRAFT_SCHEMA = {
-  type: 'object', additionalProperties: false, required: ['isNews', 'reason', 'title', 'excerpt', 'paragraphs'],
+  type: 'object', additionalProperties: false, required: ['isNews', 'reason', 'title', 'excerpt', 'paragraphs', 'people'],
   properties: {
     isNews: { type: 'boolean' }, reason: { type: 'string' },
     title: { type: 'string' }, excerpt: { type: 'string' },
     paragraphs: { type: 'array', items: { type: 'string' } },
+    people: { type: 'array', items: { type: 'string' } },
   },
 };
 
@@ -40,17 +41,19 @@ If it is: write one story about this event: ${b.headline}. (That label is our de
 - title: specific, not clickbait, no colon-subtitle.
 - excerpt: one sentence, at most 160 characters.
 - paragraphs: 3 to 6 plain-text paragraphs. Lead with what happened. Only facts that appear in the sources.
+- people: the full names of the runners this story is about (winners, record-breakers, the subject), spelt as in the sources. Not everyone mentioned: leave out also-rans, officials and race directors. Empty when it is about no particular runner.
 
 ${b.note ? `\nA note from the editor for this story: ${b.note}\n` : ''}${unsupported.length ? `\nA previous draft was held because the fact-checker could not find these in the sources. Leave each out, or state it exactly as a source does:\n${unsupported.map((u) => `- ${u}`).join('\n')}\n` : ''}${avoid.length ? `\nA previous draft was too close to a source's wording. None of these phrases may appear, even lightly reworded; say the same facts in new sentences:\n${avoid.map((a) => `- "${a}"`).join('\n')}\n` : ''}
 ${sourcesBlock(b)}`;
-  const r = await call<{ isNews: boolean; reason: string; title: string; excerpt: string; paragraphs: string[] }>({ model: WRITE_MODEL, prompt, maxTokens: 3000, temperature: 0.6, schemaName: 'story', schema: DRAFT_SCHEMA });
+  const r = await call<{ isNews: boolean; reason: string; title: string; excerpt: string; paragraphs: string[]; people: string[] }>({ model: WRITE_MODEL, prompt, maxTokens: 3000, temperature: 0.6, schemaName: 'story', schema: DRAFT_SCHEMA });
   if (!r.data) return { draft: null, refusal: 'unreadable reply', costUsd: r.costUsd };
   if (r.data.isNews === false) return { draft: null, refusal: `not news: ${r.data.reason}`, costUsd: r.costUsd };
   const { title, excerpt, paragraphs } = r.data;
   const usable = r.data.isNews === true && typeof title === 'string' && typeof excerpt === 'string'
     && Array.isArray(paragraphs) && paragraphs.every((p) => typeof p === 'string');
   if (!usable) return { draft: null, refusal: 'unreadable reply', costUsd: r.costUsd };
-  return { draft: { title, excerpt, paragraphs } as Draft, refusal: null, costUsd: r.costUsd };
+  const people = Array.isArray(r.data.people) ? r.data.people.filter((p) => typeof p === 'string') : [];
+  return { draft: { title, excerpt, paragraphs, people } as Draft, refusal: null, costUsd: r.costUsd };
 }
 
 const CHECK_SCHEMA = { type: 'object', additionalProperties: false, required: ['unsupported'], properties: { unsupported: { type: 'array', items: { type: 'string' } } } };
@@ -100,12 +103,13 @@ STORY (JSON):
 ${JSON.stringify(d)}
 
 ${sourcesBlock(b)}`;
-  const r = await call<{ isNews: boolean; reason: string; title: string; excerpt: string; paragraphs: string[] }>({ model: WRITE_MODEL, prompt, maxTokens: 3000, temperature: 0.3, schemaName: 'story', schema: DRAFT_SCHEMA });
+  const r = await call<{ isNews: boolean; reason: string; title: string; excerpt: string; paragraphs: string[]; people: string[] }>({ model: WRITE_MODEL, prompt, maxTokens: 3000, temperature: 0.3, schemaName: 'story', schema: DRAFT_SCHEMA });
   const x = r.data;
   const ok = x && typeof x.title === 'string' && typeof x.excerpt === 'string' && Array.isArray(x.paragraphs) && x.paragraphs.every((p) => typeof p === 'string');
   if (!ok) return { draft: null, costUsd: r.costUsd };
   const paragraphs = x.paragraphs.filter((p) => p.trim() !== UNVERIFIED_NOTE);
   // Any asterisk left in the story gets the note as its last line.
   if (paragraphs.some((p) => p.includes('*'))) paragraphs.push(UNVERIFIED_NOTE);
-  return { draft: { title: x.title, excerpt: x.excerpt, paragraphs } as Draft, costUsd: r.costUsd };
+  const people = Array.isArray(x.people) && x.people.length ? x.people : d.people;
+  return { draft: { title: x.title, excerpt: x.excerpt, paragraphs, people } as Draft, costUsd: r.costUsd };
 }

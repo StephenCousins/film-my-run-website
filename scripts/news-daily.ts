@@ -8,6 +8,7 @@ import { Resend } from 'resend';
 import { prisma } from '@/lib/db';
 import { NEWS_CONFIG } from '@/lib/news/config';
 import { errorText, NewsRunError, runNews } from '@/lib/news/run';
+import { refreshUtmbIndexes } from '@/lib/runners/refresh';
 
 if (process.argv.includes('--help')) {
   console.log('Usage: npm run news:daily [-- --dry-run] [--max N]   (--max: a one-off larger run, e.g. the launch fill)');
@@ -49,7 +50,14 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
   // Stephen asked for the report weekly (27 Sep 2026): Mondays carry the last seven days.
   // A dry run is asked for by hand, so it still reports at once; failures always report at once.
   if (dryRun) await report(`Film My Run news (dry run): ${log.published.length} would publish, ${log.notPublished.length} not published`, text);
-  else if (new Date().getUTCDay() === 1) await weeklyReport();
+  else if (new Date().getUTCDay() === 1) {
+    const utmb = await refreshUtmbIndexes().then(
+      (r) => `UTMB Index refreshed for ${r.updated} runners${r.missing.length ? `; not found on UTMB: ${r.missing.join(', ')}` : ''}.`,
+      (e) => `UTMB Index refresh FAILED: ${errorText(e)}`,
+    );
+    console.log(utmb);
+    await weeklyReport(utmb);
+  }
   await prisma.$disconnect();
   // Something (an HTTP keep-alive pool) holds the event loop open after the work is done;
   // the first run sat idle until the workflow's 30-minute timeout. Done is done.
@@ -81,11 +89,13 @@ function runLines(log: RunSummary, dryRun = false, brief = false): string[] {
   if (brief) return [
     ...(log.published ?? []).map((p) => `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
     ...(log.notPublished ?? log.held ?? []).map((h) => `Not published: ${h.headline} (${h.reason})`),
+    ...((log as { profiles?: { name: string; slug?: string; reason?: string }[] }).profiles ?? []).map((p) => p.slug ? `Runner page: ${p.name} https://filmmyrun.com/runners/${p.slug}` : `No runner page for ${p.name} (${p.reason})`),
     passedOver ? `${passedOver} more passed the sort but weren't written (cap, too old, or no group).` : '',
   ].filter(Boolean);
   return [
     ...(log.published ?? []).map((p) => dryRun ? `Would publish: ${p.title}` : `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
     ...(log.notPublished ?? log.held ?? []).map((h) => `Not published: ${h.headline} (${h.reason})`),
+    ...((log as { profiles?: { name: string; slug?: string; reason?: string }[] }).profiles ?? []).map((p) => p.slug ? `Runner page: ${p.name} https://filmmyrun.com/runners/${p.slug}` : `No runner page for ${p.name} (${p.reason})`),
     ...(log.skipped ?? []).map((s) => `Not written: ${s.headline} (${s.reason})`),
     ...(log.ungrouped ?? []).map((u) => `Passed the sort but in no group (retried tomorrow): ${u.title} ${u.url}`),
     ...(log.borderline ?? []).map((b) => `Borderline (${b.confidence.toFixed(2)}): ${b.url}`),
@@ -93,7 +103,7 @@ function runLines(log: RunSummary, dryRun = false, brief = false): string[] {
 }
 
 // ponytail: if both Monday runs are skipped, that week's email is skipped too; the next Monday covers only its own 7 days.
-async function weeklyReport() {
+async function weeklyReport(extra = '') {
   const since = new Date(Date.now() - 7 * 24 * 3600 * 1000);
   const runs = await prisma.news_runs.findMany({ where: { dry_run: false, started_at: { gte: since } }, orderBy: { started_at: 'asc' } });
   const logs = runs.map((r) => ({ at: r.started_at, cost: Number(r.cost_usd ?? 0), log: (r.summary ?? {}) as RunSummary }));
@@ -102,6 +112,7 @@ async function weeklyReport() {
   const cost = logs.reduce((n, r) => n + r.cost, 0);
   const text = [
     `The week to ${new Date().toISOString().slice(0, 10)}: ${runs.length} runs, ${published} published, ${notPublished} not published, $${cost.toFixed(2)}.`,
+    ...(extra ? [extra] : []),
     ...logs.flatMap((r) => [
       '',
       `${r.at.toISOString().slice(0, 10)}${r.log.onDemand ? ' (story on demand)' : ''}${r.log.error ? `: FAILED: ${r.log.error}` : ''}`,

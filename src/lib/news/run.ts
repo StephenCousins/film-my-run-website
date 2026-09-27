@@ -8,6 +8,7 @@ import { storyImage } from './image';
 import { isStale, pickBundles, slugBase, STORY_ESTIMATE_USD, uniqueSlug, withinCeiling } from './plan';
 import { nearCopyPhrases, ruleProblems, tidyPunctuation } from './rules';
 import { moreCoverage } from './search';
+import { runnerCandidates, RUNNER_FILE_SOURCE } from '@/lib/runners/runner-file';
 import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
 import { checkFacts, writeStory, editStory, type Fix } from './write';
@@ -23,6 +24,8 @@ export interface RunDeps {
   edit: (d: Draft, b: Bundle, fix: Fix) => Promise<{ draft: Draft | null; costUsd: number }>;
   /** Other sites' reports of the event, when its own source can't be read or stands alone. */
   more: (b: Bundle, now: Date) => Promise<{ items: Candidate[]; costUsd: number }>;
+  /** Our runner files for the runners a bundle names (a source for writer and checker). */
+  runnerFiles: (b: Bundle) => Promise<Candidate[]>;
   check: (d: Draft, b: Bundle) => ReturnType<typeof checkFacts>;
   image: typeof storyImage;
   publish: (s: StoryToPublish) => Promise<void>;
@@ -61,6 +64,7 @@ const liveDeps: RunDeps = {
   write: (b, now, avoid, unsupported) => writeStory(b, now, undefined, avoid, unsupported),
   edit: (d, b, fix) => editStory(d, b, fix),
   more: (b, now) => moreCoverage(b, now),
+  runnerFiles: (b) => runnerCandidates(b),
   check: (d, b) => checkFacts(d, b),
   image: storyImage,
   publish: async (s) => { await saveStory(s, 'published', null); },
@@ -105,7 +109,7 @@ export class NewsRunError extends Error {
 type RunOpts = { now: Date; dryRun: boolean; outDir?: string; deps?: Partial<RunDeps>; maxStories?: number };
 
 export async function runNews(opts: RunOpts): Promise<RunLog> {
-  const log: RunLog = { dryRun: opts.dryRun, itemsSeen: 0, sortedOut: [], borderline: [], ungrouped: [], skipped: [], notPublished: [], published: [], costUsd: 0, stoppedByCeiling: false };
+  const log: RunLog = { dryRun: opts.dryRun, itemsSeen: 0, sortedOut: [], borderline: [], ungrouped: [], skipped: [], notPublished: [], published: [], costUsd: 0, stoppedByCeiling: false, profiles: [] };
   try {
     return await run(log, opts);
   } catch (e) {
@@ -173,9 +177,11 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
     let story: StoryToPublish | null = null;
     try {
       await markSeen(bundleSeen(b));
+      // Our own runner files first: facts the writer can use without a web search.
+      b.items.push(...(await d.runnerFiles(b).catch(() => [])));
       // Its own source unreadable or alone: look for other sites' reports first (after
       // markSeen, so web finds, articleId 0, are never recorded as feed items).
-      if (b.items.filter((i) => i.text).length < 2) {
+      if (b.items.filter((i) => i.text && i.source !== RUNNER_FILE_SOURCE).length < 2) {
         const more = await d.more(b, now);
         log.costUsd += more.costUsd;
         b.items.push(...more.items);
@@ -188,7 +194,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       const lead = b.verdicts.reduce((a, v) => (v.importance > a.importance ? v : a), b.verdicts[0]);
       story = {
         ...w.draft, slug, topic: lead.topic, isUk: b.verdicts.some((v) => v.isUk), importance: bundleImportance(b),
-        sources: b.items.map((i) => ({ site: i.source, url: i.url })), imageUrl: null, photoCredit: null,
+        sources: b.items.filter((i) => i.source !== RUNNER_FILE_SOURCE).map((i) => ({ site: i.source, url: i.url })), imageUrl: null, photoCredit: null,
         bundleKey: b.key, articleIds: b.items.map((i) => i.articleId).filter((id) => id > 0),
       };
       if (recentSlugs.has(slugBase(w.draft.title))) {
@@ -204,7 +210,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       const texts = () => b.items.map((i) => i.text ?? '');
       let draft = tidyPunctuation(w.draft);
       let reason: string | null = null;
-      let searched = b.items.filter((i) => i.text).length >= 2 ? false : true; // `more` already ran above
+      let searched = b.items.filter((i) => i.text && i.source !== RUNNER_FILE_SOURCE).length >= 2 ? false : true; // `more` already ran above
       for (let round = 0; ; round++) {
         const last = round >= NEWS_CONFIG.fixRounds;
         const problems = ruleProblems(draft, texts());
@@ -238,7 +244,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
         log.costUsd += e.costUsd;
         if (e.draft) draft = tidyPunctuation(e.draft);
       }
-      Object.assign(story, draft, { sources: b.items.map((i) => ({ site: i.source, url: i.url })) });
+      Object.assign(story, draft, { sources: b.items.filter((i) => i.source !== RUNNER_FILE_SOURCE).map((i) => ({ site: i.source, url: i.url })) });
       if (reason) {
         log.notPublished.push({ headline: b.headline, reason });
         await save(`${slug}.not-published.json`, { reason, story });

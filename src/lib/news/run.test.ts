@@ -29,12 +29,30 @@ function deps(over: Record<string, unknown> = {}) {
     recentSlugs: async () => new Set<string>(),
     markSeen: async (items: { c: Candidate }[]) => { seen.push(...items.map((i) => i.c.articleId)); },
     more: async () => ({ items: [], costUsd: 0 }),
+    runnerFiles: async () => [],
+    autoProfiles: async () => ({ log: [], costUsd: 0 }),
     ...over,
   };
   return { d, published, held, seen };
 }
 
 describe('a news run', () => {
+  it('a runner file joins the sources the writer sees, but not the published sources, and does not stand in for a second report', async () => {
+    const file: Candidate = { articleId: 0, url: 'https://filmmyrun.com/runners/ruth-croft', source: 'Film My Run runner file', title: 'Ruth Croft', pubDate: new Date(), summary: '', text: 'Ruth Croft (NZ). UTMB Index 920.', imageUrl: null, photoCredit: null };
+    let writerSaw: string[] = [];
+    let searched = false;
+    const { d, published } = deps({
+      gather: async () => [cand(1)],
+      runnerFiles: async () => [file],
+      more: async () => { searched = true; return { items: [], costUsd: 0 }; },
+      write: async (b: Bundle) => { writerSaw = b.items.map((i) => i.source); return { draft: { title: 'A title', excerpt: 'An excerpt.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }; },
+    });
+    await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(writerSaw).toContain('Film My Run runner file');
+    expect(searched).toBe(true); // one feed report plus our own file is still a single outside source
+    expect((published[0] as unknown as { sources: { site: string }[] }).sources.map((x) => x.site)).toEqual(['iRunFar']);
+  });
+
   it('writes at most 4, the most important first, and skips non-news', async () => {
     const { d, published } = deps();
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });

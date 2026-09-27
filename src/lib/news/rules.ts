@@ -51,5 +51,5 @@ export function tidyPunctuation(d: Draft): Draft {
       .replace(/;\s*([a-z])/g, (_, c: string) => `. ${c.toUpperCase()}`)
       .replace(/;/g, '.')
       .replace(/,\s*,/g, ',');
-  return { title: fix(d.title), excerpt: fix(d.excerpt), paragraphs: d.paragraphs.map(fix) };
+  return { ...d, title: fix(d.title), excerpt: fix(d.excerpt), paragraphs: d.paragraphs.map(fix) };
 }
