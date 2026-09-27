@@ -28,7 +28,10 @@ export async function gatherRunner(input: { name?: string; utmbUri?: string; era
   const utmb = uri ? await utmbRunner(uri, deps.get) : null;
   const name = utmb?.name ?? input.name?.trim();
   if (!name) return null;
-  const wiki = await wikipediaArticle(name, deps.get);
+  const wikiPage = await wikipediaArticle(name, deps.get);
+  // Only use it if it's actually about running: a same-named actor, politician etc. would
+  // otherwise pass straight through as a source.
+  const wiki = wikiPage && /\b(run|runner|marathon|ultra|athlet|trail|track|mile)/i.test(wikiPage.text.slice(0, 2000)) ? wikiPage : null;
   if (!utmb && !wiki) return null;
 
   const texts: RunnerFile['texts'] = [];

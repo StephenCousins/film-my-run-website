@@ -21,4 +21,27 @@ describe('gathering a runner', () => {
   it('nobody found anywhere is null (no page is made)', async () => {
     expect(await gatherRunner({ name: 'Nobody Atall' }, { get: get({}), ourStories: none })).toBeNull();
   });
+
+  const wikiSummary = (title: string) => JSON.stringify({ type: 'standard', title, content_urls: { desktop: { page: `https://en.wikipedia.org/wiki/${title}` } } });
+  const wikiExtract = (text: string) => JSON.stringify({ query: { pages: { '1': { extract: text } } } });
+  const noUtmb = JSON.stringify({ runners: [] });
+
+  it('a Wikipedia article that never mentions running is not used (a same-named actor, politician etc.)', async () => {
+    const text = 'Jane Doe is a British television presenter and columnist based in London. '.repeat(40);
+    const f = await gatherRunner({ name: 'Jane Doe' }, {
+      get: get({ 'search=': noUtmb, '/api/rest_v1/page/summary/': wikiSummary('Jane Doe'), 'action=query': wikiExtract(text) }),
+      ourStories: none,
+    });
+    expect(f).toBeNull();
+  });
+
+  it('a Wikipedia article that does mention running is used', async () => {
+    const text = 'Jane Doe is a British marathon runner who represented her country at three Olympic Games. '.repeat(20);
+    const f = await gatherRunner({ name: 'Jane Doe' }, {
+      get: get({ 'search=': noUtmb, '/api/rest_v1/page/summary/': wikiSummary('Jane Doe'), 'action=query': wikiExtract(text) }),
+      ourStories: none,
+    });
+    expect(f).not.toBeNull();
+    expect(f!.texts.map((t) => t.source.name)).toEqual(['Wikipedia']);
+  });
 });
