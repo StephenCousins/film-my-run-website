@@ -101,7 +101,7 @@ function sections(report: JobReport, baseUrl: string, signPublish: (candidateId:
 export function discoverySummary(report: JobReport): string {
   const n = report.nominations;
   const list = (xs: string[]) => (xs.length ? xs.join(', ') : 'none');
-  return `Discovered ${report.discovered} from ${n.feeds + n.shops + n.versionBumps} nominations (feeds ${n.feeds}, shops ${n.shops}, version bumps ${n.versionBumps}); feeds empty: ${list(report.feedsEmpty)}; stores empty: ${list(report.storesEmpty)}`;
+  return `Discovered ${report.discovered} from ${n.feeds + n.shops + n.versionBumps + n.listings} nominations (feeds ${n.feeds}, shops ${n.shops}, version bumps ${n.versionBumps}, big-brand listings ${n.listings}); feeds empty: ${list(report.feedsEmpty)}; stores empty: ${list(report.storesEmpty)}`;
 }
 
 function summaryLines(report: JobReport): string[] {

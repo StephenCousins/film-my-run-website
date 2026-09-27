@@ -15,6 +15,7 @@ describe('discover', () => {
       ],
       readAllShopifyNewArrivals: async () => [{ source: 'shopify:startfitness.co.uk', nominations: [{ ...nom('Novablast 5', 'shopify:startfitness.co.uk'), brandText: 'Asics' }], empty: false, stores: [{ store: 'shopify:startfitness.co.uk', fetched: 250, nominated: 1 }] }],
       readVersionBumps: async () => ({ source: 'version-bump', nominations: [{ ...nom('Hoka Clifton 11', 'version-bump'), brandText: 'Hoka', modelText: 'Clifton 11', publishedAt: null }], empty: false, stores: [{ store: 'version-bump:startfitness.co.uk', fetched: 2, nominated: 1 }, { store: 'version-bump:kicksown.com', fetched: 2, nominated: 0 }] }),
+      readListingPages: async () => ({ source: 'listing-pages', nominations: [], empty: true, stores: [] }),
       loadBrands: async () => brands,
       completeText: async () => JSON.stringify([{ i: 0, brand: 'Hoka', model: 'Clifton 10' }, { i: 1, brand: 'Hoka', model: 'Bondi 9' }, { i: 2, brand: 'Asics', model: 'Novablast 5' }, { i: 3, brand: 'Hoka', model: 'Clifton 11' }]),
       existingSlugs: async () => [{ slug: 'hoka-bondi-9', brand: 'Hoka', model: 'Bondi 9' }],
@@ -33,6 +34,7 @@ describe('discover', () => {
       readAllFeeds: async () => [{ source: 'a', nominations: [nom('New Balance 1080 v14', 'a')], empty: false }],
       readAllShopifyNewArrivals: async () => [],
       readVersionBumps: noBumps,
+      readListingPages: async () => ({ source: 'listing-pages', nominations: [], empty: true, stores: [] }),
       loadBrands: async () => [{ id: 3, name: 'New Balance', aliases: ['nb'], domain: 'newbalance.co.uk', newArrivalsUrl: null }],
       completeText: async () => JSON.stringify([{ i: 0, brand: 'New Balance', model: '1080 v14' }]),
       existingSlugs: async () => [{ slug: 'new-balance-fresh-foam-1080-v14', brand: 'New Balance', model: '1080 V14' }],
@@ -53,13 +55,14 @@ describe('discover', () => {
         { source: 'shopify:nordarun.com', nominations: [], empty: true, error: 'unreachable:503', stores: [norda] },
       ],
       readVersionBumps: async () => ({ source: 'version-bump', nominations: [], empty: true, error: 'startfitness.co.uk (unreachable:403)', stores: [bumps] }),
+      readListingPages: async () => ({ source: 'listing-pages', nominations: [], empty: true, stores: [] }),
       loadBrands: async () => brands,
       completeText: async () => { throw new Error('should not be called with no nominations'); },
       existingSlugs: async () => [],
       upsertCandidate: async () => {},
     });
     expect(r).toEqual({
-      nominations: 0, feeds: 0, shops: 0, versionBumps: 0, candidatesUpserted: 0, alreadyKnown: 0,
+      nominations: 0, feeds: 0, shops: 0, versionBumps: 0, listings: 0, candidatesUpserted: 0, alreadyKnown: 0,
       feedsEmpty: ['quiet'],
       storesEmpty: ['shopify:kicksown.com', 'shopify:nordarun.com (unreachable:503)', 'version-bump:startfitness.co.uk (unreachable:403)'],
       stores: [kicksown, norda, bumps],
@@ -78,12 +81,13 @@ describe('discover', () => {
       ],
       readAllShopifyNewArrivals: async () => [],
       readVersionBumps: noBumps,
+      readListingPages: async () => ({ source: 'listing-pages', nominations: [], empty: true, stores: [] }),
       loadBrands: async () => brands,
       completeText: async () => 'I cannot help with that.',
       existingSlugs: async () => [],
       upsertCandidate: async c => { upserts.push(c); },
     });
-    expect(r).toEqual({ nominations: 1, feeds: 1, shops: 0, versionBumps: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: ['quiet', 'blocked (HTTP 403)'], storesEmpty: [], stores: [], normaliseFailed: true, normaliseDropped: 1 });
+    expect(r).toEqual({ nominations: 1, feeds: 1, shops: 0, versionBumps: 0, listings: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: ['quiet', 'blocked (HTTP 403)'], storesEmpty: [], stores: [], normaliseFailed: true, normaliseDropped: 1 });
     expect(upserts).toEqual([]);
     expect(warn).toHaveBeenCalledOnce();
     warn.mockRestore();
@@ -95,6 +99,7 @@ describe('discover', () => {
       readAllFeeds: async () => [{ source: 'a', nominations: [nom('Hoka Clifton 10 review', 'a'), { ...nom('Clifton 10 launch', 'a'), publishedAt: null, url: 'https://x/launch' }], empty: false }],
       readAllShopifyNewArrivals: async () => [],
       readVersionBumps: noBumps,
+      readListingPages: async () => ({ source: 'listing-pages', nominations: [], empty: true, stores: [] }),
       loadBrands: async () => brands,
       completeText: async () => JSON.stringify([{ i: 0, brand: 'Hoka', model: 'Clifton 10' }, { i: 1, brand: 'Hoka', model: 'Clifton 10' }]),
       existingSlugs: async () => [],

@@ -23,7 +23,7 @@ interface Writes {
 function fakeDeps(over: Partial<WeeklyDeps> = {}): { deps: WeeklyDeps; writes: Writes } {
   const writes: Writes = { upsertCandidate: 0, publish: [], hold: [], link: [], rejectStale: [], rejectCandidate: [], upsertReviews: [], recompute: [], touch: [], clearImage: 0, store: [], imageAttempt: [] };
   const deps: WeeklyDeps = {
-    discover: async () => { writes.upsertCandidate += 2; return { nominations: 5, feeds: 3, shops: 1, versionBumps: 1, candidatesUpserted: 2, alreadyKnown: 3, feedsEmpty: ['believe_in_run'], storesEmpty: ['shopify:nordarun.com (unreachable:503)'], stores: [], normaliseFailed: false, normaliseDropped: 0 }; },
+    discover: async () => { writes.upsertCandidate += 2; return { nominations: 5, feeds: 3, shops: 1, versionBumps: 1, listings: 0, candidatesUpserted: 2, alreadyKnown: 3, feedsEmpty: ['believe_in_run'], storesEmpty: ['shopify:nordarun.com (unreachable:503)'], stores: [], normaliseFailed: false, normaliseDropped: 0 }; },
     listCandidates: async statuses => (statuses.includes('pending') ? [clifton, pegasus] : []),
     shoeExists: async () => null,
     linkCandidate: async (id, shoeId) => { writes.link.push({ id, shoeId }); },
@@ -57,7 +57,7 @@ describe('runWeekly', () => {
     const { deps, writes } = fakeDeps();
     const r = await runWeekly({}, deps);
     expect(r.discovered).toBe(2);
-    expect(r.nominations).toEqual({ feeds: 3, shops: 1, versionBumps: 1 });
+    expect(r.nominations).toEqual({ feeds: 3, shops: 1, versionBumps: 1, listings: 0 });
     expect(r.feedsEmpty).toEqual(['believe_in_run']);
     expect(r.storesEmpty).toEqual(['shopify:nordarun.com (unreachable:503)']);
     expect(r.published).toEqual([{ slug: 'hoka-clifton-10', imageUrl: 'https://r2/shoes/hoka-clifton-10.jpg' }]);
@@ -235,7 +235,7 @@ describe('runWeekly', () => {
     expect(r.imagesCleared).toEqual(['dead-shoe']);
   });
   it('an unparseable normalise reply is reported under errored', async () => {
-    const { deps } = fakeDeps({ discover: async () => ({ nominations: 9, feeds: 9, shops: 0, versionBumps: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: [], storesEmpty: [], stores: [], normaliseFailed: true, normaliseDropped: 4 }) });
+    const { deps } = fakeDeps({ discover: async () => ({ nominations: 9, feeds: 9, shops: 0, versionBumps: 0, listings: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: [], storesEmpty: [], stores: [], normaliseFailed: true, normaliseDropped: 4 }) });
     const r = await runWeekly({}, deps);
     expect(r.errored).toEqual([{ slug: 'discover', error: 'LLM normalise output was unparseable; 4 of 9 nominations dropped' }]);
   });

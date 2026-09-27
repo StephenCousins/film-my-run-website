@@ -5,6 +5,7 @@ import { isSameLine, parseModelVersion } from '../versions';
 import { readAllFeeds } from './sources/rss';
 import { readAllShopifyNewArrivals } from './sources/shopifyNewArrivals';
 import { readVersionBumps } from './sources/versionBumps';
+import { readListingPages } from './sources/listingPages';
 import { normalise } from './normalise';
 import type { Nomination, SourceResult, StoreStat } from './types';
 
@@ -15,6 +16,8 @@ export interface DiscoverDeps {
   readAllFeeds: () => Promise<SourceResult[]>;
   readAllShopifyNewArrivals: () => Promise<SourceResult[]>;
   readVersionBumps: () => Promise<SourceResult>;
+  /** Big-brand listings (sportsshoes.com, nike.com), newest first. */
+  readListingPages: () => Promise<SourceResult>;
   loadBrands: typeof loadBrands; completeText: typeof completeText;
   existingSlugs: () => Promise<{ slug: string; brand: string; model: string }[]>;
   upsertCandidate: (c: CandidateUpsert) => Promise<void>;
@@ -25,6 +28,7 @@ export interface DiscoverReport {
   feeds: number;
   shops: number;
   versionBumps: number;
+  listings: number;
   candidatesUpserted: number;
   alreadyKnown: number;
   /** Feeds that yielded nothing, with the error when there was one: 'irunfar (HTTP 403)' is a block, 'irunfar' is a quiet week. */
@@ -53,7 +57,7 @@ export function mergeEvidenceSources(existing: unknown, incoming: EvidenceSource
 }
 
 export const liveDiscoverDeps: DiscoverDeps = {
-  readAllFeeds: () => readAllFeeds(), readAllShopifyNewArrivals: () => readAllShopifyNewArrivals(), readVersionBumps: () => readVersionBumps(), loadBrands, completeText,
+  readAllFeeds: () => readAllFeeds(), readAllShopifyNewArrivals: () => readAllShopifyNewArrivals(), readVersionBumps: () => readVersionBumps(), readListingPages: () => readListingPages(), loadBrands, completeText,
   existingSlugs: async () => prisma.shoes.findMany({ select: { slug: true, brand: true, model: true } }),
   upsertCandidate: async c => {
     // A candidate seen again keeps its status and hold reasons — the gate
@@ -74,11 +78,11 @@ function evidenceOf(noms: Nomination[]): { sources: EvidenceSource[] } {
 
 export async function discover(deps: DiscoverDeps = liveDiscoverDeps): Promise<DiscoverReport> {
   const brands = await deps.loadBrands();
-  const [feedResults, shopResults, bumpResult] = await Promise.all([deps.readAllFeeds(), deps.readAllShopifyNewArrivals(), deps.readVersionBumps()]);
+  const [feedResults, shopResults, bumpResult, listingResult] = await Promise.all([deps.readAllFeeds(), deps.readAllShopifyNewArrivals(), deps.readVersionBumps(), deps.readListingPages()]);
   const count = (rs: SourceResult[]) => rs.reduce((n, r) => n + r.nominations.length, 0);
-  const noms = [...feedResults, ...shopResults, bumpResult].flatMap(r => r.nominations);
+  const noms = [...feedResults, ...shopResults, bumpResult, listingResult].flatMap(r => r.nominations);
   const feedsEmpty = feedResults.filter(r => r.empty).map(r => (r.error ? `${r.source} (${r.error})` : r.source));
-  const stores = [...shopResults, bumpResult].flatMap(r => r.stores ?? []);
+  const stores = [...shopResults, bumpResult, listingResult].flatMap(r => r.stores ?? []);
   const storesEmpty = stores.filter(s => s.nominated === 0).map(s => (s.error ? `${s.store} (${s.error})` : s.store));
 
   const { resolved, unresolved, failed: normaliseFailed, dropped: normaliseDropped } = await normalise(noms, brands, { completeText: deps.completeText });
@@ -97,7 +101,7 @@ export async function discover(deps: DiscoverDeps = liveDiscoverDeps): Promise<D
     upserted++;
   }
   return {
-    nominations: noms.length, feeds: count(feedResults), shops: count(shopResults), versionBumps: bumpResult.nominations.length,
+    nominations: noms.length, feeds: count(feedResults), shops: count(shopResults), versionBumps: bumpResult.nominations.length, listings: listingResult.nominations.length,
     candidatesUpserted: upserted, alreadyKnown: known, feedsEmpty, storesEmpty, stores, normaliseFailed, normaliseDropped,
   };
 }
