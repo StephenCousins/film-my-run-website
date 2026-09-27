@@ -29,12 +29,17 @@ Wikipedia title.
 Fill these into the work file:
 
 - `bio`: 3 to 5 plain paragraphs.
-  - News-desk voice, third person.
+  - News-desk voice, third person, British English. Sentences average about 16 words, none over about 30. Pick the highlights, not every result.
   - No em dashes, no semicolons.
-  - Every fact from `texts`, nothing from memory.
+  - Every fact from `texts`, nothing from memory. Check the sources are about the same person: namesakes are common (a Wikipedia "Hannah Allgood" was an 18th-century cookery writer).
   - No 10-word run copied from a source.
-  - Living people: nothing about health, family or private life beyond what
-    they've made public. Doping only where an official body ruled.
+  - Living people (Stephen's rules, 27 Sep 2026):
+    - No family life: no spouses, partners, children or family disputes. A relative is named only as a coach, training partner or fellow runner.
+    - No medical or mental-health conditions, even ones the runner has spoken about publicly. A running injury that stopped a race or season is fine.
+    - Doping only where an official body ruled (AIU, USADA, UKAD, WADA or a federation). Name the body and state the ruling as made.
+    - Other controversies only if well reported, stated plainly with no comment, and about their running or sponsorship. No insinuations.
+  - A runner who has died: plain and respectful. Give the date, never the cause.
+  - Thin sources: you may add iRunFar, federation, race or the runner's own pages to `texts` (with the passage you read) and to `sources`.
 - `bestFinishes`: `{race, year, distance, time, position, source}`.
   - `source` must be the name of an entry in `sources`.
   - Tidy UTMB's race names ("HARDROCK 100 ENDURANCE RUN HARDROCK 100 - CW" becomes "Hardrock 100").
@@ -45,12 +50,12 @@ Fill these into the work file:
   - `era` (`current` or `historic`).
   - `nationality`, `sex`, `birthYear`.
   - Change `slug` and `name` if UTMB's form reads badly (UTMB gives "Kilian Jornet Burgada"; we use "Kilian Jornet").
-- `photos`: up to one `portrait` and one `action`, each `{kind, url, credit, licence, source_url}`.
-  - Prefer free-licence Wikimedia Commons photos. Search Commons with `action=query&generator=search&gsrsearch=filetype:bitmap "Name"`.
-  - Credit reads "Photo: <photographer> / Wikimedia Commons".
-  - Otherwise use the best photo from a race, brand, iRunFar or photographer page, credited "Photo: <photographer> / <outlet>".
-  - **Never an agency photo** (Getty, AFP, Reuters, AP, PA, Shutterstock, Alamy). The save step refuses them.
-  - No photo: leave `photos` empty and the page shows the branded card.
+- `photos`: every runner gets at least a portrait (Stephen, 27 Sep 2026: copyrighted photos are fine when credited). Up to one `portrait` and one `action`, each `{kind, url, credit, licence, source_url}`. Look in this order:
+  1. Wikimedia Commons. Search with `action=query&generator=search&gsrsearch=filetype:bitmap "Name"`. Credit "Photo: <Artist> / Wikimedia Commons".
+  2. Any credited photo on the web: iRunFar (captions name the photographer), sponsor athlete pages, the runner's own site, race or federation pages, non-agency news, public Instagram. Credit "Photo: <photographer> / <outlet>", or the owner ("Photo: HOKA") when no photographer is named.
+  3. Fallback: the runner's UTMB profile picture. `profilePicture` in the UTMB runner page's `__NEXT_DATA__` becomes `https://img.utmb.world/image/upload/q_auto/f_jpg/c_limit,w_1600/v1/<path>`. Credit "Photo: UTMB profile". Use it only when it's a real photo of them.
+
+  Look at every candidate before using it, and make sure it's clearly them. **Never an agency photo** (Getty, AFP, Reuters, AP, PA, Shutterstock, Alamy). The save step refuses them.
 
 ## 3. Save
 
