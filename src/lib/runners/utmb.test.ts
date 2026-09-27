@@ -34,6 +34,7 @@ describe('a runner page', () => {
   it('reads the general index, website and finished results (no DNFs)', () => {
     const r = parseRunnerPage(page, '2704.kilian.jornetburgada')!;
     expect(r).toMatchObject({ utmbId: 2704, name: 'Kilian Jornet Burgada', index: 947, nationality: 'ES', sex: 'M', website: 'https://www.kilianjornetfoundation.org' });
+    expect(r.picture).toBe('https://img.utmb.world/image/upload/q_auto/f_jpg/c_limit,w_1600/v1/worldseries/Members/39d5c4b4-2d37-447f-9b41-4576b1bfb937');
     expect(r.results).toHaveLength(6);
     expect(r.results[0]).toMatchObject({ source: 'UTMB' });
     expect(r.results[0].race).toBeTruthy();
@@ -44,6 +45,11 @@ describe('a runner page', () => {
     expect(parseRunnerPage('<html></html>', '1.x')).toBeNull();
     const noIndex = page.replace('"index": 947', '"index": null');
     expect(parseRunnerPage(noIndex, '2704.kilian.jornetburgada')!.index).toBeNull();
+  });
+  it('no profilePicture on the page: picture is null', () => {
+    const noPicture = pageData.replace(/"profilePicture": "[^"]*",\s*/, '');
+    const html = `<html><script id="__NEXT_DATA__" type="application/json">${noPicture}</script></html>`;
+    expect(parseRunnerPage(html, '2704.kilian.jornetburgada')!.picture).toBeNull();
   });
 });
 

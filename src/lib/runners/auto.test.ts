@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
-import { autoProfiles, recentFailureNames } from './auto';
+import { AUTO_PROFILES_PER_DAY, autoProfiles, recentFailureNames } from './auto';
 import type { RunnerFile } from './types';
 import { UNVERIFIED_NOTE } from '@/lib/news/write';
 
-const file = (name: string): RunnerFile => ({
+const file = (name: string, picture: string | null = null): RunnerFile => ({
   slug: name.toLowerCase().replace(/ /g, '-'), name, aliases: [], nationality: 'GB', sex: 'F', birthYear: null, disciplines: ['trail_ultra'], era: 'current',
-  utmb: { id: 1, uri: '1.x', index: 800, website: null },
+  utmb: { id: 1, uri: '1.x', index: 800, website: null, picture },
   texts: [{ source: { name: 'UTMB', url: 'https://utmb.world/en/runner/1.x' }, text: `${name}. General UTMB Index: 800. 2025: Lakeland 100, 1st woman.` }],
   results: [{ race: 'Lakeland 100', year: 2025, distance: '169 km', time: '28:10:00', position: '1st woman', source: 'UTMB' }], photoCandidates: [],
 });
@@ -35,18 +35,26 @@ describe('automatic runner pages', () => {
     const saved = d.save.mock.calls[0][0] as RunnerFile;
     expect(saved.bio).toEqual(bio);
     expect(saved.bestFinishes).toEqual(saved.results);
-    expect(saved.photos).toEqual([]); // auto pages start with the card
+    expect(saved.photos).toEqual([]); // no UTMB picture: no photo until a session picks one
     expect(saved.sources).toEqual([{ name: 'UTMB', url: 'https://utmb.world/en/runner/1.x' }]);
+  });
+  it('uses the UTMB profile picture as the portrait when the runner has one', async () => {
+    const gather = vi.fn(async () => file('Jasmin Paris', 'https://img.utmb.world/image/upload/q_auto/f_jpg/c_limit,w_1600/v1/worldseries/Members/x'));
+    const d = deps({ gather });
+    await autoProfiles(['Jasmin Paris'], 10, d);
+    const saved = d.save.mock.calls[0][0] as RunnerFile;
+    expect(saved.photos).toEqual([{ kind: 'portrait', url: 'https://img.utmb.world/image/upload/q_auto/f_jpg/c_limit,w_1600/v1/worldseries/Members/x', credit: 'Photo: UTMB profile', licence: null, source_url: 'https://utmb.world/en/runner/1.x' }]);
   });
   it('no results anywhere: no page, with the reason', async () => {
     const out = await autoProfiles(['Nobody Found'], 10, deps());
     expect(out.log).toEqual([{ name: 'Nobody Found', reason: 'no UTMB entry or Wikipedia article' }]);
   });
-  it('at most 3 a day, and none past the budget', async () => {
+  it('at most AUTO_PROFILES_PER_DAY a day, and none past the budget', async () => {
     const d = deps();
-    const out = await autoProfiles(['A One', 'B Two', 'C Three', 'D Four'], 10, d);
-    expect(d.save).toHaveBeenCalledTimes(3);
-    expect(out.log[3]).toEqual({ name: 'D Four', reason: 'over the 3-a-day limit' });
+    const names = Array.from({ length: AUTO_PROFILES_PER_DAY + 1 }, (_, i) => `Runner ${i} Name`);
+    const out = await autoProfiles(names, 10, d);
+    expect(d.save).toHaveBeenCalledTimes(AUTO_PROFILES_PER_DAY);
+    expect(out.log[AUTO_PROFILES_PER_DAY]).toEqual({ name: names[AUTO_PROFILES_PER_DAY], reason: `over the ${AUTO_PROFILES_PER_DAY}-a-day limit` });
     const broke = await autoProfiles(['E Five'], 0.01, deps());
     expect(broke.log).toEqual([{ name: 'E Five', reason: 'monthly ceiling' }]);
   });
@@ -98,17 +106,18 @@ describe('automatic runner pages', () => {
   it('a failed attempt still counts toward the day cap', async () => {
     const write = vi.fn(async () => ({ bio: null, costUsd: 0.05 }));
     const d = deps({ write });
-    const out = await autoProfiles(['A One', 'B Two', 'C Three', 'D Four'], 10, d);
-    expect(d.write).toHaveBeenCalledTimes(3);
-    expect(out.log[3]).toEqual({ name: 'D Four', reason: 'over the 3-a-day limit' });
+    const names = Array.from({ length: AUTO_PROFILES_PER_DAY + 1 }, (_, i) => `Runner ${i} Name`);
+    const out = await autoProfiles(names, 10, d);
+    expect(d.write).toHaveBeenCalledTimes(AUTO_PROFILES_PER_DAY);
+    expect(out.log[AUTO_PROFILES_PER_DAY]).toEqual({ name: names[AUTO_PROFILES_PER_DAY], reason: `over the ${AUTO_PROFILES_PER_DAY}-a-day limit` });
     expect(d.save).not.toHaveBeenCalled();
   });
 
   it('autoToday reduces how many more can be made this run', async () => {
-    const d = deps({ autoToday: async () => 2 });
+    const d = deps({ autoToday: async () => AUTO_PROFILES_PER_DAY - 1 });
     const out = await autoProfiles(['A One', 'B Two'], 10, d);
     expect(d.save).toHaveBeenCalledTimes(1);
-    expect(out.log[1]).toEqual({ name: 'B Two', reason: 'over the 3-a-day limit' });
+    expect(out.log[1]).toEqual({ name: 'B Two', reason: `over the ${AUTO_PROFILES_PER_DAY}-a-day limit` });
   });
 
   it('stops starting new names after the deadline, without gathering them', async () => {

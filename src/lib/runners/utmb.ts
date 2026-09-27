@@ -24,7 +24,14 @@ export function displayName(full: string): string {
 }
 
 export interface UtmbRanked { utmbId: number; uri: string; name: string; index: number | null; nationality: string | null; sex: 'M' | 'F' }
-export interface UtmbRunner extends UtmbRanked { website: string | null; team: string | null; results: BestFinish[]; finishes: number }
+export interface UtmbRunner extends UtmbRanked { website: string | null; team: string | null; results: BestFinish[]; finishes: number; picture: string | null }
+
+const PICTURE_BASE = 'https://img.utmb.world/image/upload/q_auto/f_jpg/c_limit,w_1600/v1/';
+
+/** `props.pageProps.profilePicture` is a storage path ("worldseries/Members/<uuid>"), not a URL; built into one, or null when missing/not path-shaped. */
+function pictureUrl(p: unknown): string | null {
+  return typeof p === 'string' && /^[\w-]+\/[\w./-]+$/.test(p) ? `${PICTURE_BASE}${p}` : null;
+}
 
 const sexOf = (s: unknown): 'M' | 'F' => (s === 'F' ? 'F' : 'M'); // UTMB: H (homme) or F
 
@@ -80,6 +87,7 @@ export function parseRunnerPage(html: string, uri: string): UtmbRunner | null {
     team: typeof p.team === 'string' && p.team ? p.team : null,
     results,
     finishes: finished.length,
+    picture: pictureUrl(p.profilePicture),
   };
 }
 

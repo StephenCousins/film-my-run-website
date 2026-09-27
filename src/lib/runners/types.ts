@@ -36,7 +36,7 @@ export interface RunnerFile {
   birthYear: number | null;
   disciplines: Discipline[];
   era: 'current' | 'historic';
-  utmb: { id: number; uri: string; index: number | null; website: string | null } | null;
+  utmb: { id: number; uri: string; index: number | null; website: string | null; picture?: string | null } | null;
   /** Source texts the bio may use: each is one RunnerSource plus its text. */
   texts: { source: RunnerSource; text: string }[];
   /** Results that can go straight into best_finishes. */

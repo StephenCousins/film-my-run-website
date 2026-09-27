@@ -21,11 +21,11 @@ function topFinishes(results: BestFinish[]): BestFinish[] {
   return [...results].sort((a, b) => positionRank(a.position) - positionRank(b.position) || b.year - a.year).slice(0, 10);
 }
 
-export const AUTO_PROFILES_PER_DAY = 3;
+export const AUTO_PROFILES_PER_DAY = 6;
 /** Write, check and up to NEWS_CONFIG.fixRounds rounds of edits on Opus, several pence; rounded up for the ceiling check. */
 export const PROFILE_ESTIMATE_USD = 0.15;
 /** Never more than this from one run, whatever's left of the monthly ceiling. */
-export const PROFILE_RUN_BUDGET_USD = 1.0;
+export const PROFILE_RUN_BUDGET_USD = 1.5;
 
 type Entry = { name: string; slug?: string; reason?: string };
 
@@ -93,7 +93,8 @@ const norm = (s: string) => s.trim().replace(/\s+/g, ' ').replace(/[‘’]/g, "
  * A page for each runner a new story is about who has none yet (spec: "a new name
  * in a news story has a page by the next morning"). Same fact rules as a story:
  * edits for what the checker can't find, an asterisk in the last round, never
- * held. Auto pages have no photos (the card) until a session picks them.
+ * held. Auto pages use the runner's UTMB profile picture as a portrait when
+ * they have one, otherwise no photo until a session picks one.
  *
  * Guards on top of the fact rules: never overwrite an existing page (slugTaken,
  * checked after gather resolves the canonical name/slug); the day cap counts every
@@ -138,7 +139,10 @@ export async function autoProfiles(names: string[], budgetUsd: number, deps: Aut
       if (!w.bio) { log.push({ name, reason: 'the writer returned nothing' }); continue; }
       let bio = tidy(w.bio);
       const texts = f.texts.map((t) => t.text);
-      const file = (b: string[]): RunnerFile => ({ ...f, bio: b, bestFinishes: topFinishes(f.results), photos: [], sources: f.texts.map((t) => t.source) });
+      const photos: RunnerFile['photos'] = f.utmb?.picture
+        ? [{ kind: 'portrait', url: f.utmb.picture, credit: 'Photo: UTMB profile', licence: null, source_url: `https://utmb.world/en/runner/${f.utmb.uri}` }]
+        : [];
+      const file = (b: string[]): RunnerFile => ({ ...f, bio: b, bestFinishes: topFinishes(f.results), photos, sources: f.texts.map((t) => t.source) });
       let reason: string | null = null;
       for (let round = 0; ; round++) {
         const last = round >= NEWS_CONFIG.fixRounds;

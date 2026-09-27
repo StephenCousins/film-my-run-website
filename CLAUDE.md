@@ -948,11 +948,12 @@ adding runners is `docs/runners/HOW-TO.md`.**
   shape.
 - **Automatic pages:** `src/lib/runners/auto.ts` writes pages for runners new
   stories are about.
-  - At most 3 attempts a day and $1 per run, inside the £10 ceiling.
+  - At most 6 attempts a day and $1.50 per run, inside the £10 ceiling.
   - An 8-minute limit.
   - It never overwrites an existing slug and skips names that failed in the
     last 14 days.
-  - Pages carry no photos until a session adds them.
+  - Pages use the runner's UTMB profile picture as a portrait when they have
+    one, otherwise no photo until a session adds one.
 - **Photos:** only free-licence Commons photos or others with a named
   photographer. `AGENCY_CREDITS` refuses agency credits.
 - **ITRA is out of scope:** itra.run blocks automated requests.

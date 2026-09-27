@@ -97,10 +97,11 @@ The branded card shows instead.
   - If UTMB stops showing indexes altogether, nothing is overwritten.
   - The result is a line in the Monday email.
 - **Automatic pages:** runners a new story is about get a page written
-  through OpenRouter (`written_by = 'auto'`, no photos, the card).
-  - At most 3 attempts a day, and at most $1 of spend per run, inside the £10 monthly ceiling.
+  through OpenRouter (`written_by = 'auto'`, the card), with the runner's UTMB
+  profile picture as their portrait when they have one, otherwise no photo.
+  - At most 6 attempts a day, and at most $1.50 of spend per run, inside the £10 monthly ceiling.
   - An 8-minute limit.
   - They never overwrite an existing page.
   - Only runners with a UTMB entry or a Wikipedia article about running get one.
   - A name that failed is skipped for 14 days.
-  - The Monday email lists them. Add their photos in a session.
+  - The Monday email lists them. Add or replace their photos in a session.

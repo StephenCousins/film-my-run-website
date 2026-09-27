@@ -89,7 +89,7 @@ export async function gatherRunner(input: { name?: string; utmbUri?: string; era
     birthYear: null,
     disciplines: utmb ? ['trail_ultra'] : [],
     era: input.era ?? 'current',
-    utmb: utmb ? { id: utmb.utmbId, uri: utmb.uri, index: utmb.index, website: utmb.website } : null,
+    utmb: utmb ? { id: utmb.utmbId, uri: utmb.uri, index: utmb.index, website: utmb.website, picture: utmb.picture } : null,
     texts,
     results: utmb?.results ?? [],
     photoCandidates: wiki?.image ? [wiki.image] : [],
