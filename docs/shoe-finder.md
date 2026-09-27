@@ -72,7 +72,7 @@ that is not a JSON array drops every nomination and is reported as
 ```
 {
   discovered: number,
-  nominations: { feeds, shops, versionBumps },  // what discovery had to work from, by kind of source
+  nominations: { feeds, shops, versionBumps, listings },  // what discovery had to work from, by kind of source
   published: [{ slug, imageUrl }],
   publishedWithoutImage: string[],   // published but no image cleared verification; retried next week
   linkedExisting: [],                // candidate's slug already existed as a shoe; marked published against it, no new row
@@ -179,6 +179,22 @@ nominated roundup headlines rather than shoes.
   produced 13 bumps in 111 s; the prototype earlier that day found 38, the
   first 25 of which had already been added by hand.
 
+- **Big-brand listings** (`discovery/sources/listingPages.ts`,
+  `LISTING_PAGES`, added 27 September 2026): the big brands' own sites
+  refuse server fetches (Adidas times out, Hoka 406, ASICS/Brooks/New
+  Balance 403, On renders client-side), so sportsshoes.com's per-brand
+  men's running listing sorted `publish_date|desc` stands in for Nike,
+  Adidas, Hoka, ASICS, Brooks, New Balance, On, Saucony, Puma, Salomon and
+  Mizuno, plus nike.com's own new-running page. The newest 30 product
+  slugs per page (`LISTING_TOP`) become nominations branded by the page;
+  weatherproof/city/anniversary editions, spikes, Hyrox and walking shoes
+  are skipped (`NOT_A_NEW_SHOE`), and season codes (`AW26`) and Nike's
+  retired "Air Zoom"/"ZoomX"/"Next%" are dropped from the title so they do
+  not open a second candidate for a listed shoe. Reported per page as
+  `sportsshoes:<brand>` / `nike.com` in `stores`, and counted as "big-brand
+  listings" in the digest. The dry run on 27 September: 257 nominations,
+  123 new candidates (at `maxPublish` 10 a week the backlog takes weeks).
+
 Every store read — new arrivals and version-bump lookups alike — is
 recorded in the report's `stores` as `{ store, fetched, nominated,
 error? }` (`shopify:<host>` or `version-bump:<host>`), and the ones that
@@ -195,8 +211,8 @@ were removed from the run on 14 September 2026 — no brand ever had the URL
 set and the Shopify source covers the same ground from code. The column is
 still in the schema and unused.
 
-One LLM call per run (`completeText`, Gemini 2.5 Flash Lite) normalises the
-batch of headlines to `{brand, model}` pairs. A reply that is not a JSON
+The normaliser (`completeText`, Gemini 2.5 Flash, batches of 40 since 27 September 2026 — one uncapped call truncated and dropped all 151 nominations) turns the
+headlines to `{brand, model}` pairs. A reply that is not a JSON
 array (a refusal, prose, output cut off at the token cap) loses every
 nomination for that run; it is logged with the first 200 characters of the
 reply and reported under `errored`. The brand is then resolved against
