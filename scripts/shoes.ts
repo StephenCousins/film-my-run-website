@@ -6,6 +6,9 @@
 // Commands:
 //   enrich --slug S                 Fetch review scores for one shoe, upsert them, recompute its score.
 //   image --slug S [--force]        Find, verify and store an image for one shoe. --force clears the current one first.
+//   image --slug S --from-url U --page P
+//                                   Store a photo found by hand (P = the product page naming the exact model);
+//                                   it still has to pass the size and vision checks.
 //   backfill-images [--limit N] [--from-slug S] [--force] [--clear-hotlinks]
 //                                   Image pass over the catalogue: current shoes first, then superseded.
 //                                   Skips shoes already on R2 unless --force. Resume with --from-slug.
@@ -38,7 +41,7 @@ import { CATEGORY_LABELS, TERRAIN_LABELS, isShoeCategory, isShoeTerrain } from '
 import { findBrandProductPage, type BrandPageResult } from '@/lib/shoes/publish/brandPage';
 import { evaluate, type CandidateInput, type HoldReason } from '@/lib/shoes/publish/gate';
 import { publishCandidate } from '@/lib/shoes/publish/publish';
-import { findAndStoreImage, auditImages, isR2ImageUrl, R2_SHOES_PREFIX } from '@/lib/shoes/images';
+import { findAndStoreImage, liveFindDeps, auditImages, isR2ImageUrl, R2_SHOES_PREFIX } from '@/lib/shoes/images';
 import { runWeekly } from '@/lib/shoes/job/weekly';
 import { sleep } from '@/lib/shoes/search';
 
@@ -145,7 +148,16 @@ async function imageForShoe(shoe: ShoeRef): Promise<{ stored: boolean; line: str
   return { stored: false, line: `${shoe.slug} → NONE (${reason})` };
 }
 
-async function image(slug: string, force: boolean): Promise<void> {
+async function imageFromUrl(shoe: ShoeRef, url: string, pageUrl: string): Promise<{ stored: boolean; line: string }> {
+  const outcome = await findAndStoreImage({ slug: shoe.slug, brand: shoe.brand, model: shoe.model }, null, {
+    ...liveFindDeps,
+    imageCandidates: async (_input, phase) => (phase === 'brand' ? [{ url, method: 'retailer-og', pageUrl }] : []),
+  });
+  return outcome ? { stored: true, line: `${shoe.slug} → stored from ${pageUrl}` } : { stored: false, line: `${shoe.slug} → NONE (${url} failed the size or vision check)` };
+}
+
+async function image(slug: string, force: boolean, fromUrl?: string, page?: string): Promise<void> {
+  if (fromUrl && !page) throw new UsageError('--from-url needs --page, the product page that names the exact model');
   const shoe = await loadShoe(slug);
   if (isOnR2(shoe.image_url) && !force) {
     console.log(`${shoe.slug}: already on R2 (${shoe.image_url}); pass --force to replace`);
@@ -155,7 +167,7 @@ async function image(slug: string, force: boolean): Promise<void> {
     await clearImage(shoe.slug);
     console.log(`${shoe.slug}: cleared ${shoe.image_url}`);
   }
-  const { stored, line } = await imageForShoe(shoe);
+  const { stored, line } = fromUrl ? await imageFromUrl(shoe, fromUrl, page!) : await imageForShoe(shoe);
   console.log(line);
   if (!stored) { await markImageAttempt(shoe.slug); process.exitCode = 1; }
 }
@@ -329,6 +341,8 @@ async function main(argv: string[]): Promise<void> {
     allowPositionals: true,
     options: {
       slug: { type: 'string' },
+      'from-url': { type: 'string' },
+      page: { type: 'string' },
       force: { type: 'boolean', default: false },
       limit: { type: 'string' },
       'from-slug': { type: 'string' },
@@ -350,7 +364,7 @@ async function main(argv: string[]): Promise<void> {
 
   switch (command) {
     case 'enrich': return enrich(requireSlug(values));
-    case 'image': return image(requireSlug(values), values.force);
+    case 'image': return image(requireSlug(values), values.force, values['from-url'], values.page);
     case 'backfill-images': return backfillImages({ limit: parseLimit(values.limit), fromSlug: values['from-slug'], force: values.force, clearHotlinks: values['clear-hotlinks'] });
     case 'run-weekly': {
       const report = await runWeekly({ dryRun: values['dry-run'] });

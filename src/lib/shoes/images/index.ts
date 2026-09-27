@@ -34,7 +34,7 @@ export interface FindImageDeps {
   writeImage: (slug: string, data: ImageWrite) => Promise<void>;
 }
 
-const liveFindDeps: FindImageDeps = {
+export const liveFindDeps: FindImageDeps = {
   imageCandidates: (input, phase) => imageCandidates(input, undefined, { phase }),
   isLikelyProductImage,
   checkImageSize: url => checkImageSize(url),
