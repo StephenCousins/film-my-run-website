@@ -11,6 +11,11 @@ export const NEWS_CONFIG = {
   nearCopyWords: 10,
   /** Rounds of edits a draft gets to pass the checks before it is not published (never held, Stephen 27 Sep). */
   fixRounds: 3,
+  /** A story loses a point of importance for every this many days since its newest report. */
+  fadeEveryDays: 2,
+  /** Waiting longer than this, a story is dropped unless it scores bigStory or more. */
+  staleAfterDays: 4,
+  bigStory: 8,
   /** Feeds that can back up a story but never lead one. */
   referenceOnlySources: ['Marathon Investigation'] as readonly string[],
 } as const;

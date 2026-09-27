@@ -5,7 +5,7 @@ import { NEWS_CONFIG } from './config';
 import { gatherCandidates } from './gather';
 import { bundleImportance, groupItems } from './group';
 import { storyImage } from './image';
-import { pickBundles, slugBase, STORY_ESTIMATE_USD, uniqueSlug, withinCeiling } from './plan';
+import { isStale, pickBundles, slugBase, STORY_ESTIMATE_USD, uniqueSlug, withinCeiling } from './plan';
 import { nearCopyPhrases, ruleProblems, tidyPunctuation } from './rules';
 import { moreCoverage } from './search';
 import { isBorderline, passesSort, sortItem } from './sort';
@@ -144,13 +144,19 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
     log.skipped.push({ headline: b.headline, reason: 'reference-only source' });
     b.alreadyCovered = true; // out of the running, and marked seen below
   }
+  // Waited too long (isStale): dropped for good, so it isn't looked at again tomorrow.
+  for (const b of grouped.bundles.filter((x) => !x.alreadyCovered && isStale(x, now))) {
+    log.skipped.push({ headline: b.headline, reason: 'too old' });
+    b.alreadyCovered = true;
+    b.stale = true;
+  }
   const covered = grouped.bundles.filter((b) => b.alreadyCovered);
-  for (const b of covered) if (!referenceOnly(b)) log.skipped.push({ headline: b.headline, reason: 'already covered' });
+  for (const b of covered) if (!referenceOnly(b) && !b.stale) log.skipped.push({ headline: b.headline, reason: 'already covered' });
   await markSeen([...sorted.filter((s) => !passesSort(s.v)), ...covered.flatMap(bundleSeen)]);
 
   // maxStories: a one-off larger run (the launch fill); the daily cap otherwise.
   const cap = maxStories ?? NEWS_CONFIG.maxStoriesPerRun;
-  const picked = pickBundles(grouped.bundles, cap);
+  const picked = pickBundles(grouped.bundles, cap, now);
   for (const b of grouped.bundles) {
     if (!b.alreadyCovered && !picked.includes(b)) log.skipped.push({ headline: b.headline, reason: `over the ${cap}-story cap` });
   }

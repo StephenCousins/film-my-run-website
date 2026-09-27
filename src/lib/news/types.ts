@@ -32,6 +32,8 @@ export interface Bundle {
   note?: string;
   /** Asked for by hand: Stephen has decided it is news, so the writer doesn't re-judge that or the 14-day window. */
   onDemand?: boolean;
+  /** Set by the run when a bundle has waited too long (plan.ts isStale). */
+  stale?: boolean;
 }
 
 export interface Draft {
