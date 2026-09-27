@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { evaluate, MAX_AGE_MONTHS } from './gate';
+import { findEvidencePage, evaluate, MAX_AGE_MONTHS } from './gate';
 import type { BrandPage } from './brandPage';
 import type { ParsedSpecs, SpecsInput } from '../specs';
 
@@ -12,6 +12,7 @@ const found = (p: BrandPage = page) => ({ kind: 'found' as const, page: p });
 const ok = () => ({
   findBrandProductPage: async () => found(),
   findRetailerProductPage: async () => null,
+  findEvidencePage: async () => null,
   fetchReviewsForShoe: async () => [review('runrepeat'), review('irunfar')],
   parseShoeSpecs: async () => specs,
   webSearch: async () => { throw new Error('webSearch must only be called when no_brand_page is overridden and no page was found'); },
@@ -45,6 +46,25 @@ describe('evaluate', () => {
     const r = await evaluate(cand(), { ...ok(), findBrandProductPage: async () => ({ kind: 'unreachable', reason: 'unreachable:406' }), findRetailerProductPage: async () => retailerPage });
     expect(r.publish).toBe(true);
     if (r.publish) expect(r.brandPage).toEqual(retailerPage);
+  });
+  it('a page the shoe was nominated from proves it before any search; the retailer walk is not asked', async () => {
+    const ssPage = { ...page, url: 'https://www.sportsshoes.com/product/hok3643/hoka-zinal-3-men', source: 'retailer' as const };
+    const r = await evaluate(cand(), { ...ok(), findBrandProductPage: async () => ({ kind: 'absent' }), findEvidencePage: async () => ssPage, findRetailerProductPage: async () => { throw new Error('search:429'); } });
+    expect(r.publish).toBe(true);
+    if (r.publish) expect(r.brandPage).toEqual(ssPage);
+  });
+  it('findEvidencePage reads product-page sources only, needs the exact model in the fetched title, and marks the brand\'s own domain as brand', async () => {
+    const pages: Record<string, { html: string; title: string }> = {
+      'https://www.runnersworld.com/gear/a1/clifton-10-review': { html: '', title: 'Hoka Clifton 10 review' },
+      'https://www.sportsshoes.com/product/h1/hoka-clifton-11-men': { html: '', title: 'Hoka Clifton 11 Men' },
+      'https://www.hoka.com/clifton-10': { html: '', title: 'Clifton 10 | HOKA' },
+    };
+    const fetch = async (u: string) => pages[u] ?? null;
+    const src = (source: string, url: string) => ({ source, url, title: '', publishedAt: null });
+    const c = cand({ evidence: { sources: [src('runners_world', 'https://www.runnersworld.com/gear/a1/clifton-10-review'), src('sportsshoes:hoka', 'https://www.sportsshoes.com/product/h1/hoka-clifton-11-men'), src('shopify:hoka.com', 'https://www.hoka.com/clifton-10')] } });
+    const p = await findEvidencePage(c, fetch as never);
+    expect(p).toMatchObject({ url: 'https://www.hoka.com/clifton-10', source: 'brand' });
+    expect(await findEvidencePage(cand({ evidence: { sources: [src('runners_world', 'https://www.runnersworld.com/gear/a1/clifton-10-review')] } }), fetch as never)).toBeNull();
   });
   it('an out-of-quota brand-page search still asks the retailers; a non-search error still throws', async () => {
     const retailerPage = { ...page, url: 'https://startfitness.co.uk/products/hoka-clifton-10', source: 'retailer' as const };

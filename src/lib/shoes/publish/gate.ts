@@ -4,6 +4,9 @@ import { parseShoeSpecs, type ParsedSpecs, type SpecsInput } from '../specs';
 import { findBrandProductPage, type BrandPage, type BrandPageResult } from './brandPage';
 import { findRetailerProductPage, RETAILERS_BY_BRAND } from './retailerPage';
 import { webSearch } from '../search';
+import { fetchPage } from '../html';
+import { pageNamesExactModel } from '../pageMatch';
+import { toBrandPage } from './brandPage';
 
 export type HoldReason = 'brand_unresolved' | 'no_brand_page' | 'too_old' | 'reviews_lt_2' | 'bad_taxonomy' | 'specs_unparseable';
 
@@ -35,6 +38,8 @@ export interface GateHold {
 export interface GateDeps {
   findBrandProductPage: (brand: Brand, model: string) => Promise<BrandPageResult>;
   findRetailerProductPage: (brand: Brand, model: string) => Promise<BrandPage | null>;
+  /** The product pages discovery already found the shoe on, when one names the exact model. */
+  findEvidencePage: (c: CandidateInput) => Promise<BrandPage | null>;
   fetchReviewsForShoe: (brand: string, model: string) => Promise<ReviewResult[]>;
   parseShoeSpecs: (input: SpecsInput) => Promise<ParsedSpecs>;
   /** Only called when `no_brand_page` is overridden and no page was found: its snippets stand in for the page text. */
@@ -45,6 +50,7 @@ export interface GateDeps {
 const liveDeps: GateDeps = {
   findBrandProductPage: (brand, model) => findBrandProductPage(brand, model),
   findRetailerProductPage: (brand, model) => findRetailerProductPage(brand, model),
+  findEvidencePage: c => findEvidencePage(c),
   fetchReviewsForShoe: (brand, model) => fetchReviewsForShoe(brand, model),
   parseShoeSpecs: input => parseShoeSpecs(input),
   webSearch,
@@ -52,6 +58,26 @@ const liveDeps: GateDeps = {
 };
 
 export const MAX_AGE_MONTHS = 15;
+
+/** Evidence from these sources is a shop's or brand's own product page, not an article about the shoe. */
+const PRODUCT_PAGE_SOURCE = /^(?:sportsshoes:|nike\.com$|shopify:|version-bump$)/;
+
+/**
+ * The shoe was nominated from a product page (sportsshoes.com, nike.com, a
+ * Shopify store); that page is fetched again and must still name the exact
+ * model and version. It is the brand page when it is on the brand's own
+ * domain, else a retailer page. Costs no search call.
+ */
+export async function findEvidencePage(c: CandidateInput, fetch: typeof fetchPage = fetchPage): Promise<BrandPage | null> {
+  for (const s of c.evidence.sources) {
+    if (!PRODUCT_PAGE_SOURCE.test(s.source)) continue;
+    const page = await fetch(s.url).catch(() => null);
+    if (!page || !pageNamesExactModel(c.model, s.url, page.title)) continue;
+    const own = !!c.brand && new URL(s.url).hostname.endsWith(c.brand.domain.replace(/^www\./, ''));
+    return toBrandPage({ url: s.url, title: page.title, html: page.html }, own ? 'brand' : 'retailer');
+  }
+  return null;
+}
 
 /** Visible page text for the spec parser: scripts out, tags out, whitespace collapsed. */
 function pageText(html: string): string {
@@ -99,12 +125,16 @@ export async function evaluate(
     if (!/^search:/.test(reason)) throw err;
     return { kind: 'unreachable', reason };
   });
+  // The page the shoe was found on proves it before any search is spent.
+  const evidencePage = found.kind === 'found' ? null : await deps.findEvidencePage(c);
   // A brand with curated importers is asked about them even when its own site answered and had nothing: that is the normal case for those brands.
   const askRetailers = found.kind === 'unreachable' || c.brand.name in RETAILERS_BY_BRAND || ignore.has('no_brand_page');
-  if (found.kind === 'absent' && !askRetailers) return { publish: false, reasons: ['no_brand_page'], partial: {} };
+  if (found.kind === 'absent' && !askRetailers && !evidencePage) return { publish: false, reasons: ['no_brand_page'], partial: {} };
   let brandPage: BrandPage | null;
   if (found.kind === 'found') {
     brandPage = found.page;
+  } else if (evidencePage) {
+    brandPage = evidencePage;
   } else {
     brandPage = await deps.findRetailerProductPage(c.brand, c.model);
     if (!brandPage && !ignore.has('no_brand_page')) {

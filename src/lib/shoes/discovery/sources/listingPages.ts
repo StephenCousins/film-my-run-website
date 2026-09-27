@@ -20,7 +20,7 @@ const sportsshoes = (slug: string, brand: string): ListingPage => ({
 });
 
 export const LISTING_PAGES: ListingPage[] = [
-  { key: 'nike.com', brand: 'Nike', url: 'https://www.nike.com/gb/w/new-mens-running-shoes-3n82yz37v7jznik1zy7ok', link: /nike\.com\/gb\/t\/([a-z0-9-]+)/g },
+  { key: 'nike.com', brand: 'Nike', url: 'https://www.nike.com/gb/w/new-mens-running-shoes-3n82yz37v7jznik1zy7ok', link: /nike\.com\/gb\/t\/([a-z0-9-]+)(?:\/[A-Za-z0-9-]+)?/g },
   sportsshoes('nike', 'Nike'),
   sportsshoes('adidas', 'Adidas'),
   sportsshoes('hoka', 'Hoka'),

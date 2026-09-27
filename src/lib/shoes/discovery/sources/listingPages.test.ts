@@ -20,9 +20,9 @@ describe('listing pages', () => {
     const html = [a('/product/nik1/nike-zoomx-streakfly-2-running-shoes---ho26'), a('/product/nik2/nike-air-zoom-alphafly-next%25-3-men'), a('/product/pum1/puma-evospeed-elite-2'), a('/product/pum2/puma-x-hyrox-deviate-nitro-4')].join('');
     expect(nominationsFromListing(ss, html).map(x => x.title)).toEqual(['nike streakfly 2 running shoes', 'nike alphafly 3 men']);
   });
-  it('reads nike.com product slugs into full URLs', () => {
+  it('reads nike.com product slugs, keeping the product code in the URL', () => {
     const n = nominationsFromListing(nike, a('https://www.nike.com/gb/t/alphafly-4-mens-road-racing-shoes-n/ABC123'));
-    expect(n).toEqual([expect.objectContaining({ brandText: 'Nike', title: 'alphafly 4 mens road racing shoes n', url: 'https://www.nike.com/gb/t/alphafly-4-mens-road-racing-shoes-n' })]);
+    expect(n).toEqual([expect.objectContaining({ brandText: 'Nike', title: 'alphafly 4 mens road racing shoes n', url: 'https://www.nike.com/gb/t/alphafly-4-mens-road-racing-shoes-n/ABC123' })]);
   });
   it(`stops after the newest ${LISTING_TOP} products`, () => {
     const html = Array.from({ length: LISTING_TOP + 10 }, (_, i) => a(`/product/hok${i}/hoka-shoe-${i}-men`)).join('');
