@@ -21,9 +21,9 @@ const DISTANCES = [
   ['10K', 'The next step up'],
   ['Half marathon', 'The distance most people love'],
   ['Marathon', '8 to 24 weeks'],
-  ['50K', 'Your first ultra'],
-  ['100K', 'A long day out'],
-  ['100 miles', 'The long night'],
+  ['50K', 'Your first ultra · FMR Club'],
+  ['100K', 'A long day out · FMR Club'],
+  ['100 miles', 'The long night · FMR Club'],
 ];
 
 const METHOD = [
@@ -154,17 +154,18 @@ export default function TrainingPage() {
             <div>
               <h2 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-4">Free, for good</h2>
               <p className="text-secondary text-lg leading-relaxed">
-                Every plan, every distance, the calendar, the reminders and the Apple Health tick-offs are free
-                in the app. So are the calculators and the race predictor.
+                The 5K, 10K, half marathon and marathon plans are free in the app, with your own paces on every
+                session, and so are the calendar, the reminders and the Apple Health tick-offs. So are the
+                calculators and the race predictor.
               </p>
             </div>
             <div className="p-6 lg:p-8 rounded-2xl border border-orange-500/30 bg-orange-500/5">
               <h3 className="font-display text-2xl font-bold text-foreground mb-3">FMR Club adds</h3>
               <ul className="space-y-2 text-secondary">
-                <li>Your own paces on every session, from your racing</li>
-                <li>Ultra Race Pacing: your arrival time at every checkpoint</li>
-                <li>Ask Stephen: a one-to-one thread with me about anything running</li>
                 <li>15% off everything in the shop</li>
+                <li>The ultra plans: 50K, 100K and 100 miles, paces included</li>
+                <li>Ask Stephen: a one-to-one thread with me about anything running</li>
+                <li>Ultra Race Pacing: your arrival time at every checkpoint</li>
               </ul>
               <p className="text-sm text-muted mt-4">£2.99 a month or £29 a year.</p>
             </div>

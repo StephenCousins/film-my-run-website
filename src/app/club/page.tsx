@@ -9,20 +9,19 @@ export const metadata: Metadata = {
   title: 'FMR Club',
   alternates: { canonical: 'https://filmmyrun.com/club' },
   description:
-    'Support Film My Run for £2.99 a month: your own paces on every training session, Ultra Race Pacing, Ask Stephen, and 15% off everything in the shop. The plans themselves stay free.',
+    'Support Film My Run for £2.99 a month: 15% off everything in the shop, the ultra training plans, Ask Stephen and Ultra Race Pacing. The 5K to marathon plans stay free.',
 };
 
 const money = (pence: number) => `£${(pence / 100).toFixed(2).replace(/\.00$/, '')}`;
 
 const perks = [
-  // In line with the app's FMR Club (Stephen, 26 Sep 2026): the training plans are free for
-  // everyone; Club adds the paces, race pacing and the rest.
-  ['Paces that are yours', 'Every session in your training plan at your own paces, worked out from what you have actually run, rather than a percentage of a time you hope to hit.'],
-  ['Ultra Race Pacing', 'Your arrival time at every checkpoint, for ultras in our race library or your own course, built from 7,687 real race finishes.'],
-  ['On the day', 'Check in at each aid station and it tells you how far ahead or behind you are. Print a wrist band, and keep the widget on your Lock Screen.'],
-  ['Ask Stephen', 'A one-to-one thread with me about anything running. I read and answer them myself.'],
+  // Order is Stephen's (28 Sep 2026). 5K to marathon plans, with their paces, are free for
+  // everyone; the ultra plans are Club only.
   ['15% off the shop', 'On everything, for as long as you are a member. A free account gets 10%.'],
-  ['It keeps the lights on', 'The films, the calculators, the predictor and the training plans are free and stay free. This is what pays for them.'],
+  ['All the training plans', 'The 5K, 10K, half marathon and marathon plans are free for everyone, paces included. FMR Club adds the ultra plans: 50K, 100K and 100 miles, with every session at your own paces, worked out from a recent road race.'],
+  ['Ask Stephen', 'A one-to-one thread with me about anything running. I read and answer them myself.'],
+  ['Ultra Race Pacing', 'Your arrival time at every checkpoint, for ultras in our race library or your own course, built from 7,687 real race finishes. On the day, check in at each aid station to see how far ahead or behind you are, print a wrist band, and keep the widget on your Lock Screen.'],
+  ['It keeps the lights on', 'The films, the calculators, the predictor and the road training plans are free and stay free. This is what pays for them.'],
 ];
 
 export default function ClubPage() {
