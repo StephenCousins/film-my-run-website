@@ -85,7 +85,7 @@ export function parseRunnerPage(html: string, uri: string): UtmbRunner | null {
 
 export async function topRunners(sex: 'M' | 'F', n: number, get: Getter = httpGet): Promise<UtmbRanked[]> {
   const body = await get(`${API}?category=general&sex=${sex === 'F' ? 'F' : 'H'}&limit=${n}&offset=0&lang=en`);
-  return body ? parseRanked(JSON.parse(body)) : [];
+  return body ? parseRanked(parseJson(body)) : [];
 }
 
 export async function utmbRunner(uri: string, get: Getter = httpGet): Promise<UtmbRunner | null> {
@@ -95,10 +95,19 @@ export async function utmbRunner(uri: string, get: Getter = httpGet): Promise<Ut
 
 const plain = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
+/** A blocked/rate-limited reply (Cloudflare challenge page, etc.) is a 200 that isn't JSON; fail soft rather than throw. */
+function parseJson(body: string): unknown {
+  try {
+    return JSON.parse(body);
+  } catch {
+    return null;
+  }
+}
+
 /** The UTMB entry whose name is exactly this one (accents and case aside); null otherwise. */
 export async function findUtmb(name: string, get: Getter = httpGet): Promise<UtmbRanked | null> {
   const body = await get(`${API}?search=${encodeURIComponent(name)}&limit=10&lang=en`);
   if (!body) return null;
-  const hits = parseRanked(JSON.parse(body)).filter((r) => plain(r.name) === plain(name));
+  const hits = parseRanked(parseJson(body)).filter((r) => plain(r.name) === plain(name));
   return hits.length === 1 ? hits[0] : null;
 }

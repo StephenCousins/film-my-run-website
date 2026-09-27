@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { displayName, findUtmb, parseRanked, parseRunnerPage } from './utmb';
+import { displayName, findUtmb, parseRanked, parseRunnerPage, topRunners } from './utmb';
 
 const pageData = readFileSync(new URL('./fixtures/utmb-runner.json', import.meta.url), 'utf8');
 const page = `<html><script id="__NEXT_DATA__" type="application/json">${pageData}</script></html>`;
@@ -57,5 +57,14 @@ describe('finding a runner by name', () => {
     expect((await findUtmb('Kilian Jornet Burgada', get))?.utmbId).toBe(2704);
     expect((await findUtmb('Kílian Jornet Burgada', get))?.utmbId).toBe(2704);
     expect(await findUtmb('Kilian Burgada', get)).toBeNull();
+  });
+});
+
+describe('a blocked or non-JSON reply fails soft', () => {
+  it('findUtmb resolves to null rather than throwing', async () => {
+    expect(await findUtmb('Kilian Jornet Burgada', async () => '<html>blocked</html>')).toBeNull();
+  });
+  it('topRunners resolves to an empty list rather than throwing', async () => {
+    expect(await topRunners('F', 3, async () => 'not json')).toEqual([]);
   });
 });
