@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { flagEmoji } from '@/lib/runners/flag';
 import RunnerCard from '@/components/runners/RunnerCard';
@@ -20,8 +21,15 @@ export default function RunnersList({ runners }: { runners: Row[] }) {
           <Link href={`/runners/${r.slug}`} className="block group">
             {r.photo
               ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={r.photo} alt="" className="w-full aspect-[4/5] object-cover rounded-xl" />
+                <div className="relative w-full aspect-[4/5] rounded-xl overflow-hidden bg-zinc-200 dark:bg-zinc-800">
+                  <Image
+                    src={r.photo}
+                    alt=""
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                    className="object-cover"
+                  />
+                </div>
               )
               : <RunnerCard name={r.name} flag={flagEmoji(r.nationality)} index={r.utmbIndex} className="aspect-[4/5] w-full rounded-xl" />}
             <span className="block mt-2 font-semibold text-foreground group-hover:text-[#f88c00]">{flagEmoji(r.nationality)} {r.name}</span>

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { prisma } from '@/lib/db';
@@ -68,8 +69,15 @@ export default async function RunnerPage({ params }: PageProps) {
             <div>
               {portrait ? (
                 <figure>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={portrait.url} alt={r.name} className="w-full aspect-square md:aspect-[4/5] max-w-[240px] md:max-w-none object-cover rounded-2xl" />
+                  <div className="relative w-full aspect-square md:aspect-[4/5] max-w-[240px] md:max-w-none rounded-2xl overflow-hidden bg-zinc-200 dark:bg-zinc-800">
+                    <Image
+                      src={portrait.url}
+                      alt={r.name}
+                      fill
+                      sizes="(min-width: 768px) 40vw, 240px"
+                      className="object-cover"
+                    />
+                  </div>
                   <figcaption className="text-xs text-secondary mt-2">{portrait.credit}</figcaption>
                 </figure>
               ) : <RunnerCard name={r.name} flag={flag} index={r.utmbIndex} className="aspect-square md:aspect-[4/5] max-w-[240px] md:max-w-none w-full rounded-2xl" />}
@@ -86,8 +94,15 @@ export default async function RunnerPage({ params }: PageProps) {
 
           {action && (
             <figure className="mt-12">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={action.url} alt={`${r.name} racing`} className="w-full max-h-[560px] object-cover rounded-2xl" />
+              <div className="relative w-full aspect-[16/9] max-h-[560px] rounded-2xl overflow-hidden bg-zinc-200 dark:bg-zinc-800">
+                <Image
+                  src={action.url}
+                  alt={`${r.name} racing`}
+                  fill
+                  sizes="(min-width: 1024px) 1024px, 100vw"
+                  className="object-cover"
+                />
+              </div>
               <figcaption className="text-xs text-secondary mt-2">{action.credit}</figcaption>
             </figure>
           )}
@@ -116,8 +131,9 @@ export default async function RunnerPage({ params }: PageProps) {
                   <li key={s.slug}>
                     <Link href={`/news/${s.slug}`} className="flex gap-4 items-center group">
                       {s.imageUrl && (
-                        // eslint-disable-next-line @next/next/no-img-element
-                        <img src={s.imageUrl} alt="" className="w-28 aspect-video object-cover rounded-lg shrink-0" />
+                        <div className="relative w-28 aspect-video rounded-lg overflow-hidden shrink-0 bg-zinc-200 dark:bg-zinc-800">
+                          <Image src={s.imageUrl} alt="" fill sizes="112px" className="object-cover" />
+                        </div>
                       )}
                       <span>
                         <span className="block text-xs text-secondary">{new Date(s.publishedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
