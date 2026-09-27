@@ -57,6 +57,8 @@ Fill these into the work file:
 
   Look at every candidate before using it, and make sure it's clearly them. **Never an agency photo** (Getty, AFP, Reuters, AP, PA, Shutterstock, Alamy). The save step refuses them.
 
+  If none of the above name a credit, leave `credit` as `""` — no credit line shows on the page rather than a placeholder.
+
 ## 3. Save
 
 ```bash

@@ -78,7 +78,7 @@ export default async function RunnerPage({ params }: PageProps) {
                       className="object-cover"
                     />
                   </div>
-                  <figcaption className="text-xs text-secondary mt-2">{portrait.credit}</figcaption>
+                  {portrait.credit.trim() && <figcaption className="text-xs text-secondary mt-2">{portrait.credit}</figcaption>}
                 </figure>
               ) : <RunnerCard name={r.name} flag={flag} index={r.utmbIndex} className="aspect-square md:aspect-[4/5] max-w-[240px] md:max-w-none w-full rounded-2xl" />}
             </div>
@@ -103,7 +103,7 @@ export default async function RunnerPage({ params }: PageProps) {
                   className="object-cover"
                 />
               </div>
-              <figcaption className="text-xs text-secondary mt-2">{action.credit}</figcaption>
+              {action.credit.trim() && <figcaption className="text-xs text-secondary mt-2">{action.credit}</figcaption>}
             </figure>
           )}
 

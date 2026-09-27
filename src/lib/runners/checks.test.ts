@@ -35,7 +35,7 @@ describe('the save checks', () => {
     expect(profileProblems(base({ photos: [p(), p()] }))).toContain('two portrait photos');
     expect(profileProblems(base({ photos: [p({ credit: 'Photo: Getty Images' })] }))).toContain('agency photo (portrait): Photo: Getty Images');
     expect(profileProblems(base({ photos: [p({ credit: 'Photo: PA Wire / PA Images' })] }))).toContain('agency photo (portrait): Photo: PA Wire / PA Images');
-    expect(profileProblems(base({ photos: [p({ credit: '' })] }))).toContain('portrait photo has no credit');
+    expect(profileProblems(base({ photos: [p({ credit: '' })] }))).toEqual([]);
     expect(profileProblems(base({ photos: [p({ source_url: '' })] }))).toContain('portrait photo has no source page');
   });
   it('a bare "PA" credit is refused as an agency photo', () => {

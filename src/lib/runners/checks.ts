@@ -36,7 +36,6 @@ export function profileProblems(f: RunnerFile): string[] {
     const of = photos.filter((p) => p.kind === kind);
     if (of.length > 1) problems.push(`two ${kind} photos`);
     for (const p of of) {
-      if (!p.credit.trim()) problems.push(`${kind} photo has no credit`);
       if (!p.source_url.trim()) problems.push(`${kind} photo has no source page`);
       if (AGENCY_CREDITS.test(p.credit)) problems.push(`agency photo (${kind}): ${p.credit}`);
       if (agencyHost(p.source_url) || agencyHost(p.url)) problems.push(`agency photo host (${kind}): ${p.source_url || p.url}`);
