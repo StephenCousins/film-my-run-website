@@ -502,3 +502,6 @@ blockquote.pull-quote p,
 .elevation-profile span {
   @apply text-muted text-sm;
 }
+
+.runner-link { text-decoration: underline; text-decoration-color: #f88c00; text-underline-offset: 3px; }
+.runner-link:hover { color: #f88c00; }

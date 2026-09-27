@@ -9,6 +9,7 @@ import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import { prisma } from '@/lib/db';
 import { sanitizeContent } from '@/lib/sanitize';
 import { buildArticleJsonLd } from '@/lib/news/article-jsonld';
+import { linkRunners, loadNameIndex } from '@/lib/runners/names';
 
 export const dynamic = 'force-dynamic';
 
@@ -116,6 +117,8 @@ export default async function NewsStoryPage({ params }: PageProps) {
   }
 
   const relatedStories = await getRelatedStories(slug);
+  // Runner names link to their profiles when the page is shown; the stored story never changes.
+  const runnerIndex = await loadNameIndex().catch(() => new Map<string, string>());
   const storyUrl = `https://filmmyrun.com/news/${story.slug}`;
 
   const articleJsonLd = buildArticleJsonLd(story, storyUrl);
@@ -212,7 +215,7 @@ export default async function NewsStoryPage({ params }: PageProps) {
                     prose-p:text-secondary prose-p:leading-relaxed
                     prose-a:text-orange-500 prose-a:no-underline hover:prose-a:underline
                     prose-strong:text-foreground"
-                  dangerouslySetInnerHTML={{ __html: sanitizeContent(story.content) }}
+                  dangerouslySetInnerHTML={{ __html: linkRunners(sanitizeContent(story.content), runnerIndex) }}
                 />
 
                 {/* Sources */}
