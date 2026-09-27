@@ -2,6 +2,7 @@
 //
 // Run:   npm run news:daily               (publishes)
 //        npm run news:daily -- --dry-run  (publishes nothing; stories, images and log go to news-dry-run/<date>/)
+//        npm run news:daily -- --if-not-run-today  (the 08:17 catch-up: does nothing if today's run happened)
 import { Resend } from 'resend';
 import { prisma } from '@/lib/db';
 import { NEWS_CONFIG } from '@/lib/news/config';
@@ -18,6 +19,18 @@ const maxStories = maxArg > 0 ? Math.min(20, Math.max(1, parseInt(process.argv[m
 const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` : undefined;
 
 (async () => {
+  // The catch-up schedule: GitHub sometimes skips a scheduled run (27 Sep 2026), so a second
+  // one later in the morning runs the news only if no live daily run has happened today.
+  if (process.argv.includes('--if-not-run-today')) {
+    const since = new Date(new Date().toISOString().slice(0, 10) + 'T00:00:00Z');
+    const today = await prisma.news_runs.findMany({ where: { dry_run: false, started_at: { gte: since } }, select: { summary: true } });
+    if (today.some((r) => !(r.summary as { onDemand?: unknown } | null)?.onDemand)) {
+      console.log("Today's run already happened; nothing to do.");
+      await prisma.$disconnect();
+      process.exit(0);
+    }
+    console.log('No run yet today (the scheduled one was skipped): running now.');
+  }
   const log = await runNews({ now: new Date(), dryRun, outDir, maxStories });
   await prisma.news_runs.create({ data: { dry_run: dryRun, cost_usd: log.costUsd, summary: log as never } });
   const text = [
