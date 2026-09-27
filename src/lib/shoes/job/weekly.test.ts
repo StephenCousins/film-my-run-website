@@ -23,7 +23,7 @@ interface Writes {
 function fakeDeps(over: Partial<WeeklyDeps> = {}): { deps: WeeklyDeps; writes: Writes } {
   const writes: Writes = { upsertCandidate: 0, publish: [], hold: [], link: [], rejectStale: [], rejectCandidate: [], upsertReviews: [], recompute: [], touch: [], clearImage: 0, store: [], imageAttempt: [] };
   const deps: WeeklyDeps = {
-    discover: async () => { writes.upsertCandidate += 2; return { nominations: 5, feeds: 3, shops: 1, versionBumps: 1, candidatesUpserted: 2, alreadyKnown: 3, feedsEmpty: ['believe_in_run'], storesEmpty: ['shopify:nordarun.com (unreachable:503)'], stores: [], normaliseFailed: false }; },
+    discover: async () => { writes.upsertCandidate += 2; return { nominations: 5, feeds: 3, shops: 1, versionBumps: 1, candidatesUpserted: 2, alreadyKnown: 3, feedsEmpty: ['believe_in_run'], storesEmpty: ['shopify:nordarun.com (unreachable:503)'], stores: [], normaliseFailed: false, normaliseDropped: 0 }; },
     listCandidates: async statuses => (statuses.includes('pending') ? [clifton, pegasus] : []),
     shoeExists: async () => null,
     linkCandidate: async (id, shoeId) => { writes.link.push({ id, shoeId }); },
@@ -196,6 +196,18 @@ describe('runWeekly', () => {
     expect(writes.store).toEqual([]);
     expect(writes.imageAttempt).toEqual([]);
   });
+  it('search-quota failures collapse into one errored line naming every item they cost', async () => {
+    const { deps } = fakeDeps({
+      evaluate: async () => { throw new Error('search:429'); },
+      fetchReviewsForShoe: async () => { throw new Error('search:429'); },
+      findAndStoreImage: async () => { throw new Error('vision down'); },
+    });
+    const r = await runWeekly({}, deps);
+    const quota = r.errored.filter(e => e.slug === 'search');
+    expect(quota).toHaveLength(1);
+    expect(quota[0].error).toMatch(/^search quota exhausted \(search:429\); \d+ skipped until it resets: .*hoka-speedgoat-6/);
+    expect(r.errored).toContainEqual({ slug: 'nike-vomero-18', error: 'vision down' });
+  });
   it('a dep that throws for one candidate lands in errored and the run continues', async () => {
     const { deps, writes } = fakeDeps({
       evaluate: async c => { if (c.slug === 'hoka-clifton-10') throw new Error('brave 429'); return holdFor(); },
@@ -214,9 +226,9 @@ describe('runWeekly', () => {
     expect(r.imagesCleared).toEqual(['dead-shoe']);
   });
   it('an unparseable normalise reply is reported under errored', async () => {
-    const { deps } = fakeDeps({ discover: async () => ({ nominations: 9, feeds: 9, shops: 0, versionBumps: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: [], storesEmpty: [], stores: [], normaliseFailed: true }) });
+    const { deps } = fakeDeps({ discover: async () => ({ nominations: 9, feeds: 9, shops: 0, versionBumps: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: [], storesEmpty: [], stores: [], normaliseFailed: true, normaliseDropped: 4 }) });
     const r = await runWeekly({}, deps);
-    expect(r.errored).toEqual([{ slug: 'discover', error: 'LLM normalise output was unparseable; 9 nominations dropped' }]);
+    expect(r.errored).toEqual([{ slug: 'discover', error: 'LLM normalise output was unparseable; 4 of 9 nominations dropped' }]);
   });
   it('a failing discover is reported, not fatal', async () => {
     const { deps } = fakeDeps({ discover: async () => { throw new Error('feeds down'); } });

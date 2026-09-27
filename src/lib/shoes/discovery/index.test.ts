@@ -63,7 +63,7 @@ describe('discover', () => {
       feedsEmpty: ['quiet'],
       storesEmpty: ['shopify:kicksown.com', 'shopify:nordarun.com (unreachable:503)', 'version-bump:startfitness.co.uk (unreachable:403)'],
       stores: [kicksown, norda, bumps],
-      normaliseFailed: false,
+      normaliseFailed: false, normaliseDropped: 0,
     });
   });
 
@@ -83,7 +83,7 @@ describe('discover', () => {
       existingSlugs: async () => [],
       upsertCandidate: async c => { upserts.push(c); },
     });
-    expect(r).toEqual({ nominations: 1, feeds: 1, shops: 0, versionBumps: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: ['quiet', 'blocked (HTTP 403)'], storesEmpty: [], stores: [], normaliseFailed: true });
+    expect(r).toEqual({ nominations: 1, feeds: 1, shops: 0, versionBumps: 0, candidatesUpserted: 0, alreadyKnown: 0, feedsEmpty: ['quiet', 'blocked (HTTP 403)'], storesEmpty: [], stores: [], normaliseFailed: true, normaliseDropped: 1 });
     expect(upserts).toEqual([]);
     expect(warn).toHaveBeenCalledOnce();
     warn.mockRestore();

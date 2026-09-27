@@ -35,6 +35,8 @@ export interface DiscoverReport {
   stores: StoreStat[];
   /** The one LLM call that turns headlines into shoes returned something unparseable; every nomination was lost. */
   normaliseFailed: boolean;
+  /** Nominations lost with the batches whose reply would not parse. */
+  normaliseDropped: number;
 }
 
 /** Union of evidence sources by url; the stored order is kept, new urls appended. */
@@ -79,7 +81,7 @@ export async function discover(deps: DiscoverDeps = liveDiscoverDeps): Promise<D
   const stores = [...shopResults, bumpResult].flatMap(r => r.stores ?? []);
   const storesEmpty = stores.filter(s => s.nominated === 0).map(s => (s.error ? `${s.store} (${s.error})` : s.store));
 
-  const { resolved, unresolved, failed: normaliseFailed } = await normalise(noms, brands, { completeText: deps.completeText });
+  const { resolved, unresolved, failed: normaliseFailed, dropped: normaliseDropped } = await normalise(noms, brands, { completeText: deps.completeText });
   const existing = await deps.existingSlugs();
   const existingSlugs = new Set(existing.map(e => e.slug));
 
@@ -96,6 +98,6 @@ export async function discover(deps: DiscoverDeps = liveDiscoverDeps): Promise<D
   }
   return {
     nominations: noms.length, feeds: count(feedResults), shops: count(shopResults), versionBumps: bumpResult.nominations.length,
-    candidatesUpserted: upserted, alreadyKnown: known, feedsEmpty, storesEmpty, stores, normaliseFailed,
+    candidatesUpserted: upserted, alreadyKnown: known, feedsEmpty, storesEmpty, stores, normaliseFailed, normaliseDropped,
   };
 }

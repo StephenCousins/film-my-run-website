@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { normalise } from './normalise';
+import { normalise, NORMALISE_BATCH } from './normalise';
 import type { Brand } from '../brands';
 
 const brands: Brand[] = [
@@ -36,7 +36,7 @@ describe('normalise', () => {
   });
   it('flags unparseable, truncated or non-array LLM output as failed and warns with the head of the reply', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const failed = { resolved: [], unresolved: [], failed: true };
+    const failed = { resolved: [], unresolved: [], failed: true, dropped: 1 };
     expect(await normalise([nom('x 2')], brands, { completeText: async () => 'sorry' })).toEqual(failed);
     expect(await normalise([nom('x 2')], brands, { completeText: async () => '[{"i": 0, "brand": "Hoka", "mod' })).toEqual(failed);
     expect(await normalise([nom('x 2')], brands, { completeText: async () => '{"i": 0}' })).toEqual(failed);
@@ -65,15 +65,33 @@ describe('normalise', () => {
     let calls = 0;
     const r = await normalise([], brands, { completeText: async () => { calls++; return '[]'; } });
     expect(calls).toBe(0);
-    expect(r).toEqual({ resolved: [], unresolved: [], failed: false });
+    expect(r).toEqual({ resolved: [], unresolved: [], failed: false, dropped: 0 });
   });
-  it('sends the prompt with one tab-separated line per nomination and a 2000-token cap', async () => {
-    let seen: { prompt: string; maxTokens: number } | null = null;
+  it('sends the prompt with one tab-separated line per nomination on the extraction model with a 4000-token cap', async () => {
+    let seen: { prompt: string; maxTokens: number; model?: string } | null = null;
     await normalise([{ ...nom('Clifton 10 review'), brandText: 'Hoka' }, nom('Bondi 9 review')], brands, {
-      completeText: async (o: { prompt: string; maxTokens: number }) => { seen = o; return '[]'; },
+      completeText: async (o: { prompt: string; maxTokens: number; model?: string }) => { seen = o; return '[]'; },
     });
-    expect(seen!.maxTokens).toBe(2000);
+    expect(seen!.maxTokens).toBe(4000);
+    expect(seen!.model).toBe('google/gemini-2.5-flash');
     expect(seen!.prompt).toContain('0\tHoka\tClifton 10 review');
     expect(seen!.prompt).toContain('1\t\tBondi 9 review');
+  });
+  it('splits nominations into batches with batch-local indexes, and a bad batch loses only itself', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const noms = Array.from({ length: NORMALISE_BATCH * 2 + 5 }, (_, k) => ({ ...nom(`Clifton ${k + 1} review`), brandText: 'Hoka' }));
+    let call = 0;
+    const r = await normalise(noms, brands, {
+      completeText: async () => {
+        call++;
+        if (call === 2) return '[{"i": 0, "brand": "Hoka", "mod';
+        return JSON.stringify([{ i: 0, brand: 'Hoka', model: call === 1 ? 'Clifton 1' : `Clifton ${NORMALISE_BATCH * 2 + 1}` }]);
+      },
+    });
+    expect(call).toBe(3);
+    expect(r.failed).toBe(true);
+    expect(r.dropped).toBe(NORMALISE_BATCH);
+    expect(r.resolved.map(x => x.nominations[0].title)).toEqual(['Clifton 1 review', `Clifton ${NORMALISE_BATCH * 2 + 1} review`]);
+    warn.mockRestore();
   });
 });

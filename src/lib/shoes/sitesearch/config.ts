@@ -56,4 +56,7 @@ export const BRAND_SITE_ADAPTERS: Record<string, SiteAdapter> = {
   Lems: { kind: 'shopify', store: 'www.lemsshoes.com' },
   Freet: { kind: 'shopify', store: 'freetbarefoot.com' },
   Walsh: { kind: 'shopify', store: 'normanwalsh.com' },
+  // Probed 27 September 2026.
+  Tarkine: { kind: 'shopify', store: 'www.tarkine.com' },
+  TYR: { kind: 'shopify', store: 'tyr.com' },
 };

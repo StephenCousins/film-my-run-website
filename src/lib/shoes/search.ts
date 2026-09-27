@@ -33,9 +33,10 @@ class BraveError extends Error {
 
 // ── Serper (Google results fallback) ────────────────────────────────
 
-async function serperWebSearch(query: string, count: number, deps: SearchDeps): Promise<SearchResult[]> {
+/** null = Serper failed (no key, bad key, no credit): never read that as "no results". */
+async function serperWebSearch(query: string, count: number, deps: SearchDeps): Promise<SearchResult[] | null> {
   const key = getSerperKey();
-  if (!key) return [];
+  if (!key) return null;
   try {
     const res = await deps.fetch('https://google.serper.dev/search', {
       method: 'POST',
@@ -44,20 +45,20 @@ async function serperWebSearch(query: string, count: number, deps: SearchDeps): 
     });
     if (!res.ok) {
       console.error(`Serper search failed (${res.status}): ${query}`);
-      return [];
+      return null;
     }
     const data = await res.json();
     return (data.organic ?? []).map((r: Record<string, string>) => ({
       title: r.title ?? '', url: r.link ?? '', description: r.snippet ?? '',
     }));
   } catch {
-    return [];
+    return null;
   }
 }
 
-async function serperImageSearch(query: string, count: number, deps: SearchDeps): Promise<ImageSearchResult[]> {
+async function serperImageSearch(query: string, count: number, deps: SearchDeps): Promise<ImageSearchResult[] | null> {
   const key = getSerperKey();
-  if (!key) return [];
+  if (!key) return null;
   try {
     const res = await deps.fetch('https://google.serper.dev/images', {
       method: 'POST',
@@ -66,7 +67,7 @@ async function serperImageSearch(query: string, count: number, deps: SearchDeps)
     });
     if (!res.ok) {
       console.error(`Serper image search failed (${res.status}): ${query}`);
-      return [];
+      return null;
     }
     const data = await res.json();
     return (data.images ?? []).map((r: Record<string, string>) => ({
@@ -76,7 +77,7 @@ async function serperImageSearch(query: string, count: number, deps: SearchDeps)
       title: r.title ?? '',
     })).filter((r: ImageSearchResult) => r.thumbnailUrl);
   } catch {
-    return [];
+    return null;
   }
 }
 
@@ -130,16 +131,20 @@ async function braveImageSearch(query: string, count: number, deps: SearchDeps):
  * and "fewer than two reviews" for every candidate in the run, and eight
  * weeks of that auto-rejects real shoes. A thrown error lands in `errored`.
  */
-async function withFallback<T>(brave: () => Promise<T[]>, serper: () => Promise<T[]>): Promise<T[]> {
+async function withFallback<T>(brave: () => Promise<T[]>, serper: () => Promise<T[] | null>): Promise<T[]> {
   let results: T[];
   try {
     results = await brave();
   } catch (err) {
-    if (err instanceof BraveError && getSerperKey()) return serper();
+    // A dead Serper key must not turn Brave's 429 into "no results" (27 Sep 2026: SERPER_API_KEY 400s on every call).
+    if (err instanceof BraveError) {
+      const fallback = await serper();
+      if (fallback) return fallback;
+    }
     throw err;
   }
   if (results.length > 0) return results;
-  return serper();
+  return (await serper()) ?? [];
 }
 
 export async function webSearch(query: string, count = 8, deps: SearchDeps = liveDeps): Promise<SearchResult[]> {

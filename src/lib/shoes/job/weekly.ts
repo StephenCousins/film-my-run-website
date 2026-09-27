@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db';
 import type { CandidateStatus, Prisma } from '@prisma/client';
-import { loadBrands, resetBrandCache, type Brand } from '../brands';
+import { loadBrands, resetBrandCache, resolveBrand, type Brand } from '../brands';
 import { discover, liveDiscoverDeps, type DiscoverReport } from '../discovery';
 import { evaluate, type CandidateInput, type GateHold, type GatePass } from '../publish/gate';
 import { findBrandProductPage, type BrandPage } from '../publish/brandPage';
@@ -130,16 +130,18 @@ export function liveDeps(dryRun: boolean): WeeklyDeps {
   return {
     discover: () => discover(dryRun ? { ...liveDiscoverDeps, upsertCandidate: noop } : liveDiscoverDeps),
     listCandidates: async statuses => {
-      const brands = new Map((await loadBrands()).map(b => [b.id, b]));
+      const all = await loadBrands();
+      const brands = new Map(all.map(b => [b.id, b]));
       const rows = await prisma.shoe_candidates.findMany({
         where: { status: { in: statuses } },
         orderBy: { first_seen_at: 'asc' },
-        select: { id: true, slug: true, brand_id: true, model_text: true, evidence: true },
+        select: { id: true, slug: true, brand_id: true, brand_text: true, model_text: true, evidence: true },
       });
       return rows.map(r => ({
         id: r.id,
         slug: r.slug,
-        brand: (r.brand_id !== null && brands.get(r.brand_id)) || null,
+        // A brand added after the candidate was held as brand_unresolved counts from the next run.
+        brand: (r.brand_id !== null && brands.get(r.brand_id)) || resolveBrand(r.brand_text, all),
         model: r.model_text,
         evidence: { sources: (r.evidence as { sources?: CandidateInput['evidence']['sources'] } | null)?.sources ?? [] },
       }));
@@ -257,9 +259,15 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
     discovered: 0, nominations: { feeds: 0, shops: 0, versionBumps: 0 }, published: [], publishedWithoutImage: [], linkedExisting: [], held: [], errored: [],
     rejectedStale: 0, reviewsRefreshed: 0, imagesStored: [], imagesCleared: [], feedsEmpty: [], storesEmpty: [], durationMs: 0, dryRun,
   };
+  // An exhausted search quota fails every item that needs a search; one line naming them beats seventeen.
+  let quotaHit: { entry: { slug: string; error: string }; slugs: string[]; status: string } | null = null;
   const fail = (slug: string, err: unknown) => {
     console.error(err);
-    report.errored.push({ slug, error: errorMessage(err) });
+    const error = errorMessage(err);
+    if (!/^search:(401|402|429)$/.test(error)) { report.errored.push({ slug, error }); return; }
+    if (!quotaHit) { quotaHit = { entry: { slug: 'search', error: '' }, slugs: [], status: error }; report.errored.push(quotaHit.entry); }
+    quotaHit.slugs.push(slug);
+    quotaHit.entry.error = `search quota exhausted (${quotaHit.status}); ${quotaHit.slugs.length} skipped until it resets: ${quotaHit.slugs.join(', ')}`;
   };
 
   // A brand or alias added to shoe_brands since the process started must count on this run.
@@ -273,7 +281,7 @@ export async function runWeekly(opts: WeeklyOpts = {}, injected?: WeeklyDeps): P
     report.storesEmpty = d.storesEmpty;
     deps.log(`discovery: ${d.nominations} nominations (feeds ${d.feeds}, shops ${d.shops}, version bumps ${d.versionBumps}), ${d.candidatesUpserted} candidates upserted, ${d.alreadyKnown} already known`);
     // Every nomination was thrown away; that is a failed run, not a quiet week.
-    if (d.normaliseFailed) report.errored.push({ slug: 'discover', error: `LLM normalise output was unparseable; ${d.nominations} nominations dropped` });
+    if (d.normaliseFailed) report.errored.push({ slug: 'discover', error: `LLM normalise output was unparseable; ${d.normaliseDropped} of ${d.nominations} nominations dropped` });
   } catch (err) {
     fail('discover', err);
   }

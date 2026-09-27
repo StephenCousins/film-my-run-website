@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { webSearch } from './search';
+import { webSearch, imageSearch } from './search';
 
 type Call = { url: string; init?: RequestInit };
 
@@ -44,6 +44,14 @@ describe('webSearch', () => {
     const { fetch, calls } = fakeFetch({ brave: { status: 429 }, serper: { status: 200, body: serperBody } });
     expect(await webSearch('x', 8, { fetch })).toEqual([{ title: 'Clifton 10 (google)', url: 'https://www.hoka.com/clifton-10', description: 's' }]);
     expect(calls.map(c => new URL(c.url).hostname)).toEqual(['api.search.brave.com', 'google.serper.dev']);
+  });
+  it('rethrows the Brave error when the Serper fallback fails too (a dead key must not read as "no results")', async () => {
+    process.env.SERPER_API_KEY = 'serper';
+    const err = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { fetch } = fakeFetch({ brave: { status: 429 }, serper: { status: 400 } });
+    await expect(webSearch('x', 8, { fetch })).rejects.toThrow('search:429');
+    await expect(imageSearch('x', 8, { fetch })).rejects.toThrow('search:429');
+    err.mockRestore();
   });
   it('falls back to Serper on zero Brave results, and returns [] when there is no Serper key', async () => {
     process.env.SERPER_API_KEY = 'serper';
