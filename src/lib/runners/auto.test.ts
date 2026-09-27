@@ -21,6 +21,7 @@ function deps(over: object = {}) {
     write: vi.fn(async () => ({ bio, costUsd: 0.05 })),
     check: vi.fn(async () => ({ unsupported: [] as string[], costUsd: 0.03 })),
     edit: vi.fn(async (_f: RunnerFile, b: string[]) => ({ bio: b, costUsd: 0.02 })),
+    checkPhoto: vi.fn(async () => true),
     save: vi.fn(async (f: RunnerFile) => ({ slug: f.slug })),
     ...over,
   };
@@ -44,6 +45,21 @@ describe('automatic runner pages', () => {
     await autoProfiles(['Jasmin Paris'], 10, d);
     const saved = d.save.mock.calls[0][0] as RunnerFile;
     expect(saved.photos).toEqual([{ kind: 'portrait', url: 'https://img.utmb.world/image/upload/q_auto/f_jpg/c_limit,w_1600/v1/worldseries/Members/x', credit: 'Photo: UTMB profile', licence: null, source_url: 'https://utmb.world/en/runner/1.x' }]);
+  });
+  it('the photo check says no: not used as a portrait, no photo saved', async () => {
+    const gather = vi.fn(async () => file('Jasmin Paris', 'https://img.utmb.world/x'));
+    const d = deps({ gather, checkPhoto: vi.fn(async () => false) });
+    await autoProfiles(['Jasmin Paris'], 10, d);
+    const saved = d.save.mock.calls[0][0] as RunnerFile;
+    expect(saved.photos).toEqual([]);
+  });
+  it('the photo check throws: treated as no, not a pass', async () => {
+    const gather = vi.fn(async () => file('Jasmin Paris', 'https://img.utmb.world/x'));
+    const d = deps({ gather, checkPhoto: vi.fn(async () => { throw new Error('502'); }) });
+    const out = await autoProfiles(['Jasmin Paris'], 10, d);
+    const saved = d.save.mock.calls[0][0] as RunnerFile;
+    expect(saved.photos).toEqual([]);
+    expect(out.log).toEqual([{ name: 'Jasmin Paris', slug: 'jasmin-paris' }]); // a broken photo check doesn't fail the whole page
   });
   it('no results anywhere: no page, with the reason', async () => {
     const out = await autoProfiles(['Nobody Found'], 10, deps());

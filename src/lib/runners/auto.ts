@@ -5,6 +5,7 @@ import { UNVERIFIED_NOTE } from '@/lib/news/write';
 import { profileProblems } from './checks';
 import { gatherRunner } from './gather';
 import { loadNameIndex } from './names';
+import { isPersonPhoto } from './photo-check';
 import { saveRunner } from './save';
 import type { BestFinish, RunnerFile } from './types';
 import { checkProfile, editProfile, writeProfile } from './write';
@@ -49,6 +50,8 @@ export interface AutoDeps {
   write: typeof writeProfile;
   check: typeof checkProfile;
   edit: typeof editProfile;
+  /** Cheap vision check that a UTMB picture actually shows a person, before it's used as a portrait. */
+  checkPhoto: (url: string) => Promise<boolean>;
   save: (f: RunnerFile) => Promise<{ slug: string }>;
   /** Wall-clock budget for starting new names, ms; default 8 minutes (like refresh.ts). */
   deadlineMs?: number;
@@ -81,6 +84,7 @@ const liveDeps: AutoDeps = {
   write: (f) => writeProfile(f),
   check: (f, b) => checkProfile(f, b),
   edit: (f, b, fix) => editProfile(f, b, fix),
+  checkPhoto: (url) => isPersonPhoto(url),
   // A photo that won't download must not cost the runner their page: save without it.
   save: (f) => saveRunner(f, 'auto').catch(() => saveRunner({ ...f, photos: [] }, 'auto')),
 };
@@ -95,7 +99,8 @@ const norm = (s: string) => s.trim().replace(/\s+/g, ' ').replace(/[‘’]/g, "
  * in a news story has a page by the next morning"). Same fact rules as a story:
  * edits for what the checker can't find, an asterisk in the last round, never
  * held. Auto pages use the runner's UTMB profile picture as a portrait when
- * they have one, otherwise no photo until a session picks one.
+ * they have one and a cheap vision check confirms it shows a person,
+ * otherwise no photo until a session picks one.
  *
  * Guards on top of the fact rules: never overwrite an existing page (slugTaken,
  * checked after gather resolves the canonical name/slug); the day cap counts every
@@ -140,8 +145,12 @@ export async function autoProfiles(names: string[], budgetUsd: number, deps: Aut
       if (!w.bio) { log.push({ name, reason: 'the writer returned nothing' }); continue; }
       let bio = tidy(w.bio);
       const texts = f.texts.map((t) => t.text);
-      const photos: RunnerFile['photos'] = f.utmb?.picture
-        ? [{ kind: 'portrait', url: f.utmb.picture, credit: 'Photo: UTMB profile', licence: null, source_url: `https://utmb.world/en/runner/${f.utmb.uri}` }]
+      // Only used once a cheap vision check confirms it's actually a photo of a person
+      // (a human writer found one UTMB picture that was a dog).
+      const picture = f.utmb?.picture;
+      const photoOk = !!picture && (await deps.checkPhoto(picture).catch(() => false));
+      const photos: RunnerFile['photos'] = photoOk
+        ? [{ kind: 'portrait', url: picture!, credit: 'Photo: UTMB profile', licence: null, source_url: `https://utmb.world/en/runner/${f.utmb!.uri}` }]
         : [];
       const file = (b: string[]): RunnerFile => ({ ...f, bio: b, bestFinishes: topFinishes(f.results), photos, sources: f.texts.map((t) => t.source) });
       let reason: string | null = null;
