@@ -24,7 +24,7 @@ export interface RunnerSource {
 }
 
 /** A photographer or agency whose images are never used (spec: automated invoices). */
-export const AGENCY_CREDITS = /\b(getty|afp|reuters|associated press|ap photo|\bap\b|pa images|pa wire|press association|shutterstock|alamy)\b/i;
+export const AGENCY_CREDITS = /\b(getty|afp|reuters|associated press|ap photo|\bap\b|pa images|pa wire|press association|\bpa\b|shutterstock|alamy)\b/i;
 
 /** Everything gathered on one runner: the work file a session (or auto.ts) writes a bio from. */
 export interface RunnerFile {

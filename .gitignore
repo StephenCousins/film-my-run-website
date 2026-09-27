@@ -57,3 +57,6 @@ news-dry-run/
 
 # Sorter check cache (regenerable; costs money to rebuild)
 docs/news/.sorter-cache.json
+
+# Runner profile gather output (local working files, not committed)
+runners-work/

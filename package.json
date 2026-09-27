@@ -26,7 +26,10 @@
     "news:daily": "tsx --tsconfig tsconfig.json scripts/news-daily.ts",
     "news:publish": "tsx --tsconfig tsconfig.json scripts/news-publish.ts",
     "news:unimage": "tsx --tsconfig tsconfig.json scripts/news-unimage.ts",
-    "news:story": "tsx --tsconfig tsconfig.json scripts/news-story.ts"
+    "news:story": "tsx --tsconfig tsconfig.json scripts/news-story.ts",
+    "runners:gather": "tsx --tsconfig tsconfig.json scripts/runners-gather.ts",
+    "runners:save": "tsx --tsconfig tsconfig.json scripts/runners-save.ts",
+    "runners:photo": "tsx --tsconfig tsconfig.json scripts/runners-photo.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.77.0",
