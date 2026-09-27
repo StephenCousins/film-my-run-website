@@ -9,6 +9,7 @@ import { isStale, pickBundles, slugBase, STORY_ESTIMATE_USD, uniqueSlug, withinC
 import { nearCopyPhrases, ruleProblems, tidyPunctuation } from './rules';
 import { moreCoverage } from './search';
 import { runnerCandidates, RUNNER_FILE_SOURCE } from '@/lib/runners/runner-file';
+import { autoProfiles } from '@/lib/runners/auto';
 import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
 import { checkFacts, writeStory, editStory, type Fix } from './write';
@@ -26,6 +27,8 @@ export interface RunDeps {
   more: (b: Bundle, now: Date) => Promise<{ items: Candidate[]; costUsd: number }>;
   /** Our runner files for the runners a bundle names (a source for writer and checker). */
   runnerFiles: (b: Bundle) => Promise<Candidate[]>;
+  /** Runner pages for the people new stories name (runners/auto.ts). */
+  autoProfiles: (names: string[], budgetUsd: number) => Promise<{ log: RunLog['profiles']; costUsd: number }>;
   check: (d: Draft, b: Bundle) => ReturnType<typeof checkFacts>;
   image: typeof storyImage;
   publish: (s: StoryToPublish) => Promise<void>;
@@ -65,6 +68,7 @@ const liveDeps: RunDeps = {
   edit: (d, b, fix) => editStory(d, b, fix),
   more: (b, now) => moreCoverage(b, now),
   runnerFiles: (b) => runnerCandidates(b),
+  autoProfiles: (names, budget) => autoProfiles(names, budget),
   check: (d, b) => checkFacts(d, b),
   image: storyImage,
   publish: async (s) => { await saveStory(s, 'published', null); },
@@ -168,6 +172,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
   const taken = await d.takenSlugs();
   const recentSlugs = await d.recentSlugs(now);
   const monthBefore = await d.monthSpentUsd(now);
+  const people: string[] = [];
   for (const b of picked) {
     if (log.stoppedByCeiling || !withinCeiling(monthBefore + log.costUsd, STORY_ESTIMATE_USD)) {
       log.stoppedByCeiling = true;
@@ -258,10 +263,19 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       if (!dryRun) await d.publish(story);
       await save(`${slug}.json`, story);
       log.published.push({ slug, title: story.title });
+      people.push(...(story.people ?? []));
     } catch (e) {
       log.notPublished.push({ headline: b.headline, reason: `error: ${errorText(e)}` });
     }
   }
+  // Pages for the runners today's stories are about who have none yet. Never on a dry run.
+  if (!dryRun && people.length) {
+    const budget = NEWS_CONFIG.monthlyCeilingGbp * NEWS_CONFIG.usdPerGbp - (monthBefore + log.costUsd);
+    const p = await d.autoProfiles(people, budget).catch((e) => ({ log: [{ name: people.join(', '), reason: `error: ${errorText(e)}` }], costUsd: 0 }));
+    log.profiles.push(...p.log);
+    log.costUsd += p.costUsd;
+  }
+
   await save('log.json', log);
   return log;
 }
