@@ -96,7 +96,7 @@ export async function utmbRunner(uri: string, get: Getter = httpGet): Promise<Ut
 const plain = (s: string) => s.normalize('NFD').replace(/\p{M}/gu, '').toLowerCase().replace(/\s+/g, ' ').trim();
 
 /** A blocked/rate-limited reply (Cloudflare challenge page, etc.) is a 200 that isn't JSON; fail soft rather than throw. */
-function parseJson(body: string): unknown {
+export function parseJson(body: string): unknown {
   try {
     return JSON.parse(body);
   } catch {

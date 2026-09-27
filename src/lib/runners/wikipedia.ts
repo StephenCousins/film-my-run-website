@@ -1,19 +1,10 @@
 import type { RunnerPhoto } from './types';
-import { httpGet, type Getter } from './utmb';
+import { httpGet, parseJson, type Getter } from './utmb';
 
 const WIKI = 'https://en.wikipedia.org';
 const COMMONS = 'https://commons.wikimedia.org';
 
 const stripTags = (s: string) => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
-
-/** A blocked/rate-limited reply (Cloudflare challenge page, etc.) is a 200 that isn't JSON; fail soft rather than throw. */
-function parseJson(body: string): unknown {
-  try {
-    return JSON.parse(body);
-  } catch {
-    return null;
-  }
-}
 
 /** A Commons file's author and licence, or null when either can't be read. */
 export async function commonsLicence(fileTitle: string, get: Getter = httpGet): Promise<{ credit: string; licence: string | null } | null> {
