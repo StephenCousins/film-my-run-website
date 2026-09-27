@@ -14,7 +14,9 @@
 //                                   Skips shoes already on R2 unless --force. Resume with --from-slug.
 //                                   --clear-hotlinks nulls the image fields of every shoe still on a
 //                                   non-R2 URL afterwards; without it the count and the command are printed.
-//   run-weekly [--dry-run]          Run the weekly job in-process and print its report as JSON.
+//   run-weekly [--dry-run] [--max-publish N]
+//                                   Run the weekly job in-process and print its report as JSON.
+//                                   --max-publish lifts the 10-a-week cap for a one-off backlog run.
 //   candidates [--status held|pending|rejected|published]
 //                                   List discovered candidates with their hold reasons.
 //   audit-images                    HEAD every stored image and clear the ones that are gone.
@@ -50,7 +52,7 @@ const USAGE = `Usage: npm run shoes -- <command> [flags]
   enrich --slug S
   image --slug S [--force]
   backfill-images [--limit N] [--from-slug S] [--force] [--clear-hotlinks]
-  run-weekly [--dry-run]
+  run-weekly [--dry-run] [--max-publish N]
   candidates [--status held|pending|rejected|published]
   audit-images
   add --brand "X" --model "Y" [--lift-no-brand-page] [--terrain road|trail|both] [--category C]
@@ -348,6 +350,7 @@ async function main(argv: string[]): Promise<void> {
       'from-slug': { type: 'string' },
       'clear-hotlinks': { type: 'boolean', default: false },
       'dry-run': { type: 'boolean', default: false },
+      'max-publish': { type: 'string' },
       status: { type: 'string' },
       brand: { type: 'string' },
       model: { type: 'string' },
@@ -367,7 +370,7 @@ async function main(argv: string[]): Promise<void> {
     case 'image': return image(requireSlug(values), values.force, values['from-url'], values.page);
     case 'backfill-images': return backfillImages({ limit: parseLimit(values.limit), fromSlug: values['from-slug'], force: values.force, clearHotlinks: values['clear-hotlinks'] });
     case 'run-weekly': {
-      const report = await runWeekly({ dryRun: values['dry-run'] });
+      const report = await runWeekly({ dryRun: values['dry-run'], maxPublish: parseLimit(values['max-publish']) });
       console.log(JSON.stringify(report, null, 2));
       if (report.errored.length > 0) process.exitCode = 1;
       return;
