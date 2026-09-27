@@ -94,7 +94,7 @@ not license the photo, and a profile page has no news-reporting defence.
   (PicRights, Pixsy). `runners:save` rejects a credit that names one of them.
 - A free-licence Wikimedia Commons photo, or one of Stephen's own, is preferred
   whenever it is as good.
-- Every photo records `photo_source_url`, credit and (where known) licence, so a
+- Every photo records its `source_url`, credit and (where known) licence, so a
   takedown or invoice is answered in minutes: that photo is removed and the
   branded card takes its place (`npm run runners:photo -- <slug> --remove
   portrait|action`).
@@ -102,6 +102,8 @@ not license the photo, and a profile page has no news-reporting defence.
   change a photo" note with the contact address.
 - A runner with no usable photo gets a branded Film My Run card showing their
   name, flag and UTMB index.
+- Pages written automatically (see "Writing") start with the card; their photos
+  are picked in the next session, where the choice can be looked at.
 - Photos are copied to R2 under `runners/`, never hotlinked.
 
 ## Pages
