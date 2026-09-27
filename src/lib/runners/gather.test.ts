@@ -44,4 +44,13 @@ describe('gathering a runner', () => {
     expect(f).not.toBeNull();
     expect(f!.texts.map((t) => t.source.name)).toEqual(['Wikipedia']);
   });
+
+  it('a politician whose article mentions his running mate and a film trailer, never running itself, is rejected', async () => {
+    const text = 'John Smith is a British politician who served as a running mate in the general election. He also appeared briefly in a film trailer for a campaign advert. '.repeat(10);
+    const f = await gatherRunner({ name: 'John Smith' }, {
+      get: get({ 'search=': noUtmb, '/api/rest_v1/page/summary/': wikiSummary('John Smith'), 'action=query': wikiExtract(text) }),
+      ourStories: none,
+    });
+    expect(f).toBeNull();
+  });
 });

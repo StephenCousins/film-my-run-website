@@ -17,8 +17,13 @@ export const PROFILE_RUN_BUDGET_USD = 1.0;
 
 type Entry = { name: string; slug?: string; reason?: string };
 
-/** Reasons that don't mean the name is a dud: a limit, not a fact or a rule problem. Never held against it later. */
-const NOT_A_FAILURE = /^(over the \d+-a-day limit|monthly ceiling|out of time|already has a page)$/;
+/**
+ * Reasons that don't mean the name is a dud: a limit or a this-run-only skip, not a fact or
+ * a rule problem. Never held against it later — "failed recently" and the same-run duplicate
+ * are themselves in this list, or a runner often in the news would never clear its own
+ * 14-day window: every skip would relog as a fresh failure and push the window out again.
+ */
+const NOT_A_FAILURE = /^(over the \d+-a-day limit|monthly ceiling|out of time|already has a page|failed recently|same person, already handled this run)$/;
 
 export interface AutoDeps {
   known: () => Promise<Set<string>>;
@@ -39,6 +44,18 @@ export interface AutoDeps {
   clock?: () => number;
 }
 
+/** Pure, so it can be tested without a database: the names that failed for a real reason (not a limit or a this-run-only skip) across several runs' profile logs. */
+export function recentFailureNames(profileLogs: Entry[][]): Set<string> {
+  const names = new Set<string>();
+  for (const profiles of profileLogs) {
+    for (const p of profiles) {
+      if (p.slug || !p.reason || NOT_A_FAILURE.test(p.reason)) continue;
+      names.add(p.name);
+    }
+  }
+  return names;
+}
+
 const liveDeps: AutoDeps = {
   known: async () => new Set((await loadNameIndex()).keys()),
   slugTaken: async (slug) => (await prisma.runners.findUnique({ where: { slug }, select: { slug: true } })) !== null,
@@ -46,15 +63,7 @@ const liveDeps: AutoDeps = {
   recentFailures: async () => {
     const since = new Date(Date.now() - 14 * 86_400_000);
     const rows = await prisma.news_runs.findMany({ where: { started_at: { gte: since } }, select: { summary: true } });
-    const names = new Set<string>();
-    for (const r of rows) {
-      const profiles = (r.summary as { profiles?: Entry[] } | null)?.profiles ?? [];
-      for (const p of profiles) {
-        if (p.slug || !p.reason || NOT_A_FAILURE.test(p.reason)) continue;
-        names.add(p.name);
-      }
-    }
-    return names;
+    return recentFailureNames(rows.map((r) => (r.summary as { profiles?: Entry[] } | null)?.profiles ?? []));
   },
   gather: (name) => gatherRunner({ name }),
   write: (f) => writeProfile(f),

@@ -10,6 +10,8 @@ export interface GatherDeps {
   ourStories: (name: string) => Promise<{ title: string; url: string; text: string }[]>;
 }
 
+const RUNNING_WORDS = /\b(runner|runners|running|ran|marathons?|ultramarathons?|ultra-trail|ultrarunning|ultrarunner|athlete|athletics|trail running|track and field|middle-distance|long-distance|mile)\b/i;
+
 const liveDeps: GatherDeps = {
   get: httpGet,
   ourStories: async (name) => {
@@ -30,8 +32,10 @@ export async function gatherRunner(input: { name?: string; utmbUri?: string; era
   if (!name) return null;
   const wikiPage = await wikipediaArticle(name, deps.get);
   // Only use it if it's actually about running: a same-named actor, politician etc. would
-  // otherwise pass straight through as a source.
-  const wiki = wikiPage && /\b(run|runner|marathon|ultra|athlet|trail|track|mile)/i.test(wikiPage.text.slice(0, 2000)) ? wikiPage : null;
+  // otherwise pass straight through as a source. Whole words only, so "trailer", "track
+  // record", "ultrasound" and "Milestone" don't count; "running mate" is stripped first so
+  // a politician's own running mate doesn't count as the article being about running.
+  const wiki = wikiPage && RUNNING_WORDS.test(wikiPage.text.slice(0, 2000).replace(/running mate/gi, '')) ? wikiPage : null;
   if (!utmb && !wiki) return null;
 
   const texts: RunnerFile['texts'] = [];

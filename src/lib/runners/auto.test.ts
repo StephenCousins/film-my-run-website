@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
-import { autoProfiles } from './auto';
+import { autoProfiles, recentFailureNames } from './auto';
 import type { RunnerFile } from './types';
 import { UNVERIFIED_NOTE } from '@/lib/news/write';
 
@@ -131,5 +131,13 @@ describe('automatic runner pages', () => {
     const out = await autoProfiles(['Jasmin Paris'], 10, d);
     expect(out.log).toEqual([{ name: 'Jasmin Paris', reason: 'failed recently' }]);
     expect(d.gather).not.toHaveBeenCalled();
+  });
+
+  it('"failed recently" and a same-run duplicate are not themselves failures: a name whose only recent log entries are those gets attempted', () => {
+    const names = recentFailureNames([
+      [{ name: 'Jasmin Paris', reason: 'failed recently' }],
+      [{ name: 'Jasmin Paris', reason: 'same person, already handled this run' }],
+    ]);
+    expect(names.has('Jasmin Paris')).toBe(false);
   });
 });
