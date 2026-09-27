@@ -192,6 +192,14 @@ const RSS_FEEDS: Array<{
     category: 'running',
     filterMode: 'none',
   },
+  // Reference only (Stephen, 27 Sep 2026): Derek Murphy's cheating investigations. Its posts can
+  // back up a story other sites report, never lead one (NEWS_CONFIG.referenceOnlySources).
+  {
+    name: 'Marathon Investigation',
+    url: 'https://www.marathoninvestigation.com/feed',
+    category: 'running',
+    filterMode: 'none',
+  },
   // Athletics (keyword-filtered — BBC's feed is broad)
   {
     name: 'BBC Sport',

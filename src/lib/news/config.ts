@@ -9,4 +9,8 @@ export const NEWS_CONFIG = {
   imageHeight: 675,
   minSourceImageWidth: 800,
   nearCopyWords: 10,
+  /** Rounds of edits a draft gets to pass the checks before it is not published (never held, Stephen 27 Sep). */
+  fixRounds: 3,
+  /** Feeds that can back up a story but never lead one. */
+  referenceOnlySources: ['Marathon Investigation'] as readonly string[],
 } as const;

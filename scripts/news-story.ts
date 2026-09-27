@@ -26,7 +26,7 @@ const urls = args.filter((a, i) => /^https?:\/\//.test(a) && !['--note', '--head
   const log = await runNews({ now, dryRun, outDir, maxStories: 1, deps: storyDeps(candidates, { note, headline }) });
   await prisma.news_runs.create({ data: { dry_run: dryRun, cost_usd: log.costUsd, summary: { ...log, onDemand: urls } as never } });
   for (const p of log.published) console.log(dryRun ? `WOULD PUBLISH: ${p.title} (draft in ${outDir})` : `PUBLISHED: https://filmmyrun.com/news/${p.slug}`);
-  for (const h of log.held) console.log(`HELD: ${h.headline}: ${h.reason}${h.storyId ? ` (publish anyway: npm run news:publish ${h.storyId})` : ''}`);
+  for (const h of log.notPublished) console.log(`NOT PUBLISHED: ${h.headline}: ${h.reason}`);
   for (const s of log.skipped) console.log(`NOT WRITTEN: ${s.headline}: ${s.reason}`);
   console.log(`Cost: $${log.costUsd.toFixed(3)}`);
   await prisma.$disconnect();

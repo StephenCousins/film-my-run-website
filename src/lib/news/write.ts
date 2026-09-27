@@ -33,6 +33,8 @@ export async function writeStory(b: Bundle, now: Date, call: typeof completeJson
 
 Today is ${now.toISOString().slice(0, 10)}. First decide: is this genuinely running NEWS from the last 14 days (something that happened, not a preview, review, training piece or opinion)? If not, set isNews false, give the reason, and leave the other fields empty.
 
+Also not for us: a story that accuses a named private individual (not a professional or elite athlete) of cheating when no race or governing body has acted on it. A disqualification or ban by a race, federation or the AIU is fine; say who took the action.
+
 If it is: write one story about this event: ${b.headline}. (That label is our desk's, not a source's: take every name and its spelling from the sources.) Combine every source that reports it. Add nothing from your own knowledge, however well known (where a route runs, a runner's past results): only what the sources say. If a source is about a different race or incident, leave it out entirely: one event per story.
 - When British athletes or UK races feature (a British record, a British medal, a UK race), say so early.
 - title: specific, not clickbait, no colon-subtitle.
@@ -66,4 +68,44 @@ ${sourcesBlock(b)}`;
   const u = r.data?.unsupported;
   const unsupported = Array.isArray(u) && u.every((x) => typeof x === 'string') ? u : ['checker reply unreadable'];
   return { ok: unsupported.length === 0, unsupported, costUsd: r.costUsd };
+}
+
+/** What an edit must put right. */
+export interface Fix { problems?: string[]; phrases?: string[]; unsupported?: string[]; mark?: string[] }
+
+/** Ends a story that keeps facts nobody could confirm (Stephen, 27 Sep 2026). */
+export const UNVERIFIED_NOTE = '* Film My Run could not verify this information.';
+
+/**
+ * Put a draft right without rewriting it: Opus changes only what the checks
+ * flagged (a rule broken, a phrase too close to a source, a fact the checker
+ * could not find) and leaves the rest of the story as it is. Up to
+ * NEWS_CONFIG.fixRounds of these before a story is not published; it replaced
+ * holding stories for Stephen to review (27 Sep 2026).
+ */
+export async function editStory(d: Draft, b: Bundle, fix: Fix, call: typeof completeJson = completeJson) {
+  const asks = [
+    ...(fix.problems ?? []).map((p) => `- Fix: ${p} (3 to 6 paragraphs, no em dashes, no semicolons, a title and a one-sentence excerpt).`),
+    ...(fix.phrases ?? []).map((p) => `- Too close to a source's wording; say it in new words: "${p}"`),
+    ...(fix.unsupported ?? []).map((u) => `- Not found in any source; remove it, or state it exactly as a source does: ${u}`),
+    ...(fix.mark ?? []).map((m) => `- Could not be verified; keep it only if the story needs it, with an asterisk (*) straight after it: ${m}`),
+  ].join('\n');
+  const prompt = `${VOICE}
+
+You wrote this news story. Edit it so every point below is put right. Change nothing else: keep the structure, the facts that are fine and the voice. Only facts from the sources below.
+
+${asks}
+
+STORY (JSON):
+${JSON.stringify(d)}
+
+${sourcesBlock(b)}`;
+  const r = await call<{ isNews: boolean; reason: string; title: string; excerpt: string; paragraphs: string[] }>({ model: WRITE_MODEL, prompt, maxTokens: 3000, temperature: 0.3, schemaName: 'story', schema: DRAFT_SCHEMA });
+  const x = r.data;
+  const ok = x && typeof x.title === 'string' && typeof x.excerpt === 'string' && Array.isArray(x.paragraphs) && x.paragraphs.every((p) => typeof p === 'string');
+  if (!ok) return { draft: null, costUsd: r.costUsd };
+  const paragraphs = x.paragraphs.filter((p) => p.trim() !== UNVERIFIED_NOTE);
+  // Any asterisk left in the story gets the note as its last line.
+  if (paragraphs.some((p) => p.includes('*'))) paragraphs.push(UNVERIFIED_NOTE);
+  return { draft: { title: x.title, excerpt: x.excerpt, paragraphs } as Draft, costUsd: r.costUsd };
 }

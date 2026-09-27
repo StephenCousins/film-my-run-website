@@ -21,16 +21,16 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
   const log = await runNews({ now: new Date(), dryRun, outDir, maxStories });
   await prisma.news_runs.create({ data: { dry_run: dryRun, cost_usd: log.costUsd, summary: log as never } });
   const text = [
-    `${dryRun ? `DRY RUN (stories in ${outDir}). ` : ''}${log.published.length} published, ${log.held.length} held, ${log.itemsSeen} items seen, $${log.costUsd.toFixed(3)}.`,
+    `${dryRun ? `DRY RUN (stories in ${outDir}). ` : ''}${log.published.length} published, ${log.notPublished.length} not published, ${log.itemsSeen} items seen, $${log.costUsd.toFixed(3)}.`,
     log.stoppedByCeiling ? `Stopped at the £${NEWS_CONFIG.monthlyCeilingGbp} monthly ceiling.` : '',
     ...log.published.map((p) => dryRun ? `Would publish: ${p.title}` : `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
-    ...log.held.map((h) => `Held: ${h.headline} (${h.reason})${h.storyId ? `; publish by hand with npm run news:publish ${h.storyId}` : ''}`),
+    ...log.notPublished.map((h) => `Not published: ${h.headline} (${h.reason})`),
     ...log.skipped.map((s) => `Not written: ${s.headline} (${s.reason})`),
     ...log.ungrouped.map((u) => `Passed the sort but in no group (retried tomorrow): ${u.title} ${u.url}`),
     ...log.borderline.map((b) => `Borderline (${b.confidence.toFixed(2)}): ${b.url}`),
   ].filter(Boolean).join('\n');
   console.log(text);
-  await report(`Film My Run news${dryRun ? ' (dry run)' : ''}: ${log.published.length} ${dryRun ? 'would publish' : 'published'}, ${log.held.length} held`, text);
+  await report(`Film My Run news${dryRun ? ' (dry run)' : ''}: ${log.published.length} ${dryRun ? 'would publish' : 'published'}, ${log.notPublished.length} not published`, text);
   await prisma.$disconnect();
   // Something (an HTTP keep-alive pool) holds the event loop open after the work is done;
   // the first run sat idle until the workflow's 30-minute timeout. Done is done.

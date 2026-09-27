@@ -6,11 +6,11 @@ import { gatherCandidates } from './gather';
 import { bundleImportance, groupItems } from './group';
 import { storyImage } from './image';
 import { pickBundles, slugBase, STORY_ESTIMATE_USD, uniqueSlug, withinCeiling } from './plan';
-import { nearCopyPhrases, ruleProblems } from './rules';
+import { nearCopyPhrases, ruleProblems, tidyPunctuation } from './rules';
 import { moreCoverage } from './search';
 import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
-import { checkFacts, writeStory } from './write';
+import { checkFacts, writeStory, editStory, type Fix } from './write';
 
 type Seen = { c: Candidate; v: Verdict | null; bundleKey?: string };
 
@@ -19,6 +19,8 @@ export interface RunDeps {
   sort: (c: Candidate) => ReturnType<typeof sortItem>;
   group: (items: { c: Candidate; v: Verdict }[], recent: string[]) => ReturnType<typeof groupItems>;
   write: (b: Bundle, now: Date, avoid?: string[], unsupported?: string[]) => ReturnType<typeof writeStory>;
+  /** Puts right only what the checks flagged (editStory). */
+  edit: (d: Draft, b: Bundle, fix: Fix) => Promise<{ draft: Draft | null; costUsd: number }>;
   /** Other sites' reports of the event, when its own source can't be read or stands alone. */
   more: (b: Bundle, now: Date) => Promise<{ items: Candidate[]; costUsd: number }>;
   check: (d: Draft, b: Bundle) => ReturnType<typeof checkFacts>;
@@ -57,6 +59,7 @@ const liveDeps: RunDeps = {
   sort: (c) => sortItem(c),
   group: (items, recent) => groupItems(items, recent),
   write: (b, now, avoid, unsupported) => writeStory(b, now, undefined, avoid, unsupported),
+  edit: (d, b, fix) => editStory(d, b, fix),
   more: (b, now) => moreCoverage(b, now),
   check: (d, b) => checkFacts(d, b),
   image: storyImage,
@@ -102,7 +105,7 @@ export class NewsRunError extends Error {
 type RunOpts = { now: Date; dryRun: boolean; outDir?: string; deps?: Partial<RunDeps>; maxStories?: number };
 
 export async function runNews(opts: RunOpts): Promise<RunLog> {
-  const log: RunLog = { dryRun: opts.dryRun, itemsSeen: 0, sortedOut: [], borderline: [], ungrouped: [], skipped: [], held: [], published: [], costUsd: 0, stoppedByCeiling: false };
+  const log: RunLog = { dryRun: opts.dryRun, itemsSeen: 0, sortedOut: [], borderline: [], ungrouped: [], skipped: [], notPublished: [], published: [], costUsd: 0, stoppedByCeiling: false };
   try {
     return await run(log, opts);
   } catch (e) {
@@ -135,8 +138,14 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
   const inBundle = new Set(grouped.bundles.flatMap((b) => b.items.map((i) => i.articleId)));
   for (const { c } of passed) if (!inBundle.has(c.articleId)) log.ungrouped.push({ url: c.url, title: c.title });
   const bundleSeen = (b: Bundle): Seen[] => b.items.map((c, i) => ({ c, v: b.verdicts[i] ?? null, bundleKey: b.key }));
+  // A reference-only source (Marathon Investigation) can back up a story, never lead one.
+  const referenceOnly = (b: Bundle) => b.items.every((i) => NEWS_CONFIG.referenceOnlySources.includes(i.source));
+  for (const b of grouped.bundles.filter(referenceOnly)) {
+    log.skipped.push({ headline: b.headline, reason: 'reference-only source' });
+    b.alreadyCovered = true; // out of the running, and marked seen below
+  }
   const covered = grouped.bundles.filter((b) => b.alreadyCovered);
-  for (const b of covered) log.skipped.push({ headline: b.headline, reason: 'already covered' });
+  for (const b of covered) if (!referenceOnly(b)) log.skipped.push({ headline: b.headline, reason: 'already covered' });
   await markSeen([...sorted.filter((s) => !passesSort(s.v)), ...covered.flatMap(bundleSeen)]);
 
   // maxStories: a one-off larger run (the launch fill); the daily cap otherwise.
@@ -167,7 +176,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       }
       const w = await d.write(b, now);
       log.costUsd += w.costUsd;
-      if (!w.draft) { log.held.push({ headline: b.headline, reason: w.refusal ?? 'no draft' }); continue; }
+      if (!w.draft) { log.notPublished.push({ headline: b.headline, reason: w.refusal ?? 'no draft' }); continue; }
       const slug = uniqueSlug(w.draft.title, taken);
       taken.add(slug);
       const lead = b.verdicts.reduce((a, v) => (v.importance > a.importance ? v : a), b.verdicts[0]);
@@ -176,46 +185,57 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
         sources: b.items.map((i) => ({ site: i.source, url: i.url })), imageUrl: null, photoCredit: null,
         bundleKey: b.key, articleIds: b.items.map((i) => i.articleId).filter((id) => id > 0),
       };
-      let reason: string | null = null;
       if (recentSlugs.has(slugBase(w.draft.title))) {
         // The same event slugged again within the window: a duplicate, not a fresh -2 story.
-        reason = 'duplicate slug';
-      } else {
-        // The full text, not the writer's 12,000-character slice: a copied sentence can sit anywhere.
-        const texts = b.items.map((i) => i.text ?? '');
-        let problems = ruleProblems(w.draft, texts);
-        // A near-copy and nothing else: one rewrite with the lifted phrases named, then the gates again.
-        if (problems.length === 1 && problems[0] === 'near-copy of a source') {
-          const again = await d.write(b, now, nearCopyPhrases(w.draft, texts));
-          log.costUsd += again.costUsd;
-          if (again.draft) {
-            w.draft = again.draft;
-            Object.assign(story, again.draft);
-            problems = ruleProblems(again.draft, texts);
-          }
-        }
-        reason = problems.length ? problems.join(', ') : null;
-        if (!reason) {
-          let c = await d.check(w.draft, b);
-          log.costUsd += c.costUsd;
-          // A few facts the checker can't find: one rewrite told to drop or correct exactly those, then every gate again.
-          if (!c.ok && c.unsupported.length <= 5 && !c.unsupported.includes('checker reply unreadable')) {
-            const again = await d.write(b, now, undefined, c.unsupported);
-            log.costUsd += again.costUsd;
-            if (again.draft && ruleProblems(again.draft, texts).length === 0) {
-              w.draft = again.draft;
-              Object.assign(story, again.draft);
-              c = await d.check(again.draft, b);
-              log.costUsd += c.costUsd;
-            }
-          }
-          if (!c.ok) reason = `unsupported: ${c.unsupported.join('; ')}`;
-        }
+        log.notPublished.push({ headline: b.headline, reason: 'duplicate of a recent story' });
+        continue;
       }
+      // Every picked story is published or not; none is held for review (Stephen, 27 Sep
+      // 2026). What the checks flag gets put right: punctuation in code, then up to
+      // NEWS_CONFIG.fixRounds of edits. A fact nobody can find is first looked for (more
+      // coverage), then taken out or corrected, and in the last round kept with an asterisk
+      // and "Film My Run could not verify this information" if the story needs it.
+      const texts = () => b.items.map((i) => i.text ?? '');
+      let draft = tidyPunctuation(w.draft);
+      let reason: string | null = null;
+      let searched = b.items.filter((i) => i.text).length >= 2 ? false : true; // `more` already ran above
+      for (let round = 0; ; round++) {
+        const last = round >= NEWS_CONFIG.fixRounds;
+        const problems = ruleProblems(draft, texts());
+        if (problems.length) {
+          if (last) { reason = problems.join(', '); break; }
+          const phrases = problems.includes('near-copy of a source') ? nearCopyPhrases(draft, texts()) : [];
+          const e = await d.edit(draft, b, { problems: problems.filter((p) => p !== 'near-copy of a source'), phrases });
+          log.costUsd += e.costUsd;
+          if (e.draft) draft = tidyPunctuation(e.draft);
+          continue;
+        }
+        const c = await d.check(draft, b);
+        log.costUsd += c.costUsd;
+        if (c.ok) break;
+        if (c.unsupported.includes('checker reply unreadable')) { if (last) { reason = 'the fact-check could not be read'; break; } continue; }
+        if (!searched) {
+          // Verify first: other sites' reports may carry what the checker couldn't find.
+          searched = true;
+          const more = await d.more(b, now);
+          log.costUsd += more.costUsd;
+          if (more.items.length) { b.items.push(...more.items); continue; }
+        }
+        if (last) {
+          const e = await d.edit(draft, b, { mark: c.unsupported });
+          log.costUsd += e.costUsd;
+          if (e.draft && ruleProblems(e.draft, texts()).length === 0) { draft = tidyPunctuation(e.draft); break; }
+          reason = `unsupported: ${c.unsupported.join('; ')}`;
+          break;
+        }
+        const e = await d.edit(draft, b, { unsupported: c.unsupported });
+        log.costUsd += e.costUsd;
+        if (e.draft) draft = tidyPunctuation(e.draft);
+      }
+      Object.assign(story, draft, { sources: b.items.map((i) => ({ site: i.source, url: i.url })) });
       if (reason) {
-        const storyId = dryRun ? undefined : await d.hold(story, reason);
-        log.held.push({ headline: b.headline, reason, ...(storyId ? { storyId } : {}) });
-        await save(`${slug}.held.json`, { reason, story });
+        log.notPublished.push({ headline: b.headline, reason });
+        await save(`${slug}.not-published.json`, { reason, story });
         continue;
       }
       const img = !dryRun ? await d.image(b, slug) : outDir ? await d.image(b, slug, { upload: saveLocally(outDir) }) : null;
@@ -225,9 +245,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       await save(`${slug}.json`, story);
       log.published.push({ slug, title: story.title });
     } catch (e) {
-      const reason = `error: ${errorText(e)}`;
-      const storyId = story && !dryRun ? await d.hold(story, reason).catch(() => undefined) : undefined;
-      log.held.push({ headline: b.headline, reason, ...(storyId ? { storyId } : {}) });
+      log.notPublished.push({ headline: b.headline, reason: `error: ${errorText(e)}` });
     }
   }
   await save('log.json', log);

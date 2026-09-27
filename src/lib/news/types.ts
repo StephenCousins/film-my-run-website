@@ -64,7 +64,8 @@ export interface RunLog {
   ungrouped: { url: string; title: string }[];
   /** Bundles not written this run (already covered, over the cap, or the ceiling); the last two stay unseen. */
   skipped: { headline: string; reason: string }[];
-  held: { headline: string; reason: string; storyId?: number }[];
+  /** Picked but not published, with why: it failed the checks after every round of fixes, or the writer refused. Never held for review (Stephen, 27 Sep 2026). */
+  notPublished: { headline: string; reason: string; storyId?: number }[];
   published: { slug: string; title: string }[];
   costUsd: number;
   stoppedByCeiling: boolean;

@@ -3,7 +3,8 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { NewsRunError, runNews } from './run';
-import type { Bundle, Candidate, Verdict } from './types';
+import type { Bundle, Candidate, Draft, Verdict } from './types';
+import { UNVERIFIED_NOTE } from './write';
 
 const cand = (id: number): Candidate => ({ articleId: id, url: `https://x.test/${id}`, source: 'iRunFar', title: `T${id}`, pubDate: new Date(), summary: 's', text: `full text ${id}`, imageUrl: null, photoCredit: null });
 const news = (importance: number): Verdict => ({ type: 'news', confidence: 0.95, isRunning: true, topic: 'trail_ultra', isUk: false, importance });
@@ -21,6 +22,7 @@ function deps(over: Record<string, unknown> = {}) {
     image: async () => ({ url: 'https://r2.test/x.webp', credit: 'Photo: iRunFar' }),
     publish: async (s: { slug: string; photoCredit: string | null }) => { published.push(s); },
     hold: async (s: { slug: string }) => { held.push(s.slug); return 42; },
+    edit: async (dr: Draft) => ({ draft: dr, costUsd: 0.05 }),
     monthSpentUsd: async () => 0,
     recentHeadlines: async () => [],
     takenSlugs: async () => new Set<string>(),
@@ -42,14 +44,56 @@ describe('a news run', () => {
     expect(log.sortedOut.map((s) => s.type)).toContain('review');
     expect(log.costUsd).toBeCloseTo(6 * 0.001 + 0.002 + 4 * 0.09, 5);
   });
-  it('holds (saves, unpublished) a story that fails the fact check', async () => {
-    const { d, published, held } = deps({ check: async () => ({ ok: false, unsupported: ['19:37'], costUsd: 0.03 }) });
+  it('a fact nobody can confirm is kept with an asterisk and the note; nothing is held', async () => {
+    const { d, published, held } = deps({
+      check: async () => ({ ok: false, unsupported: ['19:37'], costUsd: 0.03 }),
+      edit: async (dr: Draft, _b: Bundle, fix: { mark?: string[] }) => ({ draft: fix.mark ? { ...dr, paragraphs: [`${dr.paragraphs[0]} *`, ...dr.paragraphs.slice(1), UNVERIFIED_NOTE] } : dr, costUsd: 0.05 }),
+    });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(published).toHaveLength(4);
+    expect(held).toHaveLength(0);
+    expect(log.notPublished).toHaveLength(0);
+    expect((published[0] as unknown as Draft).paragraphs.at(-1)).toBe(UNVERIFIED_NOTE);
+  });
+  it('a story that can never be put right is not published, and never held', async () => {
+    const { d, published, held } = deps({ check: async () => ({ ok: false, unsupported: ['19:37'], costUsd: 0.03 }), edit: async () => ({ draft: null, costUsd: 0.05 }) });
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(published).toHaveLength(0);
-    expect(held).toHaveLength(4);
-    expect(log.held[0].reason).toMatch(/unsupported: 19:37/);
-    expect(log.held[0].storyId).toBe(42);
+    expect(held).toHaveLength(0);
+    expect(log.notPublished[0].reason).toMatch(/unsupported: 19:37/);
   });
+  it('verifies first: other reports that confirm the fact mean no edit at all', async () => {
+    let checks = 0; let edits = 0;
+    const { d, published } = deps({
+      gather: async () => [cand(1), { ...cand(2), source: 'Other' }],
+      group: async (items: { c: Candidate; v: Verdict }[]) => ({ costUsd: 0, bundles: [{ key: 'e', headline: 'E', items: items.map((i) => i.c), verdicts: items.map((i) => i.v), alreadyCovered: false }] }),
+      check: async () => (checks++ === 0 ? { ok: false, unsupported: ['2:03:17'], costUsd: 0.03 } : { ok: true, unsupported: [], costUsd: 0.03 }),
+      more: async () => ({ items: [{ ...cand(0), articleId: 0, url: 'https://x.test/more', source: 'More', text: 'He ran 2:03:17.' }], costUsd: 0.01 }),
+      edit: async (dr: Draft) => { edits++; return { draft: dr, costUsd: 0.05 }; },
+    });
+    await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(published).toHaveLength(1);
+    expect(edits).toBe(0);
+  });
+  it('em dashes and semicolons are fixed in code, without an edit', async () => {
+    let edits = 0;
+    const { d, published } = deps({
+      gather: async () => [cand(1)],
+      write: async () => ({ draft: { title: 'T', excerpt: 'E.', paragraphs: ['He won — easily.', 'Then; he rested.', 'Three.'] }, refusal: null, costUsd: 0.06 }),
+      edit: async (dr: Draft) => { edits++; return { draft: dr, costUsd: 0.05 }; },
+    });
+    await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(published).toHaveLength(1);
+    expect(edits).toBe(0);
+    expect((published[0] as unknown as Draft).paragraphs.slice(0, 2)).toEqual(['He won, easily.', 'Then. He rested.']);
+  });
+  it('a story led only by a reference-only source is never written', async () => {
+    const { d, published } = deps({ gather: async () => [{ ...cand(1), source: 'Marathon Investigation' }] });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(published).toHaveLength(0);
+    expect(log.skipped[0]).toEqual({ headline: 'E1', reason: 'reference-only source' });
+  });
+
   it('stops writing at the ceiling but keeps what it wrote', async () => {
     // $12.50 already spent this month; the ceiling is £10 x 1.27 = $12.70. The first story fits,
     // and what this run has spent (sorting, grouping, that story) stops the second.
@@ -89,7 +133,7 @@ describe('a news run', () => {
     await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(published.map((p) => p.slug)).toEqual(['same-title-2', 'same-title-3', 'same-title-4', 'same-title-5']);
   });
-  it('holds a story as duplicate slug instead of publishing it as -2, when the base slug belongs to a story from the last 14 days', async () => {
+  it('does not publish a duplicate of a recent story (same base slug in the last 14 days)', async () => {
     const { d, published, held } = deps({
       gather: async () => [cand(5)],
       write: async () => ({ draft: { title: 'Same title', excerpt: 'E.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }),
@@ -98,8 +142,8 @@ describe('a news run', () => {
     });
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(published).toHaveLength(0);
-    expect(held).toHaveLength(1);
-    expect(log.held[0].reason).toBe('duplicate slug');
+    expect(held).toHaveLength(0);
+    expect(log.notPublished[0].reason).toBe('duplicate of a recent story');
   });
   it('still suffixes a same-base slug that belongs to an older story (not from the last 14 days)', async () => {
     const { d, published } = deps({
@@ -124,20 +168,20 @@ describe('a news run', () => {
     await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(recentSeenByGroup).toEqual(['A held story title', 'A published story title']);
   });
-  it('one bundle throwing holds that story and the run carries on', async () => {
+  it('one bundle throwing is not published and the run carries on', async () => {
     let n = 0;
     const { d, published, held } = deps({ image: async () => { if (n++ === 0) throw new Error('R2 down'); return { url: 'u', credit: null }; } });
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(published).toHaveLength(3);
-    expect(held).toHaveLength(1);
-    expect(log.held[0].reason).toMatch(/R2 down/);
+    expect(held).toHaveLength(0);
+    expect(log.notPublished[0].reason).toMatch(/R2 down/);
   });
   it('a throwing writer is held without a story, and the run carries on', async () => {
     let n = 0;
     const { d, published } = deps({ write: async (b: Bundle) => { if (n++ === 0) throw new Error('timeout'); return { draft: { title: b.key, excerpt: 'E.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }; } });
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(published).toHaveLength(3);
-    expect(log.held[0]).toEqual({ headline: 'E5', reason: 'error: timeout' });
+    expect(log.notPublished[0]).toEqual({ headline: 'E5', reason: 'error: timeout' });
   });
   it('publishes the photo credit the image step returned', async () => {
     const { d, published } = deps();
@@ -154,7 +198,7 @@ describe('a news run', () => {
     });
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(published).toHaveLength(0);
-    expect(log.held[0].reason).toMatch(/near-copy/);
+    expect(log.notPublished[0].reason).toMatch(/near-copy/);
   });
   it('a run that fails partway still reports what it spent', async () => {
     let calls = 0;
@@ -188,22 +232,20 @@ describe('a news run', () => {
     expect(published.length).toBe(5);
   });
 
-  it('rewrites a near-copy once with the phrases to avoid, then publishes', async () => {
+  it('edits a near-copy with the phrases named, then publishes', async () => {
     const copied = 'death comes less than three weeks after canadian skyrunner kalie mccrystal went missing';
-    const calls: (string[] | undefined)[] = [];
+    const asks: string[][] = [];
     const { d, published } = deps({
       gather: async () => [{ ...cand(1), text: `The ${copied} on the Matterhorn.` }],
-      write: async (_b: Bundle, _now: Date, avoid?: string[]) => {
-        calls.push(avoid);
-        return { draft: { title: 'T', excerpt: 'E.', paragraphs: [avoid ? 'Reworded.' : `Her ${copied}.`, 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 };
-      },
+      write: async () => ({ draft: { title: 'T', excerpt: 'E.', paragraphs: [`Her ${copied}.`, 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }),
+      edit: async (dr: Draft, _b: Bundle, fix: { phrases?: string[] }) => { asks.push(fix.phrases ?? []); return { draft: { ...dr, paragraphs: ['Reworded.', 'Two.', 'Three.'] }, costUsd: 0.05 }; },
     });
     const log = await runNews({ now: new Date(), dryRun: false, deps: d });
-    expect(calls).toHaveLength(2);
-    expect(calls[1]?.join(' ')).toContain('three weeks after');
+    expect(asks[0].join(' ')).toContain('three weeks after');
     expect(published).toHaveLength(1);
-    expect(log.held).toHaveLength(0);
+    expect(log.notPublished).toHaveLength(0);
   });
+
   it('looks for more coverage when the source cannot be read, and credits it', async () => {
     const found = { ...cand(0), articleId: 0, url: 'https://fellrunner.test/gossage', source: 'Fell Runner', text: 'Lucy Gossage ran the Pennine Way.' };
     let asked = 0;
@@ -220,16 +262,17 @@ describe('a news run', () => {
     expect(log.costUsd).toBeGreaterThan(0.08);
   });
 
-  it('rewrites once to drop the facts the checker could not find, then publishes', async () => {
+  it('edits out the facts the checker could not find, then publishes', async () => {
     const asks: (string[] | undefined)[] = [];
     let checks = 0;
     const { d, published } = deps({
-      gather: async () => [cand(1)],
-      write: async (_b: Bundle, _n: Date, _avoid?: string[], unsupported?: string[]) => { asks.push(unsupported); return { draft: { title: 'T', excerpt: 'E.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }; },
-      check: async () => (checks++ === 0 ? { ok: false, unsupported: ['Lake District'], costUsd: 0.03 } : { ok: true, unsupported: [], costUsd: 0.03 }),
+      gather: async () => [cand(1), { ...cand(2), source: 'Other' }],
+      group: async (items: { c: Candidate; v: Verdict }[]) => ({ costUsd: 0, bundles: [{ key: 'e', headline: 'E', items: items.map((i) => i.c), verdicts: items.map((i) => i.v), alreadyCovered: false }] }),
+      edit: async (dr: Draft, _b: Bundle, fix: { unsupported?: string[] }) => { asks.push(fix.unsupported); return { draft: dr, costUsd: 0.05 }; },
+      check: async () => (checks++ < 2 ? { ok: false, unsupported: ['Lake District'], costUsd: 0.03 } : { ok: true, unsupported: [], costUsd: 0.03 }),
     });
     await runNews({ now: new Date(), dryRun: false, deps: d });
-    expect(asks[1]).toEqual(['Lake District']);
+    expect(asks[0]).toEqual(['Lake District']);
     expect(published).toHaveLength(1);
   });
 });

@@ -17,7 +17,8 @@ export function ruleProblems(d: Draft, sourceTexts: string[]): string[] {
   const problems: string[] = [];
   if (!d.title.trim()) problems.push('no title');
   if (!d.excerpt.trim()) problems.push('no excerpt');
-  const nonBlank = d.paragraphs.map((p) => p.trim()).filter((p) => p.length > 0);
+  // The unverified-information note is a footnote, not a paragraph of the story.
+  const nonBlank = d.paragraphs.map((p) => p.trim()).filter((p) => p.length > 0 && !p.startsWith('* '));
   if (nonBlank.length === 0) problems.push('no body');
   if (nonBlank.length < 3 || nonBlank.length > 6) problems.push(`${nonBlank.length} paragraphs (3-6)`);
   const all = [d.title, d.excerpt, ...d.paragraphs].join('\n');
@@ -35,4 +36,20 @@ export function nearCopyPhrases(d: Draft, sourceTexts: string[]): string[] {
   const hits = new Set<string>();
   for (const t of sourceTexts) for (const s of shingles(t, NEWS_CONFIG.nearCopyWords)) if (mine.has(s)) hits.add(s);
   return [...hits];
+}
+
+/**
+ * Fix what code can fix before anything is judged: an em dash or a spaced en dash
+ * becomes a comma, a semicolon a full stop (Stephen doesn't use either). Ranges
+ * like 5–10 keep their en dash.
+ */
+export function tidyPunctuation(d: Draft): Draft {
+  const fix = (t: string) =>
+    t
+      .replace(/\s*—\s*/g, ', ')
+      .replace(/\s+–\s+/g, ', ')
+      .replace(/;\s*([a-z])/g, (_, c: string) => `. ${c.toUpperCase()}`)
+      .replace(/;/g, '.')
+      .replace(/,\s*,/g, ',');
+  return { title: fix(d.title), excerpt: fix(d.excerpt), paragraphs: d.paragraphs.map(fix) };
 }

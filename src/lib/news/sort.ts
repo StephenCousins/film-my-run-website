@@ -35,7 +35,10 @@ Give "confidence" as the probability (0-1) that your "type" is right.
 "importance" 1-10 for a trail and ultra running site. Use the whole scale:
 10: the biggest days of the year: UTMB or Western States won, an ultra world record, a British win at either.
 8-9: world championship results in ultra, trail or mountain running; a course record at a major ultra; a road or track world record; a Majors marathon win.
-8-9 as well: the death of a known runner, and the stories the running world is talking about (a controversy, a big name's surprising move); 9 when it is one of the sport's biggest names.
+8-9 as well: the death of a known runner, and the stories the running world is talking about (a controversy, a big name's surprising move); 9 when it is one of the sport's biggest names. Also 8-9: doping bans and results stripped, cheating caught and punished by a race, race disasters (runners lost in the mountains, a race stopped by weather, a death during a race), results overturned or records voided, sporting firsts (first woman to win outright, first to complete a route).
+7-8: governing-body rows (UTMB lottery or Index, World Athletics rules, prize money), a race or series sold, axed or collapsing, a sponsor walking away, a legend retiring or coming back.
+6-7 as well: trails or races losing access (closures, permits pulled), viral human-interest (the oldest finisher, a record in fancy dress, a run across a continent).
+5: celebrities running a race.
 6-7: notable results at well-known races, big-name injuries or retirements, rule changes that affect many runners.
 4-5: results at smaller races, national-level news.
 1-3: local news, minor announcements, entries and logistics.
