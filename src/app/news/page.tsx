@@ -44,6 +44,9 @@ interface Article {
   category: string;
   isOriginal?: boolean;
   tags?: string[];
+  importance?: number;
+  /** The biggest story of the last three days (orderForPage): leads the page with a badge. */
+  topStory?: boolean;
 }
 
 // ============================================
@@ -52,7 +55,7 @@ interface Article {
 
 import { getArticles as fetchArticles } from '@/lib/rss-fetcher';
 import { prisma } from '@/lib/db';
-import { NEWS_PAGE_OURS_ONLY, storyTags } from '@/lib/news/present';
+import { NEWS_PAGE_OURS_ONLY, orderForPage, storyTags } from '@/lib/news/present';
 
 async function getOriginalStories(): Promise<Article[]> {
   try {
@@ -61,7 +64,7 @@ async function getOriginalStories(): Promise<Article[]> {
       orderBy: { published_at: 'desc' },
     });
 
-    return stories.map((story) => ({
+    const articles = stories.map((story) => ({
       id: `fmr-${story.id}`,
       title: story.title,
       link: `/news/${story.slug}`,
@@ -72,7 +75,10 @@ async function getOriginalStories(): Promise<Article[]> {
       category: 'trail',
       isOriginal: true,
       tags: storyTags(story.topic, story.is_uk),
+      importance: story.importance ?? 0,
     }));
+    // The biggest story of the last three days leads; the rest newest first.
+    return orderForPage(articles, new Date());
   } catch (error) {
     console.error('Error fetching original stories:', error);
     return [];

@@ -2,10 +2,17 @@ import { completeJson } from '@/lib/llm';
 import { GROUP_MODEL } from './models';
 import type { Bundle, Candidate, Verdict } from './types';
 
+/**
+ * How big a story is: its most important item, plus how widely it is covered
+ * (+1 for two sites, +2 for three or more), the best sign of a big story.
+ * The British point is the sorter's; adding another here counted it twice
+ * (27 Sep 2026, Stephen: "we need to prioritise the big stories").
+ */
 export function bundleImportance(b: Bundle): number {
   const top = Math.max(0, ...b.verdicts.map((v) => v.importance));
-  const uk = b.verdicts.some((v) => v.isUk) ? 1 : 0;
-  return Math.min(10, top + uk);
+  const sites = new Set(b.items.map((i) => i.source)).size;
+  const coverage = sites >= 3 ? 2 : sites === 2 ? 1 : 0;
+  return Math.min(10, top + coverage);
 }
 
 const SCHEMA = {

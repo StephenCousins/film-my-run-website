@@ -26,8 +26,14 @@ describe('grouping', () => {
     expect(r.bundles[0].key).toBe('first');
     expect(r.bundles[0].items.map((i) => i.articleId)).toEqual([1]);
   });
-  it('a bundle is as important as its most important item, plus 1 for UK', () => {
+  it('a bundle is as important as its most important item, plus its coverage', () => {
     expect(bundleImportance({ key: 'k', headline: 'h', items: [], verdicts: [v(6), v(8)], alreadyCovered: false })).toBe(8);
-    expect(bundleImportance({ key: 'k', headline: 'h', items: [], verdicts: [v(6, true)], alreadyCovered: false })).toBe(7);
+    // The sorter already adds a point for a British angle; the bundle doesn't add another (27 Sep 2026).
+    expect(bundleImportance({ key: 'k', headline: 'h', items: [], verdicts: [v(6, true)], alreadyCovered: false })).toBe(6);
+    // How widely it is covered is the best sign of a big story: +1 for two sites, +2 for three or more.
+    const item = (source: string) => ({ articleId: 1, url: `https://${source}.test/a`, source, title: 't', pubDate: new Date(), summary: '', text: 'x', imageUrl: null, photoCredit: null });
+    expect(bundleImportance({ key: 'k', headline: 'h', items: [item('a'), item('a')], verdicts: [v(6)], alreadyCovered: false })).toBe(6);
+    expect(bundleImportance({ key: 'k', headline: 'h', items: [item('a'), item('b')], verdicts: [v(6)], alreadyCovered: false })).toBe(7);
+    expect(bundleImportance({ key: 'k', headline: 'h', items: [item('a'), item('b'), item('c')], verdicts: [v(9)], alreadyCovered: false })).toBe(10);
   });
 });

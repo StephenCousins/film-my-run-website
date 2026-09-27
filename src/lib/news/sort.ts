@@ -32,7 +32,13 @@ Also NOT news (type "other", "opinion" or "media"): interviews and profiles, "ta
 "isRunning" is false for field events (jumps, throws, combined events) and for non-running sports; sprints, hurdles and relays are running.
 
 Give "confidence" as the probability (0-1) that your "type" is right.
-"importance" 1-10 for a trail and ultra running site: trail and ultra first (a UTMB or Western States win is 9-10), big road and track moments next (a marathon or track world record is 7-8), everyday results lower. Add 1 when British athletes or UK races are central, capped at 10.
+"importance" 1-10 for a trail and ultra running site. Use the whole scale:
+10: the biggest days of the year: UTMB or Western States won, an ultra world record, a British win at either.
+8-9: world championship results in ultra, trail or mountain running; a course record at a major ultra; a road or track world record; a Majors marathon win.
+6-7: notable results at well-known races, big-name injuries or retirements, rule changes that affect many runners.
+4-5: results at smaller races, national-level news.
+1-3: local news, minor announcements, entries and logistics.
+Add 1 when British athletes or UK races are central, capped at 10.
 "isUk": British athletes or UK races are central.
 
 Source: ${c.source}

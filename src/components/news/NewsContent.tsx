@@ -20,6 +20,9 @@ interface Article {
   category: string;
   isOriginal?: boolean;
   tags?: string[];
+  importance?: number;
+  /** The biggest story of the last three days (orderForPage): leads the page with a badge. */
+  topStory?: boolean;
 }
 
 const TAG_ORDER = ['Trail & Ultra', 'Road', 'Track', 'UK'];
@@ -118,10 +121,10 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
       >
         <CardWrapper article={article} className="block h-full">
           <div className="p-5 lg:p-6 flex flex-col flex-1 h-full">
-            {isRecent && (
+            {(article.topStory || isRecent) && (
               <div className="mb-3">
                 <span className="px-2.5 py-1 bg-brand text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
-                  New
+                  {article.topStory ? 'Top story' : 'New'}
                 </span>
               </div>
             )}
@@ -182,10 +185,10 @@ function ArticleCard({ article, featured = false }: { article: Article; featured
             loading="lazy"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-          {isRecent && (
+          {(article.topStory || isRecent) && (
             <div className="absolute top-3 left-3">
               <span className="px-2.5 py-1 bg-brand text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
-                New
+                {article.topStory ? 'Top story' : 'New'}
               </span>
             </div>
           )}
