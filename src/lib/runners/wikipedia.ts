@@ -41,9 +41,11 @@ export async function wikipediaArticle(name: string, get: Getter = httpGet) {
   let image: RunnerPhoto | null = null;
   const src: string | undefined = sum.originalimage?.source;
   if (src) {
-    const file = `File:${decodeURIComponent(src.split('/').pop()!)}`;
+    const url = new URL(src);
+    const filename = decodeURIComponent(url.pathname.split('/').pop()!);
+    const file = `File:${filename}`;
     const lic = await commonsLicence(file, get);
-    if (lic) image = { kind: 'portrait', url: src, credit: lic.credit, licence: lic.licence, source_url: `${COMMONS}/wiki/${file.replace(/ /g, '_')}` };
+    if (lic) image = { kind: 'portrait', url: `${url.origin}${url.pathname}`, credit: lic.credit, licence: lic.licence, source_url: `${COMMONS}/wiki/${file.replace(/ /g, '_')}` };
   }
   return { title: sum.title as string, url: sum.content_urls?.desktop?.page as string, text, image };
 }

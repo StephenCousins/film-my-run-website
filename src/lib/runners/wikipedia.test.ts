@@ -29,6 +29,16 @@ describe('a Wikipedia article', () => {
     const a = await wikipediaArticle('Ann Trason', getter({ '/page/summary/': summary('standard'), 'prop=extracts': extract }));
     expect(a!.image).toBeNull();
   });
+  it('originalimage sources with query strings are stripped when building the file title and photo url', async () => {
+    const get = getter({
+      '/page/summary/': summary('standard', { originalimage: { source: 'https://upload.wikimedia.org/wikipedia/commons/6/62/Paula_Radcliffe_NYC_Marathon_2008_cropped.jpg?utm_source=en.wikipedia.org&utm_campaign=api&utm_content=thumbnail_unscaled', width: 1200, height: 900 } }),
+      'prop=extracts': extract,
+      'prop=imageinfo': licence,
+    });
+    const a = (await wikipediaArticle('Ann Trason', get))!;
+    expect(a.image).toMatchObject({ kind: 'portrait', credit: 'Photo: Jane Smith / Wikimedia Commons', licence: 'CC BY-SA 4.0', source_url: 'https://commons.wikimedia.org/wiki/File:Paula_Radcliffe_NYC_Marathon_2008_cropped.jpg' });
+    expect(a.image!.url).toBe('https://upload.wikimedia.org/wikipedia/commons/6/62/Paula_Radcliffe_NYC_Marathon_2008_cropped.jpg');
+  });
   it('a blocked (non-JSON) summary reply is no article', async () => {
     expect(await wikipediaArticle('Ann Trason', getter({ '/page/summary/': '<html>blocked</html>' }))).toBeNull();
   });
