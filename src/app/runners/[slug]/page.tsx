@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 function Card({ name, flag, index }: { name: string; flag: string; index: number | null }) {
   return (
-    <div className="aspect-[4/5] w-full rounded-2xl bg-zinc-900 text-white flex flex-col justify-end p-6 border-b-8 border-[#f88c00]">
+    <div className="aspect-square md:aspect-[4/5] max-w-[240px] md:max-w-none w-full rounded-2xl bg-zinc-900 text-white flex flex-col justify-end p-6 border-b-8 border-[#f88c00]">
       <span className="text-4xl">{flag}</span>
       <span className="font-display text-3xl font-bold mt-2">{name}</span>
       {index !== null && <span className="text-[#f88c00] mt-1 tabular-nums">UTMB Index {index}</span>}
@@ -79,7 +79,7 @@ export default async function RunnerPage({ params }: PageProps) {
               {portrait ? (
                 <figure>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={portrait.url} alt={r.name} className="w-full aspect-[4/5] object-cover rounded-2xl" />
+                  <img src={portrait.url} alt={r.name} className="w-full aspect-square md:aspect-[4/5] max-w-[240px] md:max-w-none object-cover rounded-2xl" />
                   <figcaption className="text-xs text-secondary mt-2">{portrait.credit}</figcaption>
                 </figure>
               ) : <Card name={r.name} flag={flag} index={r.utmbIndex} />}
