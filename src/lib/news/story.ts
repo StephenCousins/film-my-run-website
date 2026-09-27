@@ -75,6 +75,7 @@ export function storyDeps(
             items: items.map((i) => i.c),
             verdicts: items.map((i) => i.v),
             alreadyCovered: false,
+            onDemand: true,
             ...(opts.note ? { note: opts.note } : {}),
           }]
         : [],

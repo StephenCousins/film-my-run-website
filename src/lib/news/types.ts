@@ -30,6 +30,8 @@ export interface Bundle {
   alreadyCovered: boolean;
   /** Stephen's steer for a story he asked for by hand (news:story --note). */
   note?: string;
+  /** Asked for by hand: Stephen has decided it is news, so the writer doesn't re-judge that or the 14-day window. */
+  onDemand?: boolean;
 }
 
 export interface Draft {

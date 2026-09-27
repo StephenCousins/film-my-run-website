@@ -31,7 +31,7 @@ export async function writeStory(b: Bundle, now: Date, call: typeof completeJson
   if (!b.items.some((i) => i.text)) return { draft: null, refusal: 'no full text', costUsd: 0 };
   const prompt = `${VOICE}
 
-Today is ${now.toISOString().slice(0, 10)}. First decide: is this genuinely running NEWS from the last 14 days (something that happened, not a preview, review, training piece or opinion)? If not, set isNews false, give the reason, and leave the other fields empty.
+Today is ${now.toISOString().slice(0, 10)}. ${b.onDemand ? 'The editor has asked for this story: set isNews true and write it, whatever its date.' : 'First decide: is this genuinely running NEWS from the last 14 days (something that happened, not a preview, review, training piece or opinion)? If not, set isNews false, give the reason, and leave the other fields empty.'}
 
 Also not for us: a story that accuses a named private individual (not a professional or elite athlete) of cheating when no race or governing body has acted on it. A disqualification or ban by a race, federation or the AIU is fine; say who took the action.
 

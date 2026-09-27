@@ -41,6 +41,7 @@ describe('a story on demand', () => {
     });
     expect(published.map((p) => p.title)).toEqual(['Evans wins UTMB']);
     expect(bundles[0].note).toBe('Lead with the British angle');
+    expect(bundles[0].onDemand).toBe(true);
     expect(bundles[0].headline).toBe('Tom Evans wins UTMB');
     expect(bundles[0].verdicts[0]).toMatchObject({ type: 'news', isUk: true, importance: 9 });
     expect(log.costUsd).toBeGreaterThan(0.09);
