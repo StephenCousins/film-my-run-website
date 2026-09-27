@@ -283,6 +283,8 @@ function SourceFilter({
 // NEWS CONTENT (exported client component)
 // ============================================
 
+const PER_PAGE = 20;
+
 export default function NewsContent({
   articles,
   topicChips = false,
@@ -293,6 +295,7 @@ export default function NewsContent({
   topicChips?: boolean;
 }) {
   const [selectedSource, setSelectedSource] = useState<string | null>(null);
+  const [page, setPage] = useState(0);
 
   const chipsOf = (article: Article): string[] =>
     topicChips ? article.tags ?? [] : [article.source];
@@ -312,6 +315,13 @@ export default function NewsContent({
   const filteredArticles = selectedSource
     ? articles.filter((a) => chipsOf(a).includes(selectedSource))
     : articles;
+  const pageCount = Math.max(1, Math.ceil(filteredArticles.length / PER_PAGE));
+  const shown = filteredArticles.slice(page * PER_PAGE, (page + 1) * PER_PAGE);
+  // Only the first page leads with the two big cards.
+  const featured = page === 0 ? shown.slice(0, 2) : [];
+  const rest = page === 0 ? shown.slice(2) : shown;
+  const selectSource = (source: string | null) => { setSelectedSource(source); setPage(0); };
+  const goTo = (p: number) => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
   return (
     <>
@@ -324,7 +334,7 @@ export default function NewsContent({
               counts={sourceCounts}
               totalCount={totalCount}
               selectedSource={selectedSource}
-              onSelectSource={setSelectedSource}
+              onSelectSource={selectSource}
             />
           </div>
         </div>
@@ -342,19 +352,41 @@ export default function NewsContent({
           ) : (
             <>
               {/* Featured articles - top row */}
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                {filteredArticles.slice(0, 2).map((article) => (
-                  <ArticleCard key={article.id} article={article} featured />
-                ))}
-              </div>
+              {featured.length > 0 && (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                  {featured.map((article) => (
+                    <ArticleCard key={article.id} article={article} featured />
+                  ))}
+                </div>
+              )}
 
               {/* Regular articles grid */}
-              {filteredArticles.length > 2 && (
+              {rest.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {filteredArticles.slice(2).map((article) => (
+                  {rest.map((article) => (
                     <ArticleCard key={article.id} article={article} />
                   ))}
                 </div>
+              )}
+
+              {pageCount > 1 && (
+                <nav aria-label="News pages" className="mt-10 flex items-center justify-center gap-4">
+                  <button
+                    onClick={() => goTo(page - 1)}
+                    disabled={page === 0}
+                    className="px-4 py-2 rounded-lg border border-border text-sm font-medium text-foreground hover:border-[#f88c00] disabled:opacity-40 disabled:pointer-events-none"
+                  >
+                    Newer
+                  </button>
+                  <span className="text-sm text-secondary tabular-nums">Page {page + 1} of {pageCount}</span>
+                  <button
+                    onClick={() => goTo(page + 1)}
+                    disabled={page === pageCount - 1}
+                    className="px-4 py-2 rounded-lg border border-border text-sm font-medium text-foreground hover:border-[#f88c00] disabled:opacity-40 disabled:pointer-events-none"
+                  >
+                    Older
+                  </button>
+                </nav>
               )}
             </>
           )}
