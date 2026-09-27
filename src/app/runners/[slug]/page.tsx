@@ -8,6 +8,7 @@ import { sanitizeContent } from '@/lib/sanitize';
 import { flagEmoji } from '@/lib/runners/flag';
 import { personJsonLd, storiesAbout } from '@/lib/runners/present';
 import type { BestFinish, RunnerPhoto, RunnerSource } from '@/lib/runners/types';
+import RunnerCard from '@/components/runners/RunnerCard';
 
 export const dynamic = 'force-dynamic';
 
@@ -37,17 +38,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     alternates: { canonical: `https://filmmyrun.com/runners/${r.slug}` },
     openGraph: { title: r.name, description, type: 'profile', images: image ? [image] : [] },
   };
-}
-
-function Card({ name, flag, index }: { name: string; flag: string; index: number | null }) {
-  return (
-    <div className="aspect-square md:aspect-[4/5] max-w-[240px] md:max-w-none w-full rounded-2xl bg-zinc-900 text-white flex flex-col justify-end p-6 border-b-8 border-[#f88c00]">
-      <span className="text-4xl">{flag}</span>
-      <span className="font-display text-3xl font-bold mt-2">{name}</span>
-      {index !== null && <span className="text-[#f88c00] mt-1 tabular-nums">UTMB Index {index}</span>}
-      <span className="text-xs text-zinc-400 mt-4">Film My Run</span>
-    </div>
-  );
 }
 
 export default async function RunnerPage({ params }: PageProps) {
@@ -82,7 +72,7 @@ export default async function RunnerPage({ params }: PageProps) {
                   <img src={portrait.url} alt={r.name} className="w-full aspect-square md:aspect-[4/5] max-w-[240px] md:max-w-none object-cover rounded-2xl" />
                   <figcaption className="text-xs text-secondary mt-2">{portrait.credit}</figcaption>
                 </figure>
-              ) : <Card name={r.name} flag={flag} index={r.utmbIndex} />}
+              ) : <RunnerCard name={r.name} flag={flag} index={r.utmbIndex} className="aspect-square md:aspect-[4/5] max-w-[240px] md:max-w-none w-full rounded-2xl" />}
             </div>
             <div>
               <h1 className="font-display text-4xl lg:text-5xl font-bold text-foreground text-balance">{flag} {r.name}</h1>

@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { flagEmoji } from '@/lib/runners/flag';
+import RunnerCard from '@/components/runners/RunnerCard';
 
 interface Row { slug: string; name: string; nationality: string | null; disciplines: string[]; era: string; utmbIndex: number | null; photo: string | null }
 const FILTERS: [string, string][] = [['all', 'All'], ['trail_ultra', 'Trail & Ultra'], ['road', 'Road'], ['track', 'Track']];
@@ -22,7 +23,7 @@ export default function RunnersList({ runners }: { runners: Row[] }) {
                 // eslint-disable-next-line @next/next/no-img-element
                 <img src={r.photo} alt="" className="w-full aspect-[4/5] object-cover rounded-xl" />
               )
-              : <div className="w-full aspect-[4/5] rounded-xl bg-zinc-900 border-b-4 border-[#f88c00] flex items-end p-3 text-white font-display font-bold">{r.name}</div>}
+              : <RunnerCard name={r.name} flag={flagEmoji(r.nationality)} index={r.utmbIndex} className="aspect-[4/5] w-full rounded-xl" />}
             <span className="block mt-2 font-semibold text-foreground group-hover:text-[#f88c00]">{flagEmoji(r.nationality)} {r.name}</span>
             {r.utmbIndex !== null && <span className="block text-sm text-secondary tabular-nums">UTMB Index {r.utmbIndex}</span>}
           </Link>
