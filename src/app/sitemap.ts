@@ -34,6 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { route: '/discounts', changeFrequency: 'weekly', priority: 0.6 },
     { route: '/live', changeFrequency: 'weekly', priority: 0.6 },
     { route: '/news', changeFrequency: 'weekly', priority: 0.6 },
+    { route: '/runners', changeFrequency: 'weekly', priority: 0.7 },
     { route: '/privacy', changeFrequency: 'monthly', priority: 0.3 },
     { route: '/terms', changeFrequency: 'monthly', priority: 0.3 },
   ];
@@ -79,6 +80,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     console.error('sitemap: failed to load dynamic routes', error);
   }
 
+  // Dynamic runner profiles
+  let runnerRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const runners = await prisma.runners.findMany({ where: { status: 'published' }, select: { slug: true, updated_at: true } });
+    runnerRoutes = runners.map((r) => ({ url: `${baseUrl}/runners/${r.slug}`, lastModified: r.updated_at, changeFrequency: 'weekly' as const, priority: 0.6 }));
+  } catch (error) {
+    console.error('sitemap: failed to load runners', error);
+  }
+
   // Dynamic film pages
   let filmRoutes: MetadataRoute.Sitemap = [];
   try {
@@ -99,6 +109,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...staticRoutes,
     ...blogRoutes,
     ...newsRoutes,
+    ...runnerRoutes,
     ...filmRoutes,
   ];
 }

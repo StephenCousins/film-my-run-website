@@ -37,6 +37,7 @@ const footerLinks = {
     links: [
       { name: 'Blog', href: '/blog' },
       { name: 'Films', href: '/films' },
+      { name: 'Runners', href: '/runners' },
       { name: 'Race Results', href: '/races' },
       { name: 'Parkrun Stats', href: '/tools/parkrun' },
       { name: 'Race Map', href: '/tools/race-map' },
