@@ -81,7 +81,8 @@ const liveDeps: AutoDeps = {
   write: (f) => writeProfile(f),
   check: (f, b) => checkProfile(f, b),
   edit: (f, b, fix) => editProfile(f, b, fix),
-  save: (f) => saveRunner(f, 'auto'),
+  // A photo that won't download must not cost the runner their page: save without it.
+  save: (f) => saveRunner(f, 'auto').catch(() => saveRunner({ ...f, photos: [] }, 'auto')),
 };
 
 const tidy = (bio: string[]) => tidyPunctuation({ title: '', excerpt: '', paragraphs: bio }).paragraphs;
