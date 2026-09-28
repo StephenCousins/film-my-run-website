@@ -105,3 +105,14 @@ The branded card shows instead.
   - Only runners with a UTMB entry or a Wikipedia article about running get one.
   - A name that failed is skipped for 14 days.
   - The Monday email lists them. Add or replace their photos in a session.
+- **Monthly refresh:** the first Monday of the month (UTC day 1 to 7), after the
+  UTMB index refresh, `src/lib/runners/monthly.ts` runs.
+  - New UTMB podiums (1st to 3rd, overall or by gender) since the bio was last
+    checked go into best finishes, at most 10. No AI.
+  - Up to 20 bios with a new podium or a newer story about the runner are revised
+    through OpenRouter, from the old bio plus fresh sources, through the same
+    checks as automatic pages. A bio that fails keeps the old one.
+  - Photos, aliases and the author (`session` stays `session`) are kept.
+  - At most $3, inside the £10 ceiling, and a 12-minute limit.
+  - The Monday email has a line on it. `npm run news:daily -- --monthly-refresh`
+    runs it by hand (live).

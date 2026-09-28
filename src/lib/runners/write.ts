@@ -38,3 +38,9 @@ export async function editProfile(f: RunnerFile, bio: string[], fix: { unsupport
   const r = await call<{ paragraphs: string[] }>({ model: WRITE_MODEL, prompt: `${VOICE}\n\n${RULES}\n\nYou wrote this profile. Put right every point below and change nothing else.\n${asks}\n\nPROFILE (JSON):\n${JSON.stringify(bio)}\n\n${sources(f)}`, maxTokens: 2000, temperature: 0.3, schemaName: 'profile', schema: BIO_SCHEMA });
   return { bio: paragraphs(r.data), costUsd: r.costUsd };
 }
+
+/** The monthly refresh: revises our existing profile instead of starting over. The previous profile is also one of `f.texts`. */
+export async function reviseProfile(f: RunnerFile, previous: string[], call: Call = completeJson) {
+  const r = await call<{ paragraphs: string[] }>({ model: WRITE_MODEL, prompt: `${VOICE}\n\n${RULES}\n\nThe runner: ${f.name}.\n\nThis is our current profile of them. Revise it rather than starting over: keep what is still true, add their new results and any news in the sources below, and bring "what they are doing now" up to date. Still 3 to 5 paragraphs.\n\nCURRENT PROFILE (JSON):\n${JSON.stringify(previous)}\n\n${sources(f)}`, maxTokens: 2000, temperature: 0.4, schemaName: 'profile', schema: BIO_SCHEMA });
+  return { bio: paragraphs(r.data), costUsd: r.costUsd };
+}

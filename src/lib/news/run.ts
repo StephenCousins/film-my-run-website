@@ -60,6 +60,13 @@ async function saveStory(s: StoryToPublish, status: 'published' | 'held', heldRe
   });
 }
 
+/** Everything the news runs (and the monthly runner refresh) have spent since the 1st of this month, UTC. */
+export async function monthSpentUsd(now: Date): Promise<number> {
+  const from = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  const r = await prisma.news_runs.aggregate({ _sum: { cost_usd: true }, where: { started_at: { gte: from } } });
+  return r._sum.cost_usd ?? 0;
+}
+
 const liveDeps: RunDeps = {
   gather: gatherCandidates,
   sort: (c) => sortItem(c),
@@ -73,11 +80,7 @@ const liveDeps: RunDeps = {
   image: storyImage,
   publish: async (s) => { await saveStory(s, 'published', null); },
   hold: (s, reason) => saveStory(s, 'held', reason),
-  monthSpentUsd: async (now) => {
-    const from = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
-    const r = await prisma.news_runs.aggregate({ _sum: { cost_usd: true }, where: { started_at: { gte: from } } });
-    return r._sum.cost_usd ?? 0;
-  },
+  monthSpentUsd,
   recentHeadlines: async (now) => (await prisma.news_stories.findMany({ where: { status: { in: ['published', 'held'] }, created_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { title: true } })).map((s) => s.title),
   takenSlugs: async () => new Set((await prisma.news_stories.findMany({ select: { slug: true } })).map((s) => s.slug)),
   recentSlugs: async (now) => new Set((await prisma.news_stories.findMany({ where: { created_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { slug: true } })).map((s) => s.slug)),

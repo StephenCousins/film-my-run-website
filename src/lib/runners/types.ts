@@ -8,6 +8,7 @@ export interface BestFinish {
   time: string | null; // "19:49:30"
   position: string | null; // "1st", "3rd woman"
   source: string; // the RunnerSource name it came from
+  date?: string; // "2025-08-29" when the source gives one (UTMB does)
 }
 
 export interface RunnerPhoto {

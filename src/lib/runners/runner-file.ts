@@ -15,7 +15,7 @@ type Row = { slug: string; name: string; nationality: string | null; utmb_index:
  * in (a sentence-level split breaks on a decimal like "2:05.3*." and can let the
  * marked fact through), which also removes the note paragraph itself.
  */
-function verifiedBioText(bioHtml: string): string {
+export function verifiedBioText(bioHtml: string): string {
   const paragraphs = bioHtml.replace(/<\/p>\s*<p>/g, '\n\n').replace(/<[^>]+>/g, '').trim().split(/\n\n+/);
   return paragraphs
     .map((p) => p.trim())

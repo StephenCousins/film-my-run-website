@@ -18,7 +18,7 @@ const positionRank = (position: string | null): number => {
 };
 
 /** Best finishes for an auto page: winners first, then newest year, capped at 10. */
-function topFinishes(results: BestFinish[]): BestFinish[] {
+export function topFinishes(results: BestFinish[]): BestFinish[] {
   return [...results].sort((a, b) => positionRank(a.position) - positionRank(b.position) || b.year - a.year).slice(0, 10);
 }
 
@@ -91,6 +91,50 @@ const liveDeps: AutoDeps = {
 
 const tidy = (bio: string[]) => tidyPunctuation({ title: '', excerpt: '', paragraphs: bio }).paragraphs;
 
+/**
+ * The fix loop every generated bio goes through before it may be saved: code checks
+ * (paragraph count, punctuation, near-copy) are edited away first, then the
+ * fact-check, for up to NEWS_CONFIG.fixRounds rounds; in the last round an
+ * unsupported fact may stay only marked with an asterisk. `f` is what the writer and
+ * checker see; `page(bio)` is the file as it would be saved, which the code checks run
+ * on (its texts are the ones a bio mustn't copy). A null bio comes with the reason.
+ */
+export async function checkedBio(
+  f: RunnerFile,
+  draft: string[],
+  page: (bio: string[]) => RunnerFile,
+  deps: { check: typeof checkProfile; edit: typeof editProfile },
+): Promise<{ bio: string[] | null; reason: string | null; costUsd: number }> {
+  let bio = tidy(draft);
+  let costUsd = 0;
+  for (let round = 0; ; round++) {
+    const last = round >= NEWS_CONFIG.fixRounds;
+    const problems = profileProblems(page(bio));
+    if (problems.length) {
+      if (last) return { bio: null, reason: problems.join(', '), costUsd };
+      const phrases = problems.includes('near-copy of a source') ? nearCopyPhrases({ title: '', excerpt: '', paragraphs: bio }, page(bio).texts.map((t) => t.text)) : [];
+      const e = await deps.edit(f, bio, { problems: problems.filter((p) => p !== 'near-copy of a source'), phrases });
+      costUsd += e.costUsd;
+      if (e.bio) bio = tidy(e.bio);
+      continue;
+    }
+    const c = await deps.check(f, bio);
+    costUsd += c.costUsd;
+    if (c.unsupported.length === 0) return { bio, reason: null, costUsd };
+    if (last) {
+      const e = await deps.edit(f, bio, { mark: c.unsupported });
+      costUsd += e.costUsd;
+      const marked = e.bio ? tidy(e.bio).filter((p) => p.trim() !== UNVERIFIED_NOTE) : null;
+      if (marked && marked.some((p) => p.includes('*'))) marked.push(UNVERIFIED_NOTE);
+      if (marked && profileProblems(page(marked)).length === 0) return { bio: marked, reason: null, costUsd };
+      return { bio: null, reason: `unsupported: ${c.unsupported.join('; ')}`, costUsd };
+    }
+    const e = await deps.edit(f, bio, { unsupported: c.unsupported });
+    costUsd += e.costUsd;
+    if (e.bio) bio = tidy(e.bio);
+  }
+}
+
 /** Trim, collapse whitespace, curly apostrophes to straight: the same identity names.ts's index uses. */
 const norm = (s: string) => s.trim().replace(/\s+/g, ' ').replace(/[‘’]/g, "'");
 
@@ -143,8 +187,6 @@ export async function autoProfiles(names: string[], budgetUsd: number, deps: Aut
       const w = await deps.write(f);
       costUsd += w.costUsd;
       if (!w.bio) { log.push({ name, reason: 'the writer returned nothing' }); continue; }
-      let bio = tidy(w.bio);
-      const texts = f.texts.map((t) => t.text);
       // Only used once a cheap vision check confirms it's actually a photo of a person
       // (a human writer found one UTMB picture that was a dog). Road runners have no
       // UTMB picture but often a Wikipedia lead photo in photoCandidates; try that next,
@@ -160,36 +202,10 @@ export async function autoProfiles(names: string[], budgetUsd: number, deps: Aut
         photos = candidateOk ? [{ ...candidate, kind: 'portrait' }] : [];
       }
       const file = (b: string[]): RunnerFile => ({ ...f, bio: b, bestFinishes: topFinishes(f.results), photos, sources: f.texts.map((t) => t.source) });
-      let reason: string | null = null;
-      for (let round = 0; ; round++) {
-        const last = round >= NEWS_CONFIG.fixRounds;
-        const problems = profileProblems(file(bio));
-        if (problems.length) {
-          if (last) { reason = problems.join(', '); break; }
-          const phrases = problems.includes('near-copy of a source') ? nearCopyPhrases({ title: '', excerpt: '', paragraphs: bio }, texts) : [];
-          const e = await deps.edit(f, bio, { problems: problems.filter((p) => p !== 'near-copy of a source'), phrases });
-          costUsd += e.costUsd;
-          if (e.bio) bio = tidy(e.bio);
-          continue;
-        }
-        const c = await deps.check(f, bio);
-        costUsd += c.costUsd;
-        if (c.unsupported.length === 0) break;
-        if (last) {
-          const e = await deps.edit(f, bio, { mark: c.unsupported });
-          costUsd += e.costUsd;
-          const marked = e.bio ? tidy(e.bio).filter((p) => p.trim() !== UNVERIFIED_NOTE) : null;
-          if (marked && marked.some((p) => p.includes('*'))) marked.push(UNVERIFIED_NOTE);
-          if (marked && profileProblems(file(marked)).length === 0) { bio = marked; break; }
-          reason = `unsupported: ${c.unsupported.join('; ')}`;
-          break;
-        }
-        const e = await deps.edit(f, bio, { unsupported: c.unsupported });
-        costUsd += e.costUsd;
-        if (e.bio) bio = tidy(e.bio);
-      }
-      if (reason) { log.push({ name, reason }); continue; }
-      const { slug } = await deps.save(file(bio));
+      const r = await checkedBio(f, w.bio, file, deps);
+      costUsd += r.costUsd;
+      if (r.reason) { log.push({ name, reason: r.reason }); continue; }
+      const { slug } = await deps.save(file(r.bio!));
       log.push({ name, slug });
     } catch (e) {
       log.push({ name, reason: `error: ${e instanceof Error ? e.message.slice(0, 200) : String(e)}` });

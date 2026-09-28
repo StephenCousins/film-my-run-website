@@ -954,6 +954,12 @@ adding runners is `docs/runners/HOW-TO.md`.**
     last 14 days.
   - Pages use the runner's UTMB profile picture as a portrait when they have
     one, otherwise no photo until a session adds one.
+- **Monthly refresh:** on the first Monday of the month `news:daily` runs
+  `src/lib/runners/monthly.ts` after the UTMB index refresh: new UTMB podiums into
+  best finishes (no AI), then up to 20 bios with a new podium or newer story
+  revised through the same fix loop as auto pages (`checkedBio`). $3 and 12
+  minutes at most; photos and `written_by` are kept. `--monthly-refresh` runs it
+  by hand.
 - **Photos:** only free-licence Commons photos or others with a named
   photographer. `AGENCY_CREDITS` refuses agency credits.
 - **ITRA is out of scope:** itra.run blocks automated requests.

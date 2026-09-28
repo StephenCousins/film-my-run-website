@@ -75,6 +75,7 @@ export function parseRunnerPage(html: string, uri: string): UtmbRunner | null {
     time: r.time ?? null,
     position: r.rankGender ? `${ordinal(r.rankGender)} ${sex === 'F' ? 'woman' : 'man'}` : r.rank ? ordinal(r.rank) : null,
     source: 'UTMB',
+    date: r.dateIso!.slice(0, 10),
   }));
   return {
     utmbId: Number(uri.split('.')[0]),

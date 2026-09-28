@@ -4,10 +4,12 @@
 //        npm run news:daily -- --dry-run  (publishes nothing; stories, images and log go to news-dry-run/<date>/)
 //        npm run news:daily -- --weekly-report     (sends the Monday email now; prints it only if NEWS_REPORT_TO is unset)
 //        npm run news:daily -- --if-not-run-today  (the 08:17 catch-up: does nothing if today's run happened)
+//        npm run news:daily -- --monthly-refresh   (the monthly runner refresh on its own, live; normally the first Monday)
 import { Resend } from 'resend';
 import { prisma } from '@/lib/db';
 import { NEWS_CONFIG } from '@/lib/news/config';
 import { errorText, NewsRunError, runNews } from '@/lib/news/run';
+import { monthlyRefresh } from '@/lib/runners/monthly';
 import { refreshUtmbIndexes } from '@/lib/runners/refresh';
 
 if (process.argv.includes('--help')) {
@@ -27,12 +29,17 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
     await prisma.$disconnect();
     process.exit(0);
   }
+  if (process.argv.includes('--monthly-refresh')) {
+    console.log(await runMonthlyRefresh());
+    await prisma.$disconnect();
+    process.exit(0);
+  }
   // The catch-up schedule: GitHub sometimes skips a scheduled run (27 Sep 2026), so a second
   // one later in the morning runs the news only if no live daily run has happened today.
   if (process.argv.includes('--if-not-run-today')) {
     const since = new Date(new Date().toISOString().slice(0, 10) + 'T00:00:00Z');
     const today = await prisma.news_runs.findMany({ where: { dry_run: false, started_at: { gte: since } }, select: { summary: true } });
-    if (today.some((r) => !(r.summary as { onDemand?: unknown } | null)?.onDemand)) {
+    if (today.some((r) => { const x = r.summary as { onDemand?: unknown; monthlyRefresh?: unknown } | null; return !x?.onDemand && !x?.monthlyRefresh; })) {
       console.log("Today's run already happened; nothing to do.");
       await prisma.$disconnect();
       process.exit(0);
@@ -60,7 +67,9 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
       (e) => `UTMB Index refresh FAILED: ${errorText(e)}`,
     );
     console.log(utmb);
-    await weeklyReport(utmb);
+    // Once a month (Stephen, 28 Sep 2026): the first Monday adds new results and refreshes bios.
+    const monthly = new Date().getUTCDate() <= 7 ? await runMonthlyRefresh() : '';
+    await weeklyReport([utmb, monthly].filter(Boolean).join('\n'));
   }
   await prisma.$disconnect();
   // Something (an HTTP keep-alive pool) holds the event loop open after the work is done;
@@ -76,6 +85,21 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
   await prisma.$disconnect().catch(() => {});
   process.exit(1);
 });
+
+/** The monthly runner refresh, its cost recorded as a news_runs row so the monthly ceiling sees it; returns the email line. */
+async function runMonthlyRefresh(): Promise<string> {
+  try {
+    const r = await monthlyRefresh();
+    await prisma.news_runs.create({ data: { dry_run: false, cost_usd: r.costUsd, summary: { monthlyRefresh: r } as never } });
+    return [
+      `Monthly runner refresh: ${r.resultsAdded} results added, ${r.biosRefreshed.length} bios refreshed${r.biosRefreshed.length ? ` (${r.biosRefreshed.join(', ')})` : ''}, ${r.skipped.length} skipped.`,
+      ...r.skipped.map((x) => `  ${x.slug}: ${x.reason}`),
+      r.cutShort ? '  Cut short by the budget or the 12-minute limit.' : '',
+    ].filter(Boolean).join('\n');
+  } catch (e) {
+    return `Monthly runner refresh FAILED: ${errorText(e)}`;
+  }
+}
 
 type RunSummary = {
   published?: { title: string; slug: string }[];
