@@ -971,6 +971,15 @@ All LLM calls from the site go through **OpenRouter**, not the Anthropic API.
 `OPENROUTER_API_KEY` is required; `OPENROUTER_MODEL` optionally overrides the
 default.
 
+The one exception: news writing and checking (every `completeJson` call on
+`WRITE_MODEL` or `CHECK_MODEL`, so also the runner bios) is tried first
+through Claude Code headless (`claude -p --model opus`) on the owner's
+subscription, when `CLAUDE_CODE_OAUTH_TOKEN` is set (a GitHub secret, made with
+`claude setup-token`). If the CLI is missing, fails, times out, hits a usage
+limit or returns something that isn't JSON, the call falls back to OpenRouter.
+A call served by the subscription counts as $0 against the news ceiling. See
+`completeJsonViaClaude()` in `src/lib/llm.ts`.
+
 `src/lib/llm.ts` exposes `completeText()` and `completeTextWithImage()`. Two
 models, chosen per job:
 

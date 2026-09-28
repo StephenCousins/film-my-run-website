@@ -1,4 +1,7 @@
 import OpenAI from 'openai';
+import { spawn } from 'node:child_process';
+import { tmpdir } from 'node:os';
+import { CHECK_MODEL, WRITE_MODEL } from './news/models';
 
 /**
  * LLM calls for the Shoe Finder, routed through OpenRouter.
@@ -127,15 +130,7 @@ export function parseJson<T>(raw: string): T | null {
  * call when asked (`usage: { include: true }`), so the news pipeline can keep
  * to its monthly ceiling on real figures, not estimates.
  */
-export async function completeJson<T>({
-  model,
-  prompt,
-  system,
-  maxTokens,
-  temperature = 0,
-  schemaName,
-  schema,
-}: {
+export interface JsonCallOptions {
   model: string;
   prompt: string;
   system?: string;
@@ -143,7 +138,74 @@ export async function completeJson<T>({
   temperature?: number;
   schemaName: string;
   schema: object;
-}): Promise<{ data: T | null; costUsd: number; raw: string }> {
+}
+
+/** Runs the `claude` CLI with `args`, feeding `stdin`; resolves stdout, rejects on a non-zero exit or timeout. */
+export type ClaudeRunner = (args: string[], stdin: string, timeoutMs: number) => Promise<string>;
+
+const runClaude: ClaudeRunner = (args, stdin, timeoutMs) =>
+  new Promise((resolve, reject) => {
+    // tmpdir: keep the repo's CLAUDE.md out of the model's context.
+    const child = spawn('claude', args, { cwd: tmpdir(), timeout: timeoutMs, stdio: ['pipe', 'pipe', 'pipe'] });
+    let out = '';
+    let err = '';
+    child.stdout.on('data', (d) => (out += d));
+    child.stderr.on('data', (d) => (err += d));
+    child.on('error', reject); // ENOENT when the CLI isn't installed
+    child.on('close', (code, signal) => {
+      if (signal) reject(new Error(`killed by ${signal} (timeout?)`));
+      else if (code !== 0) reject(new Error(`exit ${code}: ${(err || out).trim().slice(0, 200)}`));
+      else resolve(out);
+    });
+    child.stdin.on('error', () => {}); // EPIPE if it dies early; 'close' reports why
+    child.stdin.end(stdin);
+  });
+
+/**
+ * The same JSON call through Claude Code headless (`claude -p`), on the owner's
+ * subscription via CLAUDE_CODE_OAUTH_TOKEN. Null means "use OpenRouter instead":
+ * CLI missing, error, timeout, usage limit, or a reply that isn't JSON.
+ * Cost is 0: the subscription has no marginal cost, and the news ceiling must
+ * count only real OpenRouter spend.
+ */
+export async function completeJsonViaClaude<T>(
+  { prompt, system, schema }: JsonCallOptions,
+  run: ClaudeRunner = runClaude,
+): Promise<{ data: T; costUsd: number; raw: string } | null> {
+  const args = [
+    '-p',
+    '--model', 'opus',
+    '--output-format', 'json',
+    '--tools', '',
+    '--system-prompt', system || 'You are a careful writer and fact-checker. Follow the instructions exactly.',
+    '--no-session-persistence',
+    '--strict-mcp-config',
+    '--setting-sources', '',
+  ];
+  const input = `${prompt}\n\nReply with ONLY a JSON object matching this JSON schema. No prose, no code fences.\n${JSON.stringify(schema)}`;
+  try {
+    const out = JSON.parse(await run(args, input, 180_000)) as { is_error?: boolean; result?: string; subtype?: string };
+    if (out.is_error || typeof out.result !== 'string') throw new Error(`${out.subtype ?? 'error'}: ${String(out.result ?? '').slice(0, 200)}`);
+    const raw = out.result.trim();
+    const data = parseJson<T>(raw);
+    if (data === null) throw new Error('reply was not JSON');
+    console.log('claude-cli ok');
+    return { data, costUsd: 0, raw };
+  } catch (e) {
+    console.log(`claude-cli failed: ${(e as Error).message.split('\n')[0].slice(0, 200)}, falling back to OpenRouter`);
+    return null;
+  }
+}
+
+export async function completeJson<T>(
+  opts: JsonCallOptions,
+  run: ClaudeRunner = runClaude,
+): Promise<{ data: T | null; costUsd: number; raw: string }> {
+  const { model, prompt, system, maxTokens, temperature = 0, schemaName, schema } = opts;
+  if (process.env.CLAUDE_CODE_OAUTH_TOKEN && (model === WRITE_MODEL || model === CHECK_MODEL)) {
+    const viaClaude = await completeJsonViaClaude<T>(opts, run);
+    if (viaClaude) return viaClaude;
+  }
   const client = getClient();
   const completion = await client.chat.completions.create({
     model,
