@@ -9,7 +9,7 @@ import { Resend } from 'resend';
 import { prisma } from '@/lib/db';
 import { NEWS_CONFIG } from '@/lib/news/config';
 import { errorText, NewsRunError, runNews } from '@/lib/news/run';
-import { monthlyRefresh } from '@/lib/runners/monthly';
+import { liveMonthlyDeps, monthlyRefresh, type MonthlySummary } from '@/lib/runners/monthly';
 import { refreshUtmbIndexes } from '@/lib/runners/refresh';
 
 if (process.argv.includes('--help')) {
@@ -30,7 +30,7 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
     process.exit(0);
   }
   if (process.argv.includes('--monthly-refresh')) {
-    console.log(await runMonthlyRefresh());
+    await runMonthlyRefresh();
     await prisma.$disconnect();
     process.exit(0);
   }
@@ -67,9 +67,10 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
       (e) => `UTMB Index refresh FAILED: ${errorText(e)}`,
     );
     console.log(utmb);
+    await weeklyReport(utmb);
     // Once a month (Stephen, 28 Sep 2026): the first Monday adds new results and refreshes bios.
-    const monthly = new Date().getUTCDate() <= 7 ? await runMonthlyRefresh() : '';
-    await weeklyReport([utmb, monthly].filter(Boolean).join('\n'));
+    // After the weekly email, so a job timeout can never cost that; its own short email.
+    if (new Date().getUTCDate() <= 7) await runMonthlyRefresh();
   }
   await prisma.$disconnect();
   // Something (an HTTP keep-alive pool) holds the event loop open after the work is done;
@@ -86,19 +87,32 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
   process.exit(1);
 });
 
-/** The monthly runner refresh, its cost recorded as a news_runs row so the monthly ceiling sees it; returns the email line. */
-async function runMonthlyRefresh(): Promise<string> {
+/**
+ * The monthly runner refresh. Its spend goes into a news_runs row after every bio (so the
+ * monthly ceiling sees it even if the job is killed), then a short email says what it did.
+ */
+async function runMonthlyRefresh(): Promise<void> {
+  let rowId: number | null = null;
+  const record = async (r: MonthlySummary) => {
+    const data = { cost_usd: r.costUsd, summary: { monthlyRefresh: r } as never };
+    if (rowId === null) rowId = (await prisma.news_runs.create({ data: { dry_run: false, ...data } })).id;
+    else await prisma.news_runs.update({ where: { id: rowId }, data });
+  };
+  let text: string;
   try {
-    const r = await monthlyRefresh();
-    await prisma.news_runs.create({ data: { dry_run: false, cost_usd: r.costUsd, summary: { monthlyRefresh: r } as never } });
-    return [
-      `Monthly runner refresh: ${r.resultsAdded} results added, ${r.biosRefreshed.length} bios refreshed${r.biosRefreshed.length ? ` (${r.biosRefreshed.join(', ')})` : ''}, ${r.skipped.length} skipped.`,
+    const r = await monthlyRefresh({ ...liveMonthlyDeps(), progress: record });
+    await record(r);
+    text = [
+      `Monthly runner refresh: ${r.resultsAdded} results added, ${r.biosRefreshed.length} bios refreshed${r.biosRefreshed.length ? ` (${r.biosRefreshed.join(', ')})` : ''}, ${r.skipped.length} skipped. $${r.costUsd.toFixed(2)}.`,
+      r.utmbNotRead ? `${r.utmbNotRead} UTMB pages could not be read.` : '',
       ...r.skipped.map((x) => `  ${x.slug}: ${x.reason}`),
-      r.cutShort ? '  Cut short by the budget or the 12-minute limit.' : '',
+      r.cutShort ? 'Cut short by the budget or the time limit.' : '',
     ].filter(Boolean).join('\n');
   } catch (e) {
-    return `Monthly runner refresh FAILED: ${errorText(e)}`;
+    text = `Monthly runner refresh FAILED: ${errorText(e)}`;
   }
+  console.log(text);
+  await report(text.split('\n')[0], text).catch((err) => console.error('Could not send the monthly refresh email:', err));
 }
 
 type RunSummary = {

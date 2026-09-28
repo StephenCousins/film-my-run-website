@@ -14,7 +14,7 @@ const RUNNING_WORDS = /\b(runner|runners|running|ran|marathons?|ultramarathons?|
 
 /** A race name's first two words, lowercased and stripped of punctuation (hyphens
  * kept: "Mont-Blanc" is one word). "UTMB Mont-Blanc CCC" -> "utmb mont-blanc". */
-const raceKey = (race: string) =>
+export const raceKey = (race: string) =>
   race.toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu, '').trim().split(/\s+/).slice(0, 2).join(' ');
 
 /**
@@ -48,8 +48,9 @@ const liveDeps: GatherDeps = {
  * results), Wikipedia, and our own stories. No UTMB entry and no Wikipedia article
  * is null: a runner we can't find results for gets no page.
  */
-export async function gatherRunner(input: { name?: string; utmbUri?: string; era?: 'current' | 'historic' }, deps: GatherDeps = liveDeps): Promise<RunnerFile | null> {
-  const uri = input.utmbUri ?? (input.name ? (await findUtmb(input.name, deps.get))?.uri : undefined);
+/** `noUtmbSearch`: never look a name up on UTMB (a page with no UTMB link must not pick up a namesake's). */
+export async function gatherRunner(input: { name?: string; utmbUri?: string; era?: 'current' | 'historic'; noUtmbSearch?: boolean }, deps: GatherDeps = liveDeps): Promise<RunnerFile | null> {
+  const uri = input.utmbUri ?? (input.name && !input.noUtmbSearch ? (await findUtmb(input.name, deps.get))?.uri : undefined);
   let utmb = uri ? await utmbRunner(uri, deps.get) : null;
   const name = utmb?.name ?? input.name?.trim();
   if (!name) return null;

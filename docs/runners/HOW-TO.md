@@ -113,6 +113,10 @@ The branded card shows instead.
     through OpenRouter, from the old bio plus fresh sources, through the same
     checks as automatic pages. A bio that fails keeps the old one.
   - Photos, aliases and the author (`session` stays `session`) are kept.
-  - At most $3, inside the £10 ceiling, and a 12-minute limit.
-  - The Monday email has a line on it. `npm run news:daily -- --monthly-refresh`
-    runs it by hand (live).
+  - A bio that fails isn't tried again for 30 days. Finishes a session chose are
+    never dropped; over 10, only UTMB ones go, lowest place first.
+  - Pages with no UTMB link are never looked up on UTMB by name.
+  - At most $3, inside the £10 ceiling. Results stop after 5 minutes, and no bio
+    starts after 10.
+  - It runs after the Monday email and sends its own short one.
+  - `npm run news:daily -- --monthly-refresh` runs it by hand (live).

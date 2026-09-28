@@ -18,6 +18,9 @@ describe('gathering a runner', () => {
     expect(f.results[0]).toMatchObject({ race: 'UTMB Mont-Blanc CCC', year: 2025, position: '1st woman', source: 'UTMB' });
     expect(f.texts.map((t) => t.source.name)).toEqual(['UTMB', 'Film My Run']);
   });
+  it('noUtmbSearch never looks the name up on UTMB', async () => {
+    expect(await gatherRunner({ name: 'Ruth Croft', noUtmbSearch: true }, { get: get({ 'search=': utmbSearch, '/en/runner/99.ruth.croft': utmbPage }), ourStories: none })).toBeNull();
+  });
   it('nobody found anywhere is null (no page is made)', async () => {
     expect(await gatherRunner({ name: 'Nobody Atall' }, { get: get({}), ourStories: none })).toBeNull();
   });

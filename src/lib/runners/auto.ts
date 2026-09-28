@@ -12,7 +12,7 @@ import { checkProfile, editProfile, writeProfile } from './write';
 
 /** 1st, then 2nd, 3rd… by the leading number in `position`; no position (or none
  * parseable) sorts last. */
-const positionRank = (position: string | null): number => {
+export const positionRank = (position: string | null): number => {
   const m = position?.match(/^(\d+)/);
   return m ? Number(m[1]) : Infinity;
 };
@@ -105,8 +105,25 @@ export async function checkedBio(
   page: (bio: string[]) => RunnerFile,
   deps: { check: typeof checkProfile; edit: typeof editProfile },
 ): Promise<{ bio: string[] | null; reason: string | null; costUsd: number }> {
+  const spent = { costUsd: 0 };
+  try {
+    return await fixLoop(f, draft, page, deps, spent);
+  } catch (e) {
+    // What earlier rounds spent still counts against the budget.
+    return { bio: null, reason: `error: ${e instanceof Error ? e.message.slice(0, 200) : String(e)}`, costUsd: spent.costUsd };
+  }
+}
+
+async function fixLoop(
+  f: RunnerFile,
+  draft: string[],
+  page: (bio: string[]) => RunnerFile,
+  deps: { check: typeof checkProfile; edit: typeof editProfile },
+  spent: { costUsd: number },
+): Promise<{ bio: string[] | null; reason: string | null; costUsd: number }> {
   let bio = tidy(draft);
   let costUsd = 0;
+  const add = (c: number) => { costUsd += c; spent.costUsd = costUsd; };
   for (let round = 0; ; round++) {
     const last = round >= NEWS_CONFIG.fixRounds;
     const problems = profileProblems(page(bio));
@@ -114,23 +131,23 @@ export async function checkedBio(
       if (last) return { bio: null, reason: problems.join(', '), costUsd };
       const phrases = problems.includes('near-copy of a source') ? nearCopyPhrases({ title: '', excerpt: '', paragraphs: bio }, page(bio).texts.map((t) => t.text)) : [];
       const e = await deps.edit(f, bio, { problems: problems.filter((p) => p !== 'near-copy of a source'), phrases });
-      costUsd += e.costUsd;
+      add(e.costUsd);
       if (e.bio) bio = tidy(e.bio);
       continue;
     }
     const c = await deps.check(f, bio);
-    costUsd += c.costUsd;
+    add(c.costUsd);
     if (c.unsupported.length === 0) return { bio, reason: null, costUsd };
     if (last) {
       const e = await deps.edit(f, bio, { mark: c.unsupported });
-      costUsd += e.costUsd;
+      add(e.costUsd);
       const marked = e.bio ? tidy(e.bio).filter((p) => p.trim() !== UNVERIFIED_NOTE) : null;
       if (marked && marked.some((p) => p.includes('*'))) marked.push(UNVERIFIED_NOTE);
       if (marked && profileProblems(page(marked)).length === 0) return { bio: marked, reason: null, costUsd };
       return { bio: null, reason: `unsupported: ${c.unsupported.join('; ')}`, costUsd };
     }
     const e = await deps.edit(f, bio, { unsupported: c.unsupported });
-    costUsd += e.costUsd;
+    add(e.costUsd);
     if (e.bio) bio = tidy(e.bio);
   }
 }

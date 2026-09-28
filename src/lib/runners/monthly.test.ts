@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import { MONTHLY_BIO_LIMIT, monthlyRefresh, type MonthlyDeps, type PageRow } from './monthly';
+import { profileProblems } from './checks';
+import { MONTHLY_BIO_LIMIT, monthlyFailures, monthlyRefresh, type MonthlyDeps, type PageRow } from './monthly';
 import type { BestFinish, RunnerFile } from './types';
 
 const checked = new Date('2026-06-01T00:00:00Z');
@@ -26,6 +27,7 @@ function deps(rows: PageRow[], over: Partial<MonthlyDeps> = {}) {
     runners: async () => rows,
     readUtmb: vi.fn(async () => ({ results: [] as BestFinish[] })),
     setFinishes: vi.fn(async () => {}),
+    recentFailures: async () => new Set<string>(),
     latestNews: async () => new Map<string, Date>(),
     monthSpentUsd: async () => 0,
     gather: vi.fn(async (r: PageRow) => gathered(r)),
@@ -45,23 +47,46 @@ describe('monthly runner refresh: results', () => {
     });
     const s = await monthlyRefresh(d);
     expect(s.resultsAdded).toBe(1);
-    expect(d.setFinishes).toHaveBeenCalledWith('jane-doe', [have[0], expect.objectContaining({ race: 'Lavaredo' })]);
+    expect(d.setFinishes).toHaveBeenCalledWith('jane-doe', [have[0], expect.objectContaining({ race: 'Lavaredo' })], row('jane-doe').sources);
   });
 
-  it('keeps at most 10, podiums first, then newest', async () => {
-    const have = Array.from({ length: 10 }, (_, i) => finish(`Race ${i}`, 2015 + i, '3rd woman'));
-    const d = deps([row('jane-doe', { best_finishes: have })], { readUtmb: vi.fn(async () => ({ results: [finish('New Win', 2026, '1st woman')] })) });
-    await monthlyRefresh(d);
+  it('keeps at most 10, dropping only UTMB entries, lowest place then oldest first', async () => {
+    const have = [...Array.from({ length: 8 }, (_, i) => finish(`Race ${i}`, 2015 + i, '3rd woman')), { ...finish('Comrades', 2010, '9th woman'), source: 'Wikipedia' }, finish('Worse', 2024, '3rd woman')];
+    const d = deps([row('jane-doe', { best_finishes: have, sources: [{ name: 'UTMB', url: 'u' }, { name: 'Wikipedia', url: 'w' }] })], { readUtmb: vi.fn(async () => ({ results: [finish('New Win', 2026, '1st woman')] })) });
+    const s = await monthlyRefresh(d);
     const saved = (vi.mocked(d.setFinishes).mock.calls[0] as unknown as [string, BestFinish[]])[1];
     expect(saved).toHaveLength(10);
-    expect(saved[0].race).toBe('New Win');
+    expect(s.resultsAdded).toBe(1);
+    expect(saved.map((b) => b.race)).toContain('New Win');
+    expect(saved.map((b) => b.race)).toContain('Comrades'); // not from UTMB: never dropped, whatever its place
     expect(saved.map((b) => b.race)).not.toContain('Race 0');
   });
 
-  it('runners without a UTMB page are not read', async () => {
-    const d = deps([row('jane-doe', { utmb_uri: null })]);
+  it('adds the UTMB source when the page lacks one, in the same update, and the page still passes the real checks', async () => {
+    const r = row('jane-doe', { sources: [{ name: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Jane_Doe' }] });
+    const d = deps([r], { readUtmb: vi.fn(async () => ({ results: [finish('Lavaredo', 2026, '2nd woman')] })) });
     await monthlyRefresh(d);
-    expect(d.readUtmb).not.toHaveBeenCalled();
+    const [, finishes, sources] = vi.mocked(d.setFinishes).mock.calls[0] as unknown as [string, BestFinish[], { name: string; url: string }[]];
+    expect(sources).toEqual([{ name: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Jane_Doe' }, { name: 'UTMB', url: 'https://utmb.world/en/runner/1.jane-doe' }]);
+    const page: RunnerFile = { slug: 'jane-doe', name: 'Jane Doe', aliases: [], nationality: 'GB', sex: 'F', birthYear: null, disciplines: ['trail_ultra'], era: 'current', utmb: null, texts: [], results: [], photoCandidates: [], bio: newBio, bestFinishes: finishes, sources, photos: [] };
+    expect(profileProblems(page)).toEqual([]);
+  });
+
+  it('runners without a UTMB page are not read; unreadable pages are counted', async () => {
+    const d = deps([row('jane-doe', { utmb_uri: null }), row('ann-smith')], { readUtmb: vi.fn(async () => null) });
+    const s = await monthlyRefresh(d);
+    expect(d.readUtmb).toHaveBeenCalledTimes(1);
+    expect(s.utmbNotRead).toBe(1);
+    expect(s.skipped).toEqual([]);
+  });
+
+  it('stops reading results at their own deadline, longest-unchecked first', async () => {
+    let t = 0;
+    const rows = [row('newer', { bio_checked_at: new Date('2026-08-01') }), row('never', { bio_checked_at: null }), row('older')];
+    const d = deps(rows, { resultsDeadlineMs: 10, clock: () => t, readUtmb: vi.fn(async () => { t += 6; return { results: [] }; }) });
+    const s = await monthlyRefresh(d);
+    expect(vi.mocked(d.readUtmb).mock.calls.map((c) => (c as unknown as [string])[0])).toEqual(['1.never', '1.older']);
+    expect(s.cutShort).toBe(true);
   });
 });
 
@@ -99,10 +124,44 @@ describe('monthly runner refresh: saving', () => {
     expect(f.photos).toEqual([r2Photo]);
     expect(f.bio).toEqual(newBio);
     expect(f.sources!.map((x) => x.name)).toEqual(['UTMB']);
+    expect(f).toMatchObject({ aliases: [], disciplines: ['trail_ultra'], era: 'current', nationality: 'GB', name: 'Jane Doe' });
     // The writer saw the old bio, labelled as our previous profile.
     const seen = (vi.mocked(d.write).mock.calls[0] as unknown as [RunnerFile, string[]]);
     expect(seen[1]).toEqual(['She is a runner.', 'She won a race.', 'She runs now.']);
     expect(seen[0].texts.map((t) => t.source.name)).toContain('Film My Run previous profile');
+  });
+
+  it('keeps aliases, disciplines, era and nationality; one Film My Run source, the newest', async () => {
+    const r = row('jane-doe', { aliases: ['Jane D. Doe'], disciplines: ['road', 'trail_ultra'], era: 'historic', nationality: 'IE', sources: [{ name: 'UTMB', url: 'https://utmb.world/en/runner/1.jane-doe' }, { name: 'Film My Run', url: 'https://filmmyrun.com/news/old' }] });
+    const g = gathered(r);
+    g.texts.push({ source: { name: 'Film My Run', url: 'https://filmmyrun.com/news/new' }, text: 'Jane Doe won again.' });
+    const d = deps([r], { latestNews: news, gather: vi.fn(async () => g) });
+    await monthlyRefresh(d);
+    const [f] = vi.mocked(d.save).mock.calls[0] as unknown as [RunnerFile];
+    expect(f).toMatchObject({ aliases: ['Jane D. Doe'], disciplines: ['road', 'trail_ultra'], era: 'historic', nationality: 'IE' });
+    expect(f.sources).toEqual([{ name: 'UTMB', url: 'https://utmb.world/en/runner/1.jane-doe' }, { name: 'Film My Run', url: 'https://filmmyrun.com/news/new' }]);
+  });
+
+  it('a bio that failed in the last 30 days is not tried again', async () => {
+    const d = deps([row('jane-doe')], { latestNews: news, recentFailures: async () => monthlyFailures([{ monthlyRefresh: { skipped: [{ slug: 'jane-doe', reason: 'unsupported: x' }, { slug: 'ann-smith', reason: 'budget' }] } }]) });
+    const s = await monthlyRefresh(d);
+    expect(d.write).not.toHaveBeenCalled();
+    expect(s.skipped).toEqual([{ slug: 'jane-doe', reason: 'failed recently' }]);
+    expect(monthlyFailures([{ monthlyRefresh: { skipped: [{ slug: 'ann-smith', reason: 'budget' }] } }]).size).toBe(0);
+  });
+
+  it('spend from earlier rounds counts when a later call throws', async () => {
+    const check = vi.fn().mockResolvedValueOnce({ unsupported: ['x'], costUsd: 0.03 }).mockRejectedValueOnce(new Error('network'));
+    const d = deps([row('jane-doe')], { latestNews: news, check });
+    const s = await monthlyRefresh(d);
+    expect(s.costUsd).toBeCloseTo(0.05 + 0.03 + 0.02); // write, first check, the edit
+    expect(s.skipped).toEqual([{ slug: 'jane-doe', reason: 'error: network' }]);
+  });
+
+  it('reports progress after the results and after every bio', async () => {
+    const progress = vi.fn(async () => {});
+    await monthlyRefresh(deps([row('jane-doe')], { latestNews: news, progress }));
+    expect(progress).toHaveBeenCalledTimes(2);
   });
 
   it('an auto page stays auto', async () => {
@@ -141,7 +200,7 @@ describe('monthly runner refresh: limits', () => {
 
   it('stops at the deadline', async () => {
     let t = 0;
-    const d = deps(rows, { latestNews: news, deadlineMs: 10, clock: () => t, write: vi.fn(async () => { t += 6; return { bio: newBio, costUsd: 0.05 }; }) });
+    const d = deps(rows, { latestNews: news, bioDeadlineMs: 10, clock: () => t, write: vi.fn(async () => { t += 6; return { bio: newBio, costUsd: 0.05 }; }) });
     const s = await monthlyRefresh(d);
     expect(s.biosRefreshed).toHaveLength(2);
     expect(s.cutShort).toBe(true);
