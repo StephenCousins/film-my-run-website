@@ -45,7 +45,7 @@ const METHOD = [
   {
     icon: Mountain,
     title: 'Ultras counted in hours',
-    body: 'Long runs that build to five to seven hours, back-to-back weekends, a weekly hill session and time on your feet, not just miles.',
+    body: 'Easy, chatty long runs that build to five hours at most, back-to-back weekends, a weekly hill session and time on your feet, not just miles.',
   },
   {
     icon: Zap,
