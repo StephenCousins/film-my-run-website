@@ -4,7 +4,8 @@ on:
   schedule:
     # Off the hour: GitHub delays or drops scheduled runs at :00 when busy (none ran on 27 Sep).
     - cron: '17 5 * * *'   # 06:17 UK summer time, 05:17 winter
-    # Catch-up: runs the news only if the 06:17 run didn't happen (news:daily --if-not-run-today).
+    # Catch-up. Every scheduled run passes --if-not-run-today: GitHub fires this repo's
+    # schedules hours late, so a late 06:17 must not repeat a run started by hand.
     - cron: '17 7 * * *'   # 08:17 UK summer time, 07:17 winter
   workflow_dispatch:
     inputs:
@@ -22,7 +23,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci && npx prisma generate
-      - run: npm run news:daily -- ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }} ${{ (github.event_name == 'workflow_dispatch' && inputs.max_stories != '') && format('--max {0}', inputs.max_stories) || '' }} ${{ github.event.schedule == '17 7 * * *' && '--if-not-run-today' || '' }}
+      - run: npm run news:daily -- ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }} ${{ (github.event_name == 'workflow_dispatch' && inputs.max_stories != '') && format('--max {0}', inputs.max_stories) || '' }} ${{ github.event_name == 'schedule' && '--if-not-run-today' || '' }}
         env:
           DATABASE_URL: ${{ secrets.DATABASE_PUBLIC_URL }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
