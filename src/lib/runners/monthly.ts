@@ -155,7 +155,7 @@ export async function monthlyRefresh(deps: MonthlyDeps = liveMonthlyDeps()): Pro
     newPodium.add(row.slug);
   }
   console.log(`Monthly runner refresh: ${out.resultsAdded} results added, ${out.utmbNotRead} UTMB pages not read.`);
-  await deps.progress?.(out);
+  await deps.progress?.(out).catch((e) => console.error("monthly refresh: progress record failed", e));
 
   // 2. Which bios.
   const news = await deps.latestNews();
@@ -201,7 +201,7 @@ export async function monthlyRefresh(deps: MonthlyDeps = liveMonthlyDeps()): Pro
     } catch (e) {
       out.skipped.push({ slug: row.slug, reason: `error: ${e instanceof Error ? e.message.slice(0, 200) : String(e)}` });
     }
-    await deps.progress?.(out);
+    await deps.progress?.(out).catch((e) => console.error("monthly refresh: progress record failed", e));
   }
   return out;
 }
