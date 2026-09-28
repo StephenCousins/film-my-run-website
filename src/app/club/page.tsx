@@ -46,7 +46,7 @@ export default function ClubPage() {
           <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-16 lg:py-24">
             <p className="text-sm font-semibold uppercase tracking-wider text-orange-400">FMR Club</p>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mt-4 mb-6">
-              {money(CLUB_MONTHLY_PENCE)} a month, and the running stays free for everyone
+              Support the Channel for only {money(CLUB_MONTHLY_PENCE)} a month
             </h1>
             <p className="text-lg text-zinc-200 leading-relaxed max-w-2xl">
               Film My Run has always given the tools away: the calculators, the race predictor built on 2.4 million
