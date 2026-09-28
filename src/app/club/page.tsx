@@ -50,7 +50,7 @@ export default function ClubPage() {
             </h1>
             <p className="text-lg text-zinc-200 leading-relaxed max-w-2xl">
               Film My Run has always given the tools away: the calculators, the race predictor built on 2.4 million
-              results, a training plan for whatever you are aiming at. That does not change. FMR Club is for the people
+              results, and training plans from 5km to marathon distance. That does not change. FMR Club is for the people
               who want to chip in anyway, and it comes with the things that take real work to run.
             </p>
             <div className="mt-10">
