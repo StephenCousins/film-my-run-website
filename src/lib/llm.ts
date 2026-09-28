@@ -154,7 +154,12 @@ const runClaude: ClaudeRunner = (args, stdin, timeoutMs) =>
     child.on('error', reject); // ENOENT when the CLI isn't installed
     child.on('close', (code, signal) => {
       if (signal) reject(new Error(`killed by ${signal} (timeout?)`));
-      else if (code !== 0) reject(new Error(`exit ${code}: ${(err || out).trim().slice(0, 200)}`));
+      else if (code !== 0) {
+        // The CLI prints a JSON envelope even on failure; its `result` holds the reason.
+        let why = (err || out).trim();
+        try { const j = JSON.parse(out); why = String(j.result ?? j.error ?? why); } catch {}
+        reject(new Error(`exit ${code}: ${why.slice(0, 300)}`));
+      }
       else resolve(out);
     });
     child.stdin.on('error', () => {}); // EPIPE if it dies early; 'close' reports why
