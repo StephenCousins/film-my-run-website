@@ -146,12 +146,19 @@ export async function autoProfiles(names: string[], budgetUsd: number, deps: Aut
       let bio = tidy(w.bio);
       const texts = f.texts.map((t) => t.text);
       // Only used once a cheap vision check confirms it's actually a photo of a person
-      // (a human writer found one UTMB picture that was a dog).
+      // (a human writer found one UTMB picture that was a dog). Road runners have no
+      // UTMB picture but often a Wikipedia lead photo in photoCandidates; try that next,
+      // same check, keeping its own credit/licence/source_url.
       const picture = f.utmb?.picture;
       const photoOk = !!picture && (await deps.checkPhoto(picture).catch(() => false));
-      const photos: RunnerFile['photos'] = photoOk
-        ? [{ kind: 'portrait', url: picture!, credit: 'Photo: UTMB profile', licence: null, source_url: `https://utmb.world/en/runner/${f.utmb!.uri}` }]
-        : [];
+      let photos: RunnerFile['photos'];
+      if (photoOk) {
+        photos = [{ kind: 'portrait', url: picture!, credit: 'Photo: UTMB profile', licence: null, source_url: `https://utmb.world/en/runner/${f.utmb!.uri}` }];
+      } else {
+        const candidate = f.photoCandidates[0];
+        const candidateOk = !!candidate && (await deps.checkPhoto(candidate.url).catch(() => false));
+        photos = candidateOk ? [{ ...candidate, kind: 'portrait' }] : [];
+      }
       const file = (b: string[]): RunnerFile => ({ ...f, bio: b, bestFinishes: topFinishes(f.results), photos, sources: f.texts.map((t) => t.source) });
       let reason: string | null = null;
       for (let round = 0; ; round++) {

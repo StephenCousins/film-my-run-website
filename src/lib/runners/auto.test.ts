@@ -3,11 +3,13 @@ import { AUTO_PROFILES_PER_DAY, autoProfiles, recentFailureNames } from './auto'
 import type { RunnerFile } from './types';
 import { UNVERIFIED_NOTE } from '@/lib/news/write';
 
-const file = (name: string, picture: string | null = null): RunnerFile => ({
+const candidatePhoto = { kind: 'portrait' as const, url: 'https://upload.wikimedia.org/x.jpg', credit: 'Photo: Jane Smith / Wikimedia Commons', licence: 'CC BY-SA 4.0', source_url: 'https://commons.wikimedia.org/wiki/File:x.jpg' };
+
+const file = (name: string, picture: string | null = null, photoCandidates: RunnerFile['photoCandidates'] = []): RunnerFile => ({
   slug: name.toLowerCase().replace(/ /g, '-'), name, aliases: [], nationality: 'GB', sex: 'F', birthYear: null, disciplines: ['trail_ultra'], era: 'current',
   utmb: { id: 1, uri: '1.x', index: 800, website: null, picture },
   texts: [{ source: { name: 'UTMB', url: 'https://utmb.world/en/runner/1.x' }, text: `${name}. General UTMB Index: 800. 2025: Lakeland 100, 1st woman.` }],
-  results: [{ race: 'Lakeland 100', year: 2025, distance: '169 km', time: '28:10:00', position: '1st woman', source: 'UTMB' }], photoCandidates: [],
+  results: [{ race: 'Lakeland 100', year: 2025, distance: '169 km', time: '28:10:00', position: '1st woman', source: 'UTMB' }], photoCandidates,
 });
 const bio = ['She is a British trail runner.', 'She won the Lakeland 100 in 2025.', 'Her UTMB Index is 800.'];
 
@@ -60,6 +62,27 @@ describe('automatic runner pages', () => {
     const saved = d.save.mock.calls[0][0] as RunnerFile;
     expect(saved.photos).toEqual([]);
     expect(out.log).toEqual([{ name: 'Jasmin Paris', slug: 'jasmin-paris' }]); // a broken photo check doesn't fail the whole page
+  });
+  it('no UTMB picture but a candidate that passes: uses it as the portrait with its Commons credit', async () => {
+    const gather = vi.fn(async () => file('Tigst Assefa', null, [candidatePhoto]));
+    const d = deps({ gather });
+    await autoProfiles(['Tigst Assefa'], 10, d);
+    const saved = d.save.mock.calls[0][0] as RunnerFile;
+    expect(saved.photos).toEqual([candidatePhoto]);
+  });
+  it('a candidate that fails the photo check: no photo', async () => {
+    const gather = vi.fn(async () => file('Tigst Assefa', null, [candidatePhoto]));
+    const d = deps({ gather, checkPhoto: vi.fn(async () => false) });
+    await autoProfiles(['Tigst Assefa'], 10, d);
+    const saved = d.save.mock.calls[0][0] as RunnerFile;
+    expect(saved.photos).toEqual([]);
+  });
+  it('a UTMB picture that passes still wins over the candidate', async () => {
+    const gather = vi.fn(async () => file('Jasmin Paris', 'https://img.utmb.world/x', [candidatePhoto]));
+    const d = deps({ gather });
+    await autoProfiles(['Jasmin Paris'], 10, d);
+    const saved = d.save.mock.calls[0][0] as RunnerFile;
+    expect(saved.photos).toEqual([{ kind: 'portrait', url: 'https://img.utmb.world/x', credit: 'Photo: UTMB profile', licence: null, source_url: 'https://utmb.world/en/runner/1.x' }]);
   });
   it('no results anywhere: no page, with the reason', async () => {
     const out = await autoProfiles(['Nobody Found'], 10, deps());
