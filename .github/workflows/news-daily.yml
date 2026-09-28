@@ -3,7 +3,7 @@ on:
   # Live since 26 Sep 2026.
   schedule:
     # Off the hour: GitHub delays or drops scheduled runs at :00 when busy (none ran on 27 Sep).
-    - cron: '17 5 * * *'   # 06:17 UK summer time, 05:17 winter
+    - cron: '17 2 * * *'   # 03:17 UK summer time, 02:17 winter (GitHub starts it hours late; any time is fine)
     # Catch-up. Every scheduled run passes --if-not-run-today: GitHub fires this repo's
     # schedules hours late, so a late 06:17 must not repeat a run started by hand.
     - cron: '17 7 * * *'   # 08:17 UK summer time, 07:17 winter
