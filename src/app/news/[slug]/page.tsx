@@ -85,11 +85,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const story = await getStoryBySlug(slug);
 
   if (!story) {
-    return { title: 'Story Not Found | Film My Run' };
+    return { title: 'Story Not Found' };
   }
 
   return {
-    title: `${story.title} | Film My Run`,
+    title: story.title,
     description: story.excerpt,
     alternates: {
       canonical: `https://filmmyrun.com/news/${slug}`,

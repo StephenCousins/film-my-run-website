@@ -11,7 +11,7 @@ import ContactForm from '@/components/contact/ContactForm';
 // ============================================
 
 export const metadata: Metadata = {
-  title: 'Contact | Film My Run',
+  title: 'Contact',
   alternates: { canonical: 'https://filmmyrun.com/contact' },
   description: 'Get in touch for race filming, event coverage, collaborations, or just to say hello. We\'d love to hear from you.',
   keywords: [

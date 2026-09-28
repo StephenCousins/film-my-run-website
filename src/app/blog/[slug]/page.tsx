@@ -171,12 +171,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   if (!post) {
     return {
-      title: 'Post Not Found | Film My Run',
+      title: 'Post Not Found',
     };
   }
 
   return {
-    title: `${post.title} | Film My Run`,
+    title: post.title,
     description: post.excerpt,
     alternates: {
       canonical: `https://filmmyrun.com/blog/${slug}`,
