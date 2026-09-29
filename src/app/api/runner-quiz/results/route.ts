@@ -43,13 +43,17 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Counts only the current 12 types; rows from the old quiz stay stored but aren't counted.
+// Counts only results from the new quiz. Several old types share a name with a new one
+// (Lab Rat, Marathon Hunter, Track Purist...), so the launch time is what separates them.
+// It also leaves out one test row written before launch.
+const LAUNCHED = new Date('2026-09-29T13:30:00Z');
+
 export async function GET() {
   try {
     const names = QUIZ.types.map((t) => t.name);
     const groups = await prisma.quiz_results.groupBy({
       by: ['tribe'],
-      where: { tribe: { in: names } },
+      where: { tribe: { in: names }, created_at: { gte: LAUNCHED } },
       _count: { tribe: true },
     });
     const total = groups.reduce((n, g) => n + g._count.tribe, 0);
