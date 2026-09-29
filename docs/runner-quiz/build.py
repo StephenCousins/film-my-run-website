@@ -22,7 +22,7 @@ Q = [
  ("What's stuck to your fridge?", [
    ("A training plan. Every session colour-coded.", dict(M=2,R=1)),
    ("A parkrun milestone certificate.", dict(D=1,R=-2)),
-   ("A race number with a bog stain on it.", dict(S=-2,M=-1)),
+   ("A torn race number with mud on it.", dict(S=-2,M=-1)),
    ("Your PBs on a Post-it. Updated in pen.", dict(D=1,R=2)),
  ]),
  ("The hill ahead is steep. You...", [
@@ -77,7 +77,7 @@ Q = [
 for q in Q:
   for a in q[1]: a[1].pop('R2',None)
 # Fix the vague race-entries answer.
-Q[8][1][2] = ("Race entries. Lots of race entries.", dict(R=1,M=-1))
+Q[8][1][2] = ("Flights to the mountains.", dict(S=-2,D=-1))
 
 T = [
  dict(id="track", name="Track Purist", colour="#d63a2f", target=[90,80,95,90],
