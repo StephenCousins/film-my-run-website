@@ -4,6 +4,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ShopGrid from '@/components/shop/ShopGrid';
 import WelcomeOffer from '@/components/shop/WelcomeOffer';
+import { MemberOffer } from '@/components/shop/MemberLine';
 import Link from 'next/link';
 import { shopItems, shopCategories, etsyShopUrl } from '@/lib/shop';
 import { typeById } from '@/lib/runner-quiz';
@@ -79,6 +80,7 @@ export default function ShopPage() {
                 ))}
               </div>
             </Link>
+            <MemberOffer />
             <ShopGrid items={shopItems} categories={shopCategories} />
             <WelcomeOffer />
           </div>
