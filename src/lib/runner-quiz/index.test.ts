@@ -169,3 +169,14 @@ describe('filmTitle', () => {
     for (const t of QUIZ.types) expect(filmTitle(t.film.title).length).toBeGreaterThan(3);
   });
 });
+
+describe('photos', () => {
+  it('every question, every type and the intro has a site photo', () => {
+    const photos = [QUIZ.intro, ...QUIZ.questions, ...QUIZ.types];
+    for (const p of photos) {
+      expect(p.image).toMatch(/^https:\/\/pub-dbf37311fd7c4d94b4e1f0eb78ebdd18\.r2\.dev\/.+\.(jpe?g|png|webp)$/i);
+      if (p.focus) expect(p.focus).toMatch(/^\d{1,3}% \d{1,3}%$/);
+    }
+    expect(new Set(QUIZ.questions.map((q) => q.image)).size).toBe(QUIZ.questions.length);
+  });
+});

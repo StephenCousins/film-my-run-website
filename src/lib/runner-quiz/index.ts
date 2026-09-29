@@ -7,7 +7,12 @@ export interface QuizAnswer {
   text: string;
   scores: Partial<Record<AxisId, number>>;
 }
-export interface QuizQuestion {
+/** A photo from the site's R2 bucket; `focus` is its CSS object-position, e.g. "50% 30%". */
+export interface QuizPhoto {
+  image: string;
+  focus?: string;
+}
+export interface QuizQuestion extends QuizPhoto {
   q: string;
   answers: QuizAnswer[];
 }
@@ -15,7 +20,7 @@ export interface QuizFilm {
   id: string;
   title: string;
 }
-export interface QuizType {
+export interface QuizType extends QuizPhoto {
   id: string;
   name: string;
   colour: string;
@@ -37,6 +42,7 @@ export interface Quiz {
   questions: QuizQuestion[];
   types: QuizType[];
   calibration: { mean: Scores; sd: Scores; spread: number };
+  intro: QuizPhoto;
 }
 
 export const QUIZ = content as unknown as Quiz;
