@@ -1,0 +1,700 @@
+{
+ "axes": [
+  {
+   "id": "S",
+   "low": "Trail",
+   "high": "Road"
+  },
+  {
+   "id": "M",
+   "low": "Feel",
+   "high": "Data"
+  },
+  {
+   "id": "D",
+   "low": "Long",
+   "high": "Short"
+  },
+  {
+   "id": "R",
+   "low": "Social",
+   "high": "Racer"
+  }
+ ],
+ "questions": [
+  {
+   "q": "6am Saturday. It's chucking it down. You...",
+   "answers": [
+    {
+     "text": "Go to parkrun. Obviously. The barcode's already in your pocket.",
+     "scores": {
+      "S": 1,
+      "D": 2,
+      "R": -2
+     }
+    },
+    {
+     "text": "Head for the hills. Rain makes the bogs better.",
+     "scores": {
+      "S": -2,
+      "M": -1
+     }
+    },
+    {
+     "text": "Treadmill. The plan says 6 x 800m and the plan is the plan.",
+     "scores": {
+      "M": 2,
+      "D": 1,
+      "R": 1
+     }
+    },
+    {
+     "text": "Twenty miles anyway. The long run doesn't care about weather.",
+     "scores": {
+      "D": -2,
+      "R": 1
+     }
+    }
+   ]
+  },
+  {
+   "q": "Your watch dies on the start line.",
+   "answers": [
+    {
+     "text": "Panic. Borrow one. Seriously consider going home.",
+     "scores": {
+      "M": 2,
+      "R": 1
+     }
+    },
+    {
+     "text": "Brilliant. Now I can just run.",
+     "scores": {
+      "M": -2,
+      "R": -1
+     }
+    },
+    {
+     "text": "Pace off the runner in front and count the mile markers.",
+     "scores": {
+      "S": 1,
+      "R": 2
+     }
+    },
+    {
+     "text": "Doesn't matter. I've got the map.",
+     "scores": {
+      "S": -2,
+      "M": -1
+     }
+    }
+   ]
+  },
+  {
+   "q": "Pick a finish line.",
+   "answers": [
+    {
+     "text": "The Mall. Medal round your neck, crowds ten deep.",
+     "scores": {
+      "S": 2,
+      "D": -1,
+      "R": -1
+     }
+    },
+    {
+     "text": "A village hall in the Lakes. Tea, soup and a raffle.",
+     "scores": {
+      "S": -2,
+      "M": -1,
+      "R": -1
+     }
+    },
+    {
+     "text": "Chamonix at 4am, 170km after you started.",
+     "scores": {
+      "S": -2,
+      "D": -2,
+      "R": 1
+     }
+    },
+    {
+     "text": "A floodlit track. Last lap of a 5000m. The bell is ringing.",
+     "scores": {
+      "S": 2,
+      "D": 2,
+      "R": 2
+     }
+    }
+   ]
+  },
+  {
+   "q": "What's stuck to your fridge?",
+   "answers": [
+    {
+     "text": "A training plan. Every session colour-coded.",
+     "scores": {
+      "M": 2,
+      "R": 1
+     }
+    },
+    {
+     "text": "A parkrun milestone certificate.",
+     "scores": {
+      "D": 1,
+      "R": -2
+     }
+    },
+    {
+     "text": "A race number with a bog stain on it.",
+     "scores": {
+      "S": -2,
+      "M": -1
+     }
+    },
+    {
+     "text": "Your PBs on a Post-it. Updated in pen.",
+     "scores": {
+      "D": 1,
+      "R": 2
+     }
+    }
+   ]
+  },
+  {
+   "q": "The hill ahead is steep. You...",
+   "answers": [
+    {
+     "text": "Walk it. Power hiking is a skill. Eat something.",
+     "scores": {
+      "S": -1,
+      "D": -2,
+      "R": -1
+     }
+    },
+    {
+     "text": "Attack it. Hills are where races are won.",
+     "scores": {
+      "S": -1,
+      "R": 2
+     }
+    },
+    {
+     "text": "Find the road that goes round it.",
+     "scores": {
+      "S": 2,
+      "M": 0
+     }
+    },
+    {
+     "text": "Look at what it did to your heart rate afterwards.",
+     "scores": {
+      "M": 2
+     }
+    }
+   ]
+  },
+  {
+   "q": "Your Sunday long run ends with...",
+   "answers": [
+    {
+     "text": "Coffee and cake with the club.",
+     "scores": {
+      "R": -2,
+      "M": -1
+     }
+    },
+    {
+     "text": "An upload, a kudos check and a proper look at the splits.",
+     "scores": {
+      "M": 2,
+      "S": 1
+     }
+    },
+    {
+     "text": "A pint in a pub you've never seen before, 30 miles from home.",
+     "scores": {
+      "S": -1,
+      "D": -2,
+      "M": -1
+     }
+    },
+    {
+     "text": "Long run? It's 45 minutes. Sunday is for recovery.",
+     "scores": {
+      "D": 2,
+      "R": 1
+     }
+    }
+   ]
+  },
+  {
+   "q": "Entries open at 9am. You're entering...",
+   "answers": [
+    {
+     "text": "The London ballot. Again.",
+     "scores": {
+      "S": 2,
+      "D": -1,
+      "R": -1
+     }
+    },
+    {
+     "text": "A 100-miler with qualifying points and a waiting list.",
+     "scores": {
+      "S": -1,
+      "D": -2,
+      "M": 1,
+      "R": 1
+     }
+    },
+    {
+     "text": "The club championship 10K.",
+     "scores": {
+      "D": 1,
+      "R": -1
+     }
+    },
+    {
+     "text": "A backyard ultra. Last one standing. No finish line.",
+     "scores": {
+      "D": -2,
+      "R": 2,
+      "M": 1
+     }
+    }
+   ]
+  },
+  {
+   "q": "Someone asks your marathon PB.",
+   "answers": [
+    {
+     "text": "To the second. Plus the story of the headwind at mile 20.",
+     "scores": {
+      "M": 1,
+      "R": 2
+     }
+    },
+    {
+     "text": "About four hours? I stopped for a photo with a man dressed as a rhino.",
+     "scores": {
+      "M": -1,
+      "R": -2
+     }
+    },
+    {
+     "text": "I don't really do marathons. Too short.",
+     "scores": {
+      "D": -2
+     }
+    },
+    {
+     "text": "I don't really do marathons. Too long.",
+     "scores": {
+      "D": 2
+     }
+    }
+   ]
+  },
+  {
+   "q": "You've got £300 to spend. You buy...",
+   "answers": [
+    {
+     "text": "A new GPS watch and a chest strap.",
+     "scores": {
+      "M": 2
+     }
+    },
+    {
+     "text": "A proper waterproof and a compass.",
+     "scores": {
+      "S": -2,
+      "M": -1
+     }
+    },
+    {
+     "text": "Race entries. Lots of race entries.",
+     "scores": {
+      "R": 1,
+      "M": -1
+     }
+    },
+    {
+     "text": "Carbon-plated super shoes.",
+     "scores": {
+      "S": 2,
+      "D": 1,
+      "R": 1
+     }
+    }
+   ]
+  },
+  {
+   "q": "Halfway through a race, you're...",
+   "answers": [
+    {
+     "text": "Chatting to the person next to you. You'll be mates by the finish.",
+     "scores": {
+      "R": -2
+     }
+    },
+    {
+     "text": "Doing sums. Pace, fuel, time to the next checkpoint.",
+     "scores": {
+      "M": 2,
+      "D": -1
+     }
+    },
+    {
+     "text": "Hurting and loving it. Someone's getting overtaken.",
+     "scores": {
+      "R": 2,
+      "D": 1
+     }
+    },
+    {
+     "text": "Looking at the view. You came for this.",
+     "scores": {
+      "S": -2,
+      "M": -1,
+      "R": -1
+     }
+    }
+   ]
+  },
+  {
+   "q": "Dream running holiday.",
+   "answers": [
+    {
+     "text": "Chamonix in August.",
+     "scores": {
+      "S": -2,
+      "D": -1
+     }
+    },
+    {
+     "text": "A city break, timed perfectly to a marathon.",
+     "scores": {
+      "S": 2,
+      "D": -1
+     }
+    },
+    {
+     "text": "Three weeks at altitude with a coach and a spreadsheet.",
+     "scores": {
+      "M": 2,
+      "R": 2
+     }
+    },
+    {
+     "text": "Anywhere with a parkrun you haven't done yet.",
+     "scores": {
+      "S": 1,
+      "D": 2,
+      "R": -2
+     }
+    }
+   ]
+  },
+  {
+   "q": "Why do you run?",
+   "answers": [
+    {
+     "text": "To see how fast I can go.",
+     "scores": {
+      "D": 1,
+      "R": 2
+     }
+    },
+    {
+     "text": "To be with my people.",
+     "scores": {
+      "R": -2
+     }
+    },
+    {
+     "text": "To get properly lost.",
+     "scores": {
+      "S": -2,
+      "M": -2,
+      "D": -1
+     }
+    },
+    {
+     "text": "Because the numbers keep getting better.",
+     "scores": {
+      "M": 2
+     }
+    }
+   ]
+  }
+ ],
+ "types": [
+  {
+   "id": "track",
+   "name": "Track Purist",
+   "colour": "#d63a2f",
+   "target": [
+    90,
+    80,
+    95,
+    90
+   ],
+   "line": "One lane, one clock, no excuses.",
+   "profile": "You like your running measured to the centimetre. You know your 400m splits from races years ago and you have strong opinions about spikes. Road races are fine, but the track is where the truth lives.",
+   "traits": [
+    "Owns more spikes than trainers",
+    "Can tell you the lap record at their local track",
+    "Warms up for longer than most people race"
+   ],
+   "famous": "Josh Kerr, Keely Hodgkinson",
+   "race": "A 5000m on a warm evening, with a pacer",
+   "mantra": "The clock doesn't lie."
+  },
+  {
+   "id": "marathon",
+   "name": "Marathon Hunter",
+   "colour": "#e8762c",
+   "target": [
+    85,
+    85,
+    30,
+    90
+   ],
+   "line": "Sixteen-week blocks and a spreadsheet for everything.",
+   "profile": "Your year runs in training blocks. You've studied the Berlin elevation profile and you know exactly how many gels you take and when. The marathon is the perfect distance. Long enough to hurt, short enough to race.",
+   "traits": [
+    "Has a pace band for every marathon they've run",
+    "Plans annual leave around the race calendar",
+    "Talks about 'the wall' like an old enemy"
+   ],
+   "famous": "Eliud Kipchoge, Paula Radcliffe",
+   "race": "Berlin. Flat, fast, cold morning",
+   "mantra": "Trust the training."
+  },
+  {
+   "id": "parkrun",
+   "name": "Parkrun Faithful",
+   "colour": "#3a9a5b",
+   "target": [
+    75,
+    40,
+    85,
+    15
+   ],
+   "line": "Saturday, 9am. Non-negotiable.",
+   "profile": "You've run in hail, heatwaves and once on Christmas Day, which took some explaining. Your barcode is laminated, your tourist tally is growing and you've volunteered nearly as often as you've run. It's the best free thing in Britain.",
+   "traits": [
+    "Barcode in every jacket pocket",
+    "Plans holidays around new parkruns",
+    "Knows the first-timers' briefing word for word"
+   ],
+   "famous": "The volunteers in hi-vis at every one",
+   "race": "A parkrun you haven't done, somewhere odd",
+   "mantra": "See you Saturday."
+  },
+  {
+   "id": "bigcity",
+   "name": "Big City Marathoner",
+   "colour": "#c2408f",
+   "target": [
+    90,
+    30,
+    30,
+    20
+   ],
+   "line": "Crowds, costumes and a medal the size of a saucer.",
+   "profile": "You run for the atmosphere. Strangers shouting your name, the bands under the bridges, the man dressed as a rhino. The time on the clock matters less than the story you tell afterwards, and you tell it often.",
+   "traits": [
+    "Name printed on the front of the vest",
+    "Has run past a Big Ben costume at least once",
+    "The finish photo is still their profile picture"
+   ],
+   "famous": "Kevin Sinfield",
+   "race": "London. Tower Bridge, the Mall, the lot",
+   "mantra": "Every mile means something."
+  },
+  {
+   "id": "fell",
+   "name": "Fell Runner",
+   "colour": "#7a6a3a",
+   "target": [
+    10,
+    15,
+    55,
+    70
+   ],
+   "line": "Map, compass, bog. Tea afterwards.",
+   "profile": "You don't need a waymarked trail, you need a hill and a line up it. Your races cost a fiver, start from a pub car park and finish with soup. You're fast downhill in a way that frightens people.",
+   "traits": [
+    "Knows the difference between a bog and a proper bog",
+    "Kit list includes a whistle and a cag",
+    "Has never once looked at their average pace"
+   ],
+   "famous": "Joss Naylor",
+   "race": "A Lakes classic with a checkpoint on every summit",
+   "mantra": "Straight up. Straight down."
+  },
+  {
+   "id": "sky",
+   "name": "Sky Racer",
+   "colour": "#2f7fc1",
+   "target": [
+    15,
+    80,
+    55,
+    85
+   ],
+   "line": "Measures runs in metres climbed, not kilometres.",
+   "profile": "You chase vertical. Your training is hill reps and your watch knows your climbing rate better than your friends know you. You're properly competitive, but the mountain is always the real opponent.",
+   "traits": [
+    "Calves that could crack walnuts",
+    "Poles, and they know how to use them",
+    "Checks the elevation profile before the distance"
+   ],
+   "famous": "Kilian Jornet",
+   "race": "A skyrace with a ridge in the middle",
+   "mantra": "Up is the only direction."
+  },
+  {
+   "id": "hundred",
+   "name": "Hundred Miler",
+   "colour": "#5b3f8f",
+   "target": [
+    30,
+    75,
+    5,
+    65
+   ],
+   "line": "Checkpoint to checkpoint, all through the night.",
+   "profile": "A hundred miles doesn't scare you, it organises you. You've got a crew plan, a fuel plan and a plan for when the plans go wrong. You know which checkpoint does the best soup and you've learned to love 3am.",
+   "traits": [
+    "Owns more head torches than hats",
+    "Has a crew spreadsheet with tabs",
+    "Can eat a sandwich at 10 minutes a mile"
+   ],
+   "famous": "Courtney Dauwalter, Jim Walmsley",
+   "race": "A Centurion hundred, finishing in the dark",
+   "mantra": "Relentless forward progress."
+  },
+  {
+   "id": "wanderer",
+   "name": "Ultra Wanderer",
+   "colour": "#4f8a7a",
+   "target": [
+    15,
+    10,
+    10,
+    15
+   ],
+   "line": "Long days out. The sandwich stop is part of the plan.",
+   "profile": "You run far because you like being out there, not because anyone's timing you. You walk the hills, stop for the view and know every good cafe on the South Downs Way. Getting there is the point.",
+   "traits": [
+    "Packs a proper lunch for a long run",
+    "Takes photos at every stile",
+    "Has never raced the last mile in their life"
+   ],
+   "famous": "Stephen Cousins, on a good day",
+   "race": "A long trail with good views and better cake",
+   "mantra": "Time on feet."
+  },
+  {
+   "id": "backyard",
+   "name": "Backyard Brawler",
+   "colour": "#8a2f3f",
+   "target": [
+    50,
+    70,
+    5,
+    95
+   ],
+   "line": "6.7 kilometres, every hour, until everyone else stops.",
+   "profile": "You like a fight with no finish line. Every hour on the hour, the same loop, until you're the last one standing. It's the most stubborn event in running and you're the most stubborn runner in the field.",
+   "traits": [
+    "Plans each lap to the minute",
+    "Treats the start pen as a rest area",
+    "Thinks 'last one standing' is a lifestyle"
+   ],
+   "famous": "Harvey Lewis",
+   "race": "A backyard ultra that goes on for days",
+   "mantra": "One more lap."
+  },
+  {
+   "id": "lab",
+   "name": "Lab Rat",
+   "colour": "#1f8f8f",
+   "target": [
+    55,
+    97,
+    55,
+    55
+   ],
+   "line": "If it isn't on Strava, it didn't happen.",
+   "profile": "You love the numbers. Heart rate, lactate threshold, ground contact time, the lot. You've read the research, you've got opinions about zone 2 and your watch has more settings than your car. Every run is data.",
+   "traits": [
+    "Wears two watches to compare them",
+    "Has a favourite training load metric",
+    "Reads studies about carbohydrate for fun"
+   ],
+   "famous": "Every Garmin forum moderator",
+   "race": "Any race with chip timing and live splits",
+   "mantra": "Measure everything."
+  },
+  {
+   "id": "club",
+   "name": "Club Stalwart",
+   "colour": "#d9a21b",
+   "target": [
+    60,
+    35,
+    55,
+    8
+   ],
+   "line": "Tuesday reps, Thursday hills, Sunday cake.",
+   "profile": "You're the heart of your running club. You've run every relay, marshalled every race and you know everyone's name and their dog's name. Your PBs matter less than getting the team round.",
+   "traits": [
+    "Owns more club vests than T-shirts",
+    "Always brings the jelly babies",
+    "Has organised at least one Christmas social"
+   ],
+   "famous": "Every club's longest-serving member",
+   "race": "The club relay, with a barbecue after",
+   "mantra": "Nobody gets left behind."
+  },
+  {
+   "id": "free",
+   "name": "Free Runner",
+   "colour": "#6b7fa8",
+   "target": [
+    45,
+    5,
+    55,
+    35
+   ],
+   "line": "No watch, no plan, no problem.",
+   "profile": "You run because it clears your head. You go out when it feels right and come back when you've had enough. You couldn't tell anyone your 10K time, and honestly you've never been happier.",
+   "traits": [
+    "Has a watch, forgets to charge it",
+    "Runs a different route every time",
+    "Says 'it was lovely' when asked how far"
+   ],
+   "famous": "Forrest Gump",
+   "race": "Whatever route the morning suggests",
+   "mantra": "Just run."
+  }
+ ],
+ "calibration": {
+  "mean": [
+   54.6,
+   41.0,
+   47.5,
+   50.2
+  ],
+  "sd": [
+   12.5,
+   11.9,
+   12.3,
+   11.3
+  ],
+  "spread": 22
+ }
+}
