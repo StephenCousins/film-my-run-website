@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { QUIZ, scoreAnswers, rankTypes, result, parseScores, typeById, type AxisId, type Scores } from './index';
+import { QUIZ, scoreAnswers, rankTypes, result, parseScores, typeById, parseResult, sharedType, type AxisId, type Scores } from './index';
 
 const AXES: AxisId[] = ['S', 'M', 'D', 'R'];
 
@@ -121,5 +121,34 @@ describe('fixtures', () => {
     const r = result(answers as number[]);
     expect(r.scores).toEqual(scores);
     expect([r.type.id, r.second.id]).toEqual([type, second]);
+  });
+});
+
+describe('parseResult', () => {
+  it('accepts a type with scores that point at it', () => {
+    const r = parseResult({ type: 'track', scores: [90, 80, 95, 90] });
+    expect(r?.type.id).toBe('track');
+    expect(r?.scores).toEqual([90, 80, 95, 90]);
+  });
+  it.each([
+    null,
+    'track',
+    {},
+    { type: 'nope', scores: [90, 80, 95, 90] },
+    { type: 'fell', scores: [90, 80, 95, 90] },
+    { type: 'track', scores: [90, 80, 95] },
+    { type: 'track', scores: [90, 80, 95, 101] },
+    { type: 'track', scores: [90, 80, 95, 89.5] },
+    { type: 'track', scores: ['90', 80, 95, 90] },
+    { surfaceL: 1, methodL: 2, distanceL: 3, spiritL: 4 },
+  ])('rejects %j', (body) => expect(parseResult(body)).toBeNull());
+});
+
+describe('sharedType', () => {
+  it('reads a type id or an old score link', () => {
+    expect(sharedType('fell')?.id).toBe('fell');
+    expect(sharedType('90-80-95-90')?.id).toBe('track');
+    expect(sharedType('junk')).toBeUndefined();
+    expect(sharedType(null)).toBeUndefined();
   });
 });

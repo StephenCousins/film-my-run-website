@@ -95,3 +95,24 @@ export function parseScores(str: string | null | undefined): Scores | null {
 export function typeById(id: string | null | undefined): QuizType | undefined {
   return QUIZ.types.find((t) => t.id === id);
 }
+
+/**
+ * A result posted by the website or the app: `{ type: "<id>", scores: [a, b, c, d] }`.
+ * Returns it only if the type exists, the scores are four integers 0-100 and the
+ * scores really do point at that type; anything else is null.
+ */
+export function parseResult(body: unknown): { type: QuizType; scores: Scores } | null {
+  if (!body || typeof body !== 'object') return null;
+  const { type: id, scores } = body as { type?: unknown; scores?: unknown };
+  const type = typeof id === 'string' ? typeById(id) : undefined;
+  if (!type || !Array.isArray(scores) || scores.length !== 4) return null;
+  if (!scores.every((v) => Number.isInteger(v) && v >= 0 && v <= 100)) return null;
+  const s = scores as Scores;
+  return rankTypes(s)[0].id === type.id ? { type, scores: s } : null;
+}
+
+/** A shared `?r=` value: a type id, or an old four-score link ("18-29-45-64") mapped to its nearest type. */
+export function sharedType(r: string | null | undefined): QuizType | undefined {
+  const s = parseScores(r);
+  return s ? rankTypes(s)[0] : typeById(r);
+}
