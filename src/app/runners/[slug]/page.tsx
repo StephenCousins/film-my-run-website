@@ -75,7 +75,7 @@ export default async function RunnerPage({ params }: PageProps) {
                       alt={r.name}
                       fill
                       sizes="(min-width: 768px) 40vw, 240px"
-                      className="object-cover"
+                      className="object-cover object-top"
                     />
                   </div>
                   {portrait.credit.trim() && <figcaption className="text-xs text-secondary mt-2">{portrait.credit}</figcaption>}
@@ -100,7 +100,7 @@ export default async function RunnerPage({ params }: PageProps) {
                   alt={`${r.name} racing`}
                   fill
                   sizes="(min-width: 1024px) 1024px, 100vw"
-                  className="object-cover"
+                  className="object-cover object-top"
                 />
               </div>
               {action.credit.trim() && <figcaption className="text-xs text-secondary mt-2">{action.credit}</figcaption>}
