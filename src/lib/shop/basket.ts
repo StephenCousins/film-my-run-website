@@ -2,6 +2,7 @@
 /** Basket lives in localStorage; a `fmr-basket` window event keeps the header badge in sync. */
 import { useEffect, useState } from 'react';
 import type { BasketLine } from './orders';
+import type { Personal } from './runner-tee';
 
 const KEY = 'fmr-basket';
 const EVENT = 'fmr-basket';
@@ -21,11 +22,13 @@ export function writeBasket(lines: BasketLine[]) {
   window.dispatchEvent(new Event(EVENT));
 }
 
-export function addToBasket(slug: string, variantId: number | string, quantity = 1) {
+const samePersonal = (a?: Personal, b?: Personal) => JSON.stringify(a ?? null) === JSON.stringify(b ?? null);
+
+export function addToBasket(slug: string, variantId: number | string, quantity = 1, personal?: Personal) {
   const lines = readBasket();
-  const hit = lines.find((l) => l.slug === slug && l.variantId === variantId);
+  const hit = lines.find((l) => l.slug === slug && l.variantId === variantId && samePersonal(l.personal, personal));
   if (hit) hit.quantity = Math.min(10, hit.quantity + quantity);
-  else lines.push({ slug, variantId, quantity });
+  else lines.push({ slug, variantId, quantity, ...(personal && { personal }) });
   writeBasket(lines);
 }
 

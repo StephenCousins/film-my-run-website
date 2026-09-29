@@ -8,6 +8,8 @@ import { useBasket } from '@/lib/shop/basket';
 import { variantLabel, toFreeShipping } from '@/lib/shop/orders';
 import { useAuth } from '@/contexts/AuthContext';
 import { memberPrice } from '@/lib/members/price';
+import { RUNNER_TEE_SLUG, runnerTee, parsePersonal, personalType, teeColour } from '@/lib/shop/runner-tee';
+import { SHIRT_COLOURS, frontArt, teeMock } from '@/lib/runner-quiz/shirt-art';
 import MemberLine from './MemberLine';
 
 export default function Basket() {
@@ -16,18 +18,21 @@ export default function Basket() {
   const [error, setError] = useState<string | null>(null);
   const [pendingUrl, setPendingUrl] = useState<string | null>(null);
 
-  const rows = lines.flatMap((l) => {
-    const item = shopItems.find((i) => i.slug === l.slug);
+  const rows = lines.flatMap((l, index) => {
+    const item = l.slug === RUNNER_TEE_SLUG ? runnerTee : shopItems.find((i) => i.slug === l.slug);
     const v = item?.variants.find((v) => v.id === l.variantId);
-    return item && v ? [{ ...l, item, v }] : [];
+    const personal = l.slug === RUNNER_TEE_SLUG ? parsePersonal(l.personal) : undefined;
+    if (personal === null) return [];
+    const type = personal ? personalType(personal) : undefined;
+    return item && v ? [{ ...l, index, item, v, type }] : [];
   });
   const subtotal = rows.reduce((s, r) => s + r.v.price * r.quantity, 0);
   const { isAuthenticated, hasAccess } = useAuth();
   const club = hasAccess('PRO');
   const discount = isAuthenticated ? Math.round((subtotal - memberPrice(subtotal, club)) * 100) / 100 : 0;
 
-  const setQty = (slug: string, variantId: number | string, q: number) =>
-    set(lines.map((l) => (l.slug === slug && l.variantId === variantId ? { ...l, quantity: q } : l)).filter((l) => l.quantity > 0));
+  const setQty = (index: number, q: number) =>
+    set(lines.map((l, i) => (i === index ? { ...l, quantity: q } : l)).filter((l) => l.quantity > 0));
 
   const checkout = async () => {
     setBusy(true);
@@ -62,20 +67,32 @@ export default function Basket() {
     <div>
       <ul className="divide-y divide-border rounded-2xl bg-surface-secondary border border-border">
         {rows.map((r) => (
-          <li key={`${r.slug}-${r.variantId}`} className="flex gap-4 p-4">
-            <Link href={`/shop/${r.item.slug}`} className="relative w-20 h-20 rounded-lg bg-white overflow-hidden shrink-0">
-              {r.item.images[0] && <Image src={r.item.images[0].src} alt="" fill sizes="80px" className="object-cover" />}
-            </Link>
+          <li key={r.index} className="flex gap-4 p-4">
+            {r.type ? (
+              <Link
+                href={`/shop/${r.item.slug}?type=${r.type.id}&s=${r.personal!.scores.join('-')}`}
+                className="w-20 h-20 rounded-lg bg-white overflow-hidden shrink-0"
+                aria-label={r.type.shirt}
+                dangerouslySetInnerHTML={{ __html: teeMock(SHIRT_COLOURS[teeColour(r.v.id)], frontArt(r.type, teeColour(r.v.id))) }}
+              />
+            ) : (
+              <Link href={`/shop/${r.item.slug}`} className="relative w-20 h-20 rounded-lg bg-white overflow-hidden shrink-0">
+                {r.item.images[0] && <Image src={r.item.images[0].src} alt="" fill sizes="80px" className="object-cover" />}
+              </Link>
+            )}
             <div className="flex-1 min-w-0">
-              <Link href={`/shop/${r.item.slug}`} className="font-semibold text-foreground hover:text-brand line-clamp-2">{r.item.name}</Link>
+              <Link href={r.type ? `/shop/${r.item.slug}?type=${r.type.id}&s=${r.personal!.scores.join('-')}` : `/shop/${r.item.slug}`} className="font-semibold text-foreground hover:text-brand line-clamp-2">
+                {r.type ? `${r.item.name}: ${r.type.name}` : r.item.name}
+              </Link>
+              {r.type && <p className="text-sm text-foreground">&ldquo;{r.type.shirt}&rdquo; · your Runner DNA on the back</p>}
               <p className="text-sm text-secondary">{variantLabel(r.v)}</p>
               <div className="flex items-center gap-3 mt-2">
                 <div className="inline-flex items-center rounded-lg border border-border">
-                  <button type="button" aria-label="Fewer" onClick={() => setQty(r.slug, r.variantId, r.quantity - 1)} className="p-1.5 hover:text-brand"><Minus className="w-4 h-4" /></button>
+                  <button type="button" aria-label="Fewer" onClick={() => setQty(r.index, r.quantity - 1)} className="p-1.5 hover:text-brand"><Minus className="w-4 h-4" /></button>
                   <span className="w-8 text-center font-mono text-sm">{r.quantity}</span>
-                  <button type="button" aria-label="More" onClick={() => setQty(r.slug, r.variantId, Math.min(10, r.quantity + 1))} className="p-1.5 hover:text-brand"><Plus className="w-4 h-4" /></button>
+                  <button type="button" aria-label="More" onClick={() => setQty(r.index, Math.min(10, r.quantity + 1))} className="p-1.5 hover:text-brand"><Plus className="w-4 h-4" /></button>
                 </div>
-                <button type="button" aria-label="Remove" onClick={() => setQty(r.slug, r.variantId, 0)} className="p-1.5 text-muted hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
+                <button type="button" aria-label="Remove" onClick={() => setQty(r.index, 0)} className="p-1.5 text-muted hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
               </div>
             </div>
             <p className="font-mono text-foreground">£{(r.v.price * r.quantity).toFixed(2)}</p>

@@ -8,14 +8,14 @@ import { memberPrice } from '@/lib/members/price';
  * "Members save 10% · Sign in" for guests; the member price for members
  * (spec §3.1). A Club subscriber saves 15%, and a plain member is told so.
  */
-export default function MemberLine({ pounds, label = 'Member price' }: { pounds: number; label?: string }) {
+export default function MemberLine({ pounds, label = 'Member price', returnTo }: { pounds: number; label?: string; returnTo?: string }) {
   const { isAuthenticated, status, hasAccess } = useAuth();
   const pathname = usePathname();
   if (status === 'loading') return null;
   if (!isAuthenticated) {
     return (
       <p className="text-sm text-secondary mt-1">
-        Members save 10% · <Link href={`/login?callbackUrl=${encodeURIComponent(pathname)}`} className="text-brand hover:underline">Sign in</Link>
+        Members save 10% · <Link href={`/login?callbackUrl=${encodeURIComponent(returnTo ?? pathname)}`} className="text-brand hover:underline">Sign in</Link>
       </p>
     );
   }

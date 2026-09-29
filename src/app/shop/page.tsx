@@ -4,7 +4,17 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ShopGrid from '@/components/shop/ShopGrid';
 import WelcomeOffer from '@/components/shop/WelcomeOffer';
+import Link from 'next/link';
 import { shopItems, shopCategories, etsyShopUrl } from '@/lib/shop';
+import { typeById } from '@/lib/runner-quiz';
+import { SHIRT_COLOURS, frontArt, teeMock } from '@/lib/runner-quiz/shirt-art';
+import '@/styles/runner-quiz-fonts.css';
+
+// Three fronts from the runner quiz, for the Runner Type Tee card.
+const runnerTeeFronts = (['fell', 'lab', 'parkrun'] as const).map((id, i) => {
+  const colour = (['Forest', 'Black', 'Navy'] as const)[i];
+  return teeMock(SHIRT_COLOURS[colour], frontArt(typeById(id)!, colour));
+});
 
 const breadcrumbJsonLd = {
   '@context': 'https://schema.org',
@@ -51,6 +61,24 @@ export default function ShopPage() {
 
         <section className="py-10 lg:py-16">
           <div className="container">
+            <Link
+              href="/tools/runner-quiz"
+              className="group mb-10 grid md:grid-cols-[1fr_auto] items-center gap-6 rounded-2xl border border-border bg-surface-secondary p-6 hover:border-brand transition-colors"
+            >
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-wider text-brand mb-2">New · Runner Type Tee</p>
+                <p className="font-display text-2xl lg:text-3xl font-bold text-foreground">A shirt with your Runner DNA on the back</p>
+                <p className="text-secondary mt-2 max-w-xl">
+                  Take the two-minute quiz. Your runner type goes on the front, your own four scores on the back. From £29.99.
+                </p>
+                <p className="mt-4 text-sm font-bold uppercase tracking-widest text-brand">Take the quiz to get yours →</p>
+              </div>
+              <div className="grid grid-cols-3 gap-2 w-full md:w-96" aria-hidden>
+                {runnerTeeFronts.map((svg, i) => (
+                  <div key={i} dangerouslySetInnerHTML={{ __html: svg }} />
+                ))}
+              </div>
+            </Link>
             <ShopGrid items={shopItems} categories={shopCategories} />
             <WelcomeOffer />
           </div>
