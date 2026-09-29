@@ -65,7 +65,7 @@ function backArt(t, second, s, ink) {
       <circle cx="${x}" cy="${y}" r="7" fill="${t.colour}" stroke="${ink}" stroke-width="1.5"/>
       <text x="${x0 + w + 12}" y="${y + 4}" font-family="JetBrains Mono" font-weight="700" font-size="11" fill="${ink}">${s[k]}</text>`;
   }).join('');
-  return `<image href="${ink === '#18181b' ? LOGO.light : LOGO.dark}" x="160" y="46" width="80" height="35.5"/>
+  return `<image href="${ink === '#18181b' ? LOGO.light : LOGO.dark}" x="178" y="58" width="44" height="19.5"/>
     <text x="200" y="104" text-anchor="middle" font-family="JetBrains Mono" font-size="9" letter-spacing="3" fill="${ink}" opacity=".75">RUNNER DNA</text>
     <text x="200" y="134" text-anchor="middle" font-family="Space Grotesk" font-weight="700" font-size="22" fill="${ink}">${esc(t.name.toUpperCase())}</text>
     ${rows}
