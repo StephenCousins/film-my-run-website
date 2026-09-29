@@ -456,7 +456,13 @@
    "filmAlt": {
     "id": "S9Y0oG-CPlI",
     "title": "Racing the SUSSEX XC Relay Champs | Cross Country Season is BACK!"
-   }
+   },
+   "phrases": [
+    "HAND TIMES DON'T COUNT",
+    "STILL WARMING UP",
+    "EIGHT LANES. NO HIDING.",
+    "LANE ONE"
+   ]
   },
   {
    "id": "marathon",
@@ -485,7 +491,13 @@
    "filmAlt": {
     "id": "GJ7ZWyh_8s4",
     "title": "Manchester Marathon: Pushing the Limits | Disastrous Positive Split"
-   }
+   },
+   "phrases": [
+    "THE WALL OWES ME ONE",
+    "SIXTEEN WEEKS FOR THIS",
+    "I PLANNED THIS IN JANUARY",
+    "TRUST THE TAPER"
+   ]
   },
   {
    "id": "parkrun",
@@ -514,7 +526,13 @@
    "filmAlt": {
     "id": "tyTr2zDgfgI",
     "title": "I Went to parkrun… in Lithuania! 🇱🇹 | Vingis Parkrun, Vilnius"
-   }
+   },
+   "phrases": [
+    "SATURDAYS ARE SPOKEN FOR",
+    "KEEP MOVING DOWN THE FUNNEL",
+    "THANK THE MARSHALS",
+    "SEE YOU SATURDAY"
+   ]
   },
   {
    "id": "bigcity",
@@ -543,7 +561,13 @@
    "filmAlt": {
     "id": "y09TMlAfN9w",
     "title": "Brighton Marathon | This Isn’t Just a Marathon… It’s Life Advice"
-   }
+   },
+   "phrases": [
+    "BEATEN BY A RHINO",
+    "STRANGERS CALLED ME A LEGEND",
+    "HERE FOR THE HIGH FIVES",
+    "THE CROWD CARRIED ME"
+   ]
   },
   {
    "id": "fell",
@@ -572,7 +596,13 @@
    "filmAlt": {
     "id": "MQHacVwyXPY",
     "title": "Conquering the Skyline Scotland Ring of Steall: My 7-Hour Battle with Scotland's Rugged Peaks"
-   }
+   },
+   "phrases": [
+    "UP IT. DOWN IT. PUB.",
+    "I KNOW A SHORTCUT",
+    "THAT'S NOT A PROPER BOG",
+    "BOG STANDARD"
+   ]
   },
   {
    "id": "sky",
@@ -601,7 +631,13 @@
    "filmAlt": {
     "id": "v1lZHK5O-2M",
     "title": "Ultra-Trail Snowdonia by UTMB | Mountain Running Perfection"
-   }
+   },
+   "phrases": [
+    "HOW MUCH CLIMB?",
+    "METRES, NOT MILES.",
+    "IT'S ONLY A LITTLE HILL",
+    "ABOVE THE CLOUDS"
+   ]
   },
   {
    "id": "hundred",
@@ -630,7 +666,13 @@
    "filmAlt": {
     "id": "Bmiqina9ZRE",
     "title": "South Downs Way 100 | Our FIRST 100 Miler | Centurion Running"
-   }
+   },
+   "phrases": [
+    "TWO SUNRISES. ONE RUN.",
+    "IS THERE SOUP?",
+    "WHAT DAY IS IT?",
+    "BEWARE THE CHAIR"
+   ]
   },
   {
    "id": "wanderer",
@@ -659,7 +701,13 @@
    "filmAlt": {
     "id": "QSF7lBghF8M",
     "title": "South Downs Way 50 | Victoria's First 50 Miler SDW50 2022"
-   }
+   },
+   "phrases": [
+    "OUT ALL DAY. BACK FOR TEA.",
+    "SCENIC PACE",
+    "I STOPPED FOR THE VIEW",
+    "NOT LOST. EXPLORING."
+   ]
   },
   {
    "id": "backyard",
@@ -688,7 +736,13 @@
    "filmAlt": {
     "id": "EDoIF85LsYo",
     "title": "Suffolk Backyard Ultra 2023 | Last Runner Standing Documentary"
-   }
+   },
+   "phrases": [
+    "AFTER YOU.",
+    "I'LL STOP WHEN YOU STOP.",
+    "I'VE GOT ALL NIGHT.",
+    "ONE MORE LAP"
+   ]
   },
   {
    "id": "lab",
@@ -717,7 +771,13 @@
    "filmAlt": {
     "id": "04nMyU4eD2E",
     "title": "Treadmill vs Outdoor Running - Which is Harder? Data Analysis"
-   }
+   },
+   "phrases": [
+    "SAMPLE SIZE OF ONE",
+    "WAITING FOR GPS",
+    "SPLITS OR IT DIDN'T HAPPEN",
+    "I'M NOT SLOW. I'M IN ZONE 2."
+   ]
   },
   {
    "id": "club",
@@ -746,7 +806,13 @@
    "filmAlt": {
     "id": "S9Y0oG-CPlI",
     "title": "Racing the SUSSEX XC Relay Champs | Cross Country Season is BACK!"
-   }
+   },
+   "phrases": [
+    "REGROUP AT THE LAMPPOST",
+    "HAVE YOU PAID YOUR SUBS?",
+    "SAME TIME NEXT TUESDAY",
+    "NOBODY GETS LEFT BEHIND"
+   ]
   },
   {
    "id": "free",
@@ -775,7 +841,13 @@
    "filmAlt": {
     "id": "ohu4Jd0aUZI",
     "title": "Lakeland 100 Training Series | Let's Talk about 'GPS' Watches | Episode 6"
-   }
+   },
+   "phrases": [
+    "IT WAS LOVELY",
+    "BACK WHEN I'M BACK",
+    "PACE: LOVELY",
+    "NO WATCH. NO PROBLEM."
+   ]
   }
  ],
  "calibration": {
