@@ -5,7 +5,7 @@
  * print files are made after payment (see runner-tee-print.ts). Safe for client code.
  */
 import { getShopItem, type ShopItem } from '@/lib/shop';
-import { typeById, type QuizType, type Scores } from '@/lib/runner-quiz';
+import { parseResult, typeById, type QuizType, type Scores } from '@/lib/runner-quiz';
 import { SHIRT_COLOURS, type ShirtColour } from '@/lib/runner-quiz/shirt-art';
 
 export const RUNNER_TEE_SLUG = 'runner-type-tee';
@@ -45,13 +45,13 @@ export const runnerTee: ShopItem = {
   supplier: 'printify',
 };
 
-/** A basket's `personal` as sent by the client → a valid Personal, or null. */
+/**
+ * A basket's `personal` as sent by the client → a valid Personal, or null. Same strict rule as
+ * the results API: a real type, four whole scores 0-100, and the scores must point at that type.
+ */
 export function parsePersonal(p: unknown): Personal | null {
-  if (!p || typeof p !== 'object') return null;
-  const { type, scores } = p as { type?: unknown; scores?: unknown };
-  if (typeof type !== 'string' || !typeById(type)) return null;
-  if (!Array.isArray(scores) || scores.length !== 4 || !scores.every((v) => Number.isInteger(v) && v >= 0 && v <= 100)) return null;
-  return { type, scores: [...scores] as Scores };
+  const r = parseResult(p);
+  return r && { type: r.type.id, scores: [...r.scores] as Scores };
 }
 
 export const personalType = (p: Personal): QuizType => typeById(p.type)!;

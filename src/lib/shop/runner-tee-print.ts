@@ -3,7 +3,7 @@
  * turn the line into a Printify "product on the fly" line item (blueprint + provider + variant
  * + print areas), so it goes in the same Printify order as the catalogue lines.
  */
-import { backArt, frontArt } from '@/lib/runner-quiz/shirt-art';
+import { SHIRT_COLOURS, backArt, frontArt } from '@/lib/runner-quiz/shirt-art';
 import { rankTypes } from '@/lib/runner-quiz';
 import type { OrderLine } from './orders';
 import type { PrintifyLine } from './printify';
@@ -11,8 +11,8 @@ import { RUNNER_TEE_BLUEPRINT, RUNNER_TEE_PROVIDER, personalType, teeColour } fr
 import type { ShirtColour } from '@/lib/runner-quiz/shirt-art';
 
 export interface PrintDeps {
-  /** SVG → PNG (renderPng at 4500 wide, the largest print area; Printify scales it down for XS-M). */
-  render: (svg: string) => Promise<Buffer>;
+  /** SVG → PNG at `width` (renderPng). Print files use 4500, the largest print area; Printify scales it down for XS-M. */
+  render: (svg: string, width: number) => Promise<Buffer>;
   /** Uploads a PNG and returns its public URL. */
   upload: (key: string, png: Buffer) => Promise<string>;
   /** The logo image for backArt, for this shirt colour. */
@@ -21,7 +21,12 @@ export interface PrintDeps {
   paidAt: Date;
 }
 
-export const printKey = (orderId: number, index: number, side: 'front' | 'back') => `quiz-shirts/${orderId}-${index}-${side}.png`;
+export const PRINT_WIDTH = 4500;
+export const PREVIEW_WIDTH = 800;
+
+/** `preview` is the back on its shirt colour at 800 px, for the confirmation email. */
+export const printKey = (orderId: number, index: number, side: 'front' | 'back' | 'preview') =>
+  `quiz-shirts/${orderId}-${index}-${side}.png`;
 
 /**
  * Printify line items for `lines` (the order's Printify lines). `items` is the whole order, so
@@ -38,11 +43,12 @@ export async function printifyLineItems(orderId: number, items: OrderLine[], lin
     const type = personalType(l.personal);
     const second = rankTypes(l.personal.scores).find((t) => t.id !== type.id)!;
     const colour = teeColour(l.variantId);
-    const front = await d.upload(printKey(orderId, index, 'front'), await d.render(frontArt(type, colour)));
-    const back = await d.upload(
-      printKey(orderId, index, 'back'),
-      await d.render(backArt(type, second, l.personal.scores, d.paidAt, colour, d.logo(colour)))
-    );
+    const backSvg = backArt(type, second, l.personal.scores, d.paidAt, colour, d.logo(colour));
+    const front = await d.upload(printKey(orderId, index, 'front'), await d.render(frontArt(type, colour), PRINT_WIDTH));
+    const back = await d.upload(printKey(orderId, index, 'back'), await d.render(backSvg, PRINT_WIDTH));
+    // Not a print file: the back on the shirt colour, small, for the email.
+    const onShirt = backSvg.replace('>', `><rect width="100%" height="100%" fill="${SHIRT_COLOURS[colour]}"/>`);
+    await d.upload(printKey(orderId, index, 'preview'), await d.render(onShirt, PREVIEW_WIDTH));
     out.push({
       blueprint_id: RUNNER_TEE_BLUEPRINT,
       print_provider_id: RUNNER_TEE_PROVIDER,

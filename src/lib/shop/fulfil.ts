@@ -5,7 +5,7 @@
  */
 import type { Supplier } from '@/lib/shop';
 import { linesFor, type OrderLine } from './orders';
-import type { PrintifyAddress } from './printify';
+import { PrintifyDraftError, type PrintifyAddress } from './printify';
 
 export interface PaidOrder {
   id: number;
@@ -20,8 +20,13 @@ export interface FulfilDeps {
   markPaid: (id: number, email: string, address: PrintifyAddress) => Promise<void>;
   place: (supplier: Supplier, lines: OrderLine[], order: PaidOrder, address: PrintifyAddress) => Promise<string>;
   markSubmitted: (id: number, ids: SupplierOrderIds) => Promise<void>;
-  /** A supplier refused or something threw: mark the order failed, keep what was placed, tell the owner. */
-  flagFailed: (id: number, error: Error, ids: SupplierOrderIds) => Promise<void>;
+  /**
+   * Placing with a supplier failed: mark the order failed, keep what was placed, tell the owner.
+   * `drafts`: orders a supplier created but did not send to production.
+   */
+  flagFailed: (id: number, error: Error, ids: SupplierOrderIds, drafts: SupplierOrderIds) => Promise<void>;
+  /** Every supplier accepted but saving that failed: the order is placed, so only tell the owner. */
+  alertNotSaved: (id: number, error: Error, ids: SupplierOrderIds) => Promise<void>;
   emailConfirmation: (order: PaidOrder, email: string) => Promise<void>;
 }
 
@@ -39,14 +44,22 @@ export async function fulfilPaidSession(sessionId: string, email: string, addres
       const lines = linesFor(order.items, supplier);
       if (lines.length) ids[supplier] = await d.place(supplier, lines, order, address);
     }
-    await d.markSubmitted(order.id, ids);
   } catch (e) {
     // Never a silent drop: a Stripe retry finds the order 'failed' and leaves it for a person.
-    await d.flagFailed(order.id, e as Error, ids);
+    const drafts: SupplierOrderIds = e instanceof PrintifyDraftError ? { printify: e.draftId } : {};
+    await d.flagFailed(order.id, e as Error, ids, drafts);
     throw e;
   }
+  let result = 'submitted';
+  try {
+    await d.markSubmitted(order.id, ids);
+  } catch (e) {
+    // Placed with every supplier; only our record is behind. Not a failed order.
+    await d.alertNotSaved(order.id, e as Error, ids);
+    result = 'submitted-not-saved';
+  }
   await d.emailConfirmation(order, email);
-  return 'submitted';
+  return result;
 }
 
 /** Stripe's shipping details → the address both suppliers want. */

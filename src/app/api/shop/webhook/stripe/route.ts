@@ -6,7 +6,7 @@ import { stripe } from '@/lib/shop/stripe';
 import { fulfilPaidSession, toPrintifyAddress } from '@/lib/shop/fulfil';
 import { createOrder } from '@/lib/shop/printify';
 import { createContradoOrder } from '@/lib/shop/contrado';
-import { orderConfirmation, orderFailed } from '@/lib/shop/email';
+import { orderConfirmation, orderFailed, orderNotSaved } from '@/lib/shop/email';
 import type { OrderLine } from '@/lib/shop/orders';
 import { printifyLineItems, printKey } from '@/lib/shop/runner-tee-print';
 import { renderPng, logoDataUri } from '@/lib/runner-quiz/render';
@@ -37,7 +37,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'No email or address' }, { status: 400 });
   }
   const address = toPrintifyAddress(ship.name, email, session.customer_details?.phone, ship.address);
-  const paidAt = new Date();
+  // The event's own time, so a retry prints the same date.
+  const paidAt = new Date(event.created * 1000);
 
   const result = await fulfilPaidSession(session.id, email, address, {
     load: async (id) => {
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
     place: (supplier, lines, o, a) =>
       supplier === 'printify'
         ? printifyLineItems(o.id, o.items, lines, {
-            render: (svg) => renderPng(svg, 4500),
+            render: renderPng,
             upload: (key, png) => uploadToR2(key, png, 'image/png'),
             logo: logoDataUri,
             paidAt,
@@ -56,13 +57,29 @@ export async function POST(request: Request) {
         : createContradoOrder(`FMR-${o.id}`, lines, a),
     markSubmitted: (id, ids) =>
       prisma.orders.update({ where: { id }, data: { status: 'submitted', printify_order_id: ids.printify ?? null, contrado_order_id: ids.contrado ?? null, updated_at: new Date() } }).then(() => {}),
-    flagFailed: async (id, e, ids) => {
-      await prisma.orders.update({ where: { id }, data: { status: 'failed', printify_order_id: ids.printify ?? null, contrado_order_id: ids.contrado ?? null, updated_at: new Date() } });
-      await orderFailed(id, e.message, ids).catch((err) => console.error('Owner alert email failed', err));
+    flagFailed: async (id, e, ids, drafts) => {
+      // Each in its own try: the owner must hear about it even if the database is the problem.
+      try {
+        await prisma.orders.update({ where: { id }, data: { status: 'failed', printify_order_id: ids.printify ?? drafts.printify ?? null, contrado_order_id: ids.contrado ?? null, updated_at: new Date() } });
+      } catch (err) {
+        console.error('Could not mark order failed', id, err);
+      }
+      try {
+        await orderFailed(id, e.message, ids, drafts);
+      } catch (err) {
+        console.error('Owner alert email failed', id, err);
+      }
+    },
+    alertNotSaved: async (id, e, ids) => {
+      try {
+        await orderNotSaved(id, e.message, ids);
+      } catch (err) {
+        console.error('Owner alert email failed', id, err);
+      }
     },
     emailConfirmation: (o, to) => {
       const previews = o.items.flatMap((l, i) =>
-        l.personal ? [{ src: getR2Url(printKey(o.id, i, 'back')), background: SHIRT_COLOURS[teeColour(l.variantId)] }] : []
+        l.personal ? [{ src: getR2Url(printKey(o.id, i, 'preview')), background: SHIRT_COLOURS[teeColour(l.variantId)] }] : []
       );
       return orderConfirmation(to, o.id, o.items, session.amount_total ?? 0, previews);
     },

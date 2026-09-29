@@ -1,6 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 import { fulfilPaidSession, toPrintifyAddress, type FulfilDeps, type PaidOrder } from './fulfil';
 import type { OrderLine } from './orders';
+import { PrintifyDraftError, createOrder } from './printify';
+import { orderFailedLines } from './email';
 
 const addr = toPrintifyAddress('Jo Bloggs', 'jo@x.com', null, { line1: '1 St', city: 'Leeds', postal_code: 'LS1 1AA', country: 'GB' });
 
@@ -15,7 +17,8 @@ function deps(order: PaidOrder | null): FulfilDeps & { calls: string[] } {
     markPaid: async () => { calls.push('paid'); },
     place: async (supplier, lines) => { calls.push(`${supplier}:${lines.length}`); return supplier === 'printify' ? 'PF1' : 'CT1'; },
     markSubmitted: async (_id, ids) => { calls.push('submitted ' + JSON.stringify(ids)); },
-    flagFailed: async (_id, e, ids) => { calls.push(`failed ${e.message} ${JSON.stringify(ids)}`); },
+    flagFailed: async (_id, e, ids, drafts) => { calls.push(`failed ${e.message} ${JSON.stringify(ids)} drafts ${JSON.stringify(drafts)}`); },
+    alertNotSaved: async (_id, e, ids) => { calls.push(`not-saved ${e.message} ${JSON.stringify(ids)}`); },
     emailConfirmation: async () => { calls.push('email'); },
   };
 }
@@ -44,7 +47,23 @@ describe('fulfilPaidSession', () => {
       return 'PF1';
     };
     await expect(fulfilPaidSession('cs_1', 'jo@x.com', addr, d)).rejects.toThrow('Contrado down');
-    expect(d.calls).toEqual(['paid', 'printify:1', 'failed Contrado down {"printify":"PF1"}']);
+    expect(d.calls).toEqual(['paid', 'printify:1', 'failed Contrado down {"printify":"PF1"} drafts {}']);
+  });
+  it('passes on a Printify draft, so nobody places it again blind', async () => {
+    const d = deps({ id: 1, status: 'pending', items: [pf] });
+    d.place = async () => { throw new PrintifyDraftError('PFD9', 'timeout'); };
+    await expect(fulfilPaidSession('cs_1', 'jo@x.com', addr, d)).rejects.toThrow(/draft/);
+    expect(d.calls[1]).toBe('failed Printify order PFD9 created as a draft, send to production failed: timeout {} drafts {"printify":"PFD9"}');
+    const lines = orderFailedLines(1, 'x', {}, { printify: 'PFD9' });
+    expect(lines.join('\n')).toContain('Created at Printify (draft) id PFD9, check before re-placing.');
+    expect(lines.join('\n')).not.toContain('was not placed');
+    expect(orderFailedLines(1, 'x', {}).join('\n')).toContain('was not placed');
+  });
+  it('a database failure after every supplier accepted is not a failed order', async () => {
+    const d = deps({ id: 1, status: 'pending', items: [pf, ct] });
+    d.markSubmitted = async () => { throw new Error('db down'); };
+    expect(await fulfilPaidSession('cs_1', 'jo@x.com', addr, d)).toBe('submitted-not-saved');
+    expect(d.calls).toEqual(['paid', 'printify:1', 'contrado:1', 'not-saved db down {"printify":"PF1","contrado":"CT1"}', 'email']);
   });
   it('ignores sessions it never created', async () => {
     const d = deps(null);
@@ -68,5 +87,24 @@ describe('verifyPrintifySignature', () => {
     expect(verifyPrintifySignature(body + ' ', good, 's3cret')).toBe(false);
     expect(verifyPrintifySignature(body, null, 's3cret')).toBe(false);
     expect(verifyPrintifySignature(body, 'sha256=00', 's3cret')).toBe(false);
+  });
+});
+
+describe('createOrder', () => {
+  it('reports the draft id when send to production fails', async () => {
+    vi.stubEnv('PRINTIFY_API_TOKEN', 't');
+    vi.stubEnv('PRINTIFY_SHOP_ID', 's');
+    const fetchMock = vi.fn(async (url: string) =>
+      String(url).endsWith('/orders.json')
+        ? new Response(JSON.stringify({ id: 'PFD1' }), { status: 200 })
+        : new Response('nope', { status: 500 })
+    );
+    vi.stubGlobal('fetch', fetchMock);
+    const err = await createOrder('1', [], addr).catch((e) => e);
+    expect(err).toBeInstanceOf(PrintifyDraftError);
+    expect(err.draftId).toBe('PFD1');
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
   });
 });

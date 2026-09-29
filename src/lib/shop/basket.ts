@@ -2,16 +2,24 @@
 /** Basket lives in localStorage; a `fmr-basket` window event keeps the header badge in sync. */
 import { useEffect, useState } from 'react';
 import type { BasketLine } from './orders';
-import type { Personal } from './runner-tee';
+import { RUNNER_TEE_SLUG, parsePersonal, type Personal } from './runner-tee';
 
 const KEY = 'fmr-basket';
 const EVENT = 'fmr-basket';
 
+/**
+ * Stored basket → usable lines. A runner tee line whose quiz result no longer validates is
+ * dropped here, so a stale line can't silently block checkout.
+ */
+export function cleanBasket(v: unknown): BasketLine[] {
+  if (!Array.isArray(v)) return [];
+  return v.filter((l) => l && typeof l === 'object' && (l.slug !== RUNNER_TEE_SLUG || parsePersonal(l.personal)));
+}
+
 export function readBasket(): BasketLine[] {
   try {
     const raw = localStorage.getItem(KEY);
-    const v = raw ? JSON.parse(raw) : [];
-    return Array.isArray(v) ? v : [];
+    return cleanBasket(raw ? JSON.parse(raw) : []);
   } catch {
     return [];
   }

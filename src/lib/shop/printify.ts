@@ -65,8 +65,20 @@ export async function createOrder(external_id: string, line_items: PrintifyLine[
     send_shipping_notification: false,
     address_to,
   });
-  await call('POST', `/shops/${shop()}/orders/${r.id}/send_to_production.json`);
+  try {
+    await call('POST', `/shops/${shop()}/orders/${r.id}/send_to_production.json`);
+  } catch (e) {
+    // The order exists at Printify as a draft: whoever picks this up must not place it again.
+    throw new PrintifyDraftError(r.id, (e as Error).message);
+  }
   return r.id;
+}
+
+/** Printify created the order but did not send it to production. */
+export class PrintifyDraftError extends Error {
+  constructor(public draftId: string, message: string) {
+    super(`Printify order ${draftId} created as a draft, send to production failed: ${message}`);
+  }
 }
 
 /** Webhook header x-pfy-signature = sha256=HMAC-SHA256(secret, raw body). */

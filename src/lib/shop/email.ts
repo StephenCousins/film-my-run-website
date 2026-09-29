@@ -42,13 +42,36 @@ export function orderConfirmation(to: string, orderId: number, items: OrderLine[
   ], previews);
 }
 
-/** To the owner, when an order was paid but could not be placed with a supplier. */
-export function orderFailed(orderId: number, error: string, placed: Record<string, string | undefined>) {
-  return send('stephen@filmmyrun.com', `Shop order #${orderId} needs you: fulfilment failed`, [
-    `Order #${orderId} is paid but was not placed. It is marked 'failed' in the orders table.`,
+type Ids = Record<string, string | undefined>;
+const list = (ids: Ids) => Object.entries(ids).filter(([, v]) => v).map(([k, v]) => `${k} ${v}`).join(', ');
+
+/** To the owner, when an order was paid but placing it with a supplier failed. */
+export function orderFailed(orderId: number, error: string, placed: Ids, drafts: Ids = {}) {
+  return send('stephen@filmmyrun.com', `Shop order #${orderId} needs you: fulfilment failed`, orderFailedLines(orderId, error, placed, drafts));
+}
+
+export function orderFailedLines(orderId: number, error: string, placed: Ids, drafts: Ids = {}) {
+  const draftLines = Object.entries(drafts)
+    .filter(([, v]) => v)
+    .map(([k, v]) => `Created at ${k === 'printify' ? 'Printify' : k} (draft) id ${v}, check before re-placing.`);
+  return [
+    draftLines.length
+      ? `Order #${orderId} is paid but not fully placed. It is marked 'failed' in the orders table.`
+      : `Order #${orderId} is paid but was not placed. It is marked 'failed' in the orders table.`,
     '',
     `Error: ${error}`,
-    `Already placed: ${Object.entries(placed).filter(([, v]) => v).map(([k, v]) => `${k} ${v}`).join(', ') || 'nothing'}`,
+    `Placed: ${list(placed) || 'nothing'}`,
+    ...draftLines,
+  ];
+}
+
+/** To the owner, when every supplier took the order but saving that to the database failed. */
+export function orderNotSaved(orderId: number, error: string, placed: Ids) {
+  return send('stephen@filmmyrun.com', `Shop order #${orderId}: placed, but the database update failed`, [
+    `Order #${orderId} is paid and placed, but the database update failed, so the row still says 'paid'. Do not place it again.`,
+    '',
+    `Placed: ${list(placed) || 'nothing'}`,
+    `Error: ${error}`,
   ]);
 }
 

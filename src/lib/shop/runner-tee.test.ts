@@ -4,6 +4,7 @@ import { runnerTee, parsePersonal, teeColour, RUNNER_TEE_SLUG } from './runner-t
 import { printifyLineItems, printKey, type PrintDeps } from './runner-tee-print';
 import { fulfilPaidSession, toPrintifyAddress, type FulfilDeps, type PaidOrder } from './fulfil';
 import type { PrintifyLine } from './printify';
+import { cleanBasket } from './basket';
 
 const personal = { type: 'fell', scores: [18, 29, 45, 64] as [number, number, number, number] };
 const blackM = runnerTee.variants.find((v) => v.colour === 'Black' && v.size === 'M')!;
@@ -21,8 +22,19 @@ describe('runner tee product', () => {
 
   it('parsePersonal accepts a real type and four whole scores only', () => {
     expect(parsePersonal(personal)).toEqual(personal);
-    for (const bad of [null, {}, { type: 'nope', scores: [1, 2, 3, 4] }, { type: 'fell', scores: [1, 2, 3] }, { type: 'fell', scores: [1, 2, 3, 101] }, { type: 'fell', scores: [1, 2, 3, 4.5] }, { type: 'fell', scores: '1-2-3-4' }])
+    for (const bad of [null, {}, { type: 'track', scores: [18, 29, 45, 64] }, { type: 'nope', scores: [1, 2, 3, 4] }, { type: 'fell', scores: [1, 2, 3] }, { type: 'fell', scores: [1, 2, 3, 101] }, { type: 'fell', scores: [1, 2, 3, 4.5] }, { type: 'fell', scores: '1-2-3-4' }])
       expect(parsePersonal(bad)).toBeNull();
+  });
+});
+
+describe('cleanBasket', () => {
+  it('drops runner tee lines whose quiz result no longer validates, keeps the rest', () => {
+    const good = { slug: RUNNER_TEE_SLUG, variantId: 18101, quantity: 1, personal };
+    const stale = { slug: RUNNER_TEE_SLUG, variantId: 18101, quantity: 1, personal: { type: 'track', scores: [18, 29, 45, 64] } };
+    const missing = { slug: RUNNER_TEE_SLUG, variantId: 18101, quantity: 1 };
+    const other = { slug: 'bonus-miles', variantId: 18100, quantity: 2 };
+    expect(cleanBasket([good, stale, missing, other, null])).toEqual([good, other]);
+    expect(cleanBasket('junk')).toEqual([]);
   });
 });
 
@@ -38,6 +50,8 @@ describe('buildOrderLines with a runner tee', () => {
   it('rejects a runner tee without a valid result, and personal on anything else', () => {
     expect(() => buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1 }])).toThrow(/quiz result/);
     expect(() => buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, personal: { type: 'fell', scores: [1, 2, 3, 999] } as never }])).toThrow(/quiz result/);
+    // Scores that point at another type are refused, as in the results API.
+    expect(() => buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, personal: { type: 'track', scores: [18, 29, 45, 64] } }])).toThrow(/quiz result/);
     expect(() => buildOrderLines([{ slug: 'bonus-miles', variantId: blackM.id, quantity: 1, personal }])).toThrow(/personalised/);
     expect(() => buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: 18467, quantity: 1, personal }])).toThrow(/Unknown/);
   });
@@ -46,7 +60,7 @@ describe('buildOrderLines with a runner tee', () => {
 function printDeps() {
   const uploads: string[] = [];
   const d: PrintDeps = {
-    render: vi.fn(async (svg: string) => Buffer.from(svg.slice(0, 20))),
+    render: vi.fn(async (svg: string, _width: number) => Buffer.from(svg.slice(0, 20))),
     upload: vi.fn(async (key: string) => {
       uploads.push(key);
       return `https://r2.example/${key}`;
@@ -75,7 +89,11 @@ describe('printifyLineItems', () => {
         print_areas: { front: 'https://r2.example/quiz-shirts/42-1-front.png', back: 'https://r2.example/quiz-shirts/42-1-back.png' },
       },
     ]);
-    expect(uploads).toEqual([printKey(42, 1, 'front'), printKey(42, 1, 'back')]);
+    expect(uploads).toEqual([printKey(42, 1, 'front'), printKey(42, 1, 'back'), printKey(42, 1, 'preview')]);
+    // Print files at 4500, the email preview at 800 on the shirt colour.
+    const calls = (d.render as ReturnType<typeof vi.fn>).mock.calls;
+    expect(calls.map((c) => c[1])).toEqual([4500, 4500, 800]);
+    expect(calls[2][0]).toContain('fill="#f1f0ec"');
     // The back carries the paid date and the buyer's scores, in dark ink on the White shirt.
     const backSvg = (d.render as ReturnType<typeof vi.fn>).mock.calls[1][0] as string;
     expect(backSvg).toContain('01.10.2026');
@@ -107,12 +125,13 @@ describe('fulfilment with a runner tee', () => {
       flagFailed: async () => {
         order.status = 'failed';
       },
+      alertNotSaved: async () => {},
       emailConfirmation: async () => {},
     };
     expect(await fulfilPaidSession('cs_7', 'jo@x.com', addr, deps)).toBe('submitted');
     expect(await fulfilPaidSession('cs_7', 'jo@x.com', addr, deps)).toBe('already-submitted');
     expect(createOrder).toHaveBeenCalledTimes(1);
-    expect(uploads).toEqual(['quiz-shirts/7-1-front.png', 'quiz-shirts/7-1-back.png']);
+    expect(uploads).toEqual(['quiz-shirts/7-1-front.png', 'quiz-shirts/7-1-back.png', 'quiz-shirts/7-1-preview.png']);
     expect(createOrder.mock.calls[0][1]).toHaveLength(2);
   });
 
@@ -138,6 +157,7 @@ describe('fulfilment with a runner tee', () => {
         order.status = 'failed';
         flagged.push(e.message);
       },
+      alertNotSaved: async () => {},
       emailConfirmation: async () => {},
     };
     await expect(fulfilPaidSession('cs_8', 'jo@x.com', addr, deps)).rejects.toThrow('R2 down');

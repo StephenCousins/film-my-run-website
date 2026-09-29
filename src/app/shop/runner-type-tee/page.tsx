@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import RunnerTee from '@/components/shop/RunnerTee';
-import { parseScores, typeById } from '@/lib/runner-quiz';
+import { parseResult, parseScores } from '@/lib/runner-quiz';
 
 interface Props {
   searchParams: Promise<{ type?: string; s?: string }>;
@@ -17,13 +17,13 @@ export const metadata: Metadata = {
 
 export default async function RunnerTeePage({ searchParams }: Props) {
   const { type, s } = await searchParams;
-  const t = typeById(type);
-  const scores = parseScores(s);
+  // Same strict rule as checkout: the scores must point at the type.
+  const r = parseResult({ type, scores: parseScores(s) });
   return (
     <>
       <Header />
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">
-        <RunnerTee typeId={t && scores ? t.id : null} scores={t && scores ? scores : null} />
+        <RunnerTee typeId={r ? r.type.id : null} scores={r ? r.scores : null} />
       </main>
       <Footer />
     </>
