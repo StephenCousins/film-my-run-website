@@ -448,7 +448,15 @@
    ],
    "famous": "Josh Kerr, Keely Hodgkinson",
    "race": "A 5000m on a warm evening, with a pacer",
-   "mantra": "The clock doesn't lie."
+   "mantra": "The clock doesn't lie.",
+   "film": {
+    "id": "jzc2crhjr_I",
+    "title": "10K Daylight Robbery | Chichester 10k"
+   },
+   "filmAlt": {
+    "id": "S9Y0oG-CPlI",
+    "title": "Racing the SUSSEX XC Relay Champs | Cross Country Season is BACK!"
+   }
   },
   {
    "id": "marathon",
@@ -469,7 +477,15 @@
    ],
    "famous": "Eliud Kipchoge, Paula Radcliffe",
    "race": "Berlin. Flat, fast, cold morning",
-   "mantra": "Trust the training."
+   "mantra": "Trust the training.",
+   "film": {
+    "id": "EJnq66b8EMI",
+    "title": "BREAKING 3 HOURS in the Paris Marathon 2023 WITHOUT GELS"
+   },
+   "filmAlt": {
+    "id": "GJ7ZWyh_8s4",
+    "title": "Manchester Marathon: Pushing the Limits | Disastrous Positive Split"
+   }
   },
   {
    "id": "parkrun",
@@ -490,7 +506,15 @@
    ],
    "famous": "The volunteers in hi-vis at every one",
    "race": "A parkrun you haven't done, somewhere odd",
-   "mantra": "See you Saturday."
+   "mantra": "See you Saturday.",
+   "film": {
+    "id": "ZxieljVQgxU",
+    "title": "Toughest parkrun in Manchester? | Philips Park parkrun"
+   },
+   "filmAlt": {
+    "id": "tyTr2zDgfgI",
+    "title": "I Went to parkrun… in Lithuania! 🇱🇹 | Vingis Parkrun, Vilnius"
+   }
   },
   {
    "id": "bigcity",
@@ -511,7 +535,15 @@
    ],
    "famous": "Kevin Sinfield",
    "race": "London. Tower Bridge, the Mall, the lot",
-   "mantra": "Every mile means something."
+   "mantra": "Every mile means something.",
+   "film": {
+    "id": "RWBi6nP2_-g",
+    "title": "TCS London MARATHON 2022 | One Race TWO Medals!"
+   },
+   "filmAlt": {
+    "id": "y09TMlAfN9w",
+    "title": "Brighton Marathon | This Isn’t Just a Marathon… It’s Life Advice"
+   }
   },
   {
    "id": "fell",
@@ -532,7 +564,15 @@
    ],
    "famous": "Joss Naylor",
    "race": "A Lakes classic with a checkpoint on every summit",
-   "mantra": "Straight up. Straight down."
+   "mantra": "Straight up. Straight down.",
+   "film": {
+    "id": "tSco2FEgtGQ",
+    "title": "Ben Nevis Ultra 2022 | Skyline Scotland | Film My Run"
+   },
+   "filmAlt": {
+    "id": "MQHacVwyXPY",
+    "title": "Conquering the Skyline Scotland Ring of Steall: My 7-Hour Battle with Scotland's Rugged Peaks"
+   }
   },
   {
    "id": "sky",
@@ -553,7 +593,15 @@
    ],
    "famous": "Kilian Jornet",
    "race": "A skyrace with a ridge in the middle",
-   "mantra": "Up is the only direction."
+   "mantra": "Up is the only direction.",
+   "film": {
+    "id": "Vo020VQJKA4",
+    "title": "Val D'Aran by UTMB | TOUGHEST 100 Mile Ultra in the World?"
+   },
+   "filmAlt": {
+    "id": "v1lZHK5O-2M",
+    "title": "Ultra-Trail Snowdonia by UTMB | Mountain Running Perfection"
+   }
   },
   {
    "id": "hundred",
@@ -574,7 +622,15 @@
    ],
    "famous": "Courtney Dauwalter, Jim Walmsley",
    "race": "A Centurion hundred, finishing in the dark",
-   "mantra": "Relentless forward progress."
+   "mantra": "Relentless forward progress.",
+   "film": {
+    "id": "wliGi88LZLQ",
+    "title": "Surviving UTMB: 114 Miles with COVID? Mont Blanc Ultra Deep Dive"
+   },
+   "filmAlt": {
+    "id": "Bmiqina9ZRE",
+    "title": "South Downs Way 100 | Our FIRST 100 Miler | Centurion Running"
+   }
   },
   {
    "id": "wanderer",
@@ -595,7 +651,15 @@
    ],
    "famous": "Stephen Cousins, on a good day",
    "race": "A long trail with good views and better cake",
-   "mantra": "Time on feet."
+   "mantra": "Time on feet.",
+   "film": {
+    "id": "rWFTnOzMSdI",
+    "title": "Cape Wrath Ultra | Episode 1 | Scottish parkrun & Kit Check Challenges!"
+   },
+   "filmAlt": {
+    "id": "QSF7lBghF8M",
+    "title": "South Downs Way 50 | Victoria's First 50 Miler SDW50 2022"
+   }
   },
   {
    "id": "backyard",
@@ -616,7 +680,15 @@
    ],
    "famous": "Harvey Lewis",
    "race": "A backyard ultra that goes on for days",
-   "mantra": "One more lap."
+   "mantra": "One more lap.",
+   "film": {
+    "id": "R2fhcCSvZj8",
+    "title": "81 Yards | Award Winning Backyard Ultra Documentary"
+   },
+   "filmAlt": {
+    "id": "EDoIF85LsYo",
+    "title": "Suffolk Backyard Ultra 2023 | Last Runner Standing Documentary"
+   }
   },
   {
    "id": "lab",
@@ -637,7 +709,15 @@
    ],
    "famous": "Every Garmin forum moderator",
    "race": "Any race with chip timing and live splits",
-   "mantra": "Measure everything."
+   "mantra": "Measure everything.",
+   "film": {
+    "id": "CtdFuEWsUsw",
+    "title": "Sub 3 MARATHON Training Analysis | Paris 2023 vs Goodwood 2020"
+   },
+   "filmAlt": {
+    "id": "04nMyU4eD2E",
+    "title": "Treadmill vs Outdoor Running - Which is Harder? Data Analysis"
+   }
   },
   {
    "id": "club",
@@ -658,7 +738,15 @@
    ],
    "famous": "Every club's longest-serving member",
    "race": "The club relay, with a barbecue after",
-   "mantra": "Nobody gets left behind."
+   "mantra": "Nobody gets left behind.",
+   "film": {
+    "id": "Ni3-IOA_zLQ",
+    "title": "We Ran 100 Miles Across the South Downs as a Relay Team – Here’s What Happened"
+   },
+   "filmAlt": {
+    "id": "S9Y0oG-CPlI",
+    "title": "Racing the SUSSEX XC Relay Champs | Cross Country Season is BACK!"
+   }
   },
   {
    "id": "free",
@@ -679,7 +767,15 @@
    ],
    "famous": "Forrest Gump",
    "race": "Whatever route the morning suggests",
-   "mantra": "Just run."
+   "mantra": "Just run.",
+   "film": {
+    "id": "Zalac7m4Wbk",
+    "title": "SURREY HALF MARATHON Experiment | Ditching the WATCH"
+   },
+   "filmAlt": {
+    "id": "ohu4Jd0aUZI",
+    "title": "Lakeland 100 Training Series | Let's Talk about 'GPS' Watches | Episode 6"
+   }
   }
  ],
  "calibration": {
