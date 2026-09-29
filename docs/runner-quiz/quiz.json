@@ -464,7 +464,13 @@
     "EIGHT LANES. NO HIDING.",
     "LANE ONE"
    ],
-   "shirt": "LANE 2 FOR TRAINING. LANE 1 FOR RACING."
+   "shirt": "LANE 2 FOR TRAINING. LANE 1 FOR RACING.",
+   "shirtLines": [
+    "LANE 2",
+    "FOR TRAINING.",
+    "LANE 1",
+    "FOR RACING."
+   ]
   },
   {
    "id": "marathon",
@@ -501,7 +507,11 @@
     "I PLANNED THIS IN JANUARY",
     "TRUST THE TAPER"
    ],
-   "shirt": "TRUST THE PROCESS"
+   "shirt": "TRUST THE PROCESS",
+   "shirtLines": [
+    "TRUST THE",
+    "PROCESS"
+   ]
   },
   {
    "id": "parkrun",
@@ -537,7 +547,11 @@
     "KEEP MOVING DOWN THE FUNNEL",
     "THANK THE MARSHALS"
    ],
-   "shirt": "SEE YOU SATURDAY"
+   "shirt": "SEE YOU SATURDAY",
+   "shirtLines": [
+    "SEE YOU",
+    "SATURDAY"
+   ]
   },
   {
    "id": "bigcity",
@@ -573,7 +587,11 @@
     "HERE FOR THE HIGH FIVES",
     "THE CROWD CARRIED ME"
    ],
-   "shirt": "BEATEN BY A RHINO"
+   "shirt": "BEATEN BY A RHINO",
+   "shirtLines": [
+    "BEATEN BY",
+    "A RHINO"
+   ]
   },
   {
    "id": "fell",
@@ -610,7 +628,12 @@
     "THAT'S NOT A PROPER BOG",
     "BOG STANDARD"
    ],
-   "shirt": "UP IT, DOWN IT. DONE."
+   "shirt": "UP IT, DOWN IT. DONE.",
+   "shirtLines": [
+    "UP IT,",
+    "DOWN IT.",
+    "DONE."
+   ]
   },
   {
    "id": "sky",
@@ -647,7 +670,12 @@
     "IT'S ONLY A LITTLE HILL",
     "ABOVE THE CLOUDS"
    ],
-   "shirt": "ALTITUDE BEATS ATTITUDE"
+   "shirt": "ALTITUDE BEATS ATTITUDE",
+   "shirtLines": [
+    "ALTITUDE",
+    "BEATS",
+    "ATTITUDE"
+   ]
   },
   {
    "id": "hundred",
@@ -683,7 +711,11 @@
     "WHAT DAY IS IT?",
     "BEWARE THE CHAIR"
    ],
-   "shirt": "TWO SUNRISES. ONE RUN."
+   "shirt": "TWO SUNRISES. ONE RUN.",
+   "shirtLines": [
+    "TWO SUNRISES.",
+    "ONE RUN."
+   ]
   },
   {
    "id": "wanderer",
@@ -720,7 +752,11 @@
     "I STOPPED FOR THE VIEW",
     "NOT LOST. EXPLORING."
    ],
-   "shirt": "NOT LOST, EXPLORING."
+   "shirt": "NOT LOST, EXPLORING.",
+   "shirtLines": [
+    "NOT LOST,",
+    "EXPLORING."
+   ]
   },
   {
    "id": "backyard",
@@ -757,7 +793,11 @@
     "I'VE GOT ALL NIGHT.",
     "ONE MORE LAP"
    ],
-   "shirt": "GOING THE EXTRA YARD"
+   "shirt": "GOING THE EXTRA YARD",
+   "shirtLines": [
+    "GOING THE",
+    "EXTRA YARD"
+   ]
   },
   {
    "id": "lab",
@@ -794,7 +834,11 @@
     "SPLITS OR IT DIDN'T HAPPEN",
     "I'M NOT SLOW. I'M IN ZONE 2."
    ],
-   "shirt": "I'M NOT SLOW, I'M IN ZONE 2."
+   "shirt": "I'M NOT SLOW, I'M IN ZONE 2.",
+   "shirtLines": [
+    "I'M NOT SLOW,",
+    "I'M IN ZONE 2."
+   ]
   },
   {
    "id": "club",
@@ -831,7 +875,11 @@
     "SAME TIME NEXT TUESDAY",
     "NOBODY GETS LEFT BEHIND"
    ],
-   "shirt": "NO ONE GETS LEFT BEHIND"
+   "shirt": "NO ONE GETS LEFT BEHIND",
+   "shirtLines": [
+    "NO ONE GETS",
+    "LEFT BEHIND"
+   ]
   },
   {
    "id": "free",
@@ -868,7 +916,12 @@
     "PACE: LOVELY",
     "NO WATCH. NO PROBLEM."
    ],
-   "shirt": "NO WATCH, NO STRAVA, NO PROBLEM."
+   "shirt": "NO WATCH, NO STRAVA, NO PROBLEM.",
+   "shirtLines": [
+    "NO WATCH,",
+    "NO STRAVA,",
+    "NO PROBLEM."
+   ]
   }
  ],
  "calibration": {
