@@ -119,3 +119,6 @@ export function sharedType(r: string | null | undefined): QuizType | undefined {
 
 /** A type name in capitals, keeping parkrun's lower-case brand style ("parkrun FAITHFUL"). */
 export const upperName = (name: string) => name.toUpperCase().replace(/\bPARKRUN\b/g, 'parkrun');
+
+/** A film title as the quiz shows it: YouTube's "Title | Subtitle" cut at the first " | ", as the app does. */
+export const filmTitle = (title: string) => title.split(' | ')[0].trim();

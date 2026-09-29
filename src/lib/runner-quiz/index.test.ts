@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { QUIZ, scoreAnswers, rankTypes, result, parseScores, typeById, parseResult, sharedType, type AxisId, type Scores } from './index';
+import { QUIZ, scoreAnswers, rankTypes, result, parseScores, typeById, parseResult, sharedType, filmTitle, type AxisId, type Scores } from './index';
 
 const AXES: AxisId[] = ['S', 'M', 'D', 'R'];
 
@@ -156,5 +156,16 @@ describe('sharedType', () => {
     expect(sharedType('90-80-95-90')?.id).toBe('track');
     expect(sharedType('junk')).toBeUndefined();
     expect(sharedType(null)).toBeUndefined();
+  });
+});
+
+describe('filmTitle', () => {
+  it('cuts at the first " | "', () => {
+    expect(filmTitle('UTMB 2023 Documentary | Film My Run | Chamonix')).toBe('UTMB 2023 Documentary');
+    expect(filmTitle('No pipe here')).toBe('No pipe here');
+    expect(filmTitle('A|B')).toBe('A|B');
+  });
+  it('every type has a short title left', () => {
+    for (const t of QUIZ.types) expect(filmTitle(t.film.title).length).toBeGreaterThan(3);
   });
 });

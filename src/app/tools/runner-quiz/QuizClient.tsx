@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight, Check, Play, RotateCcw, Share2, Shirt } from 'lu
 import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { QUIZ, result as scoreQuiz, sharedType, upperName, type QuizType, type Scores } from '@/lib/runner-quiz';
+import { QUIZ, filmTitle, result as scoreQuiz, sharedType, upperName, type QuizType, type Scores } from '@/lib/runner-quiz';
 import { frontArt, teeMock, SHIRT_COLOURS } from '@/lib/runner-quiz/shirt-art';
 import '@/styles/runner-quiz-fonts.css';
 
@@ -292,7 +292,7 @@ function Result({
             </div>
             <div className="min-w-0">
               <p className="text-xs font-bold uppercase tracking-widest text-brand mb-1">Watch</p>
-              <p className="font-display text-lg sm:text-xl font-bold leading-tight line-clamp-3">{type.film.title}</p>
+              <p className="font-display text-lg sm:text-xl font-bold leading-tight line-clamp-3">{filmTitle(type.film.title)}</p>
             </div>
           </a>
         </div>

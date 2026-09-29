@@ -1,14 +1,20 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
 import { ImageResponse } from 'next/og';
-import { sharedType } from '@/lib/runner-quiz';
+import { sharedType, upperName } from '@/lib/runner-quiz';
 
-export const runtime = 'edge';
+// Node, not edge: the font is read from the bundled TTF on disk. Fetching it from the site's
+// own URL went to the container's internal address in production and quietly fell back.
+export const runtime = 'nodejs';
+
+let fontData: Promise<Buffer> | null = null;
+// No fallback: a missing font is an error, not a card in the wrong typeface.
+const spaceGrotesk = () => (fontData ??= fs.readFile(path.join(process.cwd(), 'assets/fonts/SpaceGrotesk-Bold.ttf')));
 
 // Share card: the type's shirt phrase big, the type name under it. No `r`: the quiz itself.
 export async function GET(request: Request) {
   const type = sharedType(new URL(request.url).searchParams.get('r'));
-  const font = await fetch(new URL('/fonts/runner-quiz/SpaceGrotesk-Bold.ttf', request.url))
-    .then((res) => (res.ok ? res.arrayBuffer() : null))
-    .catch(() => null);
+  const font = await spaceGrotesk();
 
   const lines = type ? type.shirtLines : ['WHAT KIND OF', 'RUNNER ARE YOU?'];
   const size = lines.length > 3 ? 76 : lines.length > 2 ? 96 : 116;
@@ -26,7 +32,7 @@ export async function GET(request: Request) {
           padding: '64px 72px',
           backgroundColor: '#09090b',
           color: '#fafafa',
-          fontFamily: font ? 'Space Grotesk' : 'system-ui, sans-serif',
+          fontFamily: 'Space Grotesk',
         }}
       >
         <div style={{ display: 'flex', color: '#f88c00', fontSize: 22, letterSpacing: 4, textTransform: 'uppercase' }}>
@@ -40,8 +46,8 @@ export async function GET(request: Request) {
           ))}
           <div style={{ display: 'flex', alignItems: 'center', marginTop: 28 }}>
             <div style={{ display: 'flex', width: 64, height: 8, borderRadius: 4, backgroundColor: accent, marginRight: 20 }} />
-            <div style={{ display: 'flex', fontSize: 32, color: '#a1a1aa', letterSpacing: 3, textTransform: 'uppercase' }}>
-              {type ? type.name : 'Twelve questions. Two minutes.'}
+            <div style={{ display: 'flex', fontSize: 32, color: '#a1a1aa', letterSpacing: 3 }}>
+              {type ? upperName(type.name) : 'TWELVE QUESTIONS. TWO MINUTES.'}
             </div>
           </div>
         </div>
@@ -54,7 +60,7 @@ export async function GET(request: Request) {
     {
       width: 1200,
       height: 630,
-      fonts: font ? [{ name: 'Space Grotesk', data: font, weight: 700, style: 'normal' }] : undefined,
+      fonts: [{ name: 'Space Grotesk', data: font, weight: 700, style: 'normal' }],
     }
   );
 }
