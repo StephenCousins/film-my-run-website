@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import sharp from 'sharp';
 import { QUIZ, typeById, type QuizType, type Scores } from './index';
-import { frontArt, backArt, inkFor, teeMock, textWidth, formatDate, FRONT_MAX_WIDTH, PRINT_W, PRINT_H, DARK_INK, LIGHT_INK } from './shirt-art';
+import { frontArt, backArt, inkFor, teeMock, textWidth, formatDate, FRONT_MAX_WIDTH, PRINT_W, PRINT_H, DARK_INK, LIGHT_INK, SHIRT_COLOURS, mix, type ShirtColour } from './shirt-art';
 import { renderPng, logoDataUri } from './render';
 
 const DATE = new Date('2026-09-29T12:00:00Z');
@@ -29,13 +29,27 @@ describe('shirt art', () => {
     expect(inkFor('Black')).toBe(LIGHT_INK);
   });
 
+  it('mix pre-blends ink into the shirt colour', () => {
+    expect(mix('#ffffff', '#000000', 1)).toBe('#ffffff');
+    expect(mix('#ffffff', '#000000', 0)).toBe('#000000');
+    expect(mix('#ffffff', '#000000', 0.5)).toBe('#808080');
+  });
+
+  it.each(Object.keys(SHIRT_COLOURS) as ShirtColour[])('%s art has no partial opacity', (colour) => {
+    const t = typeById('fell')!;
+    for (const svg of [frontArt(t, colour), backArt(t, t, [1, 2, 3, 4], DATE, colour, 'logo.png')]) {
+      expect(svg).not.toMatch(/opacity|rgba|fill-opacity|stroke-opacity/);
+      for (const [, c] of svg.matchAll(/(?:fill|stroke)="([^"]+)"/g)) expect(c).toMatch(/^#[0-9a-f]{6}$/i);
+    }
+  });
+
   it('formats the date as DD.MM.YYYY in UK time', () => {
     expect(formatDate(DATE)).toBe('29.09.2026');
     expect(formatDate(new Date('2026-06-30T23:30:00Z'))).toBe('01.07.2026');
   });
 
   it.each(QUIZ.types.map((t) => [t.id, t] as const))('%s front fits the width limit', (_id, t) => {
-    const svg = frontArt(t, LIGHT_INK);
+    const svg = frontArt(t, 'Forest');
     expect(svg).toContain(`viewBox="0 0 ${PRINT_W} ${PRINT_H}"`);
     const lines = [...svg.matchAll(/font-family="Space Grotesk"[^>]*font-size="([\d.]+)" letter-spacing="([\d.]+)"/g)];
     expect(lines).toHaveLength(t.shirtLines.length);
@@ -47,8 +61,8 @@ describe('shirt art', () => {
 
   it('escapes text', () => {
     const t = { ...typeById('lab')!, name: 'A <b> & "c"', shirtLines: ["<script>'x'</script>"] };
-    const front = frontArt(t, LIGHT_INK);
-    const back = backArt(t, t, [1, 2, 3, 4], DATE, LIGHT_INK, 'x" onload="y');
+    const front = frontArt(t, 'Forest');
+    const back = backArt(t, t, [1, 2, 3, 4], DATE, 'Forest', 'x" onload="y');
     for (const svg of [front, back]) {
       expect(svg).not.toContain('<script>');
       expect(svg).not.toContain('<b>');
@@ -59,7 +73,7 @@ describe('shirt art', () => {
   });
 
   it('teeMock places the art on the garment', () => {
-    const mock = teeMock('#2e4636', frontArt(typeById('fell')!, LIGHT_INK));
+    const mock = teeMock('#2e4636', frontArt(typeById('fell')!, 'Forest'));
     expect(mock).toContain('fill="#2e4636"');
     expect(mock).toMatch(/<svg x="\d+" y="\d+" width="\d+" height="[\d.]+" xmlns/);
   });
@@ -67,7 +81,7 @@ describe('shirt art', () => {
 
 describe('renderPng', () => {
   it('renders a print-size PNG with ink on it and nothing at the edges', async () => {
-    const png = await renderPng(frontArt(typeById('track')!, DARK_INK));
+    const png = await renderPng(frontArt(typeById('track')!, 'White'));
     expect(png.subarray(1, 4).toString()).toBe('PNG');
     const px = await pixels(png);
     expect([px.width, px.height]).toEqual([PRINT_W, PRINT_H]);
@@ -84,8 +98,7 @@ describe('renderPng', () => {
     [0, 0, 0, 0],
     [100, 100, 100, 100],
   ] as Scores[])('back for scores %j stays inside the print area', async (...s) => {
-    const ink = inkFor('Black');
-    const px = await pixels(await renderPng(backArt(name, second, s, DATE, ink, logoDataUri(ink))));
+    const px = await pixels(await renderPng(backArt(name, second, s, DATE, 'Black', logoDataUri('Black'))));
     expect([px.width, px.height]).toEqual([PRINT_W, PRINT_H]);
     expect(edgeAlpha(px)).toBe(0);
   }, 30000);

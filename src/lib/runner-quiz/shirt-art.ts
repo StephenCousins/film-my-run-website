@@ -29,8 +29,31 @@ export function textWidth(text: string, font: FontName, size: number, letterSpac
 export const esc = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 
-/** Shirt colour name → ink: dark on White, light on everything else. */
-export const inkFor = (colour: string) => (colour.trim().toLowerCase() === 'white' ? DARK_INK : LIGHT_INK);
+/** The shirt colours on offer (Printify blueprint 12), as drawn in previews and used to mix muted ink. */
+export const SHIRT_COLOURS = {
+  Black: '#1c1c1e',
+  'Dark Grey': '#4a4a4f',
+  Forest: '#2e4636',
+  Navy: '#1f2a44',
+  White: '#f1f0ec',
+} as const;
+export type ShirtColour = keyof typeof SHIRT_COLOURS;
+
+/** Ink for a shirt colour: dark on White, light on everything else. */
+export const inkFor = (colour: ShirtColour) => (colour === 'White' ? DARK_INK : LIGHT_INK);
+
+/** `a` laid over `b` at strength `t` (0-1), as one solid hex colour. */
+export function mix(a: string, b: string, t: number): string {
+  const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const [x, y] = [rgb(a), rgb(b)];
+  return '#' + x.map((v, i) => Math.round(v * t + y[i] * (1 - t)).toString(16).padStart(2, '0')).join('');
+}
+
+// DTG must never get semi-transparent ink, so faded text is ink pre-mixed with the shirt colour.
+function palette(colour: ShirtColour) {
+  const ink = inkFor(colour);
+  return { ink, tint: (t: number) => mix(ink, SHIRT_COLOURS[colour], t) };
+}
 
 const f = (n: number) => n.toFixed(1);
 const svg = (body: string) =>
@@ -45,7 +68,8 @@ export const FRONT_MAX_WIDTH = PRINT_W * 0.64;
 const FRONT_CAP = 410;
 const FRONT_SPACING = 0.023; // em, as the mock-up's 0.6 at 26
 
-export function frontArt(t: QuizType, ink: string): string {
+export function frontArt(t: QuizType, colour: ShirtColour): string {
+  const { ink, tint } = palette(colour);
   const lines = t.shirtLines;
   const size = Math.min(...lines.map((l) => fit(l, 'SpaceGrotesk-Bold', FRONT_CAP, FRONT_MAX_WIDTH, FRONT_SPACING)));
   const gap = size * 1.12;
@@ -63,7 +87,7 @@ export function frontArt(t: QuizType, ink: string): string {
   const y = top + (lines.length - 1) * gap + size * 0.9 + 94;
   return svg(
     `${text}<line x1="${cx - 250}" x2="${cx + 250}" y1="${f(y)}" y2="${f(y)}" stroke="${t.colour}" stroke-width="40"/>` +
-      `<text x="${cx}" y="${f(y + 251)}" text-anchor="middle" ${FONT['JetBrainsMono-Medium']} font-size="${nameSize}" letter-spacing="31" fill="${ink}" opacity=".75">${esc(t.name.toUpperCase())}</text>`
+      `<text x="${cx}" y="${f(y + 251)}" text-anchor="middle" ${FONT['JetBrainsMono-Medium']} font-size="${nameSize}" letter-spacing="31" fill="${tint(0.75)}">${esc(t.name.toUpperCase())}</text>`
   );
 }
 
@@ -96,7 +120,15 @@ const BACK_TOP = 40; // mock-up y that sits at the top of the print area
 const LOGO_W = (PRINT_W * 0.18) / BACK_K;
 const LOGO_H = LOGO_W / 2.2523; // logo PNGs are 1000 × 444
 
-export function backArt(t: QuizType, second: QuizType, scores: Scores, date: Date, ink: string, logoHref: string): string {
+export function backArt(
+  t: QuizType,
+  second: QuizType,
+  scores: Scores,
+  date: Date,
+  colour: ShirtColour,
+  logoHref: string
+): string {
+  const { ink, tint } = palette(colour);
   const mono = FONT['JetBrainsMono-Medium'];
   const name = t.name.toUpperCase();
   const nameSize = fit(name, 'SpaceGrotesk-Bold', 22, 220);
@@ -109,9 +141,9 @@ export function backArt(t: QuizType, second: QuizType, scores: Scores, date: Dat
       w = 160,
       x = x0 + (w * s) / 100;
     return (
-      `<text x="${x0}" y="${y - 10}" ${mono} font-size="8.5" letter-spacing="1" fill="${ink}" opacity=".7">${lo}</text>` +
-      `<text x="${x0 + w}" y="${y - 10}" text-anchor="end" ${mono} font-size="8.5" letter-spacing="1" fill="${ink}" opacity=".7">${hi}</text>` +
-      `<rect x="${x0}" y="${y - 2}" width="${w}" height="4" rx="2" fill="${ink}" opacity=".25"/>` +
+      `<text x="${x0}" y="${y - 10}" ${mono} font-size="8.5" letter-spacing="1" fill="${tint(0.7)}">${lo}</text>` +
+      `<text x="${x0 + w}" y="${y - 10}" text-anchor="end" ${mono} font-size="8.5" letter-spacing="1" fill="${tint(0.7)}">${hi}</text>` +
+      `<rect x="${x0}" y="${y - 2}" width="${w}" height="4" rx="2" fill="${tint(0.25)}"/>` +
       `<circle cx="${f(x)}" cy="${y}" r="7" fill="${t.colour}" stroke="${ink}" stroke-width="1.5"/>` +
       `<text x="${x0 + w + 12}" y="${y + 4}" ${FONT['JetBrainsMono-Bold']} font-size="11" fill="${ink}">${s}</text>`
     );
@@ -121,11 +153,11 @@ export function backArt(t: QuizType, second: QuizType, scores: Scores, date: Dat
     `<g transform="translate(${f(tx)} ${-BACK_TOP * BACK_K}) scale(${BACK_K})">` +
       `<image href="${esc(logoHref)}" xlink:href="${esc(logoHref)}" x="${f(200 - LOGO_W / 2)}" y="46" width="${f(LOGO_W)}" height="${f(LOGO_H)}"/>` +
       `<g transform="translate(0 ${f(LOGO_H - 35.5)})">` +
-      `<text x="200" y="104" text-anchor="middle" ${mono} font-size="9" letter-spacing="3" fill="${ink}" opacity=".75">RUNNER DNA</text>` +
+      `<text x="200" y="104" text-anchor="middle" ${mono} font-size="9" letter-spacing="3" fill="${tint(0.75)}">RUNNER DNA</text>` +
       `<text x="200" y="134" text-anchor="middle" ${FONT['SpaceGrotesk-Bold']} font-size="${f(nameSize)}" fill="${ink}">${esc(name)}</text>` +
       rows +
-      `<text x="200" y="376" text-anchor="middle" ${FONT['Inter-Regular']} font-size="${f(streakSize)}" fill="${ink}" opacity=".85">${esc(streak)}</text>` +
-      `<text x="200" y="396" text-anchor="middle" ${mono} font-size="8" letter-spacing="1.5" fill="${ink}" opacity=".6">FILMMYRUN.COM/QUIZ · ${formatDate(date)}</text>` +
+      `<text x="200" y="376" text-anchor="middle" ${FONT['Inter-Regular']} font-size="${f(streakSize)}" fill="${tint(0.85)}">${esc(streak)}</text>` +
+      `<text x="200" y="396" text-anchor="middle" ${mono} font-size="8" letter-spacing="1.5" fill="${tint(0.6)}">FILMMYRUN.COM/QUIZ · ${formatDate(date)}</text>` +
       `</g></g>`
   );
 }

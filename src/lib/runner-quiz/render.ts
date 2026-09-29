@@ -2,7 +2,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { Resvg } from '@resvg/resvg-js';
-import { DARK_INK, PRINT_W } from './shirt-art';
+import { PRINT_W, type ShirtColour } from './shirt-art';
 
 const FONT_DIR = path.join(process.cwd(), 'assets/fonts');
 const FONT_FILES = fs
@@ -20,8 +20,8 @@ export async function renderPng(svg: string): Promise<Buffer> {
 }
 
 /** The Film My Run logo as a data URI, for backArt: dark runners on White, white runners otherwise. */
-export function logoDataUri(ink: string): string {
-  const file = ink === DARK_INK ? 'fmr-logo-light.png' : 'fmr-logo-dark.png';
+export function logoDataUri(colour: ShirtColour): string {
+  const file = colour === 'White' ? 'fmr-logo-light.png' : 'fmr-logo-dark.png';
   const png = fs.readFileSync(path.join(process.cwd(), 'public/images/logo', file));
   return `data:image/png;base64,${png.toString('base64')}`;
 }
