@@ -1,0 +1,140 @@
+// Runner quiz shirt art. The same SVG drives the on-page preview and the Printify
+// print (rendered to PNG by render.ts), so what the buyer sees is what gets printed.
+import metrics from './metrics.json';
+import type { QuizType, Scores } from './index';
+
+/** Printify print area for blueprint 12 (front and back), in pixels. */
+export const PRINT_W = 3709;
+export const PRINT_H = 4203;
+
+export const DARK_INK = '#18181b';
+export const LIGHT_INK = '#f5f4ef';
+
+export type FontName = keyof typeof metrics;
+
+const FONT: Record<FontName, string> = {
+  'SpaceGrotesk-Bold': `font-family="Space Grotesk" font-weight="700"`,
+  'JetBrainsMono-Medium': `font-family="JetBrains Mono" font-weight="500"`,
+  'JetBrainsMono-Bold': `font-family="JetBrains Mono" font-weight="700"`,
+  'Inter-Regular': `font-family="Inter" font-weight="400"`,
+  'Inter-Medium': `font-family="Inter" font-weight="500"`,
+};
+
+/** Width of `text` in px from the static advance-width table (no kerning). */
+export function textWidth(text: string, font: FontName, size: number, letterSpacing = 0): number {
+  const table = metrics[font] as Record<string, number>;
+  return [...text].reduce((w, c) => w + (table[c] ?? table['M']) * size + letterSpacing, 0);
+}
+
+export const esc = (s: string) =>
+  s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+/** Shirt colour name → ink: dark on White, light on everything else. */
+export const inkFor = (colour: string) => (colour.trim().toLowerCase() === 'white' ? DARK_INK : LIGHT_INK);
+
+const f = (n: number) => n.toFixed(1);
+const svg = (body: string) =>
+  `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 ${PRINT_W} ${PRINT_H}">${body}</svg>`;
+
+// Font size so `text` is at most `max` wide, never above `cap`.
+const fit = (text: string, font: FontName, cap: number, max: number, spacingEm = 0) =>
+  Math.min(cap, (100 * max) / textWidth(text, font, 100, 100 * spacingEm));
+
+/** Front: the phrase over the chest, a short rule in the type's colour, the type name. */
+export const FRONT_MAX_WIDTH = PRINT_W * 0.64;
+const FRONT_CAP = 410;
+const FRONT_SPACING = 0.023; // em, as the mock-up's 0.6 at 26
+
+export function frontArt(t: QuizType, ink: string): string {
+  const lines = t.shirtLines;
+  const size = Math.min(...lines.map((l) => fit(l, 'SpaceGrotesk-Bold', FRONT_CAP, FRONT_MAX_WIDTH, FRONT_SPACING)));
+  const gap = size * 1.12;
+  const nameSize = 126;
+  const blockH = size * 0.72 + (lines.length - 1) * gap + size * 0.9 + 94 + 251;
+  // Centre the block on the chest, 30% of the way down the print area.
+  const top = Math.max(160, PRINT_H * 0.3 - blockH / 2) + size * 0.72;
+  const cx = PRINT_W / 2;
+  const text = lines
+    .map(
+      (l, i) =>
+        `<text x="${cx}" y="${f(top + i * gap)}" text-anchor="middle" ${FONT['SpaceGrotesk-Bold']} font-size="${f(size)}" letter-spacing="${f(size * FRONT_SPACING)}" fill="${ink}">${esc(l)}</text>`
+    )
+    .join('');
+  const y = top + (lines.length - 1) * gap + size * 0.9 + 94;
+  return svg(
+    `${text}<line x1="${cx - 250}" x2="${cx + 250}" y1="${f(y)}" y2="${f(y)}" stroke="${t.colour}" stroke-width="40"/>` +
+      `<text x="${cx}" y="${f(y + 251)}" text-anchor="middle" ${FONT['JetBrainsMono-Medium']} font-size="${nameSize}" letter-spacing="31" fill="${ink}" opacity=".75">${esc(t.name.toUpperCase())}</text>`
+  );
+}
+
+const LABELS = [
+  ['TRAIL', 'ROAD'],
+  ['FEEL', 'DATA'],
+  ['LONG', 'SHORT'],
+  ['SOCIAL', 'RACER'],
+];
+
+const pad = (n: number) => String(n).padStart(2, '0');
+/** DD.MM.YYYY in UK time. */
+export function formatDate(date: Date): string {
+  const p = Object.fromEntries(
+    new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', day: 'numeric', month: 'numeric', year: 'numeric' })
+      .formatToParts(date)
+      .map((x) => [x.type, x.value])
+  );
+  return `${pad(+p.day)}.${pad(+p.month)}.${p.year}`;
+}
+
+/**
+ * Back: logo, RUNNER DNA, the type name, four scales with the buyer's scores, their
+ * second type and the date. Drawn in the mock-up's 400-wide units, then scaled so the
+ * block fills the height of the print area.
+ */
+const BACK_K = 11; // px per mock-up unit
+const BACK_TOP = 40; // mock-up y that sits at the top of the print area
+
+export function backArt(t: QuizType, second: QuizType, scores: Scores, date: Date, ink: string, logoHref: string): string {
+  const mono = FONT['JetBrainsMono-Medium'];
+  const name = t.name.toUpperCase();
+  const nameSize = fit(name, 'SpaceGrotesk-Bold', 22, 220);
+  const streak = `with a streak of ${second.name}`;
+  const streakSize = fit(streak, 'Inter-Regular', 10.5, 230);
+  const rows = LABELS.map(([lo, hi], k) => {
+    const s = Math.max(0, Math.min(100, Math.round(scores[k])));
+    const y = 170 + k * 50,
+      x0 = 120,
+      w = 160,
+      x = x0 + (w * s) / 100;
+    return (
+      `<text x="${x0}" y="${y - 10}" ${mono} font-size="8.5" letter-spacing="1" fill="${ink}" opacity=".7">${lo}</text>` +
+      `<text x="${x0 + w}" y="${y - 10}" text-anchor="end" ${mono} font-size="8.5" letter-spacing="1" fill="${ink}" opacity=".7">${hi}</text>` +
+      `<rect x="${x0}" y="${y - 2}" width="${w}" height="4" rx="2" fill="${ink}" opacity=".25"/>` +
+      `<circle cx="${f(x)}" cy="${y}" r="7" fill="${t.colour}" stroke="${ink}" stroke-width="1.5"/>` +
+      `<text x="${x0 + w + 12}" y="${y + 4}" ${FONT['JetBrainsMono-Bold']} font-size="11" fill="${ink}">${s}</text>`
+    );
+  }).join('');
+  const tx = PRINT_W / 2 - 200 * BACK_K;
+  return svg(
+    `<g transform="translate(${f(tx)} ${-BACK_TOP * BACK_K}) scale(${BACK_K})">` +
+      `<image href="${esc(logoHref)}" xlink:href="${esc(logoHref)}" x="160" y="46" width="80" height="35.5"/>` +
+      `<text x="200" y="104" text-anchor="middle" ${mono} font-size="9" letter-spacing="3" fill="${ink}" opacity=".75">RUNNER DNA</text>` +
+      `<text x="200" y="134" text-anchor="middle" ${FONT['SpaceGrotesk-Bold']} font-size="${f(nameSize)}" fill="${ink}">${esc(name)}</text>` +
+      rows +
+      `<text x="200" y="376" text-anchor="middle" ${FONT['Inter-Regular']} font-size="${f(streakSize)}" fill="${ink}" opacity=".85">${esc(streak)}</text>` +
+      `<text x="200" y="396" text-anchor="middle" ${mono} font-size="8" letter-spacing="1.5" fill="${ink}" opacity=".6">FILMMYRUN.COM/QUIZ · ${formatDate(date)}</text>` +
+      `</g>`
+  );
+}
+
+/** Where the print area sits on the 400 × 440 garment drawing (as Printify's placeholder). */
+const MOCK_AREA = { x: 120, y: 72, w: 160 };
+
+/** On-page preview: a T-shirt in `colourHex` with the art placed on it. */
+export function teeMock(colourHex: string, artSvg: string): string {
+  const h = (MOCK_AREA.w * PRINT_H) / PRINT_W;
+  const art = artSvg.replace('<svg ', `<svg x="${MOCK_AREA.x}" y="${MOCK_AREA.y}" width="${MOCK_AREA.w}" height="${f(h)}" `);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 440" role="img" aria-label="T-shirt preview">
+  <path d="M130 30 Q200 62 270 30 L352 64 Q370 72 376 92 L396 160 L336 182 L318 132 L318 420 Q200 432 82 420 L82 132 L64 182 L4 160 L24 92 Q30 72 48 64 Z" fill="${esc(colourHex)}" stroke="rgba(0,0,0,.18)" stroke-width="1.5"/>
+  <path d="M150 34 Q200 60 250 34" fill="none" stroke="rgba(0,0,0,.22)" stroke-width="3"/>
+  ${art}</svg>`;
+}

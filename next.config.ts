@@ -2,6 +2,8 @@ import type { NextConfig } from 'next';
 import { withSentryConfig } from '@sentry/nextjs';
 
 const nextConfig: NextConfig = {
+  // Native module (runner quiz shirt PNGs): load from node_modules, don't bundle.
+  serverExternalPackages: ['@resvg/resvg-js'],
   // Image optimization
   images: {
     remotePatterns: [
