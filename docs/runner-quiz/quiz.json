@@ -458,11 +458,13 @@
     "title": "Racing the SUSSEX XC Relay Champs | Cross Country Season is BACK!"
    },
    "phrases": [
+    "LANE 2 FOR TRAINING. LANE 1 FOR RACING.",
     "HAND TIMES DON'T COUNT",
     "STILL WARMING UP",
     "EIGHT LANES. NO HIDING.",
     "LANE ONE"
-   ]
+   ],
+   "shirt": "LANE 2 FOR TRAINING. LANE 1 FOR RACING."
   },
   {
    "id": "marathon",
@@ -493,11 +495,13 @@
     "title": "Manchester Marathon: Pushing the Limits | Disastrous Positive Split"
    },
    "phrases": [
+    "TRUST THE PROCESS",
     "THE WALL OWES ME ONE",
     "SIXTEEN WEEKS FOR THIS",
     "I PLANNED THIS IN JANUARY",
     "TRUST THE TAPER"
-   ]
+   ],
+   "shirt": "TRUST THE PROCESS"
   },
   {
    "id": "parkrun",
@@ -528,11 +532,12 @@
     "title": "I Went to parkrun… in Lithuania! 🇱🇹 | Vingis Parkrun, Vilnius"
    },
    "phrases": [
+    "SEE YOU SATURDAY",
     "SATURDAYS ARE SPOKEN FOR",
     "KEEP MOVING DOWN THE FUNNEL",
-    "THANK THE MARSHALS",
-    "SEE YOU SATURDAY"
-   ]
+    "THANK THE MARSHALS"
+   ],
+   "shirt": "SEE YOU SATURDAY"
   },
   {
    "id": "bigcity",
@@ -567,7 +572,8 @@
     "STRANGERS CALLED ME A LEGEND",
     "HERE FOR THE HIGH FIVES",
     "THE CROWD CARRIED ME"
-   ]
+   ],
+   "shirt": "BEATEN BY A RHINO"
   },
   {
    "id": "fell",
@@ -598,11 +604,13 @@
     "title": "Conquering the Skyline Scotland Ring of Steall: My 7-Hour Battle with Scotland's Rugged Peaks"
    },
    "phrases": [
+    "UP IT, DOWN IT. DONE.",
     "UP IT. DOWN IT. PUB.",
     "I KNOW A SHORTCUT",
     "THAT'S NOT A PROPER BOG",
     "BOG STANDARD"
-   ]
+   ],
+   "shirt": "UP IT, DOWN IT. DONE."
   },
   {
    "id": "sky",
@@ -633,11 +641,13 @@
     "title": "Ultra-Trail Snowdonia by UTMB | Mountain Running Perfection"
    },
    "phrases": [
+    "ALTITUDE BEATS ATTITUDE",
     "HOW MUCH CLIMB?",
     "METRES, NOT MILES.",
     "IT'S ONLY A LITTLE HILL",
     "ABOVE THE CLOUDS"
-   ]
+   ],
+   "shirt": "ALTITUDE BEATS ATTITUDE"
   },
   {
    "id": "hundred",
@@ -672,7 +682,8 @@
     "IS THERE SOUP?",
     "WHAT DAY IS IT?",
     "BEWARE THE CHAIR"
-   ]
+   ],
+   "shirt": "TWO SUNRISES. ONE RUN."
   },
   {
    "id": "wanderer",
@@ -703,11 +714,13 @@
     "title": "South Downs Way 50 | Victoria's First 50 Miler SDW50 2022"
    },
    "phrases": [
+    "NOT LOST, EXPLORING.",
     "OUT ALL DAY. BACK FOR TEA.",
     "SCENIC PACE",
     "I STOPPED FOR THE VIEW",
     "NOT LOST. EXPLORING."
-   ]
+   ],
+   "shirt": "NOT LOST, EXPLORING."
   },
   {
    "id": "backyard",
@@ -738,11 +751,13 @@
     "title": "Suffolk Backyard Ultra 2023 | Last Runner Standing Documentary"
    },
    "phrases": [
+    "GOING THE EXTRA YARD",
     "AFTER YOU.",
     "I'LL STOP WHEN YOU STOP.",
     "I'VE GOT ALL NIGHT.",
     "ONE MORE LAP"
-   ]
+   ],
+   "shirt": "GOING THE EXTRA YARD"
   },
   {
    "id": "lab",
@@ -773,11 +788,13 @@
     "title": "Treadmill vs Outdoor Running - Which is Harder? Data Analysis"
    },
    "phrases": [
+    "I'M NOT SLOW, I'M IN ZONE 2.",
     "SAMPLE SIZE OF ONE",
     "WAITING FOR GPS",
     "SPLITS OR IT DIDN'T HAPPEN",
     "I'M NOT SLOW. I'M IN ZONE 2."
-   ]
+   ],
+   "shirt": "I'M NOT SLOW, I'M IN ZONE 2."
   },
   {
    "id": "club",
@@ -808,11 +825,13 @@
     "title": "Racing the SUSSEX XC Relay Champs | Cross Country Season is BACK!"
    },
    "phrases": [
+    "NO ONE GETS LEFT BEHIND",
     "REGROUP AT THE LAMPPOST",
     "HAVE YOU PAID YOUR SUBS?",
     "SAME TIME NEXT TUESDAY",
     "NOBODY GETS LEFT BEHIND"
-   ]
+   ],
+   "shirt": "NO ONE GETS LEFT BEHIND"
   },
   {
    "id": "free",
@@ -843,11 +862,13 @@
     "title": "Lakeland 100 Training Series | Let's Talk about 'GPS' Watches | Episode 6"
    },
    "phrases": [
+    "NO WATCH, NO STRAVA, NO PROBLEM.",
     "IT WAS LOVELY",
     "BACK WHEN I'M BACK",
     "PACE: LOVELY",
     "NO WATCH. NO PROBLEM."
-   ]
+   ],
+   "shirt": "NO WATCH, NO STRAVA, NO PROBLEM."
   }
  ],
  "calibration": {
