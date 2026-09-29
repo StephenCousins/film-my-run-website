@@ -1,57 +1,29 @@
 import { Metadata } from 'next';
 import QuizClient from './QuizClient';
-import { findClosestIdeology } from './quiz-data';
+import { sharedType } from '@/lib/runner-quiz';
 
 interface Props {
   searchParams: Promise<{ r?: string }>;
 }
 
+const DESCRIPTION =
+  'Twelve situations, two minutes. Find out which of twelve runner types you are, from Fell Runner to Lab Rat, and see your Runner DNA.';
+
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
-  const params = await searchParams;
-  const r = params.r;
-
-  if (r) {
-    const parts = r.split('-').map(Number);
-    if (parts.length === 4 && parts.every(n => !isNaN(n) && n >= 0 && n <= 100)) {
-      const [surfaceL, methodL, distanceL, spiritL] = parts;
-      const ideology = findClosestIdeology(surfaceL, methodL, distanceL, spiritL);
-      const title = `I'm a ${ideology.name}! What Kind of Runner Are You?`;
-      return {
-        title,
-        description: ideology.desc,
-        openGraph: {
-          title,
-          description: ideology.desc,
-          images: [`/tools/runner-quiz/og?r=${r}`],
-        },
-        twitter: {
-          card: 'summary_large_image',
-          title,
-          description: ideology.desc,
-          images: [`/tools/runner-quiz/og?r=${r}`],
-        },
-      };
-    }
-  }
-
+  const { r } = await searchParams;
+  const type = sharedType(r);
+  const title = type ? `I'm a ${type.name}. What kind of runner are you?` : 'What Kind of Runner Are You?';
+  const description = type ? `${type.line} ${DESCRIPTION}` : DESCRIPTION;
+  const image = type ? `/tools/runner-quiz/og?r=${type.id}` : '/tools/runner-quiz/og';
   return {
-    title: 'What Kind of Runner Are You?',
-    description: 'Take the four-axis running ideology quiz. 32 questions across surface, method, distance, and spirit — find your running tribe in five minutes.',
-    openGraph: {
-      title: 'What Kind of Runner Are You? | Film My Run',
-      description: '32 questions, 4 axes, 21 tribes. Find your running ideology in five minutes.',
-      images: ['/tools/runner-quiz/og'],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: 'What Kind of Runner Are You? | Film My Run',
-      description: '32 questions, 4 axes, 21 tribes. Find your running ideology in five minutes.',
-      images: ['/tools/runner-quiz/og'],
-    },
+    title,
+    description,
+    openGraph: { title, description, images: [image] },
+    twitter: { card: 'summary_large_image', title, description, images: [image] },
   };
 }
 
 export default async function RunnerQuizPage({ searchParams }: Props) {
-  const params = await searchParams;
-  return <QuizClient sharedResult={params.r} />;
+  const { r } = await searchParams;
+  return <QuizClient sharedResult={r} />;
 }

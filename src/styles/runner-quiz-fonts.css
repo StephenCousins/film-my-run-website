@@ -1,0 +1,8 @@
+/* The runner quiz shirt art names these families directly (the print renderer loads
+   the same TTFs from assets/fonts), so browser previews match the print. The site's
+   own next/font families have generated names, so these don't clash with them. */
+@font-face { font-family: 'Space Grotesk'; font-weight: 700; font-display: swap; src: url('/fonts/runner-quiz/SpaceGrotesk-Bold.ttf') format('truetype'); }
+@font-face { font-family: 'JetBrains Mono'; font-weight: 500; font-display: swap; src: url('/fonts/runner-quiz/JetBrainsMono-Medium.ttf') format('truetype'); }
+@font-face { font-family: 'JetBrains Mono'; font-weight: 700; font-display: swap; src: url('/fonts/runner-quiz/JetBrainsMono-Bold.ttf') format('truetype'); }
+@font-face { font-family: 'Inter'; font-weight: 400; font-display: swap; src: url('/fonts/runner-quiz/Inter-Regular.ttf') format('truetype'); }
+@font-face { font-family: 'Inter'; font-weight: 500; font-display: swap; src: url('/fonts/runner-quiz/Inter-Medium.ttf') format('truetype'); }
