@@ -57,11 +57,11 @@ const RANGE = AXES.map((a) =>
 
 /** One answer index (0-3) per question → calibrated 0-100 score per axis (S, M, D, R). */
 export function scoreAnswers(answers: number[]): Scores {
-  if (
-    answers.length !== QUIZ.questions.length ||
-    answers.some((a, i) => !Number.isInteger(a) || a < 0 || a >= QUIZ.questions[i].answers.length)
-  ) {
-    throw new Error('Invalid quiz answers');
+  if (!Array.isArray(answers) || answers.length !== QUIZ.questions.length) throw new Error('Invalid quiz answers');
+  // A for loop over indices, so holes in a sparse array are caught too.
+  for (let i = 0; i < answers.length; i++) {
+    const a = answers[i];
+    if (!Number.isInteger(a) || a < 0 || a >= QUIZ.questions[i].answers.length) throw new Error('Invalid quiz answers');
   }
   const { mean, sd, spread } = QUIZ.calibration;
   return AXES.map((a, k) => {

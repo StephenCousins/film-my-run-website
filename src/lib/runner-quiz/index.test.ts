@@ -80,6 +80,12 @@ describe('runner quiz scoring', () => {
     expect(() => scoreAnswers([...Array(11).fill(0), 4])).toThrow();
     expect(() => scoreAnswers([...Array(11).fill(0), -1])).toThrow();
     expect(() => scoreAnswers([...Array(11).fill(0), 1.5])).toThrow();
+    expect(() => scoreAnswers(new Array(12))).toThrow();
+    const sparse = Array(12).fill(0);
+    delete sparse[5];
+    expect(() => scoreAnswers(sparse)).toThrow();
+    expect(() => scoreAnswers('000000000000' as unknown as number[])).toThrow();
+    expect(() => scoreAnswers(null as unknown as number[])).toThrow();
   });
 
   it('rankTypes returns every type, nearest first', () => {

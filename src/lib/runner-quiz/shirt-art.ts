@@ -116,6 +116,9 @@ export function formatDate(date: Date): string {
  */
 const BACK_K = 11; // px per mock-up unit
 const BACK_TOP = 40; // mock-up y that sits at the top of the print area
+// The scales run 120-280 with the score hanging to the right (widest "100"); shift them so
+// that whole row, number included, is centred on the print.
+const ROWS_SHIFT = 200 - (120 + 292 + textWidth('100', 'JetBrainsMono-Bold', 11)) / 2;
 // Logo ~18% of the print width (Stephen, 29 Sep: smaller than the mock-up's 80); the block below moves up with it.
 const LOGO_W = (PRINT_W * 0.18) / BACK_K;
 const LOGO_H = LOGO_W / 2.2523; // logo PNGs are 1000 × 444
@@ -134,8 +137,12 @@ export function backArt(
   const nameSize = fit(name, 'SpaceGrotesk-Bold', 22, 220);
   const streak = `with a streak of ${second.name}`;
   const streakSize = fit(streak, 'Inter-Regular', 10.5, 230);
+  // Last guard before print: only four whole numbers 0-100 reach the shirt.
+  if (!Array.isArray(scores) || scores.length !== 4 || !scores.every((v) => Number.isInteger(v) && v >= 0 && v <= 100)) {
+    throw new Error('Invalid scores for shirt art');
+  }
   const rows = LABELS.map(([lo, hi], k) => {
-    const s = Math.max(0, Math.min(100, Math.round(scores[k])));
+    const s = scores[k];
     const y = 170 + k * 50,
       x0 = 120,
       w = 160,
@@ -155,7 +162,7 @@ export function backArt(
       `<g transform="translate(0 ${f(LOGO_H - 35.5)})">` +
       `<text x="200" y="104" text-anchor="middle" ${mono} font-size="9" letter-spacing="3" fill="${tint(0.75)}">RUNNER DNA</text>` +
       `<text x="200" y="134" text-anchor="middle" ${FONT['SpaceGrotesk-Bold']} font-size="${f(nameSize)}" fill="${ink}">${esc(name)}</text>` +
-      rows +
+      `<g transform="translate(${f(ROWS_SHIFT)} 0)">${rows}</g>` +
       `<text x="200" y="376" text-anchor="middle" ${FONT['Inter-Regular']} font-size="${f(streakSize)}" fill="${tint(0.85)}">${esc(streak)}</text>` +
       `<text x="200" y="396" text-anchor="middle" ${mono} font-size="8" letter-spacing="1.5" fill="${tint(0.6)}">FILMMYRUN.COM/QUIZ · ${formatDate(date)}</text>` +
       `</g></g>`

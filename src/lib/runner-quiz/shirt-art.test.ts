@@ -72,6 +72,11 @@ describe('shirt art', () => {
     expect(back).not.toContain('x" onload');
   });
 
+  it.each([[[1, 2, 3, 101]], [[1, 2, 3, -1]], [[1, 2, 3, 4.5]], [[1, 2, 3]], [[1, 2, 3, NaN]]])('backArt refuses scores %j', (s) => {
+    const t = typeById('fell')!;
+    expect(() => backArt(t, t, s as unknown as Scores, DATE, 'Forest', 'logo.png')).toThrow();
+  });
+
   it('teeMock places the art on the garment', () => {
     const mock = teeMock('#2e4636', frontArt(typeById('fell')!, 'Forest'));
     expect(mock).toContain('fill="#2e4636"');
