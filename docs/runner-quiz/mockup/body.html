@@ -1,0 +1,56 @@
+<div class="wrap">
+  <section class="intro">
+    <span class="eyebrow">Film My Run · Runner quiz · Draft for review</span>
+    <h1>What kind of runner are you?</h1>
+    <p class="lede">A rewrite of the runner quiz for the website and the iOS app. Play it first, then read every type and question below. Nothing is live yet. Tell me what to change.</p>
+    <div class="changes">
+      <div><b>12 questions, not 32</b>Real situations with four answers each. About 90 seconds.</div>
+      <div><b>12 types, not 20</b>Each one clearly different, with no near-duplicates.</div>
+      <div><b>Runner DNA</b>Four scales and a second type, so the result feels like yours.</div>
+      <div><b>Leads somewhere</b>Each type points to a film, a plan or tool, and a shop item.</div>
+    </div>
+  </section>
+
+  <section class="play" aria-label="Play the quiz">
+    <div class="phone" id="phone"></div>
+    <div class="aside">
+      <span class="eyebrow">How it scores</span>
+      <h3>Four scales, one closest type</h3>
+      <ul>
+        <li>Each answer nudges one to three scales: <b>Road or Trail</b>, <b>Data or Feel</b>, <b>Short or Long</b>, <b>Racer or Social</b>.</li>
+        <li>Scores are scaled against how answers usually fall, so no scale leans one way by default.</li>
+        <li>You get the closest type, plus the next closest as "a streak of".</li>
+        <li>Tested with 20,000 random answer sets: every type comes up, none more than 18% of the time.</li>
+      </ul>
+      <span class="eyebrow" style="margin-top:12px">On the result, in the real thing</span>
+      <ul>
+        <li>A share card sized for Instagram Stories.</li>
+        <li>"Compare with a mate": send a link, see how alike you are.</li>
+        <li>"14% of Film My Run runners are Fell Runners", from the results we already store.</li>
+        <li>Watch this film, try this plan, and the matching shirt.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section style="display:grid;gap:18px">
+    <div><span class="eyebrow">The types</span><h2>Twelve runners</h2><p class="lede">Profiles are written to your voice rules: short sentences, British, no em dashes. The "famous" lines need your eye.</p></div>
+    <div class="types" id="types"></div>
+  </section>
+
+  <section style="display:grid;gap:18px">
+    <div><span class="eyebrow">The questions</span><h2>Twelve situations</h2><p class="lede">The chips show which way each answer pushes. Road, Data, Short and Racer are plus. Trail, Feel, Long and Social are minus.</p></div>
+    <div class="qs" id="qs"></div>
+  </section>
+
+  <section class="notes">
+    <span class="eyebrow">For you to decide</span>
+    <h2>Open questions</h2>
+    <ol>
+      <li><b>Famous examples.</b> Real names are fun but need to be right. "Stephen Cousins, on a good day" for Ultra Wanderer is a joke at your expense. Keep it?</li>
+      <li><b>Ideal races.</b> You are looking through these. Send me the ones you want and I will swap them in.</li>
+      <li><b>Films.</b> Each type now has a film and an alternative, under "Watch". Your five picks are in, and I suggested the other seven. Pick one per type.</li>
+      <li><b>Old results.</b> The website has stored results under the old 20 types. I'd keep them, but count only new results in the "14% of runners" line.</li>
+      <li><b>The old quiz URL</b> stays the same, /tools/runner-quiz, so existing links and shares keep working.</li>
+    </ol>
+  </section>
+</div>

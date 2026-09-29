@@ -1,0 +1,28 @@
+<title>Runner Type Shirt</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{--bg:#f4f4f5;--surface:#fff;--ink:#18181b;--ink2:#52525b;--mute:#8a8a93;--line:#e4e4e7;--orange:#f88c00;--orange-ink:#b86400}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){color-scheme:dark;--bg:#0c0c0e;--surface:#18181b;--ink:#fafafa;--ink2:#a1a1aa;--mute:#71717a;--line:#27272a;--orange-ink:#ffa53a}}
+:root[data-theme="dark"]{color-scheme:dark;--bg:#0c0c0e;--surface:#18181b;--ink:#fafafa;--ink2:#a1a1aa;--mute:#71717a;--line:#27272a;--orange-ink:#ffa53a}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 'Inter',system-ui,sans-serif;padding-inline:16px;padding-block:28px 64px}
+.wrap{max-width:1100px;margin:0 auto;display:grid;gap:28px}
+h1{font:700 clamp(28px,4.5vw,40px)/1.05 'Space Grotesk',system-ui,sans-serif;margin:0;text-wrap:balance}
+.eyebrow{font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;color:var(--orange-ink)}
+.lede{color:var(--ink2);max-width:64ch;margin:10px 0 0}
+.controls{display:flex;flex-wrap:wrap;gap:14px 22px;align-items:end;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px 16px}
+.controls label{display:grid;gap:6px;font:500 11px 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+select{font:500 14px 'Inter',sans-serif;padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+.swatches{display:flex;gap:8px}
+.swatches button{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);cursor:pointer}
+.swatches button[aria-pressed="true"]{outline:2px solid var(--orange);outline-offset:2px}
+.btn{font:600 14px 'Inter',sans-serif;padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);cursor:pointer}
+.btn:focus-visible,select:focus-visible,.swatches button:focus-visible{outline:2px solid var(--orange);outline-offset:2px}
+.shirts{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}
+figure{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;display:grid;gap:10px}
+figcaption{font:500 11px 'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.1em;color:var(--mute)}
+svg{width:100%;height:auto;display:block}
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.notes div{border-top:2px solid var(--orange);padding-top:10px;color:var(--ink2);font-size:14px}
+.notes b{display:block;color:var(--ink);font:700 16px 'Space Grotesk',sans-serif;margin-bottom:2px}
+</style>
