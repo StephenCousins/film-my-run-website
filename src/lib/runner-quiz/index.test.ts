@@ -110,3 +110,16 @@ describe('typeById', () => {
     expect(typeById('nope')).toBeUndefined();
   });
 });
+
+// Shared with the iOS app (FMRCore): same answers must give the same scores and types there.
+describe('fixtures', () => {
+  it.each([
+    [Array(12).fill(0), [72, 75, 44, 29], 'lab', 'club'],
+    [Array(12).fill(1), [34, 32, 38, 19], 'club', 'free'],
+    [[2, 3, 1, 0, 3, 2, 1, 0, 2, 3, 1, 0], [18, 62, 32, 68], 'hundred', 'sky'],
+  ])('%j → %j %s/%s', (answers, scores, type, second) => {
+    const r = result(answers as number[]);
+    expect(r.scores).toEqual(scores);
+    expect([r.type.id, r.second.id]).toEqual([type, second]);
+  });
+});

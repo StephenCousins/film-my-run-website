@@ -92,6 +92,9 @@ export function formatDate(date: Date): string {
  */
 const BACK_K = 11; // px per mock-up unit
 const BACK_TOP = 40; // mock-up y that sits at the top of the print area
+// Logo ~18% of the print width (Stephen, 29 Sep: smaller than the mock-up's 80); the block below moves up with it.
+const LOGO_W = (PRINT_W * 0.18) / BACK_K;
+const LOGO_H = LOGO_W / 2.2523; // logo PNGs are 1000 × 444
 
 export function backArt(t: QuizType, second: QuizType, scores: Scores, date: Date, ink: string, logoHref: string): string {
   const mono = FONT['JetBrainsMono-Medium'];
@@ -116,13 +119,14 @@ export function backArt(t: QuizType, second: QuizType, scores: Scores, date: Dat
   const tx = PRINT_W / 2 - 200 * BACK_K;
   return svg(
     `<g transform="translate(${f(tx)} ${-BACK_TOP * BACK_K}) scale(${BACK_K})">` +
-      `<image href="${esc(logoHref)}" xlink:href="${esc(logoHref)}" x="160" y="46" width="80" height="35.5"/>` +
+      `<image href="${esc(logoHref)}" xlink:href="${esc(logoHref)}" x="${f(200 - LOGO_W / 2)}" y="46" width="${f(LOGO_W)}" height="${f(LOGO_H)}"/>` +
+      `<g transform="translate(0 ${f(LOGO_H - 35.5)})">` +
       `<text x="200" y="104" text-anchor="middle" ${mono} font-size="9" letter-spacing="3" fill="${ink}" opacity=".75">RUNNER DNA</text>` +
       `<text x="200" y="134" text-anchor="middle" ${FONT['SpaceGrotesk-Bold']} font-size="${f(nameSize)}" fill="${ink}">${esc(name)}</text>` +
       rows +
       `<text x="200" y="376" text-anchor="middle" ${FONT['Inter-Regular']} font-size="${f(streakSize)}" fill="${ink}" opacity=".85">${esc(streak)}</text>` +
       `<text x="200" y="396" text-anchor="middle" ${mono} font-size="8" letter-spacing="1.5" fill="${ink}" opacity=".6">FILMMYRUN.COM/QUIZ · ${formatDate(date)}</text>` +
-      `</g>`
+      `</g></g>`
   );
 }
 
