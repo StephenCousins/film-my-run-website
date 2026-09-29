@@ -67,12 +67,12 @@ export default function MemberLine({ pounds, label = 'Member price', returnTo }:
 }
 
 /** The shop page's call to action: a bold card for guests, a slim line for members, nothing for the Club. */
-export function MemberOffer() {
+export function MemberOffer({ className = 'mb-8' }: { className?: string }) {
   const m = useMember();
   if (m.loading || m.club) return null;
   if (m.signedIn) {
     return (
-      <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-2xl border border-border bg-surface-secondary px-5 py-4">
+      <div className={`${className} flex flex-col sm:flex-row sm:items-center justify-between gap-2 rounded-2xl border border-border bg-surface-secondary px-5 py-4`}>
         <p className="text-foreground">
           <span className="font-semibold">You save {MEMBER}.</span> FMR Club members save {CLUB}.
         </p>
@@ -81,7 +81,7 @@ export function MemberOffer() {
     );
   }
   return (
-    <div className="mb-8 rounded-2xl bg-brand text-black p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-5 shadow-lg">
+    <div className={`${className} rounded-2xl bg-brand text-black p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-5 shadow-lg`}>
       <div>
         <p className="font-display text-2xl sm:text-3xl font-bold leading-tight">Save {MEMBER} on every shirt</p>
         <p className="mt-2 text-black/80 text-base sm:text-lg">

@@ -91,7 +91,8 @@ export default function NewsletterForm({
       'bg-zinc-800 border border-zinc-700 text-white placeholder:text-zinc-500',
     theme === 'glass' &&
       'bg-white/10 border border-white/15 text-white placeholder:text-zinc-500 backdrop-blur-sm',
-    variant === 'stacked' ? 'w-full' : 'flex-1'
+    // min-w-0: Safari gives an input a wide intrinsic width, which pushed the page wider than a phone.
+    variant === 'stacked' ? 'w-full' : 'flex-1 min-w-0'
   );
 
   const buttonClasses = cn(
