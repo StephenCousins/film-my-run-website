@@ -5,10 +5,10 @@ import { Resvg } from '@resvg/resvg-js';
 import { PRINT_W, type ShirtColour } from './shirt-art';
 
 const FONT_DIR = path.join(process.cwd(), 'assets/fonts');
-const FONT_FILES = fs
-  .readdirSync(FONT_DIR)
-  .filter((f) => f.endsWith('.ttf'))
-  .map((f) => path.join(FONT_DIR, f));
+// Read on first render, not at import: the Stripe webhook imports this file for every order.
+let fontFiles: string[] | undefined;
+const fonts = () =>
+  (fontFiles ??= fs.readdirSync(FONT_DIR).filter((f) => f.endsWith('.ttf')).map((f) => path.join(FONT_DIR, f)));
 
 /**
  * SVG → PNG, transparent background. Default is the art's own size (3709 × 4203, Printify's
@@ -16,7 +16,7 @@ const FONT_FILES = fs
  */
 export async function renderPng(svg: string, width = PRINT_W): Promise<Buffer> {
   const resvg = new Resvg(svg, {
-    font: { fontFiles: FONT_FILES, loadSystemFonts: false, defaultFontFamily: 'Inter' },
+    font: { fontFiles: fonts(), loadSystemFonts: false, defaultFontFamily: 'Inter' },
     fitTo: { mode: 'width', value: width },
   });
   return resvg.render().asPng();
