@@ -20,6 +20,8 @@ export interface FulfilDeps {
   markPaid: (id: number, email: string, address: PrintifyAddress) => Promise<void>;
   place: (supplier: Supplier, lines: OrderLine[], order: PaidOrder, address: PrintifyAddress) => Promise<string>;
   markSubmitted: (id: number, ids: SupplierOrderIds) => Promise<void>;
+  /** A supplier refused or something threw: mark the order failed, keep what was placed, tell the owner. */
+  flagFailed: (id: number, error: Error, ids: SupplierOrderIds) => Promise<void>;
   emailConfirmation: (order: PaidOrder, email: string) => Promise<void>;
 }
 
@@ -32,11 +34,17 @@ export async function fulfilPaidSession(sessionId: string, email: string, addres
   if (order.status !== 'pending') return `already-${order.status}`;
   await d.markPaid(order.id, email, address);
   const ids: SupplierOrderIds = {};
-  for (const supplier of SUPPLIERS) {
-    const lines = linesFor(order.items, supplier);
-    if (lines.length) ids[supplier] = await d.place(supplier, lines, order, address);
+  try {
+    for (const supplier of SUPPLIERS) {
+      const lines = linesFor(order.items, supplier);
+      if (lines.length) ids[supplier] = await d.place(supplier, lines, order, address);
+    }
+    await d.markSubmitted(order.id, ids);
+  } catch (e) {
+    // Never a silent drop: a Stripe retry finds the order 'failed' and leaves it for a person.
+    await d.flagFailed(order.id, e as Error, ids);
+    throw e;
   }
-  await d.markSubmitted(order.id, ids);
   await d.emailConfirmation(order, email);
   return 'submitted';
 }

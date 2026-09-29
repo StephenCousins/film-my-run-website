@@ -10,11 +10,14 @@ const FONT_FILES = fs
   .filter((f) => f.endsWith('.ttf'))
   .map((f) => path.join(FONT_DIR, f));
 
-/** SVG → PNG at the Printify print area size (3709 × 4203), transparent background. */
-export async function renderPng(svg: string): Promise<Buffer> {
+/**
+ * SVG → PNG, transparent background. Default is the art's own size (3709 × 4203, Printify's
+ * print area for size S); pass 4500 for the L-4XL area (4500 × 5100, same shape).
+ */
+export async function renderPng(svg: string, width = PRINT_W): Promise<Buffer> {
   const resvg = new Resvg(svg, {
     font: { fontFiles: FONT_FILES, loadSystemFonts: false, defaultFontFamily: 'Inter' },
-    fitTo: { mode: 'width', value: PRINT_W },
+    fitTo: { mode: 'width', value: width },
   });
   return resvg.render().asPng();
 }

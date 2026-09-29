@@ -3,11 +3,14 @@
  * names always come from the catalogue, never from the client.
  */
 import { shopItems, type ShopItem, type ShopVariant, type Supplier, type VariantOption } from '@/lib/shop';
+import { RUNNER_TEE_SLUG, runnerTee, parsePersonal, personalType, type Personal } from './runner-tee';
 
 export interface BasketLine {
   slug: string;
   variantId: number | string;
   quantity: number;
+  /** Runner Type Tee only: the quiz result printed on it. */
+  personal?: Personal;
 }
 
 export interface OrderLine {
@@ -22,6 +25,8 @@ export interface OrderLine {
   options?: VariantOption[];
   quantity: number;
   unitPence: number;
+  /** Runner Type Tee only, validated. The print files are made from it after payment. */
+  personal?: Personal;
 }
 
 export const MAX_LINES = 10;
@@ -33,14 +38,18 @@ export function buildOrderLines(lines: BasketLine[], items: ShopItem[] = shopIte
   if (!Array.isArray(lines) || lines.length === 0) throw new Error('Basket is empty');
   if (lines.length > MAX_LINES) throw new Error(`Too many lines (max ${MAX_LINES})`);
   return lines.map((l) => {
-    const item = items.find((i) => i.slug === l.slug);
+    const item = l.slug === RUNNER_TEE_SLUG ? runnerTee : items.find((i) => i.slug === l.slug);
+    // Personalisation is only for the runner tee, and the runner tee is nothing without it.
+    const personal = l.slug === RUNNER_TEE_SLUG ? parsePersonal(l.personal) : undefined;
+    if (personal === null) throw new Error('This shirt needs a quiz result');
+    if (l.slug !== RUNNER_TEE_SLUG && l.personal !== undefined) throw new Error(`${l.slug} can't be personalised`);
     const v = item?.variants.find((v) => String(v.id) === String(l.variantId));
     if (!item || !v) throw new Error(`Unknown product ${l.slug}/${l.variantId}`);
     const quantity = Number(l.quantity);
     if (!Number.isInteger(quantity) || quantity < 1 || quantity > MAX_QTY) throw new Error(`Bad quantity for ${l.slug}`);
     return {
       slug: item.slug,
-      name: item.name,
+      name: personal ? `${item.name}: ${personalType(personal).name}` : item.name,
       variantLabel: variantLabel(v),
       image: (item.images.find((i) => i.colour === v.colour) ?? item.images[0])?.src,
       supplier: item.supplier ?? 'printify',
@@ -49,6 +58,7 @@ export function buildOrderLines(lines: BasketLine[], items: ShopItem[] = shopIte
       options: v.options,
       quantity,
       unitPence: Math.round(v.price * 100),
+      ...(personal && { personal }),
     };
   });
 }

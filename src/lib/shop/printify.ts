@@ -16,11 +16,16 @@ export interface PrintifyAddress {
   zip: string;
 }
 
-export interface PrintifyLine {
-  product_id: string;
-  variant_id: number;
-  quantity: number;
-}
+/** A catalogue product, or a product made on the fly from print files (the Runner Type Tee). */
+export type PrintifyLine =
+  | { product_id: string; variant_id: number; quantity: number }
+  | {
+      blueprint_id: number;
+      print_provider_id: number;
+      variant_id: number;
+      quantity: number;
+      print_areas: { front: string; back: string };
+    };
 
 async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown): Promise<T> {
   const token = process.env.PRINTIFY_API_TOKEN;

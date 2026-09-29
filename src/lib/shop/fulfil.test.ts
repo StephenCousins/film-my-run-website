@@ -15,6 +15,7 @@ function deps(order: PaidOrder | null): FulfilDeps & { calls: string[] } {
     markPaid: async () => { calls.push('paid'); },
     place: async (supplier, lines) => { calls.push(`${supplier}:${lines.length}`); return supplier === 'printify' ? 'PF1' : 'CT1'; },
     markSubmitted: async (_id, ids) => { calls.push('submitted ' + JSON.stringify(ids)); },
+    flagFailed: async (_id, e, ids) => { calls.push(`failed ${e.message} ${JSON.stringify(ids)}`); },
     emailConfirmation: async () => { calls.push('email'); },
   };
 }
@@ -34,6 +35,16 @@ describe('fulfilPaidSession', () => {
     const d = deps({ id: 1, status: 'submitted', items: [] });
     expect(await fulfilPaidSession('cs_1', 'jo@x.com', addr, d)).toBe('already-submitted');
     expect(d.calls).toEqual([]);
+  });
+  it('flags the order and keeps what was placed when a supplier fails', async () => {
+    const d = deps({ id: 1, status: 'pending', items: [pf, ct] });
+    d.place = async (supplier) => {
+      if (supplier === 'contrado') throw new Error('Contrado down');
+      d.calls.push('printify:1');
+      return 'PF1';
+    };
+    await expect(fulfilPaidSession('cs_1', 'jo@x.com', addr, d)).rejects.toThrow('Contrado down');
+    expect(d.calls).toEqual(['paid', 'printify:1', 'failed Contrado down {"printify":"PF1"}']);
   });
   it('ignores sessions it never created', async () => {
     const d = deps(null);
