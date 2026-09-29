@@ -1,7 +1,7 @@
 // Runner quiz shirt art. The same SVG drives the on-page preview and the Printify
 // print (rendered to PNG by render.ts), so what the buyer sees is what gets printed.
 import metrics from './metrics.json';
-import type { QuizType, Scores } from './index';
+import { upperName, type QuizType, type Scores } from './index';
 
 /** Printify print area for blueprint 12 (front and back), in pixels. */
 export const PRINT_W = 3709;
@@ -87,7 +87,7 @@ export function frontArt(t: QuizType, colour: ShirtColour): string {
   const y = top + (lines.length - 1) * gap + size * 0.9 + 94;
   return svg(
     `${text}<line x1="${cx - 250}" x2="${cx + 250}" y1="${f(y)}" y2="${f(y)}" stroke="${t.colour}" stroke-width="40"/>` +
-      `<text x="${cx}" y="${f(y + 251)}" text-anchor="middle" ${FONT['JetBrainsMono-Medium']} font-size="${nameSize}" letter-spacing="31" fill="${tint(0.75)}">${esc(t.name.toUpperCase())}</text>`
+      `<text x="${cx}" y="${f(y + 251)}" text-anchor="middle" ${FONT['JetBrainsMono-Medium']} font-size="${nameSize}" letter-spacing="31" fill="${tint(0.75)}">${esc(upperName(t.name))}</text>`
   );
 }
 
@@ -133,7 +133,7 @@ export function backArt(
 ): string {
   const { ink, tint } = palette(colour);
   const mono = FONT['JetBrainsMono-Medium'];
-  const name = t.name.toUpperCase();
+  const name = upperName(t.name);
   const nameSize = fit(name, 'SpaceGrotesk-Bold', 22, 220);
   const streak = `with a streak of ${second.name}`;
   const streakSize = fit(streak, 'Inter-Regular', 10.5, 230);

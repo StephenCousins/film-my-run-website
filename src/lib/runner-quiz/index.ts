@@ -116,3 +116,6 @@ export function sharedType(r: string | null | undefined): QuizType | undefined {
   const s = parseScores(r);
   return s ? rankTypes(s)[0] : typeById(r);
 }
+
+/** A type name in capitals, keeping parkrun's lower-case brand style ("parkrun FAITHFUL"). */
+export const upperName = (name: string) => name.toUpperCase().replace(/\bPARKRUN\b/g, 'parkrun');

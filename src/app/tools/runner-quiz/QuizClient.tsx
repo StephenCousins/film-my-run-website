@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowRight, Check, Play, RotateCcw, Share2, Shirt } from 'lu
 import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { QUIZ, result as scoreQuiz, sharedType, type QuizType, type Scores } from '@/lib/runner-quiz';
+import { QUIZ, result as scoreQuiz, sharedType, upperName, type QuizType, type Scores } from '@/lib/runner-quiz';
 import { frontArt, teeMock, SHIRT_COLOURS } from '@/lib/runner-quiz/shirt-art';
 import '@/styles/runner-quiz-fonts.css';
 
@@ -239,9 +239,9 @@ function Result({
             </span>
           ))}
         </h1>
-        <p className="flex items-center gap-3 font-mono text-sm uppercase tracking-[0.2em] text-secondary mb-10">
+        <p className="flex items-center gap-3 font-mono text-sm tracking-[0.2em] text-secondary mb-10">
           <span className="inline-block w-8 h-1 rounded-full" style={{ backgroundColor: type.colour }} />
-          {type.name}
+          {upperName(type.name)}
         </p>
 
         <div className="grid md:grid-cols-2 gap-4 mb-12">
