@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, Play, RotateCcw, Share2, Shirt } from 'lucide-react';
 import Image from 'next/image';
@@ -27,12 +27,15 @@ export default function QuizClient({ sharedResult }: { sharedResult?: string }) 
   const [stats, setStats] = useState<{ total: number; types: { id: string; pct: number }[] } | null>(null);
   const [copied, setCopied] = useState(false);
   const reduceMotion = useReducedMotion();
+  const questionRef = useRef<HTMLHeadingElement>(null);
+  const submittedRef = useRef(false);
 
   const idx = answers.length;
   const total = QUIZ.questions.length;
   const scrollTop = () => window.scrollTo({ top: 0 });
 
   const start = () => {
+    submittedRef.current = false;
     setAnswers([]);
     setOutcome(null);
     setPhase('quiz');
@@ -40,10 +43,13 @@ export default function QuizClient({ sharedResult }: { sharedResult?: string }) 
   };
 
   const answer = (i: number) => {
+    // A second tap during the exit animation, or on the last question, must not count twice.
+    if (submittedRef.current || answers.length >= total) return;
     const next = [...answers, i];
     setAnswers(next);
     scrollTop();
     if (next.length < total) return;
+    submittedRef.current = true;
     const r = scoreQuiz(next);
     setOutcome(r);
     setPhase('checking');
@@ -58,6 +64,11 @@ export default function QuizClient({ sharedResult }: { sharedResult?: string }) 
       .catch(() => {});
   };
 
+  // Move focus to each new question, so keyboard and screen reader users start at the top.
+  useEffect(() => {
+    if (phase === 'quiz') questionRef.current?.focus({ preventScroll: true });
+  }, [phase, answers.length]);
+
   // A short "checking your splits" beat before the reveal.
   useEffect(() => {
     if (phase !== 'checking') return;
@@ -70,7 +81,7 @@ export default function QuizClient({ sharedResult }: { sharedResult?: string }) 
 
   const fade = reduceMotion
     ? {}
-    : { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -10 }, transition: { duration: 0.2 } };
+    : { initial: { opacity: 0, y: 10 }, animate: { opacity: 1, y: 0 }, exit: { opacity: 0, y: -10, pointerEvents: 'none' as const }, transition: { duration: 0.2 } };
 
   return (
     <>
@@ -134,7 +145,9 @@ export default function QuizClient({ sharedResult }: { sharedResult?: string }) 
 
               <AnimatePresence mode="wait">
                 <motion.div key={idx} {...fade}>
-                  <h2 className="font-display text-2xl sm:text-3xl font-bold leading-snug mb-8">{QUIZ.questions[idx].q}</h2>
+                  <h2 ref={questionRef} tabIndex={-1} className="font-display text-2xl sm:text-3xl font-bold leading-snug mb-8 outline-none">
+                    {QUIZ.questions[idx].q}
+                  </h2>
                   <div className="grid gap-3">
                     {QUIZ.questions[idx].answers.map((a, i) => (
                       <button
@@ -152,8 +165,13 @@ export default function QuizClient({ sharedResult }: { sharedResult?: string }) 
           </section>
         )}
 
+        {/* Stays mounted so screen readers hear each change. */}
+        <p role="status" className="sr-only">
+          {phase === 'quiz' ? `Question ${idx + 1} of ${total}` : phase === 'checking' ? 'Checking your splits' : phase === 'result' && outcome ? `You are a ${outcome.type.name}` : ''}
+        </p>
+
         {phase === 'checking' && (
-          <section className="py-32 text-center" aria-live="polite">
+          <section className="py-32 text-center">
             <div className="w-10 h-10 mx-auto mb-6 rounded-full border-4 border-brand/20 border-t-brand animate-spin motion-reduce:animate-none" />
             <p className="font-display text-2xl font-bold">Checking your splits…</p>
           </section>
@@ -202,6 +220,11 @@ function Result({
   onRetake: () => void;
 }) {
   const preview = useMemo(() => teeMock(SHIRT_COLOURS[PREVIEW_COLOUR], frontArt(type, PREVIEW_COLOUR)), [type]);
+  const headingRef = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    // Only after taking the quiz; a shared link opens normally.
+    if (scores) headingRef.current?.focus({ preventScroll: true });
+  }, [scores]);
 
   return (
     <section className="py-10 lg:py-16">
@@ -209,7 +232,7 @@ function Result({
         <p className="text-xs font-bold uppercase tracking-[0.2em] text-muted mb-4">
           {scores ? 'Your runner type' : 'Someone shared their runner type'}
         </p>
-        <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95] uppercase mb-4">
+        <h1 ref={headingRef} tabIndex={-1} className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight leading-[0.95] uppercase mb-4 outline-none">
           {type.shirtLines.map((l) => (
             <span key={l} className="block">
               {l}

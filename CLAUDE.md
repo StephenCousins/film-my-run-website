@@ -401,7 +401,7 @@ Prisma directly.
 - `/api/auth/[...nextauth]` — NextAuth, Google + Credentials providers
 - `/api/auth/register`, `/api/sso/adrian`
 - `/api/contact`, `/api/track`, `/api/track/click`
-- `/api/runner-quiz/results`, `/api/runner-quiz/email`
+- `/api/runner-quiz/results`
 
 **Not built:** no `/api/checkout`, `/api/products`, `/api/webhooks/stripe` or
 `/api/auth/me`.

@@ -8,6 +8,8 @@ function isRateLimited(ip: string): boolean {
   const now = Date.now();
   const entry = rateLimitMap.get(ip);
   if (!entry || now > entry.resetAt) {
+    // Drop expired entries as we go, so the map doesn't grow with every IP ever seen.
+    for (const [key, e] of rateLimitMap) if (now > e.resetAt) rateLimitMap.delete(key);
     rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 });
     return false;
   }
@@ -58,7 +60,7 @@ export async function GET() {
       })
       .sort((a, b) => b.count - a.count);
 
-    return NextResponse.json({ total, types });
+    return NextResponse.json({ total, types }, { headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300' } });
   } catch (error) {
     console.error('Quiz stats error:', error);
     return NextResponse.json({ error: 'Failed to load stats' }, { status: 500 });
