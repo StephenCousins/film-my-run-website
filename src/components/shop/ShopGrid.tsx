@@ -28,12 +28,12 @@ export default function ShopGrid({ items, categories }: { items: ShopItem[]; cat
                 className={cn(
                   'inline-flex items-center gap-1.5 h-10 pl-3.5 pr-2 rounded-full text-sm font-semibold whitespace-nowrap border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand',
                   on
-                    ? 'bg-foreground text-background border-foreground'
+                    ? 'bg-brand text-black border-brand'
                     : 'bg-surface-secondary text-secondary border-border hover:text-foreground hover:border-foreground/30',
                 )}
               >
                 {chipLabel(c.label)}
-                <span className={cn('min-w-6 px-1.5 rounded-full text-xs font-mono leading-5', on ? 'bg-brand text-black' : 'bg-border/60 text-muted')}>
+                <span className={cn('min-w-6 px-1.5 rounded-full text-xs font-mono leading-5', on ? 'bg-black/15 text-black' : 'bg-border/60 text-muted')}>
                   {c.count}
                 </span>
               </button>
