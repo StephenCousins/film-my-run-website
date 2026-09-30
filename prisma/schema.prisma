@@ -31,9 +31,9 @@ model articles {
   title       String
   link        String
   description String?
-  image_url   String?  // Thumbnail/featured image from RSS feed
+  image_url   String? // Thumbnail/featured image from RSS feed
   pub_date    DateTime
-  source      String   // e.g., "iRunFar", "UltraRunning Magazine"
+  source      String // e.g., "iRunFar", "UltraRunning Magazine"
   category    String?
   created_at  DateTime @default(now())
 
@@ -154,7 +154,7 @@ model parkrun_results {
   id              Int       @id @default(autoincrement())
   athlete_id      String
   event           String
-  run_date        String    // DD/MM/YYYY as scraped
+  run_date        String // DD/MM/YYYY as scraped
   run_date_parsed DateTime?
   run_number      String?
   position        String?
@@ -173,8 +173,8 @@ model parkrun_results {
 
 model scraper_alerts {
   id           Int      @id @default(autoincrement())
-  source       String   // parkrun | po10
-  alert_type   String   // missing_table | missing_headers | date_format_changed | etc.
+  source       String // parkrun | po10
+  alert_type   String // missing_table | missing_headers | date_format_changed | etc.
   details      String
   html_snippet String?
   resolved     Boolean  @default(false)
@@ -315,24 +315,24 @@ model terms {
 }
 
 model users {
-  id                 Int            @id @default(autoincrement())
-  email              String         @unique
-  name               String?
-  password_hash      String?
-  stripe_customer_id String?
-  created_at         DateTime       @default(now())
-  updated_at         DateTime
-  access_tier        AccessTier     @default(FREE)
-  email_verified_at  DateTime?
-  image              String?
-  subscription_end   DateTime?
+  id                  Int                 @id @default(autoincrement())
+  email               String              @unique
+  name                String?
+  password_hash       String?
+  stripe_customer_id  String?
+  created_at          DateTime            @default(now())
+  updated_at          DateTime
+  access_tier         AccessTier          @default(FREE)
+  email_verified_at   DateTime?
+  image               String?
+  subscription_end    DateTime?
   newsletter_asked_at DateTime? // when the member answered the one-off newsletter prompt, either way
-  accounts           accounts[]
-  orders             orders[]
-  posts              posts[]
-  saved_routes       saved_routes[]
-  sessions           sessions[]
-  shoe_user_ratings  shoe_user_ratings[]
+  accounts            accounts[]
+  orders              orders[]
+  posts               posts[]
+  saved_routes        saved_routes[]
+  sessions            sessions[]
+  shoe_user_ratings   shoe_user_ratings[]
 }
 
 model verification_tokens {
@@ -426,10 +426,10 @@ model news_stories {
   source_url     String
   source_heading String?
   roundup_date   DateTime?
-  topic          String?   // trail_ultra | road | track
+  topic          String? // trail_ultra | road | track
   is_uk          Boolean   @default(false)
   importance     Int?
-  sources        Json?     // [{ site, url }]
+  sources        Json? // [{ site, url }]
   photo_credit   String?
   held_reason    String?
   priority       Int       @default(50)
@@ -446,14 +446,14 @@ model news_stories {
 /// Every feed item the news pipeline has looked at, so nothing is sorted twice
 /// and a run's log can explain each decision.
 model news_items {
-  id          Int      @id @default(autoincrement())
-  article_id  Int      @unique
-  url         String
-  source      String
-  verdict     Json?    // { type, confidence, isRunning, topic, isUk, importance }
-  bundle_key  String?
-  story_id    Int?
-  created_at  DateTime @default(now())
+  id         Int      @id @default(autoincrement())
+  article_id Int      @unique
+  url        String
+  source     String
+  verdict    Json? // { type, confidence, isRunning, topic, isUk, importance }
+  bundle_key String?
+  story_id   Int?
+  created_at DateTime @default(now())
 
   @@index([bundle_key])
 }
@@ -472,8 +472,8 @@ model runners {
   slug           String    @unique
   name           String
   aliases        String[]  @default([])
-  nationality    String?   // ISO 3166 alpha-2
-  sex            String?   // M | F
+  nationality    String? // ISO 3166 alpha-2
+  sex            String? // M | F
   birth_year     Int?
   disciplines    String[]  @default([]) // trail_ultra | road | track
   era            String    @default("current") // current | historic
@@ -550,28 +550,28 @@ enum CandidateStatus {
 }
 
 model shoe_brands {
-  id               Int      @id @default(autoincrement())
-  name             String   @unique
-  aliases          String[] @default([])
+  id               Int               @id @default(autoincrement())
+  name             String            @unique
+  aliases          String[]          @default([])
   domain           String
   new_arrivals_url String?
-  created_at       DateTime @default(now())
+  created_at       DateTime          @default(now())
   shoes            shoes[]
   candidates       shoe_candidates[]
 }
 
 model shoes {
-  id                Int            @id @default(autoincrement())
+  id                Int                 @id @default(autoincrement())
   brand             String
   brand_id          Int
   model             String
-  slug              String         @unique
+  slug              String              @unique
   terrain           ShoeTerrain
   category          ShoeCategory
   drop_mm           Int?
   weight_g          Int?
   stack_height_mm   Int?
-  price_gbp         Int?           // in pence
+  price_gbp         Int? // in pence
   release_year      Int?
   release_date      DateTime?
   description       String?
@@ -580,18 +580,18 @@ model shoes {
   image_method      String?
   image_verified_at DateTime?
   buy_url           String?
-  avg_score         Decimal?       @db.Decimal(4, 2)
-  review_count      Int            @default(0)
-  user_avg_score    Decimal?       @db.Decimal(3, 1)
-  user_rating_count Int            @default(0)
+  avg_score         Decimal?            @db.Decimal(4, 2)
+  review_count      Int                 @default(0)
+  user_avg_score    Decimal?            @db.Decimal(3, 1)
+  user_rating_count Int                 @default(0)
   last_reviewed     DateTime?
-  origin            ShoeOrigin     @default(seed)
+  origin            ShoeOrigin          @default(seed)
   added_by_user_id  Int?
   superseded_by_id  Int?
-  created_at        DateTime       @default(now())
-  brand_ref         shoe_brands    @relation(fields: [brand_id], references: [id])
-  superseded_by     shoes?         @relation("ShoeSupersession", fields: [superseded_by_id], references: [id])
-  supersedes        shoes[]        @relation("ShoeSupersession")
+  created_at        DateTime            @default(now())
+  brand_ref         shoe_brands         @relation(fields: [brand_id], references: [id])
+  superseded_by     shoes?              @relation("ShoeSupersession", fields: [superseded_by_id], references: [id])
+  supersedes        shoes[]             @relation("ShoeSupersession")
   shoe_reviews      shoe_reviews[]
   shoe_user_ratings shoe_user_ratings[]
   candidate         shoe_candidates?
@@ -700,13 +700,32 @@ model chat_threads {
 }
 
 model chat_messages {
-  id               String       @id @default(uuid())
-  thread_id        String
-  sender           ChatSender
-  text             String
-  created_at       DateTime     @default(now())
-  read_by_user_at  DateTime?
-  thread           chat_threads @relation(fields: [thread_id], references: [id], onDelete: Cascade)
+  id              String       @id @default(uuid())
+  thread_id       String
+  sender          ChatSender
+  text            String
+  created_at      DateTime     @default(now())
+  read_by_user_at DateTime?
+  thread          chat_threads @relation(fields: [thread_id], references: [id], onDelete: Cascade)
 
   @@index([thread_id, created_at])
+}
+
+model push_devices {
+  token        String    @id
+  environment  String // 'sandbox' | 'production'
+  news         Boolean   @default(true)
+  created_at   DateTime  @default(now())
+  last_seen_at DateTime  @default(now())
+  invalid_at   DateTime?
+
+  @@index([news, invalid_at])
+}
+
+model news_push_sends {
+  day        String   @id // 'YYYY-MM-DD' in Europe/London
+  slug       String
+  sent_at    DateTime @default(now())
+  recipients Int      @default(0)
+  failures   Int      @default(0)
 }
