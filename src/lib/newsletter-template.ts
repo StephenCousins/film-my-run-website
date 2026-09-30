@@ -429,9 +429,9 @@ function renderSponsors(): string {
   // Each logo is a ready-made 600x240 tile in the sponsor's own colours (Stephen, 30 Sep 2026).
   const sponsors = [
     { name: 'NoblePro', url: 'https://noble-pro.com', logo: `${R2_URL}/newsletter/sponsors/v2/noblepro.png` },
-    { name: 'Enertor', url: 'https://enertor.com', logo: `${R2_URL}/newsletter/sponsors/v2/enertor.png` },
-    { name: 'Protein Rebel', url: 'https://proteinrebel.com', logo: `${R2_URL}/newsletter/sponsors/v2/protein-rebel.png` },
-    { name: 'Flying Burrito', url: 'https://flyingburrito.eu', logo: `${R2_URL}/newsletter/sponsors/v2/flying-burrito.png` },
+    { name: 'Enertor', url: 'https://enertor.com', logo: `${R2_URL}/newsletter/sponsors/v3/enertor.png` },
+    { name: 'Protein Rebel', url: 'https://proteinrebel.com', logo: `${R2_URL}/newsletter/sponsors/v3/protein-rebel.png` },
+    { name: 'Flying Burrito', url: 'https://flyingburrito.eu', logo: `${R2_URL}/newsletter/sponsors/v3/flying-burrito.png` },
   ];
 
   const card = (s: (typeof sponsors)[number]) =>
