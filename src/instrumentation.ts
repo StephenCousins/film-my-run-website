@@ -11,7 +11,7 @@ export async function register() {
     // Daily news push: a 5-minute tick that only acts in the London send window.
     // register() can run more than once in dev, so start the timer once per process.
     const g = globalThis as { __newsPushTimer?: NodeJS.Timeout };
-    if (process.env.NEWS_PUSH_ENABLED === '1' && !g.__newsPushTimer) {
+    if (process.env.NODE_ENV === 'production' && process.env.NEWS_PUSH_ENABLED === '1' && !g.__newsPushTimer) {
       const { apnsConfig } = await import('@/lib/push/apns');
       const config = apnsConfig();
       if (!config) {
@@ -20,7 +20,10 @@ export async function register() {
         const { runNewsPush, prismaNewsPushDeps } = await import('@/lib/push/news-push');
         const tick = async () => {
           try {
-            const r = await runNewsPush(await prismaNewsPushDeps(new Date(), config));
+            const r = await runNewsPush({
+              ...(await prismaNewsPushDeps(new Date(), config)),
+              alert: (message, extra) => { Sentry.captureMessage(message, { level: 'error', extra }); },
+            });
             if (r.outcome === 'sent') console.log(`[news-push] sent ${r.slug} to ${r.recipients} devices, ${r.failures} failures`);
           } catch (e) {
             Sentry.captureException(e);

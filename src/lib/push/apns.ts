@@ -34,72 +34,107 @@ export function isDeadToken(status: number, reason?: string): boolean {
   return status === 410 || (status === 400 && reason === 'BadDeviceToken');
 }
 
+export interface ApnsSession {
+  send(token: string, payload: object, opts?: { expiration?: number }): Promise<{ status: number; reason?: string }>;
+  close(): void;
+}
+
+/**
+ * One HTTP/2 connection reused for many sends (Apple treats rapid connect/disconnect as abuse).
+ * Connects lazily; if the session errors or closes, the next send reconnects, and a send that
+ * dies on a dropped connection is retried once on a fresh one.
+ */
+export function openApns(c: ApnsConfig, environment: ApnsEnvironment, opts?: { host?: string }): ApnsSession {
+  const hostUrl = opts?.host || HOSTS[environment];
+  let client: http2.ClientHttp2Session | null = null;
+  let closed = false;
+
+  const session = (): http2.ClientHttp2Session => {
+    if (client && !client.destroyed && !client.closed) return client;
+    const s = http2.connect(hostUrl);
+    s.on('error', () => { /* per-request listeners report it; this stops an unhandled 'error' */ });
+    s.on('close', () => { if (client === s) client = null; });
+    client = s;
+    return s;
+  };
+
+  const once = async (token: string, payload: object, expiration?: number) => {
+    const jwt = await providerToken(c);
+    const s = session();
+    return await new Promise<{ status: number; reason?: string }>((resolve, reject) => {
+      let done = false;
+      let req: http2.ClientHttp2Stream | undefined;
+      const settle = (value: { status: number; reason?: string } | Error, killSession = false) => {
+        if (done) return;
+        done = true;
+        clearTimeout(deadline);
+        s.off('error', onError);
+        s.off('close', onClose);
+        if (killSession) s.destroy();
+        else if (req && !req.closed) req.close(http2.constants.NGHTTP2_CANCEL);
+        if (value instanceof Error) reject(value);
+        else resolve(value);
+      };
+      const onError = (err: Error) => settle(err, true);
+      const onClose = () => settle(new Error('APNs session closed'), true);
+      // 15-second deadline for the entire operation; a hung request poisons the session
+      const deadline = setTimeout(() => settle(new Error('APNs request deadline exceeded'), true), 15_000);
+      s.on('error', onError);
+      s.on('close', onClose);
+
+      const headers: http2.OutgoingHttpHeaders = {
+        ':method': 'POST', ':path': `/3/device/${token}`,
+        authorization: `bearer ${jwt}`, 'apns-topic': c.topic, 'apns-push-type': 'alert', 'apns-priority': '10',
+      };
+      if (expiration !== undefined) headers['apns-expiration'] = String(expiration);
+      try { req = s.request(headers); } catch (e) { settle(e as Error, true); return; }
+
+      let status = 0; let body = '';
+      req.setEncoding('utf8');
+      req.on('response', (h) => { status = Number(h[':status']); });
+      req.on('data', (d) => { body += d; });
+      req.on('end', () => {
+        if (status === 0) { settle(new Error('APNs stream ended without response')); return; }
+        let reason: string | undefined;
+        if (body) {
+          try { reason = JSON.parse(body).reason; } catch { /* e.g. HTML body from a 502 */ }
+        }
+        settle({ status, reason });
+      });
+      req.on('error', (err) => settle(err));
+      req.on('close', () => { if (!done) settle(new Error('APNs stream closed unexpectedly')); });
+      req.setTimeout(10_000, () => { req?.close(http2.constants.NGHTTP2_CANCEL); });
+      req.end(JSON.stringify(payload));
+    });
+  };
+
+  return {
+    async send(token, payload, o) {
+      // Validate token: 64-200 hex characters
+      if (!/^[0-9a-fA-F]{64,200}$/.test(token)) throw new Error('APNs token must be 64-200 hex characters');
+      if (closed) throw new Error('APNs session is closed');
+      const wasConnected = !!client && !client.destroyed && !client.closed;
+      try {
+        return await once(token, payload, o?.expiration);
+      } catch (e) {
+        // A reused connection may have been dropped by the server between sends: retry once on a fresh one.
+        if (!wasConnected || closed) throw e;
+        return await once(token, payload, o?.expiration);
+      }
+    },
+    close() { closed = true; client?.destroy(); client = null; },
+  };
+}
+
 export async function sendApns(
   c: ApnsConfig,
-  msg: { token: string; environment: ApnsEnvironment; payload: object },
+  msg: { token: string; environment: ApnsEnvironment; payload: object; expiration?: number },
   opts?: { host?: string },
 ): Promise<{ status: number; reason?: string }> {
-  // Validate token: 64-200 hex characters
-  if (!/^[0-9a-fA-F]{64,200}$/.test(msg.token)) {
-    throw new Error('APNs token must be 64-200 hex characters');
+  const s = openApns(c, msg.environment, opts);
+  try {
+    return await s.send(msg.token, msg.payload, { expiration: msg.expiration });
+  } finally {
+    s.close();
   }
-
-  const jwt = await providerToken(c);
-  const hostUrl = opts?.host || HOSTS[msg.environment];
-  const client = http2.connect(hostUrl);
-
-  return await new Promise((resolve, reject) => {
-    let done = false;
-    const settle = (value: { status: number; reason?: string } | Error) => {
-      if (done) return;
-      done = true;
-      clearTimeout(deadline);
-      client.destroy();
-      if (value instanceof Error) reject(value);
-      else resolve(value);
-    };
-
-    // 15-second deadline for the entire operation
-    const deadline = setTimeout(() => {
-      settle(new Error('APNs request deadline exceeded'));
-    }, 15_000);
-
-    // Handle connection-level errors
-    client.on('error', (err) => settle(err));
-
-    const req = client.request({
-      ':method': 'POST', ':path': `/3/device/${msg.token}`,
-      authorization: `bearer ${jwt}`, 'apns-topic': c.topic, 'apns-push-type': 'alert', 'apns-priority': '10',
-    });
-
-    let status = 0; let body = '';
-    req.setEncoding('utf8');
-    req.on('response', (h) => { status = Number(h[':status']); });
-    req.on('data', (d) => { body += d; });
-    req.on('end', () => {
-      // If we never received a status, this is an error (stream was closed prematurely)
-      if (status === 0) {
-        settle(new Error('APNs stream ended without response'));
-        return;
-      }
-      let reason: string | undefined;
-      if (body) {
-        try {
-          reason = JSON.parse(body).reason;
-        } catch {
-          // Ignore parse errors (e.g., HTML body from 502), leave reason undefined
-        }
-      }
-      settle({ status, reason });
-    });
-    req.on('error', (err) => settle(err));
-    req.on('close', () => {
-      if (!done) {
-        // Stream closed without 'end' event - treat as error
-        settle(new Error('APNs stream closed unexpectedly'));
-      }
-    });
-    req.setTimeout(10_000, () => { req.close(http2.constants.NGHTTP2_CANCEL); });
-    req.end(JSON.stringify(msg.payload));
-  });
 }

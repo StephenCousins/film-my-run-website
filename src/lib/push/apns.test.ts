@@ -2,7 +2,7 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import http2 from 'node:http2';
 import { createHash, generateKeyPairSync } from 'node:crypto';
 import { exportPKCS8 } from 'jose';
-import { apnsConfig, isDeadToken, sendApns } from './apns';
+import { apnsConfig, isDeadToken, openApns, sendApns } from './apns';
 
 describe('apns', () => {
   it('is dormant without credentials', () => {
@@ -194,5 +194,38 @@ describe('sendApns integration', () => {
         payload: { aps: { alert: 'test' } },
       }, { host: `http://127.0.0.1:${port}` }),
     ).rejects.toThrow(/token.*64.*200.*hex/i);
+  });
+
+  it('reuses one connection for many sends and reconnects after a drop', async () => {
+    let sessions = 0;
+    const onSession = () => { sessions++; };
+    server.on('session', onSession);
+    const expirations: (string | undefined)[] = [];
+    let dropNext = false;
+    const onStream = (stream: http2.ServerHttp2Stream, h: http2.IncomingHttpHeaders) => {
+      if (dropNext) { dropNext = false; stream.session?.destroy(); return; }
+      expirations.push(h['apns-expiration'] as string | undefined);
+      stream.respond({ ':status': 200 });
+      stream.end();
+    };
+    server.on('stream', onStream);
+    const config = { keyId: testKeyId, teamId: testTeamId, key: testKey, topic: testTopic };
+    const s = openApns(config, 'sandbox', { host: `http://127.0.0.1:${port}` });
+    try {
+      for (let i = 0; i < 5; i++) expect((await s.send('0'.repeat(64), {}, { expiration: 123 })).status).toBe(200);
+      expect(sessions).toBe(1);
+      expect(expirations).toEqual(['123', '123', '123', '123', '123']);
+
+      // server drops the connection between sends
+      dropNext = true;
+      await expect(s.send('0'.repeat(64), {})).resolves.toHaveProperty('status', 200);
+      expect(sessions).toBe(2);
+      await s.send('0'.repeat(64), {});
+      expect(sessions).toBe(2);
+    } finally {
+      s.close();
+      server.removeListener('session', onSession);
+      server.removeListener('stream', onStream);
+    }
   });
 });
