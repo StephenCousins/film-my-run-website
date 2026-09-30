@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-30T20:18:33.065Z",
+  "generatedAt": "2026-09-30T21:05:18.839Z",
   "shop": {
     "etsyUrl": "https://www.etsy.com/shop/FilmMyRun"
   },
@@ -12582,11 +12582,11 @@
       "priceTo": 38.99,
       "currency": "GBP",
       "colours": [
+        "Soft Pink",
         "Black",
         "Dark Grey",
         "Forest",
         "Navy",
-        "Soft Pink",
         "White"
       ],
       "sizes": [
@@ -12600,6 +12600,11 @@
         "4XL"
       ],
       "images": [
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-soft-pink-1.jpg",
+          "position": "model",
+          "colour": "Soft Pink"
+        },
         {
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-black-1.jpg",
           "position": "model",
@@ -12619,11 +12624,6 @@
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-navy-1.jpg",
           "position": "model",
           "colour": "Navy"
-        },
-        {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-soft-pink-1.jpg",
-          "position": "model",
-          "colour": "Soft Pink"
         },
         {
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/phrase-should-be-running-eating-cake-white-1.jpg",
@@ -18680,8 +18680,8 @@
       "priceTo": 51.99,
       "currency": "GBP",
       "colours": [
-        "Black",
         "White",
+        "Black",
         "Navy",
         "Forest Green",
         "Light Pink",
@@ -18699,14 +18699,14 @@
       ],
       "images": [
         {
-          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/hoodie-just-a-parkrun-to-go-black-1.jpg",
-          "position": "model",
-          "colour": "Black"
-        },
-        {
           "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/hoodie-just-a-parkrun-to-go-white-1.jpg",
           "position": "model",
           "colour": "White"
+        },
+        {
+          "src": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/shop/hoodie-just-a-parkrun-to-go-black-1.jpg",
+          "position": "model",
+          "colour": "Black"
         },
         {
           "src": "https://images.printify.com/mockup/6aaafcaae801ec43fb0e4154/33419/98424/parkrun-hoodie-just-a-parkrun-to-go-funny-marathon-runner-gift-film-my-run.jpg?camera_label=front",
