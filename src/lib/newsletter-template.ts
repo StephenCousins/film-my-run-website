@@ -426,22 +426,19 @@ function renderWhatsNew(text: string): string {
 const R2_URL = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev';
 
 function renderSponsors(): string {
+  // Each logo is a ready-made 600x240 tile in the sponsor's own colours (Stephen, 30 Sep 2026).
   const sponsors = [
-    { name: 'NoblePro', url: 'https://noble-pro.com', logo: `${R2_URL}/newsletter/sponsors/noblepro-logo.png`, width: 140 },
-    { name: 'Enertor', url: 'https://enertor.com', logo: `${R2_URL}/newsletter/sponsors/enertor-logo.png`, width: 130 },
-    { name: 'Protein Rebel', url: 'https://proteinrebel.com', logo: `${R2_URL}/newsletter/sponsors/protein-rebel-logo.png`, width: 55 },
-    { name: 'Flying Burrito', url: 'https://flyingburrito.eu', logo: `${R2_URL}/newsletter/sponsors/flying-burrito-logo.png`, width: 80 },
+    { name: 'NoblePro', url: 'https://noble-pro.com', logo: `${R2_URL}/newsletter/sponsors/v2/noblepro.png` },
+    { name: 'Enertor', url: 'https://enertor.com', logo: `${R2_URL}/newsletter/sponsors/v2/enertor.png` },
+    { name: 'Protein Rebel', url: 'https://proteinrebel.com', logo: `${R2_URL}/newsletter/sponsors/v2/protein-rebel.png` },
+    { name: 'Flying Burrito', url: 'https://flyingburrito.eu', logo: `${R2_URL}/newsletter/sponsors/v2/flying-burrito.png` },
   ];
 
   const card = (s: (typeof sponsors)[number]) =>
     `<td width="50%" class="mob-stack" style="padding:5px;">
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-        <tr><td align="center" valign="middle" height="76" style="background:${WHITE};border:1px solid ${RULE};border-radius:6px;height:76px;padding:12px 16px;">
-          <a href="${s.url}" style="text-decoration:none;">
-            <img src="${s.logo}" alt="${s.name}" width="${s.width}" style="display:inline-block;width:${s.width}px;max-width:100%;max-height:52px;border:0;" />
-          </a>
-        </td></tr>
-      </table>
+      <a href="${s.url}" style="text-decoration:none;display:block;">
+        <img src="${s.logo}" alt="${s.name}" width="245" style="display:block;width:100%;max-width:245px;height:auto;border:0;border-radius:8px;margin:0 auto;" />
+      </a>
     </td>`;
 
   return `<tr><td style="background:${CREAM};padding:32px 43px 36px;" align="center" class="section-pad">
