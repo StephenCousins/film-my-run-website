@@ -40,5 +40,5 @@ export const GET = withAppApi(
       previewUrl:
         'https://filmmyrun.com/api/shop/runner-tee/preview?type={type}&s={scores}&colour={colour}&side={side}&w={w}&v=3',
     }),
-  { limit: 60, cacheControl: 'public, max-age=3600, stale-while-revalidate=86400' }
+  { limit: 60, cacheControl: 'public, max-age=300, stale-while-revalidate=600' }
 );

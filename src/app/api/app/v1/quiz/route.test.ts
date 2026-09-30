@@ -6,7 +6,7 @@ describe('GET /api/app/v1/quiz', () => {
   it('returns the quiz content and the shirt URL template', async () => {
     const res = await GET(new NextRequest('http://localhost/api/app/v1/quiz'));
     expect(res.status).toBe(200);
-    expect(res.headers.get('cache-control')).toContain('max-age=3600');
+    expect(res.headers.get('cache-control')).toContain('max-age=300');
     const body = await res.json();
     expect(body.questions).toHaveLength(12);
     expect(body.types).toHaveLength(12);

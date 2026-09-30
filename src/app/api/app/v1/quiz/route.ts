@@ -10,5 +10,5 @@ export const GET = withAppApi(
       ...QUIZ,
       shirtUrl: 'https://filmmyrun.com/shop/runner-type-tee?type={type}&s={scores}',
     }),
-  { limit: 60, cacheControl: 'public, max-age=3600, stale-while-revalidate=86400' }
+  { limit: 60, cacheControl: 'public, max-age=300, stale-while-revalidate=600' }
 );
