@@ -482,18 +482,16 @@
     "title": "Racing the SUSSEX XC Relay Champs | Cross Country Season is BACK!"
    },
    "phrases": [
-    "LANE 2 FOR TRAINING. LANE 1 FOR RACING.",
+    "LANE 2: TRAINING / LANE 1: RACING",
     "HAND TIMES DON'T COUNT",
     "STILL WARMING UP",
     "EIGHT LANES. NO HIDING.",
     "LANE ONE"
    ],
-   "shirt": "LANE 2 FOR TRAINING. LANE 1 FOR RACING.",
+   "shirt": "LANE 2: TRAINING / LANE 1: RACING",
    "shirtLines": [
-    "LANE 2",
-    "FOR TRAINING.",
-    "LANE 1",
-    "FOR RACING."
+    "LANE 2: TRAINING",
+    "LANE 1: RACING"
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2016/06/SDW100-South-Downs-Way-100-00007.jpg",
    "focus": "55% 40%",
