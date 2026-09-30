@@ -17,6 +17,14 @@ describe('GET /api/shop/runner-tee/preview', () => {
     }
   }, 30000);
 
+  it('renders any design, with or without a quiz result', async () => {
+    for (const qs of ['design=lab&type=fell&s=18-29-45-64', 'design=track', 'design=track&type=&s=']) {
+      const res = await get(`${qs}&colour=White&side=back&w=200`);
+      expect(res.status, qs).toBe(200);
+      expect(res.headers.get('content-type')).toBe('image/png');
+    }
+  }, 30000);
+
   it('clamps the width and defaults it', async () => {
     const width = async (w: string) => Buffer.from(await (await get(`type=fell&s=18-29-45-64&colour=Black&side=front${w}`)).arrayBuffer()).readUInt32BE(16);
     expect(await width('&w=5000')).toBe(1000);
@@ -27,6 +35,8 @@ describe('GET /api/shop/runner-tee/preview', () => {
 
   it.each([
     'type=track&s=18-29-45-64&colour=Black&side=front', // scores point at another type
+    'design=nope&colour=Black&side=front',
+    'design=lab&type=fell&s=1-2-3&colour=Black&side=front', // a result that's sent must be valid
     'type=nope&s=18-29-45-64&colour=Black&side=front',
     'type=fell&s=18-29-45&colour=Black&side=front',
     'type=fell&s=18-29-45-64&colour=Soft%20Pink&side=front',

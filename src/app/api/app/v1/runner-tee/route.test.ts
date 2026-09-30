@@ -16,6 +16,8 @@ describe('GET /api/app/v1/runner-tee', () => {
     expect(body.variants.every((v: { colour: string }) => v.colour in SHIRT_COLOURS)).toBe(true);
     expect(body.previewUrl).toContain('{type}');
     expect(body.previewUrl).toContain('v=3');
+    expect(body.pricing).toEqual({ ownTypeDiscount: 3, floorOffset: 5, memberDiscount: 0.1, clubDiscount: 0.15 });
+    expect(body.designPreviewUrl).toContain('design={design}');
     expect(body.defaultColours).toMatchObject({ track: 'Black', bigcity: 'White', wanderer: 'Dark Grey' });
     expect(Object.keys(body.defaultColours)).toHaveLength(12);
     expect(Object.keys(body.modelPhotos)).toHaveLength(12);

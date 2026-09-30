@@ -39,16 +39,25 @@ describe('cleanBasket', () => {
 });
 
 describe('buildOrderLines with a runner tee', () => {
-  it('carries the validated quiz result into the order line, priced from the catalogue', () => {
+  it("an old line (personal, no design) is the buyer's own type: £3 off, priced from the catalogue", () => {
     const [line] = buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: String(blackM.id), quantity: 1, personal, price: 1 } as never]);
-    expect(line).toMatchObject({ slug: RUNNER_TEE_SLUG, name: 'Runner Type Tee: Fell Runner', variantLabel: 'Black / M', unitPence: 2999, supplier: 'printify', personal });
+    expect(line).toMatchObject({ slug: RUNNER_TEE_SLUG, name: 'Runner Type Tee: Fell Runner', variantLabel: 'Black / M', unitPence: 2699, supplier: 'printify', design: 'fell', personal });
+  });
+  it('any design, with or without a quiz result; only your own type is £3 off', () => {
+    const [other] = buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, design: 'lab', personal }]);
+    expect(other).toMatchObject({ name: 'Runner Type Tee: Lab Rat', design: 'lab', personal, unitPence: 2999 });
+    const [plain] = buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, design: 'track' }]);
+    expect(plain).toMatchObject({ design: 'track', unitPence: 2999 });
+    expect(plain.personal).toBeUndefined();
   });
   it('drops anything extra the client sends in personal', () => {
     const [line] = buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, personal: { ...personal, text: '<b>hi</b>' } as never }]);
     expect(line.personal).toEqual(personal);
   });
-  it('rejects a runner tee without a valid result, and personal on anything else', () => {
-    expect(() => buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1 }])).toThrow(/quiz result/);
+  it('rejects a tee with no design, a bad result, and design or personal on anything else', () => {
+    expect(() => buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1 }])).toThrow(/design/);
+    expect(() => buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, design: 'nope' }])).toThrow(/design/);
+    expect(() => buildOrderLines([{ slug: 'bonus-miles', variantId: 18100, quantity: 1, design: 'fell' }])).toThrow(/personalised/);
     expect(() => buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, personal: { type: 'fell', scores: [1, 2, 3, 999] } as never }])).toThrow(/quiz result/);
     // Scores that point at another type are refused, as in the results API.
     expect(() => buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, personal: { type: 'track', scores: [18, 29, 45, 64] } }])).toThrow(/quiz result/);
@@ -99,6 +108,29 @@ describe('printifyLineItems', () => {
     expect(backSvg).toContain('01.10.2026');
     expect(backSvg).toContain('>64<');
     expect(backSvg).toContain('#18181b');
+  });
+});
+
+describe('printifyLineItems for any design', () => {
+  it('another type with a quiz result: that type on the shirt, my DNA and "My type" on the back', async () => {
+    const items = buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, design: 'lab', personal }]);
+    const { d } = printDeps();
+    await printifyLineItems(9, items, items, d);
+    const [front, back] = (d.render as ReturnType<typeof vi.fn>).mock.calls.map((c) => c[0] as string);
+    expect(front).toContain('ZONE 2.');
+    expect(back).toContain('LAB RAT');
+    expect(back).toContain('My type: Fell Runner');
+    expect(back).toContain('>64<');
+  });
+  it('no quiz result: the plain back, no scores and no date', async () => {
+    const items = buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: whiteL.id, quantity: 1, design: 'track' }]);
+    const { d } = printDeps();
+    await printifyLineItems(10, items, items, d);
+    const back = (d.render as ReturnType<typeof vi.fn>).mock.calls[1][0] as string;
+    expect(back).toContain('TRACK PURIST');
+    expect(back).toContain('The clock doesn&#39;t lie.');
+    expect(back).not.toContain('RUNNER DNA');
+    expect(back).not.toContain('01.10.2026');
   });
 });
 

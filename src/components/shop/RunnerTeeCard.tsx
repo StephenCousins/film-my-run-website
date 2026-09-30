@@ -11,7 +11,7 @@ import { formatPrice } from '@/lib/shop';
 /**
  * The Runner Type Tee as a card in the shop grid: a model photo of a random type's shirt,
  * picked after mount so the server and first client render agree (Fell Runner until then).
- * It has no page of its own without a quiz result, so it goes to the quiz.
+ * It opens the chooser of all 12 designs.
  */
 export default function RunnerTeeCard() {
   const [typeId, setTypeId] = useState('fell');
@@ -19,7 +19,7 @@ export default function RunnerTeeCard() {
   const type = QUIZ.types.find((t) => t.id === typeId)!;
   return (
     <Link
-      href="/tools/runner-quiz"
+      href="/shop/runner-type-tee"
       className="group block rounded-2xl bg-surface-secondary border border-border overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/20"
     >
       <div className="relative aspect-square bg-white overflow-hidden">
@@ -37,7 +37,7 @@ export default function RunnerTeeCard() {
       </div>
       <div className="p-4">
         <h3 className="font-display font-semibold text-foreground leading-snug line-clamp-2 group-hover:text-brand transition-colors">
-          {runnerTee.name}: take the quiz
+          {runnerTee.name}: 12 designs
         </h3>
         <div className="mt-2 flex items-center justify-between gap-3">
           <span className="font-mono text-sm text-foreground">{formatPrice(runnerTee)}</span>

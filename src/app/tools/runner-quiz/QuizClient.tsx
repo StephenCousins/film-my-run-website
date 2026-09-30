@@ -8,6 +8,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { QUIZ, filmTitle, result as scoreQuiz, sharedType, upperName, type QuizPhoto, type QuizType, type Scores } from '@/lib/runner-quiz';
 import { modelPhotos } from '@/lib/runner-quiz/models';
+import { saveResult } from '@/lib/runner-quiz/stored';
 import '@/styles/runner-quiz-fonts.css';
 
 type Phase = 'intro' | 'quiz' | 'checking' | 'result';
@@ -87,6 +88,8 @@ export default function QuizClient({ sharedResult }: { sharedResult?: string }) 
     submittedRef.current = true;
     const r = scoreQuiz(next);
     setOutcome(r);
+    // So the shop can offer your type's shirt at £3 off and put your DNA on any of them.
+    saveResult(r.type.id, r.scores);
     setPhase('checking');
     fetch('/api/runner-quiz/results', {
       method: 'POST',
@@ -271,7 +274,7 @@ function ResultHero({ outcome: { type, scores }, onRetake }: { outcome: Outcome;
       <div className="grid md:grid-cols-2 gap-4">
         {scores ? (
           <a
-            href={`/shop/runner-type-tee?type=${type.id}&s=${scores.join('-')}`}
+            href={`/shop/runner-type-tee?design=${type.id}&type=${type.id}&s=${scores.join('-')}`}
             className="group flex items-center gap-4 sm:gap-5 rounded-2xl bg-brand text-white p-4 sm:p-6 shadow-2xl hover:bg-brand-hover transition-colors"
           >
             <div className="relative w-28 sm:w-36 aspect-square flex-shrink-0 rounded-xl bg-white overflow-hidden">
@@ -280,7 +283,7 @@ function ResultHero({ outcome: { type, scores }, onRetake }: { outcome: Outcome;
             </div>
             <div>
               <p className="font-display text-xl sm:text-2xl font-bold leading-tight mb-1">Get the {type.name} shirt</p>
-              <p className="text-sm text-white/90">Your phrase on the front, your Runner DNA on the back.</p>
+              <p className="text-sm text-white/90">Your phrase on the front, your Runner DNA on the back. £3 off, as it<p className="text-sm text-white/90">Your phrase on the front, your Runner DNA on the back.</p>apos;s your type.</p>
               <p className="mt-3 inline-flex items-center gap-1 text-sm font-bold uppercase tracking-widest">
                 <Shirt className="w-4 h-4" /> Design yours <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </p>

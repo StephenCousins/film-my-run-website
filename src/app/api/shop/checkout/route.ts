@@ -9,6 +9,7 @@ import { quoteShippingPence } from '@/lib/shop/printify';
 import { stripe, siteUrl } from '@/lib/shop/stripe';
 import { currentMember } from '@/lib/members/current';
 import { memberCheckout } from '@/lib/members/checkout';
+import { discountAsLinePrices, linePayPence, memberRate } from '@/lib/shop/tee-pricing';
 
 export const dynamic = 'force-dynamic';
 
@@ -36,20 +37,29 @@ export async function POST(request: Request) {
     const total = subtotalPence(lines) + shippingPence;
     const { member, hadBearer, pro } = await currentMember(request);
     const mc = memberCheckout(member, hadBearer, { member: process.env.STRIPE_MEMBER_COUPON, club: process.env.STRIPE_CLUB_COUPON }, pro);
+    // With a Runner Type Tee in the basket the member discount is charged as line prices, so no
+    // tee goes below its floor (tee-pricing.ts); otherwise it stays Stripe's session coupon.
+    const rate = memberRate(mc.discounts, process.env.STRIPE_CLUB_COUPON);
+    const asLines = discountAsLinePrices(lines, rate);
     const order = await prisma.orders.create({
       data: { status: 'pending', total_cents: total, currency: 'GBP', items: lines as object[], updated_at: new Date(), ...mc.orderFields },
     });
 
     const session = await stripe().checkout.sessions.create({
       mode: 'payment',
-      discounts: mc.discounts,
+      discounts: asLines ? undefined : mc.discounts,
       client_reference_id: String(order.id),
       line_items: lines.map((l) => ({
         quantity: l.quantity,
         price_data: {
           currency: 'gbp',
-          unit_amount: l.unitPence,
-          product_data: { name: l.variantLabel ? `${l.name} (${l.variantLabel})` : l.name, images: l.image ? [l.image] : [] },
+          unit_amount: asLines ? linePayPence(l, rate) : l.unitPence,
+          product_data: {
+            name: l.variantLabel ? `${l.name} (${l.variantLabel})` : l.name,
+            images: l.image ? [l.image] : [],
+            // The discount is in the price here, not a coupon line, so say so.
+            ...(asLines && { description: rate > 0.1 ? 'FMR Club price' : 'Member price' }),
+          },
         },
       })),
       shipping_address_collection: { allowed_countries: ['GB'] },

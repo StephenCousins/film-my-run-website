@@ -12,7 +12,7 @@ import { printifyLineItems, printKey } from '@/lib/shop/runner-tee-print';
 import { renderPng, logoDataUri } from '@/lib/runner-quiz/render';
 import { uploadToR2, getR2Url } from '@/lib/r2';
 import { SHIRT_COLOURS } from '@/lib/runner-quiz/shirt-art';
-import { teeColour } from '@/lib/shop/runner-tee';
+import { RUNNER_TEE_SLUG, teeColour } from '@/lib/shop/runner-tee';
 
 export const dynamic = 'force-dynamic';
 
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
     },
     emailConfirmation: (o, to) => {
       const previews = o.items.flatMap((l, i) =>
-        l.personal ? [{ src: getR2Url(printKey(o.id, i, 'preview')), background: SHIRT_COLOURS[teeColour(l.variantId)] }] : []
+        l.slug === RUNNER_TEE_SLUG ? [{ src: getR2Url(printKey(o.id, i, 'preview')), background: SHIRT_COLOURS[teeColour(l.variantId)] }] : []
       );
       return orderConfirmation(to, o.id, o.items, session.amount_total ?? 0, previews);
     },

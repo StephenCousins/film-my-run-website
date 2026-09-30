@@ -3,11 +3,11 @@
  * turn the line into a Printify "product on the fly" line item (blueprint + provider + variant
  * + print areas), so it goes in the same Printify order as the catalogue lines.
  */
-import { SHIRT_COLOURS, backArt, frontArt } from '@/lib/runner-quiz/shirt-art';
-import { rankTypes } from '@/lib/runner-quiz';
+import { SHIRT_COLOURS, frontArt, teeBackArt } from '@/lib/runner-quiz/shirt-art';
+import { typeById } from '@/lib/runner-quiz';
 import type { OrderLine } from './orders';
 import type { PrintifyLine } from './printify';
-import { RUNNER_TEE_BLUEPRINT, RUNNER_TEE_PROVIDER, personalType, teeColour } from './runner-tee';
+import { RUNNER_TEE_BLUEPRINT, RUNNER_TEE_PROVIDER, RUNNER_TEE_SLUG, teeColour } from './runner-tee';
 import type { ShirtColour } from '@/lib/runner-quiz/shirt-art';
 
 export interface PrintDeps {
@@ -35,15 +35,16 @@ export const printKey = (orderId: number, index: number, side: 'front' | 'back' 
 export async function printifyLineItems(orderId: number, items: OrderLine[], lines: OrderLine[], d: PrintDeps): Promise<PrintifyLine[]> {
   const out: PrintifyLine[] = [];
   for (const l of lines) {
-    if (!l.personal) {
+    if (l.slug !== RUNNER_TEE_SLUG) {
       out.push({ product_id: l.supplierProductId, variant_id: Number(l.variantId), quantity: l.quantity });
       continue;
     }
     const index = items.indexOf(l);
-    const type = personalType(l.personal);
-    const second = rankTypes(l.personal.scores).find((t) => t.id !== type.id)!;
+    // The shirt's design (old orders: the buyer's own type); the back is the buyer's DNA, or the plain back.
+    const type = typeById(l.design ?? l.personal?.type)!;
     const colour = teeColour(l.variantId);
-    const backSvg = backArt(type, second, l.personal.scores, d.paidAt, colour, d.logo(colour));
+    const personal = l.personal ? { type: typeById(l.personal.type)!, scores: l.personal.scores } : null;
+    const backSvg = teeBackArt(type, personal, d.paidAt, colour, d.logo(colour));
     const front = await d.upload(printKey(orderId, index, 'front'), await d.render(frontArt(type, colour), PRINT_WIDTH));
     const back = await d.upload(printKey(orderId, index, 'back'), await d.render(backSvg, PRINT_WIDTH));
     // Not a print file: the back on the shirt colour, small, for the email.

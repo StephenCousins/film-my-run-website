@@ -1,7 +1,7 @@
 // Runner quiz shirt art. The same SVG drives the on-page preview and the Printify
 // print (rendered to PNG by render.ts), so what the buyer sees is what gets printed.
 import metrics from './metrics.json';
-import { upperName, type QuizType, type Scores } from './index';
+import { rankTypes, upperName, type QuizType, type Scores } from './index';
 
 /** Printify print area for blueprint 12 (front and back), in pixels. */
 export const PRINT_W = 3709;
@@ -147,13 +147,15 @@ export function backArt(
   scores: Scores,
   date: Date,
   colour: ShirtColour,
-  logoHref: string
+  logoHref: string,
+  /** The buyer's own type, when the shirt is another type's: "My type: …" replaces the streak line. */
+  mine?: QuizType
 ): string {
   const { ink, tint } = palette(colour);
   const mono = FONT['JetBrainsMono-Medium'];
   const name = upperName(t.name);
   const nameSize = fit(name, 'SpaceGrotesk-Bold', 28, 235);
-  const streak = `with a streak of ${second.name}`;
+  const streak = mine && mine.id !== t.id ? `My type: ${mine.name}` : `with a streak of ${second.name}`;
   const streakSize = fit(streak, 'Inter-Regular', 20, 225);
   const foot = `FILMMYRUN.COM/QUIZ · ${formatDate(date)}`;
   const footSize = fit(foot, 'JetBrainsMono-Medium', 15, 225, 1.5 / 15);
@@ -189,6 +191,49 @@ export function backArt(
       text(ROWS_Y + 3 * ROW_GAP + 56, `${mono} font-size="${f(footSize)}" letter-spacing="1.5" fill="${tint(0.6)}"`, foot) +
       `</g>`
   );
+}
+
+/**
+ * Back without a quiz result: logo, the shirt's type name, its mantra and the quiz address.
+ * No scores, no date.
+ */
+export function plainBackArt(t: QuizType, colour: ShirtColour, logoHref: string): string {
+  const { ink, tint } = palette(colour);
+  const mono = FONT['JetBrainsMono-Medium'];
+  const name = upperName(t.name);
+  const nameSize = fit(name, 'SpaceGrotesk-Bold', 34, 235);
+  const mantra = `\u201c${t.mantra}\u201d`;
+  const mantraSize = fit(mantra, 'Inter-Regular', 22, 225);
+  const foot = 'FILMMYRUN.COM/QUIZ';
+  const top = LOGO_Y + LOGO_H;
+  const tx = PRINT_W / 2 - BACK_CX * BACK_K;
+  const text = (y: number, attrs: string, body: string) =>
+    `<text x="${BACK_CX}" y="${f(top + y)}" text-anchor="middle" ${attrs}>${body}</text>`;
+  return svg(
+    `<g transform="translate(${f(tx)} 0) scale(${BACK_K})">` +
+      `<image href="${esc(logoHref)}" xlink:href="${esc(logoHref)}" x="${f(BACK_CX - LOGO_W / 2)}" y="${LOGO_Y}" width="${f(LOGO_W)}" height="${f(LOGO_H)}"/>` +
+      text(52, `${FONT['SpaceGrotesk-Bold']} font-size="${f(nameSize)}" fill="${ink}"`, esc(name)) +
+      `<rect x="${BACK_CX - 30}" y="${f(top + 66)}" width="60" height="5" rx="2.5" fill="${t.colour}"/>` +
+      text(104, `${FONT['Inter-Regular']} font-size="${f(mantraSize)}" fill="${tint(0.85)}"`, esc(mantra)) +
+      text(132, `${mono} font-size="15" letter-spacing="1.5" fill="${tint(0.6)}"`, foot) +
+      `</g>`
+  );
+}
+
+/**
+ * The back for a Runner Type Tee of type `design`: the buyer's own DNA when they have a quiz
+ * result (even on another type's shirt), otherwise the plain back.
+ */
+export function teeBackArt(
+  design: QuizType,
+  personal: { type: QuizType; scores: Scores } | null,
+  date: Date,
+  colour: ShirtColour,
+  logoHref: string
+): string {
+  if (!personal) return plainBackArt(design, colour, logoHref);
+  const second = rankTypes(personal.scores).find((x) => x.id !== personal.type.id)!;
+  return backArt(design, second, personal.scores, date, colour, logoHref, personal.type);
 }
 
 /**
