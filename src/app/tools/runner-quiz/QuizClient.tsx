@@ -7,7 +7,7 @@ import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { QUIZ, filmTitle, result as scoreQuiz, sharedType, upperName, type QuizPhoto, type QuizType, type Scores } from '@/lib/runner-quiz';
-import { frontArt, teeMock, SHIRT_COLOURS } from '@/lib/runner-quiz/shirt-art';
+import { modelPhotos } from '@/lib/runner-quiz/models';
 import '@/styles/runner-quiz-fonts.css';
 
 type Phase = 'intro' | 'quiz' | 'checking' | 'result';
@@ -16,8 +16,6 @@ interface Outcome {
   second?: QuizType;
   scores?: Scores; // absent when someone opens a shared link
 }
-
-const PREVIEW_COLOUR = 'Black' as const;
 
 /**
  * The whole quiz happens over one full-bleed photo that changes with each question: the
@@ -243,7 +241,6 @@ export default function QuizClient({ sharedResult }: { sharedResult?: string }) 
 
 /** The top of the result, over the type's photo: the phrase, the name and the two calls to action. */
 function ResultHero({ outcome: { type, scores }, onRetake }: { outcome: Outcome; onRetake: () => void }) {
-  const preview = useMemo(() => teeMock(SHIRT_COLOURS[PREVIEW_COLOUR], frontArt(type, PREVIEW_COLOUR)), [type]);
   const headingRef = useRef<HTMLHeadingElement>(null);
   useEffect(() => {
     // Only after taking the quiz; a shared link opens normally.
@@ -277,7 +274,10 @@ function ResultHero({ outcome: { type, scores }, onRetake }: { outcome: Outcome;
             href={`/shop/runner-type-tee?type=${type.id}&s=${scores.join('-')}`}
             className="group flex items-center gap-4 sm:gap-5 rounded-2xl bg-brand text-white p-4 sm:p-6 shadow-2xl hover:bg-brand-hover transition-colors"
           >
-            <div className="w-28 sm:w-36 flex-shrink-0 rounded-xl bg-white/90 p-1" aria-hidden dangerouslySetInnerHTML={{ __html: preview }} />
+            <div className="relative w-28 sm:w-36 aspect-square flex-shrink-0 rounded-xl bg-white overflow-hidden">
+              {/* Zoomed to the chest so the phrase reads at thumbnail size. */}
+              <Image src={modelPhotos(type.id)[0]} alt="" fill sizes="288px" className="object-cover scale-[1.9] origin-[50%_42%]" />
+            </div>
             <div>
               <p className="font-display text-xl sm:text-2xl font-bold leading-tight mb-1">Get the {type.name} shirt</p>
               <p className="text-sm text-white/90">Your phrase on the front, your Runner DNA on the back.</p>

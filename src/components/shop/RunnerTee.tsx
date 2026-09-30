@@ -1,6 +1,8 @@
 'use client';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { modelPhotos } from '@/lib/runner-quiz/models';
 import { ArrowRight, Check, ChevronRight, ShoppingBag } from 'lucide-react';
 import { QUIZ, rankTypes, typeById, type Scores } from '@/lib/runner-quiz';
 import { SHIRT_COLOURS, backArt, frontArt, teeMock, type ShirtColour } from '@/lib/runner-quiz/shirt-art';
@@ -79,6 +81,17 @@ function Personalised({ typeId, scores, colour: urlColour }: { typeId: string; s
               The back print, close up
             </figcaption>
           </figure>
+          <div className="col-span-2 mt-2">
+            <p className="text-sm font-semibold text-foreground">On a model</p>
+            <p className="text-xs text-muted mb-2">Shown in {type.shirtColour} with sample scores</p>
+            <div className="grid grid-cols-3 gap-2">
+              {modelPhotos(type.id).slice(0, 3).map((src, i) => (
+                <div key={src} className="relative aspect-square rounded-xl overflow-hidden bg-white border border-border">
+                  <Image src={src} alt={i === 0 ? `A ${type.name} tee on a model` : ''} fill sizes="(max-width: 1024px) 33vw, 16vw" className="object-cover" />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         <div>
@@ -164,10 +177,7 @@ function Personalised({ typeId, scores, colour: urlColour }: { typeId: string; s
 }
 
 function AllTypes() {
-  const fronts = useMemo(
-    () => QUIZ.types.map((t) => ({ t, svg: teeMock(SHIRT_COLOURS.Black, frontArt(t, 'Black')) })),
-    []
-  );
+
   return (
     <div className="container py-8 lg:py-12">
       <Breadcrumb name={runnerTee.name} />
@@ -181,10 +191,12 @@ function AllTypes() {
         </Link>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {fronts.map(({ t, svg }) => (
-          <figure key={t.id} className="rounded-2xl bg-surface-secondary border border-border p-3">
-            <div dangerouslySetInnerHTML={{ __html: svg }} />
-            <figcaption className="text-sm text-center mt-1 text-secondary">{t.name}</figcaption>
+        {QUIZ.types.map((t) => (
+          <figure key={t.id} className="rounded-2xl bg-surface-secondary border border-border overflow-hidden">
+            <div className="relative aspect-square bg-white">
+              <Image src={modelPhotos(t.id)[0]} alt={`${t.name} tee: ${t.shirt}`} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" className="object-cover" />
+            </div>
+            <figcaption className="text-sm text-center py-2 text-secondary">{t.name}</figcaption>
           </figure>
         ))}
       </div>

@@ -1,26 +1,36 @@
+'use client';
+import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
-import { typeById } from '@/lib/runner-quiz';
-import { SHIRT_COLOURS, frontArt, teeMock } from '@/lib/runner-quiz/shirt-art';
+import { QUIZ } from '@/lib/runner-quiz';
+import { modelPhotos } from '@/lib/runner-quiz/models';
+import { SHIRT_COLOURS } from '@/lib/runner-quiz/shirt-art';
 import { runnerTee } from '@/lib/shop/runner-tee';
 import { formatPrice } from '@/lib/shop';
-import '@/styles/runner-quiz-fonts.css';
-
-const fell = typeById('fell')!;
-const fellColour = fell.shirtColour as keyof typeof SHIRT_COLOURS;
-const preview = teeMock(SHIRT_COLOURS[fellColour], frontArt(fell, fellColour));
 
 /**
- * The Runner Type Tee as a card in the shop grid. It has no page of its own without a quiz
- * result (the website keeps none), so it goes to the quiz.
+ * The Runner Type Tee as a card in the shop grid: a model photo of a random type's shirt,
+ * picked after mount so the server and first client render agree (Fell Runner until then).
+ * It has no page of its own without a quiz result, so it goes to the quiz.
  */
 export default function RunnerTeeCard() {
+  const [typeId, setTypeId] = useState('fell');
+  useEffect(() => setTypeId(QUIZ.types[Math.floor(Math.random() * QUIZ.types.length)].id), []);
+  const type = QUIZ.types.find((t) => t.id === typeId)!;
   return (
     <Link
       href="/tools/runner-quiz"
       className="group block rounded-2xl bg-surface-secondary border border-border overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/20"
     >
-      <div className="relative aspect-square bg-zinc-100 overflow-hidden flex items-center justify-center pt-9">
-        <div className="w-[80%] [&>svg]:w-full [&>svg]:h-auto" aria-hidden dangerouslySetInnerHTML={{ __html: preview }} />
+      <div className="relative aspect-square bg-white overflow-hidden">
+        <Image
+          src={modelPhotos(type.id)[0]}
+          alt={`${type.name} tee: ${type.shirt}`}
+          fill
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          // Closer on the shirt, so the phrase reads and the badge sits clear of the face.
+          className="object-cover scale-[1.35] origin-[50%_62%]"
+        />
         <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-brand text-[11px] font-semibold uppercase tracking-wider text-black">
           Personalised
         </span>
