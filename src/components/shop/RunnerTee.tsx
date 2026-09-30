@@ -290,8 +290,14 @@ function Chooser({ personal }: { personal: StoredResult | null }) {
               <div className="relative aspect-square bg-white">
                 <Image src={chooserPhoto(t.id)} alt={`${t.name} tee: ${t.shirt}`} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" className="object-cover" />
                 {own && (
-                  <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-brand text-[11px] font-semibold uppercase tracking-wider text-black">
-                    Your type · {OWN_OFF} off
+                  // A sash across the top-left corner, clipped by the card's rounded edge; the models' heads
+                  // sit top-centre, so the corner stays clear of the face.
+                  <span
+                    className="absolute top-[18px] -left-[42px] sm:top-[24px] sm:-left-[48px] lg:top-[30px] lg:-left-[54px] w-[150px] sm:w-[180px] lg:w-[210px] -rotate-45 bg-brand text-black text-center shadow-md py-1 leading-tight pointer-events-none"
+                    aria-label={`Your type, ${OWN_OFF} off`}
+                  >
+                    <span className="block text-[10px] sm:text-[11px] lg:text-xs font-bold uppercase tracking-wider">Your type</span>
+                    <span className="block text-[10px] sm:text-[11px] lg:text-xs font-semibold">{OWN_OFF} off</span>
                   </span>
                 )}
               </div>
