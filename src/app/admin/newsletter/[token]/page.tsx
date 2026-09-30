@@ -54,7 +54,7 @@ export default async function NewsletterEditPage({
           <p className="text-xs font-semibold uppercase tracking-widest text-brand mb-2">Draft #{issue.id}</p>
           <h1 className="font-display text-3xl font-semibold text-foreground">Review this week&rsquo;s newsletter</h1>
           <p className="text-secondary mt-2">
-            Edit anything below, then save. When you&rsquo;re happy, use the approve link to send it to all subscribers.
+            Edit anything below. It saves itself as you go; &ldquo;Approve &amp; Send&rdquo; saves, shows the final preview and asks before anything is sent.
           </p>
         </div>
         <NewsletterEditForm token={token} initialPayload={payload} approveUrl={approveUrl} />

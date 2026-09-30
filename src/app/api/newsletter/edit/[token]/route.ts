@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { buildNewsletterHtml, type NewsletterPayload } from '@/lib/newsletter-template';
 import { newsletterPayloadSchema } from '@/lib/newsletter-payload-schema';
+import { liveRecipientCount } from '@/lib/newsletter/send-deps';
 
 export async function POST(
   request: NextRequest,
@@ -47,4 +48,12 @@ export async function POST(
   const html = buildNewsletterHtml(payload, '#unsubscribe-preview', baseUrl);
 
   return NextResponse.json({ ok: true, html });
+}
+
+/** GET → { ok, recipients }: how many a send would go to now, for the editor's confirmation. */
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ token: string }> }) {
+  const { token } = await params;
+  const issue = await prisma.newsletter_issues.findUnique({ where: { approve_token: token }, select: { status: true } });
+  if (!issue) return NextResponse.json({ error: 'Draft not found' }, { status: 404 });
+  return NextResponse.json({ ok: true, recipients: await liveRecipientCount(), status: issue.status });
 }
