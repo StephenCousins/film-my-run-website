@@ -1,17 +1,11 @@
 import { NextResponse } from 'next/server';
-import { z } from 'zod';
 import { prisma } from '@/lib/db';
 import { withAppApi } from '@/lib/app-api/rate-limit';
+import { registerSchema } from '@/lib/push/register-schema';
 
 // News push: the app registers its APNs token and whether the daily news push is on.
 // The app's FMRAPIClient.post sends a flat JSON map of strings, so news is "true"/"false".
 export const dynamic = 'force-dynamic';
-
-export const registerSchema = z.object({
-  token: z.string().regex(/^[0-9a-fA-F]{64,200}$/),
-  environment: z.enum(['sandbox', 'production']),
-  news: z.union([z.boolean(), z.enum(['true', 'false']).transform((v) => v === 'true')]),
-});
 
 export const POST = withAppApi(
   async (request) => {

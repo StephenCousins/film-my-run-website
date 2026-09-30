@@ -4,7 +4,8 @@ import { NextRequest } from 'next/server';
 const upsert = vi.hoisted(() => vi.fn());
 vi.mock('@/lib/db', () => ({ prisma: { push_devices: { upsert } } }));
 
-import { POST, registerSchema } from './route';
+import { POST } from './route';
+import { registerSchema } from '@/lib/push/register-schema';
 
 const token = 'ab12'.repeat(16);
 const post = (body: unknown) =>
