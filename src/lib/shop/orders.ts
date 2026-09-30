@@ -29,6 +29,11 @@ export interface OrderLine {
   options?: VariantOption[];
   quantity: number;
   unitPence: number;
+  /**
+   * Set at checkout when the member discount is charged as line prices (a tee in the basket):
+   * what one unit really costs. Otherwise the discount is Stripe's coupon and this is absent.
+   */
+  payPence?: number;
   /** Runner Type Tee only: the shirt's type (its phrase on the front). */
   design?: string;
   /** Runner Type Tee only, validated: the buyer's quiz result for the back. */

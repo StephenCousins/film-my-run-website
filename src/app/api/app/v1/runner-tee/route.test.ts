@@ -21,6 +21,10 @@ describe('GET /api/app/v1/runner-tee', () => {
     expect(body.defaultColours).toMatchObject({ track: 'Black', bigcity: 'White', wanderer: 'Dark Grey' });
     expect(Object.keys(body.defaultColours)).toHaveLength(12);
     expect(Object.keys(body.modelPhotos)).toHaveLength(12);
-    expect(body.modelPhotos.fell).toEqual([1, 2, 3, 'back'].map((n) => `https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/quiz-shirts/models/v3/fell-${n}.webp`));
+    const v4 = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/quiz-shirts/models/v4';
+    expect(body.modelPhotos.fell['Dark Grey']).toEqual([1, 2, 3, 'back'].map((n) => `${v4}/fell-dark-grey-${n}.webp`));
+    expect(Object.keys(body.modelPhotos.fell).sort()).toEqual(['Black', 'Dark Grey', 'Forest', 'Navy', 'White']);
+    expect(body.modelPhotosDefault.bigcity).toEqual([1, 2, 3, 'back'].map((n) => `${v4}/bigcity-white-${n}.webp`));
+    expect(Object.keys(body.modelPhotosDefault)).toHaveLength(12);
   });
 });

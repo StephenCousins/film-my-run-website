@@ -19,8 +19,12 @@ export const GET = withAppApi(
       colours: runnerTee.colours.map((name) => ({ name, hex: SHIRT_COLOURS[name as ShirtColour] })),
       // The colour the product page opens on, per quiz type.
       defaultColours: Object.fromEntries(QUIZ.types.map((t) => [t.id, t.shirtColour])),
-      // Per type: three model shots of the front on its default colour, then the flat back.
-      modelPhotos: Object.fromEntries(QUIZ.types.map((t) => [t.id, modelPhotos(t.id)])),
+      // Per type and colour: three model shots of the front, then the flat back (sample scores).
+      modelPhotos: Object.fromEntries(
+        QUIZ.types.map((t) => [t.id, Object.fromEntries(runnerTee.colours.map((c) => [c, modelPhotos(t.id, c)]))])
+      ),
+      // Older app builds read one list per type: the type's default colour.
+      modelPhotosDefault: Object.fromEntries(QUIZ.types.map((t) => [t.id, modelPhotos(t.id)])),
       // What a buyer pays per tee: the variant price, less ownTypeDiscount when design == their
       // quiz type, less the member or Club discount, never below (variant price − floorOffset).
       pricing: {

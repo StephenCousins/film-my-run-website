@@ -86,3 +86,19 @@ describe('memberRate', () => {
     expect(memberRate([{ coupon: 'MEMBER10' }], undefined)).toBe(MEMBER);
   });
 });
+
+describe('confirmation email lines', () => {
+  it('show the net price when checkout charged line prices, else the list price', async () => {
+    const { itemLines } = await import('./email');
+    const [teeLine, other] = buildOrderLines([tee('lab'), { slug: 'bonus-miles', variantId: 18100, quantity: 2 }]);
+    expect(itemLines([teeLine, other])).toEqual([
+      '1 × Runner Type Tee: Lab Rat (Black / M) — £29.99',
+      '2 × Bonus Miles (Black / S) — £59.98',
+    ]);
+    const charged = [teeLine, other].map((l) => ({ ...l, payPence: linePayPence(l, MEMBER) }));
+    expect(itemLines(charged)).toEqual([
+      '1 × Runner Type Tee: Lab Rat (Black / M) — £26.99',
+      '2 × Bonus Miles (Black / S) — £53.98',
+    ]);
+  });
+});

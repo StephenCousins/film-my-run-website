@@ -18,8 +18,9 @@ async function send(to: string, subject: string, lines: string[], images: Previe
   if (error) throw new Error(error.message);
 }
 
-const itemLines = (items: OrderLine[]) =>
-  items.map((l) => `${l.quantity} × ${l.name}${l.variantLabel ? ` (${l.variantLabel})` : ''} — ${gbp(l.unitPence * l.quantity)}`);
+// The net price when checkout charged line prices (member price in the line), else the list price.
+export const itemLines = (items: OrderLine[]) =>
+  items.map((l) => `${l.quantity} × ${l.name}${l.variantLabel ? ` (${l.variantLabel})` : ''} — ${gbp((l.payPence ?? l.unitPence) * l.quantity)}`);
 
 /** A transparent print file, shown on its shirt colour. */
 export interface Preview {

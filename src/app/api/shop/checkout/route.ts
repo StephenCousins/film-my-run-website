@@ -7,9 +7,8 @@ import { prisma } from '@/lib/db';
 import { buildOrderLines, subtotalPence, linesFor, contradoShippingPence, returnUrls, shippingToCharge } from '@/lib/shop/orders';
 import { quoteShippingPence } from '@/lib/shop/printify';
 import { stripe, siteUrl } from '@/lib/shop/stripe';
-import { currentMember } from '@/lib/members/current';
-import { memberCheckout } from '@/lib/members/checkout';
-import { discountAsLinePrices, linePayPence, memberRate } from '@/lib/shop/tee-pricing';
+import { memberPricing } from '@/lib/shop/member-pricing';
+import { discountAsLinePrices, linePayPence } from '@/lib/shop/tee-pricing';
 
 export const dynamic = 'force-dynamic';
 
@@ -35,12 +34,13 @@ export async function POST(request: Request) {
     // We still pay the supplier; the buyer does not, over the threshold.
     const shippingPence = shippingToCharge(subtotalPence(lines), supplierShipping);
     const total = subtotalPence(lines) + shippingPence;
-    const { member, hadBearer, pro } = await currentMember(request);
-    const mc = memberCheckout(member, hadBearer, { member: process.env.STRIPE_MEMBER_COUPON, club: process.env.STRIPE_CLUB_COUPON }, pro);
+    // Same rule as GET /api/shop/rate, which the shop pages show prices from.
+    const { mc, rate } = await memberPricing(request);
     // With a Runner Type Tee in the basket the member discount is charged as line prices, so no
     // tee goes below its floor (tee-pricing.ts); otherwise it stays Stripe's session coupon.
-    const rate = memberRate(mc.discounts, process.env.STRIPE_CLUB_COUPON);
     const asLines = discountAsLinePrices(lines, rate);
+    // Record what each line really costs, for the confirmation email and order history.
+    if (asLines) lines = lines.map((l) => ({ ...l, payPence: linePayPence(l, rate) }));
     const order = await prisma.orders.create({
       data: { status: 'pending', total_cents: total, currency: 'GBP', items: lines as object[], updated_at: new Date(), ...mc.orderFields },
     });
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
         quantity: l.quantity,
         price_data: {
           currency: 'gbp',
-          unit_amount: asLines ? linePayPence(l, rate) : l.unitPence,
+          unit_amount: l.payPence ?? l.unitPence,
           product_data: {
             name: l.variantLabel ? `${l.name} (${l.variantLabel})` : l.name,
             images: l.image ? [l.image] : [],

@@ -7,7 +7,8 @@ import { shopItems } from '@/lib/shop';
 import { useBasket } from '@/lib/shop/basket';
 import { buildOrderLines, variantLabel, toFreeShipping, subtotalPence, gbp } from '@/lib/shop/orders';
 import { useAuth } from '@/contexts/AuthContext';
-import { CLUB_DISCOUNT, MEMBER_DISCOUNT } from '@/lib/members/price';
+import { MEMBER_DISCOUNT } from '@/lib/members/price';
+import { useShopRate } from '@/lib/shop/use-rate';
 import { RUNNER_TEE_SLUG, runnerTee, teeColour } from '@/lib/shop/runner-tee';
 import { payPence } from '@/lib/shop/tee-pricing';
 import { typeById } from '@/lib/runner-quiz';
@@ -37,9 +38,11 @@ export default function Basket() {
   const hasTee = rows.some((r) => r.type);
   const subtotalP = subtotalPence(orderLines);
   const subtotal = subtotalP / 100;
-  const { isAuthenticated, hasAccess } = useAuth();
-  const club = hasAccess('PRO');
-  const rate = isAuthenticated ? (club ? CLUB_DISCOUNT : MEMBER_DISCOUNT) : 0;
+  const { isAuthenticated } = useAuth();
+  // The server's answer (same rule as checkout), so the basket shows exactly what Stripe charges.
+  const serverRate = useShopRate();
+  const rate = serverRate ?? 0;
+  const club = rate > MEMBER_DISCOUNT;
   const payP = payPence(orderLines, rate);
   const discount = (subtotalP - payP) / 100;
   const teeHref = (r: (typeof rows)[number]) =>
@@ -124,9 +127,9 @@ export default function Basket() {
         <div>
           <p className="text-secondary text-sm">Subtotal</p>
           <p className="font-mono text-2xl text-foreground">£{subtotal.toFixed(2)}</p>
-          {isAuthenticated ? (
+          {rate > 0 ? (
             <p className="text-sm text-foreground">{club ? 'FMR Club discount' : 'Member discount'} <span className="font-mono">−£{discount.toFixed(2)}</span> · you pay <span className="font-mono">£{(subtotal - discount).toFixed(2)}</span> plus postage</p>
-          ) : (
+          ) : isAuthenticated || serverRate === null ? null : (
             hasTee ? (
               <p className="text-sm text-secondary mt-1">
                 Members pay <span className="font-mono">{gbp(payPence(orderLines, MEMBER_DISCOUNT))}</span> ·{' '}
@@ -139,11 +142,11 @@ export default function Basket() {
           {toFreeShipping(Math.round(subtotal * 100)) > 0 ? (
             <p className="text-xs text-muted mt-1">
               Spend <span className="font-mono text-foreground">£{(toFreeShipping(Math.round(subtotal * 100)) / 100).toFixed(2)}</span> more for free UK delivery.
-              {isAuthenticated ? ' Member discount applied at checkout.' : ''}
+              {rate > 0 ? ' Member discount applied at checkout.' : ''}
             </p>
           ) : (
             <p className="text-xs text-brand mt-1">
-              Free UK delivery on this order.{isAuthenticated ? ' Member discount applied at checkout.' : ''}
+              Free UK delivery on this order.{rate > 0 ? ' Member discount applied at checkout.' : ''}
             </p>
           )}
         </div>

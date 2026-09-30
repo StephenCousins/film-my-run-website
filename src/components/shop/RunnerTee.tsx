@@ -9,7 +9,8 @@ import { SHIRT_COLOURS, frontArt, teeBackArt, teeMock, type ShirtColour } from '
 import { useStoredResult, type StoredResult } from '@/lib/runner-quiz/stored';
 import { RUNNER_TEE_SLUG, runnerTee } from '@/lib/shop/runner-tee';
 import { OWN_TYPE_OFF_PENCE, teeListPence, teePayPence } from '@/lib/shop/tee-pricing';
-import { CLUB_DISCOUNT, MEMBER_DISCOUNT } from '@/lib/members/price';
+import { MEMBER_DISCOUNT } from '@/lib/members/price';
+import { useShopRate } from '@/lib/shop/use-rate';
 import { addToBasket } from '@/lib/shop/basket';
 import { arrives } from '@/lib/shop/delivery';
 import { useAuth } from '@/contexts/AuthContext';
@@ -68,8 +69,10 @@ function Product({ design, personal, urlColour }: { design: QuizType; personal: 
   const [colour, setColour] = useState<ShirtColour>(urlColour ?? (design.shirtColour as ShirtColour));
   const [size, setSize] = useState<string | null>(null);
   const [added, setAdded] = useState(false);
-  const { isAuthenticated, status, hasAccess } = useAuth();
-  const rate = isAuthenticated ? (hasAccess('PRO') ? CLUB_DISCOUNT : MEMBER_DISCOUNT) : 0;
+  const { isAuthenticated } = useAuth();
+  // The server's answer (same rule as checkout); list price until it arrives.
+  const serverRate = useShopRate();
+  const rate = serverRate ?? 0;
   const own = personal?.type.id === design.id;
 
   const sizes = runnerTee.variants.filter((v) => v.colour === colour).map((v) => v.size!);
@@ -117,13 +120,16 @@ function Product({ design, personal, urlColour }: { design: QuizType; personal: 
           </figure>
           <div className="col-span-2 mt-2">
             <p className="text-sm font-semibold text-foreground">On a model</p>
-            <p className="text-xs text-muted mb-2">Shown in {design.shirtColour} with sample scores</p>
-            <div className="grid grid-cols-3 gap-2">
-              {modelPhotos(design.id).slice(0, 3).map((src, i) => (
-                <div key={src} className="relative aspect-square rounded-xl overflow-hidden bg-white border border-border">
-                  <Image src={src} alt={i === 0 ? `A ${design.name} tee on a model` : ''} fill sizes="(max-width: 1024px) 33vw, 16vw" className="object-cover" />
-                </div>
-              ))}
+            {/* Follows the colour picker. The back photo carries sample scores, so it shows only with a result. */}
+            <p className="text-xs text-muted mb-2">Shown in {colour}{personal ? ' with sample scores' : ''}</p>
+            <div className={`grid gap-2 ${personal ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'}`}>
+              {modelPhotos(design.id, colour)
+                .slice(0, personal ? 4 : 3)
+                .map((src, i) => (
+                  <div key={src} className="relative aspect-square rounded-xl overflow-hidden bg-white border border-border">
+                    <Image src={src} alt={i === 0 ? `A ${design.name} tee in ${colour} on a model` : ''} fill sizes="(max-width: 1024px) 33vw, 16vw" className="object-cover" />
+                  </div>
+                ))}
             </div>
           </div>
         </div>
@@ -153,12 +159,12 @@ function Product({ design, personal, urlColour }: { design: QuizType; personal: 
               {gbp(pay)}
               {pay < variantPence && <span className="ml-3 text-base text-muted line-through">{gbp(variantPence)}</span>}
             </p>
-            {status !== 'loading' && (
+            {serverRate !== null && (
               <p className="text-sm text-secondary mt-1">
                 {[own && `Your type: ${OWN_OFF} off`, rate > 0 && (rate > MEMBER_DISCOUNT ? 'FMR Club price' : 'Member price')]
                   .filter(Boolean)
                   .join(' · ')}
-                {!isAuthenticated && (
+                {!isAuthenticated && rate === 0 && (
                   <>
                     {own ? ' · ' : ''}Members pay {gbp(memberPay)}.{' '}
                     <Link href={`/login?callbackUrl=${encodeURIComponent(teeHref(design.id, personal))}`} className="text-brand hover:underline">

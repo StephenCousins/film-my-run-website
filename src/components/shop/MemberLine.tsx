@@ -3,7 +3,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { CLUB_DISCOUNT, MEMBER_DISCOUNT, memberPrice } from '@/lib/members/price';
+import { CLUB_DISCOUNT, MEMBER_DISCOUNT } from '@/lib/members/price';
+import { useShopRate } from '@/lib/shop/use-rate';
 import { CLUB_MONTHLY_PENCE } from '@/lib/club/subscription';
 
 const pct = (d: number) => `${Math.round(d * 100)}%`;
@@ -12,12 +13,15 @@ const CLUB = pct(CLUB_DISCOUNT);
 const CLUB_MONTHLY = `£${(CLUB_MONTHLY_PENCE / 100).toFixed(2)}`;
 
 function useMember(returnTo?: string) {
-  const { isAuthenticated, status, hasAccess } = useAuth();
+  const { isAuthenticated, status } = useAuth();
   const pathname = usePathname();
+  // Club or not, and the price, come from the server's checkout rule, not the session's tier.
+  const rate = useShopRate();
   return {
-    loading: status === 'loading',
+    loading: status === 'loading' || (isAuthenticated && rate === null),
     signedIn: isAuthenticated,
-    club: hasAccess('PRO'),
+    rate: rate ?? 0,
+    club: (rate ?? 0) > MEMBER_DISCOUNT,
     signIn: `/login?callbackUrl=${encodeURIComponent(returnTo ?? pathname)}`,
   };
 }
@@ -51,10 +55,11 @@ export default function MemberLine({ pounds, label = 'Member price', returnTo }:
       </div>
     );
   }
+  if (m.rate === 0) return null; // signed in, but checkout would give no discount
   return (
     <>
       <p className="text-sm text-foreground mt-1">
-        {label} <span className="font-mono">£{memberPrice(pounds, m.club).toFixed(2)}</span>
+        {label} <span className="font-mono">£{(Math.round(Math.round(pounds * 100) * (1 - m.rate)) / 100).toFixed(2)}</span>
         {m.club && <span className="text-brand"> · FMR Club {CLUB}</span>}
       </p>
       {!m.club && (

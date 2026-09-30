@@ -26,7 +26,7 @@ export function toOrderDTO(row: OrderRow): OrderDTO | null {
     id: row.id,
     placedAt: row.created_at.toISOString(),
     status: row.status as OrderDTO['status'],
-    items: lines.map((l) => ({ slug: l.slug, name: l.name, variant: l.variantLabel ?? '', quantity: l.quantity, pricePence: l.unitPence, imageUrl: l.image ?? null })),
+    items: lines.map((l) => ({ slug: l.slug, name: l.name, variant: l.variantLabel ?? '', quantity: l.quantity, pricePence: l.payPence ?? l.unitPence, imageUrl: l.image ?? null })),
     totalPence: row.total_cents,
     currency: row.currency,
     trackingUrl: row.tracking_url,
