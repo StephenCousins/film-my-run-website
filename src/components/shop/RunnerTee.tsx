@@ -1,11 +1,11 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Check, ChevronRight, ShoppingBag } from 'lucide-react';
 import { QUIZ, typeById, type QuizType, type Scores } from '@/lib/runner-quiz';
 import { chooserPhoto, modelPhotos } from '@/lib/runner-quiz/models';
-import { SHIRT_COLOURS, frontArt, teeBackArt, teeMock, type ShirtColour } from '@/lib/runner-quiz/shirt-art';
+import { SHIRT_COLOURS, teeBackArt, type ShirtColour } from '@/lib/runner-quiz/shirt-art';
 import { useStoredResult, type StoredResult } from '@/lib/runner-quiz/stored';
 import { RUNNER_TEE_SLUG, runnerTee } from '@/lib/shop/runner-tee';
 import { OWN_TYPE_OFF_PENCE, teeListPence, teePayPence } from '@/lib/shop/tee-pricing';
@@ -84,12 +84,19 @@ function Product({ design, personal, urlColour }: { design: QuizType; personal: 
   const memberPay = teePayPence(variantPence, own, MEMBER_DISCOUNT);
 
   // The print date is the day the order is paid; the preview shows today.
-  const front = useMemo(() => teeMock(SHIRT_COLOURS[colour], frontArt(design, colour)), [design, colour]);
   const backPrint = useMemo(
     () => teeBackArt(design, personal, new Date(), colour, colour === 'White' ? LOGO.light : LOGO.dark),
     [design, personal, colour]
   );
-  const back = useMemo(() => teeMock(SHIRT_COLOURS[colour], backPrint), [colour, backPrint]);
+  const shots = modelPhotos(design.id, colour).slice(0, 3);
+  const [shot, setShot] = useState(0);
+  const [backOpen, setBackOpen] = useState(false);
+  useEffect(() => {
+    if (!backOpen) return;
+    const close = (e: KeyboardEvent) => e.key === 'Escape' && setBackOpen(false);
+    window.addEventListener('keydown', close);
+    return () => window.removeEventListener('keydown', close);
+  }, [backOpen]);
 
   const add = () => {
     if (!variant) return;
@@ -102,36 +109,63 @@ function Product({ design, personal, urlColour }: { design: QuizType; personal: 
     <div className="container py-8 lg:py-12">
       <Breadcrumb name={design.name} />
       <div className="grid lg:grid-cols-2 gap-8 lg:gap-14">
-        <div className="grid grid-cols-2 gap-3 self-start">
-          {[
-            ['Front', front],
-            [personal ? 'Back, with your Runner DNA' : 'Back', back],
-          ].map(([label, svg]) => (
-            <figure key={label} className="rounded-2xl bg-surface-secondary border border-border p-2 sm:p-4">
-              <div dangerouslySetInnerHTML={{ __html: svg }} />
-              <figcaption className="text-xs text-muted text-center mt-1">{label}</figcaption>
-            </figure>
-          ))}
-          <figure className="col-span-2 rounded-2xl border border-border p-6" style={{ backgroundColor: SHIRT_COLOURS[colour] }}>
-            <div className="max-w-xs mx-auto [&>svg]:w-full [&>svg]:h-auto" dangerouslySetInnerHTML={{ __html: backPrint }} />
-            <figcaption className={`text-xs text-center mt-2 ${colour === 'White' ? 'text-zinc-500' : 'text-zinc-400'}`}>
-              The back print, close up
-            </figcaption>
-          </figure>
-          <div className="col-span-2 mt-2">
-            <p className="text-sm font-semibold text-foreground">On a model</p>
-            {/* Follows the colour picker. The back photo carries sample scores, so it shows only with a result. */}
-            <p className="text-xs text-muted mb-2">Shown in {colour}{personal ? ' with sample scores' : ''}</p>
-            <div className={`grid gap-2 ${personal ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'}`}>
-              {modelPhotos(design.id, colour)
-                .slice(0, personal ? 4 : 3)
-                .map((src, i) => (
-                  <div key={src} className="relative aspect-square rounded-xl overflow-hidden bg-white border border-border">
-                    <Image src={src} alt={i === 0 ? `A ${design.name} tee in ${colour} on a model` : ''} fill sizes="(max-width: 1024px) 33vw, 16vw" className="object-cover" />
-                  </div>
-                ))}
-            </div>
+        <div className="self-start">
+          {/* The gallery: the three model shots in the chosen colour. */}
+          <div className="relative aspect-square rounded-2xl overflow-hidden bg-white border border-border">
+            <Image src={shots[shot]} alt={`A ${design.name} tee in ${colour} on a model`} fill priority sizes="(max-width: 1024px) 100vw, 50vw" className="object-cover" />
           </div>
+          <div className="grid grid-cols-3 gap-2 mt-2">
+            {shots.map((src, i) => (
+              <button
+                key={src}
+                type="button"
+                onClick={() => setShot(i)}
+                aria-label={`Photo ${i + 1}`}
+                aria-pressed={i === shot}
+                className={`relative aspect-square rounded-xl overflow-hidden bg-white border-2 transition-colors ${i === shot ? 'border-brand' : 'border-border hover:border-foreground/30'}`}
+              >
+                <Image src={src} alt="" fill sizes="(max-width: 1024px) 33vw, 16vw" className="object-cover" />
+              </button>
+            ))}
+          </div>
+          <p className="text-xs text-muted mt-2">Shown in {colour}{personal ? ' with sample scores' : ''}</p>
+
+          {/* The back this buyer will get: their DNA, or the plain back. Tap to enlarge. */}
+          <button
+            type="button"
+            onClick={() => setBackOpen(true)}
+            className="mt-4 w-full flex items-center gap-4 rounded-2xl border border-border bg-surface-secondary p-3 text-left hover:border-brand transition-colors"
+          >
+            <span
+              className="w-20 h-24 shrink-0 rounded-lg p-1.5 [&>svg]:w-full [&>svg]:h-full"
+              style={{ backgroundColor: SHIRT_COLOURS[colour] }}
+              aria-hidden
+              dangerouslySetInnerHTML={{ __html: backPrint }}
+            />
+            <span>
+              <span className="block font-semibold text-foreground">Your back print</span>
+              <span className="block text-sm text-secondary">
+                {personal ? 'Your Runner DNA, dated the day you order.' : `${design.name} and "${design.mantra}"`}
+              </span>
+              <span className="block text-sm text-brand mt-1">Tap to see it bigger</span>
+            </span>
+          </button>
+          {backOpen && (
+            <div
+              className="fixed inset-0 z-[70] flex items-center justify-center bg-black/70 p-4"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Your back print"
+              onClick={() => setBackOpen(false)}
+            >
+              <div className="w-full max-w-md rounded-2xl p-6" style={{ backgroundColor: SHIRT_COLOURS[colour] }} onClick={(e) => e.stopPropagation()}>
+                <div className="[&>svg]:w-full [&>svg]:h-auto" dangerouslySetInnerHTML={{ __html: backPrint }} />
+                <button type="button" onClick={() => setBackOpen(false)} className="mt-4 w-full py-2 rounded-full bg-black/40 text-white text-sm font-semibold" autoFocus>
+                  Close
+                </button>
+              </div>
+            </div>
+          )}
         </div>
 
         <div>

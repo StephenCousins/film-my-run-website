@@ -12,7 +12,7 @@ import { useShopRate } from '@/lib/shop/use-rate';
 import { RUNNER_TEE_SLUG, runnerTee, teeColour } from '@/lib/shop/runner-tee';
 import { payPence } from '@/lib/shop/tee-pricing';
 import { typeById } from '@/lib/runner-quiz';
-import { SHIRT_COLOURS, frontArt, teeMock } from '@/lib/runner-quiz/shirt-art';
+import { modelPhotos } from '@/lib/runner-quiz/models';
 import MemberLine from './MemberLine';
 import NewsletterCheckbox from '@/components/newsletter/NewsletterCheckbox';
 
@@ -89,12 +89,10 @@ export default function Basket() {
         {rows.map((r) => (
           <li key={r.index} className="flex gap-4 p-4">
             {r.type ? (
-              <Link
-                href={teeHref(r)}
-                className="w-20 h-20 rounded-lg bg-white overflow-hidden shrink-0"
-                aria-label={r.type.shirt}
-                dangerouslySetInnerHTML={{ __html: teeMock(SHIRT_COLOURS[teeColour(r.v.id)], frontArt(r.type, teeColour(r.v.id))) }}
-              />
+              <Link href={teeHref(r)} className="relative w-20 h-20 rounded-lg bg-white overflow-hidden shrink-0" aria-label={r.type.shirt}>
+                {/* Model shot 1 of this design in the line's colour. */}
+                <Image src={modelPhotos(r.type.id, teeColour(r.v.id))[0]} alt="" fill sizes="160px" className="object-cover scale-[1.7] origin-[50%_45%]" />
+              </Link>
             ) : (
               <Link href={`/shop/${r.item.slug}`} className="relative w-20 h-20 rounded-lg bg-white overflow-hidden shrink-0">
                 {r.item.images[0] && <Image src={r.item.images[0].src} alt="" fill sizes="80px" className="object-cover" />}
