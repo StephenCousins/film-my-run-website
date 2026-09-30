@@ -11,14 +11,18 @@ export function storyTags(topic: string | null, isUk: boolean): string[] {
 export const TOP_STORY_DAYS = 3;
 
 /**
- * The /news order: the biggest story of the last three days first, marked as
- * the top story (a tie goes to the newer), then everything else newest first.
- * The newest story used to lead however small it was (Stephen, 27 Sep 2026:
- * "we need to prioritise the big stories").
+ * The /news order: the top story first, then everything else newest first.
+ * The top story is the best of the last three days after age is counted:
+ * each day a story has been up costs it one importance point, so a big story
+ * leads for about a day and then a fresh one takes over (Stephen, 30 Sep 2026:
+ * the same story led for three days). A tie goes to the newer. The newest story
+ * used to lead however small it was (Stephen, 27 Sep 2026: "we need to
+ * prioritise the big stories").
  */
 export function orderForPage<T extends { importance: number; pubDate: string }>(stories: T[], now: Date): (T & { topStory?: boolean })[] {
   const newest = [...stories].sort((a, b) => Date.parse(b.pubDate) - Date.parse(a.pubDate));
   const since = now.getTime() - TOP_STORY_DAYS * 86_400_000;
-  const top = newest.filter((s) => Date.parse(s.pubDate) >= since).reduce<T | null>((best, s) => (!best || s.importance > best.importance ? s : best), null);
+  const score = (s: T) => s.importance - (now.getTime() - Date.parse(s.pubDate)) / 86_400_000;
+  const top = newest.filter((s) => Date.parse(s.pubDate) >= since).reduce<T | null>((best, s) => (!best || score(s) > score(best) ? s : best), null);
   return top ? [{ ...top, topStory: true }, ...newest.filter((s) => s !== top)] : newest;
 }

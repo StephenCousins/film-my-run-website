@@ -20,6 +20,9 @@ describe('the page order', () => {
   });
   it('a tie goes to the newer story, and with nothing recent the list is just newest first', () => {
     expect(orderForPage([s('a', 8, 10), s('b', 8, 2)], now)[0].id).toBe('b');
+    // A big story fades: two days old at 8 loses to a fresh 7 (30 Sep 2026: one story led for three days).
+    expect(orderForPage([s('old-big', 8, 48), s('fresh', 7, 3)], now)[0].id).toBe('fresh');
+    expect(orderForPage([s('big-today', 9, 6), s('fresh', 7, 1)], now)[0].id).toBe('big-today');
     const stale = orderForPage([s('x', 9, 24 * 6), s('y', 4, 24 * 5)], now);
     expect(stale.map((x) => [x.id, !!x.topStory])).toEqual([['y', false], ['x', false]]);
   });
