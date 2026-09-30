@@ -39,8 +39,23 @@ export type MemberDeps = {
    * link, removes the account with its sessions and sign-in links.
    */
   deleteAccount?: (userId: number) => Promise<void>;
+  /** The newsletter box on the sign-in form, ticked: subscribe with consent. */
+  subscribeNewsletter?: (email: string, source: 'signup-web' | 'signup-app') => Promise<unknown>;
   now?: () => number;
 };
+
+/**
+ * `newsletter: true` in a verify or Apple body is the sign-in form's unticked box, ticked.
+ * `source: 'web'` from the website's form, else the app. Never fails the sign-in.
+ */
+async function maybeSubscribe(body: Record<string, unknown>, email: string, deps: MemberDeps) {
+  if (body.newsletter !== true || !deps.subscribeNewsletter) return;
+  try {
+    await deps.subscribeNewsletter(email, body.source === 'web' ? 'signup-web' : 'signup-app');
+  } catch (e) {
+    console.error('Newsletter at sign-in failed:', e);
+  }
+}
 
 /** What a verified Apple identity token says: its stable id and the email Apple shares (perhaps a private relay). */
 export type AppleClaims = { sub: string; email: string };
@@ -109,6 +124,7 @@ export async function handleVerify(req: NextRequest, deps: MemberDeps): Promise<
   const token = makeToken();
   await deps.createSession(member.id, token, new Date(now + TOKEN_TTL_MS));
   await deps.attachGuestOrders(member.id, email);
+  await maybeSubscribe(body, email, deps);
   return json({ ok: true, token, member });
 }
 
@@ -137,6 +153,7 @@ export async function handleApple(req: NextRequest, deps: MemberDeps): Promise<R
   const token = makeToken();
   await deps.createSession(member.id, token, new Date(now + TOKEN_TTL_MS));
   await deps.attachGuestOrders(member.id, member.email.toLowerCase());
+  await maybeSubscribe(body, member.email, deps);
   return json({ ok: true, token, member: name && !member.name ? { ...member, name } : member });
 }
 

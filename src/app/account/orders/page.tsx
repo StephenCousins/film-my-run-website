@@ -6,6 +6,7 @@ import { liveOrderDeps, toOrderDTO, type OrderDTO } from '@/lib/members/orders';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import OrderSummary from '@/components/account/OrderSummary';
+import { NewsletterPrompt, NewsletterToggle } from '@/components/newsletter/NewsletterPrompt';
 
 export const dynamic = 'force-dynamic';
 export const metadata: Metadata = { title: 'Your orders', robots: { index: false } };
@@ -20,6 +21,8 @@ export default async function OrdersPage() {
       <Header />
       <main className="min-h-screen pt-24 pb-16 bg-background">
         <div className="container max-w-2xl">
+          <NewsletterPrompt className="mb-6" />
+          <NewsletterToggle className="mb-8" />
           <h1 className="text-3xl font-display font-bold text-foreground mb-6">Your orders</h1>
           {orders.length === 0 ? (
             <div className="p-8 rounded-2xl bg-surface-secondary border border-border text-center">

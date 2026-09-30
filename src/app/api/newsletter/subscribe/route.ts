@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { subscribe } from '@/lib/newsletter/consent';
+import { liveNewsletterStore } from '@/lib/newsletter/store';
 import { z } from 'zod';
-import crypto from 'crypto';
 import { Resend } from 'resend';
 
 const subscribeSchema = z.object({
@@ -42,22 +42,10 @@ export async function POST(request: NextRequest) {
     }
 
     const { email } = result.data;
-    const token = crypto.randomUUID();
 
-    // Upsert: re-subscribing sets status back to active
-    await prisma.newsletter_subscribers.upsert({
-      where: { email },
-      create: {
-        email,
-        token,
-        status: 'active',
-      },
-      update: {
-        status: 'active',
-        token,
-        unsubscribed_at: null,
-      },
-    });
+    // Typing an address into the form and pressing Subscribe is consent (and may re-subscribe).
+    const outcome = await subscribe(liveNewsletterStore, email, 'consent', 'signup-web');
+    if (outcome === 'already') return NextResponse.json({ ok: true, message: "You're already subscribed." });
 
     // Send welcome email via Resend (non-blocking — don't fail the subscription if email fails)
     const resendKey = process.env.RESEND_API_KEY;

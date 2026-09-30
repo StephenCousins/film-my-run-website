@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server';
 import type Stripe from 'stripe';
 import { prisma } from '@/lib/db';
+import { subscribeAfterPayment } from '@/lib/newsletter/consent';
+import { liveNewsletterStore } from '@/lib/newsletter/store';
 import { stripe } from '@/lib/shop/stripe';
 import { fulfilPaidSession, toPrintifyAddress } from '@/lib/shop/fulfil';
 import { createOrder } from '@/lib/shop/printify';
@@ -37,6 +39,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'No email or address' }, { status: 400 });
   }
   const address = toPrintifyAddress(ship.name, email, session.customer_details?.phone, ship.address);
+
+  // The basket's newsletter box: soft opt-in, only now the payment has gone through.
+  const optIn = await prisma.orders.findFirst({ where: { stripe_session_id: session.id }, select: { newsletter: true } }).catch(() => null);
+  await subscribeAfterPayment(liveNewsletterStore, { email, paid: session.payment_status === 'paid', optedIn: optIn?.newsletter === true, source: 'checkout' });
   // The event's own time, so a retry prints the same date.
   const paidAt = new Date(event.created * 1000);
 

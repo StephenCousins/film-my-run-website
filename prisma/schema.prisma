@@ -108,6 +108,7 @@ model orders {
   printify_order_id String?
   contrado_order_id String?
   tracking_url      String?
+  newsletter        Boolean? // the basket's pre-ticked box; the webhook subscribes only after payment
   created_at        DateTime @default(now())
   updated_at        DateTime
   users             users?   @relation(fields: [user_id], references: [id])
@@ -325,6 +326,7 @@ model users {
   email_verified_at  DateTime?
   image              String?
   subscription_end   DateTime?
+  newsletter_asked_at DateTime? // when the member answered the one-off newsletter prompt, either way
   accounts           accounts[]
   orders             orders[]
   posts              posts[]
@@ -381,6 +383,9 @@ model newsletter_subscribers {
   token           String    @unique // for unsubscribe links
   subscribed_at   DateTime  @default(now())
   unsubscribed_at DateTime?
+  basis           String? // PECR: consent (an unticked box they ticked) | soft-opt-in (a pre-ticked box at a sale); null before 30 Sep 2026
+  source          String? // signup-web | signup-app | checkout | club | prompt
+  consented_at    DateTime? // when the basis was given (the latest subscribe)
 
   @@index([status])
   @@index([email])

@@ -7,6 +7,8 @@
 import { NextResponse } from 'next/server';
 import type Stripe from 'stripe';
 import { prisma } from '@/lib/db';
+import { subscribeAfterPayment } from '@/lib/newsletter/consent';
+import { liveNewsletterStore } from '@/lib/newsletter/store';
 import { stripe } from '@/lib/shop/stripe';
 import { accessFor, mergeWithExisting } from '@/lib/club/subscription';
 
@@ -54,7 +56,15 @@ export async function POST(request: Request) {
         if (s.mode !== 'subscription') return NextResponse.json({ ignored: 'not a subscription' });
         const sub = await stripe().subscriptions.retrieve(String(s.subscription));
         const userId = Number(s.client_reference_id ?? s.metadata?.user_id);
-        return NextResponse.json({ ok: await applyToAccount(Number.isInteger(userId) ? userId : null, String(s.customer), sub) });
+        const result = await applyToAccount(Number.isInteger(userId) ? userId : null, String(s.customer), sub);
+        // The join page's newsletter box: soft opt-in, only once the first payment has gone through.
+        await subscribeAfterPayment(liveNewsletterStore, {
+          email: s.customer_details?.email ?? s.metadata?.email,
+          paid: s.payment_status === 'paid',
+          optedIn: s.metadata?.newsletter === '1',
+          source: 'club',
+        });
+        return NextResponse.json({ ok: result });
       }
       case 'customer.subscription.updated':
       case 'customer.subscription.deleted': {

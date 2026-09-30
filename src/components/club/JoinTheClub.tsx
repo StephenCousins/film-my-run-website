@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
+import NewsletterCheckbox from '@/components/newsletter/NewsletterCheckbox';
 
 const money = (pence: number) => `£${(pence / 100).toFixed(2).replace(/\.00$/, '')}`;
 
@@ -13,6 +14,8 @@ export default function JoinTheClub({ monthlyPence, yearlyPence }: { monthlyPenc
   const { isAuthenticated, status, hasAccess } = useAuth();
   const [busy, setBusy] = useState<'month' | 'year' | 'portal' | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // Pre-ticked: a customer's soft opt-in (PECR). Subscribed only after payment, in the webhook.
+  const [newsletter, setNewsletter] = useState(true);
 
   const go = async (path: string, body?: unknown, key: 'month' | 'year' | 'portal' = 'portal') => {
     setBusy(key);
@@ -68,7 +71,7 @@ export default function JoinTheClub({ monthlyPence, yearlyPence }: { monthlyPenc
       <div className="flex flex-wrap gap-3">
         <button
           type="button"
-          onClick={() => go('/api/club/checkout', { interval: 'month' }, 'month')}
+          onClick={() => go('/api/club/checkout', { interval: 'month', newsletter }, 'month')}
           disabled={busy !== null}
           className="inline-flex items-center justify-center px-8 py-4 rounded-xl bg-brand text-black font-semibold text-lg hover:bg-orange-400 transition-colors disabled:opacity-60"
         >
@@ -76,7 +79,7 @@ export default function JoinTheClub({ monthlyPence, yearlyPence }: { monthlyPenc
         </button>
         <button
           type="button"
-          onClick={() => go('/api/club/checkout', { interval: 'year' }, 'year')}
+          onClick={() => go('/api/club/checkout', { interval: 'year', newsletter }, 'year')}
           disabled={busy !== null}
           className="inline-flex items-center justify-center px-6 py-4 rounded-xl border border-border text-foreground font-medium hover:text-brand transition-colors disabled:opacity-60"
         >
@@ -84,6 +87,12 @@ export default function JoinTheClub({ monthlyPence, yearlyPence }: { monthlyPenc
         </button>
       </div>
       <p className="text-sm text-muted mt-3">A year works out at two months free. Cancel any time.</p>
+      <NewsletterCheckbox
+        className="mt-3"
+        checked={newsletter}
+        onChange={setNewsletter}
+        label="Send me the Film My Run newsletter (untick if you'd rather not)"
+      />
       {error && <p className="text-sm text-red-400 mt-2">{error}</p>}
     </div>
   );

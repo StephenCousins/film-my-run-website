@@ -16,8 +16,12 @@ export async function POST(request: Request) {
   }
 
   let interval: unknown;
+  let newsletter = false;
   try {
-    interval = (await request.json()).interval;
+    const body = await request.json();
+    interval = body.interval;
+    // The pre-ticked box; the webhook subscribes only once the first payment succeeds.
+    newsletter = body.newsletter === true;
   } catch {
     interval = 'month';
   }
@@ -35,7 +39,7 @@ export async function POST(request: Request) {
       client_reference_id: String(id),
       // The webhook is the source of truth; this is only the belt to its braces.
       subscription_data: { metadata: { user_id: String(id), email } },
-      metadata: { user_id: String(id), email },
+      metadata: { user_id: String(id), email, newsletter: newsletter ? '1' : '0' },
       allow_promotion_codes: true,
       success_url: `${base}/club?joined=1`,
       cancel_url: `${base}/club`,

@@ -1,5 +1,7 @@
 /** Prisma side of member sign-in. `verification_tokens` and `sessions` are NextAuth's unused tables. */
 import { prisma } from '@/lib/db';
+import { subscribe } from '@/lib/newsletter/consent';
+import { liveNewsletterStore } from '@/lib/newsletter/store';
 import type { Member, MemberDeps } from './handlers';
 import { sendCodeEmail } from './email';
 import { verifyAppleIdentityToken } from './apple';
@@ -16,6 +18,7 @@ export const toMember = (u: UserRow, now = new Date()): Member => ({
 });
 
 export const liveMemberDeps: MemberDeps = {
+  subscribeNewsletter: (email, source) => subscribe(liveNewsletterStore, email, 'consent', source),
   saveCode: async (email, hash, expires) => {
     await prisma.verification_tokens.deleteMany({ where: { identifier: email, expires: { lt: new Date() } } });
     await prisma.verification_tokens.create({ data: { identifier: email, token: hash, expires } });

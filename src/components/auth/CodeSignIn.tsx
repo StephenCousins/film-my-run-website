@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Loader2, Mail } from 'lucide-react';
+import NewsletterCheckbox from '@/components/newsletter/NewsletterCheckbox';
 
 const MESSAGES: Record<string, string> = {
   wrong_code: "That code isn't right",
@@ -20,6 +21,8 @@ export default function CodeSignIn({ callbackUrl = '/' }: { callbackUrl?: string
   const [step, setStep] = useState<'email' | 'code'>('email');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Unticked: signing in is not a reason to be emailed (PECR consent).
+  const [newsletter, setNewsletter] = useState(false);
 
   const post = async (path: string, body: unknown) => {
     const res = await fetch(`/api/app/v1/auth/${path}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -40,7 +43,7 @@ export default function CodeSignIn({ callbackUrl = '/' }: { callbackUrl?: string
     e.preventDefault();
     setBusy(true); setError(null);
     try {
-      const { token } = await post('verify', { email, code });
+      const { token } = await post('verify', { email, code, newsletter, source: 'web' });
       const result = await signIn('code', { token, redirect: false });
       if (result?.error) throw new Error('Something went wrong. Please try again.');
       router.push(callbackUrl);
@@ -58,6 +61,7 @@ export default function CodeSignIn({ callbackUrl = '/' }: { callbackUrl?: string
           <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted" />
           <input type="email" required autoComplete="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com" className={input} aria-label="Email" />
         </div>
+        <NewsletterCheckbox checked={newsletter} onChange={setNewsletter} label="Send me the Film My Run newsletter" />
         <button type="submit" disabled={busy || !email} className={button}>
           {busy ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
           Email me a code

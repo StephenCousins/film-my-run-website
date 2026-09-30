@@ -14,12 +14,15 @@ import { payPence } from '@/lib/shop/tee-pricing';
 import { typeById } from '@/lib/runner-quiz';
 import { SHIRT_COLOURS, frontArt, teeMock } from '@/lib/runner-quiz/shirt-art';
 import MemberLine from './MemberLine';
+import NewsletterCheckbox from '@/components/newsletter/NewsletterCheckbox';
 
 export default function Basket() {
   const { lines, set } = useBasket();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pendingUrl, setPendingUrl] = useState<string | null>(null);
+  // Pre-ticked: a customer's soft opt-in (PECR). Subscribed only after payment, in the webhook.
+  const [newsletter, setNewsletter] = useState(true);
 
   // Priced exactly as checkout prices them (orders.ts, tee-pricing.ts).
   const rows = lines.flatMap((l, index) => {
@@ -56,7 +59,7 @@ export default function Basket() {
     setError(null);
     setPendingUrl(null);
     try {
-      const res = await fetch('/api/shop/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lines }) });
+      const res = await fetch('/api/shop/checkout', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ lines, newsletter }) });
       const data = await res.json();
       if (!res.ok || !data.url) throw new Error(data.error ?? 'Checkout failed');
       if (isAuthenticated && data.member === false && data.reason) {
@@ -159,6 +162,12 @@ export default function Basket() {
           {busy ? 'Taking you to checkout…' : 'Checkout'}
         </button>
       </div>
+      <NewsletterCheckbox
+        className="mt-4 sm:justify-end"
+        checked={newsletter}
+        onChange={setNewsletter}
+        label="Send me the Film My Run newsletter (untick if you'd rather not)"
+      />
       {pendingUrl ? (
         <div className="mt-4 text-sm text-red-500">
           <p>Your member discount couldn&apos;t be applied. Sign in again, or continue at full price.</p>

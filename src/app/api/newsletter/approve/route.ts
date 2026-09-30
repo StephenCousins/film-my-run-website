@@ -91,16 +91,19 @@ export async function GET(request: NextRequest) {
 
     for (let i = 0; i < subscribers.length; i += 100) {
       const batch = subscribers.slice(i, i + 100);
-      const emails = batch.map((sub) => ({
-        from: fromEmail,
-        to: sub.email,
-        subject: payload.subject,
-        html: buildNewsletterHtml(
-          payload,
-          sub.token === 'admin' ? '#' : `${baseUrl}/api/newsletter/unsubscribe?token=${sub.token}`,
-          baseUrl
-        ),
-      }));
+      const emails = batch.map((sub) => {
+        const unsubscribeUrl = sub.token === 'admin' ? '#' : `${baseUrl}/api/newsletter/unsubscribe?token=${sub.token}`;
+        return {
+          from: fromEmail,
+          to: sub.email,
+          subject: payload.subject,
+          html: buildNewsletterHtml(payload, unsubscribeUrl, baseUrl),
+          // One-click unsubscribe in the mail app itself (RFC 8058), as Gmail and Yahoo require.
+          ...(sub.token !== 'admin' && {
+            headers: { 'List-Unsubscribe': `<${unsubscribeUrl}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' },
+          }),
+        };
+      });
 
       await resend.batch.send(emails);
       totalSent += batch.length;

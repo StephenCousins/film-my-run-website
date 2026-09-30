@@ -15,9 +15,12 @@ export const dynamic = 'force-dynamic';
 export async function POST(request: Request) {
   let lines;
   let source: unknown;
+  let newsletter = false;
   try {
     const body = await request.json();
     source = body.source;
+    // The basket's pre-ticked box. Stored now; the webhook subscribes only once payment succeeds.
+    newsletter = body.newsletter === true;
     lines = buildOrderLines(body.lines);
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
@@ -42,7 +45,7 @@ export async function POST(request: Request) {
     // Record what each line really costs, for the confirmation email and order history.
     if (asLines) lines = lines.map((l) => ({ ...l, payPence: linePayPence(l, rate) }));
     const order = await prisma.orders.create({
-      data: { status: 'pending', total_cents: total, currency: 'GBP', items: lines as object[], updated_at: new Date(), ...mc.orderFields },
+      data: { status: 'pending', total_cents: total, currency: 'GBP', items: lines as object[], newsletter, updated_at: new Date(), ...mc.orderFields },
     });
 
     const session = await stripe().checkout.sessions.create({

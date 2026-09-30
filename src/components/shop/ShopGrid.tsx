@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import ProductCard from './ProductCard';
 import RunnerTeeCard from './RunnerTeeCard';
 import { MemberOffer } from './MemberLine';
+import { NewsletterPrompt } from '@/components/newsletter/NewsletterPrompt';
 import type { ShopCategory, ShopItem } from '@/lib/shop';
 
 /** One case for every chip: "Running T-Shirts" → "Running T-shirts". */
@@ -63,6 +64,9 @@ export default function ShopGrid({ items, categories }: { items: ShopItem[]; cat
           })}
         </div>
       </div>
+
+      {/* Signed-in members only, once: the newsletter question. */}
+      <NewsletterPrompt className="mb-8" />
 
       <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
         {cards}

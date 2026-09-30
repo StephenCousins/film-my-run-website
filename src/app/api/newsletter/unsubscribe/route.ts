@@ -1,52 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/db';
+import { unsubscribeByToken } from '@/lib/newsletter/consent';
+import { liveNewsletterStore } from '@/lib/newsletter/store';
 
+const html = (body: string, status = 200) => new NextResponse(body, { status, headers: { 'Content-Type': 'text/html; charset=utf-8' } });
+
+// The link in every newsletter.
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
-  const token = searchParams.get('token');
-
-  if (!token) {
-    return new NextResponse(unsubscribePage('Invalid unsubscribe link.', false), {
-      status: 400,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    });
-  }
-
   try {
-    const subscriber = await prisma.newsletter_subscribers.findUnique({
-      where: { token },
-    });
-
-    if (!subscriber) {
-      return new NextResponse(unsubscribePage('This unsubscribe link is not valid.', false), {
-        status: 404,
-        headers: { 'Content-Type': 'text/html; charset=utf-8' },
-      });
-    }
-
-    if (subscriber.status === 'unsubscribed') {
-      return new NextResponse(unsubscribePage('You have already been unsubscribed.', true), {
-        headers: { 'Content-Type': 'text/html; charset=utf-8' },
-      });
-    }
-
-    await prisma.newsletter_subscribers.update({
-      where: { token },
-      data: {
-        status: 'unsubscribed',
-        unsubscribed_at: new Date(),
-      },
-    });
-
-    return new NextResponse(unsubscribePage('You have been successfully unsubscribed.', true), {
-      headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    });
+    const outcome = await unsubscribeByToken(liveNewsletterStore, new URL(request.url).searchParams.get('token') ?? '');
+    if (outcome === 'unknown') return html(unsubscribePage('This unsubscribe link is not valid.', false), 404);
+    return html(unsubscribePage(outcome === 'already' ? 'You have already been unsubscribed.' : 'You have been successfully unsubscribed.', true));
   } catch (error) {
     console.error('Unsubscribe error:', error);
-    return new NextResponse(unsubscribePage('Something went wrong. Please try again.', false), {
-      status: 500,
-      headers: { 'Content-Type': 'text/html; charset=utf-8' },
-    });
+    return html(unsubscribePage('Something went wrong. Please try again.', false), 500);
+  }
+}
+
+// One-click unsubscribe (RFC 8058): mail apps POST "List-Unsubscribe=One-Click" to the same URL.
+export async function POST(request: NextRequest) {
+  try {
+    const outcome = await unsubscribeByToken(liveNewsletterStore, new URL(request.url).searchParams.get('token') ?? '');
+    return new NextResponse(null, { status: outcome === 'unknown' ? 404 : 200 });
+  } catch (error) {
+    console.error('One-click unsubscribe error:', error);
+    return new NextResponse(null, { status: 500 });
   }
 }
 
