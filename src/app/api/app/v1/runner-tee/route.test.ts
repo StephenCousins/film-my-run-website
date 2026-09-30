@@ -15,5 +15,8 @@ describe('GET /api/app/v1/runner-tee', () => {
     expect(body.variants).toContainEqual({ id: 18101, colour: 'Black', size: 'M', price: 29.99 });
     expect(body.variants.every((v: { colour: string }) => v.colour in SHIRT_COLOURS)).toBe(true);
     expect(body.previewUrl).toContain('{type}');
+    expect(body.previewUrl).toContain('v=3');
+    expect(body.defaultColours).toMatchObject({ track: 'Black', bigcity: 'White', wanderer: 'Dark Grey' });
+    expect(Object.keys(body.defaultColours)).toHaveLength(12);
   });
 });

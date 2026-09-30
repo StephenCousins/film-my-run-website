@@ -470,7 +470,8 @@
     "FOR TRAINING.",
     "LANE 1",
     "FOR RACING."
-   ]
+   ],
+   "shirtColour": "Black"
   },
   {
    "id": "marathon",
@@ -511,7 +512,8 @@
    "shirtLines": [
     "TRUST THE",
     "TRAINING"
-   ]
+   ],
+   "shirtColour": "Navy"
   },
   {
    "id": "parkrun",
@@ -551,7 +553,8 @@
    "shirtLines": [
     "SEE YOU",
     "SATURDAY"
-   ]
+   ],
+   "shirtColour": "Forest"
   },
   {
    "id": "bigcity",
@@ -591,7 +594,8 @@
    "shirtLines": [
     "BEATEN BY",
     "A RHINO"
-   ]
+   ],
+   "shirtColour": "White"
   },
   {
    "id": "fell",
@@ -633,7 +637,8 @@
     "UP IT,",
     "DOWN IT.",
     "DONE."
-   ]
+   ],
+   "shirtColour": "Forest"
   },
   {
    "id": "sky",
@@ -675,7 +680,8 @@
     "ALTITUDE",
     "BEATS",
     "ATTITUDE"
-   ]
+   ],
+   "shirtColour": "Navy"
   },
   {
    "id": "hundred",
@@ -715,7 +721,8 @@
    "shirtLines": [
     "TWO SUNRISES.",
     "ONE RUN."
-   ]
+   ],
+   "shirtColour": "Black"
   },
   {
    "id": "wanderer",
@@ -756,7 +763,8 @@
    "shirtLines": [
     "NOT LOST,",
     "EXPLORING."
-   ]
+   ],
+   "shirtColour": "Dark Grey"
   },
   {
    "id": "backyard",
@@ -797,7 +805,8 @@
    "shirtLines": [
     "GOING THE",
     "EXTRA YARD"
-   ]
+   ],
+   "shirtColour": "Black"
   },
   {
    "id": "lab",
@@ -838,7 +847,8 @@
    "shirtLines": [
     "I'M NOT SLOW,",
     "I'M IN ZONE 2."
-   ]
+   ],
+   "shirtColour": "White"
   },
   {
    "id": "club",
@@ -879,7 +889,8 @@
    "shirtLines": [
     "NO ONE GETS",
     "LEFT BEHIND"
-   ]
+   ],
+   "shirtColour": "Navy"
   },
   {
    "id": "free",
@@ -921,7 +932,8 @@
     "NO WATCH,",
     "NO APP,",
     "NO PROBLEM."
-   ]
+   ],
+   "shirtColour": "Dark Grey"
   }
  ],
  "calibration": {

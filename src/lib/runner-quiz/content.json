@@ -496,7 +496,8 @@
     "FOR RACING."
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2016/06/SDW100-South-Downs-Way-100-00007.jpg",
-   "focus": "55% 40%"
+   "focus": "55% 40%",
+   "shirtColour": "Black"
   },
   {
    "id": "marathon",
@@ -539,7 +540,8 @@
     "TRAINING"
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2015/03/brighton-half-2015.jpg",
-   "focus": "30% 40%"
+   "focus": "30% 40%",
+   "shirtColour": "Navy"
   },
   {
    "id": "parkrun",
@@ -581,7 +583,8 @@
     "SATURDAY"
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2011/10/IMG_2201.jpg",
-   "focus": "60% 50%"
+   "focus": "60% 50%",
+   "shirtColour": "Forest"
   },
   {
    "id": "bigcity",
@@ -623,7 +626,8 @@
     "A RHINO"
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2016/04/Paris-breakfast-run.jpeg",
-   "focus": "50% 40%"
+   "focus": "50% 40%",
+   "shirtColour": "White"
   },
   {
    "id": "fell",
@@ -667,7 +671,8 @@
     "DONE."
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2018/04/Devon-Coast-to-Coast-Ultra-5-1.jpg",
-   "focus": "35% 55%"
+   "focus": "35% 55%",
+   "shirtColour": "Forest"
   },
   {
    "id": "sky",
@@ -711,7 +716,8 @@
     "ATTITUDE"
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2017/06/2017-05-13-transvulcania-ultra-2017-pico-piedrallana-km-44-ultra-y-km-20-3.jpeg",
-   "focus": "60% 50%"
+   "focus": "60% 50%",
+   "shirtColour": "Navy"
   },
   {
    "id": "hundred",
@@ -753,7 +759,8 @@
     "ONE RUN."
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2020/03/transgrancanaria2020-18776-1-scaled.jpg",
-   "focus": "50% 55%"
+   "focus": "50% 55%",
+   "shirtColour": "Black"
   },
   {
    "id": "wanderer",
@@ -796,7 +803,8 @@
     "EXPLORING."
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2020/03/IMG_1220-scaled.jpg",
-   "focus": "50% 50%"
+   "focus": "50% 50%",
+   "shirtColour": "Dark Grey"
   },
   {
    "id": "backyard",
@@ -839,7 +847,8 @@
     "EXTRA YARD"
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2017/11/CENTR-17-WW50-lap2-193.jpg",
-   "focus": "45% 50%"
+   "focus": "45% 50%",
+   "shirtColour": "Black"
   },
   {
    "id": "lab",
@@ -882,7 +891,8 @@
     "I'M IN ZONE 2."
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2015/03/Brighton-Half-Marathon-2015.jpg",
-   "focus": "50% 10%"
+   "focus": "50% 10%",
+   "shirtColour": "White"
   },
   {
    "id": "club",
@@ -925,7 +935,8 @@
     "LEFT BEHIND"
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2016/11/Bright10-2016-10-Mile-Road-Race-Runbase-Brighton-1.jpg",
-   "focus": "50% 50%"
+   "focus": "50% 50%",
+   "shirtColour": "Navy"
   },
   {
    "id": "free",
@@ -969,7 +980,8 @@
     "NO PROBLEM."
    ],
    "image": "https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2023/03/IMG_4044.jpg",
-   "focus": "55% 60%"
+   "focus": "55% 60%",
+   "shirtColour": "Dark Grey"
   }
  ],
  "calibration": {

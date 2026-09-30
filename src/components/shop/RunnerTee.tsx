@@ -24,16 +24,17 @@ const Breadcrumb = ({ name }: { name: string }) => (
 );
 
 /** The personalised shirt for one quiz result, or all twelve fronts when there is no result. */
-export default function RunnerTee({ typeId, scores }: { typeId: string | null; scores: Scores | null }) {
+export default function RunnerTee({ typeId, scores, colour }: { typeId: string | null; scores: Scores | null; colour?: ShirtColour }) {
   const type = typeById(typeId);
   if (!type || !scores) return <AllTypes />;
-  return <Personalised typeId={type.id} scores={scores} />;
+  return <Personalised typeId={type.id} scores={scores} colour={colour} />;
 }
 
-function Personalised({ typeId, scores }: { typeId: string; scores: Scores }) {
+function Personalised({ typeId, scores, colour: urlColour }: { typeId: string; scores: Scores; colour?: ShirtColour }) {
   const type = typeById(typeId)!;
   const second = useMemo(() => rankTypes(scores).find((t) => t.id !== type.id)!, [scores, type.id]);
-  const [colour, setColour] = useState<ShirtColour>(runnerTee.colours[0] as ShirtColour);
+  // A colour in the URL wins; otherwise the type's own shirt colour.
+  const [colour, setColour] = useState<ShirtColour>(urlColour ?? (type.shirtColour as ShirtColour));
   const [size, setSize] = useState<string | null>(null);
   const [added, setAdded] = useState(false);
 

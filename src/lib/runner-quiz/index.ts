@@ -36,6 +36,8 @@ export interface QuizType extends QuizPhoto {
   phrases: string[];
   shirt: string;
   shirtLines: string[];
+  /** The shirt colour the Runner Type Tee opens on for this type (a SHIRT_COLOURS name). */
+  shirtColour: string;
 }
 export interface Quiz {
   axes: { id: AxisId; low: string; high: string }[];

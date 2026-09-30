@@ -52,7 +52,10 @@ export function mix(a: string, b: string, t: number): string {
 // DTG must never get semi-transparent ink, so faded text is ink pre-mixed with the shirt colour.
 function palette(colour: ShirtColour) {
   const ink = inkFor(colour);
-  return { ink, tint: (t: number) => mix(ink, SHIRT_COLOURS[colour], t) };
+  // Light ink on a dark shirt reads at any strength; dark ink faded towards White turns into a
+  // pale grey, so on White every muted tone keeps at least 55% ink (Stephen, 30 Sep).
+  const strength = (t: number) => (colour === 'White' ? 0.4 + 0.6 * t : t);
+  return { ink, tint: (t: number) => mix(ink, SHIRT_COLOURS[colour], strength(t)) };
 }
 
 const f = (n: number) => n.toFixed(1);
@@ -68,6 +71,7 @@ const fit = (text: string, font: FontName, cap: number, max: number, spacingEm =
 export const FRONT_MAX_WIDTH = PRINT_W * 0.85;
 const FRONT_CAP = 580;
 const FRONT_SPACING = 0.023; // em, as the mock-up's 0.6 at 26
+const NAME_SPACING = 0.25; // em, the type name's wide mono tracking
 
 export function frontArt(t: QuizType, colour: ShirtColour): string {
   const { ink, tint } = palette(colour);
@@ -76,8 +80,10 @@ export function frontArt(t: QuizType, colour: ShirtColour): string {
   const gap = size * 1.12;
   // The rule and the type name keep their proportion to the phrase (the old 410 px phrase had a 126 px name).
   const k = size / 410;
-  const nameSize = 126 * k;
-  const blockH = size * 0.72 + (lines.length - 1) * gap + size * 0.9 + 94 * k + 251 * k;
+  // The type name at twice its first size (Stephen, 30 Sep), shrunk only if a long name would outgrow the phrase.
+  const name = upperName(t.name);
+  const nameSize = Math.min(252 * k, fit(name, 'JetBrainsMono-Medium', 1e9, FRONT_MAX_WIDTH, NAME_SPACING));
+  const blockH = size * 0.72 + (lines.length - 1) * gap + size * 0.9 + 110 * k + nameSize * 1.15;
   // Centre the block on the chest, 30% of the way down the print area.
   const top = Math.max(160, PRINT_H * 0.3 - blockH / 2) + size * 0.72;
   const cx = PRINT_W / 2;
@@ -87,10 +93,10 @@ export function frontArt(t: QuizType, colour: ShirtColour): string {
         `<text x="${cx}" y="${f(top + i * gap)}" text-anchor="middle" ${FONT['SpaceGrotesk-Bold']} font-size="${f(size)}" letter-spacing="${f(size * FRONT_SPACING)}" fill="${ink}">${esc(l)}</text>`
     )
     .join('');
-  const y = top + (lines.length - 1) * gap + size * 0.9 + 94 * k;
+  const y = top + (lines.length - 1) * gap + size * 0.9 + 110 * k;
   return svg(
-    `${text}<line x1="${f(cx - 250 * k)}" x2="${f(cx + 250 * k)}" y1="${f(y)}" y2="${f(y)}" stroke="${t.colour}" stroke-width="${f(40 * k)}"/>` +
-      `<text x="${cx}" y="${f(y + 251 * k)}" text-anchor="middle" ${FONT['JetBrainsMono-Medium']} font-size="${f(nameSize)}" letter-spacing="${f(31 * k)}" fill="${tint(0.75)}">${esc(upperName(t.name))}</text>`
+    `${text}<line x1="${f(cx - 420 * k)}" x2="${f(cx + 420 * k)}" y1="${f(y)}" y2="${f(y)}" stroke="${t.colour}" stroke-width="${f(60 * k)}"/>` +
+      `<text x="${cx}" y="${f(y + 60 * k + nameSize * 1.05)}" text-anchor="middle" ${FONT['JetBrainsMono-Medium']} font-size="${f(nameSize)}" letter-spacing="${f(nameSize * NAME_SPACING)}" fill="${tint(0.75)}">${esc(name)}</text>`
   );
 }
 
@@ -115,20 +121,25 @@ export function formatDate(date: Date): string {
 /**
  * Back: logo, RUNNER DNA, the type name, four scales with the buyer's scores, their second
  * type and the date. Laid out in small units, then scaled so the block spans about 80% of the
- * print width and fills its height (Stephen, 30 Sep: bigger).
+ * print width. Stephen, 30 Sep: the small text about twice the size, the block starting about
+ * 3 in down and spread to fill the print area.
  */
-const BACK_K = 14.5; // px per unit: 290 units tall fits the 4203 px print area
+const BACK_K = 12; // px per unit: the print area is 309 × 350 units
 const BACK_CX = 200; // the unit x that lands on the print's centre line
-const ROW_W = 170; // the scale bar
-const NUM_W = textWidth('100', 'JetBrainsMono-Bold', 11); // the widest score, hanging right of the bar
+const ROW_W = 190; // the scale bar
+const LABEL = 17; // TRAIL, ROAD and the rest
+const NUM = 22; // the score
+const NUM_W = textWidth('100', 'JetBrainsMono-Bold', NUM); // the widest score, hanging right of the bar
 // Bar plus score, centred on the print as one row.
-const ROW_X0 = BACK_CX - (ROW_W + 12 + NUM_W) / 2;
-// Logo at 20% of the print width, top centre.
+const ROW_X0 = BACK_CX - (ROW_W + 14 + NUM_W) / 2;
+// Logo at 20% of the print width, top centre of the block, the block 8% down the print area.
 const LOGO_W = (PRINT_W * 0.2) / BACK_K;
 const LOGO_H = LOGO_W / 2.2523; // logo PNGs are 1000 × 444
-const LOGO_Y = 8;
-// Below the logo: RUNNER DNA at +16, the type name at +42, the first scale at +80, then every 40.
-const ROWS_Y = 80;
+const LOGO_Y = (PRINT_H * 0.08) / BACK_K;
+// Below the logo: RUNNER DNA at +20, the type name at +48, the scales from +96 every 46,
+// the streak and the address below them.
+const ROWS_Y = 96;
+const ROW_GAP = 46;
 
 export function backArt(
   t: QuizType,
@@ -141,9 +152,11 @@ export function backArt(
   const { ink, tint } = palette(colour);
   const mono = FONT['JetBrainsMono-Medium'];
   const name = upperName(t.name);
-  const nameSize = fit(name, 'SpaceGrotesk-Bold', 22, 225);
+  const nameSize = fit(name, 'SpaceGrotesk-Bold', 28, 235);
   const streak = `with a streak of ${second.name}`;
-  const streakSize = fit(streak, 'Inter-Regular', 10.5, 230);
+  const streakSize = fit(streak, 'Inter-Regular', 20, 225);
+  const foot = `FILMMYRUN.COM/QUIZ · ${formatDate(date)}`;
+  const footSize = fit(foot, 'JetBrainsMono-Medium', 15, 225, 1.5 / 15);
   // Last guard before print: only four whole numbers 0-100 reach the shirt.
   if (!Array.isArray(scores) || scores.length !== 4 || !scores.every((v) => Number.isInteger(v) && v >= 0 && v <= 100)) {
     throw new Error('Invalid scores for shirt art');
@@ -151,16 +164,16 @@ export function backArt(
   const top = LOGO_Y + LOGO_H; // everything below the logo hangs from here
   const rows = LABELS.map(([lo, hi], k) => {
     const s = scores[k];
-    const y = top + ROWS_Y + k * 40,
+    const y = top + ROWS_Y + k * ROW_GAP,
       x0 = ROW_X0,
       w = ROW_W,
       x = x0 + (w * s) / 100;
     return (
-      `<text x="${f(x0)}" y="${f(y - 10)}" ${mono} font-size="8.5" letter-spacing="1" fill="${tint(0.7)}">${lo}</text>` +
-      `<text x="${f(x0 + w)}" y="${f(y - 10)}" text-anchor="end" ${mono} font-size="8.5" letter-spacing="1" fill="${tint(0.7)}">${hi}</text>` +
-      `<rect x="${f(x0)}" y="${f(y - 2)}" width="${w}" height="4" rx="2" fill="${tint(0.25)}"/>` +
-      `<circle cx="${f(x)}" cy="${f(y)}" r="7" fill="${t.colour}" stroke="${ink}" stroke-width="1.5"/>` +
-      `<text x="${f(x0 + w + 12)}" y="${f(y + 4)}" ${FONT['JetBrainsMono-Bold']} font-size="11" fill="${ink}">${s}</text>`
+      `<text x="${f(x0)}" y="${f(y - 18)}" ${mono} font-size="${LABEL}" letter-spacing="1.5" fill="${tint(0.7)}">${lo}</text>` +
+      `<text x="${f(x0 + w)}" y="${f(y - 18)}" text-anchor="end" ${mono} font-size="${LABEL}" letter-spacing="1.5" fill="${tint(0.7)}">${hi}</text>` +
+      `<rect x="${f(x0)}" y="${f(y - 3.5)}" width="${w}" height="7" rx="3.5" fill="${tint(0.25)}"/>` +
+      `<circle cx="${f(x)}" cy="${f(y)}" r="10" fill="${t.colour}" stroke="${ink}" stroke-width="2.5"/>` +
+      `<text x="${f(x0 + w + 14)}" y="${f(y + 8)}" ${FONT['JetBrainsMono-Bold']} font-size="${NUM}" fill="${ink}">${s}</text>`
     );
   }).join('');
   const tx = PRINT_W / 2 - BACK_CX * BACK_K;
@@ -169,11 +182,11 @@ export function backArt(
   return svg(
     `<g transform="translate(${f(tx)} 0) scale(${BACK_K})">` +
       `<image href="${esc(logoHref)}" xlink:href="${esc(logoHref)}" x="${f(BACK_CX - LOGO_W / 2)}" y="${LOGO_Y}" width="${f(LOGO_W)}" height="${f(LOGO_H)}"/>` +
-      text(16, `${mono} font-size="9" letter-spacing="3" fill="${tint(0.75)}"`, 'RUNNER DNA') +
-      text(42, `${FONT['SpaceGrotesk-Bold']} font-size="${f(nameSize)}" fill="${ink}"`, esc(name)) +
+      text(20, `${mono} font-size="16" letter-spacing="5" fill="${tint(0.75)}"`, 'RUNNER DNA') +
+      text(48, `${FONT['SpaceGrotesk-Bold']} font-size="${f(nameSize)}" fill="${ink}"`, esc(name)) +
       rows +
-      text(ROWS_Y + 3 * 40 + 32, `${FONT['Inter-Regular']} font-size="${f(streakSize)}" fill="${tint(0.85)}"`, esc(streak)) +
-      text(ROWS_Y + 3 * 40 + 50, `${mono} font-size="8" letter-spacing="1.5" fill="${tint(0.6)}"`, `FILMMYRUN.COM/QUIZ · ${formatDate(date)}`) +
+      text(ROWS_Y + 3 * ROW_GAP + 34, `${FONT['Inter-Regular']} font-size="${f(streakSize)}" fill="${tint(0.85)}"`, esc(streak)) +
+      text(ROWS_Y + 3 * ROW_GAP + 56, `${mono} font-size="${f(footSize)}" letter-spacing="1.5" fill="${tint(0.6)}"`, foot) +
       `</g>`
   );
 }

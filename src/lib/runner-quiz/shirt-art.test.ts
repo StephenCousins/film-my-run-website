@@ -84,6 +84,28 @@ describe('shirt art', () => {
   });
 });
 
+describe('shirt colours', () => {
+  it('every type opens on one of the five shirt colours', () => {
+    for (const t of QUIZ.types) expect(Object.keys(SHIRT_COLOURS)).toContain(t.shirtColour);
+  });
+
+  // WCAG relative luminance contrast, so the muted tones stay legible on the White shirt.
+  const lum = (hex: string) => {
+    const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4));
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const contrast = (a: string, b: string) => {
+    const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+    return (x + 0.05) / (y + 0.05);
+  };
+  it('the faintest text on the White back still has 4.5:1 contrast', () => {
+    const t = typeById('lab')!;
+    const svg = backArt(t, t, [1, 2, 3, 4], DATE, 'White', 'logo.png');
+    const fills = [...svg.matchAll(/<text[^>]*fill="(#[0-9a-f]{6})"/g)].map((m) => m[1]);
+    for (const c of fills) expect(contrast(c, SHIRT_COLOURS.White), c).toBeGreaterThanOrEqual(4.5);
+  });
+});
+
 describe('renderPng', () => {
   it('renders a print-size PNG with ink on it and nothing at the edges', async () => {
     const png = await renderPng(frontArt(typeById('track')!, 'White'));

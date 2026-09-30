@@ -5,7 +5,9 @@ import { runnerTee } from '@/lib/shop/runner-tee';
 import { formatPrice } from '@/lib/shop';
 import '@/styles/runner-quiz-fonts.css';
 
-const preview = teeMock(SHIRT_COLOURS.Forest, frontArt(typeById('fell')!, 'Forest'));
+const fell = typeById('fell')!;
+const fellColour = fell.shirtColour as keyof typeof SHIRT_COLOURS;
+const preview = teeMock(SHIRT_COLOURS[fellColour], frontArt(fell, fellColour));
 
 /**
  * The Runner Type Tee as a card in the shop grid. It has no page of its own without a quiz
