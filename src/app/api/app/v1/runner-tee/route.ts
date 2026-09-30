@@ -14,7 +14,7 @@ export const GET = withAppApi(
       colours: runnerTee.colours.map((name) => ({ name, hex: SHIRT_COLOURS[name as ShirtColour] })),
       variants: runnerTee.variants.map((v) => ({ id: v.id, colour: v.colour, size: v.size, price: v.price })),
       previewUrl:
-        'https://filmmyrun.com/api/shop/runner-tee/preview?type={type}&s={scores}&colour={colour}&side={side}&w={w}',
+        'https://filmmyrun.com/api/shop/runner-tee/preview?type={type}&s={scores}&colour={colour}&side={side}&w={w}&v=2',
     }),
   { limit: 60, cacheControl: 'public, max-age=3600, stale-while-revalidate=86400' }
 );
