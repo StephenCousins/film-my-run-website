@@ -80,7 +80,7 @@ describe('shirt art', () => {
   it('teeMock places the art on the garment', () => {
     const mock = teeMock('#2e4636', frontArt(typeById('fell')!, 'Forest'));
     expect(mock).toContain('fill="#2e4636"');
-    expect(mock).toMatch(/<svg x="\d+" y="\d+" width="\d+" height="[\d.]+" xmlns/);
+    expect(mock).toMatch(/<svg x="[\d.]+" y="[\d.]+" width="[\d.]+" height="[\d.]+" xmlns/);
   });
 });
 
