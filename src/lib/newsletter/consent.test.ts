@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { NextRequest } from 'next/server';
-import { memoryStore, subscribe, subscribeAfterPayment, unsubscribe, unsubscribeByToken, isSubscribed, SOURCES, type Subscriber } from './consent';
+import { memoryStore, subscribe, subscribeAfterPayment, unsubscribe, unsubscribeByToken, isSubscribed, footerSubscribe, confirmToken, checkConfirmToken, SOURCES, type Subscriber } from './consent';
 import { handleApple, handleRequestCode, handleVerify, resetMemberLimits, type Member, type MemberDeps } from '@/lib/members/handlers';
 import { handleGetNewsletter, handlePostNewsletter, type MemberNewsletterDeps } from './member';
 
@@ -207,5 +207,38 @@ describe('/api/members/newsletter', () => {
   });
   it('400 without a boolean', async () => {
     expect((await handlePostNewsletter(req({ subscribe: 'yes' }), deps(jo).d)).status).toBe(400);
+  });
+});
+
+describe('footer form double opt-in', () => {
+  it('a new address subscribes at once; an active one is already there', async () => {
+    const s = memoryStore();
+    const sent: string[] = [];
+    const send = async (e: string) => void sent.push(e);
+    expect(await footerSubscribe(s, 'New@x.com', send, T0)).toBe('created');
+    expect(s.rows[0]).toMatchObject({ email: 'new@x.com', basis: 'consent', source: 'signup-web' });
+    expect(await footerSubscribe(s, 'new@x.com', send, T0)).toBe('already');
+    expect(sent).toEqual([]);
+  });
+
+  it('an address that unsubscribed gets a confirmation email and stays unsubscribed until it clicks', async () => {
+    const s = memoryStore([unsubscribed('jo@example.com')]);
+    const sent: string[] = [];
+    expect(await footerSubscribe(s, 'Jo@Example.com', async (e) => void sent.push(e), T1)).toBe('confirm-sent');
+    expect(sent).toEqual(['jo@example.com']);
+    expect(s.rows[0].status).toBe('unsubscribed');
+    // The link: consent, source footer-confirmed.
+    expect(await subscribe(s, 'jo@example.com', 'consent', 'footer-confirmed', T1)).toBe('resubscribed');
+    expect(s.rows[0]).toMatchObject({ status: 'active', basis: 'consent', source: 'footer-confirmed' });
+  });
+
+  it('confirmation tokens: right email and unexpired only', () => {
+    const now = Date.UTC(2026, 8, 30);
+    const t = confirmToken('Jo@Example.com', 'sekret', now + 1000);
+    expect(checkConfirmToken('jo@example.com', t, 'sekret', now)).toBe(true);
+    expect(checkConfirmToken('someone@else.com', t, 'sekret', now)).toBe(false);
+    expect(checkConfirmToken('jo@example.com', t, 'other', now)).toBe(false);
+    expect(checkConfirmToken('jo@example.com', t, 'sekret', now + 2000)).toBe(false);
+    expect(checkConfirmToken('jo@example.com', 'junk', 'sekret', now)).toBe(false);
   });
 });

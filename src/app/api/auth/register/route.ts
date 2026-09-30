@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { hashPassword } from '@/lib/auth';
 import { z } from 'zod';
+import { subscribe } from '@/lib/newsletter/consent';
+import { liveNewsletterStore } from '@/lib/newsletter/store';
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -13,6 +15,8 @@ const registerSchema = z.object({
     .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
     .regex(/[0-9]/, 'Password must contain at least one number')
     .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
+  // The form's unticked box, ticked: consent.
+  newsletter: z.boolean().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -28,7 +32,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, email, password } = result.data;
+    const { name, email, password, newsletter } = result.data;
 
     // Check if user already exists — use generic message to prevent email enumeration
     const existingUser = await prisma.users.findUnique({
@@ -54,6 +58,12 @@ export async function POST(request: NextRequest) {
         updated_at: new Date(),
       },
     });
+
+    // Only for a new account: an existing email gets the same answer and no subscription, so this
+    // form can't be used to tell whether an address is registered, or to sign someone else up.
+    if (newsletter === true) {
+      await subscribe(liveNewsletterStore, email, 'consent', 'signup-web').catch((e) => console.error('Newsletter at registration failed:', e));
+    }
 
     return NextResponse.json(
       { message: 'If this email is available, your account has been created. Check your email.' },

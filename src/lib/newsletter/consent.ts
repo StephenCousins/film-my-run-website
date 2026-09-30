@@ -9,8 +9,8 @@
 import crypto from 'crypto';
 
 export type Basis = 'consent' | 'soft-opt-in';
-export type Source = 'signup-web' | 'signup-app' | 'checkout' | 'club' | 'prompt';
-export const SOURCES: readonly Source[] = ['signup-web', 'signup-app', 'checkout', 'club', 'prompt'];
+export type Source = 'signup-web' | 'signup-app' | 'checkout' | 'club' | 'prompt' | 'footer-confirmed';
+export const SOURCES: readonly Source[] = ['signup-web', 'signup-app', 'checkout', 'club', 'prompt', 'footer-confirmed'];
 
 export interface Subscriber {
   email: string;
@@ -105,4 +105,41 @@ export async function subscribeAfterPayment(
     console.error('Newsletter soft opt-in failed:', e);
     return 'failed';
   }
+}
+
+/**
+ * The footer form. A new address subscribes at once (consent). An address that unsubscribed is
+ * only brought back after it confirms by email (double opt-in): anyone can type anyone's address
+ * into a form, and an unsubscribe must not be undone by someone else.
+ */
+export async function footerSubscribe(
+  store: NewsletterStore,
+  rawEmail: string,
+  sendConfirm: (email: string) => Promise<unknown>,
+  now = new Date()
+): Promise<SubscribeResult | 'confirm-sent'> {
+  const email = normalise(rawEmail);
+  if (!looksLikeEmail(email)) return 'bad-email';
+  const existing = await store.find(email);
+  if (existing?.status === 'unsubscribed') {
+    await sendConfirm(email);
+    return 'confirm-sent';
+  }
+  return subscribe(store, email, 'consent', 'signup-web', now);
+}
+
+/** A signed, expiring confirmation link for footerSubscribe (no table needed). */
+export function confirmToken(email: string, secret: string, expires: number): string {
+  const sig = crypto.createHmac('sha256', secret).update(`${normalise(email)}|${expires}`).digest('base64url');
+  return `${expires}.${sig}`;
+}
+
+export function checkConfirmToken(email: string, token: string, secret: string, now = Date.now()): boolean {
+  const [exp, sig] = token.split('.');
+  const expires = Number(exp);
+  if (!Number.isFinite(expires) || expires < now || !sig) return false;
+  const want = confirmToken(email, secret, expires).split('.')[1];
+  const a = Buffer.from(sig);
+  const b = Buffer.from(want);
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
 }

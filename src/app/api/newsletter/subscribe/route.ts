@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { subscribe } from '@/lib/newsletter/consent';
+import { footerSubscribe } from '@/lib/newsletter/consent';
+import { sendConfirmation } from '@/lib/newsletter/confirm-email';
 import { liveNewsletterStore } from '@/lib/newsletter/store';
 import { z } from 'zod';
 import { Resend } from 'resend';
@@ -43,8 +44,12 @@ export async function POST(request: NextRequest) {
 
     const { email } = result.data;
 
-    // Typing an address into the form and pressing Subscribe is consent (and may re-subscribe).
-    const outcome = await subscribe(liveNewsletterStore, email, 'consent', 'signup-web');
+    // Typing an address and pressing Subscribe is consent for a new address. One that unsubscribed
+    // must confirm by email first (double opt-in).
+    const outcome = await footerSubscribe(liveNewsletterStore, email, sendConfirmation);
+    if (outcome === 'confirm-sent') {
+      return NextResponse.json({ ok: true, message: 'Check your inbox: click the link in our email to confirm.' });
+    }
     if (outcome === 'already') return NextResponse.json({ ok: true, message: "You're already subscribed." });
 
     // Send welcome email via Resend (non-blocking — don't fail the subscription if email fails)

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import NewsletterCheckbox from '@/components/newsletter/NewsletterCheckbox';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -27,6 +28,8 @@ export default function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  // Unticked: creating an account is not a reason to be emailed (PECR consent).
+  const [newsletter, setNewsletter] = useState(false);
 
   const allRequirementsMet = passwordRequirements.every((req) =>
     req.test(password)
@@ -47,7 +50,7 @@ export default function RegisterForm() {
       const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, newsletter }),
       });
 
       const data = await response.json();
@@ -242,6 +245,8 @@ export default function RegisterForm() {
               </div>
             )}
           </div>
+
+          <NewsletterCheckbox className="mt-5" checked={newsletter} onChange={setNewsletter} label="Send me the Film My Run newsletter" />
 
           <button
             type="submit"

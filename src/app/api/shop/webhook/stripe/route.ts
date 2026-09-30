@@ -40,9 +40,6 @@ export async function POST(request: Request) {
   }
   const address = toPrintifyAddress(ship.name, email, session.customer_details?.phone, ship.address);
 
-  // The basket's newsletter box: soft opt-in, only now the payment has gone through.
-  const optIn = await prisma.orders.findFirst({ where: { stripe_session_id: session.id }, select: { newsletter: true } }).catch(() => null);
-  await subscribeAfterPayment(liveNewsletterStore, { email, paid: session.payment_status === 'paid', optedIn: optIn?.newsletter === true, source: 'checkout' });
   // The event's own time, so a retry prints the same date.
   const paidAt = new Date(event.created * 1000);
 
@@ -94,6 +91,11 @@ export async function POST(request: Request) {
     console.error('Shop fulfilment failed for', session.id, e);
     throw e;
   });
+
+  // The basket's newsletter box: soft opt-in, only now the payment has gone through and the order
+  // is placed. A failed fulfilment throws above, and Stripe's retry comes back through here.
+  const optIn = await prisma.orders.findFirst({ where: { stripe_session_id: session.id }, select: { newsletter: true } }).catch(() => null);
+  await subscribeAfterPayment(liveNewsletterStore, { email, paid: session.payment_status === 'paid', optedIn: optIn?.newsletter === true, source: 'checkout' });
 
   return NextResponse.json({ result });
 }

@@ -60,7 +60,8 @@ export async function POST(request: Request) {
         // The join page's newsletter box: soft opt-in, only once the first payment has gone through.
         await subscribeAfterPayment(liveNewsletterStore, {
           email: s.customer_details?.email ?? s.metadata?.email,
-          paid: s.payment_status === 'paid',
+          // A 100% promotion code comes through as no_payment_required: still a sale.
+          paid: s.payment_status === 'paid' || s.payment_status === 'no_payment_required',
           optedIn: s.metadata?.newsletter === '1',
           source: 'club',
         });
