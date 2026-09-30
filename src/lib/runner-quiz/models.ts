@@ -5,6 +5,8 @@
 import { QUIZ } from './index';
 
 export const MODELS_BASE = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/quiz-shirts/models/v4';
+/** R2 serves these for a year: bump when a photo is replaced in place (Track Purist phrase, 30 Sep 2026). */
+const REV = '?r=2';
 
 /** "Dark Grey" → "dark-grey", as the files are named. */
 const slug = (colour: string) => colour.toLowerCase().replace(/\s+/g, '-');
@@ -16,10 +18,10 @@ const slug = (colour: string) => colour.toLowerCase().replace(/\s+/g, '-');
 export function modelPhotos(typeId: string, colour?: string): [string, string, string, string] {
   const c = slug(colour ?? QUIZ.types.find((t) => t.id === typeId)?.shirtColour ?? 'Black');
   return [
-    `${MODELS_BASE}/${typeId}-${c}-1.webp`,
-    `${MODELS_BASE}/${typeId}-${c}-2.webp`,
-    `${MODELS_BASE}/${typeId}-${c}-3.webp`,
-    `${MODELS_BASE}/${typeId}-${c}-back.webp`,
+    `${MODELS_BASE}/${typeId}-${c}-1.webp${REV}`,
+    `${MODELS_BASE}/${typeId}-${c}-2.webp${REV}`,
+    `${MODELS_BASE}/${typeId}-${c}-3.webp${REV}`,
+    `${MODELS_BASE}/${typeId}-${c}-back.webp${REV}`,
   ];
 }
 

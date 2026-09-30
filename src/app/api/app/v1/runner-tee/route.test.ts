@@ -22,9 +22,9 @@ describe('GET /api/app/v1/runner-tee', () => {
     expect(Object.keys(body.defaultColours)).toHaveLength(12);
     expect(Object.keys(body.modelPhotos)).toHaveLength(12);
     const v4 = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/quiz-shirts/models/v4';
-    expect(body.modelPhotos.fell['Dark Grey']).toEqual([1, 2, 3, 'back'].map((n) => `${v4}/fell-dark-grey-${n}.webp`));
+    expect(body.modelPhotos.fell['Dark Grey']).toEqual([1, 2, 3, 'back'].map((n) => `${v4}/fell-dark-grey-${n}.webp?r=2`));
     expect(Object.keys(body.modelPhotos.fell).sort()).toEqual(['Black', 'Dark Grey', 'Forest', 'Navy', 'White']);
-    expect(body.modelPhotosDefault.bigcity).toEqual([1, 2, 3, 'back'].map((n) => `${v4}/bigcity-white-${n}.webp`));
+    expect(body.modelPhotosDefault.bigcity).toEqual([1, 2, 3, 'back'].map((n) => `${v4}/bigcity-white-${n}.webp?r=2`));
     expect(Object.keys(body.modelPhotosDefault)).toHaveLength(12);
   });
 });
@@ -33,9 +33,9 @@ describe('chooserPhoto', () => {
   it('alternates the three models by content order, in the default colour', async () => {
     const { chooserPhoto } = await import('@/lib/runner-quiz/models');
     const v4 = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/quiz-shirts/models/v4';
-    expect(chooserPhoto('track')).toBe(`${v4}/track-black-1.webp`);
-    expect(chooserPhoto('marathon')).toBe(`${v4}/marathon-navy-2.webp`);
-    expect(chooserPhoto('parkrun')).toBe(`${v4}/parkrun-forest-3.webp`);
-    expect(chooserPhoto('bigcity')).toBe(`${v4}/bigcity-white-1.webp`);
+    expect(chooserPhoto('track')).toBe(`${v4}/track-black-1.webp?r=2`);
+    expect(chooserPhoto('marathon')).toBe(`${v4}/marathon-navy-2.webp?r=2`);
+    expect(chooserPhoto('parkrun')).toBe(`${v4}/parkrun-forest-3.webp?r=2`);
+    expect(chooserPhoto('bigcity')).toBe(`${v4}/bigcity-white-1.webp?r=2`);
   });
 });
