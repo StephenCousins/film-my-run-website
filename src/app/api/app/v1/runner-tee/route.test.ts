@@ -28,3 +28,14 @@ describe('GET /api/app/v1/runner-tee', () => {
     expect(Object.keys(body.modelPhotosDefault)).toHaveLength(12);
   });
 });
+
+describe('chooserPhoto', () => {
+  it('alternates the three models by content order, in the default colour', async () => {
+    const { chooserPhoto } = await import('@/lib/runner-quiz/models');
+    const v4 = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/quiz-shirts/models/v4';
+    expect(chooserPhoto('track')).toBe(`${v4}/track-black-1.webp`);
+    expect(chooserPhoto('marathon')).toBe(`${v4}/marathon-navy-2.webp`);
+    expect(chooserPhoto('parkrun')).toBe(`${v4}/parkrun-forest-3.webp`);
+    expect(chooserPhoto('bigcity')).toBe(`${v4}/bigcity-white-1.webp`);
+  });
+});

@@ -22,3 +22,12 @@ export function modelPhotos(typeId: string, colour?: string): [string, string, s
     `${MODELS_BASE}/${typeId}-${c}-back.webp`,
   ];
 }
+
+/**
+ * The one model photo shown for a type in a grid: shot 1, 2 or 3 by the type's place in the
+ * quiz content (not display order), in its default colour, so the three models alternate.
+ */
+export function chooserPhoto(typeId: string): string {
+  const i = Math.max(0, QUIZ.types.findIndex((t) => t.id === typeId));
+  return modelPhotos(typeId)[i % 3];
+}

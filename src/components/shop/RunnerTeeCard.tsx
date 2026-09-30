@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { QUIZ } from '@/lib/runner-quiz';
-import { modelPhotos } from '@/lib/runner-quiz/models';
+import { chooserPhoto } from '@/lib/runner-quiz/models';
 import { SHIRT_COLOURS } from '@/lib/runner-quiz/shirt-art';
 import { runnerTee } from '@/lib/shop/runner-tee';
 import { formatPrice } from '@/lib/shop';
@@ -24,7 +24,7 @@ export default function RunnerTeeCard() {
     >
       <div className="relative aspect-square bg-white overflow-hidden">
         <Image
-          src={modelPhotos(type.id)[0]}
+          src={chooserPhoto(type.id)}
           alt={`${type.name} tee: ${type.shirt}`}
           fill
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"

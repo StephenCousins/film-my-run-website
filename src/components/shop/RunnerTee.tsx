@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Check, ChevronRight, ShoppingBag } from 'lucide-react';
 import { QUIZ, typeById, type QuizType, type Scores } from '@/lib/runner-quiz';
-import { modelPhotos } from '@/lib/runner-quiz/models';
+import { chooserPhoto, modelPhotos } from '@/lib/runner-quiz/models';
 import { SHIRT_COLOURS, frontArt, teeBackArt, teeMock, type ShirtColour } from '@/lib/runner-quiz/shirt-art';
 import { useStoredResult, type StoredResult } from '@/lib/runner-quiz/stored';
 import { RUNNER_TEE_SLUG, runnerTee } from '@/lib/shop/runner-tee';
@@ -288,7 +288,7 @@ function Chooser({ personal }: { personal: StoredResult | null }) {
               className={`group rounded-2xl bg-surface-secondary border overflow-hidden transition-transform duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-black/20 ${own ? 'border-brand' : 'border-border'}`}
             >
               <div className="relative aspect-square bg-white">
-                <Image src={modelPhotos(t.id)[0]} alt={`${t.name} tee: ${t.shirt}`} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" className="object-cover" />
+                <Image src={chooserPhoto(t.id)} alt={`${t.name} tee: ${t.shirt}`} fill sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw" className="object-cover" />
                 {own && (
                   <span className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-brand text-[11px] font-semibold uppercase tracking-wider text-black">
                     Your type · {OWN_OFF} off
