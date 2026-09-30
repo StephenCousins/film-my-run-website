@@ -1,4 +1,5 @@
 import { orderForPage } from '@/lib/news/present';
+import { prisma } from '@/lib/db';
 
 export const APP_NEWS_LIMIT = 12;
 const SITE = 'https://filmmyrun.com';
@@ -44,4 +45,16 @@ export function appNewsFeed(rows: StoryRow[], now: Date): AppNewsStory[] {
       url: `${SITE}/news/${s.slug}`,
       topStory: s.topStory === true,
     }));
+}
+
+/** The latest published stories as the app feed (shared by the news route and the daily push). */
+export async function latestPublishedStories(now = new Date()): Promise<AppNewsStory[]> {
+  // The top story can be any story from the last three days, so fetch a little past the 12 shown.
+  const rows = await prisma.news_stories.findMany({
+    where: { status: 'published' },
+    orderBy: { published_at: 'desc' },
+    take: 40,
+    select: { slug: true, title: true, excerpt: true, image_url: true, published_at: true, created_at: true, importance: true },
+  });
+  return appNewsFeed(rows, now);
 }
