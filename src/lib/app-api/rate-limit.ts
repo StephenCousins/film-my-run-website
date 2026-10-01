@@ -11,9 +11,13 @@ const WINDOW_MS = 60_000;
 type Entry = { count: number; resetAt: number };
 const buckets = new Map<string, Entry>();
 
+/**
+ * Railway's edge sets X-Real-IP and appends the client to X-Forwarded-For, so
+ * the LAST entry is the one it saw. The first entry is whatever the caller
+ * sent: keying on it let anyone pick a fresh IP per request.
+ */
 export function clientIp(request: NextRequest): string {
-  const forwarded = request.headers.get('x-forwarded-for');
-  return forwarded?.split(',')[0]?.trim() || request.headers.get('x-real-ip') || 'unknown';
+  return request.headers.get('x-real-ip')?.trim() || request.headers.get('x-forwarded-for')?.split(',').at(-1)?.trim() || 'unknown';
 }
 
 /** Returns the seconds until the window resets when over the limit, else null. */

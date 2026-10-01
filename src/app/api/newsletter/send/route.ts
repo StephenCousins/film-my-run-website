@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { hasBearerSecret } from '@/lib/cron-auth';
 import { prisma } from '@/lib/db';
 import { Resend } from 'resend';
 import { buildNewsletterHtml, wrapWithApprovalBanner, type NewsletterPayload } from '@/lib/newsletter-template';
@@ -6,14 +7,7 @@ import { autoPopulateNewsletter } from '@/lib/newsletter-auto-populate';
 import { newsletterPayloadSchema } from '@/lib/newsletter-payload-schema';
 import crypto from 'crypto';
 
-function verifyAuth(request: NextRequest): boolean {
-  const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret) return false;
-
-  const authHeader = request.headers.get('authorization');
-  const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
-  return bearerToken === cronSecret;
-}
+const verifyAuth = (request: NextRequest) => hasBearerSecret(request);
 
 export async function POST(request: NextRequest) {
   if (!verifyAuth(request)) {

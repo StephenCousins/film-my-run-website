@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { fetchAndStoreArticles } from '@/lib/rss-fetcher';
+import { hasBearerSecret } from '@/lib/cron-auth';
 
 export async function GET(request: Request) {
   // Always require CRON_SECRET — fail if not configured
@@ -9,14 +10,7 @@ export async function GET(request: Request) {
     return NextResponse.json({ error: 'Server misconfigured' }, { status: 500 });
   }
 
-  // Accept secret via Authorization header (preferred) or query param (legacy)
-  const authHeader = request.headers.get('authorization');
-  const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
-  const { searchParams } = new URL(request.url);
-  const querySecret = searchParams.get('secret');
-  const providedSecret = bearerToken || querySecret;
-
-  if (!providedSecret || providedSecret !== cronSecret) {
+  if (!hasBearerSecret(request, cronSecret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

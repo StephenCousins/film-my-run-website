@@ -1,3 +1,4 @@
+import { hasBearerSecret } from '@/lib/cron-auth';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 
@@ -5,11 +6,7 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
   // Bearer token auth
-  const authHeader = request.headers.get('authorization');
-  const token = authHeader?.replace(/^Bearer\s+/i, '');
-  const statsKey = process.env.STATS_KEY;
-
-  if (!statsKey || token !== statsKey) {
+  if (!hasBearerSecret(request, process.env.STATS_KEY)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

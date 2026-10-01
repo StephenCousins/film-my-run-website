@@ -142,6 +142,16 @@ describe('handleVerify', () => {
     expect(right.status).toBe(410);
   });
 
+  it('a burst of parallel guesses gets five tries, so the right code at the end of it is refused', async () => {
+    const f = fakeDeps();
+    await handleRequestCode(post('code', { email: 'a@b.co' }), f.deps);
+    const real = f.sent[0][1];
+    const guesses = [...Array.from({ length: 50 }, (_, i) => String(i).padStart(6, '0')).filter((g) => g !== real), real];
+    const statuses = await Promise.all(guesses.map((code) => handleVerify(post('verify', { email: 'a@b.co', code }), f.deps).then((r) => r.status)));
+    expect(statuses).not.toContain(200);
+    expect(statuses.filter((s) => s === 401)).toHaveLength(4);
+  });
+
   it('answers 410 for an expired code', async () => {
     const f = fakeDeps();
     await handleRequestCode(post('code', { email: 'a@b.co' }), f.deps);

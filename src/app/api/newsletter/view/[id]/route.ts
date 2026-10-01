@@ -16,7 +16,8 @@ export async function GET(
     where: { id: issueId },
   });
 
-  if (!issue) {
+  // Drafts are reviewed through the approval link, not by stepping through ids.
+  if (!issue || issue.status !== 'sent') {
     return NextResponse.json({ error: 'Newsletter not found' }, { status: 404 });
   }
 

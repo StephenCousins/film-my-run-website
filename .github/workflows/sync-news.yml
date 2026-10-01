@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Trigger news sync
         run: |
-          response=$(curl -s -w "\n%{http_code}" "${{ secrets.SITE_URL }}/api/news/sync?secret=${{ secrets.CRON_SECRET }}")
+          response=$(curl -s -w "\n%{http_code}" -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" "${{ secrets.SITE_URL }}/api/news/sync")
           http_code=$(echo "$response" | tail -n1)
           body=$(echo "$response" | sed '$d')
 

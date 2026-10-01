@@ -1,3 +1,4 @@
+import { hasBearerSecret } from '@/lib/cron-auth';
 /**
  * Contrado has no webhooks, so a GitHub cron calls this to ask about every submitted Contrado
  * order; once tracking exists the buyer gets the shipped email. Printify orders arrive via webhook.
@@ -11,8 +12,7 @@ import type { OrderLine } from '@/lib/shop/orders';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
-  const secret = process.env.CRON_SECRET;
-  if (!secret || req.headers.get('authorization') !== `Bearer ${secret}`) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!hasBearerSecret(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   const open = await prisma.orders.findMany({ where: { status: 'submitted', contrado_order_id: { not: null } } });
   const shipped: number[] = [];

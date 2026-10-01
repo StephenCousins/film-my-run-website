@@ -110,11 +110,15 @@ export async function handleVerify(req: NextRequest, deps: MemberDeps): Promise<
   if (!email || !/^\d{6}$/.test(code)) return bad('bad_request', 400);
   const now = deps.now ? deps.now() : Date.now();
 
+  // Counted before the await: counting after it let a burst of parallel guesses all
+  // read the hashes before the first wrong one was recorded.
+  const n = (attempts.get(email) ?? 0) + 1;
+  if (n > MAX_CODE_ATTEMPTS) return bad('expired', 410);
+  attempts.set(email, n);
+
   const hashes = await deps.codeHashes(email, new Date(now));
   if (hashes.length === 0) return bad('expired', 410);
   if (!hashes.includes(hashCode(email, code))) {
-    const n = (attempts.get(email) ?? 0) + 1;
-    attempts.set(email, n);
     if (n >= MAX_CODE_ATTEMPTS) {
       await deps.deleteCodes(email);
       attempts.delete(email);

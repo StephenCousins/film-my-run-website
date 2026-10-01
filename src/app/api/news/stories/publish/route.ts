@@ -1,18 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
+import { hasBearerSecret } from '@/lib/cron-auth';
 
-function authenticate(request: Request): boolean {
-  const cronSecret = process.env.CRON_SECRET;
-  if (!cronSecret) return false;
-
-  const authHeader = request.headers.get('authorization');
-  const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null;
-  const { searchParams } = new URL(request.url);
-  const querySecret = searchParams.get('secret');
-  const provided = bearerToken || querySecret;
-
-  return provided === cronSecret;
-}
+const authenticate = (request: Request) => hasBearerSecret(request);
 
 /**
  * POST /api/news/stories/publish — Bulk publish all drafts for a roundup date

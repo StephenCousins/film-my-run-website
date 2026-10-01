@@ -27,6 +27,6 @@ export async function POST() {
     return NextResponse.json({ url: portal.url });
   } catch (e) {
     console.error('Club portal failed:', e);
-    return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    return NextResponse.json({ error: 'Could not open billing just now. Please try again.' }, { status: 500 });
   }
 }
