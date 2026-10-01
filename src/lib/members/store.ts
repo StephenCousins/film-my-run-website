@@ -1,5 +1,6 @@
 /** Prisma side of member sign-in. `verification_tokens` and `sessions` are NextAuth's unused tables. */
 import bcrypt from 'bcryptjs';
+import { ownTypeOffAvailable } from '@/lib/shop/own-type';
 import { prisma } from '@/lib/db';
 import { subscribe } from '@/lib/newsletter/consent';
 import { liveNewsletterStore } from '@/lib/newsletter/store';
@@ -65,6 +66,7 @@ export const liveMemberDeps: MemberDeps = {
     return toMember(await prisma.users.update({ where: { id: userId }, data: { access_tier: 'PRO', subscription_end: until, updated_at: new Date() }, select: memberSelect }));
   },
   sendCode: sendCodeEmail,
+  ownTypeOff: ownTypeOffAvailable,
   verifyApple: verifyAppleIdentityToken,
   deleteAccount: async (userId) => {
     const u = await prisma.users.findUniqueOrThrow({ where: { id: userId }, select: { email: true, stripe_customer_id: true } });

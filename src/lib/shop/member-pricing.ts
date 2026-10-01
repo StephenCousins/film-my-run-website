@@ -5,10 +5,12 @@
 import { currentMember } from '@/lib/members/current';
 import { memberCheckout } from '@/lib/members/checkout';
 import { memberRate } from './tee-pricing';
+import { ownTypeOffAvailable } from './own-type';
 
+/** `ownTypeOff`: this buyer may still take the £3 own-type discount (signed in, never used). */
 export async function memberPricing(request: Request) {
   const { member, hadBearer, pro } = await currentMember(request);
   const clubCoupon = process.env.STRIPE_CLUB_COUPON;
   const mc = memberCheckout(member, hadBearer, { member: process.env.STRIPE_MEMBER_COUPON, club: clubCoupon }, pro);
-  return { mc, rate: memberRate(mc.discounts, clubCoupon) };
+  return { mc, rate: memberRate(mc.discounts, clubCoupon), ownTypeOff: await ownTypeOffAvailable(member?.id) };
 }

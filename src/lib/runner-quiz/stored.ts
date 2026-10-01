@@ -1,6 +1,6 @@
 'use client';
 /**
- * The visitor's last quiz result, kept in this browser so the shop can show "Your type · £3 off"
+ * The visitor's last quiz result, kept in this browser so the shop can show "Your type" (and £3 off, once, to a signed-in member)
  * and put their Runner DNA on any shirt. Validated on every read (type must match scores).
  */
 import { useEffect, useState } from 'react';

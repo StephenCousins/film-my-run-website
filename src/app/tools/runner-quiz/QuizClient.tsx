@@ -88,7 +88,7 @@ export default function QuizClient({ sharedResult }: { sharedResult?: string }) 
     submittedRef.current = true;
     const r = scoreQuiz(next);
     setOutcome(r);
-    // So the shop can offer your type's shirt at £3 off and put your DNA on any of them.
+    // So the shop can offer your type's shirt at £3 off (once, signed in) and put your DNA on any of them.
     saveResult(r.type.id, r.scores);
     setPhase('checking');
     fetch('/api/runner-quiz/results', {
@@ -283,7 +283,7 @@ function ResultHero({ outcome: { type, scores }, onRetake }: { outcome: Outcome;
             </div>
             <div>
               <p className="font-display text-xl sm:text-2xl font-bold leading-tight mb-1">Get the {type.name} shirt</p>
-              <p className="text-sm text-white/90">Your phrase on the front, your Runner DNA on the back. £3 off, as it<p className="text-sm text-white/90">Your phrase on the front, your Runner DNA on the back.</p>apos;s your type.</p>
+              <p className="text-sm text-white/90">Your phrase on the front, your Runner DNA on the back. £3 off your first one when you&apos;re signed in.</p>
               <p className="mt-3 inline-flex items-center gap-1 text-sm font-bold uppercase tracking-widest">
                 <Shirt className="w-4 h-4" /> Design yours <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </p>

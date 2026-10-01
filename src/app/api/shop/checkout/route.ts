@@ -16,12 +16,14 @@ export async function POST(request: Request) {
   let lines;
   let source: unknown;
   let newsletter = false;
+  // Same rule as GET /api/shop/rate, which the shop pages show prices from.
+  const { mc, rate, ownTypeOff } = await memberPricing(request);
   try {
     const body = await request.json();
     source = body.source;
     // The basket's pre-ticked box. Stored now; the webhook subscribes only once payment succeeds.
     newsletter = body.newsletter === true;
-    lines = buildOrderLines(body.lines);
+    lines = buildOrderLines(body.lines, undefined, { ownTypeOff });
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }
@@ -37,8 +39,6 @@ export async function POST(request: Request) {
     // We still pay the supplier; the buyer does not, over the threshold.
     const shippingPence = shippingToCharge(subtotalPence(lines), supplierShipping);
     const total = subtotalPence(lines) + shippingPence;
-    // Same rule as GET /api/shop/rate, which the shop pages show prices from.
-    const { mc, rate } = await memberPricing(request);
     // With a Runner Type Tee in the basket the member discount is charged as line prices, so no
     // tee goes below its floor (tee-pricing.ts); otherwise it stays Stripe's session coupon.
     const asLines = discountAsLinePrices(lines, rate);

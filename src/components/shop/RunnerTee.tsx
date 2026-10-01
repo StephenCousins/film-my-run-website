@@ -10,7 +10,7 @@ import { useStoredResult, type StoredResult } from '@/lib/runner-quiz/stored';
 import { RUNNER_TEE_SLUG, runnerTee } from '@/lib/shop/runner-tee';
 import { OWN_TYPE_OFF_PENCE, teeListPence, teePayPence } from '@/lib/shop/tee-pricing';
 import { MEMBER_DISCOUNT } from '@/lib/members/price';
-import { useShopRate } from '@/lib/shop/use-rate';
+import { useOwnTypeOff, useShopRate } from '@/lib/shop/use-rate';
 import { addToBasket } from '@/lib/shop/basket';
 import { arrives } from '@/lib/shop/delivery';
 import { useAuth } from '@/contexts/AuthContext';
@@ -73,7 +73,11 @@ function Product({ design, personal, urlColour }: { design: QuizType; personal: 
   // The server's answer (same rule as checkout); list price until it arrives.
   const serverRate = useShopRate();
   const rate = serverRate ?? 0;
-  const own = personal?.type.id === design.id;
+  // Your own type is £3 off once per member account, signed in only (own-type.ts): `own` is
+  // when this page's price takes it, `ownType` just that the design is your type.
+  const ownType = personal?.type.id === design.id;
+  const ownTypeOff = useOwnTypeOff();
+  const own = ownType && ownTypeOff;
 
   const sizes = runnerTee.variants.filter((v) => v.colour === colour).map((v) => v.size!);
   const chosen = size && sizes.includes(size) ? size : null;
@@ -81,7 +85,7 @@ function Product({ design, personal, urlColour }: { design: QuizType; personal: 
   const variantPence = Math.round((variant ?? runnerTee.variants.find((v) => v.colour === colour)!).price * 100);
   const list = teeListPence(variantPence, own);
   const pay = teePayPence(variantPence, own, rate);
-  const memberPay = teePayPence(variantPence, own, MEMBER_DISCOUNT);
+  const memberPay = teePayPence(variantPence, ownType, MEMBER_DISCOUNT);
 
   // The print date is the day the order is paid; the preview shows today.
   const backPrint = useMemo(
@@ -170,7 +174,7 @@ function Product({ design, personal, urlColour }: { design: QuizType; personal: 
 
         <div>
           <p className="text-xs font-semibold uppercase tracking-wider text-brand mb-3">
-            {own ? `Your type · ${OWN_OFF} off` : personal ? 'With your Runner DNA on the back' : 'Runner Type Tee'}
+            {own ? `Your type · ${OWN_OFF} off` : ownType ? 'Your type' : personal ? 'With your Runner DNA on the back' : 'Runner Type Tee'}
           </p>
           <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground leading-tight uppercase">
             {design.shirtLines.map((l) => (
@@ -180,7 +184,7 @@ function Product({ design, personal, urlColour }: { design: QuizType; personal: 
           <p className="text-secondary mt-2">
             {design.name} tee.{' '}
             {personal
-              ? own
+              ? ownType
                 ? 'Your own type, with your Runner DNA on the back.'
                 : `Your Runner DNA on the back, marked "My type: ${personal.type.name}".`
               : `On the back: "${design.mantra}"`}{' '}
@@ -211,7 +215,7 @@ function Product({ design, personal, urlColour }: { design: QuizType; personal: 
             {!personal && (
               <p className="text-sm text-secondary mt-1">
                 <Link href="/tools/runner-quiz" className="text-brand hover:underline">Take the 2-minute quiz</Link> for your own Runner DNA on the
-                back, and {OWN_OFF} off the shirt of your type.
+                back, and {OWN_OFF} off your first shirt of your type when you&apos;re signed in.
               </p>
             )}
             {list !== pay && pay === variantPence - 500 && (
@@ -303,12 +307,12 @@ function Chooser({ personal }: { personal: StoredResult | null }) {
         <p className="text-lg text-secondary mt-3">Twelve runner types, twelve phrases. Pick any of them.</p>
         {personal ? (
           <p className="text-secondary mt-2">
-            Your Runner DNA goes on the back of whichever you choose, and your own type, {personal.type.name}, is {OWN_OFF} off.
+            Your Runner DNA goes on the back of whichever you choose, and your first {personal.type.name} shirt is {OWN_OFF} off when you&apos;re signed in.
           </p>
         ) : (
           <p className="text-secondary mt-2">
             <Link href="/tools/runner-quiz" className="text-brand font-semibold hover:underline">Take the 2-minute quiz</Link> to put your own Runner DNA
-            on the back, and get {OWN_OFF} off the shirt of your type.
+            on the back, and get {OWN_OFF} off your first shirt of your type when you&apos;re signed in.
           </p>
         )}
       </div>

@@ -168,6 +168,15 @@ describe('handleVerify', () => {
 });
 
 describe('handleMe and handleSignOut', () => {
+  it("tells the app whether the account may still take the £3 own-type discount", async () => {
+    const f = fakeDeps();
+    const { token } = await signIn(f);
+    f.deps.ownTypeOff = async () => false;
+    expect((await (await handleMe(get('me', { authorization: `Bearer ${token}` }), f.deps)).json()).member.ownTypeOff).toBe(false);
+    f.deps.ownTypeOff = async () => true;
+    expect((await (await handleMe(get('me', { authorization: `Bearer ${token}` }), f.deps)).json()).member.ownTypeOff).toBe(true);
+  });
+
   it('returns the member for a live token and 401 otherwise', async () => {
     const f = fakeDeps();
     const { token } = await signIn(f);

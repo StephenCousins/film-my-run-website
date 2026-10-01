@@ -44,6 +44,8 @@ export type MemberDeps = {
    * link, removes the account with its sessions and sign-in links.
    */
   deleteAccount?: (userId: number) => Promise<void>;
+  /** Whether this account may still take the shop's £3 own-type discount (lib/shop/own-type.ts). */
+  ownTypeOff?: (userId: number) => Promise<boolean>;
   /** The newsletter box on the sign-in form, ticked: subscribe with consent. */
   subscribeNewsletter?: (email: string, source: 'signup-web' | 'signup-app') => Promise<unknown>;
   now?: () => number;
@@ -69,6 +71,11 @@ export type AppleClaims = { sub: string; email: string };
 const requests = new Map<string, number[]>();
 const attempts = new Map<string, number>();
 export function resetMemberLimits() { requests.clear(); attempts.clear(); }
+
+/** The member as the app sees it: plus `ownTypeOff`, so its shop shows the £3 only when checkout will take it. */
+async function forApp(member: Member, deps: MemberDeps): Promise<Member & { ownTypeOff?: boolean }> {
+  return deps.ownTypeOff ? { ...member, ownTypeOff: await deps.ownTypeOff(member.id) } : member;
+}
 
 const json = (body: unknown, status = 200, headers?: Record<string, string>) => NextResponse.json(body, { status, headers });
 const bad = (error: string, status: number) => json({ ok: false, error }, status);
@@ -134,7 +141,7 @@ export async function handleVerify(req: NextRequest, deps: MemberDeps): Promise<
   await deps.createSession(member.id, token, new Date(now + TOKEN_TTL_MS));
   await deps.attachGuestOrders(member.id, email);
   await maybeSubscribe(body, email, deps);
-  return json({ ok: true, token, member });
+  return json({ ok: true, token, member: await forApp(member, deps) });
 }
 
 /**
@@ -163,7 +170,7 @@ export async function handleApple(req: NextRequest, deps: MemberDeps): Promise<R
   await deps.createSession(member.id, token, new Date(now + TOKEN_TTL_MS));
   await deps.attachGuestOrders(member.id, member.email.toLowerCase());
   await maybeSubscribe(body, member.email, deps);
-  return json({ ok: true, token, member: name && !member.name ? { ...member, name } : member });
+  return json({ ok: true, token, member: await forApp(name && !member.name ? { ...member, name } : member, deps) });
 }
 
 /** Member from `Authorization: Bearer <token>`, else null. */
@@ -178,7 +185,7 @@ export async function memberFromBearer(req: Request, deps: Pick<MemberDeps, 'mem
 /** GET auth/me → { ok, member } or 401. */
 export async function handleMe(req: NextRequest, deps: MemberDeps): Promise<Response> {
   const member = await memberFromBearer(req, deps);
-  return member ? json({ ok: true, member }) : bad('signed_out', 401);
+  return member ? json({ ok: true, member: await forApp(member, deps) }) : bad('signed_out', 401);
 }
 
 /**
@@ -194,7 +201,7 @@ export async function handlePro(req: NextRequest, deps: MemberDeps & { debugIds?
   const now = deps.now ? deps.now() : Date.now();
   const proof = checkProHeader(req.headers.get('X-FMR-Pro'), installId, { debugIds: deps.debugIds, now });
   if (!proof.ok) return bad('Pro required', 403);
-  return json({ ok: true, member: await deps.setPro(member.id, new Date(proof.expiresDate)) });
+  return json({ ok: true, member: await forApp(await deps.setPro(member.id, new Date(proof.expiresDate)), deps) });
 }
 
 /** POST auth/delete → { ok }. The bearer's account, gone for good; 401 when signed out. */

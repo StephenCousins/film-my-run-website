@@ -49,15 +49,17 @@ describe('Runner Type Tee prices, size M (£29.99, floor £24.99)', () => {
 });
 
 describe('a mixed basket', () => {
+  // A signed-in member who hasn't had their own-type £3 yet.
   const basket = buildOrderLines([
     tee('fell', fell),
     tee('lab'),
     { slug: 'bonus-miles', variantId: 18100, quantity: 2 },
-  ]);
+  ], undefined, { ownTypeOff: true });
 
-  it('a guest pays list prices, own type £3 off', () => {
-    expect(discountAsLinePrices(basket, GUEST)).toBe(false);
-    expect(payPence(basket, GUEST)).toBe(2699 + 2999 + 2 * 2999);
+  it('a guest pays list prices: the own-type £3 needs an account', () => {
+    const guest = buildOrderLines([tee('fell', fell), tee('lab'), { slug: 'bonus-miles', variantId: 18100, quantity: 2 }]);
+    expect(discountAsLinePrices(guest, GUEST)).toBe(false);
+    expect(payPence(guest, GUEST)).toBe(2999 + 2999 + 2 * 2999);
   });
 
   it('a member: tees floored, other products at exactly 10% as before', () => {

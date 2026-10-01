@@ -39,9 +39,18 @@ describe('cleanBasket', () => {
 });
 
 describe('buildOrderLines with a runner tee', () => {
-  it("an old line (personal, no design) is the buyer's own type: £3 off, priced from the catalogue", () => {
-    const [line] = buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: String(blackM.id), quantity: 1, personal, price: 1 } as never]);
-    expect(line).toMatchObject({ slug: RUNNER_TEE_SLUG, name: 'Runner Type Tee: Fell Runner', variantLabel: 'Black / M', unitPence: 2699, supplier: 'printify', design: 'fell', personal });
+  it("an old line (personal, no design) is the buyer's own type: £3 off for an eligible member, priced from the catalogue", () => {
+    const [line] = buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: String(blackM.id), quantity: 1, personal, price: 1 } as never], undefined, { ownTypeOff: true });
+    expect(line).toMatchObject({ slug: RUNNER_TEE_SLUG, name: 'Runner Type Tee: Fell Runner', variantLabel: 'Black / M', unitPence: 2699, supplier: 'printify', design: 'fell', personal, ownTypeOff: true });
+    // A guest, or a member who has had it, pays the list price.
+    expect(buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, personal }])[0]).toMatchObject({ unitPence: 2999 });
+  });
+  it('the £3 goes on one tee only: a line of three is split into one at £3 off and two at list', () => {
+    const out = buildOrderLines([
+      { slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 3, design: 'fell', personal },
+      { slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, design: 'fell', personal },
+    ], undefined, { ownTypeOff: true });
+    expect(out.map((l) => [l.quantity, l.unitPence, !!l.ownTypeOff])).toEqual([[1, 2699, true], [2, 2999, false], [1, 2999, false]]);
   });
   it('any design, with or without a quiz result; only your own type is £3 off', () => {
     const [other] = buildOrderLines([{ slug: RUNNER_TEE_SLUG, variantId: blackM.id, quantity: 1, design: 'lab', personal }]);

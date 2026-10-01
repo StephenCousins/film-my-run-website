@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { Minus, Plus, Trash2 } from 'lucide-react';
 import { shopItems } from '@/lib/shop';
 import { useBasket } from '@/lib/shop/basket';
-import { buildOrderLines, variantLabel, toFreeShipping, subtotalPence, gbp } from '@/lib/shop/orders';
+import { buildOrderLines, isOwnTypeTee, variantLabel, toFreeShipping, subtotalPence, gbp } from '@/lib/shop/orders';
 import { useAuth } from '@/contexts/AuthContext';
 import { MEMBER_DISCOUNT } from '@/lib/members/price';
-import { useShopRate } from '@/lib/shop/use-rate';
+import { useOwnTypeOff, useShopRate } from '@/lib/shop/use-rate';
 import { RUNNER_TEE_SLUG, runnerTee, teeColour } from '@/lib/shop/runner-tee';
-import { payPence } from '@/lib/shop/tee-pricing';
+import { OWN_TYPE_OFF_PENCE, payPence } from '@/lib/shop/tee-pricing';
 import { typeById } from '@/lib/runner-quiz';
 import { modelPhotos } from '@/lib/runner-quiz/models';
 import MemberLine from './MemberLine';
@@ -37,11 +37,14 @@ export default function Basket() {
     const type = line.design ? typeById(line.design) : undefined;
     return item && v ? [{ ...l, index, item, v, type, line }] : [];
   });
-  const orderLines = rows.map((r) => r.line);
+  const { isAuthenticated } = useAuth();
+  // £3 off one tee of your own type, once per account, signed in only (own-type.ts).
+  const ownTypeOff = useOwnTypeOff();
+  const offIndex = ownTypeOff ? (rows.find((r) => isOwnTypeTee(r.line))?.index ?? -1) : -1;
+  const orderLines = rows.length ? buildOrderLines(rows.map((r) => lines[r.index]), undefined, { ownTypeOff }) : [];
   const hasTee = rows.some((r) => r.type);
   const subtotalP = subtotalPence(orderLines);
   const subtotal = subtotalP / 100;
-  const { isAuthenticated } = useAuth();
   // The server's answer (same rule as checkout), so the basket shows exactly what Stripe charges.
   const serverRate = useShopRate();
   const rate = serverRate ?? 0;
@@ -106,7 +109,7 @@ export default function Basket() {
                 <p className="text-sm text-foreground">
                   &ldquo;{r.type.shirt}&rdquo;
                   {r.line.personal ? ' · your Runner DNA on the back' : ''}
-                  {r.line.personal?.type === r.type.id ? ' · your type, £3 off' : ''}
+                  {isOwnTypeTee(r.line) ? (r.index === offIndex ? ' · your type, £3 off one' : isAuthenticated ? ' · your type' : ' · your type, sign in for £3 off one') : ''}
                 </p>
               )}
               <p className="text-sm text-secondary">{variantLabel(r.v)}</p>
@@ -119,7 +122,7 @@ export default function Basket() {
                 <button type="button" aria-label="Remove" onClick={() => setQty(r.index, 0)} className="p-1.5 text-muted hover:text-red-500"><Trash2 className="w-4 h-4" /></button>
               </div>
             </div>
-            <p className="font-mono text-foreground">{gbp(r.line.unitPence * r.quantity)}</p>
+            <p className="font-mono text-foreground">{gbp(r.line.unitPence * r.quantity - (r.index === offIndex ? OWN_TYPE_OFF_PENCE : 0))}</p>
           </li>
         ))}
       </ul>

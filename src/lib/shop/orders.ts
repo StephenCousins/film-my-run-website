@@ -38,6 +38,8 @@ export interface OrderLine {
   design?: string;
   /** Runner Type Tee only, validated: the buyer's quiz result for the back. */
   personal?: Personal;
+  /** The one tee this order took the £3 own-type discount on (once per member account). */
+  ownTypeOff?: true;
 }
 
 export const MAX_LINES = 10;
@@ -45,10 +47,15 @@ export const MAX_QTY = 10;
 
 export const variantLabel = (v: ShopVariant) => [v.colour, v.size].filter((s) => s && s !== 'One size').join(' / ');
 
-export function buildOrderLines(lines: BasketLine[], items: ShopItem[] = shopItems): OrderLine[] {
+/**
+ * `ownTypeOff`: this buyer may take the £3 own-type discount (a signed-in member who never has,
+ * see own-type.ts). It goes on ONE tee: the first of their own type, split off its line if the
+ * line has more than one. Everyone else, guests included, pays the variant price.
+ */
+export function buildOrderLines(lines: BasketLine[], items: ShopItem[] = shopItems, { ownTypeOff = false } = {}): OrderLine[] {
   if (!Array.isArray(lines) || lines.length === 0) throw new Error('Basket is empty');
   if (lines.length > MAX_LINES) throw new Error(`Too many lines (max ${MAX_LINES})`);
-  return lines.map((l) => {
+  const priced = lines.map((l): OrderLine => {
     const item = l.slug === RUNNER_TEE_SLUG ? runnerTee : items.find((i) => i.slug === l.slug);
     const tee = l.slug === RUNNER_TEE_SLUG;
     if (!tee && (l.personal !== undefined || l.design !== undefined)) throw new Error(`${l.slug} can't be personalised`);
@@ -72,13 +79,23 @@ export function buildOrderLines(lines: BasketLine[], items: ShopItem[] = shopIte
       variantId: v.id,
       options: v.options,
       quantity,
-      // A tee of your own type is £3 off; member discounts come later (tee-pricing.ts).
-      unitPence: design ? teeListPence(Math.round(v.price * 100), personal?.type === design.id) : Math.round(v.price * 100),
+      // The £3 own-type discount is applied below, once; member discounts come later (tee-pricing.ts).
+      unitPence: Math.round(v.price * 100),
       ...(design && { design: design.id }),
       ...(personal && { personal }),
     };
   });
+  if (!ownTypeOff) return priced;
+  const i = priced.findIndex(isOwnTypeTee);
+  if (i < 0) return priced;
+  const l = priced[i];
+  const off: OrderLine = { ...l, quantity: 1, unitPence: teeListPence(l.unitPence, true), ownTypeOff: true };
+  const rest = l.quantity > 1 ? [{ ...l, quantity: l.quantity - 1 }] : [];
+  return [...priced.slice(0, i), off, ...rest, ...priced.slice(i + 1)];
 }
+
+/** A tee whose design is the buyer's own quiz type: the shirt the £3 can go on. */
+export const isOwnTypeTee = (l: Pick<OrderLine, 'design' | 'personal'>) => !!l.design && l.personal?.type === l.design;
 
 export const subtotalPence = (lines: OrderLine[]) => lines.reduce((s, l) => s + l.unitPence * l.quantity, 0);
 
