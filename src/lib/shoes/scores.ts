@@ -10,7 +10,8 @@ export function extractExplicitScore(text: string): number | null {
   const outOf5 = text.match(/\b(\d(?:\.\d)?)\s*(?:\/\s*5|out of 5)/i);
   if (outOf5) { const s = parseFloat(outOf5[1]) * 2; if (s >= 0 && s <= 10) return s; }
 
-  const outOf100 = text.match(/\b(\d{2,3})\s*(?:\/\s*100|out of 100|%)/i);
+  // "% off" is a sale banner, not a rating: "Now 20% Off" once scored a 9/10 shoe as 2.
+  const outOf100 = text.match(/\b(\d{2,3})\s*(?:\/\s*100|out of 100|%(?!\s*off\b))/i);
   if (outOf100) { const s = parseFloat(outOf100[1]) / 10; if (s >= 0 && s <= 10) return s; }
 
   const stars = text.match(/(\d(?:\.\d)?)\s*stars?\b/i);

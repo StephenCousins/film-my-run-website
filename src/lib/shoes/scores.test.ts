@@ -5,6 +5,7 @@ describe('extractExplicitScore', () => {
   it('reads x/10', () => expect(extractExplicitScore('Score: 9.2/10 overall')).toBe(9.2));
   it('doubles x/5', () => expect(extractExplicitScore('4.5 out of 5')).toBe(9));
   it('divides percentages', () => expect(extractExplicitScore('rated 87%')).toBe(8.7));
+  it('ignores a sale banner', () => expect(extractExplicitScore('New Balance Ellipse v1 Now 20% Off $145 $116')).toBeNull());
   it('doubles stars', () => expect(extractExplicitScore('4 stars')).toBe(8));
   it('returns null with nothing', () => expect(extractExplicitScore('great shoe')).toBeNull());
 });
