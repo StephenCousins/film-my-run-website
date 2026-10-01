@@ -23,7 +23,7 @@ export default function RunnersList({ runners }: { runners: Row[] }) {
   const remaining = current.length + legends.length - currentShown.length - legendsShown.length;
   const filterBy = (k: string) => { setD(k); setShown(PAGE); };
   const grid = (rows: Row[]) => (
-    <ul className="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 mt-6">
+    <ul className="grid gap-3 grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 mt-6">
       {rows.map((r) => (
         <li key={r.slug}>
           <Link href={`/runners/${r.slug}`} className="block group">
@@ -34,14 +34,15 @@ export default function RunnersList({ runners }: { runners: Row[] }) {
                     src={r.photo}
                     alt=""
                     fill
-                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+                    sizes="(min-width: 1024px) 16vw, (min-width: 640px) 25vw, 33vw"
                     className="object-cover object-top"
                   />
                 </div>
               )
-              : <RunnerCard name={r.name} flag={flagEmoji(r.nationality)} index={r.utmbIndex} className="aspect-[4/5] w-full rounded-xl" />}
-            <span className="block mt-2 font-semibold text-foreground group-hover:text-[#f88c00]">{flagEmoji(r.nationality)} {r.name}</span>
-            {r.utmbIndex !== null && <span className="block text-sm text-secondary tabular-nums">UTMB Index {r.utmbIndex}</span>}
+              // The index is under the card already; inside a card this small it crowded the flag.
+              : <RunnerCard name={r.name} flag={flagEmoji(r.nationality)} index={null} className="aspect-[4/5] w-full rounded-xl" />}
+            <span className="block mt-1.5 text-sm font-semibold leading-snug text-foreground group-hover:text-[#f88c00]">{flagEmoji(r.nationality)} {r.name}</span>
+            {r.utmbIndex !== null && <span className="block text-xs text-secondary tabular-nums">UTMB Index {r.utmbIndex}</span>}
           </Link>
         </li>
       ))}
