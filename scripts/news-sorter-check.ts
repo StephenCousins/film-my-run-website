@@ -1,6 +1,9 @@
 // Checks the news sorter against a hand-labelled sample, without publishing anything.
 //
-// Run:  npx tsx --env-file=.env scripts/news-sorter-check.ts [--limit N] [--threshold X] [--fresh] [--labels <path>]
+// Run:  npx tsx --env-file=.env scripts/news-sorter-check.ts [--limit N] [--threshold X] [--fresh] [--labels <path>] [--jev]
+//
+// --jev scores the Jev trial sorter instead, writes docs/news/sorter-check-jev.md, and adds how
+// often it agrees with the cached SORT_MODEL verdicts on topic, UK and importance.
 //
 // Reads docs/news/sorter-labels.json (an array of { id, isNews, note?, unsure? }), loads
 // those articles, runs the real sorter on each, and writes docs/news/sorter-check.md with
@@ -11,8 +14,8 @@ import type { articles } from '@prisma/client';
 import { prisma } from '@/lib/db';
 import { NEWS_CONFIG } from '@/lib/news/config';
 import { extractPage } from '@/lib/news/gather';
-import { SORT_MODEL } from '@/lib/news/models';
-import { sortItem } from '@/lib/news/sort';
+import { JEV_SORT_MODEL, SORT_MODEL } from '@/lib/news/models';
+import { sortItem, sortItemJev } from '@/lib/news/sort';
 import { confidenceHistogram, confusion, type SorterRow } from '@/lib/news/sorter-check';
 import type { Candidate, Verdict } from '@/lib/news/types';
 
@@ -28,7 +31,10 @@ const has = (name: string) => process.argv.includes(`--${name}`);
 
 const LABELS_PATH = arg('labels') ?? 'docs/news/sorter-labels.json';
 const CACHE_PATH = 'docs/news/.sorter-cache.json';
-const REPORT_PATH = 'docs/news/sorter-check.md';
+const JEV = has('jev');
+const MODEL = JEV ? JEV_SORT_MODEL : SORT_MODEL;
+const sort = JEV ? sortItemJev : sortItem;
+const REPORT_PATH = JEV ? 'docs/news/sorter-check-jev.md' : 'docs/news/sorter-check.md';
 
 /** Runs `fn` over `items` with at most `limit` in flight at once. */
 async function mapLimit<T, R>(items: T[], limit: number, fn: (item: T) => Promise<R>): Promise<R[]> {
@@ -107,7 +113,7 @@ async function main() {
     for (const label of labels) {
       const a = byId.get(label.id);
       if (!a) { console.warn(`No article found for id ${label.id}, skipping.`); continue; }
-      const hit = !fresh ? cache[`${label.id}:${SORT_MODEL}`] : undefined;
+      const hit = !fresh ? cache[`${label.id}:${MODEL}`] : undefined;
       if (hit) cached.push({ label, a, entry: hit });
       else pending.push({ label, a });
     }
@@ -117,12 +123,12 @@ async function main() {
       const page = html ? extractPage(html, a.link, a.source) : { text: null, imageUrl: null, photoCredit: null };
       return toCandidate(a, page.text, page.imageUrl, page.photoCredit);
     });
-    const verdicts = await mapLimit(candidates, 6, (c) => sortItem(c));
+    const verdicts = await mapLimit(candidates, 6, (c) => sort(c));
 
     const newEntries: Cache = {};
     pending.forEach(({ label, a }, i) => {
       const { verdict, costUsd } = verdicts[i];
-      newEntries[`${label.id}:${SORT_MODEL}`] = { verdict, costUsd };
+      newEntries[`${label.id}:${MODEL}`] = { verdict, costUsd };
       totalCost += costUsd;
       rows.push({ id: label.id, isNews: label.isNews, unsure: label.unsure, note: label.note, source: a.source, title: a.title, verdict, costUsd });
     });
@@ -136,6 +142,26 @@ async function main() {
     }
   }
 
+  // Fields the confusion table can't see: how often Jev agrees with the live sorter's cached verdict.
+  const agreement: string[] = [];
+  if (JEV) {
+    const cache = await loadCache();
+    const pairs = rows.flatMap((r) => {
+      const g = cache[`${r.id}:${SORT_MODEL}`]?.verdict;
+      return g && r.verdict && r.verdict.type !== 'media' ? [{ j: r.verdict, g }] : [];
+    });
+    const pct = (f: (p: (typeof pairs)[number]) => boolean) => `${Math.round((100 * pairs.filter(f).length) / Math.max(1, pairs.length))}%`;
+    agreement.push(
+      `## Agreement with ${SORT_MODEL} (${pairs.length} items both judged)`, ``,
+      `| field | agree |`, `|---|---|`,
+      `| type | ${pct((p) => p.j.type === p.g.type)} |`,
+      `| topic | ${pct((p) => p.j.topic === p.g.topic)} |`,
+      `| isUk | ${pct((p) => p.j.isUk === p.g.isUk)} |`,
+      `| importance within 1 | ${pct((p) => Math.abs(p.j.importance - p.g.importance) <= 1)} |`,
+      ``,
+    );
+  }
+
   const unsure = rows.filter((r) => r.unsure);
   const nullTotal = rows.filter((r) => !r.verdict).length;
   const main90 = confusion(rows, threshold);
@@ -146,7 +172,7 @@ async function main() {
     `# News sorter check`,
     ``,
     `Date: ${new Date().toISOString().slice(0, 10)}`,
-    `Model: ${SORT_MODEL}`,
+    `Model: ${MODEL}`,
     `Threshold: ${threshold}`,
     `Items: ${rows.length} (${unsure.length} unsure, ${nullTotal} null verdicts)`,
     `Total cost: $${totalCost.toFixed(4)}`,
@@ -173,6 +199,7 @@ async function main() {
     `|---|---|---|---|`,
     ...histogram.map((b) => `| ${b.bucket} | ${b.news} | ${b.notNews} | ${b.unsure} |`),
     ``,
+    ...agreement,
     ...(extraThresholds.length > 0 ? [`## Confusion at other thresholds`, ``] : []),
     ...extraThresholds.flatMap((t) => [`### ${t}`, ``, confusionTable(confusion(rows, t)), ``]),
     `## Unsure (excluded from the confusion table above)`,
