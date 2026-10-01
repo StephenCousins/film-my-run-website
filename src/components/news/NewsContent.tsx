@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Calendar, ExternalLink, Newspaper } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // ============================================
@@ -27,255 +26,94 @@ interface Article {
 
 const TAG_ORDER = ['Trail & Ultra', 'Road', 'Track', 'UK'];
 
-// ============================================
-// SOURCE BADGE COLORS
-// ============================================
-
-const sourceColors: Record<string, string> = {
-  'Film My Run': 'bg-[#f88c00]/20 text-[#f88c00] border-[#f88c00]/30',
-  'iRunFar': 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  'Trail Runner Magazine': 'bg-green-500/20 text-green-400 border-green-500/30',
-  'Freetrail': 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-  'Canadian Running': 'bg-red-500/20 text-red-400 border-red-500/30',
-  'RunABC South': 'bg-sky-500/20 text-sky-400 border-sky-500/30',
-  'RunABC Scotland': 'bg-teal-500/20 text-teal-400 border-teal-500/30',
-  'LetsRun': 'bg-orange-500/20 text-orange-400 border-orange-500/30',
-  'Athletics Weekly': 'bg-indigo-500/20 text-indigo-400 border-indigo-500/30',
-  'BBC Sport': 'bg-rose-500/20 text-rose-400 border-rose-500/30',
-};
-
-function getSourceColor(source: string): string {
-  return sourceColors[source] || 'bg-zinc-500/20 text-zinc-400 border-zinc-500/30';
-}
-
-const sourceAccentBorders: Record<string, string> = {
-  'Film My Run': 'border-l-[#f88c00]',
-  'iRunFar': 'border-l-blue-500',
-  'Trail Runner Magazine': 'border-l-green-500',
-  'Freetrail': 'border-l-emerald-500',
-  'Canadian Running': 'border-l-red-500',
-  'RunABC South': 'border-l-sky-500',
-  'RunABC Scotland': 'border-l-teal-500',
-  'LetsRun': 'border-l-orange-500',
-  'Athletics Weekly': 'border-l-indigo-500',
-  'BBC Sport': 'border-l-rose-500',
-};
-
-function getSourceAccentBorder(source: string): string {
-  return sourceAccentBorders[source] || 'border-l-zinc-500';
-}
+/**
+ * Laid out like a newspaper front page (BBC News style, 1 Oct 2026): a lead story with a
+ * big picture, six smaller picture stories beside it, a row of headlines with no picture,
+ * then the rest. Flat, no cards or shadows: the headlines do the work.
+ */
+const PER_PAGE = 20;
 
 // ============================================
-// ARTICLE CARD COMPONENT
+// PIECES
 // ============================================
 
-function CardWrapper({ article, children, className }: { article: Article; children: React.ReactNode; className?: string }) {
+function StoryLink({ article, children, className }: { article: Article; children: React.ReactNode; className?: string }) {
   if (article.isOriginal) {
-    return (
-      <Link href={article.link} className={className}>
-        {children}
-      </Link>
-    );
+    return <Link href={article.link} className={className}>{children}</Link>;
   }
+  return <a href={article.link} target="_blank" rel="noopener noreferrer" className={className}>{children}</a>;
+}
+
+/** "37min", "5h", "2d", then the date: how long ago, as a news page says it. */
+function ago(iso: string, now = Date.now()): string {
+  const mins = Math.max(0, Math.round((now - new Date(iso).getTime()) / 60_000));
+  if (mins < 60) return `${mins}min`;
+  if (mins < 24 * 60) return `${Math.round(mins / 60)}h`;
+  if (mins < 7 * 24 * 60) return `${Math.round(mins / (24 * 60))}d`;
+  return new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+}
+
+/** The section and how long ago, under every headline. */
+function Meta({ article, chips }: { article: Article; chips: (a: Article) => string[] }) {
+  const section = chips(article)[0] ?? article.source;
   return (
-    <a href={article.link} target="_blank" rel="noopener noreferrer" className={className}>
-      {children}
-    </a>
+    <p className="mt-auto pt-3 text-sm">
+      <span className="text-brand">{section}</span>
+      <span className="text-muted"> · {ago(article.pubDate)}</span>
+    </p>
   );
 }
 
-function ArticleCard({ article, featured = false }: { article: Article; featured?: boolean }) {
-  const pubDate = new Date(article.pubDate);
-  const isRecent = Date.now() - pubDate.getTime() < 24 * 60 * 60 * 1000;
-  const hasImage = !!article.imageUrl;
-
-  const badges = (
-    <div className="flex items-center gap-3 mb-3">
-      <span className={cn(
-        'px-3 py-1 text-xs font-medium rounded-full border',
-        getSourceColor(article.source)
-      )}>
-        {article.source}
-      </span>
-      <span className="flex items-center gap-1.5 text-xs text-muted">
-        <Calendar className="w-3 h-3" />
-        {pubDate.toLocaleDateString('en-GB', {
-          day: 'numeric',
-          month: 'short',
-          year: 'numeric',
-        })}
-      </span>
-    </div>
-  );
-
-  if (!hasImage) {
-    return (
-      <article
-        className={cn(
-          'group relative bg-surface rounded-2xl overflow-hidden border border-border/50 transition-all duration-300 hover:-translate-y-1',
-          'shadow-sm hover:shadow-lg hover:shadow-brand/5 hover:border-brand/30',
-          'border-l-4',
-          getSourceAccentBorder(article.source),
-          featured && 'lg:col-span-2'
-        )}
-      >
-        <CardWrapper article={article} className="block h-full">
-          <div className="p-5 lg:p-6 flex flex-col flex-1 h-full">
-            {(article.topStory || isRecent) && (
-              <div className="mb-3">
-                <span className="px-2.5 py-1 bg-brand text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
-                  {article.topStory ? 'Top story' : 'New'}
-                </span>
-              </div>
-            )}
-
-            {badges}
-
-            <h2 className={cn(
-              'font-display font-semibold text-foreground group-hover:text-brand transition-colors duration-200 mb-3 leading-snug',
-              featured ? 'text-xl lg:text-2xl' : 'text-base lg:text-lg'
-            )}>
-              {article.title}
-            </h2>
-
-            {article.description && (
-              <p className={cn(
-                'text-secondary leading-relaxed mb-4 flex-1',
-                featured ? 'text-sm lg:text-base line-clamp-5' : 'text-sm line-clamp-3'
-              )}>
-                {article.description}
-              </p>
-            )}
-
-            <div className="flex items-center gap-1.5 text-brand font-medium text-sm group-hover:gap-2.5 transition-all duration-200 mt-auto pt-2">
-              {article.isOriginal ? 'Read Story' : 'Read Article'}
-              {!article.isOriginal && <ExternalLink className="w-3.5 h-3.5" />}
-            </div>
-          </div>
-        </CardWrapper>
-      </article>
-    );
-  }
-
+function Picture({ src, className }: { src: string | null; className?: string }) {
   return (
-    <article
-      className={cn(
-        'group relative bg-surface rounded-2xl overflow-hidden border border-border/50 transition-all duration-300 hover:-translate-y-1',
-        'shadow-sm hover:shadow-lg hover:shadow-brand/5 hover:border-brand/30',
-        featured && 'lg:col-span-2'
-      )}
-    >
-      <CardWrapper
-        article={article}
-        className={cn(
-          'block h-full',
-          featured ? 'flex flex-col lg:flex-row' : ''
-        )}
-      >
-        <div className={cn(
-          'relative overflow-hidden bg-zinc-800',
-          featured
-            ? 'h-52 lg:h-auto lg:w-2/5 lg:min-h-[300px]'
-            : 'h-44'
-        )}>
-          <img
-            src={article.imageUrl!}
-            alt=""
-            className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-            loading="lazy"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
-          {(article.topStory || isRecent) && (
-            <div className="absolute top-3 left-3">
-              <span className="px-2.5 py-1 bg-brand text-white text-xs font-bold rounded-md uppercase tracking-wide shadow-lg">
-                {article.topStory ? 'Top story' : 'New'}
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div className={cn(
-          'p-5 lg:p-6 flex flex-col',
-          featured ? 'lg:w-3/5 lg:py-8' : '',
-          'flex-1'
-        )}>
-          {badges}
-
-          <h2 className={cn(
-            'font-display font-semibold text-foreground group-hover:text-brand transition-colors duration-200 mb-3 leading-snug',
-            featured ? 'text-xl lg:text-2xl' : 'text-base lg:text-lg'
-          )}>
-            {article.title}
-          </h2>
-
-          {article.description && (
-            <p className={cn(
-              'text-secondary leading-relaxed mb-4 flex-1',
-              featured ? 'text-sm lg:text-base line-clamp-4' : 'text-sm line-clamp-2'
-            )}>
-              {article.description}
-            </p>
-          )}
-
-          <div className="flex items-center gap-1.5 text-brand font-medium text-sm group-hover:gap-2.5 transition-all duration-200 mt-auto pt-2">
-            {article.isOriginal ? 'Read Story' : 'Read Article'}
-            {!article.isOriginal && <ExternalLink className="w-3.5 h-3.5" />}
-          </div>
-        </div>
-      </CardWrapper>
-    </article>
+    <div className={cn('relative overflow-hidden bg-zinc-200 dark:bg-zinc-800', className)}>
+      {src && <img src={src} alt="" loading="lazy" className="absolute inset-0 w-full h-full object-cover" />}
+    </div>
   );
 }
 
-// ============================================
-// SOURCE FILTER
-// ============================================
+function TopStory() {
+  return <span className="text-brand font-bold uppercase tracking-wide mr-2">Top story</span>;
+}
 
-function SourceFilter({
-  sources,
-  counts,
-  totalCount,
-  selectedSource,
-  onSelectSource,
-}: {
-  sources: string[];
-  counts: Record<string, number>;
-  totalCount: number;
-  selectedSource: string | null;
-  onSelectSource: (source: string | null) => void;
-}) {
+/** The lead: the biggest picture, the biggest headline, the standfirst. */
+function Lead({ article, chips }: { article: Article; chips: (a: Article) => string[] }) {
   return (
-    <div className="flex items-center gap-2 min-w-max">
-      <button
-        onClick={() => onSelectSource(null)}
-        className={cn(
-          'px-4 py-1.5 text-sm font-medium rounded-full shadow-sm transition-all duration-200',
-          selectedSource === null
-            ? 'bg-brand text-white'
-            : 'bg-brand/15 text-brand cursor-pointer hover:bg-brand/25'
-        )}
-      >
-        All
-        <span className="ml-1.5 opacity-80">({totalCount})</span>
-      </button>
-      <span className="w-px h-5 bg-border/50 mx-1" />
-      {sources.map((source) => (
-        <button
-          key={source}
-          onClick={() => onSelectSource(selectedSource === source ? null : source)}
-          className={cn(
-            'px-3 py-1.5 text-sm font-medium rounded-full border whitespace-nowrap transition-all duration-200',
-            getSourceColor(source),
-            selectedSource === source
-              ? 'ring-2 ring-offset-1 ring-offset-background ring-current'
-              : 'cursor-pointer hover:opacity-80'
-          )}
-        >
-          {source}
-          <span className="ml-1 opacity-60">({counts[source] || 0})</span>
-        </button>
-      ))}
-    </div>
+    <StoryLink article={article} className="group flex flex-col h-full">
+      <Picture src={article.imageUrl} className="aspect-[16/9]" />
+      <h2 className="mt-4 font-display text-2xl lg:text-[2rem] font-bold leading-tight text-foreground group-hover:underline">
+        {article.topStory && <TopStory />}
+        {article.title}
+      </h2>
+      {article.description && <p className="mt-3 text-secondary leading-relaxed line-clamp-3">{article.description}</p>}
+      <Meta article={article} chips={chips} />
+    </StoryLink>
+  );
+}
+
+/** A picture story: picture above on wider screens, a thumbnail beside it on a phone. */
+function PictureStory({ article, chips }: { article: Article; chips: (a: Article) => string[] }) {
+  return (
+    <StoryLink article={article} className="group flex sm:flex-col gap-4 sm:gap-0 h-full">
+      <Picture src={article.imageUrl} className="w-32 shrink-0 aspect-[4/3] sm:w-full sm:aspect-[16/9]" />
+      <div className="flex flex-col flex-1 sm:mt-3">
+        <h3 className="font-display text-lg font-semibold leading-snug text-foreground group-hover:underline">
+          {article.topStory && <TopStory />}
+          {article.title}
+        </h3>
+        <Meta article={article} chips={chips} />
+      </div>
+    </StoryLink>
+  );
+}
+
+/** A headline with no picture, under a rule. */
+function Headline({ article, chips }: { article: Article; chips: (a: Article) => string[] }) {
+  return (
+    <StoryLink article={article} className="group flex flex-col h-full border-t border-border pt-3">
+      <h3 className="font-display text-lg font-semibold leading-snug text-foreground group-hover:underline">{article.title}</h3>
+      <Meta article={article} chips={chips} />
+    </StoryLink>
   );
 }
 
@@ -283,98 +121,93 @@ function SourceFilter({
 // NEWS CONTENT (exported client component)
 // ============================================
 
-const PER_PAGE = 20;
-
 export default function NewsContent({
   articles,
   topicChips = false,
 }: {
   articles: Article[];
-  /** true only from go-live (Task 12): chips/counts/filter run on topic tags,
-   * fixed order, instead of on `article.source`. */
+  /** true from go-live (Task 12): the section bar runs on topic tags, fixed order, instead of on `article.source`. */
   topicChips?: boolean;
 }) {
-  const [selectedSource, setSelectedSource] = useState<string | null>(null);
+  const [section, setSection] = useState<string | null>(null);
   const [page, setPage] = useState(0);
 
-  const chipsOf = (article: Article): string[] =>
-    topicChips ? article.tags ?? [] : [article.source];
+  const chips = (article: Article): string[] => (topicChips ? article.tags ?? [] : [article.source]);
+  const counts: Record<string, number> = {};
+  for (const a of articles) for (const tag of chips(a)) counts[tag] = (counts[tag] || 0) + 1;
+  const sections = topicChips ? TAG_ORDER.filter((tag) => counts[tag]) : Object.keys(counts).sort();
 
-  const sourceCounts: Record<string, number> = {};
-  articles.forEach((article) => {
-    chipsOf(article).forEach((tag) => {
-      sourceCounts[tag] = (sourceCounts[tag] || 0) + 1;
-    });
-  });
-  const sources = topicChips
-    ? TAG_ORDER.filter((tag) => sourceCounts[tag])
-    : Object.keys(sourceCounts).sort();
-  const totalCount = articles.length;
+  const filtered = section ? articles.filter((a) => chips(a).includes(section)) : articles;
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
+  const shown = filtered.slice(page * PER_PAGE, (page + 1) * PER_PAGE);
+  // The front page shape only on page one: lead, six picture stories, five headlines, the rest.
+  const front = page === 0;
+  const lead = front ? shown[0] : undefined;
+  const pictures = front ? shown.slice(1, 7) : [];
+  const headlines = front ? shown.slice(7, 12) : [];
+  const rest = front ? shown.slice(12) : shown;
 
-  // Filter articles
-  const filteredArticles = selectedSource
-    ? articles.filter((a) => chipsOf(a).includes(selectedSource))
-    : articles;
-  const pageCount = Math.max(1, Math.ceil(filteredArticles.length / PER_PAGE));
-  const shown = filteredArticles.slice(page * PER_PAGE, (page + 1) * PER_PAGE);
-  // Only the first page leads with the two big cards.
-  const featured = page === 0 ? shown.slice(0, 2) : [];
-  const rest = page === 0 ? shown.slice(2) : shown;
-  const selectSource = (source: string | null) => { setSelectedSource(source); setPage(0); };
+  const choose = (s: string | null) => { setSection(s); setPage(0); };
   const goTo = (p: number) => { setPage(p); window.scrollTo({ top: 0, behavior: 'smooth' }); };
 
   return (
     <>
-      {/* Source filters */}
-      <section className="py-4 border-b border-border/50 bg-background/90 backdrop-blur-md sticky top-16 lg:top-20 z-30">
-        <div className="container">
-          <div className="overflow-x-auto -mx-4 px-4 lg:mx-0 lg:px-0 scrollbar-hide">
-            <SourceFilter
-              sources={sources}
-              counts={sourceCounts}
-              totalCount={totalCount}
-              selectedSource={selectedSource}
-              onSelectSource={selectSource}
-            />
-          </div>
+      {/* The section bar: text links between rules, as a newspaper site has them. */}
+      <nav aria-label="News sections" className="border-y border-border bg-background sticky top-16 lg:top-20 z-30">
+        <div className="container overflow-x-auto scrollbar-hide">
+          <ul className="flex items-stretch min-w-max text-[15px]">
+            {[null, ...sections].map((s, i) => (
+              <li key={s ?? 'all'} className={cn('flex items-center', i > 0 && 'before:content-[""] before:h-4 before:w-px before:bg-border')}>
+                <button
+                  onClick={() => choose(s)}
+                  aria-pressed={section === s}
+                  className={cn(
+                    'px-3 py-3 first:pl-0 border-b-[3px] -mb-px transition-colors',
+                    section === s ? 'border-brand text-foreground font-semibold' : 'border-transparent text-secondary hover:text-foreground'
+                  )}
+                >
+                  {s ?? 'Latest'}
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
-      </section>
+      </nav>
 
-      {/* Articles grid */}
-      <section className="py-10 lg:py-16 bg-background">
+      <section className="py-8 lg:py-10 bg-background">
         <div className="container">
-          {filteredArticles.length === 0 ? (
-            <div className="text-center py-20">
-              <Newspaper className="w-16 h-16 mx-auto text-muted mb-4" />
-              <h2 className="text-xl font-semibold text-foreground mb-2">No articles yet</h2>
-              <p className="text-secondary">Check back soon for the latest trail running news.</p>
-            </div>
+          {filtered.length === 0 ? (
+            <p className="py-20 text-center text-secondary">No stories yet. Check back tomorrow morning.</p>
           ) : (
             <>
-              {/* Featured articles - top row */}
-              {featured.length > 0 && (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-                  {featured.map((article) => (
-                    <ArticleCard key={article.id} article={article} featured />
-                  ))}
+              {lead && (
+                <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-5">
+                  <div className="sm:col-span-2 lg:row-span-2"><Lead article={lead} chips={chips} /></div>
+                  {pictures.map((a) => <PictureStory key={a.id} article={a} chips={chips} />)}
                 </div>
               )}
 
-              {/* Regular articles grid */}
-              {rest.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {rest.map((article) => (
-                    <ArticleCard key={article.id} article={article} />
-                  ))}
+              {headlines.length > 0 && (
+                <div className="mt-10 grid gap-x-6 gap-y-6 sm:grid-cols-2 lg:grid-cols-5">
+                  {headlines.map((a) => <Headline key={a.id} article={a} chips={chips} />)}
                 </div>
+              )}
+
+              {rest.length > 0 && (
+                <>
+                  {front && <h2 className="mt-14 mb-6 font-display text-2xl font-bold text-foreground">More stories</h2>}
+                  <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4">
+                    {rest.map((a) => <PictureStory key={a.id} article={a} chips={chips} />)}
+                  </div>
+                </>
               )}
 
               {pageCount > 1 && (
-                <nav aria-label="News pages" className="mt-10 flex items-center justify-center gap-4">
+                <nav aria-label="News pages" className="mt-12 flex items-center justify-center gap-4">
                   <button
                     onClick={() => goTo(page - 1)}
                     disabled={page === 0}
-                    className="px-4 py-2 rounded-lg border border-border text-sm font-medium text-foreground hover:border-[#f88c00] disabled:opacity-40 disabled:pointer-events-none"
+                    className="px-4 py-2 rounded-lg border border-border text-sm font-medium text-foreground hover:border-brand disabled:opacity-40 disabled:pointer-events-none"
                   >
                     Newer
                   </button>
@@ -382,7 +215,7 @@ export default function NewsContent({
                   <button
                     onClick={() => goTo(page + 1)}
                     disabled={page === pageCount - 1}
-                    className="px-4 py-2 rounded-lg border border-border text-sm font-medium text-foreground hover:border-[#f88c00] disabled:opacity-40 disabled:pointer-events-none"
+                    className="px-4 py-2 rounded-lg border border-border text-sm font-medium text-foreground hover:border-brand disabled:opacity-40 disabled:pointer-events-none"
                   >
                     Older
                   </button>

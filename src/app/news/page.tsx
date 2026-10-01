@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 
 import Link from 'next/link';
-import { RefreshCw, Newspaper } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import NewsContent from '@/components/news/NewsContent';
@@ -142,50 +141,20 @@ export default async function NewsPage() {
       <Header />
 
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">
-        {/* Hero section */}
-        <section className="relative py-24 lg:py-36 overflow-hidden">
-          {/* Background image */}
-          <div className="absolute inset-0">
-            <img
-              src="/images/news/hero.jpg"
-              alt="Trail runner on mountain path at Transvulcania"
-              className="w-full h-full object-cover object-[center_35%]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
+        {/* A plain masthead, no hero picture: the stories are the top of the page (1 Oct 2026). */}
+        <header className="container pt-6 lg:pt-10 pb-5 flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+          <div>
+            <h1 className="font-display text-4xl lg:text-5xl font-bold text-foreground">Running News</h1>
+            <p className="mt-2 text-secondary">
+              Our own reports, trail and ultra first, written every morning.{' '}
+              {/* The newest story's own date, not the time the page was loaded. */}
+              <span className="text-muted">
+                Latest: {new Date(articles[0]?.pubDate ?? Date.now()).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' })}
+              </span>
+            </p>
           </div>
-
-          <div className="container relative z-10">
-            <div className="max-w-3xl">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 backdrop-blur-md rounded-full border border-white/20 mb-6">
-                <Newspaper className="w-4 h-4 text-orange-400" />
-                <span className="text-orange-300 text-sm font-medium">Daily Updates</span>
-              </div>
-
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6 drop-shadow-lg">
-                Trail & Ultra Running News
-              </h1>
-              <p className="text-lg lg:text-xl text-white/80 max-w-2xl leading-relaxed">
-                Our own reports on the latest running news, trail and ultra first, written every morning
-                from the races and the people in them.
-              </p>
-              <p className="mt-3 text-sm text-white/80"><Link href="/runners" className="underline hover:text-[#f88c00]">Runner profiles: bios, best finishes and UTMB Index</Link></p>
-
-              {/* Last updated */}
-              <div className="flex items-center gap-2 mt-8 text-sm text-white/50">
-                <RefreshCw className="w-4 h-4" />
-                <span>
-                  {/* The newest story's own date, not the time the page was loaded. */}
-                  Latest story: {new Date(articles[0]?.pubDate ?? Date.now()).toLocaleDateString('en-GB', {
-                    weekday: 'long',
-                    day: 'numeric',
-                    month: 'long',
-                  })}
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
+          <Link href="/runners" className="text-sm font-medium text-brand hover:underline">Runner profiles</Link>
+        </header>
 
         <NewsContent articles={articles} topicChips={NEWS_PAGE_OURS_ONLY} />
 
