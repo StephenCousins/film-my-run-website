@@ -1,4 +1,4 @@
-import { encodeTestJws } from '@/lib/chat/pro';
+import { encodeTestJws } from '@/lib/chat/pro.fixtures';
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { hashCode } from './codes';

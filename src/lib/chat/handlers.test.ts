@@ -1,7 +1,7 @@
 import { NextRequest } from 'next/server';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { handleGetThread, handlePostMessage, type ChatDeps } from './handlers';
-import { encodeTestJws } from './pro';
+import { encodeTestJws } from './pro.fixtures';
 import type { ChatMessageDTO, ChatThreadDTO } from './store';
 
 const NOW = Date.UTC(2026, 8, 16);
