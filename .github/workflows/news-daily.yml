@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run: { description: 'Dry run (publish nothing)', type: boolean, default: true }
-      if_not_run_today: { description: 'Skip if today\'s daily run already completed (the server dispatch sets this)', type: boolean, default: false }
+      if_not_run_today: { description: 'Skip if the daily run already completed today (the server dispatch sets this)', type: boolean, default: false }
       max_stories: { description: 'One-off story cap (blank = the daily 4)', type: string, default: '' }
 # One run at a time: two overlapping runs could publish the same event twice.
 concurrency: { group: news-daily, cancel-in-progress: false }

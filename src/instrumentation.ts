@@ -14,8 +14,11 @@ export async function register() {
     const dispatchToken = process.env.NEWS_DISPATCH_TOKEN;
     if (process.env.NODE_ENV === 'production' && dispatchToken && !dg.__newsDispatchTimer) {
       const { runNewsDispatch, liveNewsDispatchDeps } = await import('@/lib/news/dispatch');
-      const attempts = { day: '', count: 0 };
+      const attempts = { day: '', count: 0, tries: 0, alerted: false };
+      let running = false;
       const dispatchTick = async () => {
+        if (running) return;
+        running = true;
         try {
           const r = await runNewsDispatch({
             ...(await liveNewsDispatchDeps(new Date(), dispatchToken, attempts)),
@@ -24,6 +27,8 @@ export async function register() {
           if (r.outcome === 'dispatched') console.log(`[news-dispatch] dispatched news-daily, ${attempts.day} attempt ${r.attempt}`);
         } catch (e) {
           Sentry.captureException(e);
+        } finally {
+          running = false;
         }
       };
       dg.__newsDispatchTimer = setInterval(dispatchTick, 5 * 60_000);

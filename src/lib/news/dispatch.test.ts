@@ -6,7 +6,7 @@ const gmt = (hhmm: string) => new Date(`2026-12-01T${hhmm}:00Z`);
 function fake(now: Date, over: Record<string, unknown> = {}) {
   return {
     now,
-    attempts: { day: '', count: 0 },
+    attempts: { day: '', count: 0, tries: 0, alerted: false },
     ranToday: vi.fn(async () => false),
     activeRunToday: vi.fn(async () => false),
     dispatch: vi.fn(async () => {}),
@@ -52,7 +52,7 @@ describe('runNewsDispatch', () => {
   });
   it('resets the count on a new London day', async () => {
     const d = fake(gmt('05:30'));
-    d.attempts = { day: '2026-11-30', count: 2 };
+    d.attempts = { day: '2026-11-30', count: 2, tries: 3, alerted: true };
     expect((await runNewsDispatch(d)).outcome).toBe('dispatched');
   });
   it('gives up from 11:00', async () => {
@@ -60,13 +60,22 @@ describe('runNewsDispatch', () => {
     expect((await runNewsDispatch(d)).outcome).toBe('gave-up');
     expect(d.dispatch).not.toHaveBeenCalled();
   });
-  it('GitHub errors alert and never throw, and do not use an attempt', async () => {
+  it('GitHub errors alert once a day, never throw, and stop after 3 tries', async () => {
     const d = fake(gmt('05:30'), { dispatch: vi.fn(async () => { throw new Error('GitHub dispatch 403'); }) });
-    expect((await runNewsDispatch(d)).outcome).toBe('error');
+    for (const t of ['05:30', '05:35', '05:40']) { d.now = gmt(t); expect((await runNewsDispatch(d)).outcome).toBe('error'); }
+    d.now = gmt('05:45');
+    expect((await runNewsDispatch(d)).outcome).toBe('gave-up');
+    expect(d.dispatch).toHaveBeenCalledTimes(3);
+    expect(d.alert).toHaveBeenCalledTimes(1);
     expect(d.alert).toHaveBeenCalledWith('[news-dispatch] failed', { day: '2026-12-01', error: 'GitHub dispatch 403' });
-    expect(d.attempts.count).toBe(0);
   });
-});
+  it('the next day resets tries and the alert', async () => {
+    const d = fake(gmt('05:30'), { dispatch: vi.fn(async () => { throw new Error('x'); }) });
+    for (let i = 0; i < 3; i++) await runNewsDispatch(d);
+    d.now = new Date('2026-12-02T05:30:00Z');
+    expect((await runNewsDispatch(d)).outcome).toBe('error');
+    expect(d.alert).toHaveBeenCalledTimes(2);
+  });});
 
 describe('liveNewsDispatchDeps (faked fetch)', () => {
   it('sends the documented request and detects active runs', async () => {
@@ -75,7 +84,7 @@ describe('liveNewsDispatchDeps (faked fetch)', () => {
       calls.push({ url, init });
       return { ok: true, status: 204, json: async () => ({ workflow_runs: [{ status: 'completed' }, { status: 'in_progress' }] }) };
     });
-    const deps = await liveNewsDispatchDeps(gmt('05:30'), 'tok', { day: '', count: 0 }, f as never);
+    const deps = await liveNewsDispatchDeps(gmt('05:30'), 'tok', { day: '', count: 0, tries: 0, alerted: false }, f as never);
     expect(await deps.activeRunToday('2026-12-01')).toBe(true);
     expect(calls[0].url).toContain('/workflows/news-daily.yml/runs?created=%3E%3D2026-12-01');
     await deps.dispatch();
@@ -85,7 +94,7 @@ describe('liveNewsDispatchDeps (faked fetch)', () => {
   });
   it('errors do not leak the token', async () => {
     const f = vi.fn(async () => ({ ok: false, status: 401 }));
-    const deps = await liveNewsDispatchDeps(gmt('05:30'), 'secret', { day: '', count: 0 }, f as never);
+    const deps = await liveNewsDispatchDeps(gmt('05:30'), 'secret', { day: '', count: 0, tries: 0, alerted: false }, f as never);
     await expect(deps.dispatch()).rejects.toThrow('GitHub dispatch 401');
   });
 });
