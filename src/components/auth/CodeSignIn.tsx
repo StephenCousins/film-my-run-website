@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Loader2, Mail } from 'lucide-react';
@@ -13,12 +13,16 @@ const MESSAGES: Record<string, string> = {
   bad_email: 'That email address does not look right',
 };
 
-/** Email → six-digit code → NextAuth session, using the same routes as the app (spec §2.3). */
-export default function CodeSignIn({ callbackUrl = '/' }: { callbackUrl?: string }) {
+/**
+ * Email → six-digit code → NextAuth session, using the same routes as the app (spec §2.3).
+ * `registered`: the register form's just-created account. The code is sent at once, and
+ * verify carries the password so the account keeps it (it is cleared otherwise).
+ */
+export default function CodeSignIn({ callbackUrl = '/', registered }: { callbackUrl?: string; registered?: { email: string; password: string } }) {
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(registered?.email ?? '');
   const [code, setCode] = useState('');
-  const [step, setStep] = useState<'email' | 'code'>('email');
+  const [step, setStep] = useState<'email' | 'code'>(registered ? 'code' : 'email');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Unticked: signing in is not a reason to be emailed (PECR consent).
@@ -39,11 +43,18 @@ export default function CodeSignIn({ callbackUrl = '/' }: { callbackUrl?: string
     finally { setBusy(false); }
   };
 
+  const sentForRegister = useRef(false);
+  useEffect(() => {
+    if (!registered || sentForRegister.current) return;
+    sentForRegister.current = true;
+    post('code', { email: registered.email }).catch((err) => setError((err as Error).message));
+  }, [registered]);
+
   const verify = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true); setError(null);
     try {
-      const { token } = await post('verify', { email, code, newsletter, source: 'web' });
+      const { token } = await post('verify', { email, code, newsletter, source: 'web', password: registered?.password });
       const result = await signIn('code', { token, redirect: false });
       if (result?.error) throw new Error('Something went wrong. Please try again.');
       router.push(callbackUrl);

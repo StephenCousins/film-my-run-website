@@ -47,8 +47,8 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Please enter your email and password');
         }
 
-        const user = await prisma.users.findUnique({
-          where: { email: credentials.email },
+        const user = await prisma.users.findFirst({
+          where: { email: { equals: credentials.email.trim(), mode: 'insensitive' } },
         });
 
         if (!user || !user.password_hash) {
@@ -62,6 +62,12 @@ export const authOptions: NextAuthOptions = {
 
         if (!isPasswordValid) {
           throw new Error('Invalid email or password');
+        }
+
+        // Registering never proved the address: without this anyone could register
+        // someone else's email (or the admin's in other capitals) and sign in as it.
+        if (!user.email_verified_at) {
+          throw new Error('Please confirm your email first: use "Email me a code" above.');
         }
 
         return {

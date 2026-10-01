@@ -7,7 +7,8 @@ import { liveNewsletterStore } from '@/lib/newsletter/store';
 
 const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
+  // Lower-cased: emails are matched case-insensitively everywhere, so STEPHEN@ can't sit beside stephen@.
+  email: z.string().trim().email('Invalid email address').transform((e) => e.toLowerCase()),
   password: z
     .string()
     .min(10, 'Password must be at least 10 characters')
@@ -35,8 +36,8 @@ export async function POST(request: NextRequest) {
     const { name, email, password, newsletter } = result.data;
 
     // Check if user already exists — use generic message to prevent email enumeration
-    const existingUser = await prisma.users.findUnique({
-      where: { email },
+    const existingUser = await prisma.users.findFirst({
+      where: { email: { equals: email, mode: 'insensitive' } },
     });
 
     if (existingUser) {
@@ -46,7 +47,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Hash password and create user
+    // Hash password and create user. Unverified: the password can't sign in until the
+    // form's emailed code proves the address (verify with this password keeps it).
     const passwordHash = await hashPassword(password);
 
     await prisma.users.create({

@@ -1,4 +1,5 @@
 /** Prisma side of member sign-in. `verification_tokens` and `sessions` are NextAuth's unused tables. */
+import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/db';
 import { subscribe } from '@/lib/newsletter/consent';
 import { liveNewsletterStore } from '@/lib/newsletter/store';
@@ -28,10 +29,13 @@ export const liveMemberDeps: MemberDeps = {
   deleteCodes: async (email) => {
     await prisma.verification_tokens.deleteMany({ where: { identifier: email } });
   },
-  findOrCreateUser: async (email, now) => {
-    const existing = await prisma.users.findFirst({ where: { email: { equals: email, mode: 'insensitive' } }, select: { ...memberSelect, email_verified_at: true } });
+  findOrCreateUser: async (email, now, password) => {
+    const existing = await prisma.users.findFirst({ where: { email: { equals: email, mode: 'insensitive' } }, select: { ...memberSelect, email_verified_at: true, password_hash: true } });
     if (existing) {
-      if (!existing.email_verified_at) await prisma.users.update({ where: { id: existing.id }, data: { email_verified_at: now, updated_at: now } });
+      if (!existing.email_verified_at) {
+        const keep = !existing.password_hash || (!!password && (await bcrypt.compare(password, existing.password_hash)));
+        await prisma.users.update({ where: { id: existing.id }, data: { email_verified_at: now, updated_at: now, ...(keep ? {} : { password_hash: null }) } });
+      }
       return toMember(existing, now);
     }
     const created = await prisma.users.create({

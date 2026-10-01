@@ -18,7 +18,12 @@ export type MemberDeps = {
   /** Every unexpired hash for the email. */
   codeHashes: (email: string, now: Date) => Promise<string[]>;
   deleteCodes: (email: string) => Promise<void>;
-  findOrCreateUser: (email: string, now: Date) => Promise<Member>;
+  /**
+   * The account for a just-proved email, created if new, marked verified. An existing
+   * unverified account's password is cleared unless `password` matches it: whoever set
+   * it never proved the address (pre-account takeover). The register form sends it.
+   */
+  findOrCreateUser: (email: string, now: Date, password?: string) => Promise<Member>;
   createSession: (userId: number, token: string, expires: Date) => Promise<void>;
   /** Member for an unexpired token, else null. */
   memberForToken: (token: string, now: Date) => Promise<Member | null>;
@@ -120,7 +125,7 @@ export async function handleVerify(req: NextRequest, deps: MemberDeps): Promise<
 
   await deps.deleteCodes(email);
   attempts.delete(email);
-  const member = await deps.findOrCreateUser(email, new Date(now));
+  const member = await deps.findOrCreateUser(email, new Date(now), typeof body.password === 'string' ? body.password : undefined);
   const token = makeToken();
   await deps.createSession(member.id, token, new Date(now + TOKEN_TTL_MS));
   await deps.attachGuestOrders(member.id, email);

@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import NewsletterCheckbox from '@/components/newsletter/NewsletterCheckbox';
+import CodeSignIn from './CodeSignIn';
 import { signIn } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { User, Mail, Lock, Eye, EyeOff, Loader2, Check, X } from 'lucide-react';
 
@@ -20,7 +20,6 @@ const passwordRequirements: PasswordRequirement[] = [
 ];
 
 export default function RegisterForm() {
-  const router = useRouter();
 
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -30,6 +29,8 @@ export default function RegisterForm() {
   const [formError, setFormError] = useState<string | null>(null);
   // Unticked: creating an account is not a reason to be emailed (PECR consent).
   const [newsletter, setNewsletter] = useState(false);
+  // Set once the account exists: the form becomes the emailed-code step.
+  const [registered, setRegistered] = useState<{ email: string; password: string } | null>(null);
 
   const allRequirementsMet = passwordRequirements.every((req) =>
     req.test(password)
@@ -61,20 +62,8 @@ export default function RegisterForm() {
         return;
       }
 
-      // Auto sign-in after successful registration
-      const signInResult = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (signInResult?.error) {
-        // Registration succeeded but auto-login failed
-        router.push('/login?registered=true');
-      } else {
-        router.push('/');
-        router.refresh();
-      }
+      // The password can't sign in until the address is proved: ask for the emailed code.
+      setRegistered({ email, password });
     } catch {
       setFormError('Something went wrong. Please try again.');
     } finally {
@@ -85,6 +74,17 @@ export default function RegisterForm() {
   const handleGoogleSignIn = () => {
     signIn('google', { callbackUrl: '/' });
   };
+
+  if (registered) {
+    return (
+      <div className="w-full max-w-md mx-auto">
+        <div className="bg-surface rounded-2xl shadow-xl border border-border p-8">
+          <h1 className="text-2xl font-display font-bold text-foreground text-center mb-6">Confirm your email</h1>
+          <CodeSignIn callbackUrl="/" registered={registered} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full max-w-md mx-auto">

@@ -5,7 +5,7 @@ const h = vi.hoisted(() => ({ users: new Map<string, unknown>(), store: null as 
 vi.mock('@/lib/db', () => ({
   prisma: {
     users: {
-      findUnique: async ({ where }: { where: { email: string } }) => h.users.get(where.email) ?? null,
+      findFirst: async ({ where }: { where: { email: { equals: string } } }) => h.users.get(where.email.equals.toLowerCase()) ?? null,
       create: async ({ data }: { data: { email: string } }) => void h.users.set(data.email, data),
     },
   },

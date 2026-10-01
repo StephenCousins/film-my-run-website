@@ -95,6 +95,18 @@ describe('handleRequestCode', () => {
 });
 
 describe('handleVerify', () => {
+  it("passes the register form's password to findOrCreateUser, and nothing for a plain sign-in", async () => {
+    const f = fakeDeps();
+    const seen: (string | undefined)[] = [];
+    const inner = f.deps.findOrCreateUser;
+    f.deps.findOrCreateUser = (email, now, password) => { seen.push(password); return inner(email, now, password); };
+    for (const body of [{ password: 'Secret-pass-1' }, {}]) {
+      await handleRequestCode(post('code', { email: 'runner@example.com' }), f.deps);
+      await handleVerify(post('verify', { email: 'runner@example.com', code: f.sent.at(-1)![1], ...body }), f.deps);
+    }
+    expect(seen).toEqual(['Secret-pass-1', undefined]);
+  });
+
   it('signs in with the right code, creates the user, attaches guest orders, issues a token', async () => {
     const f = fakeDeps();
     const { token, member } = await signIn(f);
