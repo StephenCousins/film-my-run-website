@@ -1,6 +1,7 @@
 import { completeJson } from '@/lib/llm';
 import { NEWS_CONFIG } from './config';
-import { JEV_SORT_MODEL, SORT_MODEL } from './models';
+import { decide } from '@/lib/jev';
+import { SORT_MODEL } from './models';
 import type { Candidate, Verdict } from './types';
 
 export function passesSort(v: Verdict | null): boolean {
@@ -81,74 +82,63 @@ interface JevAnswers {
  */
 export async function sortItemJev(c: Candidate, call: typeof completeJson = completeJson): Promise<{ verdict: Verdict | null; costUsd: number }> {
   if (MEDIA_URL.test(c.url)) return sortItem(c, call);
-  const body = {
-    model: JEV_SORT_MODEL,
-    state: {
-      source: c.source, title: c.title, published: c.pubDate.toISOString().slice(0, 10),
-      summary: c.summary.slice(0, 1200), opening: (c.text ?? '').slice(0, 1500),
+  const state = {
+    source: c.source, title: c.title, published: c.pubDate.toISOString().slice(0, 10),
+    summary: c.summary.slice(0, 1200), opening: (c.text ?? '').slice(0, 1500),
+  };
+  const questions = {
+    type: {
+      type: 'choice',
+      instructions: 'What kind of article is this, for a running news desk that only publishes news?',
+      criteria: {
+        news: 'Reports something that has happened: race results, records, wins, DNFs, team selections, announcements, course or rule changes, cancellations, a race selling out completely, injuries, retirements, doping cases.',
+        preview: 'A race preview or "who to watch" piece about a race not yet run.',
+        personal_race_report: "A runner's own account of their race.",
+        review: 'A gear or shoe review.',
+        training: 'Training advice.',
+        opinion: 'Opinion, a column, a "takeaways" or analysis piece, or a weekly recap column.',
+        media: 'A podcast, a video clip, a live blog or a live-tracking page.',
+        sponsored: 'A sponsored post.',
+        other: 'An interview or profile, a feature about a result already reported, entries opening, "X% sold" or other sales updates, event promotion or countdowns, or anything else.',
+      },
     },
-    questions: {
-      type: {
-        type: 'choice',
-        instructions: 'What kind of article is this, for a running news desk that only publishes news?',
-        criteria: {
-          news: 'Reports something that has happened: race results, records, wins, DNFs, team selections, announcements, course or rule changes, cancellations, a race selling out completely, injuries, retirements, doping cases.',
-          preview: 'A race preview or "who to watch" piece about a race not yet run.',
-          personal_race_report: "A runner's own account of their race.",
-          review: 'A gear or shoe review.',
-          training: 'Training advice.',
-          opinion: 'Opinion, a column, a "takeaways" or analysis piece, or a weekly recap column.',
-          media: 'A podcast, a video clip, a live blog or a live-tracking page.',
-          sponsored: 'A sponsored post.',
-          other: 'An interview or profile, a feature about a result already reported, entries opening, "X% sold" or other sales updates, event promotion or countdowns, or anything else.',
-        },
+    running: {
+      type: 'noul',
+      instructions: 'Is this about running?',
+      criteria: {
+        true: 'Road, trail, ultra, mountain, cross-country or track running, including sprints, hurdles and relays.',
+        false: 'Field events (jumps, throws, combined events) or a sport other than running.',
       },
-      running: {
-        type: 'noul',
-        instructions: 'Is this about running?',
-        criteria: {
-          true: 'Road, trail, ultra, mountain, cross-country or track running, including sprints, hurdles and relays.',
-          false: 'Field events (jumps, throws, combined events) or a sport other than running.',
-        },
-      },
-      topic: {
-        type: 'choice',
-        instructions: 'Which part of running is this about?',
-        criteria: { trail_ultra: 'Trail, ultra, mountain or sky running.', road: 'Road running, marathons, parkrun, cross-country.', track: 'Track and field running events.' },
-      },
-      uk: {
-        type: 'noul',
-        instructions: 'Are British athletes or UK races central to this story?',
-        criteria: { true: 'British athletes or UK races are central.', false: 'They are absent or only mentioned in passing.' },
-      },
-      importance: {
-        type: 'score',
-        instructions: 'How important is this story to a UK running site read by trail, ultra and road runners alike?',
-        criteria: [
-          'Local news, minor announcements, entries and logistics.',
-          'Minor race news of local interest.',
-          'Local race results.',
-          'Results at smaller races.',
-          'National-level news, or celebrities running a race.',
-          'Notable results at well-known races, big-name injuries or retirements, trails or races losing access, viral human-interest, a provisional doping suspension.',
-          'Changes that affect thousands of ordinary runners (qualifying times, cut-offs, ballots for the Majors or UTMB), governing-body rows, a race sold, axed or losing its sponsor, a legend retiring or coming back.',
-          'World championship results in ultra, trail or mountain running, a course record at a major ultra, a road or track world record, a Majors marathon win, the death of a known runner, doping bans, cheating punished, race disasters, results overturned, sporting firsts, a controversy the running world is talking about.',
-          'One of those stories about one of the sport\'s biggest names.',
-          'The biggest days of the year: UTMB or Western States won, an ultra world record, a British win at either.',
-        ],
-      },
+    },
+    topic: {
+      type: 'choice',
+      instructions: 'Which part of running is this about?',
+      criteria: { trail_ultra: 'Trail, ultra, mountain or sky running.', road: 'Road running, marathons, parkrun, cross-country.', track: 'Track and field running events.' },
+    },
+    uk: {
+      type: 'noul',
+      instructions: 'Are British athletes or UK races central to this story?',
+      criteria: { true: 'British athletes or UK races are central.', false: 'They are absent or only mentioned in passing.' },
+    },
+    importance: {
+      type: 'score',
+      instructions: 'How important is this story to a UK running site read by trail, ultra and road runners alike?',
+      criteria: [
+        'Local news, minor announcements, entries and logistics.',
+        'Minor race news of local interest.',
+        'Local race results.',
+        'Results at smaller races.',
+        'National-level news, or celebrities running a race.',
+        'Notable results at well-known races, big-name injuries or retirements, trails or races losing access, viral human-interest, a provisional doping suspension.',
+        'Changes that affect thousands of ordinary runners (qualifying times, cut-offs, ballots for the Majors or UTMB), governing-body rows, a race sold, axed or losing its sponsor, a legend retiring or coming back.',
+        'World championship results in ultra, trail or mountain running, a course record at a major ultra, a road or track world record, a Majors marathon win, the death of a known runner, doping bans, cheating punished, race disasters, results overturned, sporting firsts, a controversy the running world is talking about.',
+        'One of those stories about one of the sport\'s biggest names.',
+        'The biggest days of the year: UTMB or Western States won, an ultra world record, a British win at either.',
+      ],
     },
   };
   try {
-    const res = await fetch('https://openrouter.ai/api/alpha/decisions', {
-      method: 'POST',
-      headers: { Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      signal: AbortSignal.timeout(30_000),
-    });
-    if (!res.ok) throw new Error(`Jev ${res.status}: ${(await res.text()).slice(0, 300)}`);
-    const r = (await res.json()) as { answers: JevAnswers; usage?: { cost?: number } };
-    const a = r.answers;
+    const { answers: a, costUsd } = await decide<JevAnswers>(state, questions);
     if (!TYPES.includes(a?.type?.choice) || !TOPICS.includes(a.topic?.choice) || typeof a.importance?.score !== 'number') {
       throw new Error(`malformed answers: ${JSON.stringify(a).slice(0, 300)}`);
     }
@@ -162,7 +152,7 @@ export async function sortItemJev(c: Candidate, call: typeof completeJson = comp
       isUk,
       importance: Math.max(1, Math.min(10, Math.round(a.importance.score) + 1 + (isUk ? 1 : 0) - JEV_TOPIC_OFFSET[topic])),
     };
-    return { verdict, costUsd: r.usage?.cost ?? 0 };
+    return { verdict, costUsd };
   } catch (e) {
     console.warn(`Jev sort failed for ${c.url}, falling back to ${SORT_MODEL}: ${(e as Error).message}`);
     return sortItem(c, call);
