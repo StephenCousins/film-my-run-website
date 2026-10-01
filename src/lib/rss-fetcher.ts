@@ -187,6 +187,24 @@ const RSS_FEEDS: Array<{
     filterMode: 'none',
   },
   {
+    name: 'RunABC North',
+    url: 'https://runabc.co.uk/feeds/north-news',
+    category: 'running',
+    filterMode: 'none',
+  },
+  {
+    name: 'Run Ultra',
+    url: 'https://run-ultra.com/feed/',
+    category: 'trail',
+    filterMode: 'none',
+  },
+  {
+    name: "Runner's World UK",
+    url: 'https://www.runnersworld.com/uk/rss/all.xml/',
+    category: 'running',
+    filterMode: 'news',
+  },
+  {
     name: 'RunABC Scotland',
     url: 'https://runabc.co.uk/feeds/scotland-news',
     category: 'running',
@@ -318,6 +336,10 @@ function cleanDescription(text: string | undefined, maxLength = 300): string | u
   return (lastSpace > 0 ? truncated.substring(0, lastSpace) : truncated) + '...';
 }
 
+/** Each item's full feed HTML (content:encoded) by link, from the last fetch in this process.
+ * The news run falls back to it when the article page can't be read. */
+export const feedHtmlByLink = new Map<string, string>();
+
 export async function fetchAndStoreArticles(): Promise<{
   fetched: number;
   stored: number;
@@ -359,6 +381,7 @@ export async function fetchAndStoreArticles(): Promise<{
           // Some feeds first return ?p=123 then later the full slug URL
           const articleLink = item.link || item.guid;
           const articleGuid = item.guid || item.link;
+          if (item['content:encoded']) feedHtmlByLink.set(articleLink, item['content:encoded']);
 
           // Check if an article with the same title+source already exists
           // This catches duplicates where the URL changed between syncs

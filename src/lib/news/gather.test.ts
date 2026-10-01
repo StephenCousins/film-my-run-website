@@ -69,4 +69,14 @@ describe('pickImageUrl', () => {
     expect(p.text).not.toContain('Menu item');
     expect(p.text).not.toContain('Footer text');
   });
+  it('skips related-post <article> cards for the story in <main>, as Run Ultra builds them', () => {
+    const card = (t: string) => `<article class="elementor-post"><p>${t} is a related post teaser long enough to count</p></article>`;
+    const para = (t: string) => `<p>${t} and enough words to count as a real paragraph.</p>`;
+    const html = `<html><body><main>${para('Karen Nash won the women\'s race at the 13 Valleys Ultra')}
+      ${para('The flagship course runs 185.7km through the Lake District')}${para('She finished in 35:58:26')}
+      ${card('Whistler')}${card('Dragon\'s Back')}</main></body></html>`;
+    const p = extractPage(html, 'https://run-ultra.com/news/x', 'Run Ultra');
+    expect(p.text).toContain('Karen Nash');
+    expect(p.text).toContain('35:58:26');
+  });
 });

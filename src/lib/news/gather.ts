@@ -1,6 +1,6 @@
 import * as cheerio from 'cheerio';
 import { prisma } from '@/lib/db';
-import { fetchAndStoreArticles, SOURCE_PLACEHOLDERS } from '@/lib/rss-fetcher';
+import { feedHtmlByLink, fetchAndStoreArticles, SOURCE_PLACEHOLDERS } from '@/lib/rss-fetcher';
 import { NEWS_CONFIG } from './config';
 import type { Candidate } from './types';
 
@@ -27,9 +27,12 @@ export function pickImageUrl(pageImageUrl: string | null, feedImageUrl: string |
 export function extractPage(html: string, pageUrl: string, site: string) {
   const $ = cheerio.load(html);
   $('script, style, nav, header, footer, aside, form, .comments, .related, .newsletter, .share, .sidebar').remove();
-  // <article>, else <main>, else the whole page with its menus, header and footer already
-  // removed above: Athletics Weekly has neither, and every one of its stories came back unread.
-  const body = $('article').first().length ? $('article').first() : $('main').first().length ? $('main').first() : $('body');
+  // The <article> with the most paragraphs if it has a story's worth, else <main>, else the whole
+  // page with its menus, header and footer already removed above: Athletics Weekly has neither,
+  // and every one of its stories came back unread. Run Ultra's only <article>s are related-post
+  // cards of one line each, so taking the first lost every story there (1 Oct 2026).
+  const article = $('article').toArray().map((a) => $(a)).sort((a, b) => b.find('p').length - a.find('p').length)[0];
+  const body = article && article.find('p').length >= 3 ? article : $('main').first().length ? $('main').first() : $('body');
 
   // Read the caption before excluding its paragraph below, so its "Photo: ..." credit
   // isn't lost along with it. WordPress captions land as a <p class="wp-caption-text">
@@ -84,6 +87,9 @@ export async function gatherCandidates(now: Date): Promise<Candidate[]> {
   for (const a of articles.filter((a) => !seen.has(a.id))) {
     const html = await fetchHtml(a.link);
     const page = html ? extractPage(html, a.link, a.source) : { text: null, imageUrl: null, photoCredit: null };
+    // Page unreadable: the feed's own full text, when the feed carries one.
+    const feedHtml = feedHtmlByLink.get(a.link);
+    if (!page.text && feedHtml) page.text = extractPage(feedHtml, a.link, a.source).text;
     out.push({
       articleId: a.id, url: a.link, source: a.source, title: a.title, pubDate: a.pub_date,
       summary: a.description ?? '', text: page.text, imageUrl: pickImageUrl(page.imageUrl, a.image_url), photoCredit: page.photoCredit,
