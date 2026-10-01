@@ -148,8 +148,11 @@ async function main() {
     const cache = await loadCache();
     const pairs = rows.flatMap((r) => {
       const g = cache[`${r.id}:${SORT_MODEL}`]?.verdict;
+      // Only stories both call news: importance on a rejected item is never used.
       return g && r.verdict && r.verdict.type !== 'media' ? [{ j: r.verdict, g }] : [];
     });
+    const both = pairs.filter((p) => p.j.type === 'news' && p.g.type === 'news');
+    const pctOf = (xs: typeof pairs, f: (p: (typeof pairs)[number]) => boolean) => `${Math.round((100 * xs.filter(f).length) / Math.max(1, xs.length))}%`;
     const pct = (f: (p: (typeof pairs)[number]) => boolean) => `${Math.round((100 * pairs.filter(f).length) / Math.max(1, pairs.length))}%`;
     agreement.push(
       `## Agreement with ${SORT_MODEL} (${pairs.length} items both judged)`, ``,
@@ -157,7 +160,8 @@ async function main() {
       `| type | ${pct((p) => p.j.type === p.g.type)} |`,
       `| topic | ${pct((p) => p.j.topic === p.g.topic)} |`,
       `| isUk | ${pct((p) => p.j.isUk === p.g.isUk)} |`,
-      `| importance within 1 | ${pct((p) => Math.abs(p.j.importance - p.g.importance) <= 1)} |`,
+      `| importance within 1 (both news, ${both.length}) | ${pctOf(both, (p) => Math.abs(p.j.importance - p.g.importance) <= 1)} |`,
+      `| big story (>= ${NEWS_CONFIG.bigStory}) agrees (both news) | ${pctOf(both, (p) => (p.j.importance >= NEWS_CONFIG.bigStory) === (p.g.importance >= NEWS_CONFIG.bigStory))} |`,
       ``,
     );
   }

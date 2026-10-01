@@ -58,6 +58,13 @@ Opening: ${(c.text ?? '').slice(0, 1500)}`;
   return { verdict: valid ? { ...d, importance: Math.max(1, Math.min(10, Math.round(d.importance))) } : null, costUsd: r.costUsd };
 }
 
+/**
+ * Jev scores the size of the event, not this site's readers: against SORT_MODEL on 118 news stories
+ * it ran ~3 high on track and ~1 high on road (fitted on half, checked on the other: within 1 point
+ * went 45% -> 73%). Re-fit if the score scale or the readership changes.
+ */
+const JEV_TOPIC_OFFSET: Record<Verdict['topic'], number> = { trail_ultra: 0, road: 1, track: 3 };
+
 interface JevChoice { choice: string; probabilities: Record<string, number> }
 interface JevAnswers {
   type: JevChoice; topic: JevChoice; running: { noul: number }; uk: { noul: number }; importance: { score: number };
@@ -140,13 +147,14 @@ export async function sortItemJev(c: Candidate): Promise<{ verdict: Verdict | nu
     const r = (await res.json()) as { answers: JevAnswers; usage?: { cost?: number } };
     const a = r.answers;
     const isUk = a.uk.noul >= 0.5;
+    const topic = a.topic.choice as Verdict['topic'];
     const verdict: Verdict = {
       type: a.type.choice as Verdict['type'],
       confidence: a.type.probabilities[a.type.choice] ?? 0,
       isRunning: a.running.noul >= 0.5,
-      topic: a.topic.choice as Verdict['topic'],
+      topic,
       isUk,
-      importance: Math.min(10, Math.round(a.importance.score) + 1 + (isUk ? 1 : 0)),
+      importance: Math.max(1, Math.min(10, Math.round(a.importance.score) + 1 + (isUk ? 1 : 0) - JEV_TOPIC_OFFSET[topic])),
     };
     return { verdict, costUsd: r.usage?.cost ?? 0 };
   } catch (e) {
