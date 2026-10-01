@@ -63,6 +63,8 @@ Opening: ${(c.text ?? '').slice(0, 1500)}`;
  * it ran ~3 high on track and ~1 high on road (fitted on half, checked on the other: within 1 point
  * went 45% -> 73%). Re-fit if the score scale or the readership changes.
  */
+const TYPES: string[] = SCHEMA.properties.type.enum;
+const TOPICS: string[] = SCHEMA.properties.topic.enum;
 const JEV_TOPIC_OFFSET: Record<Verdict['topic'], number> = { trail_ultra: 0, road: 1, track: 3 };
 
 interface JevChoice { choice: string; probabilities: Record<string, number> }
@@ -71,13 +73,14 @@ interface JevAnswers {
 }
 
 /**
- * The same verdict from Jev, a decision model: typed answers instead of JSON from a chat model.
- * Trial only, run by scripts/news-sorter-check.ts --jev; the daily pipeline still calls sortItem.
+ * The live sorter since 1 Oct 2026: the same verdict from Jev, a decision model, at ~1/30th of
+ * SORT_MODEL's cost (scripts/news-sorter-check.ts --jev, docs/news/sorter-check-jev.md).
  * "confidence" is Jev's probability for the chosen type, and the +1 for UK stories is done here
- * because Jev reads instructions literally and leaves arithmetic to code.
+ * because Jev reads instructions literally and leaves arithmetic to code. Jev has no fallback of
+ * its own, so a failed or malformed answer goes to sortItem instead.
  */
-export async function sortItemJev(c: Candidate): Promise<{ verdict: Verdict | null; costUsd: number }> {
-  if (MEDIA_URL.test(c.url)) return sortItem(c);
+export async function sortItemJev(c: Candidate, call: typeof completeJson = completeJson): Promise<{ verdict: Verdict | null; costUsd: number }> {
+  if (MEDIA_URL.test(c.url)) return sortItem(c, call);
   const body = {
     model: JEV_SORT_MODEL,
     state: {
@@ -146,6 +149,9 @@ export async function sortItemJev(c: Candidate): Promise<{ verdict: Verdict | nu
     if (!res.ok) throw new Error(`Jev ${res.status}: ${(await res.text()).slice(0, 300)}`);
     const r = (await res.json()) as { answers: JevAnswers; usage?: { cost?: number } };
     const a = r.answers;
+    if (!TYPES.includes(a?.type?.choice) || !TOPICS.includes(a.topic?.choice) || typeof a.importance?.score !== 'number') {
+      throw new Error(`malformed answers: ${JSON.stringify(a).slice(0, 300)}`);
+    }
     const isUk = a.uk.noul >= 0.5;
     const topic = a.topic.choice as Verdict['topic'];
     const verdict: Verdict = {
@@ -158,7 +164,7 @@ export async function sortItemJev(c: Candidate): Promise<{ verdict: Verdict | nu
     };
     return { verdict, costUsd: r.usage?.cost ?? 0 };
   } catch (e) {
-    console.warn(`Jev sort failed for ${c.url}: ${(e as Error).message}`);
-    return { verdict: null, costUsd: 0 };
+    console.warn(`Jev sort failed for ${c.url}, falling back to ${SORT_MODEL}: ${(e as Error).message}`);
+    return sortItem(c, call);
   }
 }

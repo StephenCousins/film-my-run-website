@@ -3,5 +3,5 @@ export const SORT_MODEL = 'google/gemini-3.7-flash';
 export const GROUP_MODEL = 'google/gemini-3.7-flash';
 export const WRITE_MODEL = 'anthropic/claude-opus-5.5';
 export const CHECK_MODEL = 'anthropic/claude-opus-5.5';
-/** Trial only (1 Oct 2026): TypeSafe's decision model, scored against SORT_MODEL by scripts/news-sorter-check.ts --jev. */
+/** The live sorter since 1 Oct 2026 (sortItemJev); SORT_MODEL is its fallback and the reference it was scored against. */
 export const JEV_SORT_MODEL = 'typesafe/jev-1.13';

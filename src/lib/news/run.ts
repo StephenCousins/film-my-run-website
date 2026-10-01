@@ -10,7 +10,7 @@ import { nearCopyPhrases, ruleProblems, tidyPunctuation } from './rules';
 import { moreCoverage } from './search';
 import { runnerCandidates, RUNNER_FILE_SOURCE } from '@/lib/runners/runner-file';
 import { autoProfiles } from '@/lib/runners/auto';
-import { isBorderline, passesSort, sortItem } from './sort';
+import { isBorderline, passesSort, sortItem, sortItemJev } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
 import { checkFacts, writeStory, editStory, type Fix } from './write';
 
@@ -69,7 +69,7 @@ export async function monthSpentUsd(now: Date): Promise<number> {
 
 const liveDeps: RunDeps = {
   gather: gatherCandidates,
-  sort: (c) => sortItem(c),
+  sort: (c) => sortItemJev(c),
   group: (items, recent) => groupItems(items, recent),
   write: (b, now, avoid, unsupported) => writeStory(b, now, undefined, avoid, unsupported),
   edit: (d, b, fix) => editStory(d, b, fix),

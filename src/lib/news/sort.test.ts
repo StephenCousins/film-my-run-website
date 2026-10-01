@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { passesSort, isBorderline, sortItem } from './sort';
+import { afterEach, describe, expect, it, vi } from 'vitest';
+import { passesSort, isBorderline, sortItem, sortItemJev } from './sort';
 import type { Candidate, Verdict } from './types';
 
 const v = (over: Partial<Verdict>): Verdict => ({ type: 'news', confidence: 0.95, isRunning: true, topic: 'trail_ultra', isUk: false, importance: 7, ...over });
@@ -39,5 +39,34 @@ describe('sortItem media pages', () => {
     expect(called).toBe(false);
     expect(passesSort(r.verdict)).toBe(false);
     expect(r.costUsd).toBe(0);
+  });
+});
+
+describe('sortItemJev', () => {
+  const answers = (over: object = {}) => ({
+    type: { choice: 'news', probabilities: { news: 0.93 } }, topic: { choice: 'track', probabilities: {} },
+    running: { noul: 0.9 }, uk: { noul: 0.8 }, importance: { score: 6.2 }, ...over,
+  });
+  const stubFetch = (res: Response) => vi.stubGlobal('fetch', vi.fn(async () => res));
+  const gemini = async () => ({ data: v({ importance: 4 }), costUsd: 0.002, raw: '' });
+  afterEach(() => vi.unstubAllGlobals());
+
+  it('maps answers to a verdict, with the UK bonus and the track offset', async () => {
+    stubFetch(Response.json({ answers: answers(), usage: { cost: 0.00006 } }));
+    const r = await sortItemJev(c, gemini as never);
+    // score 6.2 -> 6, +1 to the 1-10 scale, +1 UK, -3 track
+    expect(r.verdict).toEqual({ type: 'news', confidence: 0.93, isRunning: true, topic: 'track', isUk: true, importance: 5 });
+    expect(r.costUsd).toBe(0.00006);
+  });
+  it('falls back to the chat sorter when Jev errors', async () => {
+    stubFetch(new Response('down', { status: 503 }));
+    const r = await sortItemJev(c, gemini as never);
+    expect(r.verdict?.importance).toBe(4);
+    expect(r.costUsd).toBe(0.002);
+  });
+  it('falls back when an answer is malformed', async () => {
+    stubFetch(Response.json({ answers: answers({ type: { choice: 'gossip', probabilities: {} } }) }));
+    const r = await sortItemJev(c, gemini as never);
+    expect(r.verdict?.importance).toBe(4);
   });
 });
