@@ -992,6 +992,27 @@ Extraction calls run at `temperature: 0` for parseable output; the writing calls
 use 0.6–0.7. Nothing in `src/` calls the Anthropic SDK any more. The standalone
 `scripts/*.mjs` still do.
 
+### Jev (decision model)
+
+`typesafe/jev-1.13` answers typed questions (yes/no, pick one, score) instead of
+writing text. It is billed to the same OpenRouter key and credits (no TypeSafe
+account) through `decide()` in `src/lib/jev.ts`. It reads text only, and it has
+no fallback of its own, so every caller falls back to a chat model.
+
+- **News sorter: Jev since 1 Oct 2026** (`sortItemJev`, falls back to
+  `sortItem` on Gemini 3.7 Flash). On the 306 labelled stories it matched
+  Gemini at the publish gate (0 false passes, 13 missed vs 15) at ~1/30th of
+  the cost. Jev scores the size of an event, not this site's readers, so
+  importance takes 3 off track and 1 off road (`JEV_TOPIC_OFFSET`, fitted on
+  half the stories, checked on the other half). Re-check with
+  `scripts/news-sorter-check.ts --jev`.
+- **Shoe Finder: tried, rejected 1 Oct 2026.** Slightly worse than Flash Lite
+  at both review checks, and Flash Lite already costs next to nothing
+  (`docs/shoes/jev-check.md`).
+
+Rule of thumb from both trials: Jev pays where the current model is a pricier
+reasoning model. Against Flash Lite there is nothing to save.
+
 ---
 
 ## RaceScript — built but unfinished
