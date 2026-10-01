@@ -1,6 +1,9 @@
 name: News daily
 on:
   # Live since 26 Sep 2026.
+  # The server (src/lib/news/dispatch.ts, NEWS_DISPATCH_TOKEN) dispatches this workflow at 05:30 London
+  # (retry 06:30, stop 11:00) so the news is done before the 07:30 push. The crons below are a backup only:
+  # GitHub starts them hours late.
   schedule:
     # Off the hour: GitHub delays or drops scheduled runs at :00 when busy (none ran on 27 Sep).
     - cron: '17 2 * * *'   # 03:17 UK summer time, 02:17 winter (GitHub starts it hours late; any time is fine)
@@ -10,6 +13,7 @@ on:
   workflow_dispatch:
     inputs:
       dry_run: { description: 'Dry run (publish nothing)', type: boolean, default: true }
+      if_not_run_today: { description: 'Skip if today\'s daily run already completed (the server dispatch sets this)', type: boolean, default: false }
       max_stories: { description: 'One-off story cap (blank = the daily 4)', type: string, default: '' }
 # One run at a time: two overlapping runs could publish the same event twice.
 concurrency: { group: news-daily, cancel-in-progress: false }
@@ -25,7 +29,7 @@ jobs:
       - run: npm ci && npx prisma generate
       # Writing and checking run on the owner's Claude subscription; OpenRouter if this fails.
       - run: npm install -g @anthropic-ai/claude-code
-      - run: npm run news:daily -- ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }} ${{ (github.event_name == 'workflow_dispatch' && inputs.max_stories != '') && format('--max {0}', inputs.max_stories) || '' }} ${{ github.event_name == 'schedule' && '--if-not-run-today' || '' }}
+      - run: npm run news:daily -- ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }} ${{ (github.event_name == 'workflow_dispatch' && inputs.max_stories != '') && format('--max {0}', inputs.max_stories) || '' }} ${{ (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.if_not_run_today)) && '--if-not-run-today' || '' }}
         env:
           DATABASE_URL: ${{ secrets.DATABASE_PUBLIC_URL }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}

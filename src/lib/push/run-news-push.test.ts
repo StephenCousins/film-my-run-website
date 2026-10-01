@@ -12,6 +12,7 @@ function fake(over: Record<string, unknown> = {}) {
     feed: async () => [story('a')],
     lastSentSlug: async () => null as string | null,
     alreadySent: vi.fn(async (d: string) => sent.has(d)),
+    newsRanToday: vi.fn(async () => true),
     claim: vi.fn(async (d: string) => { sent.add(d); return true; }),
     devices: async () => [
       { token: 't1', environment: 'sandbox' as const },
@@ -32,6 +33,12 @@ describe('runNewsPush', () => {
     const d = fake({ now: at('06:00') });
     expect((await runNewsPush(d)).outcome).toBe('outside-window');
     expect(d.send).not.toHaveBeenCalled();
+  });
+  it('waits for today\'s news run before claiming', async () => {
+    const d = fake({ newsRanToday: vi.fn(async () => false) });
+    expect((await runNewsPush(d)).outcome).toBe('waiting-for-news');
+    expect(d.claim).not.toHaveBeenCalled();
+    expect(d.newsRanToday).toHaveBeenCalledWith('2026-12-01');
   });
   it('sends to every device and records counts; each with its own environment', async () => {
     const d = fake();

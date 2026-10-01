@@ -52,6 +52,8 @@ export interface NewsPushDeps {
   feed(): Promise<AppNewsStory[]>;
   lastSentSlug(): Promise<string | null>;
   alreadySent(day: string): Promise<boolean>;
+  /** Has today's (London day) daily news run completed? The push never goes before it. */
+  newsRanToday(day: string): Promise<boolean>;
   /** Inserts the day's row; false if it already existed (another instance claimed it). */
   claim(day: string, slug: string, recipients: number): Promise<boolean>;
   devices(): Promise<NewsPushDevice[]>;
@@ -64,7 +66,7 @@ export interface NewsPushDeps {
   record(day: string, recipients: number, failures: number): Promise<void>;
 }
 export interface NewsPushResult {
-  outcome: 'outside-window' | 'already-sent' | 'no-new-story' | 'claimed-elsewhere' | 'sent' | 'dry-run';
+  outcome: 'outside-window' | 'waiting-for-news' | 'already-sent' | 'no-new-story' | 'claimed-elsewhere' | 'sent' | 'dry-run';
   slug?: string;
   recipients?: number;
   failures?: number;
@@ -74,6 +76,7 @@ export async function runNewsPush(deps: NewsPushDeps): Promise<NewsPushResult> {
   if (!inSendWindow(deps.now)) return { outcome: 'outside-window' };
   const { day } = londonClock(deps.now);
   if (await deps.alreadySent(day)) return { outcome: 'already-sent' };
+  if (!(await deps.newsRanToday(day))) return { outcome: 'waiting-for-news' };
   const story = pickStory(await deps.feed(), await deps.lastSentSlug(), deps.now);
   if (!story) return { outcome: 'no-new-story' };
   const devices = await deps.devices();
@@ -119,6 +122,7 @@ export async function prismaNewsPushDeps(now: Date, config: ApnsConfig, dryRun =
     dryRun,
     feed: () => latestPublishedStories(now),
     lastSentSlug: async () => (await prisma.news_push_sends.findFirst({ orderBy: { day: 'desc' }, select: { slug: true } }))?.slug ?? null,
+    newsRanToday: async (day) => (await import('@/lib/news/daily-run')).dailyRunCompletedOn(day),
     alreadySent: async (day) => (await prisma.news_push_sends.findUnique({ where: { day } })) !== null,
     claim: async (day, slug, recipients) => {
       try {

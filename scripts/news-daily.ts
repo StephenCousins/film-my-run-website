@@ -7,6 +7,7 @@
 //        npm run news:daily -- --monthly-refresh   (the monthly runner refresh on its own, live; normally the first Monday)
 import { Resend } from 'resend';
 import { prisma } from '@/lib/db';
+import { isCompletedDailyRun } from '@/lib/news/daily-run';
 import { NEWS_CONFIG } from '@/lib/news/config';
 import { errorText, NewsRunError, runNews } from '@/lib/news/run';
 import { liveMonthlyDeps, monthlyRefresh, type MonthlySummary } from '@/lib/runners/monthly';
@@ -35,11 +36,11 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
     process.exit(0);
   }
   // The catch-up schedule: GitHub sometimes skips a scheduled run (27 Sep 2026), so a second
-  // one later in the morning runs the news only if no live daily run has happened today.
+  // one later in the morning runs the news only if no live daily run has COMPLETED today (a failed run retries).
   if (process.argv.includes('--if-not-run-today')) {
     const since = new Date(new Date().toISOString().slice(0, 10) + 'T00:00:00Z');
     const today = await prisma.news_runs.findMany({ where: { dry_run: false, started_at: { gte: since } }, select: { summary: true } });
-    if (today.some((r) => { const x = r.summary as { onDemand?: unknown; monthlyRefresh?: unknown } | null; return !x?.onDemand && !x?.monthlyRefresh; })) {
+    if (today.some((r) => isCompletedDailyRun(r.summary))) {
       console.log("Today's run already happened; nothing to do.");
       await prisma.$disconnect();
       process.exit(0);
