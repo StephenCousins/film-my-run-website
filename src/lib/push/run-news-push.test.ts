@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { runNewsPush, cutoffUnix } from './news-push';
 
-const story = (slug: string) => ({ slug, title: `T ${slug}`, excerpt: '', imageUrl: null, publishedAt: '', url: '', topStory: true });
+const story = (slug: string) => ({ slug, title: `T ${slug}`, excerpt: '', imageUrl: null, publishedAt: '2026-12-01T03:17:00Z', url: '', topStory: true });
 const at = (hhmm: string) => new Date(`2026-12-01T${hhmm}:00Z`);
 
 function fake(over: Record<string, unknown> = {}) {

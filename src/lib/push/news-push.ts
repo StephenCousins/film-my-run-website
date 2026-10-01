@@ -29,9 +29,14 @@ export function cutoffUnix(day: string): number {
 }
 
 /** The feed's first story, unless it is the one already pushed. */
-export function pickStory(feed: AppNewsStory[], lastSlug: string | null): AppNewsStory | null {
+/** A story older than this is not "today's" news: on a quiet day nothing is sent (Stephen, 1 Oct 2026). */
+export const MAX_STORY_AGE_MS = 36 * 60 * 60 * 1000;
+
+export function pickStory(feed: AppNewsStory[], lastSlug: string | null, now: Date): AppNewsStory | null {
   const top = feed[0];
-  return top && top.slug !== lastSlug ? top : null;
+  if (!top || top.slug === lastSlug) return null;
+  const published = Date.parse(top.publishedAt);
+  return now.getTime() - published <= MAX_STORY_AGE_MS ? top : null;
 }
 
 export function newsPayload(story: Pick<AppNewsStory, 'slug' | 'title'>) {
@@ -69,7 +74,7 @@ export async function runNewsPush(deps: NewsPushDeps): Promise<NewsPushResult> {
   if (!inSendWindow(deps.now)) return { outcome: 'outside-window' };
   const { day } = londonClock(deps.now);
   if (await deps.alreadySent(day)) return { outcome: 'already-sent' };
-  const story = pickStory(await deps.feed(), await deps.lastSentSlug());
+  const story = pickStory(await deps.feed(), await deps.lastSentSlug(), deps.now);
   if (!story) return { outcome: 'no-new-story' };
   const devices = await deps.devices();
   if (deps.dryRun) return { outcome: 'dry-run', slug: story.slug, recipients: devices.length };

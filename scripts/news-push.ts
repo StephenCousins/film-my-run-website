@@ -16,7 +16,7 @@ async function main() {
     const clock = londonClock(now);
     console.log(`London: ${clock.day} ${Math.floor(clock.minutes / 60)}:${String(clock.minutes % 60).padStart(2, '0')}, in send window: ${inSendWindow(now)}`);
     console.log(`Already sent today: ${await deps.alreadySent(clock.day)}`);
-    const story = pickStory(await deps.feed(), await deps.lastSentSlug());
+    const story = pickStory(await deps.feed(), await deps.lastSentSlug(), now);
     console.log(story ? `Would send: ${story.slug} - "${story.title}"` : 'No new story to send');
     const devices = await deps.devices();
     for (const env of ['sandbox', 'production'] as const) console.log(`${env}: ${devices.filter((d) => d.environment === env).length} devices`);

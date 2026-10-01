@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { londonClock, inSendWindow, pickStory, newsPayload } from './news-push';
 
-const story = (slug: string) => ({ slug, title: `T ${slug}`, excerpt: '', imageUrl: null, publishedAt: '', url: '', topStory: true });
+const story = (slug: string) => ({ slug, title: `T ${slug}`, excerpt: '', imageUrl: null, publishedAt: '2026-12-01T03:17:00Z', url: '', topStory: true });
 
 describe('londonClock', () => {
   it('uses BST in summer', () => {
@@ -26,9 +26,19 @@ describe('inSendWindow', () => {
 });
 
 describe('pickStory', () => {
-  it('takes the first story', () => { expect(pickStory([story('a'), story('b')], null)?.slug).toBe('a'); });
-  it('sends nothing when the top story was already sent', () => { expect(pickStory([story('a')], 'a')).toBeNull(); });
-  it('sends nothing on an empty feed', () => { expect(pickStory([], null)).toBeNull(); });
+  const now = new Date('2026-12-01T07:30:00Z');
+  it('takes the first story', () => { expect(pickStory([story('a'), story('b')], null, now)?.slug).toBe('a'); });
+  it('sends nothing when the top story was already sent', () => { expect(pickStory([story('a')], 'a', now)).toBeNull(); });
+  it('sends nothing on an empty feed', () => { expect(pickStory([], null, now)).toBeNull(); });
+  it('sends a story published exactly 36 hours ago', () => {
+    expect(pickStory([{ ...story('a'), publishedAt: '2026-11-29T19:30:00Z' }], null, now)?.slug).toBe('a');
+  });
+  it('sends nothing when the top story is older than 36 hours', () => {
+    expect(pickStory([{ ...story('a'), publishedAt: '2026-11-29T19:29:00Z' }], null, now)).toBeNull();
+  });
+  it('sends nothing when the date is unreadable', () => {
+    expect(pickStory([{ ...story('a'), publishedAt: '' }], null, now)).toBeNull();
+  });
 });
 
 describe('newsPayload', () => {
