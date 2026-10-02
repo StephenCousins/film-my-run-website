@@ -20,7 +20,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const item = getShopItem(slug);
-  if (!item) return { title: 'Shop' };
+  if (!item) return { title: 'Shop', robots: { index: false, follow: true } }; // a 200 under the root loading.tsx, so noindex (see news/[slug])
   const description = item.description.split('\n')[0].slice(0, 160);
   return {
     title: `${item.name} | Shop`,

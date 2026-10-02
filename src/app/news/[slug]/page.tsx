@@ -84,9 +84,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const story = await getStoryBySlug(slug);
 
-  if (!story) {
-    return { title: 'Story Not Found' };
-  }
+  // The root loading.tsx streams every page, so its 200 is sent before the page can 404. A missing
+  // story says noindex instead, which keeps it out of search results (2 Oct 2026).
+  if (!story) return { title: 'Story Not Found', robots: { index: false, follow: true } };
 
   return {
     title: story.title,

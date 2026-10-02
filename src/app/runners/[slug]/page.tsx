@@ -30,7 +30,7 @@ interface PageProps { params: Promise<{ slug: string }> }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const r = await getRunner((await params).slug);
-  if (!r) return { title: 'Runner not found' };
+  if (!r) return { title: 'Runner not found', robots: { index: false, follow: true } }; // a 200 under the root loading.tsx, so noindex (see news/[slug])
   const description = r.bio.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 155);
   const image = (r.photos.find((p) => p.kind === 'portrait') ?? r.photos[0])?.url;
   return {

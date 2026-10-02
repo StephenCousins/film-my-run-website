@@ -170,8 +170,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const post = await getPostBySlug(slug);
 
   if (!post) {
+    // A 200 under the root loading.tsx, so noindex keeps it out of search (see news/[slug]).
     return {
       title: 'Post Not Found',
+      robots: { index: false, follow: true },
     };
   }
 

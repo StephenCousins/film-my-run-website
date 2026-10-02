@@ -48,7 +48,7 @@ export async function generateMetadata({ params }: FilmPageProps): Promise<Metad
   const { slug } = await params;
   const film = await getFilm(slug);
 
-  if (!film) return { title: 'Film Not Found' };
+  if (!film) return { title: 'Film Not Found', robots: { index: false, follow: true } }; // a 200 under the root loading.tsx, so noindex (see news/[slug])
 
   return {
     title: film.title,
