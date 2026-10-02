@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ANSWERS } from './answers';
 import { LAUNCH, londonDate, puzzleFor, score, shareText } from './game';
 
-describe('Word Run schedule', () => {
+describe('Fartlex schedule', () => {
   it('puzzle 1 is launch day, and the length follows the week: 4 Mon-Tue, 5 Wed-Thu, 6 Fri-Sat, 7 Sun', () => {
     expect(puzzleFor(LAUNCH).number).toBe(1);
     const lengths = ['2026-10-05', '2026-10-06', '2026-10-07', '2026-10-08', '2026-10-09', '2026-10-10', '2026-10-11'].map((d) => puzzleFor(d).length);
@@ -36,7 +36,7 @@ describe('Word Run schedule', () => {
   });
 });
 
-describe('Word Run scoring', () => {
+describe('Fartlex scoring', () => {
   const s = (g: string, a: string) => score(g, a).map((x) => x[0]).join('');
   it('marks right place, wrong place and absent', () => {
     expect(s('TRAIL', 'TRAIL')).toBe('ccccc');
@@ -50,19 +50,19 @@ describe('Word Run scoring', () => {
   });
 });
 
-describe('Word Run share text', () => {
+describe('Fartlex share text', () => {
   it('is a grid of orange, blue and black squares with the score and no answer', () => {
     const text = shareText({ number: 12, maxGuesses: 6, won: true, rows: [score('SPEED', 'STEEP'), score('STEEP', 'STEEP')] });
-    expect(text).toBe('Word Run #12 2/6\n🟧🟦🟧🟧⬛\n🟧🟧🟧🟧🟧\nfilmmyrun.com/games/word-run');
-    expect(shareText({ number: 3, maxGuesses: 7, won: false, rows: [] })).toMatch(/^Word Run #3 X\/7/);
+    expect(text).toBe('Fartlex #12 2/6\n🟧🟦🟧🟧⬛\n🟧🟧🟧🟧🟧\nfilmmyrun.com/games/fartlex');
+    expect(shareText({ number: 3, maxGuesses: 7, won: false, rows: [] })).toMatch(/^Fartlex #3 X\/7/);
   });
 });
 
-describe('Word Run word lists', () => {
+describe('Fartlex word lists', () => {
   it('every answer is a valid guess (run scripts/word-run-words.ts after adding answers)', async () => {
     const { readFileSync } = await import('node:fs');
     for (const n of [4, 5, 6, 7] as const) {
-      const valid = new Set(readFileSync(`public/games/word-run/words-${n}.txt`, 'utf8').split('\n'));
+      const valid = new Set(readFileSync(`public/games/fartlex/words-${n}.txt`, 'utf8').split('\n'));
       for (const a of ANSWERS[n]) expect(valid.has(a.word.toLowerCase()), `${a.word} missing from words-${n}.txt`).toBe(true);
     }
   });

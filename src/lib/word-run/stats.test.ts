@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { EMPTY_STATS, liveStreak, record } from './stats';
 
-describe('Word Run streaks', () => {
+describe('Fartlex streaks', () => {
   it('counts consecutive wins, and the best', () => {
     let s = record(EMPTY_STATS, 1, true, 3);
     s = record(s, 2, true, 4);

@@ -506,7 +506,7 @@ blockquote.pull-quote p,
 .runner-link { text-decoration: underline; text-decoration-color: #f88c00; text-underline-offset: 3px; }
 .runner-link:hover { color: #f88c00; }
 
-/* Word Run: a row shakes when a guess isn't accepted. */
+/* Fartlex: a row shakes when a guess isn't accepted. */
 @keyframes wordrun-shake {
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-6px); }

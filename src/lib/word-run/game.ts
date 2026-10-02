@@ -1,7 +1,7 @@
 import { ANSWERS, type Answer } from './answers';
 
-/** The game's name, in one place: change it here and on iOS (WordRun.name). */
-export const GAME_NAME = 'Word Run';
+/** The game's name, in one place: change it here and on iOS (WordRun.name). Fartlek is Swedish for speed play: speed play with words (Stephen, 2 Oct 2026). */
+export const GAME_NAME = 'Fartlex';
 
 /** Puzzle 1. One puzzle a day after that, the same for everyone, by the London date. */
 export const LAUNCH = '2026-10-02';
@@ -65,5 +65,5 @@ const SQUARE: Record<Mark, string> = { correct: '🟧', present: '🟦', absent:
 /** What a player shares: the grid without the letters, so it never gives the word away. */
 export function shareText(r: { number: number; maxGuesses: number; won: boolean; rows: Mark[][] }): string {
   const grid = r.rows.map((row) => row.map((m) => SQUARE[m]).join('')).join('\n');
-  return [`${GAME_NAME} #${r.number} ${r.won ? r.rows.length : 'X'}/${r.maxGuesses}`, grid, 'filmmyrun.com/games/word-run'].filter(Boolean).join('\n');
+  return [`${GAME_NAME} #${r.number} ${r.won ? r.rows.length : 'X'}/${r.maxGuesses}`, grid, 'filmmyrun.com/games/fartlex'].filter(Boolean).join('\n');
 }

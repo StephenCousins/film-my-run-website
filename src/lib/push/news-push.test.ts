@@ -48,4 +48,7 @@ describe('newsPayload', () => {
       url: 'filmmyrun://news/big-win',
     });
   });
+  it("adds a line saying today's Fartlex is ready", () => {
+    expect(newsPayload(story('big-win'), 6).aps.alert.body).toBe("T big-win\nToday's Fartlex is ready: 6 letters.");
+  });
 });

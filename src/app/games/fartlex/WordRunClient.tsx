@@ -13,7 +13,7 @@ interface Props {
 }
 
 /** Today's guesses, and the player's record, live in this browser only. */
-const KEY = 'wordrun:v1';
+const KEY = 'wordrun:v1'; // kept from the Word Run days, so nobody's streak resets
 interface Saved { day: number; guesses: string[]; stats: Stats }
 
 function load(): Saved | null {
@@ -66,7 +66,7 @@ export default function WordRunClient({ puzzle }: Props) {
   }, [number]);
 
   useEffect(() => {
-    fetch(`/games/word-run/words-${length}.txt`)
+    fetch(`/games/fartlex/words-${length}.txt`)
       .then((r) => r.text())
       .then((t) => setValid(new Set(t.split('\n').map((w) => w.trim().toUpperCase()))))
       .catch(() => setValid(new Set())); // offline: accept any word rather than lock the player out

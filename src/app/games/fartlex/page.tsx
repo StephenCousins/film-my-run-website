@@ -5,12 +5,12 @@ import WordRunClient from './WordRunClient';
 // The puzzle changes at midnight London time, so never prerender it.
 export const dynamic = 'force-dynamic';
 
-const DESCRIPTION = 'A new running word every day. Four letters early in the week, building to a seven-letter long run on Sunday.';
+const DESCRIPTION = 'Speed play with words: a new running word every day. Four letters early in the week, building to a seven-letter long run on Sunday.';
 
 export const metadata: Metadata = {
   title: `${GAME_NAME}: the daily running word game`,
   description: DESCRIPTION,
-  alternates: { canonical: 'https://filmmyrun.com/games/word-run' },
+  alternates: { canonical: 'https://filmmyrun.com/games/fartlex' },
   openGraph: { title: `${GAME_NAME} | Film My Run`, description: DESCRIPTION },
 };
 

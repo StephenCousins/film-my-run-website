@@ -1,5 +1,5 @@
 /**
- * Word Run's answers, in the order they are played (Stephen, 2 Oct 2026). Each length has its
+ * Fartlex's answers (the code keeps its first name, word-run), in the order they are played (Stephen, 2 Oct 2026). Each length has its
  * own queue: the schedule takes the next word of the day's length. Add new words at the END of a
  * list, never in the middle, or every later puzzle changes. Facts are tips, definitions and
  * well-documented history only: a wrong fact undoes the point of the reveal. No em dashes.

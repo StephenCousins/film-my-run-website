@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { withAppApi } from '@/lib/app-api/rate-limit';
 import { londonDate, puzzleFor } from '@/lib/word-run/game';
 
-// Word Run for the app: today's puzzle by the London date, the same one the website plays.
+// Fartlex (route kept from its first name, Word Run) for the app: today's puzzle by the London date, the same one the website plays.
 // Only today's: the answer list itself never leaves the server.
 export const dynamic = 'force-dynamic';
 export const GET = withAppApi(

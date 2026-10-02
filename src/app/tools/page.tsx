@@ -37,10 +37,10 @@ export const metadata: Metadata = {
 
 const tools = [
   {
-    name: 'Word Run',
+    name: 'Fartlex',
     description:
-      'A new running word every day. Four letters early in the week, building to a seven-letter long run on Sunday. Keep your run streak going.',
-    href: '/games/word-run',
+      'Speed play with words: a new running word every day. Four letters early in the week, building to a seven-letter long run on Sunday. Keep your run streak going.',
+    href: '/games/fartlex',
     icon: Puzzle,
     color: 'from-orange-500 to-sky-600',
     stats: 'Daily word game',

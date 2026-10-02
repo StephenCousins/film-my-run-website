@@ -1,4 +1,5 @@
 import type { AppNewsStory } from '@/lib/app-api/news';
+import { londonDate, puzzleFor } from '@/lib/word-run/game';
 import { isDeadToken, openApns, type ApnsConfig, type ApnsSession, type ApnsEnvironment } from './apns';
 
 export const SEND_FROM = 7 * 60 + 30;
@@ -39,8 +40,10 @@ export function pickStory(feed: AppNewsStory[], lastSlug: string | null, now: Da
   return now.getTime() - published <= MAX_STORY_AGE_MS ? top : null;
 }
 
-export function newsPayload(story: Pick<AppNewsStory, 'slug' | 'title'>) {
-  return { aps: { alert: { title: "Today's running news", body: story.title }, sound: 'default' }, url: `filmmyrun://news/${story.slug}` };
+/** The morning push also says today's Fartlex is ready (Stephen, 2 Oct 2026), rather than sending a second notification. */
+export function newsPayload(story: Pick<AppNewsStory, 'slug' | 'title'>, fartlexLength?: number) {
+  const body = fartlexLength ? `${story.title}\nToday's Fartlex is ready: ${fartlexLength} letters.` : story.title;
+  return { aps: { alert: { title: "Today's running news", body }, sound: 'default' }, url: `filmmyrun://news/${story.slug}` };
 }
 
 export interface NewsPushDevice { token: string; environment: ApnsEnvironment }
@@ -83,7 +86,7 @@ export async function runNewsPush(deps: NewsPushDeps): Promise<NewsPushResult> {
   if (deps.dryRun) return { outcome: 'dry-run', slug: story.slug, recipients: devices.length };
   if (!(await deps.claim(day, story.slug, devices.length))) return { outcome: 'claimed-elsewhere', slug: story.slug };
 
-  const payload = newsPayload(story);
+  const payload = newsPayload(story, puzzleFor(londonDate(deps.now)).length);
   const expiration = cutoffUnix(day);
   const clock = deps.clock ?? (() => new Date());
   let failures = 0;

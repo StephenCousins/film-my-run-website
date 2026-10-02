@@ -77,6 +77,8 @@ const nextConfig: NextConfig = {
   // Redirects for old WordPress URLs
   async redirects() {
     return [
+      // The word game launched as Word Run and was renamed Fartlex the same day (2 Oct 2026).
+      { source: '/games/word-run', destination: '/games/fartlex', permanent: true },
       // www -> apex. Both hosts serve the site, and while the canonical tags
       // already point search engines at the bare domain, a 301 keeps the two
       // from being crawled as separate copies.
