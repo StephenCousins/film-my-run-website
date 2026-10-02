@@ -8,6 +8,7 @@ import { storyImage } from './image';
 import { isStale, pickBundles, slugBase, STORY_ESTIMATE_USD, uniqueSlug, withinCeiling } from './plan';
 import { nearCopyPhrases, ruleProblems, tidyPunctuation } from './rules';
 import { moreCoverage } from './search';
+import { gapBundle, gapsToFill, mustCoverFor, mustCoverNote } from './must-cover';
 import { runnerCandidates, RUNNER_FILE_SOURCE } from '@/lib/runners/runner-file';
 import { autoProfiles } from '@/lib/runners/auto';
 import { isBorderline, passesSort, sortItem, sortItemJev } from './sort';
@@ -37,6 +38,8 @@ export interface RunDeps {
   monthSpentUsd: (now: Date) => Promise<number>;
   /** Titles from the last 14 days, published or held: what the grouper's alreadyCovered check must see. */
   recentHeadlines: (now: Date) => Promise<string[]>;
+  /** Published stories from the last 14 days, for spotting a must-cover event with no story yet. */
+  recentStories: (now: Date) => Promise<{ title: string; createdAt: Date }[]>;
   takenSlugs: () => Promise<Set<string>>;
   /** Slugs of news_stories rows created in the last 14 days, used to catch a same-event duplicate before it publishes as -2. */
   recentSlugs: (now: Date) => Promise<Set<string>>;
@@ -82,6 +85,7 @@ const liveDeps: RunDeps = {
   hold: (s, reason) => saveStory(s, 'held', reason),
   monthSpentUsd,
   recentHeadlines: async (now) => (await prisma.news_stories.findMany({ where: { status: { in: ['published', 'held'] }, created_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { title: true } })).map((s) => s.title),
+  recentStories: async (now) => (await prisma.news_stories.findMany({ where: { status: 'published', created_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { title: true, created_at: true } })).map((s) => ({ title: s.title, createdAt: s.created_at })),
   takenSlugs: async () => new Set((await prisma.news_stories.findMany({ select: { slug: true } })).map((s) => s.slug)),
   recentSlugs: async (now) => new Set((await prisma.news_stories.findMany({ where: { created_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { slug: true } })).map((s) => s.slug)),
   markSeen: async (items) => {
@@ -148,6 +152,11 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
   // items the grouper left out, and bundles over the cap or past the ceiling.
   const inBundle = new Set(grouped.bundles.flatMap((b) => b.items.map((i) => i.articleId)));
   for (const { c } of passed) if (!inBundle.has(c.articleId)) log.ungrouped.push({ url: c.url, title: c.title });
+  // A race on the must-cover list (must-cover.ts): first in line, outside the cap, never stale.
+  for (const b of grouped.bundles) {
+    const e = mustCoverFor(b, now);
+    if (e) { b.mustCover = e.name; b.note = mustCoverNote(e); }
+  }
   const bundleSeen = (b: Bundle): Seen[] => b.items.map((c, i) => ({ c, v: b.verdicts[i] ?? null, bundleKey: b.key }));
   // A reference-only source (Marathon Investigation) can back up a story, never lead one.
   const referenceOnly = (b: Bundle) => b.items.every((i) => NEWS_CONFIG.referenceOnlySources.includes(i.source));
@@ -170,6 +179,12 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
   const picked = pickBundles(grouped.bundles, cap, now);
   for (const b of grouped.bundles) {
     if (!b.alreadyCovered && !picked.includes(b)) log.skipped.push({ headline: b.headline, reason: `over the ${cap}-story cap` });
+  }
+
+  // A must-cover race that finished a few days ago with nothing published: go and find it.
+  for (const { event, edition } of gapsToFill(now, await d.recentStories(now))) {
+    if (picked.some((b) => b.mustCover === event.name)) continue;
+    picked.push(gapBundle(event, edition));
   }
 
   const taken = await d.takenSlugs();

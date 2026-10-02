@@ -1,4 +1,6 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
+
+vi.mock('./must-cover.json', () => ({ default: [{ name: 'Spartathlon', aliases: ['Spartathlon'], topic: 'trail_ultra', editions: [{ start: '2027-09-24', end: '2027-09-26', status: 'confirmed' }] }] }));
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
@@ -25,6 +27,7 @@ function deps(over: Record<string, unknown> = {}) {
     edit: async (dr: Draft) => ({ draft: dr, costUsd: 0.05 }),
     monthSpentUsd: async () => 0,
     recentHeadlines: async () => [],
+    recentStories: async () => [],
     takenSlugs: async () => new Set<string>(),
     recentSlugs: async () => new Set<string>(),
     markSeen: async (items: { c: Candidate }[]) => { seen.push(...items.map((i) => i.c.articleId)); },
@@ -292,5 +295,31 @@ describe('a news run', () => {
     await runNews({ now: new Date(), dryRun: false, deps: d });
     expect(asks[0]).toEqual(['Lake District']);
     expect(published).toHaveLength(1);
+  });
+
+  it('a must-cover race with no story two days after it finished is searched for, written and published', async () => {
+    const found: Candidate = { ...cand(0), url: 'https://gr.test/spartathlon', source: 'Notospress', text: 'Bódis won.' };
+    const asked: string[] = [];
+    let note = '';
+    const { d, published } = deps({
+      gather: async () => [],
+      more: async (b: Bundle) => { asked.push(b.headline); return { items: [found, { ...found, url: 'https://gr.test/2', source: 'Kalimera' }], costUsd: 0.01 }; },
+      write: async (b: Bundle) => { note = b.note ?? ''; return { draft: { title: 'Bódis wins the Spartathlon', excerpt: 'An excerpt.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }; },
+    });
+    await runNews({ now: new Date('2027-09-28T06:00:00Z'), dryRun: false, deps: d as never });
+    expect(asked).toEqual(['Spartathlon 2027 results']);
+    expect(note).toMatch(/British/);
+    expect(published).toHaveLength(1);
+  });
+  it('no gap fill when the race already has a story', async () => {
+    let searched = false;
+    const { d, published } = deps({
+      gather: async () => [],
+      recentStories: async () => [{ title: 'Bódis wins the Spartathlon', createdAt: new Date('2027-09-27T06:00:00Z') }],
+      more: async () => { searched = true; return { items: [], costUsd: 0 }; },
+    });
+    await runNews({ now: new Date('2027-09-28T06:00:00Z'), dryRun: false, deps: d as never });
+    expect(searched).toBe(false);
+    expect(published).toHaveLength(0);
   });
 });

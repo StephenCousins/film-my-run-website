@@ -1,0 +1,1108 @@
+[
+  {
+    "name": "UTMB",
+    "aliases": [
+      "UTMB",
+      "Ultra-Trail du Mont-Blanc",
+      "HOKA UTMB Mont-Blanc",
+      "UTMB World Series Finals 100M"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-08-27",
+        "end": "2027-08-29",
+        "status": "estimated"
+      }
+    ],
+    "notes": "174 km. 2026 start Fri 28 Aug 19:45 Chamonix, 45h30 limit (finish Sun). 2027 week not yet published (run-motion.com, 15 Sep 2026, says organisers have not confirmed). Estimated from 2026 pattern (event 24-30 Aug 2026, last full week of August) -> Mon 23 - Sun 29 Aug 2027. 2026 edition already run, none Oct-Dec 2026."
+  },
+  {
+    "name": "CCC",
+    "aliases": [
+      "CCC",
+      "Courmayeur-Champex-Chamonix",
+      "CCC World Series Finals 100K"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-08-27",
+        "end": "2027-08-28",
+        "status": "estimated"
+      }
+    ],
+    "notes": "108 km. 2026 start Fri 28 Aug 09:00 Courmayeur, 28h limit. 2027 week not yet published (run-motion.com, 15 Sep 2026, says organisers have not confirmed). Estimated from 2026 pattern (event 24-30 Aug 2026, last full week of August) -> Mon 23 - Sun 29 Aug 2027."
+  },
+  {
+    "name": "OCC",
+    "aliases": [
+      "OCC",
+      "Orsières-Champex-Chamonix",
+      "OCC World Series Finals 50K"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-08-26",
+        "end": "2027-08-26",
+        "status": "estimated"
+      }
+    ],
+    "notes": "60 km. 2026 start Thu 27 Aug 08:15 Orsières, 14h30 limit (same-day finish). 2027 week not yet published (run-motion.com, 15 Sep 2026, says organisers have not confirmed). Estimated from 2026 pattern (event 24-30 Aug 2026, last full week of August) -> Mon 23 - Sun 29 Aug 2027."
+  },
+  {
+    "name": "TDS",
+    "aliases": [
+      "TDS",
+      "Sur les Traces des Ducs de Savoie"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-08-23",
+        "end": "2027-08-25",
+        "status": "estimated"
+      }
+    ],
+    "notes": "145 km. 2026 start Mon 24 Aug 23:50 Courmayeur, 44h55 limit (finish Wed). 2027 week not yet published (run-motion.com, 15 Sep 2026, says organisers have not confirmed). Estimated from 2026 pattern (event 24-30 Aug 2026, last full week of August) -> Mon 23 - Sun 29 Aug 2027."
+  },
+  {
+    "name": "PTL",
+    "aliases": [
+      "PTL",
+      "La Petite Trotte à Léon"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-08-23",
+        "end": "2027-08-29",
+        "status": "estimated"
+      }
+    ],
+    "notes": "~300 km team event. 2026 start Mon 24 Aug 08:00 Chamonix, 151h limit (finish Sun). 2027 week not yet published (run-motion.com, 15 Sep 2026, says organisers have not confirmed). Estimated from 2026 pattern (event 24-30 Aug 2026, last full week of August) -> Mon 23 - Sun 29 Aug 2027."
+  },
+  {
+    "name": "Backyard Ultra World Team Championship",
+    "aliases": [
+      "Backyard Ultra World Team Championship",
+      "Backyard Ultra Team World Championships",
+      "Big's Backyard Ultra team worlds"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2026-10-17",
+        "end": "2026-10-21",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Even years. Every qualified country runs its own satellite race simultaneously, start Sat 17 Oct 2026 07:00 CDT; 74 national teams (~1,110 runners). No fixed finish: end date is a guess (2024 edition ran ~4-5 days at the leading satellites). Next team worlds Oct 2028 (out of range)."
+  },
+  {
+    "name": "Big's Backyard Ultra",
+    "aliases": [
+      "Big's Backyard Ultra",
+      "Big Dog's Backyard Ultra",
+      "Backyard Ultra World Individual Championship",
+      "Backyard Ultra World Championship"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-10-16",
+        "end": "2027-10-22",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Odd years, at Laz Lake's farm, Bell Buckle, Tennessee; top 50 national champions qualify. Start 16 Oct 2027 confirmed by organiser. End open-ended (2025 went ~a week), so end date is a guess. No individual edition in late 2026."
+  },
+  {
+    "name": "Tokyo Marathon",
+    "aliases": [
+      "Tokyo Marathon"
+    ],
+    "topic": "road",
+    "editions": [
+      {
+        "start": "2027-03-07",
+        "end": "2027-03-07",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Abbott WMM."
+  },
+  {
+    "name": "Boston Marathon",
+    "aliases": [
+      "Boston Marathon",
+      "B.A.A. Boston Marathon"
+    ],
+    "topic": "road",
+    "editions": [
+      {
+        "start": "2027-04-19",
+        "end": "2027-04-19",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Abbott WMM. Patriots' Day (third Monday of April); not checked on baa.org directly."
+  },
+  {
+    "name": "London Marathon",
+    "aliases": [
+      "London Marathon",
+      "TCS London Marathon",
+      "Double TCS London Marathon"
+    ],
+    "topic": "road",
+    "editions": [
+      {
+        "start": "2027-04-24",
+        "end": "2027-04-25",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Abbott WMM. 2027 is a one-off TWO-DAY event (Sat 24 + Sun 25 Apr), 100,000 runners, same Greenwich-Westminster route; runners race one day only. Elite races presumably on one day (not checked)."
+  },
+  {
+    "name": "Cape Town Marathon",
+    "aliases": [
+      "Cape Town Marathon",
+      "Sanlam Cape Town Marathon",
+      "Cape Town Major"
+    ],
+    "topic": "road",
+    "editions": [
+      {
+        "start": "2027-05-23",
+        "end": "2027-05-23",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Becomes the 8th Abbott World Marathon Major in 2027 (passed second assessment at the 24 May 2026 race). Moved from Oct to May from 2026, so no Oct-Dec 2026 edition."
+  },
+  {
+    "name": "Sydney Marathon",
+    "aliases": [
+      "Sydney Marathon",
+      "TCS Sydney Marathon"
+    ],
+    "topic": "road",
+    "editions": [
+      {
+        "start": "2027-08-29",
+        "end": "2027-08-29",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Abbott WMM since 2025. 2026 edition (30 Aug) already run."
+  },
+  {
+    "name": "Berlin Marathon",
+    "aliases": [
+      "Berlin Marathon",
+      "BMW Berlin-Marathon"
+    ],
+    "topic": "road",
+    "editions": [
+      {
+        "start": "2027-09-26",
+        "end": "2027-09-26",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Abbott WMM. 2026 edition already run."
+  },
+  {
+    "name": "Chicago Marathon",
+    "aliases": [
+      "Chicago Marathon",
+      "Bank of America Chicago Marathon"
+    ],
+    "topic": "road",
+    "editions": [
+      {
+        "start": "2026-10-11",
+        "end": "2026-10-11",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-10-10",
+        "end": "2027-10-10",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Abbott WMM. 2027 applications open 8 Oct 2026."
+  },
+  {
+    "name": "New York City Marathon",
+    "aliases": [
+      "New York City Marathon",
+      "NYC Marathon",
+      "TCS New York City Marathon"
+    ],
+    "topic": "road",
+    "editions": [
+      {
+        "start": "2026-11-01",
+        "end": "2026-11-01",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-11-07",
+        "end": "2027-11-07",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Abbott WMM. 2027 date from secondary sources (first Sunday in November), not seen on nyrr.org."
+  },
+  {
+    "name": "Shanghai Marathon",
+    "aliases": [
+      "Shanghai Marathon",
+      "Shanghai International Marathon"
+    ],
+    "topic": "road",
+    "editions": [
+      {
+        "start": "2026-12-06",
+        "end": "2026-12-06",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-12-05",
+        "end": "2027-12-05",
+        "status": "estimated"
+      }
+    ],
+    "notes": "CANDIDATE Major, not yet a Major. Passed stage one Nov 2025; the 6 Dec 2026 race is its second assessment. If it passes it joins the Majors in 2027 (would be 9th, Nine Star medal). 2027 date reported as 5 Dec TBC."
+  },
+  {
+    "name": "Spartathlon",
+    "aliases": [
+      "Spartathlon",
+      "Athens-Sparta"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-09-24",
+        "end": "2027-09-25",
+        "status": "estimated"
+      }
+    ],
+    "notes": "246 km Athens-Sparta, 36h limit. Official 2026 announcement says 26-27 Sep 2026, 07:00 start (already run). Usually last Fri-Sat of September; aggregators give 25-26 Sep 2027, last-Friday pattern gives 24-25 Sep. Not announced: treat 24-26 Sep 2027 as the window."
+  },
+  {
+    "name": "Barkley Fall Classic",
+    "aliases": [
+      "Barkley Fall Classic",
+      "BFC"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-09-18",
+        "end": "2027-09-18",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "50 km, Frozen Head State Park, TN, 07:00 start. 2026 edition (19 Sep) already run. No standalone official site; UltraSignup is the registration page."
+  },
+  {
+    "name": "Centurion Autumn 100",
+    "aliases": [
+      "Autumn 100",
+      "A100",
+      "Centurion Autumn 100"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2026-10-17",
+        "end": "2026-10-18",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-10-16",
+        "end": "2027-10-17",
+        "status": "estimated"
+      }
+    ],
+    "notes": "Centurion Running. Thames Path/Ridgeway out-and-backs from Goring, 28h. 2027 not yet listed; 3rd weekend of October pattern."
+  },
+  {
+    "name": "Wendover Woods 50",
+    "aliases": [
+      "Wendover Woods 50",
+      "WW50"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2026-11-14",
+        "end": "2026-11-14",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-11-13",
+        "end": "2027-11-13",
+        "status": "estimated"
+      }
+    ],
+    "notes": "Centurion Running. 2027 not yet listed; mid-November Saturday pattern."
+  },
+  {
+    "name": "Winter Downs 200",
+    "aliases": [
+      "Winter Downs 200",
+      "WD200"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2026-12-09",
+        "end": "2026-12-13",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-12-08",
+        "end": "2027-12-12",
+        "status": "estimated"
+      }
+    ],
+    "notes": "Centurion Running. 200-mile loop from Juniper Hall, Dorking (NDW, Vanguard Way, SDW, Wayfarers Walk, St Swithuns Way). Start Wed 9 Dec 2026 08:00, 96h limit -> 13 Dec 08:00. 2027 not listed yet."
+  },
+  {
+    "name": "Winter Downs 100",
+    "aliases": [
+      "Winter Downs 100",
+      "WD100"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2026-12-11",
+        "end": "2026-12-13",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-12-10",
+        "end": "2027-12-12",
+        "status": "estimated"
+      }
+    ],
+    "notes": "Centurion Running. Runs alongside the 200 (3rd edition in 2026). 2027 not listed yet."
+  },
+  {
+    "name": "Centurion One Virtual Slam",
+    "aliases": [
+      "One Virtual Slam",
+      "One Community Week",
+      "Centurion One Community"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2026-12-25",
+        "end": "2027-03-04",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Centurion Running. Virtual, 50 to 1,000 miles over 70 days. Probably low news value."
+  },
+  {
+    "name": "Centurion Track 100",
+    "aliases": [
+      "Centurion Track 100",
+      "Track 100"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-01-01",
+        "end": "2027-01-01",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Centurion Running. 100 miles on the track at Bedford International Athletics Stadium, 07:00 start, 17h cut-off (midnight). Not shown on the main calendar listing but has a race page."
+  },
+  {
+    "name": "Hundred Hills 50km",
+    "aliases": [
+      "Hundred Hills 50km",
+      "Hundred Hills 50K"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-03-20",
+        "end": "2027-03-20",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Centurion Running. "
+  },
+  {
+    "name": "South Downs Way 50",
+    "aliases": [
+      "South Downs Way 50",
+      "SDW50"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-04-10",
+        "end": "2027-04-10",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Centurion Running. Grand Slam (50-mile slam) race."
+  },
+  {
+    "name": "Thames Path 100",
+    "aliases": [
+      "Thames Path 100",
+      "TP100"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-05-01",
+        "end": "2027-05-02",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Centurion Running. Grand Slam 100."
+  },
+  {
+    "name": "North Downs Way 50",
+    "aliases": [
+      "North Downs Way 50",
+      "NDW50"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-05-15",
+        "end": "2027-05-15",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Centurion Running. "
+  },
+  {
+    "name": "South Downs Way 100",
+    "aliases": [
+      "South Downs Way 100",
+      "SDW100"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-06-12",
+        "end": "2027-06-13",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Centurion Running. Grand Slam 100. Same weekend as the new SDW 50km (12 Jun) and SDW 10km/5km (11 Jun 2027), which are listed separately on the calendar."
+  },
+  {
+    "name": "South Downs Way 50km / 10km / 5km",
+    "aliases": [
+      "South Downs Way 50km",
+      "South Downs Way 10km",
+      "South Downs Way 5km"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-06-11",
+        "end": "2027-06-12",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Centurion Running. 10km and 5km on Fri 11 Jun, 50km on Sat 12 Jun 2027."
+  },
+  {
+    "name": "North Downs Way 100",
+    "aliases": [
+      "North Downs Way 100",
+      "NDW100"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-08-07",
+        "end": "2027-08-08",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Centurion Running. Grand Slam 100."
+  },
+  {
+    "name": "Chiltern Wonderland 50",
+    "aliases": [
+      "Chiltern Wonderland 50",
+      "CW50"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-09-18",
+        "end": "2027-09-18",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Centurion Running.  CALENDAR NOTE: Wendover Woods 100 (formerly July) has no 2026 or 2027 page (404) and is not on the calendar - appears dropped. Grand Slam = TP100, SDW100, NDW100, A100."
+  },
+  {
+    "name": "13 Valleys Ultra",
+    "aliases": [
+      "13 Valleys Ultra",
+      "Altra 13 Valleys Ultra",
+      "13 Valleys"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-09-24",
+        "end": "2027-09-26",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "180 km, 46.5h cut-off, Keswick. Weekend 24-26 Sep 2027 (13 Valleys starts Fri). 2026 edition already run."
+  },
+  {
+    "name": "7 Valleys Ultra",
+    "aliases": [
+      "7 Valleys Ultra",
+      "Altra 7 Valleys"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-09-25",
+        "end": "2027-09-26",
+        "status": "estimated"
+      }
+    ],
+    "notes": "110.6 km, 28h cut-off, part of the 24-26 Sep 2027 weekend. Exact start day not published; Saturday assumed."
+  },
+  {
+    "name": "6 Valleys Ultra",
+    "aliases": [
+      "6 Valleys Ultra",
+      "Altra 6 Valleys"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-09-25",
+        "end": "2027-09-25",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "NEW for 2027: 81 km, 3,000 m, 21h cut-off, Borrowdale to Keswick, waymarked. Same weekend as 13/7 Valleys, not a separate event, but its own named distance (5 Valleys 58 km and 2 Valleys 21 km also run)."
+  },
+  {
+    "name": "Cotswold Way Century",
+    "aliases": [
+      "Cotswold Way Century",
+      "Cotswold Way 100"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-09-18",
+        "end": "2027-09-19",
+        "status": "estimated"
+      }
+    ],
+    "notes": "102 miles Chipping Campden to Bath, 11:00 Saturday start, 32h limit. 2026 was Sat 19 - Sun 20 Sep (already run). 2027 'mid-September' only; 3rd weekend estimate."
+  },
+  {
+    "name": "Western States 100",
+    "aliases": [
+      "Western States 100",
+      "Western States Endurance Run",
+      "WSER",
+      "Western States"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-06-26",
+        "end": "2027-06-27",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Olympic Valley to Auburn, 30h. Lottery 5 Dec 2026 (news hook). 2027 date not on wser.org front page when checked; reported by aggregators and consistent with last-full-weekend-of-June pattern."
+  },
+  {
+    "name": "Barkley Marathons",
+    "aliases": [
+      "Barkley Marathons",
+      "The Barkley"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-02-12",
+        "end": "2027-04-05",
+        "status": "window"
+      }
+    ],
+    "notes": "Date never announced; conch blown up to an hour before start. Usually mid-to-late March (sometimes early April) BUT 2026 started 14 Feb (Valentine's Day), earliest ever, so the window must now include mid-February. Race lasts up to 60h. One aggregator guesses 14 Feb 2027 (unverified). No official site."
+  },
+  {
+    "name": "Lavaredo Ultra Trail",
+    "aliases": [
+      "Lavaredo Ultra Trail",
+      "La Sportiva Lavaredo Ultra Trail by UTMB",
+      "Lavaredo 120K",
+      "LUT"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-06-25",
+        "end": "2027-06-27",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Event 23-27 Jun 2027, Cortina d'Ampezzo. Lavaredo 120K starts 25 Jun 2027 (start time and limit not shown; historically Friday 23:00 with ~30h limit)."
+  },
+  {
+    "name": "Transgrancanaria Classic",
+    "aliases": [
+      "Transgrancanaria",
+      "The North Face Transgrancanaria",
+      "Transgrancanaria Classic",
+      "TGC"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-02-26",
+        "end": "2027-02-28",
+        "status": "estimated"
+      }
+    ],
+    "notes": "28th edition, event 24-28 Feb 2027 (confirmed). Classic (~126 km) day/time not published; historically starts Friday ~23:00 with ~30h limit, so Fri 26 - Sun 28 Feb."
+  },
+  {
+    "name": "Marathon des Sables Legendary",
+    "aliases": [
+      "Marathon des Sables",
+      "MDS",
+      "MDS Legendary",
+      "Marathon des Sables Legendary"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-04-04",
+        "end": "2027-04-10",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "41st edition, ~250 km, 6 stages, Moroccan Sahara near Ouarzazate. Racing 4-10 Apr 2027. MDS also runs ~10 other events a year: MDS 120 Atlantic Coast 23-30 Jan 2027, MDS 120 Cappadocia 2027, MDS 120 Jordan 2027, MDS Ultra 2027, MDS 120/Handi/Trek Morocco 2027 (dates for these not found). Legendary is the one the news covers."
+  },
+  {
+    "name": "Transvulcania",
+    "aliases": [
+      "Transvulcania",
+      "Transvulcania adidas",
+      "Transvulcania Ultramarathon"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-05-06",
+        "end": "2027-05-08",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "La Palma. 73 km ultra (Fuencaliente lighthouse to Los Llanos) usually on the Saturday, so likely 8 May 2027 (aggregator agrees); VK earlier in the week."
+  },
+  {
+    "name": "Badwater 135",
+    "aliases": [
+      "Badwater 135",
+      "Badwater",
+      "Badwater Ultramarathon"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-07-19",
+        "end": "2027-07-21",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Mon-Wed, Death Valley to Mt Whitney Portal, 48h. 40th anniversary edition. Applications 2-20 Jan 2027."
+  },
+  {
+    "name": "Hardrock 100",
+    "aliases": [
+      "Hardrock 100",
+      "Hardrock Hundred",
+      "Hardrock Hundred Mile Endurance Run",
+      "Hardrock"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-07-09",
+        "end": "2027-07-11",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Silverton CO, start Fri 9 Jul 06:00, 48h limit. Counter-clockwise in 2027. Lottery early December."
+  },
+  {
+    "name": "Leadville Trail 100 Run",
+    "aliases": [
+      "Leadville Trail 100",
+      "Leadville 100",
+      "LT100",
+      "Race Across the Sky"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-08-21",
+        "end": "2027-08-22",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "04:00 Saturday start, 30h limit. Lottery 1-15 Dec 2026, results 6 Jan 2027."
+  },
+  {
+    "name": "Montane Winter Spine Race",
+    "aliases": [
+      "Spine Race",
+      "Montane Winter Spine",
+      "Winter Spine"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-01-10",
+        "end": "2027-01-16",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "268 miles Pennine Way, Edale to Kirk Yetholm. Start Sun 10 Jan 2027 08:00, 156h, final cut-off 16 Jan 20:00."
+  },
+  {
+    "name": "Montane Winter Spine Challenger South",
+    "aliases": [
+      "Spine Challenger South",
+      "Spine Challenger",
+      "Winter Spine Challenger",
+      "MRT Challenge South"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-01-09",
+        "end": "2027-01-11",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "108 miles Edale-Hawes, 60h. MRT Challenge South (mountain rescue team version) same day."
+  },
+  {
+    "name": "Montane Winter Spine Challenger North",
+    "aliases": [
+      "Spine Challenger North",
+      "Winter Spine Challenger North",
+      "MRT Challenge North"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-01-10",
+        "end": "2027-01-15",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "160 miles Hardraw-Kirk Yetholm, 108h winter limit."
+  },
+  {
+    "name": "Montane Winter Spine Sprint",
+    "aliases": [
+      "Spine Sprint",
+      "Spine Sprint South",
+      "Spine Sprint North",
+      "Winter Spine Sprint"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-01-09",
+        "end": "2027-01-10",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-01-12",
+        "end": "2027-01-13",
+        "status": "confirmed"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "name": "Montane Summer Spine Race",
+    "aliases": [
+      "Summer Spine",
+      "Montane Summer Spine",
+      "Summer Spine Race"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-06-13",
+        "end": "2027-06-19",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "268 miles, start 13 Jun 2027 08:00 Edale, 156h, cut-off 19 Jun 20:00 Kirk Yetholm."
+  },
+  {
+    "name": "Montane Summer Spine Challenger",
+    "aliases": [
+      "Summer Spine Challenger South",
+      "Summer Spine Challenger North"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-06-12",
+        "end": "2027-06-14",
+        "status": "estimated"
+      },
+      {
+        "start": "2027-06-13",
+        "end": "2027-06-17",
+        "status": "confirmed"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "name": "Montane Summer Spine Sprint",
+    "aliases": [
+      "Summer Spine Sprint"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-06-12",
+        "end": "2027-06-13",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-06-15",
+        "end": "2027-06-16",
+        "status": "confirmed"
+      }
+    ],
+    "notes": ""
+  },
+  {
+    "name": "Tarawera Ultramarathon",
+    "aliases": [
+      "Tarawera Ultramarathon",
+      "Tarawera Ultra-Trail by UTMB",
+      "Tarawera",
+      "T102"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-02-13",
+        "end": "2027-02-14",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Rotorua NZ, UTMB World Series. T102 starts Sat 13 Feb 2027 07:00 (Kawerau), 30h. The 100-mile race typically starts earlier (Friday); its 2027 time not found."
+  },
+  {
+    "name": "Comrades Marathon",
+    "aliases": [
+      "Comrades Marathon",
+      "Comrades"
+    ],
+    "topic": "road",
+    "editions": [
+      {
+        "start": "2027-06-13",
+        "end": "2027-06-13",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "2027 is the 100th running (centenary). DOWN run, Pietermaritzburg to Durban, ~90 km, 12h. No edition in Oct-Dec 2026."
+  },
+  {
+    "name": "Diagonale des Fous",
+    "aliases": [
+      "Diagonale des Fous",
+      "Grand Raid de La Réunion"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2026-10-15",
+        "end": "2026-10-18",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-10-21",
+        "end": "2027-10-24",
+        "status": "estimated"
+      }
+    ],
+    "notes": "~180 km, 10,200 m+, Saint-Pierre to Saint-Denis, 22:00 start, 66h. 2026 is the 34th edition. 2027 not announced ('mid-October'); held on the third Thursday-Sunday of October in 2024-26, giving 21-24 Oct 2027 (could be 14-17)."
+  },
+  {
+    "name": "Val d'Aran by UTMB",
+    "aliases": [
+      "Val d'Aran by UTMB",
+      "HOKA Val d'Aran by UTMB",
+      "VDA"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-07-07",
+        "end": "2027-07-11",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Vielha, Pyrenees. European Major again in 2027. 2026 edition (1-5 Jul) already run. VDA 163K flagship."
+  },
+  {
+    "name": "Kodiak Ultra Marathons by UTMB",
+    "aliases": [
+      "Kodiak Ultra Marathons",
+      "HOKA Kodiak Ultra Marathons by UTMB",
+      "Kodiak 100"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2026-10-08",
+        "end": "2026-10-11",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-10-08",
+        "end": "2027-10-11",
+        "status": "estimated"
+      }
+    ],
+    "notes": "Big Bear Lake CA. Americas Major for 2026. 2027: utmb.world shows '08-11 October 2027' but Major status for 2027 not confirmed; treat as estimated."
+  },
+  {
+    "name": "Chiang Mai Thailand by UTMB",
+    "aliases": [
+      "Chiang Mai Thailand by UTMB",
+      "HOKA Chiang Mai Thailand by UTMB",
+      "Ultra-Trail Chiang Mai"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2026-11-27",
+        "end": "2026-12-06",
+        "status": "confirmed"
+      },
+      {
+        "start": "2027-11-26",
+        "end": "2027-12-05",
+        "status": "estimated"
+      }
+    ],
+    "notes": "Doi Inthanon. CONFUSION: an older independent 'Ultra Trail Chiang Mai (UTCM)' is listed 8-10 Jan 2027 on ahotu/ITRA; the UTMB Major is the Nov-Dec 2026 event. Race-day (main 100 mile) date inside the 10-day window not checked."
+  },
+  {
+    "name": "Ultra-Trail Australia by UTMB",
+    "aliases": [
+      "Ultra-Trail Australia",
+      "UTA",
+      "UTA100",
+      "HOKA Ultra-Trail Australia by UTMB"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-05-13",
+        "end": "2027-05-16",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Katoomba, Blue Mountains NSW. Listed as Oceania Major (fourth Major) on utmb.world."
+  },
+  {
+    "name": "Arc of Attrition by UTMB",
+    "aliases": [
+      "Arc of Attrition",
+      "Arc of Attrition by UTMB",
+      "Arc 100",
+      "Arc 50"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-01-22",
+        "end": "2027-01-24",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Cornwall, South West Coast Path. Arc 100M Fri 22 Jan 13:00 Coverack; Arc 100K Sat 23 Jan 10:00 Land's End; Arc 50K Sun 24 Jan Harlyn Bay; Arc 20K Sun 24 Jan Perranporth. Finish cut-offs TBC (100M historically 36h -> ends Sun 24). Distances reported as 'Arc 100'/'Arc 50' but not as distinct events. 2026 edition (Jan 2026) already run."
+  },
+  {
+    "name": "Eryri by UTMB",
+    "aliases": [
+      "Eryri by UTMB",
+      "Ultra-Trail Snowdonia",
+      "UTS",
+      "Ultra-Trail Snowdonia by UTMB",
+      "Eryri 100M",
+      "UTS 100M"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-05-14",
+        "end": "2027-05-16",
+        "status": "confirmed"
+      }
+    ],
+    "notes": "Llanberis, North Wales. Renamed from Ultra-Trail Snowdonia for 2027 (snowdonia.utmb.world now redirects). 100M (163 km) and 80K start Fri 14 May, 100K and 50K Sat 15 May, 25K Sun 16 May. 100M end likely Sun 16 May (limit not shown). 2026 edition (May) already run."
+  },
+  {
+    "name": "Skyline Scotland by UTMB",
+    "aliases": [
+      "Skyline Scotland",
+      "Skyline Scotland by UTMB",
+      "Ben Nevis Skyline",
+      "Glen Coe Skyline",
+      "Skyline Scotland 100M"
+    ],
+    "topic": "trail_ultra",
+    "editions": [
+      {
+        "start": "2027-09-16",
+        "end": "2027-09-19",
+        "status": "estimated"
+      }
+    ],
+    "notes": "Nevis Range, Fort William. Joins UTMB World Series in 2027 ('returns in 2027', so apparently no 2026 edition despite a stale 18-20 Sep 2026 race page). Official site: dates 'to be announced later this year'. Sources conflict: one aggregator says 16-18 Sep 2027, a search snippet said 27-30 May 2027; September fits history. Ben Nevis Skyline and Glen Coe Skyline have historically been reported under their own names. UTMB says 2027 is the first year with three UK World Series events: Arc of Attrition, Eryri, Skyline Scotland."
+  }
+]

@@ -32,6 +32,8 @@ export interface Bundle {
   note?: string;
   /** Asked for by hand: Stephen has decided it is news, so the writer doesn't re-judge that or the 14-day window. */
   onDemand?: boolean;
+  /** The must-cover event (must-cover.ts) this bundle is about: goes first, skips the cap, never stale. */
+  mustCover?: string;
   /** Set by the run when a bundle has waited too long (plan.ts isStale). */
   stale?: boolean;
 }
