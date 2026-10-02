@@ -7,6 +7,7 @@ import { liveNewsletterStore } from '@/lib/newsletter/store';
 import type { Member, MemberDeps } from './handlers';
 import { sendCodeEmail } from './email';
 import { verifyAppleIdentityToken } from './apple';
+import { exchangeAppleCode, revokeAppleToken } from './siwa';
 import { stripe } from '@/lib/shop/stripe';
 
 type UserRow = { id: number; email: string; name: string | null; access_tier: 'FREE' | 'PREMIUM' | 'PRO'; subscription_end: Date | null };
@@ -68,6 +69,10 @@ export const liveMemberDeps: MemberDeps = {
   sendCode: sendCodeEmail,
   ownTypeOff: ownTypeOffAvailable,
   verifyApple: verifyAppleIdentityToken,
+  storeAppleCode: async (sub, code) => {
+    const refresh = await exchangeAppleCode(code);
+    if (refresh) await prisma.accounts.updateMany({ where: { provider: 'apple', provider_account_id: sub }, data: { refresh_token: refresh } });
+  },
   deleteAccount: async (userId) => {
     const u = await prisma.users.findUniqueOrThrow({ where: { id: userId }, select: { email: true, stripe_customer_id: true } });
     // Stephen's choice (23 Sep 2026): a live website Club subscription is cancelled now, not left billing a deleted account.
@@ -77,7 +82,12 @@ export const liveMemberDeps: MemberDeps = {
         if (s.status !== 'canceled' && s.status !== 'incomplete_expired') await stripe().subscriptions.cancel(s.id);
       }
     }
+    // App Review 5.1.1(v): tell Apple to forget the Sign in with Apple grant. Best effort, as Stripe above is not.
+    const apple = await prisma.accounts.findMany({ where: { user_id: userId, provider: 'apple', refresh_token: { not: null } }, select: { refresh_token: true } });
+    for (const a of apple) await revokeAppleToken(a.refresh_token!);
     await prisma.$transaction([
+      // Ask Stephen threads hang off the install, not the account; the account's email is the link we have.
+      prisma.chat_threads.deleteMany({ where: { email: { equals: u.email, mode: 'insensitive' } } }),
       // Orders are the shop's records; they keep their email and lose the account link.
       prisma.orders.updateMany({ where: { user_id: userId }, data: { user_id: null } }),
       prisma.verification_tokens.deleteMany({ where: { identifier: u.email.toLowerCase() } }),

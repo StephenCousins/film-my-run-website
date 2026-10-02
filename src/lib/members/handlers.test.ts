@@ -283,6 +283,24 @@ describe('handleApple', () => {
     expect(again.member.id).toBe(me.member.id);
   });
 
+  it('keeps the authorization code for revocation, and still signs in if that fails', async () => {
+    const f = fakeDeps(); withApple(f);
+    const stored: [string, string][] = [];
+    f.deps.storeAppleCode = async (sub, code) => { stored.push([sub, code]); };
+    expect((await handleApple(post('apple', { identityToken: 'good', authorizationCode: 'c-1' }), f.deps)).status).toBe(200);
+    expect(stored).toEqual([['apple-1', 'c-1']]);
+    f.deps.storeAppleCode = async () => { throw new Error('Apple down'); };
+    expect((await handleApple(post('apple', { identityToken: 'good', authorizationCode: 'c-2' }), f.deps)).status).toBe(200);
+  });
+
+  it('signs in without a code, as build 1.0 (2) does', async () => {
+    const f = fakeDeps(); withApple(f);
+    let called = false;
+    f.deps.storeAppleCode = async () => { called = true; };
+    expect((await handleApple(post('apple', { identityToken: 'good' }), f.deps)).status).toBe(200);
+    expect(called).toBe(false);
+  });
+
   it('503s when the server has no Apple support wired', async () => {
     const f = fakeDeps();
     expect((await handleApple(post('apple', { identityToken: 'good' }), f.deps)).status).toBe(503);

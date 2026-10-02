@@ -4,10 +4,15 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/db';
 import { stripe, siteUrl } from '@/lib/shop/stripe';
+import { isAppleMobile, JOIN_IN_THE_APP } from '@/lib/club/apple-device';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
+  // The page hides the buttons on iPhone and iPad; this stops a stale page or a direct call too.
+  if (isAppleMobile(request.headers.get('user-agent'))) {
+    return NextResponse.json({ error: JOIN_IN_THE_APP }, { status: 403 });
+  }
   const session = await getServerSession(authOptions);
   const email = session?.user?.email;
   const id = Number(session?.user?.id);

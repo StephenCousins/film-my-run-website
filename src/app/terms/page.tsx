@@ -1,12 +1,31 @@
 import { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service',
+  title: 'Terms of Use',
   alternates: { canonical: 'https://filmmyrun.com/terms' },
-  description: 'Terms of Service for Film My Run website and services.',
+  description: 'Terms of Use for filmmyrun.com, the Film My Run app, the shop and FMR Club.',
 };
+
+const CONTACT = 'stephen@filmmyrun.com';
+
+function Section({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="mb-8">
+      <h2 className="font-display text-xl font-bold text-foreground mb-4">{title}</h2>
+      {children}
+    </section>
+  );
+}
+const P = ({ children }: { children: ReactNode }) => <p className="text-secondary mb-4">{children}</p>;
+const List = ({ children }: { children: ReactNode }) => <ul className="list-disc list-inside text-secondary space-y-2 mb-4">{children}</ul>;
+const Mail = () => (
+  <a href={`mailto:${CONTACT}`} className="text-orange-500 hover:text-orange-600">
+    {CONTACT}
+  </a>
+);
 
 export default function TermsPage() {
   return (
@@ -15,187 +34,143 @@ export default function TermsPage() {
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">
         <div className="container py-12 lg:py-16">
           <div className="max-w-3xl mx-auto">
-            <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-8">
-              Terms of Service
-            </h1>
+            <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-8">Terms of Use</h1>
 
             <div className="prose prose-zinc dark:prose-invert max-w-none">
-              <p className="text-secondary text-sm mb-8">
-                Last updated: January 2025
-              </p>
+              <p className="text-secondary text-sm mb-8">Last updated: 2 October 2026</p>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  1. Agreement to Terms
-                </h2>
-                <p className="text-secondary mb-4">
-                  By accessing or using the Film My Run website (filmmyrun.com), you agree to be
-                  bound by these Terms of Service. If you do not agree to these terms, please do
-                  not use our website or services.
-                </p>
-              </section>
+              <Section title="1. About these terms">
+                <P>
+                  These terms cover the Film My Run website (filmmyrun.com), the Film My Run app, the shop and FMR
+                  Club. Film My Run is run by Stephen Cousins in the United Kingdom. By using them you agree to these
+                  terms. If you got the app from the App Store, Apple&apos;s standard licence terms for apps apply too.
+                  How we handle your data is in our{' '}
+                  <a href="/privacy" className="text-orange-500 hover:text-orange-600">Privacy Policy</a>.
+                </P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  2. Description of Services
-                </h2>
-                <p className="text-secondary mb-4">
-                  Film My Run provides:
-                </p>
-                <ul className="list-disc list-inside text-secondary space-y-2 mb-4">
-                  <li>Free running tools and calculators</li>
-                  <li>Blog content and race reports</li>
-                  <li>Professional services including POV race coverage, documentary filmmaking,
-                      live streaming, and MC services</li>
-                  <li>E-commerce products through our shop</li>
-                  <li>Training plan applications (subscription-based)</li>
-                </ul>
-              </section>
+              <Section title="2. What Film My Run offers">
+                <List>
+                  <li>Free running tools: race predictor, calculators, training plans, Shoe Finder and more</li>
+                  <li>Running News, race reports, films and blog posts</li>
+                  <li>FMR Club, an optional paid membership</li>
+                  <li>The Film My Run shop, selling clothing and other physical goods</li>
+                  <li>Professional services: POV race coverage, documentary filmmaking, live streaming and MC work</li>
+                </List>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  3. User Accounts
-                </h2>
-                <p className="text-secondary mb-4">
-                  Some features require you to create an account. You are responsible for:
-                </p>
-                <ul className="list-disc list-inside text-secondary space-y-2 mb-4">
-                  <li>Maintaining the confidentiality of your account credentials</li>
-                  <li>All activities that occur under your account</li>
-                  <li>Notifying us immediately of any unauthorised use</li>
-                </ul>
-                <p className="text-secondary mb-4">
-                  We reserve the right to suspend or terminate accounts that violate these terms.
-                </p>
-              </section>
+              <Section title="3. Your account">
+                <P>
+                  Most of Film My Run works without an account. If you make one, keep your sign-in details to
+                  yourself and tell us if you think someone else has used your account. You can delete your account
+                  at any time, in the app (Settings, then your account, then Delete account) or by emailing <Mail />.
+                  We may close accounts that break these terms.
+                </P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  4. Free Tools and Calculators
-                </h2>
-                <p className="text-secondary mb-4">
-                  Our running tools and calculators are provided free of charge for personal use.
-                  While we strive for accuracy, these tools are for informational purposes only and
-                  should not be used as a substitute for professional advice. We make no guarantees
-                  about the accuracy of calculations or predictions.
-                </p>
-              </section>
+              <Section title="4. Guidance, not medical advice">
+                <P>
+                  The predictions, calculators, training plans, race pacing, Shoe Finder and Ask Stephen are guidance
+                  for healthy adult runners. They are not medical advice and they do not replace a doctor, a
+                  physiotherapist or a qualified coach. Check with a doctor before starting a training plan, especially
+                  if you have a medical condition, are returning from injury or are new to running. Listen to your body
+                  and stop if something hurts. You run at your own risk.
+                </P>
+                <P>Predictions and calculations are estimates from real race results. We work hard to make them accurate but cannot promise any result.</P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  5. Professional Services
-                </h2>
-                <p className="text-secondary mb-4">
-                  Professional services (POV race coverage, documentary filmmaking, live streaming,
-                  MC services) are subject to separate agreements. Pricing, deliverables, and terms
-                  will be agreed upon before any work commences. A deposit may be required for
-                  certain services.
-                </p>
-              </section>
+              <Section title="5. FMR Club">
+                <P>
+                  FMR Club adds race-day pacing, the ultra training plans, Ask Stephen and money off in the shop.
+                  The current benefits and prices are shown before you join.
+                </P>
+                <P>
+                  <strong>Bought in the app:</strong> FMR Club Monthly and FMR Club Annual are auto-renewing
+                  subscriptions sold through the App Store. Payment is taken from your Apple Account when you confirm
+                  the purchase. A subscription renews automatically at the same price for the same period unless you
+                  cancel at least 24 hours before the end of the current period. Manage or cancel it in your Apple
+                  Account settings. If an offer includes a free trial, any unused part of the trial ends when you buy a
+                  subscription. Refunds for App Store purchases are handled by Apple under its own terms.
+                </P>
+                <P>
+                  <strong>Bought on the website:</strong> the membership is paid through Stripe and renews
+                  automatically each month or year until you cancel. Cancel any time from &quot;Manage your
+                  membership&quot; on the FMR Club page; it then runs to the end of the period you have paid for.
+                </P>
+                <P>Your membership is linked to your Film My Run account, so it works in the app and on the website.</P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  6. Shop and Purchases
-                </h2>
-                <p className="text-secondary mb-4">
-                  All purchases through our shop are subject to availability. Prices are displayed
-                  in GBP and include VAT where applicable. We reserve the right to refuse or cancel
-                  orders at our discretion. Digital products are non-refundable once delivered.
-                </p>
-              </section>
+              <Section title="6. Ask Stephen">
+                <P>
+                  Ask Stephen is a private conversation with me. I aim to reply within a couple of days. It is a
+                  conversation between runners, not coaching or medical advice. Please be kind: I may end conversations
+                  that are abusive.
+                </P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  7. Subscriptions
-                </h2>
-                <p className="text-secondary mb-4">
-                  Subscription services (such as training plans) will automatically renew unless
-                  cancelled before the renewal date. You can cancel your subscription at any time
-                  through your account settings. Refunds for partial subscription periods are not
-                  provided.
-                </p>
-              </section>
+              <Section title="7. The shop">
+                <P>
+                  Products are printed to order in the UK by our print partners and posted to you. Prices are in GBP
+                  and include VAT where it applies. Delivery times are estimates. We may refuse or cancel an order, for
+                  example if an item is unavailable, and will refund you in full if we do. If something arrives damaged,
+                  faulty or wrong, email <Mail /> and we will replace or refund it. Nothing here affects your statutory
+                  rights.
+                </P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  8. Intellectual Property
-                </h2>
-                <p className="text-secondary mb-4">
-                  All content on this website, including text, images, videos, logos, and software,
-                  is owned by Film My Run or its licensors and is protected by copyright and other
-                  intellectual property laws. You may not reproduce, distribute, or create derivative
-                  works without our written permission.
-                </p>
-              </section>
+              <Section title="8. Running News and race results">
+                <P>
+                  Running News stories are written with the help of AI from public news reports, credit their sources,
+                  and are checked before they are published. They can still contain mistakes: tell us and we will put
+                  them right. Race results come from public sources such as parkrun and Power of 10. Film My Run is not
+                  affiliated with or endorsed by them.
+                </P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  9. User Content
-                </h2>
-                <p className="text-secondary mb-4">
-                  If you upload content (such as GPX files for route comparison), you retain
-                  ownership but grant us a licence to process that data to provide our services.
-                  We do not share your uploaded files with third parties.
-                </p>
-              </section>
+              <Section title="9. Professional services">
+                <P>
+                  POV race coverage, documentary filmmaking, live streaming and MC work are agreed separately.
+                  Pricing, what is delivered and any deposit are agreed before work starts.
+                </P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  10. Limitation of Liability
-                </h2>
-                <p className="text-secondary mb-4">
-                  To the fullest extent permitted by law, Film My Run shall not be liable for any
-                  indirect, incidental, special, consequential, or punitive damages arising from
-                  your use of our website or services. Our total liability shall not exceed the
-                  amount you have paid us in the past 12 months.
-                </p>
-              </section>
+              <Section title="10. Your content">
+                <P>
+                  You keep ownership of anything you upload or send, such as GPX files or Ask Stephen messages. You
+                  let us use it only to provide the service to you. We do not share your uploads with anyone else.
+                </P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  11. Indemnification
-                </h2>
-                <p className="text-secondary mb-4">
-                  You agree to indemnify and hold harmless Film My Run from any claims, damages,
-                  or expenses arising from your violation of these terms or your use of our services.
-                </p>
-              </section>
+              <Section title="11. Our content">
+                <P>
+                  The films, photos, writing, designs, logos and software are owned by Film My Run or used with
+                  permission. Please do not copy or reuse them without asking. Third-party images, such as news and shoe
+                  photos, belong to the people credited.
+                </P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  12. Changes to Terms
-                </h2>
-                <p className="text-secondary mb-4">
-                  We may update these terms from time to time. Continued use of the website after
-                  changes constitutes acceptance of the new terms. We will notify registered users
-                  of significant changes via email.
-                </p>
-              </section>
+              <Section title="12. Liability">
+                <P>
+                  We are not liable for losses that were not foreseeable, or for business losses. Otherwise our total
+                  liability to you is limited to what you paid us in the 12 months before the claim. Nothing in these
+                  terms limits liability for death or personal injury caused by negligence, for fraud, or anything else
+                  the law does not let us limit.
+                </P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  13. Governing Law
-                </h2>
-                <p className="text-secondary mb-4">
-                  These terms are governed by the laws of England and Wales. Any disputes shall be
-                  subject to the exclusive jurisdiction of the courts of England and Wales.
-                </p>
-              </section>
+              <Section title="13. Changes">
+                <P>We may update these terms. If a change matters, we will say so here and, for account holders, by email. The date at the top shows the latest version.</P>
+              </Section>
 
-              <section className="mb-8">
-                <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                  14. Contact
-                </h2>
-                <p className="text-secondary mb-4">
-                  If you have any questions about these Terms of Service, please contact us at{' '}
-                  <a
-                    href="mailto:hello@filmmyrun.co.uk"
-                    className="text-orange-500 hover:text-orange-600"
-                  >
-                    hello@filmmyrun.co.uk
-                  </a>
-                </p>
-              </section>
+              <Section title="14. Law">
+                <P>These terms are governed by the law of England and Wales. If you live elsewhere in the UK, you can also bring a claim in your local courts.</P>
+              </Section>
+
+              <Section title="15. Contact">
+                <P>
+                  Stephen Cousins, Film My Run: <Mail />
+                </P>
+              </Section>
             </div>
           </div>
         </div>

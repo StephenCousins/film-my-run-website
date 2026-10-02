@@ -38,6 +38,8 @@ export type MemberDeps = {
   memberForApple?: (sub: string, now: Date) => Promise<Member | null>;
   /** Links an Apple id to an account (idempotent), and fills an empty name. */
   linkApple?: (userId: number, sub: string, name: string | null) => Promise<void>;
+  /** Swaps the app's one-time authorization code for a refresh token kept on the Apple link, so delete can revoke it. Best effort. */
+  storeAppleCode?: (sub: string, code: string) => Promise<void>;
   /**
    * Deletes the account (App Store guideline 5.1.1(v)): cancels any live
    * website FMR Club subscription at once, keeps orders without the account
@@ -166,6 +168,9 @@ export async function handleApple(req: NextRequest, deps: MemberDeps): Promise<R
     (await memberFromBearer(req, deps)) ??
     (await deps.findOrCreateUser(normaliseEmail(claims.email) ?? claims.email.toLowerCase(), new Date(now)));
   await deps.linkApple(member.id, claims.sub, name);
+  // Builds before 1.0 (3) send no code; those links can't be revoked on delete.
+  const code = typeof body.authorizationCode === 'string' ? body.authorizationCode : '';
+  if (code && deps.storeAppleCode) await deps.storeAppleCode(claims.sub, code).catch((e) => console.warn('Apple code not stored:', (e as Error).message));
   const token = makeToken();
   await deps.createSession(member.id, token, new Date(now + TOKEN_TTL_MS));
   await deps.attachGuestOrders(member.id, member.email.toLowerCase());

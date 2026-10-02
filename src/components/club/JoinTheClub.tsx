@@ -1,8 +1,9 @@
 'use client';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useAuth } from '@/contexts/AuthContext';
 import NewsletterCheckbox from '@/components/newsletter/NewsletterCheckbox';
+import { isAppleMobile, JOIN_IN_THE_APP } from '@/lib/club/apple-device';
 
 const money = (pence: number) => `£${(pence / 100).toFixed(2).replace(/\.00$/, '')}`;
 
@@ -16,6 +17,9 @@ export default function JoinTheClub({ monthlyPence, yearlyPence }: { monthlyPenc
   const [error, setError] = useState<string | null>(null);
   // Pre-ticked: a customer's soft opt-in (PECR). Subscribed only after payment, in the webhook.
   const [newsletter, setNewsletter] = useState(true);
+  // Known only in the browser, so the first render waits for it rather than flashing the Stripe buttons.
+  const [appleMobile, setAppleMobile] = useState<boolean | null>(null);
+  useEffect(() => setAppleMobile(isAppleMobile(navigator.userAgent, navigator.maxTouchPoints)), []);
 
   const go = async (path: string, body?: unknown, key: 'month' | 'year' | 'portal' = 'portal') => {
     setBusy(key);
@@ -31,7 +35,12 @@ export default function JoinTheClub({ monthlyPence, yearlyPence }: { monthlyPenc
     }
   };
 
-  if (status === 'loading') return <div className="h-14" />;
+  if (status === 'loading' || appleMobile === null) return <div className="h-14" />;
+
+  // See lib/club/apple-device.ts: no Stripe join on iPhone or iPad. Members keep their portal link below.
+  if (appleMobile && !hasAccess('PRO')) {
+    return <p className="text-lg text-foreground font-semibold">{JOIN_IN_THE_APP}</p>;
+  }
 
   if (!isAuthenticated) {
     return (
