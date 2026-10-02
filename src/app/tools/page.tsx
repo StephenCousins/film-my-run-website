@@ -11,6 +11,7 @@ import {
   ArrowRight,
   Gem,
   Footprints,
+  Puzzle,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -35,6 +36,16 @@ export const metadata: Metadata = {
 // ============================================
 
 const tools = [
+  {
+    name: 'Word Run',
+    description:
+      'A new running word every day. Four letters early in the week, building to a seven-letter long run on Sunday. Keep your run streak going.',
+    href: '/games/word-run',
+    icon: Puzzle,
+    color: 'from-orange-500 to-sky-600',
+    stats: 'Daily word game',
+    popular: true,
+  },
   {
     name: 'StoneTracker',
     description:
