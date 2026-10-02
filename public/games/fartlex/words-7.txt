@@ -22388,6 +22388,7 @@ waybill
 waylaid
 waylays
 wayless
+waymark
 wayside
 wayward
 wayworn

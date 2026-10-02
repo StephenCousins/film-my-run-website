@@ -37,9 +37,31 @@ export function puzzleFor(date: string): Puzzle {
   let index = 0;
   for (let d = start; d < today; d++) if (LENGTH_BY_WEEKDAY[new Date(d * DAY).getUTCDay()] === length) index++;
   const list = ANSWERS[length];
-  // ponytail: wraps round when a list runs out (about 28 weeks); add words to the end before then.
-  const answer = list[((index % list.length) + list.length) % list.length];
+  // The first time through, the written order. After that each cycle (a year) repeats the list in a
+  // different, fixed order, so a repeat doesn't come back as the same sequence (Stephen, 2 Oct 2026).
+  // Words added to a list after its first cycle shift later days: add them before it runs out.
+  const cycle = Math.floor(index / list.length);
+  const pos = index % list.length;
+  const answer = (cycle === 0 ? list : shuffled(list, cycle * 10 + length))[pos];
   return { number: today - start + 1, date, length, maxGuesses: length === 4 ? 7 : 6, answer };
+}
+
+/** A fixed shuffle for a seed (mulberry32 driving Fisher-Yates): the same order on every server and every day. */
+function shuffled<T>(items: readonly T[], seed: number): T[] {
+  let a = seed >>> 0;
+  const random = () => {
+    a = (a + 0x6d2b79f5) >>> 0;
+    let t = a;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+  const out = [...items];
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(random() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
 }
 
 /** Each letter of a guess: right place, in the word elsewhere, or not in it. A repeated letter is marked only as often as the answer holds it. */

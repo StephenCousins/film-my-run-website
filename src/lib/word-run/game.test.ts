@@ -30,6 +30,23 @@ describe('Fartlex schedule', () => {
       seen.add(w);
     }
   });
+  it('after a full year each list comes round again in a new, fixed order', () => {
+    const d = new Date(`${LAUNCH}T12:00:00Z`);
+    const words = (fromWeek: number) => {
+      const out: string[] = [];
+      for (let i = fromWeek * 7; i < (fromWeek + 52) * 7; i++) {
+        const p = puzzleFor(new Date(d.getTime() + i * 86_400_000).toISOString().slice(0, 10));
+        if (p.length === 7) out.push(p.answer.word);
+      }
+      return out;
+    };
+    const first = words(0);
+    const second = words(52);
+    expect(first).toEqual(ANSWERS[7].map((a) => a.word));
+    expect([...second].sort()).toEqual([...first].sort()); // every word once more
+    expect(second).not.toEqual(first); // but not in the same order
+    expect(words(52)).toEqual(second); // and the same order every time it's asked
+  });
   it('a day rolls over at midnight in London, not UTC', () => {
     expect(londonDate(new Date('2026-10-02T23:30:00Z'))).toBe('2026-10-03'); // BST: 00:30 on the 3rd
     expect(londonDate(new Date('2026-12-02T23:30:00Z'))).toBe('2026-12-02'); // GMT

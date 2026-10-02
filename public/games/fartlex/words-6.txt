@@ -7053,6 +7053,7 @@ kismet
 kissed
 kisser
 kisses
+kitbag
 kiters
 kithed
 kithes
@@ -12927,6 +12928,7 @@ sunder
 sundew
 sundog
 sundry
+sunhat
 sunken
 sunket
 sunlit
