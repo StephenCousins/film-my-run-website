@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { passesSort, isBorderline, sortItem, sortItemJev } from './sort';
+import { passesSort, isBorderline, isRoundUp, sortItem, sortItemJev } from './sort';
 import type { Candidate, Verdict } from './types';
 
 const v = (over: Partial<Verdict>): Verdict => ({ type: 'news', confidence: 0.95, isRunning: true, topic: 'trail_ultra', isUk: false, importance: 7, ...over });
@@ -28,6 +28,24 @@ describe('sorting', () => {
     const call = async () => ({ data: v({ confidence: 1.5 }), costUsd: 0.001, raw: '' });
     const r = await sortItem(c, call as never);
     expect(r.verdict).toBeNull();
+  });
+});
+
+describe('round-ups', () => {
+  it('settles a round-up as not news without calling the model (Stephen, 2 Oct 2026)', async () => {
+    const titles = ['The RunUltra Update: 28 September 2026', 'The RunUltra Update; Milne takes Bronze, Records broken', 'The Ultra Update: Hartmuth Runs Third',
+      'Weekend Ultra News 7 September 2026', "Megan Eckert and Sarah Perry Headline This Week's Ultra-Running News", 'Weekly round-up: Boston and London'];
+    for (const title of titles) {
+      let called = false;
+      const call = (async () => { called = true; return { data: null, costUsd: 0, raw: '' }; }) as never;
+      expect(passesSort((await sortItemJev({ ...c, title }, call)).verdict)).toBe(false);
+      expect(called).toBe(false);
+    }
+  });
+  it('leaves single-event stories alone', () => {
+    for (const title of ["Eckert breaks Six-Day Record and Shircore wins Inaugural Dragon's Fire", 'Dragon’s Fire Race Report', 'Kipyegon updates her mile record']) {
+      expect(isRoundUp(title)).toBe(false);
+    }
   });
 });
 

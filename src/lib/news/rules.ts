@@ -13,7 +13,7 @@ function shingles(text: string, n: number): Set<string> {
 }
 
 /** Everything code can check before a story goes live. Empty means it passes. */
-export function ruleProblems(d: Draft, sourceTexts: string[]): string[] {
+export function ruleProblems(d: Draft, sourceTexts: string[], sourceNames: string[] = []): string[] {
   const problems: string[] = [];
   if (!d.title.trim()) problems.push('no title');
   if (!d.excerpt.trim()) problems.push('no excerpt');
@@ -27,6 +27,13 @@ export function ruleProblems(d: Draft, sourceTexts: string[]): string[] {
   if (/—/.test(all) || /\s–\s/.test(all)) problems.push('em dash');
   if (/;/.test(all)) problems.push('semicolon');
   if (nearCopyPhrases(d, sourceTexts).length) problems.push('near-copy of a source');
+  // The sources are credited at the end of the page, so the story never names them (Stephen, 2 Oct
+  // 2026). Case-sensitive, a space optional ("RunUltra" for Run Ultra): a source's name is a proper
+  // noun, and "Canadian running champs" doesn't name Canadian Running.
+  for (const name of new Set(sourceNames)) {
+    const parts = name.split(/[^A-Za-z0-9]+/).filter(Boolean);
+    if (parts.join('').length >= 4 && new RegExp(`\\b${parts.join('\\s?')}\\b`).test(all)) problems.push(`names its source "${name}"`);
+  }
   return problems;
 }
 

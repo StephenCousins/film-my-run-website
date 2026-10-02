@@ -25,8 +25,19 @@ const SCHEMA = {
 
 const MEDIA_URL = /\/(videos?|av|podcasts?|watch|live)(\/|$)/i;
 
+/**
+ * A round-up ("The RunUltra Update: ...", "Weekend Ultra News 7 September"): several events in one
+ * piece. One item = one story, and the writer mixed four into one (Stephen, 2 Oct 2026), so these
+ * never lead a story. They still back a single-event story when Stephen asks for one by hand.
+ */
+export function isRoundUp(title: string): boolean {
+  return /\bupdate\s*[:;]|round-?up|\bweekly\b|\bweek(end)?(['’]s)?\b.*\bnews\b|\bweek in\b/i.test(title);
+}
+const ROUND_UP: Verdict = { type: 'opinion', confidence: 1, isRunning: true, topic: 'trail_ultra', isUk: false, importance: 1 };
+
 export async function sortItem(c: Candidate, call: typeof completeJson = completeJson) {
   // Video, audio and live pages carry no text to write from, whatever the event: settle them without a call.
+  if (isRoundUp(c.title)) return { verdict: ROUND_UP, costUsd: 0 };
   if (MEDIA_URL.test(c.url)) return { verdict: { type: 'media', confidence: 1, isRunning: true, topic: 'road', isUk: false, importance: 1 } as Verdict, costUsd: 0 };
   const prompt = `Classify this running article for a news desk. It must be NEWS to publish: something that has happened (race results, records, wins, DNFs, selections, announcements, course or rule changes, injuries, retirements, doping cases). NOT news: race previews or "who to watch", a runner's own race report, gear or shoe reviews, training advice, opinion or columns, podcasts or videos, sponsored posts.
 Also NOT news (type "other", "opinion" or "media"): interviews and profiles, "takeaways" or analysis pieces, weekly recap columns, features about a result already reported, entries opening, "X% sold" or other sales updates, event promotion and countdowns, video clips and live-blog or live-tracking pages. A race selling out completely, a course change, a cancellation and a team selection ARE news.
@@ -81,7 +92,7 @@ interface JevAnswers {
  * its own, so a failed or malformed answer goes to sortItem instead.
  */
 export async function sortItemJev(c: Candidate, call: typeof completeJson = completeJson): Promise<{ verdict: Verdict | null; costUsd: number }> {
-  if (MEDIA_URL.test(c.url)) return sortItem(c, call);
+  if (MEDIA_URL.test(c.url) || isRoundUp(c.title)) return sortItem(c, call);
   const state = {
     source: c.source, title: c.title, published: c.pubDate.toISOString().slice(0, 10),
     summary: c.summary.slice(0, 1200), opening: (c.text ?? '').slice(0, 1500),

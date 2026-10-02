@@ -218,12 +218,13 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       // Our own bio reusing its own words is not a near-copy; the fact-checker (which
       // reads the whole bundle) still sees the runner file.
       const texts = () => b.items.filter((i) => i.source !== RUNNER_FILE_SOURCE).map((i) => i.text ?? '');
+      const names = () => b.items.filter((i) => i.source !== RUNNER_FILE_SOURCE).map((i) => i.source);
       let draft = tidyPunctuation(w.draft);
       let reason: string | null = null;
       let searched = b.items.filter((i) => i.text && i.source !== RUNNER_FILE_SOURCE).length >= 2 ? false : true; // `more` already ran above
       for (let round = 0; ; round++) {
         const last = round >= NEWS_CONFIG.fixRounds;
-        const problems = ruleProblems(draft, texts());
+        const problems = ruleProblems(draft, texts(), names());
         if (problems.length) {
           if (last) { reason = problems.join(', '); break; }
           const phrases = problems.includes('near-copy of a source') ? nearCopyPhrases(draft, texts()) : [];
@@ -246,7 +247,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
         if (last) {
           const e = await d.edit(draft, b, { mark: c.unsupported });
           log.costUsd += e.costUsd;
-          if (e.draft && ruleProblems(e.draft, texts()).length === 0) { draft = tidyPunctuation(e.draft); break; }
+          if (e.draft && ruleProblems(e.draft, texts(), names()).length === 0) { draft = tidyPunctuation(e.draft); break; }
           reason = `unsupported: ${c.unsupported.join('; ')}`;
           break;
         }

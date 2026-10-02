@@ -4,6 +4,14 @@ import { nearCopyPhrases, ruleProblems } from './rules';
 const good = { title: 'Evans wins UTMB', excerpt: 'Tom Evans took the title in 19:37.', paragraphs: ['a b c', 'd e f', 'g h i'] };
 
 describe('code-rule gate', () => {
+  it('flags a story that names one of its sources, spaced or not (Stephen, 2 Oct 2026)', () => {
+    const d = { ...good, paragraphs: ["RunUltra's update also covered the 13 Valleys.", 'b', 'c'] };
+    expect(ruleProblems(d, [], ['Run Ultra'])).toContain('names its source "Run Ultra"');
+    expect(ruleProblems({ ...good, paragraphs: ['Athletics Weekly reported it.', 'b', 'c'] }, [], ['Athletics Weekly'])).toHaveLength(1);
+  });
+  it('a lower-case phrase that happens to spell a source is not naming it', () => {
+    expect(ruleProblems({ ...good, paragraphs: ['The Canadian running champs went well.', 'b', 'c'] }, [], ['Canadian Running'])).toEqual([]);
+  });
   it('passes a clean draft', () => expect(ruleProblems(good, ['unrelated source words'])).toEqual([]));
   it('needs a title, an excerpt and 3-6 paragraphs', () => {
     expect(ruleProblems({ ...good, title: '' }, [])).toContain('no title');
