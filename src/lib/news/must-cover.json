@@ -397,23 +397,6 @@
     "notes": "Centurion Running. Runs alongside the 200 (3rd edition in 2026). 2027 not listed yet."
   },
   {
-    "name": "Centurion One Virtual Slam",
-    "aliases": [
-      "One Virtual Slam",
-      "One Community Week",
-      "Centurion One Community"
-    ],
-    "topic": "trail_ultra",
-    "editions": [
-      {
-        "start": "2026-12-25",
-        "end": "2027-03-04",
-        "status": "confirmed"
-      }
-    ],
-    "notes": "Centurion Running. Virtual, 50 to 1,000 miles over 70 days. Probably low news value."
-  },
-  {
     "name": "Centurion Track 100",
     "aliases": [
       "Centurion Track 100",
@@ -510,11 +493,10 @@
     "notes": "Centurion Running. Grand Slam 100. Same weekend as the new SDW 50km (12 Jun) and SDW 10km/5km (11 Jun 2027), which are listed separately on the calendar."
   },
   {
-    "name": "South Downs Way 50km / 10km / 5km",
+    "name": "South Downs Way 50km",
     "aliases": [
       "South Downs Way 50km",
-      "South Downs Way 10km",
-      "South Downs Way 5km"
+      "South Downs Way 50K"
     ],
     "topic": "trail_ultra",
     "editions": [
@@ -1098,11 +1080,11 @@
     "topic": "trail_ultra",
     "editions": [
       {
-        "start": "2027-09-16",
-        "end": "2027-09-19",
-        "status": "estimated"
+        "start": "2027-09-01",
+        "end": "2027-09-30",
+        "status": "window"
       }
     ],
-    "notes": "Nevis Range, Fort William. Joins UTMB World Series in 2027 ('returns in 2027', so apparently no 2026 edition despite a stale 18-20 Sep 2026 race page). Official site: dates 'to be announced later this year'. Sources conflict: one aggregator says 16-18 Sep 2027, a search snippet said 27-30 May 2027; September fits history. Ben Nevis Skyline and Glen Coe Skyline have historically been reported under their own names. UTMB says 2027 is the first year with three UK World Series events: Arc of Attrition, Eryri, Skyline Scotland."
+    "notes": "New to UTMB for 2027 (previously Ourea Events); dates not locked down when researched (2 Oct 2026), so a September window. Pin to the real dates once announced."
   }
 ]
