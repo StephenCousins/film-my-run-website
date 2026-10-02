@@ -11,7 +11,8 @@ export const metadata: Metadata = {
   title: `${GAME_NAME}: the daily running word game`,
   description: DESCRIPTION,
   alternates: { canonical: 'https://filmmyrun.com/games/fartlex' },
-  openGraph: { title: `${GAME_NAME} | Film My Run`, description: DESCRIPTION },
+  openGraph: { title: `${GAME_NAME} | Film My Run`, description: DESCRIPTION, images: ['/games/fartlex/og'] },
+  twitter: { card: 'summary_large_image', title: `${GAME_NAME} | Film My Run`, description: DESCRIPTION, images: ['/games/fartlex/og'] },
 };
 
 export default function WordRunPage() {

@@ -15,6 +15,7 @@ import {
   TrainingCTA,
   ShopTeaser,
 } from '@/components/sections';
+import FartlexStrip from '@/components/sections/FartlexStrip';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CustomCursor from '@/components/animations/CustomCursor';
@@ -105,6 +106,9 @@ export default async function HomePage() {
 
         {/* Section 3: Featured Film showcase */}
         <FeaturedFilm />
+
+        {/* Today's Fartlex, the daily word game (2 Oct 2026) */}
+        <FartlexStrip />
 
         {/* Section 4: Tools horizontal scroll */}
         <ToolsShowcase />

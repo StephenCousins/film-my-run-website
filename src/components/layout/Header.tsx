@@ -34,6 +34,7 @@ const navigation = [
       { name: 'Shoe Finder', href: '/tools/shoe-finder' },
       { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
       { name: 'Runner Quiz', href: '/tools/runner-quiz' },
+      { name: 'Fartlex: daily word game', href: '/games/fartlex' },
       { name: 'Route Comparison', href: '/tools/route-comparison' },
       { name: 'Training Plans', href: '/training' },
       { name: 'Discount Codes', href: '/discounts' },
