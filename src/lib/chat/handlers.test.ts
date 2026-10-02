@@ -73,7 +73,13 @@ describe('handleGetThread', () => {
     const { deps } = makeDeps();
     const res = await handleGetThread(getReq({ 'X-FMR-Install': INSTALL_A }), deps);
     expect(res.status).toBe(200);
-    expect(await res.json()).toEqual({ ok: true, thread: null });
+    expect(await res.json()).toEqual({ ok: true, thread: null, stephenBusy: false });
+  });
+
+  it("says when Stephen is busy, before anyone has written (2 Oct 2026)", async () => {
+    const { deps } = makeDeps();
+    const res = await handleGetThread(getReq({ 'X-FMR-Install': INSTALL_A }), { ...deps, stephenBusy: async () => true });
+    expect((await res.json()).stephenBusy).toBe(true);
   });
 
   it('never lets install A see install B messages', async () => {

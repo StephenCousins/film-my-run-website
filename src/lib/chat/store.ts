@@ -25,6 +25,18 @@ export async function getThread(installId: string): Promise<ChatThreadDTO | null
   return { id: thread.id, messages: thread.messages.map(toDTO) };
 }
 
+/** Stephen's "I'm busy" switch on the inbox page: the app says he can't answer at the moment (2 Oct 2026). */
+const BUSY_KEY = 'chat_busy';
+
+export async function isStephenBusy(): Promise<boolean> {
+  const row = await prisma.settings.findUnique({ where: { key: BUSY_KEY } });
+  return (row?.value as { busy?: boolean } | null)?.busy === true;
+}
+
+export async function setStephenBusy(busy: boolean): Promise<void> {
+  await prisma.settings.upsert({ where: { key: BUSY_KEY }, update: { value: { busy }, updated_at: new Date() }, create: { key: BUSY_KEY, value: { busy }, updated_at: new Date() } });
+}
+
 export type AddUserMessageResult =
   | { ok: true; threadId: string; message: ChatMessageDTO }
   | { ok: false; reason: 'limit' };

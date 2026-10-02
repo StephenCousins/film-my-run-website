@@ -4,7 +4,8 @@ import Link from 'next/link';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { chatAdminMetadata, isChatAdmin } from '@/lib/chat/admin';
-import { listThreads } from '@/lib/chat/store';
+import { isStephenBusy, listThreads } from '@/lib/chat/store';
+import { setBusy } from './actions';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,7 +29,7 @@ export default async function ChatInboxPage() {
   const session = await getServerSession(authOptions);
   if (!isChatAdmin(session)) notFound();
 
-  const threads = await listThreads();
+  const [threads, busy] = await Promise.all([listThreads(), isStephenBusy()]);
 
   return (
     <main className="min-h-screen bg-background py-10 px-4 sm:px-6">
@@ -42,6 +43,17 @@ export default async function ChatInboxPage() {
               : `${threads.filter((t) => t.unanswered).length} unanswered of ${threads.length}.`}
           </p>
         </div>
+
+        <form action={setBusy.bind(null, !busy)} className="card p-4 mb-6 flex items-center justify-between gap-4">
+          <p className="text-sm text-secondary">
+            {busy
+              ? "You're marked as busy. The app tells runners you can't answer at the moment."
+              : 'The app tells runners you reply within a few hours.'}
+          </p>
+          <button type="submit" className={busy ? 'btn-primary shrink-0' : 'btn-secondary shrink-0'}>
+            {busy ? "I'm back" : "I'm busy"}
+          </button>
+        </form>
 
         <div className="card divide-y divide-border">
           {threads.length === 0 && <p className="p-6 text-secondary">Nothing here yet.</p>}

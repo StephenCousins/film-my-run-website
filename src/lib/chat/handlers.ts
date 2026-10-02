@@ -5,6 +5,7 @@ import {
   CHAT_DAILY_LIMIT,
   addUserMessageIfUnderLimit,
   getThread,
+  isStephenBusy,
   type AddUserMessageResult,
   type ChatThreadDTO,
 } from './store';
@@ -14,6 +15,8 @@ import { liveMemberDeps } from '@/lib/members/store';
 
 export type ChatDeps = {
   getThread: (installId: string) => Promise<ChatThreadDTO | null>;
+  /** Stephen has said he's busy: the app tells runners he can't answer at the moment. */
+  stephenBusy?: () => Promise<boolean>;
   /** Checks the daily limit and inserts the message as one atomic unit — see store.ts. */
   addUserMessageIfUnderLimit: (
     installId: string,
@@ -54,8 +57,8 @@ export async function handleGetThread(req: NextRequest, deps: ChatDeps): Promise
   if (!isInstallId(installId)) {
     return NextResponse.json({ ok: false, error: 'Missing or invalid X-FMR-Install' }, { status: 400 });
   }
-  const thread = await deps.getThread(installId);
-  return NextResponse.json({ ok: true, thread });
+  const [thread, stephenBusy] = await Promise.all([deps.getThread(installId), deps.stephenBusy?.() ?? false]);
+  return NextResponse.json({ ok: true, thread, stephenBusy });
 }
 
 /** POST /api/app/v1/chat/messages — Pro proof, validation, then the daily limit. */
@@ -96,6 +99,7 @@ export async function handlePostMessage(req: NextRequest, deps: ChatDeps): Promi
 
 export const liveChatDeps: ChatDeps = {
   getThread,
+  stephenBusy: isStephenBusy,
   addUserMessageIfUnderLimit,
   notifyStephen: liveNotifyStephen,
   memberForRequest: (req) => memberFromBearer(req, liveMemberDeps),
