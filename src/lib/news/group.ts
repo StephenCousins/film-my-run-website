@@ -12,7 +12,18 @@ export function bundleImportance(b: Bundle): number {
   const top = Math.max(0, ...b.verdicts.map((v) => v.importance));
   const sites = new Set(b.items.map((i) => i.source)).size;
   const coverage = sites >= 3 ? 2 : sites === 2 ? 1 : 0;
-  return Math.min(10, top + coverage);
+  return Math.max(1, Math.min(10, top + coverage - roadTrackHandicap(b)));
+}
+
+/**
+ * Trail and ultra mostly beat road and track: a Bob Graham record wins over Berlin's results,
+ * unless Berlin was a world record (Stephen, 2 Oct 2026). Two points, because a big road race is
+ * reported everywhere and the coverage bonus would otherwise hand it the win.
+ */
+function roadTrackHandicap(b: Bundle): number {
+  const lead = b.verdicts.reduce<Verdict | undefined>((a, v) => (!a || v.importance > a.importance ? v : a), undefined);
+  if (!lead || lead.topic === 'trail_ultra') return 0;
+  return /world (record|best)/i.test([b.headline, ...b.items.map((i) => i.title)].join(' ')) ? 0 : 2;
 }
 
 const SCHEMA = {

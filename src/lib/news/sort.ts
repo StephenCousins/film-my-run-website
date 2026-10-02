@@ -46,7 +46,7 @@ Also NOT news (type "other", "opinion" or "media"): interviews and profiles, "ta
 Give "confidence" as the probability (0-1) that your "type" is right.
 "importance" 1-10 for a UK running site read by trail, ultra and road runners alike. Use the whole scale:
 10: the biggest days of the year: UTMB or Western States won, an ultra world record, a British win at either.
-8-9: world championship results in ultra, trail or mountain running; a course record at a major ultra; a road or track world record; a Majors marathon win.
+8-9: world championship results in ultra, trail or mountain running; a course record at a major ultra; a record on a classic round or long trail (Bob Graham, Paddy Buckley, Ramsay, Pennine Way, a notable FKT); a road or track world record; a Majors marathon win.
 8-9 as well: the death of a known runner, and the stories the running world is talking about (a controversy, a big name's surprising move); 9 when it is one of the sport's biggest names. Also 8-9: doping bans and results stripped (a provisional suspension or whereabouts case before any ban is 6-7, 7-8 for one of the sport's biggest names), cheating caught and punished by a race, race disasters (runners lost in the mountains, a race stopped by weather, a death during a race), results overturned or records voided, sporting firsts (first woman to win outright, first to complete a route).
 7-8: changes that affect thousands of ordinary runners: qualifying times, cut-offs, entry rules or ballots for the Majors, UTMB or other races thousands enter (a Boston qualifying cut-off, the London ballot). Also 7-8: governing-body rows (UTMB lottery or Index, World Athletics rules, prize money), a race or series sold, axed or collapsing, a sponsor walking away, a legend retiring or coming back.
 6-7 as well: trails or races losing access (closures, permits pulled), viral human-interest (the oldest finisher, a record in fancy dress, a run across a continent).
@@ -142,7 +142,7 @@ export async function sortItemJev(c: Candidate, call: typeof completeJson = comp
         'National-level news, or celebrities running a race.',
         'Notable results at well-known races, big-name injuries or retirements, trails or races losing access, viral human-interest, a provisional doping suspension.',
         'Changes that affect thousands of ordinary runners (qualifying times, cut-offs, ballots for the Majors or UTMB), governing-body rows, a race sold, axed or losing its sponsor, a legend retiring or coming back.',
-        'World championship results in ultra, trail or mountain running, a course record at a major ultra, a road or track world record, a Majors marathon win, the death of a known runner, doping bans, cheating punished, race disasters, results overturned, sporting firsts, a controversy the running world is talking about.',
+        'World championship results in ultra, trail or mountain running, a course record at a major ultra, a record on a classic round or long trail (Bob Graham, Paddy Buckley, Ramsay, Pennine Way, a notable FKT), a road or track world record, a Majors marathon win, the death of a known runner, doping bans, cheating punished, race disasters, results overturned, sporting firsts, a controversy the running world is talking about.',
         'One of those stories about one of the sport\'s biggest names.',
         'The biggest days of the year: UTMB or Western States won, an ultra world record, a British win at either.',
       ],

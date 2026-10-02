@@ -36,4 +36,16 @@ describe('grouping', () => {
     expect(bundleImportance({ key: 'k', headline: 'h', items: [item('a'), item('b')], verdicts: [v(6)], alreadyCovered: false })).toBe(7);
     expect(bundleImportance({ key: 'k', headline: 'h', items: [item('a'), item('b'), item('c')], verdicts: [v(9)], alreadyCovered: false })).toBe(10);
   });
+  it('trail and ultra beat road and track, unless it is a world record (Stephen, 2 Oct 2026)', () => {
+    const item = (source: string, title = 't') => ({ articleId: 1, url: `https://${source}.test/a`, source, title, pubDate: new Date(), summary: '', text: 'x', imageUrl: null, photoCredit: null });
+    const road = (i: number): Verdict => ({ ...v(i), topic: 'road' });
+    // A Bob Graham record, two UK sites, beats Berlin results on every site.
+    const bgr = bundleImportance({ key: 'b', headline: 'h', items: [item('a'), item('b')], verdicts: [v(8)], alreadyCovered: false });
+    const berlin = bundleImportance({ key: 'k', headline: 'h', items: [item('a'), item('b'), item('c')], verdicts: [road(8)], alreadyCovered: false });
+    expect(bgr).toBeGreaterThan(berlin);
+    // Unless Berlin was a world record.
+    const wr = bundleImportance({ key: 'k', headline: 'h', items: [item('a', 'Sawe breaks the marathon world record in Berlin'), item('b'), item('c')], verdicts: [road(9)], alreadyCovered: false });
+    expect(wr).toBeGreaterThan(bgr);
+    expect(bundleImportance({ key: 'k', headline: 'h', items: [], verdicts: [{ ...v(7), topic: 'track' }], alreadyCovered: false })).toBe(5);
+  });
 });
