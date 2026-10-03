@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 const isStats = (s: unknown): s is Stats => {
   const o = s as Stats;
   return !!o && typeof o === 'object' && Number.isInteger(o.streak) && o.streak >= 0 && o.streak <= 400
-    && (o.lastWon === null || Number.isInteger(o.lastWon)) && (o.lastPlayed === null || Number.isInteger(o.lastPlayed));
+    && (o.lastWon == null || Number.isInteger(o.lastWon)) && (o.lastPlayed == null || Number.isInteger(o.lastPlayed));
 };
 
 export const POST = withAppApi(
@@ -30,7 +30,8 @@ export const POST = withAppApi(
       if (!r) return NextResponse.json({ ok: false, error: 'bad_result' }, { status: 400 });
       incoming.push(r);
     }
-    if (isStats(body.stats)) incoming.push(...resultsFrom(body.stats).filter((r) => r.puzzle <= today));
+    // The app leaves out empty fields where the website sends null.
+    if (isStats(body.stats)) incoming.push(...resultsFrom({ ...body.stats, lastWon: body.stats.lastWon ?? null, lastPlayed: body.stats.lastPlayed ?? null }).filter((r) => r.puzzle <= today));
     if (incoming.length) {
       // The first result for a puzzle wins: a game played on two devices counts once.
       await prisma.fartlex_results.createMany({
