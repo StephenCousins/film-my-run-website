@@ -2,6 +2,8 @@
 
 This file provides guidance to Claude Code when working with this repository.
 
+Dated session logs and handover history: docs/HANDOVER.md (read it before resuming work).
+
 ## Project Overview
 
 **Film My Run** is a complete rebuild of the old WordPress blog into a modern, dynamic running platform. It serves from **filmmyrun.com**; filmmyrun.co.uk 301s to it. Features:
@@ -18,23 +20,12 @@ This file provides guidance to Claude Code when working with this repository.
 
 ---
 
-## ⚠️ MANDATORY: Blog Post Writing Instructions
+## Blog posts
 
-**If you are asked to write a blog post, you MUST read the instructions file FIRST.**
-
-```
-BLOG-WRITING-INSTRUCTIONS.md (in this folder)
-```
-
-**DO NOT SKIP THIS STEP.** Previous Claude Code sessions failed because they did not read or follow these instructions. The instructions explain:
-
-- How to use ALL available resources (transcripts, Strava data, photos, research, screenshots)
-- How to learn and replicate Stephen's writing style
-- Why you must NEVER copy transcripts verbatim
-- The exact structure and format required for blog posts
-- Quality checklist to verify before submitting
-
-**The transcript is ONE source of many. It tells you what happened - your job is to WRITE about it in Stephen's voice using original prose.**
+Before writing a blog post, read `BLOG-WRITING-INSTRUCTIONS.md`. It covers the
+sources to gather, Stephen's style, the post structure and the quality checklist.
+The transcript is one source of many: it says what happened, and the post retells
+it in original prose in Stephen's voice, never copied from the transcript.
 
 Related project tracking: `BLOG-POST-PROJECT.md`
 
@@ -51,7 +42,7 @@ Related project tracking: `BLOG-POST-PROJECT.md`
 | **Database** | PostgreSQL (Railway) | Already in use, proven |
 | **ORM** | Prisma | Type-safe, great DX |
 | **Auth** | NextAuth (Google + Credentials) | `src/lib/auth.ts`; users live in this database, no external auth service |
-| **Payments** | Stripe — **not built** | Package installed, but nothing in `src/` imports it yet |
+| **Payments** | Stripe Checkout | Shop (`src/lib/shop/stripe.ts`, `/api/shop/*`) and club (`/api/club/webhook/stripe`) |
 | **Images** | Cloudflare R2 + Image CDN | 2.6GB of images, free tier covers it |
 | **Deployment** | Railway | Already using, Pro plan |
 
@@ -207,7 +198,7 @@ filmmyrun.com/
 │   ├── /tools/stone-tracker
 │   ├── /tools/runner-quiz
 │   └── /tools/racescript       # Built but unfinished - see below
-├── /training                   # Marathon Plan App - one page so far
+├── /training                   # The iOS app's training plans (replaced Adrian, 26 Sep 2026)
 ├── /shop                       # Catalogue from data/shop-catalog.json (film-my-run-merch export-catalog)
 │   ├── /shop/[slug]            # BuyBox → localStorage basket → /shop/basket → Stripe Checkout
 │   └── /api/shop/*             # checkout + Stripe/Printify webhooks; logic in src/lib/shop/
@@ -403,8 +394,9 @@ Prisma directly.
 - `/api/contact`, `/api/track`, `/api/track/click`
 - `/api/runner-quiz/results`
 
-**Not built:** no `/api/checkout`, `/api/products`, `/api/webhooks/stripe` or
-`/api/auth/me`.
+### Shop & club payments
+- `/api/shop/checkout`, `/api/shop/webhook/stripe`, `/api/shop/cron`, `/api/shop/rate`, `/api/shop/runner-tee`
+- `/api/club/webhook/stripe`
 
 ---
 
@@ -465,21 +457,8 @@ npm run lint
 
 ### Adding a Blog Post (Claude Workflow)
 
-**⚠️ STOP: Read `BLOG-WRITING-INSTRUCTIONS.md` before writing any blog post.**
-
-For races with video footage that need blog posts written:
-1. Claude MUST first read the blog writing instructions
-2. Claude MUST study 2-3 existing blog posts to learn Stephen's writing style
-3. Claude MUST gather ALL available resources:
-   - Transcript (`/transcripts/`)
-   - Strava activity data (WebFetch the Strava URL)
-   - Strava embed code (`/data/strava-embeds.json`)
-   - Race screenshots (`/screenshots/` at project root)
-   - Centurion RD reports (`/data/centurion-reports/`)
-   - Race research (`/data/race-research/`)
-4. Claude writes ORIGINAL prose in Stephen's voice - NEVER copying the transcript
-5. Claude includes all required media (photos, Strava embed, screenshot, YouTube embed)
-6. Claude verifies against the quality checklist before submitting
+For race posts written from video footage, follow `BLOG-WRITING-INSTRUCTIONS.md`
+(see "Blog posts" above).
 
 For posts where Stephen provides content directly:
 1. Stephen provides: Title, content (markdown), images
@@ -647,14 +626,6 @@ only one. There is no `lib/stripe.ts`.
 
 ---
 
-## Migration — complete
-
-The WordPress migration is done: Railway project and Postgres live, R2 bucket
-holding the 2.6GB of images, 212 posts and the race results imported, a Stripe
-account configured (nothing in this repo uses it yet), and DNS switched. The site serves from **filmmyrun.com**.
-
----
-
 ## Pending Tasks
 
 ### Content & Media
@@ -662,15 +633,8 @@ account configured (nothing in this repo uses it yet), and DNS switched. The sit
 - [ ] Source/create hero images for each service page
 - [ ] Add video backgrounds where appropriate
 
-### Training Plan App
-- [ ] Port over the existing Marathon Training Plan App
-- [ ] Integrate with new auth system (NextAuth)
-- [ ] Set up Stripe subscriptions for paid tiers
-
 ### Shop & Merch
-- [ ] Design merchandise for the shop (apparel, accessories, etc.)
 - [ ] Create product photography
-- [ ] Set up Stripe products and inventory
 
 ### Other
 - [ ] RaceScript (`/tools/racescript`) is built but unfinished — see its section below
@@ -690,26 +654,20 @@ account configured (nothing in this repo uses it yet), and DNS switched. The sit
 
 ### Scripts
 
-All scripts require `.env` with `DATABASE_URL`, `BRAVE_SEARCH_API_KEY`, and `ANTHROPIC_API_KEY`.
-**Note:** the standalone `scripts/*.mjs` still call Anthropic directly and will fail
-while that account has no credit. The site itself (`src/`) uses OpenRouter — see
-"LLM calls" below.
-Run with: `node --env-file=.env scripts/<script>.mjs`
+Shoe maintenance is one CLI over `src/lib/shoes/`: `npm run shoes -- <command>`
+(`scripts/shoes.ts`; its header lists every command and flag). It needs
+`DATABASE_URL`, plus `BRAVE_SEARCH_API_KEY`, `OPENROUTER_API_KEY` and the `R2_*`
+credentials for anything that searches or verifies.
 
-| Script | Purpose | Key flags |
-|--------|---------|-----------|
-| `seed-shoes.mjs` | Import 123 curated shoes from `data/shoes-seed.json` | — |
-| `fetch-shoe-reviews.mjs` | Fetch review scores via Brave Search + Haiku (regex first, then text inference) | `--limit N`, `--slug <slug>`, `--stale-only` |
-| `fetch-shoe-images.mjs` | Fetch product images via Brave Image Search, verified by Haiku 4.5 vision (`claude-haiku-4-5-20251001`) | `--limit N`, `--slug <slug>`, `--force` |
-| `cleanup-mismatched-reviews.mjs` | Remove review records where summary doesn't mention the exact shoe model | — |
-| `fix-shoe.mjs` | Clear and re-fetch image + reviews for one specific shoe | `--slug <slug>` |
+| Command | Purpose |
+|---------|---------|
+| `enrich --slug S` | Fetch review scores for one shoe and recompute its score |
+| `image --slug S [--force]` | Find, verify and store an image for one shoe |
+| `backfill-images` | Image pass over the catalogue (`--clear-hotlinks` nulls non-R2 images) |
+| `run-weekly [--dry-run] [--max-publish N]` | The weekly discovery/publish job, in-process |
+| `candidates`, `audit-images`, `add --brand X --model Y` | Inspect holds, prune dead images, owner-curated add |
 
-### Monthly Refresh Workflow
-```bash
-node --env-file=.env scripts/fetch-shoe-reviews.mjs --stale-only
-node --env-file=.env scripts/fetch-shoe-images.mjs --force
-node --env-file=.env scripts/cleanup-mismatched-reviews.mjs
-```
+`node --env-file=.env scripts/seed-shoes.mjs` still imports `data/shoes-seed.json`.
 
 ### Image Matching Notes
 - Uses two-pass search: quoted exact query first, broader fallback second
@@ -727,8 +685,8 @@ node --env-file=.env scripts/cleanup-mismatched-reviews.mjs
 - `NON_CATALOGUE_HOSTS` rejects eBay, Bazaarvoice, Outside Online and similar
   before spending a vision call; every bad image in the Aug 2026 audit came from
   one of those.
-- Images are hotlinked from external sources — future improvement: migrate to R2
-- To fix a specific mismatched shoe: `node --env-file=.env scripts/fix-shoe.mjs --slug <slug>`
+- Verified images are stored on R2 (`src/lib/shoes/images/store.ts`).
+- To fix a specific mismatched shoe: `npm run shoes -- image --slug <slug> --force`
 
 ### Review Score Notes
 - Brave Search finds review pages, regex extracts explicit scores (e.g. 9.2/10)
@@ -758,8 +716,8 @@ Segments, Insights.
 The Overview map is **Google Maps** (`@react-google-maps/api`), sharing the
 race map's loader id and `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`. It was Leaflet on
 Carto's free basemap until Sep 2026, when Carto started watermarking those
-tiles "API KEY REQUIRED". `parkrun/VenueMapClient.tsx` still uses Carto and
-has the same problem.
+tiles "API KEY REQUIRED". `parkrun/VenueMapClient.tsx` moved to Google Maps
+for the same reason.
 
 ### Library layout (`src/lib/route-comparison/`)
 | File | Holds |
@@ -980,17 +938,17 @@ limit or returns something that isn't JSON, the call falls back to OpenRouter.
 A call served by the subscription counts as $0 against the news ceiling. See
 `completeJsonViaClaude()` in `src/lib/llm.ts`.
 
-`src/lib/llm.ts` exposes `completeText()` and `completeTextWithImage()`. Two
-models, chosen per job:
+`src/lib/llm.ts` exposes `completeText()` and `completeTextWithImage()`. Models
+are chosen per job (news models live in `src/lib/news/models.ts`):
 
 | Model | Used for | $/MTok in/out |
 |---|---|---|
 | `google/gemini-2.5-flash-lite` (default) | Extraction, scoring, yes/no checks, image verification | 0.10 / 0.40 |
-| `deepseek/deepseek-v3.2` (`WRITING_MODEL`) | Race scripts, news stories — where the writing is the product | 0.269 / 0.400 |
+| `deepseek/deepseek-v3.2` (`WRITING_MODEL`) | RaceScript generation | 0.269 / 0.400 |
+| `WRITE_MODEL` / `CHECK_MODEL` | News writing and fact-checking (subscription first, see above) | — |
 
 Extraction calls run at `temperature: 0` for parseable output; the writing calls
-use 0.6–0.7. Nothing in `src/` calls the Anthropic SDK any more. The standalone
-`scripts/*.mjs` still do.
+use 0.6–0.7. Nothing in `src/` or `scripts/` calls the Anthropic SDK.
 
 ### Jev (decision model)
 
@@ -1067,7 +1025,3 @@ Stephen is not a professional coder. When making changes:
 - Provide clear explanations of what each change does
 - Document everything in this file
 - Never delete features without explicit approval
-
----
-
-*Last updated: 1 September 2026*
