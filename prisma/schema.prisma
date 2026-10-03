@@ -331,6 +331,7 @@ model users {
   orders              orders[]
   posts               posts[]
   saved_routes        saved_routes[]
+  fartlex_results     fartlex_results[]
   sessions            sessions[]
   shoe_user_ratings   shoe_user_ratings[]
 }
@@ -728,4 +729,17 @@ model news_push_sends {
   sent_at    DateTime @default(now())
   recipients Int      @default(0)
   failures   Int      @default(0)
+}
+
+/// Fartlex: each finished puzzle of a signed-in player, so the record follows them between the website and the app.
+model fartlex_results {
+  user_id    Int
+  puzzle     Int
+  won        Boolean
+  /// The guesses, so another device can show the finished grid. Empty for results carried over from a device's old record.
+  guesses    String[]
+  created_at DateTime @default(now())
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, puzzle])
 }

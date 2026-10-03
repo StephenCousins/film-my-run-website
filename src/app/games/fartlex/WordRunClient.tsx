@@ -12,8 +12,9 @@ interface Props {
   puzzle: { number: number; length: number; maxGuesses: number; word: string; fact: string; link: { label: string; href: string } | null };
 }
 
-/** Today's guesses, and the player's record, live in this browser only. */
+/** Today's guesses and the player's record live in this browser; a signed-in player's record also lives on their account. */
 const KEY = 'wordrun:v1'; // kept from the Word Run days, so nobody's streak resets
+const MERGED = 'wordrun:merged'; // set once this browser's old record has gone to an account
 interface Saved { day: number; guesses: string[]; stats: Stats }
 
 function load(): Saved | null {
@@ -26,6 +27,18 @@ function load(): Saved | null {
 }
 function save(s: Saved) {
   try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* private mode: the game still works, it just forgets */ }
+}
+
+/** Sends a finished game and/or this browser's old record to the account; null when signed out or offline. */
+async function sync(body: { result?: { puzzle: number; guesses: string[] }; stats?: Stats }): Promise<{ stats: Stats; today: { guesses: string[] } | null } | 'signed_out' | null> {
+  try {
+    const r = await fetch('/api/app/v1/word-run/record', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    if (r.status === 401) return 'signed_out';
+    const j = await r.json();
+    return j.ok ? j : null;
+  } catch {
+    return null;
+  }
 }
 
 const ROWS = ['QWERTYUIOP', 'ASDFGHJKL', 'ZXCVBNM'];
@@ -55,15 +68,30 @@ export default function WordRunClient({ puzzle }: Props) {
   const [message, setMessage] = useState('');
   const [shake, setShake] = useState(false);
   const [countdown, setCountdown] = useState('');
+  const [signedOut, setSignedOut] = useState(false);
 
   // Restore today's game and the player's record after mount (localStorage isn't there on the server).
+  // Then, for a signed-in player, the account's record (the app's games included) replaces this browser's.
   useEffect(() => {
     const s = load();
     if (s) {
       setStats(s.stats);
       if (s.day === number) setGuesses(s.guesses);
     }
-  }, [number]);
+    let merged = false;
+    try { merged = localStorage.getItem(MERGED) === '1'; } catch { /* storage blocked */ }
+    const todays = s?.day === number ? s.guesses : [];
+    const finished = todays.length > 0 && (todays[todays.length - 1] === word || todays.length >= maxGuesses);
+    sync({ result: finished ? { puzzle: number, guesses: todays } : undefined, stats: !merged && s ? s.stats : undefined }).then((r) => {
+      if (r === 'signed_out') return setSignedOut(true);
+      if (!r) return;
+      try { localStorage.setItem(MERGED, '1'); } catch { /* storage blocked */ }
+      const g = r.today?.guesses ?? todays;   // a game finished on another device wins over one in progress here
+      setStats(r.stats);
+      setGuesses(g);
+      save({ day: number, guesses: g, stats: r.stats });
+    });
+  }, [number, word, maxGuesses]);
 
   useEffect(() => {
     fetch(`/games/fartlex/words-${length}.txt`)
@@ -109,6 +137,9 @@ export default function WordRunClient({ puzzle }: Props) {
     setStats(nextStats);
     setCurrent('');
     save({ day: number, guesses: next, stats: nextStats });
+    if (finished) sync({ result: { puzzle: number, guesses: next } }).then((r) => {
+      if (r && r !== 'signed_out') { setStats(r.stats); save({ day: number, guesses: next, stats: r.stats }); }
+    });
   }, [current, length, valid, word, guesses, maxGuesses, stats, number]);
 
   const press = useCallback((key: string) => {
@@ -189,6 +220,11 @@ export default function WordRunClient({ puzzle }: Props) {
               </div>
               <button onClick={share} className="btn-primary mt-6"><Share2 className="w-4 h-4" /> Share</button>
               <p className="text-xs text-muted mt-4">Next word in {countdown}</p>
+              {signedOut && (
+                <p className="text-xs text-muted mt-2">
+                  <Link href="/login?callbackUrl=/games/fartlex" className="underline">Sign in</Link> to keep your streak on every device, the app included.
+                </p>
+              )}
             </section>
           ) : (
             <div className="w-full select-none" aria-label="Keyboard">
