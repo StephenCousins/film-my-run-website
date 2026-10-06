@@ -36,7 +36,7 @@ const discounts = [
   {
     id: 'enertor',
     brand: 'Enertor Insoles',
-    code: 'FILMMYRUN15',
+    code: '15FILMMYRUN',
     discount: '15% Off',
     description: "I have been using Enertor insoles for over 6 years and I put them in almost all my running shoes and even my every day walking shoes. They provide not only comfort but great support allowing you to recover faster, reduce the risk of injury and keep moving for longer.",
     url: 'https://enertor.com',
