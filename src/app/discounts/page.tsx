@@ -46,14 +46,76 @@ const discounts = [
   {
     id: 'proteinrebel',
     brand: 'Protein Rebel Nutrition',
-    code: 'Filmmyrun15',
+    code: '15FILMMYRUN',
     discount: '15% Off',
     description: "I am famously not a fan of gels. However, Protein Rebel's recipe is simple and doesn't upset my stomach. Plus the collagen, magnesium and protein powders provide an easy way to supplement your diet with recovery and muscle building nutrients.",
-    url: 'https://www.proteinrebel.com',
+    url: 'https://proteinrebel.avln.me/c/JHYoefQICplw',   // Avelon tracked link
     image: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/wp-uploads/2025/06/IMG_1707-scaled.jpg',
     category: 'Nutrition',
   },
 ];
+
+// More partner brands, through the Avelon affiliate network. Links are Avelon tracked links
+// (app.avelonetwork.com > Dashboard > My Links); codes are under My Retailers > Promo codes.
+const partners: { brand: string; about: string; code: string | null; discount: string | null; url: string }[] = [
+  { brand: 'Harrier Trail Running', about: 'British trail running kit and shoes.', code: 'FMR10', discount: '10% off', url: 'https://harrierrunfree.avln.me/c/RjvhiAikkLJb' },
+  { brand: 'Trailskin', about: 'All-natural skincare made for runners, by runners.', code: 'filmmyrun15', discount: '15% off', url: 'https://trailskin.avln.me/c/BxDOcVhzgmdb' },
+  { brand: 'ABSOLUTE360', about: 'Infrared performance and recovery wear: leggings, base layers, socks.', code: 'FilmMyRun-BA15', discount: '15% off', url: 'https://absolute360.avln.me/c/ZMAacDyVALGs' },
+  { brand: 'Runr', about: 'Running apparel for parkrunners and marathoners alike.', code: 'FILMMYRUN10', discount: '10% off', url: 'https://runr.avln.me/c/jgNyGXlYyOlT' },
+  { brand: 'TORQ', about: 'Sports nutrition: energy drinks, gels and bars.', code: 'AFSCTORQ10', discount: '10% off', url: 'https://torqfitness.avln.me/c/ozqBvrqRqwXD' },
+  { brand: 'Save Our Soles', about: 'Foot care and shoe care for runners.', code: 'SC', discount: '10% off', url: 'https://saveoursoles.avln.me/c/swEEQAWMPMBj' },
+  { brand: 'Maurten', about: 'Hydrogel sports fuel and drink mixes.', code: null, discount: null, url: 'https://maurten.avln.me/c/LgACXCTrtoUo' },
+  { brand: 'SunGod', about: 'Running sunglasses with zero-bounce frames and anti-fog lenses.', code: null, discount: null, url: 'https://sungod.avln.me/c/WkFmlPWZmBKQ' },
+  { brand: 'SOAR Running', about: 'Performance running kit, designed in London.', code: null, discount: null, url: 'https://soarrunning.avln.me/c/xyOeBHTDpYAy' },
+  { brand: 'Janji', about: 'Running apparel.', code: null, discount: null, url: 'https://janjiuk.avln.me/c/iCNEBMxtcQMu' },
+  { brand: 'Silva', about: 'Head torches and compasses, since 1933.', code: null, discount: null, url: 'https://silvauk.avln.me/c/twlXkMTHALYQ' },
+  { brand: 'Kitbrix', about: 'Kit bags for runners and triathletes.', code: null, discount: null, url: 'https://kitbrix.avln.me/c/QIaBoPBRfifO' },
+  { brand: 'Zone3', about: 'Triathlon and open water swim kit.', code: null, discount: null, url: 'https://zone3.avln.me/c/aznFbmzglyZs' },
+  { brand: 'Sigma Sports', about: 'Running, cycling and triathlon retailer in Kingston, Surrey.', code: null, discount: null, url: 'https://sigmasports.avln.me/c/fsyJuEHSnyyf' },
+];
+
+function PartnerCard({ p }: { p: typeof partners[0] }) {
+  const [copied, setCopied] = useState(false);
+  const copy = () => {
+    if (!p.code) return;
+    navigator.clipboard.writeText(p.code);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="flex flex-col p-6 bg-surface-secondary rounded-2xl border border-border">
+      <div className="flex items-start justify-between gap-3 mb-2">
+        <h3 className="font-display text-xl font-bold text-foreground">{p.brand}</h3>
+        {p.discount && (
+          <span className="shrink-0 px-2.5 py-1 bg-brand/10 text-brand text-xs font-bold rounded-full border border-brand/20">{p.discount}</span>
+        )}
+      </div>
+      <p className="text-secondary text-sm leading-relaxed mb-5 flex-1">{p.about}</p>
+      <div className="flex items-center gap-3">
+        {p.code && (
+          <button
+            onClick={copy}
+            className="flex items-center gap-2 px-3 py-2 bg-surface-tertiary rounded-lg font-mono text-sm font-bold text-foreground hover:bg-brand hover:text-white transition-all"
+            title="Copy code"
+          >
+            {p.code}
+            {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+          </button>
+        )}
+        <a
+          href={p.url}
+          target="_blank"
+          rel="sponsored noopener noreferrer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand text-white text-sm font-semibold rounded-full hover:bg-brand-hover transition-all"
+        >
+          Shop
+          <ExternalLink className="w-4 h-4" />
+        </a>
+      </div>
+    </div>
+  );
+}
 
 // ============================================
 // DISCOUNT CARD COMPONENT
@@ -133,7 +195,7 @@ function DiscountCard({ deal, index }: { deal: typeof discounts[0]; index: numbe
         <a
           href={deal.url}
           target="_blank"
-          rel="noopener noreferrer"
+          rel="sponsored noopener noreferrer"
           className="inline-flex items-center gap-2 px-6 py-3 bg-brand text-white font-semibold rounded-full hover:bg-brand-hover transition-all hover:scale-105"
         >
           {deal.code ? 'Shop Now' : 'Get Your Discount'}
@@ -191,6 +253,24 @@ export default function DiscountsPage() {
             {discounts.map((deal, index) => (
               <DiscountCard key={deal.id} deal={deal} index={index} />
             ))}
+          </div>
+        </section>
+
+        {/* More partner brands (Avelon) */}
+        <section className="py-16 lg:py-24 border-t border-border">
+          <div className="container">
+            <div className="max-w-2xl mb-10">
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">More Partner Brands</h2>
+              <p className="text-secondary">Codes and links for more brands in the running world. Copy a code, then use it at checkout.</p>
+            </div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {partners.map((p) => (
+                <PartnerCard key={p.brand} p={p} />
+              ))}
+            </div>
+            <p className="text-muted text-sm mt-10">
+              Some links on this page are affiliate links. If you buy through them I may earn a small commission, at no extra cost to you.
+            </p>
           </div>
         </section>
 
