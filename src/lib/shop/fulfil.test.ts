@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { fulfilPaidSession, shippingOf, toPrintifyAddress, type FulfilDeps, type PaidOrder } from './fulfil';
 import type { OrderLine } from './orders';
-import { PrintifyDraftError, createOrder } from './printify';
+import { PrintifyDraftError, createOrder, sendToProduction } from './printify';
 import { orderFailedLines } from './email';
 
 const addr = toPrintifyAddress('Jo Bloggs', 'jo@x.com', null, { line1: '1 St', city: 'Leeds', postal_code: 'LS1 1AA', country: 'GB' });
@@ -104,6 +104,20 @@ describe('createOrder', () => {
     expect(err).toBeInstanceOf(PrintifyDraftError);
     expect(err.draftId).toBe('PFD1');
     expect(fetchMock).toHaveBeenCalledTimes(2);
+    vi.unstubAllGlobals();
+    vi.unstubAllEnvs();
+  });
+
+  it('waits out Printify\'s pending status before sending to production', async () => {
+    vi.stubEnv('PRINTIFY_API_TOKEN', 't');
+    vi.stubEnv('PRINTIFY_SHOP_ID', 's');
+    let n = 0;
+    const pending = '{"errors":{"reason":"It is not allowed to sent order to production with status pending."}}';
+    vi.stubGlobal('fetch', vi.fn(async () => (++n < 3 ? new Response(pending, { status: 400 }) : new Response('{}', { status: 200 }))));
+    await sendToProduction('PF1', async () => {});
+    expect(n).toBe(3);
+    n = -100; // never stops being pending: gives up after the tries
+    await expect(sendToProduction('PF1', async () => {}, 4)).rejects.toThrow(/status pending/);
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
   });

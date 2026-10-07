@@ -66,12 +66,27 @@ export async function createOrder(external_id: string, line_items: PrintifyLine[
     address_to,
   });
   try {
-    await call('POST', `/shops/${shop()}/orders/${r.id}/send_to_production.json`);
+    await sendToProduction(r.id);
   } catch (e) {
     // The order exists at Printify as a draft: whoever picks this up must not place it again.
     throw new PrintifyDraftError(r.id, (e as Error).message);
   }
   return r.id;
+}
+
+/**
+ * A new order sits in 'pending' for a few seconds while Printify prices it, and refuses
+ * send_to_production until then (code 8502). That refusal failed the first real order, 7 Oct 2026.
+ */
+export async function sendToProduction(id: string, wait = (ms: number) => new Promise((r) => setTimeout(r, ms)), tries = 8) {
+  for (let i = 1; ; i++) {
+    try {
+      return await call('POST', `/shops/${shop()}/orders/${id}/send_to_production.json`);
+    } catch (e) {
+      if (i >= tries || !/status pending/.test((e as Error).message)) throw e;
+      await wait(2000);
+    }
+  }
 }
 
 /** Printify created the order but did not send it to production. */
