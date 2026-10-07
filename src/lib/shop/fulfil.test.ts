@@ -123,6 +123,38 @@ describe('createOrder', () => {
   });
 });
 
+describe('createOrder reference clash', () => {
+  const clash = (id: string) => new Response(`{"status":"error","code":8503,"errors":{"reason":"Order already exists","code":8503},"order":{"id":"${id}","external_id":"13"}}`, { status: 409 });
+  const run = (oldStatus: string) => {
+    vi.stubEnv('PRINTIFY_API_TOKEN', 't');
+    vi.stubEnv('PRINTIFY_SHOP_ID', 's');
+    const posted: string[] = [];
+    vi.stubGlobal('fetch', vi.fn(async (url: string, init?: RequestInit) => {
+      const u = String(url);
+      if (u.endsWith('/orders.json')) {
+        const ref = JSON.parse(String(init?.body)).external_id;
+        posted.push(ref);
+        return ref === '13' ? clash('OLD') : new Response('{"id":"NEW"}', { status: 200 });
+      }
+      if (u.endsWith('/OLD.json')) return new Response(JSON.stringify({ status: oldStatus }), { status: 200 });
+      return new Response('{}', { status: 200 }); // send_to_production
+    }));
+    return { posted, result: createOrder('13', [], addr).finally(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); }) };
+  };
+
+  it('re-places past a cancelled order as 13-2', async () => {
+    const { posted, result } = run('canceled');
+    expect(await result).toBe('NEW');
+    expect(posted).toEqual(['13', '13-2']);
+  });
+
+  it('refuses when the clashing order is live', async () => {
+    const { posted, result } = run('in-production');
+    await expect(result).rejects.toThrow(/8503/);
+    expect(posted).toEqual(['13']);
+  });
+});
+
 describe('shippingOf', () => {
   const a = { name: 'Jo', address: { line1: '1 St', country: 'GB' } };
   it('reads the 2025+ webhook shape', () => expect(shippingOf({ collected_information: { shipping_details: a } })).toBe(a));

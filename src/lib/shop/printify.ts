@@ -56,15 +56,27 @@ export async function quoteShippingPence(line_items: PrintifyLine[], address_to 
   return q.standard;
 }
 
-export async function createOrder(external_id: string, line_items: PrintifyLine[], address_to: PrintifyAddress): Promise<string> {
-  const r = await call<{ id: string }>('POST', `/shops/${shop()}/orders.json`, {
-    external_id,
-    label: `filmmyrun.com ${external_id}`,
-    line_items,
-    shipping_method: 1,
-    send_shipping_notification: false,
-    address_to,
-  });
+export async function createOrder(external_id: string, line_items: PrintifyLine[], address_to: PrintifyAddress, attempt = 1): Promise<string> {
+  const ref = attempt > 1 ? `${external_id}-${attempt}` : external_id;
+  let r: { id: string };
+  try {
+    r = await call<{ id: string }>('POST', `/shops/${shop()}/orders.json`, {
+      external_id: ref,
+      label: `filmmyrun.com ${ref}`,
+      line_items,
+      shipping_method: 1,
+      send_shipping_notification: false,
+      address_to,
+    });
+  } catch (e) {
+    // 8503: the reference is taken. Reuse it only past a CANCELLED order (a re-run after a
+    // manual cancel); a live one means this order was already placed, so stay failed.
+    const taken = /"code":8503[\s\S]*"order":\{"id":"(\w+)"/.exec((e as Error).message)?.[1];
+    if (!taken || attempt >= 5) throw e;
+    const old = await call<{ status: string }>('GET', `/shops/${shop()}/orders/${taken}.json`);
+    if (old.status !== 'canceled') throw e;
+    return createOrder(external_id, line_items, address_to, attempt + 1);
+  }
   try {
     await sendToProduction(r.id);
   } catch (e) {
