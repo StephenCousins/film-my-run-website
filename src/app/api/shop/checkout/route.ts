@@ -74,7 +74,8 @@ export async function POST(request: Request) {
           delivery_estimate: { minimum: { unit: 'business_day', value: 3 }, maximum: { unit: 'business_day', value: 7 } },
         },
       }],
-      phone_number_collection: { enabled: false },
+      // Contrado refuses an order with no phone (Recipient.Phone/Mobile required); Printify's couriers use it too.
+      phone_number_collection: { enabled: true },
       ...returnUrls(siteUrl(), source),
     });
 

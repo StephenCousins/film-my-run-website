@@ -12,8 +12,14 @@ async function call<T>(method: 'GET' | 'POST', path: string, body?: unknown): Pr
     headers: { 'X-API-KEY': key, 'Content-Type': 'application/json' },
     body: body ? JSON.stringify(body) : undefined,
   });
-  const json = (await res.json()) as { success: boolean; message: string; data: T; error?: { details?: string } };
-  if (!res.ok || !json.success) throw new Error(`Contrado ${method} ${path} → ${res.status}: ${json.error?.details ?? json.message}`);
+  const json = (await res.json()) as {
+    success: boolean; message: string; data: T;
+    error?: { details?: string; additionalData?: { validationErrors?: Record<string, string[]> } };
+  };
+  if (!res.ok || !json.success) {
+    const fields = json.error?.additionalData?.validationErrors;
+    throw new Error(`Contrado ${method} ${path} → ${res.status}: ${json.error?.details ?? json.message}${fields ? ' ' + JSON.stringify(fields) : ''}`);
+  }
   return json.data;
 }
 
