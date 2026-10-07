@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { fulfilPaidSession, toPrintifyAddress, type FulfilDeps, type PaidOrder } from './fulfil';
+import { fulfilPaidSession, shippingOf, toPrintifyAddress, type FulfilDeps, type PaidOrder } from './fulfil';
 import type { OrderLine } from './orders';
 import { PrintifyDraftError, createOrder } from './printify';
 import { orderFailedLines } from './email';
@@ -107,4 +107,11 @@ describe('createOrder', () => {
     vi.unstubAllGlobals();
     vi.unstubAllEnvs();
   });
+});
+
+describe('shippingOf', () => {
+  const a = { name: 'Jo', address: { line1: '1 St', country: 'GB' } };
+  it('reads the 2025+ webhook shape', () => expect(shippingOf({ collected_information: { shipping_details: a } })).toBe(a));
+  it('reads the old shape', () => expect(shippingOf({ shipping_details: a })).toBe(a));
+  it('null when neither', () => expect(shippingOf({})).toBeNull());
 });

@@ -5,7 +5,7 @@ import { prisma } from '@/lib/db';
 import { subscribeAfterPayment } from '@/lib/newsletter/consent';
 import { liveNewsletterStore } from '@/lib/newsletter/store';
 import { stripe } from '@/lib/shop/stripe';
-import { fulfilPaidSession, toPrintifyAddress } from '@/lib/shop/fulfil';
+import { fulfilPaidSession, shippingOf, toPrintifyAddress } from '@/lib/shop/fulfil';
 import { createOrder } from '@/lib/shop/printify';
 import { createContradoOrder } from '@/lib/shop/contrado';
 import { orderConfirmation, orderFailed, orderNotSaved } from '@/lib/shop/email';
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
   const session = event.data.object as Stripe.Checkout.Session;
   const email = session.customer_details?.email;
-  const ship = session.shipping_details;
+  const ship = shippingOf(session as Parameters<typeof shippingOf>[0]);
   if (!email || !ship?.address) {
     console.error('Shop webhook: session without email/address', session.id);
     return NextResponse.json({ error: 'No email or address' }, { status: 400 });

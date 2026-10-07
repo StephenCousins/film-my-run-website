@@ -84,3 +84,17 @@ export function toPrintifyAddress(
     zip: a.postal_code ?? '',
   };
 }
+
+type ShippingDetails = { name?: string | null; address?: Parameters<typeof toPrintifyAddress>[3] | null };
+
+/**
+ * Webhook events arrive in the ENDPOINT's Stripe API version, not the client's pinned one.
+ * From 2025-03-31 the address lives at collected_information.shipping_details; reading only
+ * the old field dropped a paid order on 2 Oct 2026.
+ */
+export function shippingOf(session: {
+  shipping_details?: ShippingDetails | null;
+  collected_information?: { shipping_details?: ShippingDetails | null } | null;
+}): ShippingDetails | null {
+  return session.collected_information?.shipping_details ?? session.shipping_details ?? null;
+}
