@@ -205,7 +205,11 @@ export async function handlePro(req: NextRequest, deps: MemberDeps & { debugIds?
   if (!isInstallId(installId)) return bad('bad_install', 400);
   const now = deps.now ? deps.now() : Date.now();
   const proof = checkProHeader(req.headers.get('X-FMR-Pro'), installId, { debugIds: deps.debugIds, now });
-  if (!proof.ok) return bad('Pro required', 403);
+  if (!proof.ok) {
+    console.warn('Pro report rejected', member.id, proof.reason);
+    return bad('Pro required', 403);
+  }
+  console.log('Pro report', member.id, proof.productId, new Date(proof.expiresDate).toISOString());
   return json({ ok: true, member: await forApp(await deps.setPro(member.id, new Date(proof.expiresDate)), deps) });
 }
 
