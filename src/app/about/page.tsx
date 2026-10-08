@@ -38,12 +38,13 @@ const stats = [
 ];
 
 const milestones = [
-  { year: '2011', event: 'First marathon - London' },
-  { year: '2013', event: 'First ultra - Thames Path 100km' },
+  { year: '2012', event: 'First marathon - Paris' },
+  { year: '2014', event: 'First ultra - Longman Ultra' },
   { year: '2015', event: 'Started Film My Run' },
-  { year: '2018', event: 'First 100-miler - South Downs Way' },
-  { year: '2022', event: 'TDS at UTMB - First alpine ultra' },
-  { year: '2024', event: 'Sub-3 marathon at London' },
+  { year: '2015', event: 'First London Marathon' },
+  { year: '2016', event: 'First 100-miler - South Downs Way 100' },
+  { year: '2018', event: 'First alpine ultra - CCC, Chamonix' },
+  { year: '2020', event: 'First sub-3 marathon - Goodwood' },
 ];
 
 const awards = [
@@ -283,8 +284,8 @@ export default function AboutPage() {
 
             <div className="max-w-2xl mx-auto">
               <div className="relative border-l-2 border-brand/30 pl-8">
-                {milestones.map((milestone, index) => (
-                  <div key={milestone.year} className="relative mb-10 last:mb-0">
+                {milestones.map((milestone) => (
+                  <div key={milestone.event} className="relative mb-10 last:mb-0">
                     {/* Dot */}
                     <div className="absolute -left-[41px] w-4 h-4 rounded-full bg-brand" />
 
