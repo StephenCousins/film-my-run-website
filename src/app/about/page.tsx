@@ -48,8 +48,7 @@ const milestones = [
 ];
 
 const awards = [
-  { title: 'Best Running Film', event: 'Sheffield Adventure Film Festival', year: '2023', film: 'TDS 2022' },
-  { title: 'Audience Choice', event: 'Trail Running Film Festival', year: '2023', film: 'Lakeland 100' },
+  { title: 'Best Running Film', event: 'Sheffield Adventure Film Festival', year: '2022', film: '81 Yards - A Backyard Story' },
 ];
 
 // ============================================
@@ -313,7 +312,7 @@ export default function AboutPage() {
                 </h2>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+              <div className={`grid gap-6 mx-auto ${awards.length > 1 ? 'md:grid-cols-2 max-w-3xl' : 'max-w-md'}`}>
                 {awards.map((award, index) => (
                   <div
                     key={index}
