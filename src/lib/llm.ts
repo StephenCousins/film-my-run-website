@@ -1,3 +1,4 @@
+import Anthropic from '@anthropic-ai/sdk';
 import OpenAI from 'openai';
 import { spawn } from 'node:child_process';
 import { tmpdir } from 'node:os';
@@ -53,6 +54,40 @@ export interface CompleteOptions {
 }
 
 /**
+ * WRITING_MODEL calls go to Claude directly while Stephen's prepaid Anthropic
+ * API credit lasts (12 Oct 2026). Null means "use OpenRouter": no
+ * ANTHROPIC_CREDIT_API_KEY, credit used up (a 400), any other API error, or a
+ * reply that didn't finish. The old ANTHROPIC_API_KEY on Railway is
+ * deliberately not used, so nothing switches on until the new key is set.
+ */
+const CLAUDE_MODEL = 'claude-opus-5-5';
+
+async function completeTextViaClaude({ prompt, maxTokens, system }: CompleteOptions): Promise<string | null> {
+  if (!process.env.ANTHROPIC_CREDIT_API_KEY) return null;
+  try {
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_CREDIT_API_KEY, maxRetries: 1 });
+    const message = await client.messages
+      .stream({
+        model: CLAUDE_MODEL,
+        // Thinking counts against max_tokens, so leave room above the reply's own cap.
+        max_tokens: maxTokens + 8000,
+        output_config: { effort: 'medium' },
+        ...(system ? { system } : {}),
+        messages: [{ role: 'user', content: prompt }],
+      })
+      .finalMessage();
+    if (message.stop_reason !== 'end_turn') throw new Error(`stop_reason ${message.stop_reason}`);
+    const text = message.content.map((b) => (b.type === 'text' ? b.text : '')).join('').trim();
+    if (!text) throw new Error('empty reply');
+    console.log('claude-credit ok');
+    return text;
+  } catch (e) {
+    console.log(`claude-credit failed: ${(e as Error).message.split('\n')[0].slice(0, 200)}, falling back to OpenRouter`);
+    return null;
+  }
+}
+
+/**
  * Single-turn completion returning plain text.
  *
  * Mirrors how the Anthropic calls it replaced were used: one user message in,
@@ -67,6 +102,11 @@ export async function completeText({
   temperature = 0,
   model = process.env.OPENROUTER_MODEL || DEFAULT_MODEL,
 }: CompleteOptions): Promise<string> {
+  if (model === WRITING_MODEL) {
+    const viaClaude = await completeTextViaClaude({ prompt, maxTokens, system });
+    if (viaClaude !== null) return viaClaude;
+  }
+
   const client = getClient();
 
   const completion = await client.chat.completions.create({
