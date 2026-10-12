@@ -89,6 +89,8 @@ async function getPostBySlug(slug: string) {
     content: applyStravaEmbedToken(post.content, post.meta as StravaEmbedMeta | null),
     excerpt: post.excerpt || post.content.replace(/<[^>]*>/g, '').substring(0, 200) + '...',
     featuredImage: post.featured_image,
+    // Optional CSS object-position for the hero crop, e.g. "50% 15%" to keep faces in shot.
+    heroPosition: (post.meta as { hero_position?: string } | null)?.hero_position,
     publishedAt: post.published_at?.toISOString() || post.created_at.toISOString(),
     updatedAt: post.updated_at.toISOString(),
     readTime: post.read_time,
@@ -324,6 +326,7 @@ export default async function BlogPostPage({ params }: PageProps) {
                 alt={post.title}
                 fill
                 className="object-cover"
+                style={post.heroPosition ? { objectPosition: post.heroPosition } : undefined}
                 priority
               />
             ) : (
