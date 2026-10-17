@@ -37,7 +37,7 @@ export default function WilsonPrivacyPage() {
             <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-8">Wilson Index: Privacy Policy</h1>
 
             <div className="prose prose-zinc dark:prose-invert max-w-none">
-              <p className="text-secondary text-sm mb-8">Last updated: 3 October 2026</p>
+              <p className="text-secondary text-sm mb-8">Last updated: 17 October 2026</p>
 
               <Section title="The short version">
                 <P>
@@ -97,21 +97,29 @@ export default function WilsonPrivacyPage() {
                 </P>
               </Section>
 
-              <Section title="7. Emailing us">
+              <Section title="7. Supporting Wilson">
+                <P>
+                  Supporting is optional. If you take the monthly support or leave a tip, Apple handles the payment
+                  through your Apple ID. We never see your name, card or Apple ID. Apple tells the app on your phone
+                  which purchases you&apos;ve made, so it can show your supporter badge, and that stays on your phone too.
+                </P>
+              </Section>
+
+              <Section title="8. Emailing us">
                 <P>
                   If you email <Mail />, we keep your email so we can reply, and delete it on request.
                 </P>
               </Section>
 
-              <Section title="8. Children">
+              <Section title="9. Children">
                 <P>The app collects no personal data from anyone, children included.</P>
               </Section>
 
-              <Section title="9. Changes">
+              <Section title="10. Changes">
                 <P>If this policy changes in a way that matters, we&apos;ll say so on this page and in the app&apos;s release notes.</P>
               </Section>
 
-              <Section title="10. Contact">
+              <Section title="11. Contact">
                 <P>
                   Stephen Cousins, Film My Run: <Mail />
                 </P>
