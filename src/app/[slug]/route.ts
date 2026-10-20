@@ -9,7 +9,8 @@ export const dynamic = 'force-dynamic';
 export async function GET(req: NextRequest, { params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const post = await prisma.posts.findFirst({ where: { slug, status: 'published' }, select: { slug: true } }).catch(() => null);
-  if (post) return NextResponse.redirect(new URL(`/blog/${post.slug}`, req.url), 308);
+  // A relative Location: behind Railway's proxy req.url is http://localhost:8080.
+  if (post) return new NextResponse(null, { status: 308, headers: { location: `/blog/${post.slug}` } });
   // The site's own 404 page, with a 404 status. Two segments never reach this route, so no loop.
   // (Route handlers can't rewrite; this costs one extra request, only for addresses that don't exist.)
   const page = await fetch(new URL(`/_not-found/${encodeURIComponent(slug)}`, req.url)).catch(() => null);
