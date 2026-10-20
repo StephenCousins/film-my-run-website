@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
@@ -310,6 +310,11 @@ function CalculatorNav({ activeId, onChange }: CalculatorNavProps) {
 
 export default function CalculatorsPage() {
   const [activeCalculator, setActiveCalculator] = useState('pace');
+  // ?calc=predictor opens that calculator (runner pages link straight to the predictor).
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('calc');
+    if (id && calculators.some((c) => c.id === id)) setActiveCalculator(id);
+  }, []);
 
   const renderCalculator = () => {
     switch (activeCalculator) {

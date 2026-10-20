@@ -9,7 +9,11 @@ import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import { prisma } from '@/lib/db';
 import { sanitizeContent } from '@/lib/sanitize';
 import { buildArticleJsonLd } from '@/lib/news/article-jsonld';
-import { linkRunners, loadNameIndex } from '@/lib/runners/names';
+import { linkRunners, loadNameIndex, mentionedSlugs } from '@/lib/runners/names';
+import { storiesAbout } from '@/lib/runners/present';
+import { flagEmoji } from '@/lib/runners/flag';
+import type { RunnerPhoto } from '@/lib/runners/types';
+import RunnerCard from '@/components/runners/RunnerCard';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,7 +64,7 @@ async function getRelatedStories(currentSlug: string) {
       status: 'published',
     },
     orderBy: { published_at: 'desc' },
-    take: 3,
+    take: 6, // room to drop the ones already picked as stories about the same runners
   });
 
   return stories.map((s) => ({
@@ -116,9 +120,23 @@ export default async function NewsStoryPage({ params }: PageProps) {
     notFound();
   }
 
-  const relatedStories = await getRelatedStories(slug);
   // Runner names link to their profiles when the page is shown; the stored story never changes.
   const runnerIndex = await loadNameIndex().catch(() => new Map<string, string>());
+  const mentioned = [...mentionedSlugs(sanitizeContent(story.content), runnerIndex)];
+  // More stories about the runners in this one first, then the latest to fill three.
+  const [aboutSame, latest, storyRunners] = await Promise.all([
+    Promise.all(mentioned.slice(0, 3).map((s) => storiesAbout(s, runnerIndex).catch(() => []))),
+    getRelatedStories(slug),
+    mentioned.length
+      ? prisma.runners.findMany({ where: { slug: { in: mentioned }, status: 'published' }, select: { slug: true, name: true, nationality: true, photos: true } })
+      : Promise.resolve([]),
+  ]);
+  const seen = new Set([slug]);
+  const relatedStories = [
+    ...aboutSame.flat().map((s) => ({ id: s.slug, title: s.title, slug: s.slug, imageUrl: s.imageUrl, publishedAt: s.publishedAt })),
+    ...latest,
+  ].filter((s) => !seen.has(s.slug) && seen.add(s.slug)).slice(0, 3);
+  const runnersHere = mentioned.map((m) => storyRunners.find((r) => r.slug === m)).filter((r) => !!r).slice(0, 6);
   const storyUrl = `https://filmmyrun.com/news/${story.slug}`;
 
   const articleJsonLd = buildArticleJsonLd(story, storyUrl);
@@ -264,6 +282,34 @@ export default async function NewsStoryPage({ params }: PageProps) {
                     <ArrowLeft className="w-4 h-4" />
                     Back to News
                   </Link>
+
+                  {/* Runners in this story */}
+                  {runnersHere.length > 0 && (
+                    <div>
+                      <h3 className="font-display text-lg font-semibold text-foreground mb-4">
+                        Runners in this story
+                      </h3>
+                      <ul className="grid grid-cols-3 gap-3">
+                        {runnersHere.map((r) => {
+                          const photo = (r.photos as unknown as RunnerPhoto[]).find((p) => p.kind === 'portrait')?.url;
+                          return (
+                            <li key={r.slug}>
+                              <Link href={`/runners/${r.slug}`} className="block group">
+                                {photo
+                                  ? (
+                                    <div className="relative w-full aspect-[4/5] rounded-lg overflow-hidden bg-surface-tertiary">
+                                      <Image src={photo} alt="" fill sizes="120px" className="object-cover object-top" />
+                                    </div>
+                                  )
+                                  : <RunnerCard name={r.name} flag={flagEmoji(r.nationality)} index={null} className="aspect-[4/5] w-full rounded-lg" />}
+                                <span className="block mt-1 text-xs font-semibold leading-snug text-foreground group-hover:text-brand">{r.name}</span>
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
 
                   {/* Related stories */}
                   {relatedStories.length > 0 && (
