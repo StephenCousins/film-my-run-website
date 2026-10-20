@@ -62,7 +62,8 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
   else if (new Date().getUTCDay() === 1) {
     const utmb = await refreshUtmbIndexes().then(
       (r) => [
-        r.note ?? `UTMB Index refreshed for ${r.updated} runners`,
+        r.note ?? `UTMB Index and results refreshed for ${r.updated} runners`,
+        r.podiums ? `${r.podiums} new podiums added to best finishes` : '',
         r.missing.length ? `not found on UTMB: ${r.missing.join(', ')}` : '',
         r.cutShort ? `refresh cut short, ${r.cutShort} not checked` : '',
       ].filter(Boolean).join('; ') + '.',
@@ -70,7 +71,7 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
     );
     console.log(utmb);
     await weeklyReport(utmb);
-    // Once a month (Stephen, 28 Sep 2026): the first Monday adds new results and refreshes bios.
+    // Once a month (Stephen, 28 Sep 2026): the first Monday refreshes bios (new results come weekly, above).
     // After the weekly email, so a job timeout can never cost that; its own short email.
     if (new Date().getUTCDate() <= 7) await runMonthlyRefresh();
   }
@@ -105,8 +106,7 @@ async function runMonthlyRefresh(): Promise<void> {
     const r = await monthlyRefresh({ ...liveMonthlyDeps(), progress: record });
     await record(r);
     text = [
-      `Monthly runner refresh: ${r.resultsAdded} results added, ${r.biosRefreshed.length} bios refreshed${r.biosRefreshed.length ? ` (${r.biosRefreshed.join(', ')})` : ''}, ${r.skipped.length} skipped. $${r.costUsd.toFixed(2)}.`,
-      r.utmbNotRead ? `${r.utmbNotRead} UTMB pages could not be read.` : '',
+      `Monthly runner refresh: ${r.biosRefreshed.length} bios refreshed${r.biosRefreshed.length ? ` (${r.biosRefreshed.join(', ')})` : ''}, ${r.skipped.length} skipped. $${r.costUsd.toFixed(2)}.`,
       ...r.skipped.map((x) => `  ${x.slug}: ${x.reason}`),
       r.cutShort ? 'Cut short by the budget or the time limit.' : '',
     ].filter(Boolean).join('\n');

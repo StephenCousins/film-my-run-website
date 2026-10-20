@@ -20,11 +20,11 @@ export default async function RunnersPage({ searchParams }: { searchParams: Prom
   const race = (await searchParams).race?.trim().slice(0, 120) || null;
   const rows = await prisma.runners.findMany({
     where: { status: 'published' },
-    select: { slug: true, name: true, nationality: true, disciplines: true, era: true, utmb_index: true, photos: true, best_finishes: true },
+    select: { slug: true, name: true, nationality: true, disciplines: true, era: true, utmb_index: true, photos: true, best_finishes: true, results: true },
     orderBy: [{ utmb_index: { sort: 'desc', nulls: 'last' } }, { name: 'asc' }],
   });
   const key = race ? raceKey(race) : null;
-  const runners = rows.filter((r) => !key || (r.best_finishes as unknown as BestFinish[]).some((b) => raceKey(b.race) === key)).map((r) => ({
+  const runners = rows.filter((r) => !key || [...(r.best_finishes as unknown as BestFinish[]), ...(r.results as unknown as BestFinish[])].some((b) => raceKey(b.race) === key)).map((r) => ({
     slug: r.slug, name: r.name, nationality: r.nationality, disciplines: r.disciplines, era: r.era, utmbIndex: r.utmb_index,
     photo: ((r.photos as unknown as { kind: string; url: string }[]).find((p) => p.kind === 'portrait') ?? null)?.url ?? null,
   }));
@@ -36,7 +36,7 @@ export default async function RunnersPage({ searchParams }: { searchParams: Prom
           <h1 className="font-display text-4xl lg:text-5xl font-bold text-foreground">{race ? `Runners who raced ${race}` : 'Runners'}</h1>
           <p className="text-secondary mt-3 max-w-2xl">
             {race
-              ? <>{runners.length} {runners.length === 1 ? 'runner' : 'runners'} with {race} in their best finishes. <Link href="/runners" className="underline hover:text-[#f88c00]">See every runner</Link></>
+              ? <>{runners.length} {runners.length === 1 ? 'runner' : 'runners'} with {race} in their results. <Link href="/runners" className="underline hover:text-[#f88c00]">See every runner</Link></>
               : 'The runners we write about. Short biographies, their best finishes and, for trail runners, the current UTMB Index.'}
           </p>
           <RunnersList runners={runners} />

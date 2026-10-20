@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { profileProblems } from './checks';
-import { MONTHLY_BIO_LIMIT, monthlyFailures, monthlyRefresh, type MonthlyDeps, type PageRow } from './monthly';
+import { addPodiums, MONTHLY_BIO_LIMIT, monthlyFailures, monthlyRefresh, type MonthlyDeps, type PageRow } from './monthly';
 import type { BestFinish, RunnerFile } from './types';
 
 const checked = new Date('2026-06-01T00:00:00Z');
@@ -25,8 +25,6 @@ const newBio = ['She is a British trail runner.', 'She won the Lakeland 100 in 2
 function deps(rows: PageRow[], over: Partial<MonthlyDeps> = {}) {
   return {
     runners: async () => rows,
-    readUtmb: vi.fn(async () => ({ results: [] as BestFinish[] })),
-    setFinishes: vi.fn(async () => {}),
     recentFailures: async () => new Set<string>(),
     latestNews: async () => new Map<string, Date>(),
     monthSpentUsd: async () => 0,
@@ -39,63 +37,42 @@ function deps(rows: PageRow[], over: Partial<MonthlyDeps> = {}) {
   } satisfies MonthlyDeps;
 }
 
-describe('monthly runner refresh: results', () => {
-  it('adds a new podium, not a duplicate, a non-podium or one from before the last check', async () => {
+describe('new podiums into best finishes (the weekly UTMB refresh)', () => {
+  it('adds a new podium, not a duplicate, a non-podium or one from before the last check', () => {
     const have = [finish('Lakeland 100', 2026, '1st woman')];
-    const d = deps([row('jane-doe', { best_finishes: have })], {
-      readUtmb: vi.fn(async () => ({ results: [finish('Lakeland 100', 2026, '1st woman'), finish('Lavaredo', 2026, '2nd woman'), finish('Zegama', 2026, '4th woman'), finish('Old Race', 2026, '1st woman', '2026-03-01')] })),
-    });
-    const s = await monthlyRefresh(d);
-    expect(s.resultsAdded).toBe(1);
-    expect(d.setFinishes).toHaveBeenCalledWith('jane-doe', [have[0], expect.objectContaining({ race: 'Lavaredo' })], row('jane-doe').sources);
+    const p = addPodiums(row('jane-doe', { best_finishes: have }), [finish('Lakeland 100', 2026, '1st woman'), finish('Lavaredo', 2026, '2nd woman'), finish('Zegama', 2026, '4th woman'), finish('Old Race', 2026, '1st woman', '2026-03-01')]);
+    expect(p?.added).toBe(1);
+    expect(p?.finishes).toEqual([have[0], expect.objectContaining({ race: 'Lavaredo' })]);
+    expect(p?.sources).toEqual(row('jane-doe').sources);
   });
 
-  it('keeps at most 10, dropping only UTMB entries, lowest place then oldest first', async () => {
+  it('nothing new is null', () => {
+    expect(addPodiums(row('jane-doe'), [finish('Zegama', 2026, '4th woman')])).toBeNull();
+  });
+
+  it('keeps at most 10, dropping only UTMB entries, lowest place then oldest first', () => {
     const have = [...Array.from({ length: 8 }, (_, i) => finish(`Race ${i}`, 2015 + i, '3rd woman')), { ...finish('Comrades', 2010, '9th woman'), source: 'Wikipedia' }, finish('Worse', 2024, '3rd woman')];
-    const d = deps([row('jane-doe', { best_finishes: have, sources: [{ name: 'UTMB', url: 'u' }, { name: 'Wikipedia', url: 'w' }] })], { readUtmb: vi.fn(async () => ({ results: [finish('New Win', 2026, '1st woman')] })) });
-    const s = await monthlyRefresh(d);
-    const saved = (vi.mocked(d.setFinishes).mock.calls[0] as unknown as [string, BestFinish[]])[1];
-    expect(saved).toHaveLength(10);
-    expect(s.resultsAdded).toBe(1);
-    expect(saved.map((b) => b.race)).toContain('New Win');
-    expect(saved.map((b) => b.race)).toContain('Comrades'); // not from UTMB: never dropped, whatever its place
-    expect(saved.map((b) => b.race)).not.toContain('Race 0');
+    const p = addPodiums(row('jane-doe', { best_finishes: have, sources: [{ name: 'UTMB', url: 'u' }, { name: 'Wikipedia', url: 'w' }] }), [finish('New Win', 2026, '1st woman')]);
+    expect(p?.finishes).toHaveLength(10);
+    expect(p?.added).toBe(1);
+    expect(p?.finishes.map((b) => b.race)).toContain('New Win');
+    expect(p?.finishes.map((b) => b.race)).toContain('Comrades'); // not from UTMB: never dropped, whatever its place
+    expect(p?.finishes.map((b) => b.race)).not.toContain('Race 0');
   });
 
-  it('adds the UTMB source when the page lacks one, in the same update, and the page still passes the real checks', async () => {
-    const r = row('jane-doe', { sources: [{ name: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Jane_Doe' }] });
-    const d = deps([r], { readUtmb: vi.fn(async () => ({ results: [finish('Lavaredo', 2026, '2nd woman')] })) });
-    await monthlyRefresh(d);
-    const [, finishes, sources] = vi.mocked(d.setFinishes).mock.calls[0] as unknown as [string, BestFinish[], { name: string; url: string }[]];
-    expect(sources).toEqual([{ name: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Jane_Doe' }, { name: 'UTMB', url: 'https://utmb.world/en/runner/1.jane-doe' }]);
-    const page: RunnerFile = { slug: 'jane-doe', name: 'Jane Doe', aliases: [], nationality: 'GB', sex: 'F', birthYear: null, disciplines: ['trail_ultra'], era: 'current', utmb: null, texts: [], results: [], photoCandidates: [], bio: newBio, bestFinishes: finishes, sources, photos: [] };
+  it('adds the UTMB source when the page lacks one, and the page still passes the real checks', () => {
+    const p = addPodiums(row('jane-doe', { sources: [{ name: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Jane_Doe' }] }), [finish('Lavaredo', 2026, '2nd woman')])!;
+    expect(p.sources).toEqual([{ name: 'Wikipedia', url: 'https://en.wikipedia.org/wiki/Jane_Doe' }, { name: 'UTMB', url: 'https://utmb.world/en/runner/1.jane-doe' }]);
+    const page: RunnerFile = { slug: 'jane-doe', name: 'Jane Doe', aliases: [], nationality: 'GB', sex: 'F', birthYear: null, disciplines: ['trail_ultra'], era: 'current', utmb: null, texts: [], results: [], photoCandidates: [], bio: newBio, bestFinishes: p.finishes, sources: p.sources, photos: [] };
     expect(profileProblems(page)).toEqual([]);
-  });
-
-  it('runners without a UTMB page are not read; unreadable pages are counted', async () => {
-    const d = deps([row('jane-doe', { utmb_uri: null }), row('ann-smith')], { readUtmb: vi.fn(async () => null) });
-    const s = await monthlyRefresh(d);
-    expect(d.readUtmb).toHaveBeenCalledTimes(1);
-    expect(s.utmbNotRead).toBe(1);
-    expect(s.skipped).toEqual([]);
-  });
-
-  it('stops reading results at their own deadline, longest-unchecked first', async () => {
-    let t = 0;
-    const rows = [row('newer', { bio_checked_at: new Date('2026-08-01') }), row('never', { bio_checked_at: null }), row('older')];
-    const d = deps(rows, { resultsDeadlineMs: 10, clock: () => t, readUtmb: vi.fn(async () => { t += 6; return { results: [] }; }) });
-    const s = await monthlyRefresh(d);
-    expect(vi.mocked(d.readUtmb).mock.calls.map((c) => (c as unknown as [string])[0])).toEqual(['1.never', '1.older']);
-    expect(s.cutShort).toBe(true);
   });
 });
 
 describe('monthly runner refresh: which bios', () => {
-  it('a new story or a new podium selects; an older story does not', async () => {
-    const rows = [row('new-story'), row('old-story'), row('new-podium'), row('nothing')];
+  it('a new story or a podium since the last check selects; an older story or podium does not', async () => {
+    const rows = [row('new-story'), row('old-story'), row('new-podium', { best_finishes: [finish('Lavaredo', 2026, '3rd')] }), row('old-podium', { best_finishes: [finish('Zegama', 2026, '1st', '2026-05-01')] }), row('nothing')];
     const d = deps(rows, {
       latestNews: async () => new Map([['new-story', new Date('2026-09-01')], ['old-story', new Date('2026-05-01')]]),
-      readUtmb: vi.fn(async (uri: string) => ({ results: uri === '1.new-podium' ? [finish('Lavaredo', 2026, '3rd')] : [] })),
     });
     const s = await monthlyRefresh(d);
     expect(s.biosRefreshed).toEqual(['new-story', 'new-podium']);
@@ -158,10 +135,10 @@ describe('monthly runner refresh: saving', () => {
     expect(s.skipped).toEqual([{ slug: 'jane-doe', reason: 'error: network' }]);
   });
 
-  it('reports progress after the results and after every bio', async () => {
+  it('reports progress after every bio', async () => {
     const progress = vi.fn(async () => {});
     await monthlyRefresh(deps([row('jane-doe')], { latestNews: news, progress }));
-    expect(progress).toHaveBeenCalledTimes(2);
+    expect(progress).toHaveBeenCalledTimes(1);
   });
 
   it('an auto page stays auto', async () => {

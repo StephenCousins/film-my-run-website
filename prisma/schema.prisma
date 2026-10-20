@@ -480,6 +480,7 @@ model runners {
   era            String    @default("current") // current | historic
   bio            String    @default("") // HTML <p> paragraphs
   best_finishes  Json      @default("[]") // BestFinish[]
+  results        Json      @default("[]") // BestFinish[]: every UTMB finish, newest first, refreshed weekly
   sources        Json      @default("[]") // RunnerSource[]
   photos         Json      @default("[]") // RunnerPhoto[]
   utmb_id        Int?      @unique

@@ -20,7 +20,9 @@ to two photos, best finishes, a live UTMB index and "In the news". The spec is
   - Sentences marked `*` in a bio are dropped from it.
 - **Monday:** `news:daily` refreshes every runner's UTMB index before the
   weekly email. It has a 5-minute limit and a guard for UTMB changing its page
-  shape.
+  shape. From the same page read (since 20 Oct 2026) it stores every UTMB finish
+  in `results` (the page's "Race history") and adds new podiums to best finishes,
+  so a weekend's result shows by Monday. No AI, no cost.
 - **Automatic pages:** `src/lib/runners/auto.ts` writes pages for runners new
   stories are about.
   - At most 6 attempts a day and $1.50 per run, inside the £10 ceiling.
@@ -30,10 +32,9 @@ to two photos, best finishes, a live UTMB index and "In the news". The spec is
   - Pages use the runner's UTMB profile picture as a portrait when they have
     one, otherwise no photo until a session adds one.
 - **Monthly refresh:** on the first Monday of the month `news:daily` runs
-  `src/lib/runners/monthly.ts` after the UTMB index refresh: new UTMB podiums into
-  best finishes (no AI), then up to 20 bios with a new podium or newer story
-  revised through the same fix loop as auto pages (`checkedBio`). $3, results
-  5 minutes, no bio started after 10; photos and `written_by` are kept; its spend
+  `src/lib/runners/monthly.ts` after the UTMB index refresh: up to 20 bios with a
+  UTMB podium since the last bio check, or a newer story, revised through the same fix loop as auto pages (`checkedBio`). $3, no bio
+  started after 10 minutes; photos and `written_by` are kept; its spend
   is recorded after every bio. Runs after the weekly email, with its own email.
   `--monthly-refresh` runs it by hand.
 - **Photos:** only free-licence Commons photos or others with a named

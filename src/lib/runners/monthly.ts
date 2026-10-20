@@ -1,4 +1,3 @@
-import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
 import { NEWS_CONFIG } from '@/lib/news/config';
 import { monthSpentUsd } from '@/lib/news/run';
@@ -9,7 +8,6 @@ import { loadNameIndex, mentionedSlugs } from './names';
 import { verifiedBioText } from './runner-file';
 import { saveRunner } from './save';
 import type { BestFinish, Discipline, RunnerFile, RunnerPhoto, RunnerSource } from './types';
-import { utmbRunner } from './utmb';
 import { checkProfile, editProfile, reviseProfile } from './write';
 
 export const MONTHLY_BIO_LIMIT = 20;
@@ -25,9 +23,6 @@ export interface PageRow {
 
 export interface MonthlyDeps {
   runners: () => Promise<PageRow[]>;
-  readUtmb: (uri: string) => Promise<{ results: BestFinish[] } | null>;
-  /** One update: the new best finishes and the sources they cite. */
-  setFinishes: (slug: string, finishes: BestFinish[], sources: RunnerSource[]) => Promise<void>;
   /** Slugs whose bio failed for a real reason in the last 30 days: not tried again. */
   recentFailures: () => Promise<Set<string>>;
   /** The newest published story that mentions each runner (the "In the news" matcher). */
@@ -38,15 +33,14 @@ export interface MonthlyDeps {
   check: typeof checkProfile;
   edit: typeof editProfile;
   save: (f: RunnerFile, writtenBy: 'session' | 'auto') => Promise<unknown>;
-  /** Hears the summary so far after the results and after every bio, so a killed job still leaves its spend recorded. */
+  /** Hears the summary so far after every bio, so a killed job still leaves its spend recorded. */
   progress?: (s: MonthlySummary) => Promise<void>;
-  /** Wall-clock budgets from the start, ms: reading results (default 5 minutes) and starting new bios (default 10). */
-  resultsDeadlineMs?: number;
+  /** Wall-clock budget from the start for starting new bios, ms (default 10 minutes). */
   bioDeadlineMs?: number;
   clock?: () => number;
 }
 
-export interface MonthlySummary { resultsAdded: number; utmbNotRead: number; biosRefreshed: string[]; skipped: { slug: string; reason: string }[]; costUsd: number; cutShort: boolean }
+export interface MonthlySummary { biosRefreshed: string[]; skipped: { slug: string; reason: string }[]; costUsd: number; cutShort: boolean }
 
 /** Skips that are a limit, not something wrong with the page: never held against it. */
 const NOT_A_FAILURE = /^(budget|out of time|failed recently)$/;
@@ -62,10 +56,6 @@ const SELECT = { slug: true, name: true, aliases: true, nationality: true, sex: 
 
 export const liveMonthlyDeps = (): MonthlyDeps => ({
   runners: () => prisma.runners.findMany({ where: { status: 'published' }, select: SELECT }),
-  readUtmb: (uri) => utmbRunner(uri),
-  setFinishes: async (slug, finishes, sources) => {
-    await prisma.runners.update({ where: { slug }, data: { best_finishes: finishes as unknown as Prisma.InputJsonValue, sources: sources as unknown as Prisma.InputJsonValue } });
-  },
   recentFailures: async () => {
     const rows = await prisma.news_runs.findMany({ where: { started_at: { gte: new Date(Date.now() - 30 * 86_400_000) } }, select: { summary: true } });
     return monthlyFailures(rows.map((r) => r.summary));
@@ -114,61 +104,57 @@ function mergeSources(old: RunnerSource[], fresh: RunnerSource[]): RunnerSource[
 }
 /** After the last bio check: by date when the result has one, else a later year. */
 const isNew = (b: BestFinish, since: Date | null) => !since || (b.date ? new Date(b.date) > since : b.year > since.getUTCFullYear());
+
+/** A UTMB podium in the page's best finishes since its bio was last checked: the bio should mention it. */
+export const hasNewPodium = (r: Pick<PageRow, 'best_finishes' | 'bio_checked_at'>) =>
+  ((r.best_finishes as BestFinish[] | null) ?? []).some((b) => b.source === 'UTMB' && isPodium(b) && isNew(b, r.bio_checked_at));
+
+/**
+ * New UTMB podiums from a freshly read results list, merged into the page's best
+ * finishes (no AI; the weekly UTMB refresh calls it). Not a duplicate, not one from
+ * before the last bio check. Null when nothing new survives the cap of 10. Adds the
+ * UTMB source in the same update when the page lacks one.
+ */
+export function addPodiums(row: Pick<PageRow, 'best_finishes' | 'sources' | 'bio_checked_at' | 'utmb_uri'>, results: BestFinish[]): { finishes: BestFinish[]; sources: RunnerSource[]; added: number } | null {
+  const have = (row.best_finishes as BestFinish[] | null) ?? [];
+  const seen = new Set(have.map(key));
+  const added = results.filter((b) => isPodium(b) && isNew(b, row.bio_checked_at) && !seen.has(key(b)) && seen.add(key(b)));
+  if (!added.length) return null;
+  const finishes = mergeFinishes(have, added);
+  const kept = added.filter((b) => finishes.includes(b)).length;
+  if (!kept) return null;
+  const old = (row.sources as RunnerSource[] | null) ?? [];
+  const sources = old.some((s) => s.name === 'UTMB') ? old : [...old, { name: 'UTMB', url: `https://utmb.world/en/runner/${row.utmb_uri}` }];
+  return { finishes, sources, added: kept };
+}
 const unescape = (s: string) => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 
 /**
- * Once a month (Stephen, 28 Sep 2026): new UTMB podiums go into every page's best
- * finishes (no AI), then up to 20 bios with a new podium or a newer story are
- * revised through OpenRouter and the same fix loop as automatic pages. A bio that
- * fails the checks leaves the old one untouched and isn't retried for 30 days. Its own
- * $3 budget, never more than what's left of the monthly news ceiling; results stop
- * after 5 minutes and no bio starts after 10.
+ * Once a month (Stephen, 28 Sep 2026): up to 20 bios with a new podium (added by the
+ * weekly UTMB refresh since 20 Oct 2026) or a newer story are revised through
+ * OpenRouter and the same fix loop as automatic pages. A bio that fails the checks
+ * leaves the old one untouched and isn't retried for 30 days. Its own $3 budget, never
+ * more than what's left of the monthly news ceiling; no bio starts after 10 minutes.
  */
 export async function monthlyRefresh(deps: MonthlyDeps = liveMonthlyDeps()): Promise<MonthlySummary> {
   const clock = deps.clock ?? Date.now;
   const start = clock();
-  const resultsDeadline = start + (deps.resultsDeadlineMs ?? 5 * 60_000);
   const bioDeadline = start + (deps.bioDeadlineMs ?? 10 * 60_000);
-  const out: MonthlySummary = { resultsAdded: 0, utmbNotRead: 0, biosRefreshed: [], skipped: [], costUsd: 0, cutShort: false };
+  const out: MonthlySummary = { biosRefreshed: [], skipped: [], costUsd: 0, cutShort: false };
   const rows = await deps.runners();
 
-  // 1. Results. Longest-unchecked first, so a run cut short doesn't starve the same tail.
-  const newPodium = new Set<string>();
-  const withUtmb = rows.filter((r) => r.utmb_uri).sort((a, b) => (a.bio_checked_at?.getTime() ?? 0) - (b.bio_checked_at?.getTime() ?? 0));
-  for (const row of withUtmb) {
-    if (clock() >= resultsDeadline) { out.cutShort = true; break; }
-    const page = await deps.readUtmb(row.utmb_uri!).catch(() => null);
-    if (!page) { out.utmbNotRead++; continue; }
-    const have = (row.best_finishes as BestFinish[] | null) ?? [];
-    const seen = new Set(have.map(key));
-    const added = page.results.filter((b) => isPodium(b) && isNew(b, row.bio_checked_at) && !seen.has(key(b)) && seen.add(key(b)));
-    if (!added.length) continue;
-    const finishes = mergeFinishes(have, added);
-    const kept = added.filter((b) => finishes.includes(b)).length;
-    if (!kept) continue;
-    const old = (row.sources as RunnerSource[] | null) ?? [];
-    const sources = old.some((s) => s.name === 'UTMB') ? old : [...old, { name: 'UTMB', url: `https://utmb.world/en/runner/${row.utmb_uri}` }];
-    await deps.setFinishes(row.slug, finishes, sources);
-    row.best_finishes = finishes;
-    row.sources = sources;
-    out.resultsAdded += kept;
-    newPodium.add(row.slug);
-  }
-  console.log(`Monthly runner refresh: ${out.resultsAdded} results added, ${out.utmbNotRead} UTMB pages not read.`);
-  await deps.progress?.(out).catch((e) => console.error("monthly refresh: progress record failed", e));
-
-  // 2. Which bios.
+  // 1. Which bios.
   const news = await deps.latestNews();
   const newsAfter = (r: PageRow) => {
     const at = news.get(r.slug);
     return at && (!r.bio_checked_at || at > r.bio_checked_at) ? at.getTime() : 0;
   };
   const picked = rows
-    .filter((r) => newPodium.has(r.slug) || newsAfter(r) > 0)
+    .filter((r) => hasNewPodium(r) || newsAfter(r) > 0)
     .sort((a, b) => newsAfter(b) - newsAfter(a) || (b.utmb_index ?? -1) - (a.utmb_index ?? -1))
     .slice(0, MONTHLY_BIO_LIMIT);
 
-  // 3. Revise them.
+  // 2. Revise them.
   const failed = await deps.recentFailures();
   const budget = Math.min(MONTHLY_BUDGET_USD, NEWS_CONFIG.monthlyCeilingGbp * NEWS_CONFIG.usdPerGbp - (await deps.monthSpentUsd()));
   for (const row of picked) {

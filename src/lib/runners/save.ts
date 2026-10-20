@@ -34,6 +34,8 @@ export async function saveRunner(f: RunnerFile, writtenBy: 'session' | 'auto', d
     best_finishes: (f.bestFinishes ?? []) as unknown as Prisma.InputJsonValue,
     sources: (f.sources ?? []) as unknown as Prisma.InputJsonValue,
     photos: photos as unknown as Prisma.InputJsonValue,
+    // Every UTMB finish; left alone when this save has none (no UTMB page, or a bio-only revision).
+    ...(f.results.length ? { results: f.results as unknown as Prisma.InputJsonValue } : {}),
     utmb_id: f.utmb?.id ?? null, utmb_uri: f.utmb?.uri ?? null, utmb_index: f.utmb?.index ?? null,
     utmb_index_at: f.utmb ? new Date() : null,
     status: 'published', written_by: writtenBy, bio_checked_at: new Date(),

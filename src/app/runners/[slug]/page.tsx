@@ -22,11 +22,11 @@ const longDate = (iso: string) => new Date(iso).toLocaleDateString('en-GB', { da
 async function getOthers() {
   const rows = await prisma.runners.findMany({
     where: { status: 'published' },
-    select: { slug: true, name: true, nationality: true, sex: true, disciplines: true, era: true, utmb_index: true, best_finishes: true, photos: true },
+    select: { slug: true, name: true, nationality: true, sex: true, disciplines: true, era: true, utmb_index: true, best_finishes: true, results: true, photos: true },
   });
   return rows.map((r) => ({
     slug: r.slug, name: r.name, nationality: r.nationality, sex: r.sex, disciplines: r.disciplines, era: r.era, utmbIndex: r.utmb_index,
-    races: (r.best_finishes as unknown as BestFinish[]).map((b) => b.race),
+    races: [...(r.best_finishes as unknown as BestFinish[]), ...(r.results as unknown as BestFinish[])].map((b) => b.race),
     photo: (r.photos as unknown as RunnerPhoto[]).find((p) => p.kind === 'portrait')?.url ?? null,
   }));
 }
@@ -42,7 +42,7 @@ async function getRunner(slug: string) {
   if (!r || r.status !== 'published') return null;
   return {
     slug: r.slug, name: r.name, nationality: r.nationality, disciplines: r.disciplines, era: r.era, sex: r.sex, birthYear: r.birth_year, updatedAt: r.updated_at.toISOString(),
-    bio: r.bio, bestFinishes: r.best_finishes as unknown as BestFinish[], sources: r.sources as unknown as RunnerSource[],
+    bio: r.bio, bestFinishes: r.best_finishes as unknown as BestFinish[], results: r.results as unknown as BestFinish[], sources: r.sources as unknown as RunnerSource[],
     photos: r.photos as unknown as RunnerPhoto[], utmbIndex: r.utmb_index, utmbIndexAt: r.utmb_index_at?.toISOString() ?? null,
     utmbUri: r.utmb_uri,
   };
@@ -72,8 +72,8 @@ export default async function RunnerPage({ params }: PageProps) {
   if (!r) notFound();
   const flag = flagEmoji(r.nationality);
   const [stories, others, films] = await Promise.all([storiesAbout(slug), getOthers(), getFilms()]);
-  const similar = similarRunners({ ...r, races: r.bestFinishes.map((b) => b.race) }, others) as typeof others;
-  const raceFilms = filmsForFinishes(r.bestFinishes, films);
+  const similar = similarRunners({ ...r, races: [...r.bestFinishes, ...r.results].map((b) => b.race) }, others) as typeof others;
+  const raceFilms = filmsForFinishes([...r.bestFinishes, ...r.results], films);
   const born = bornLine(r.birthYear, r.era);
   const facts: [string, string][] = [
     ...(born ? [['Born', born.replace(/^Born /, '')] as [string, string]] : []),
@@ -153,6 +153,26 @@ export default async function RunnerPage({ params }: PageProps) {
                   </tbody>
                 </table>
               </div>
+            </section>
+          )}
+
+          {r.results.length > 0 && (
+            <section className="mt-12">
+              <h2 className="font-display text-2xl font-bold text-foreground mb-1">Race history</h2>
+              <p className="text-secondary mb-4">{r.results.length} {r.results.length === 1 ? 'finish' : 'finishes'} on UTMB&apos;s results, {r.results[r.results.length - 1].year} to {r.results[0].year}. Refreshed every Monday.</p>
+              <details className="group" open={r.results.length <= 12}>
+                <summary className="cursor-pointer text-[#f88c00] font-semibold mb-3 group-open:mb-4">{r.results.length <= 12 ? 'Every result' : `Show all ${r.results.length} results`}</summary>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm tabular-nums">
+                    <thead><tr className="text-left text-secondary border-b border-border"><th className="py-2 pr-4">Date</th><th className="py-2 pr-4">Race</th><th className="py-2 pr-4">Distance</th><th className="py-2 pr-4">Time</th><th className="py-2">Place</th></tr></thead>
+                    <tbody>
+                      {r.results.map((b, i) => (
+                        <tr key={i} className="border-b border-border/50"><td className="py-2 pr-4 whitespace-nowrap">{b.date ? new Date(b.date).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' }) : b.year}</td><td className="py-2 pr-4"><Link href={`/runners?race=${encodeURIComponent(b.race)}`} className="hover:text-[#f88c00]">{b.race}</Link></td><td className="py-2 pr-4">{b.distance ?? ''}</td><td className="py-2 pr-4">{b.time ?? ''}</td><td className="py-2">{b.position ?? ''}</td></tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </details>
             </section>
           )}
 
