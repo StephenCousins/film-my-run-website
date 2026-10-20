@@ -44,6 +44,8 @@ After adding a dependency, run `npm install` so `package-lock.json` is in sync b
   `export const dynamic = 'force-dynamic'`** (`ƒ` in the build output is right, `○` is the trap), with
   `unstable_cache` if you want to avoid a query per request. To verify such a page after deploy, read the RSC payload
   (`curl -H "RSC: 1" <url>`), not the HTML: several pages don't put their body in the prerendered HTML.
+- **Behind Railway's proxy `req.url` is `http://localhost:8080/...`.** Never build a redirect from it
+  (`new URL(path, req.url)`); send a relative `Location` instead. This shipped once (20 Oct 2026, old permalinks).
 - **Next.js metadata `alternates` does not deep-merge.** A page that sets its own `alternates` (for a canonical)
   replaces the parent's wholesale. Put document-wide `<link>` tags in the root layout's `<head>`.
 - **YouTube `maxresdefault.jpg` only exists above 720p.** Older uploads 404. Probe maxres → sd → hq and check the
