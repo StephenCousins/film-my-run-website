@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ChevronRight, Truck, Shield, Droplets } from 'lucide-react';
 import { arrives } from '@/lib/shop/delivery';
 import Header from '@/components/layout/Header';
+import ChristmasBanner from '@/components/shop/ChristmasBanner';
 import Footer from '@/components/layout/Footer';
 import ProductCard from '@/components/shop/ProductCard';
 import ProductPurchase from '@/components/shop/ProductPurchase';
@@ -66,6 +67,7 @@ export default async function ProductPage({ params }: Props) {
       <Header />
 
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">
+        <ChristmasBanner />
         <div className="container py-8 lg:py-12">
           <nav className="flex items-center gap-2 text-sm text-muted mb-8" aria-label="Breadcrumb">
             <Link href="/shop" className="hover:text-foreground">Shop</Link>

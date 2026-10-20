@@ -9,6 +9,7 @@ import { sanitizeContent } from '@/lib/sanitize';
 import { flagEmoji } from '@/lib/runners/flag';
 import { bornLine, filmsForFinishes, personJsonLd, runnerTitle, similarRunners, storiesAbout, youtubeId } from '@/lib/runners/present';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
+import RunnerShopTee from '@/components/shop/RunnerShopTee';
 import type { BestFinish, RunnerPhoto, RunnerSource } from '@/lib/runners/types';
 import type { PersonalBest } from '@/lib/runners/pbs';
 import RunnerCard from '@/components/runners/RunnerCard';
@@ -267,6 +268,8 @@ export default async function RunnerPage({ params }: PageProps) {
               </ul>
             </section>
           )}
+
+          <RunnerShopTee runner={{ slug: r.slug, era: r.era, disciplines: r.disciplines, distances: [...r.bestFinishes, ...r.results].map((b) => b.distance) }} />
 
           <section className="mt-12 grid gap-4 sm:grid-cols-3">
             {[

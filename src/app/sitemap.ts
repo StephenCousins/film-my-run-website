@@ -25,6 +25,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { route: '/films', changeFrequency: 'monthly', priority: 0.8 },
     { route: '/races', changeFrequency: 'weekly', priority: 0.8 },
     { route: '/shop', changeFrequency: 'weekly', priority: 0.8 },
+    { route: '/shop/christmas', changeFrequency: 'weekly', priority: 0.7 },
     { route: '/tools', changeFrequency: 'monthly', priority: 0.7 },
     { route: '/games/fartlex', changeFrequency: 'daily', priority: 0.7 },
     { route: '/tools/calculators', changeFrequency: 'monthly', priority: 0.7 },

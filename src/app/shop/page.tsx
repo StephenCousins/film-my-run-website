@@ -3,6 +3,7 @@ import { ShoppingBag, Truck, Shirt, ExternalLink } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import ShopGrid from '@/components/shop/ShopGrid';
+import ChristmasBanner from '@/components/shop/ChristmasBanner';
 // + 1: the Runner Type Tee, which ShopGrid adds as its own card.
 import { shopItems, shopCategories, etsyShopUrl } from '@/lib/shop';
 
@@ -15,6 +16,8 @@ const breadcrumbJsonLd = {
   ],
 };
 
+export const revalidate = 3600; // the Christmas banner hides itself after the last order date
+
 export default function ShopPage() {
   return (
     <>
@@ -22,6 +25,7 @@ export default function ShopPage() {
       <Header />
 
       <main className="pt-20 lg:pt-24 bg-background min-h-screen">
+        <ChristmasBanner />
         <section className="relative py-16 lg:py-24 overflow-hidden">
           <div className="absolute inset-0">
             <Image
