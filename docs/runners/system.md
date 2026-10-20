@@ -37,6 +37,11 @@ to two photos, best finishes, a live UTMB index and "In the news". The spec is
   started after 10 minutes; photos and `written_by` are kept; its spend
   is recorded after every bio. Runs after the weekly email, with its own email.
   `--monthly-refresh` runs it by hand.
+- **Personal bests:** `src/lib/runners/pbs.ts` reads the `personal_best` field
+  of the Wikipedia infobox the page cites as a source (that exact article, never a
+  name search) into `personal_bests`. First Monday of the month, before the bio
+  refresh; free. A failed read or an empty field keeps what was stored. Many
+  legends' infoboxes have no such field (Ron Hill, Ingrid Kristiansen).
 - **Photos:** only free-licence Commons photos or others with a named
   photographer. `AGENCY_CREDITS` refuses agency credits.
 - **ITRA is out of scope:** itra.run blocks automated requests.

@@ -10,6 +10,7 @@ import { flagEmoji } from '@/lib/runners/flag';
 import { bornLine, filmsForFinishes, personJsonLd, runnerTitle, similarRunners, storiesAbout, youtubeId } from '@/lib/runners/present';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import type { BestFinish, RunnerPhoto, RunnerSource } from '@/lib/runners/types';
+import type { PersonalBest } from '@/lib/runners/pbs';
 import RunnerCard from '@/components/runners/RunnerCard';
 
 export const dynamic = 'force-dynamic';
@@ -42,7 +43,7 @@ async function getRunner(slug: string) {
   if (!r || r.status !== 'published') return null;
   return {
     slug: r.slug, name: r.name, nationality: r.nationality, disciplines: r.disciplines, era: r.era, sex: r.sex, birthYear: r.birth_year, updatedAt: r.updated_at.toISOString(),
-    bio: r.bio, bestFinishes: r.best_finishes as unknown as BestFinish[], results: r.results as unknown as BestFinish[], sources: r.sources as unknown as RunnerSource[],
+    bio: r.bio, bestFinishes: r.best_finishes as unknown as BestFinish[], results: r.results as unknown as BestFinish[], personalBests: r.personal_bests as unknown as PersonalBest[], sources: r.sources as unknown as RunnerSource[],
     photos: r.photos as unknown as RunnerPhoto[], utmbIndex: r.utmb_index, utmbIndexAt: r.utmb_index_at?.toISOString() ?? null,
     utmbUri: r.utmb_uri,
   };
@@ -138,6 +139,28 @@ export default async function RunnerPage({ params }: PageProps) {
               </div>
               {action.credit.trim() && <figcaption className="text-xs text-secondary mt-2">{action.credit}</figcaption>}
             </figure>
+          )}
+
+          {r.personalBests.length > 0 && (
+            <section className="mt-12">
+              <h2 className="font-display text-2xl font-bold text-foreground mb-4">Personal bests</h2>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm tabular-nums">
+                  <thead><tr className="text-left text-secondary border-b border-border"><th className="py-2 pr-4">Event</th><th className="py-2 pr-4">Time</th><th className="py-2 pr-4">Where</th><th className="py-2">Year</th></tr></thead>
+                  <tbody>
+                    {r.personalBests.map((p, i) => (
+                      <tr key={i} className="border-b border-border/50">
+                        <td className="py-2 pr-4">{p.event}{p.section ? <span className="text-secondary"> ({p.section.toLowerCase()})</span> : null}</td>
+                        <td className="py-2 pr-4 font-semibold">{p.time}{p.mark && <span className="ml-2 text-xs font-bold text-[#f88c00]" title={{ WR: 'World record', WB: 'World best', AR: 'Area record', NR: 'National record', CR: 'Championship record', ER: 'European record', OR: 'Olympic record' }[p.mark] ?? p.mark}>{p.mark}</span>}</td>
+                        <td className="py-2 pr-4">{p.place ?? ''}</td>
+                        <td className="py-2">{p.year ?? ''}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-xs text-secondary mt-2">From Wikipedia, checked monthly.</p>
+            </section>
           )}
 
           {r.bestFinishes.length > 0 && (

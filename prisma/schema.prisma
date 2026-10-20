@@ -481,6 +481,7 @@ model runners {
   bio            String    @default("") // HTML <p> paragraphs
   best_finishes  Json      @default("[]") // BestFinish[]
   results        Json      @default("[]") // BestFinish[]: every UTMB finish, newest first, refreshed weekly
+  personal_bests Json      @default("[]") // PersonalBest[]: from the cited Wikipedia infobox, refreshed monthly
   sources        Json      @default("[]") // RunnerSource[]
   photos         Json      @default("[]") // RunnerPhoto[]
   utmb_id        Int?      @unique

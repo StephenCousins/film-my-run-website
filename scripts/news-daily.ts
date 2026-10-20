@@ -12,6 +12,7 @@ import { isCompletedDailyRun, londonMidnight } from '@/lib/news/daily-run';
 import { NEWS_CONFIG } from '@/lib/news/config';
 import { errorText, NewsRunError, runNews } from '@/lib/news/run';
 import { liveMonthlyDeps, monthlyRefresh, type MonthlySummary } from '@/lib/runners/monthly';
+import { refreshPersonalBests } from '@/lib/runners/pbs';
 import { refreshUtmbIndexes } from '@/lib/runners/refresh';
 
 if (process.argv.includes('--help')) {
@@ -101,6 +102,11 @@ async function runMonthlyRefresh(): Promise<void> {
     if (rowId === null) rowId = (await prisma.news_runs.create({ data: { dry_run: false, ...data } })).id;
     else await prisma.news_runs.update({ where: { id: rowId }, data });
   };
+  // Personal bests first: free (Wikipedia, no AI), and its own line in the email.
+  const pbLine = await refreshPersonalBests().then(
+    (p) => `Personal bests: ${p.withPbs} runners have them, from ${p.read} Wikipedia articles read${p.cutShort ? ' (cut short by the time limit)' : ''}.`,
+    (e) => `Personal bests refresh FAILED: ${errorText(e)}`,
+  );
   let text: string;
   try {
     const r = await monthlyRefresh({ ...liveMonthlyDeps(), progress: record });
@@ -109,9 +115,10 @@ async function runMonthlyRefresh(): Promise<void> {
       `Monthly runner refresh: ${r.biosRefreshed.length} bios refreshed${r.biosRefreshed.length ? ` (${r.biosRefreshed.join(', ')})` : ''}, ${r.skipped.length} skipped. $${r.costUsd.toFixed(2)}.`,
       ...r.skipped.map((x) => `  ${x.slug}: ${x.reason}`),
       r.cutShort ? 'Cut short by the budget or the time limit.' : '',
+      pbLine,
     ].filter(Boolean).join('\n');
   } catch (e) {
-    text = `Monthly runner refresh FAILED: ${errorText(e)}`;
+    text = `Monthly runner refresh FAILED: ${errorText(e)}\n${pbLine}`;
   }
   console.log(text);
   await report(text.split('\n')[0], text).catch((err) => console.error('Could not send the monthly refresh email:', err));
