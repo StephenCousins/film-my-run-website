@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Link from 'next/link';
 import type { ReactNode } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -45,7 +46,7 @@ export default function TermsPage() {
                   Club. Film My Run is run by Stephen Cousins in the United Kingdom. By using them you agree to these
                   terms. If you got the app from the App Store, Apple&apos;s standard licence terms for apps apply too.
                   How we handle your data is in our{' '}
-                  <a href="/privacy" className="text-orange-500 hover:text-orange-600">Privacy Policy</a>.
+                  <Link href="/privacy" className="text-orange-500 hover:text-orange-600">Privacy Policy</Link>.
                 </P>
               </Section>
 
