@@ -34,10 +34,10 @@ export default function ClubPage() {
         <section className="relative border-b border-border overflow-hidden">
           <div className="absolute inset-0">
             <Image
-              src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/about-hero.jpg"
-              alt="Stephen running a mountain trail in the Canary Islands"
+              src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/club/vilnius-marathon.jpg"
+              alt="Runners smiling and giving a thumbs up at the Vilnius Marathon"
               fill
-              className="object-cover object-center"
+              className="object-cover object-[center_20%]"
               priority
               sizes="100vw"
             />
