@@ -234,7 +234,7 @@ export default function WordRunClient({ puzzle }: Props) {
                   {[...row].map((k) => {
                     const m = keyMarks.get(k);
                     return (
-                      <button key={k} onClick={() => press(k)} className={`flex-1 max-w-10 h-12 rounded-md text-sm font-bold ${m ? TILE[m] : 'bg-surface-tertiary text-foreground'}`}>{k}</button>
+                      <button key={k} onClick={() => press(k)} className={`flex-1 max-w-10 h-12 rounded-md text-sm font-bold ${m ? TILE[m] : 'bg-surface-tertiary text-foreground'} ${m === 'absent' ? 'opacity-40 line-through' : ''}`} aria-label={m === 'absent' ? `${k}, not in the word` : undefined}>{k}</button>
                     );
                   })}
                   {i === 2 && <button onClick={() => press('BACKSPACE')} aria-label="Delete" className="px-3 h-12 rounded-md bg-surface-tertiary text-foreground"><Delete className="w-5 h-5" /></button>}
