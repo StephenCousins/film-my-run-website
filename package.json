@@ -30,7 +30,7 @@
     "runners:gather": "tsx --tsconfig tsconfig.json scripts/runners-gather.ts",
     "runners:save": "tsx --tsconfig tsconfig.json scripts/runners-save.ts",
     "runners:photo": "tsx --tsconfig tsconfig.json scripts/runners-photo.ts",
-    "assistant:pack": "tsx --tsconfig tsconfig.json scripts/assistant-pack.ts"
+    "assistant:pack": "node --env-file=.env node_modules/.bin/tsx --tsconfig tsconfig.json scripts/assistant-pack.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.77.0",
