@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-22T08:07:22.175Z",
+  "lastUpdated": "2026-10-22T10:13:10.649Z",
   "races": [
     {
       "activityId": "33811771",
@@ -3982,6 +3982,28 @@
       "trailCount": 150,
       "hundredMilers": "",
       "raceCount": "4 x Purbeck Marathon"
+    },
+    {
+      "activityId": "20634344200",
+      "number": 182,
+      "date": "18/10/2026",
+      "name": "Abingdon Marathon",
+      "distance": 26.2,
+      "time": "3:49:33",
+      "position": 607,
+      "elevation": 144,
+      "video": "",
+      "report": "",
+      "strava": "https://www.strava.com/activities/20634344200",
+      "officialResults": "https://sites.chronotrack.com/event/94541/results/entry/81131708",
+      "type": "Marathon",
+      "terrain": "Road",
+      "marathonCount": 99,
+      "ultraCount": "",
+      "roadCount": 32,
+      "trailCount": "",
+      "hundredMilers": "",
+      "raceCount": ""
     }
   ]
 }
