@@ -1,11 +1,16 @@
 'use client';
 
 import { Fragment, useEffect, useRef, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { MessageCircle, Send, X } from 'lucide-react';
 
 /**
  * The "Ask about Film My Run" chat bubble (src/lib/assistant). Until ASSISTANT_PUBLIC is on, it only shows for
  * someone who has opened any page with ?assistant=1 in this browser, so Stephen can try it before visitors see it.
+ *
+ * The "can I help?" nudge: one short line beside the button, shown once a visitor looks engaged (TEASE.afterMs on the
+ * site, or half-way down a page after TEASE.minMs), never on pages where it would get in the way, and then not again
+ * for TEASE.quietDays. It hides itself after TEASE.showMs. The wording fits the page they're on.
  */
 
 interface Message {
@@ -18,6 +23,21 @@ const GREETING: Message = {
   content: "Hi! I'm the Film My Run assistant. Ask me about Stephen's races, films, the tools on this site or his services.",
 };
 const STORE = 'fmr-assistant';
+const TEASED = 'fmr-assistant-teased';
+const TEASE = { afterMs: 25_000, minMs: 8_000, showMs: 15_000, quietDays: 7 };
+const NO_TEASE = /^\/(contact|account|admin|shop\/checkout|login|register|games)/;
+
+/** The nudge's opening line, matched to what the visitor is looking at. */
+export function greetingFor(path: string): string {
+  if (path.startsWith('/blog/')) return 'Hi! Any questions about this race, or Stephen\'s other races?';
+  if (path.startsWith('/services')) return 'Hi! Organising an event? I can tell you about booking Stephen.';
+  if (path.startsWith('/films')) return 'Hi! Looking for a film to watch? I can point you to one.';
+  if (path.startsWith('/training')) return 'Hi! Any questions about the training plans?';
+  if (path.startsWith('/tools')) return 'Hi! Need a hand with this tool, or finding another one?';
+  if (path.startsWith('/runners')) return 'Hi! Looking for a particular runner?';
+  if (path.startsWith('/shop')) return 'Hi! Any questions about the shop?';
+  return 'Hi! Can I help you find anything?';
+}
 
 const LINK = /\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)|(https?:\/\/[^\s)]+[^\s).,!?])/g;
 
@@ -47,11 +67,16 @@ export default function SiteAssistant({ isPublic }: { isPublic: boolean }) {
   const [sessionId, setSessionId] = useState('');
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
+  const [teaser, setTeaser] = useState<string | null>(null);
   const end = useRef<HTMLDivElement>(null);
+  const pathname = usePathname() ?? '/';
 
   useEffect(() => {
     try {
-      if (new URLSearchParams(location.search).get('assistant') === '1') localStorage.setItem(STORE, '1');
+      if (new URLSearchParams(location.search).get('assistant') === '1') {
+        localStorage.setItem(STORE, '1');
+        localStorage.removeItem(TEASED); // so ?assistant=1 always shows the nudge again, for trying it out
+      }
       if (localStorage.getItem(STORE) === '1') setVisible(true);
       const saved = JSON.parse(sessionStorage.getItem(STORE) ?? 'null');
       if (saved?.messages?.length) setMessages(saved.messages);
@@ -68,7 +93,46 @@ export default function SiteAssistant({ isPublic }: { isPublic: boolean }) {
     end.current?.scrollIntoView({ block: 'end' });
   }, [messages, sessionId, open]);
 
+  useEffect(() => {
+    if (!visible || open || NO_TEASE.test(pathname)) return;
+    try {
+      if (Date.now() - Number(localStorage.getItem(TEASED) ?? 0) < TEASE.quietDays * 86_400_000) return;
+      if (JSON.parse(sessionStorage.getItem(STORE) ?? 'null')?.messages?.length > 1) return;
+    } catch {
+      return; // no storage: we couldn't remember having asked, so don't ask
+    }
+    const shownAt = Date.now();
+    let hide: ReturnType<typeof setTimeout> | undefined;
+    const show = () => {
+      cleanup();
+      try { localStorage.setItem(TEASED, String(Date.now())); } catch {}
+      setTeaser(greetingFor(pathname));
+      hide = setTimeout(() => setTeaser(null), TEASE.showMs);
+    };
+    const onScroll = () => {
+      const halfway = window.scrollY + window.innerHeight > document.documentElement.scrollHeight / 2;
+      if (halfway && Date.now() - shownAt > TEASE.minMs) show();
+    };
+    const timer = setTimeout(show, TEASE.afterMs);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    function cleanup() {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', onScroll);
+    }
+    return () => {
+      cleanup();
+      clearTimeout(hide);
+    };
+  }, [visible, open, pathname]);
+
   if (!visible) return null;
+
+  function openChat() {
+    // Start the conversation from the nudge's own words when nothing has been said yet.
+    if (teaser && messages.length === 1) setMessages([{ role: 'assistant', content: teaser }]);
+    setTeaser(null);
+    setOpen(true);
+  }
 
   async function send(e: React.FormEvent) {
     e.preventDefault();
@@ -131,9 +195,19 @@ export default function SiteAssistant({ isPublic }: { isPublic: boolean }) {
           <p className="px-3 pb-2 text-[11px] text-muted">An AI assistant. It can get things wrong; check anything important.</p>
         </div>
       ) : (
-        <button onClick={() => setOpen(true)} aria-label="Ask Film My Run" className="btn-primary rounded-full w-14 h-14 p-0 flex items-center justify-center shadow-lg">
-          <MessageCircle className="w-6 h-6" />
-        </button>
+        <div className="flex items-end gap-2">
+          {teaser && (
+            <div className="card shadow-lg flex items-start gap-1 max-w-[16rem] pl-3 pr-1 py-2 text-sm text-foreground mb-1" role="status">
+              <button onClick={openChat} className="text-left">{teaser}</button>
+              <button onClick={() => setTeaser(null)} aria-label="Dismiss" className="text-muted hover:text-foreground p-1 shrink-0">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+          <button onClick={openChat} aria-label="Ask Film My Run" className="btn-primary rounded-full w-14 h-14 p-0 flex items-center justify-center shadow-lg shrink-0">
+            <MessageCircle className="w-6 h-6" />
+          </button>
+        </div>
       )}
     </div>
   );

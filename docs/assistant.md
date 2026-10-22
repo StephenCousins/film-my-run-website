@@ -29,3 +29,11 @@ Built 22 Oct 2026. A chat bubble that answers visitors' questions about Stephen 
 
 The bubble's visibility is read when the page is built, so changing `ASSISTANT_ENABLED` or `ASSISTANT_PUBLIC` needs a
 redeploy (Railway redeploys on a variable change anyway).
+
+## The "can I help?" nudge
+
+One short line beside the bubble, worded for the page (`greetingFor()` in `SiteAssistant.tsx`): shown after 25
+seconds on the site, or half-way down a page after 8 seconds, whichever comes first. Never on /contact, /account,
+/admin, checkout, login or the games. It hides after 15 seconds and then doesn't appear again for 7 days in that
+browser (`fmr-assistant-teased` in localStorage). Opening any page with `?assistant=1` clears that, so the nudge shows
+again for testing. Tune the numbers in `TEASE`.
