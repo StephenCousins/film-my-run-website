@@ -94,6 +94,9 @@ export async function reply(messages: ChatMessage[]): Promise<{ text: string; co
     ...({ usage: { include: true } } as Record<string, unknown>),
   });
   const text = cleanReply(completion.choices[0]?.message?.content ?? '');
-  const costUsd = Number((completion.usage as { cost?: number } | undefined)?.cost ?? 0);
+  const usage = completion.usage as { cost?: number; prompt_tokens?: number; prompt_tokens_details?: { cached_tokens?: number } } | undefined;
+  const costUsd = Number(usage?.cost ?? 0);
+  // One line per reply in the Railway log: proves the prompt cache is being hit.
+  console.log(`assistant: $${costUsd.toFixed(5)}, ${usage?.prompt_tokens_details?.cached_tokens ?? 0}/${usage?.prompt_tokens ?? 0} prompt tokens cached`);
   return { text, costUsd };
 }
