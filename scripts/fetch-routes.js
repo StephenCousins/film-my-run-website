@@ -135,6 +135,14 @@ async function fetchSpreadsheetData() {
 }
 
 function saveRacesData(races) {
+  // An unchanged list keeps its old timestamp, so the workflow has nothing to commit (and Railway nothing to deploy).
+  try {
+    const old = JSON.parse(fs.readFileSync(CONFIG.racesDataPath, 'utf8'));
+    if (JSON.stringify(old.races) === JSON.stringify(races)) {
+      console.log(`Races unchanged (${races.length}); not rewritten`);
+      return;
+    }
+  } catch {}
   fs.writeFileSync(
     CONFIG.racesDataPath,
     JSON.stringify({ lastUpdated: new Date().toISOString(), races }, null, 2),
