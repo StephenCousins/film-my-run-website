@@ -54,6 +54,7 @@ async function getStoryBySlug(slug: string) {
     photoCredit: story.photo_credit,
     roundupDate: (story.published_at ?? story.created_at).toISOString(),
     publishedAt: story.published_at?.toISOString() || story.created_at.toISOString(),
+    updatedAt: story.updated_at.toISOString(),
   };
 }
 
@@ -92,17 +93,31 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   // story says noindex instead, which keeps it out of search results (2 Oct 2026).
   if (!story) return { title: 'Story Not Found', robots: { index: false, follow: true } };
 
+  const url = `https://filmmyrun.com/news/${slug}`;
+  const images = story.imageUrl ? [{ url: story.imageUrl, width: 1200, height: 675, alt: story.title }] : [];
   return {
     title: story.title,
     description: story.excerpt,
     alternates: {
-      canonical: `https://filmmyrun.com/news/${slug}`,
+      canonical: url,
     },
     openGraph: {
       title: story.title,
       description: story.excerpt,
+      url,
+      siteName: 'Film My Run',
+      locale: 'en_GB',
       type: 'article',
       publishedTime: story.publishedAt,
+      modifiedTime: story.updatedAt,
+      section: 'News',
+      images,
+    },
+    // Without this the layout's site-wide card (title "Film My Run", the default image) was shown.
+    twitter: {
+      card: 'summary_large_image',
+      title: story.title,
+      description: story.excerpt,
       images: story.imageUrl ? [story.imageUrl] : [],
     },
   };

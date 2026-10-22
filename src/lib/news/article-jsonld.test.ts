@@ -20,4 +20,10 @@ describe('buildArticleJsonLd', () => {
     );
     expect(jsonLd.image).toEqual([]);
   });
+
+  it('uses the last edit as dateModified, falling back to the publish date', () => {
+    const base = { title: 'T', excerpt: 'E', publishedAt: '2026-10-22T05:32:20.530Z', imageUrl: null };
+    expect(buildArticleJsonLd({ ...base, updatedAt: '2026-10-22T08:00:00.000Z' }, 'u').dateModified).toBe('2026-10-22T08:00:00.000Z');
+    expect(buildArticleJsonLd(base, 'u').dateModified).toBe('2026-10-22T05:32:20.530Z');
+  });
 });

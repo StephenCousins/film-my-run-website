@@ -84,11 +84,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setTheme(newTheme);
   };
 
-  // Prevent flash by not rendering until mounted
-  if (!mounted) {
-    return null;
-  }
-
+  // Always render children: returning null until mounted sent every page to the server
+  // with an empty body, so crawlers saw no headline, text or JSON-LD (22 Oct 2026).
+  // The inline script in layout.tsx <head> already sets the theme class before paint.
   return (
     <ThemeContext.Provider value={{ theme, resolvedTheme, setTheme, toggleTheme }}>
       {children}
