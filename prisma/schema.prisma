@@ -745,3 +745,17 @@ model fartlex_results {
 
   @@id([user_id, puzzle])
 }
+
+/// The site assistant's conversations (src/lib/assistant), one row per message, so Stephen can read what visitors ask
+/// at /admin/assistant. cost_usd is what OpenRouter charged for an assistant reply; the daily cap sums it.
+model assistant_messages {
+  id         String   @id @default(uuid())
+  session_id String
+  role       String // 'user' | 'assistant'
+  text       String
+  cost_usd   Float    @default(0)
+  created_at DateTime @default(now())
+
+  @@index([session_id, created_at])
+  @@index([created_at])
+}

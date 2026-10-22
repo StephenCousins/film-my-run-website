@@ -66,6 +66,7 @@ After adding a dependency, run `npm install` so `package-lock.json` is in sync b
 - `docs/design-system.md`: brand colours, logo variants, typography, animation and dark-mode rules. Read before UI work.
 - `docs/images-r2.md`: R2 URL patterns, upload script, R2 env vars. Read before adding or moving images.
 - `docs/llm.md`: LLM routing, models per job, costs, Jev decision model. Read before adding or changing an LLM call.
+- `docs/assistant.md`: the site chat assistant: knowledge pack (`npm run assistant:pack`), switches, cost cap, log.
 - `docs/app-api.md`: the iOS app's `/api/app/v1/*` endpoints.
 - `docs/shoe-finder.md`: Shoe Finder weekly pipeline, gate, images, CLI, data model (current). Older catalogue
   notes: `docs/shoes/catalogue-notes.md`.

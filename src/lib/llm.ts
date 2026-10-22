@@ -28,7 +28,7 @@ const DEFAULT_MODEL = 'google/gemini-2.5-flash-lite';
  */
 export const WRITING_MODEL = 'deepseek/deepseek-v3.2';
 
-function getClient(): OpenAI {
+export function getClient(): OpenAI {
   const apiKey = process.env.OPENROUTER_API_KEY;
   if (!apiKey) throw new Error('OPENROUTER_API_KEY is not set');
 

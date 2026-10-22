@@ -29,7 +29,8 @@
     "news:story": "tsx --tsconfig tsconfig.json scripts/news-story.ts",
     "runners:gather": "tsx --tsconfig tsconfig.json scripts/runners-gather.ts",
     "runners:save": "tsx --tsconfig tsconfig.json scripts/runners-save.ts",
-    "runners:photo": "tsx --tsconfig tsconfig.json scripts/runners-photo.ts"
+    "runners:photo": "tsx --tsconfig tsconfig.json scripts/runners-photo.ts",
+    "assistant:pack": "tsx --tsconfig tsconfig.json scripts/assistant-pack.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.77.0",

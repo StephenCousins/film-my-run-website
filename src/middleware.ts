@@ -25,7 +25,7 @@ const proRoutes = [
 // Stephen's Ask Stephen inbox (spec §3, "Admin inbox"). The pages call
 // notFound() themselves, but the root loading.tsx streams a 200 shell before
 // a page body runs, so the real 404 for anyone else has to be decided here.
-const chatAdminRoutes = ['/admin/inbox'];
+const chatAdminRoutes = ['/admin/inbox', '/admin/assistant'];
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -109,5 +109,6 @@ export const config = {
     '/account/:path*',
     '/admin/inbox/:path*',
     '/admin/inbox',
+    '/admin/assistant',
   ],
 };
