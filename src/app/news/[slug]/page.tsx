@@ -172,7 +172,7 @@ export default async function NewsStoryPage({ params }: PageProps) {
                 src={story.imageUrl}
                 alt={story.title}
                 fill
-                className="object-cover"
+                className="object-cover object-top"
                 priority
               />
             ) : (
