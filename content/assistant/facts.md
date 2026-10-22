@@ -6,14 +6,15 @@ page from the site, this file wins. Edit freely, then run `npm run assistant:pac
 ## Stephen
 
 - Stephen Cousins runs Film My Run (filmmyrun.com). He is a runner, ultra runner and award-winning running filmmaker.
-- He lives in Worthing, West Sussex, with his wife Victoria and their children Elsa and Ellis. Victoria runs too: she
-  has finished 100-mile races.
+- He lives in Worthing, West Sussex, with his wife Victoria and their children Elsa and Ellis. He also has two adult
+  children, Hallum and Jevan. Victoria runs too: she has finished 100-mile races.
 - He has a degree in English Language and Literature.
-- Before running, he had a brief pop career: he wrote "John Kettley (Is a Weatherman)", the 1988 novelty hit by
+- Before running, he had a music career. He wrote "John Kettley (Is a Weatherman)", the 1988 novelty hit by
   A Tribe of Toffs.
+- From 1992 he played in an indie rock band called Ruth, which changed its name to The 45s in 1999.
 - His work, past and present:
   - Wedding photographer.
-  - Presenter at UTMB (the Ultra-Trail du Mont-Blanc week in Chamonix).
+  - Presenter for UTMB at the Arc of Attrition by UTMB in Cornwall.
   - Inputting race results for Power of 10, the UK athletics rankings database.
   - Website designer, and builder of this site.
   - App developer: the Film My Run iOS app, plus other running apps.
