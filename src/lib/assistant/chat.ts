@@ -5,10 +5,10 @@ import { getClient } from '@/lib/llm';
 /**
  * The site assistant: answers visitors' questions about Stephen and filmmyrun.com from one knowledge pack
  * (content/assistant/pack.md, built by `npm run assistant:pack`), sent whole as the system prompt on every turn.
- * No retrieval: the pack is ~58k tokens, which a cheap model reads fine, and the provider's prompt cache makes the
- * repeated part cost a fraction of the first read. See docs/assistant.md.
+ * No retrieval: the pack is ~44k tokens, which a cheap model reads fine, and the provider's prompt cache makes the
+ * repeated part cost a tenth of the first read. See docs/assistant.md.
  */
-export const ASSISTANT_MODEL = process.env.ASSISTANT_MODEL || 'google/gemini-2.5-flash';
+export const ASSISTANT_MODEL = process.env.ASSISTANT_MODEL || 'anthropic/claude-haiku-5.5';
 
 export const LIMITS = { messages: 20, chars: 1000, replyTokens: 600 };
 
@@ -84,7 +84,12 @@ export async function reply(messages: ChatMessage[]): Promise<{ text: string; co
     model: ASSISTANT_MODEL,
     max_tokens: LIMITS.replyTokens,
     temperature: 0.3,
-    messages: [{ role: 'system', content: system() }, ...messages],
+    messages: [
+      // cache_control marks the pack for the prompt cache: Anthropic models only cache what is marked (Gemini and
+      // DeepSeek cache on their own and ignore it). OpenRouter passes it through; the OpenAI types don't know it.
+      { role: 'system', content: [{ type: 'text', text: system(), cache_control: { type: 'ephemeral' } } as { type: 'text'; text: string }] },
+      ...messages,
+    ],
     // OpenRouter-only field: include the call's cost in `usage.cost`.
     ...({ usage: { include: true } } as Record<string, unknown>),
   });

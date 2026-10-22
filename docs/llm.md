@@ -30,7 +30,7 @@ Models are chosen per job (news models live in `src/lib/news/models.ts`):
 |---|---|---|
 | `google/gemini-2.5-flash-lite` (default) | Extraction, scoring, yes/no checks, image verification | 0.10 / 0.40 |
 | `deepseek/deepseek-v3.2` (`WRITING_MODEL`) | RaceScript generation (after the Anthropic credit path) | 0.269 / 0.400 |
-| `ASSISTANT_MODEL` (default `google/gemini-2.5-flash`) | Site chat assistant (`docs/assistant.md`) | see OpenRouter |
+| `ASSISTANT_MODEL` (default `anthropic/claude-haiku-5.5`) | Site chat assistant (`docs/assistant.md`) | 0.10 / 0.50, cached input 0.01 |
 | `WRITE_MODEL` / `CHECK_MODEL` | News writing and fact-checking (subscription first, see above) | n/a |
 
 Extraction calls run at `temperature: 0` for parseable output; the writing calls

@@ -32,9 +32,9 @@ async function mapLimit<T, R>(items: T[], limit: number, fn: (t: T) => Promise<R
 const SECTIONS: [RegExp, string, number][] = [
   [/^\/blog\//, "Stephen's blog (race reports and stories)", 300],
   [/^\/films\//, "Stephen's films", 300],
-  [/^\/news\//, 'Recent news stories on the site', 300],
-  // 490 of them: name, country and age is enough to point someone at the profile.
-  [/^\/runners\//, 'Runner profiles (elite and notable runners, not Stephen)', 90],
+  // Headlines say enough, and every token here is paid for on every message.
+  [/^\/news\//, 'Recent news stories on the site', 0],
+  [/^\/runners\//, 'Runner profiles (elite and notable runners, not Stephen)', 0],
 ];
 
 (async () => {
@@ -62,7 +62,9 @@ const SECTIONS: [RegExp, string, number][] = [
       continue;
     }
     const section = SECTIONS.find(([re]) => re.test(p.path));
-    if (section) lists.get(section[1])!.push(`- [${p.title}](${SITE}${p.path})${p.description ? `: ${p.description.slice(0, section[2])}` : ''}`);
+    if (!section) continue;
+    const description = p.description.slice(0, section[2]);
+    lists.get(section[1])!.push(`- [${p.title}](${SITE}${p.path})${description ? `: ${description}` : ''}`);
   }
 
   const facts = await readFile('content/assistant/facts.md', 'utf8');

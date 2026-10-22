@@ -6,12 +6,12 @@ Built 22 Oct 2026. A chat bubble that answers visitors' questions about Stephen 
 
 - **Knowledge pack:** `content/assistant/pack.md`, built by `npm run assistant:pack` from
   `content/assistant/facts.md` (hand-written by Stephen, wins over everything else) plus every page in the live
-  sitemap: core pages in full (trimmed to 4,000 characters), blog/films/news/runners as one line each. About 58k
+  sitemap: core pages in full (trimmed to 4,000 characters), blog and films as title plus description, news and runners as titles only. About 44k
   tokens. Read it to see exactly what the assistant knows. Rebuild after editing facts.md or when the site has moved
   on (new posts, news), then commit the pack and push.
 - **No retrieval.** The whole pack is the system prompt on every turn (`src/lib/assistant/chat.ts`), with the rules
   above it. The provider's prompt cache makes the repeated part cheap.
-- **Model:** `ASSISTANT_MODEL` env var, default `google/gemini-2.5-flash` via OpenRouter (`docs/llm.md`).
+- **Model:** `ASSISTANT_MODEL` env var, default `anthropic/claude-haiku-5.5` via OpenRouter, with the pack marked for the prompt cache (`docs/llm.md`).
 - **API:** `POST /api/assistant` `{ sessionId, messages: [{ role, content }] }` → `{ reply }` or `{ error }`.
   Limits: 1,000 characters a message, last 20 messages kept, 15 messages per IP per 10 minutes and 60 a day
   (in memory, reset on deploy), and a daily spend cap.
