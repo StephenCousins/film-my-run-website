@@ -2,6 +2,40 @@
 
 Dated status entries moved out of CLAUDE.md. Newest first.
 
+## 22 Oct 2026: site chat assistant, POV page made honest
+
+**Site assistant** (`docs/assistant.md`; commits `97fd8f9` to `db929d9`)
+- Chat bubble answering visitors about Stephen and the site. Claude Haiku 5.5 via OpenRouter (`ASSISTANT_MODEL`), the
+  whole knowledge pack as a cached system prompt, no retrieval. Rules in `src/lib/assistant/chat.ts`: third person,
+  answer only from the pack, say "don't know" + /contact, treadmill/Zwift/NoblePro to zwift.run, no medical advice, no
+  personal details beyond facts.md, stay on topic, light running humour in small talk only, no em dashes.
+- Pack: `content/assistant/pack.md` from `npm run assistant:pack` (facts.md + every sitemap page + the YouTube channel's
+  25 most-viewed videos with real counts; needs `YOUTUBE_API_KEY` in .env). ~75k tokens as Claude counts them.
+  `content/assistant/facts.md` is Stephen's and wins over everything; he confirmed family, Worthing, degree, John
+  Kettley / A Tribe of Toffs, Ruth / The 45s, Arc of Attrition presenting.
+- Measured cost: ~0.75p for a conversation's first message (cache write), ~0.07p each after; caching confirmed in the
+  Railway log line `assistant: $..., N/M prompt tokens cached`. Limits: 15 msgs/10 min and 60/day per IP (in memory),
+  `ASSISTANT_DAILY_USD` cap (default $1).
+- Log: `assistant_messages` table (migration `20261022150000`), read at `/admin/assistant` (CHAT_ADMIN_EMAIL gate,
+  also in middleware). Test conversations are under session `claude-test-22oct`.
+- "Can I help?" nudge: page-aware line beside the bubble after 25 s, or half-way down a page after 8 s; hides after
+  15 s; once per 7 days per browser; never on contact/account/admin/checkout/login/games. `?assistant=1` resets it.
+- Tested live: 14 questions plus off-topic (football), unknown (pizza, Lakeland shoes), small talk; all handled. One
+  small-talk joke ("my legs do all the hard work") didn't quite land; offered Stephen example jokes in his style.
+- **State:** `ASSISTANT_ENABLED=true` on Railway; `ASSISTANT_PUBLIC` not set, so only browsers that opened a page with
+  `?assistant=1` see it. Stephen turns it on for everyone when happy.
+- **Open:** Stephen's PBs for facts.md (it currently infers the marathon PB from a blog post); "unanswered" filter and
+  weekly email of unanswered questions offered, not built; app version planned after 1.0 (filmmyrun-ios
+  `docs/superpowers/specs/2026-10-22-site-assistant-in-app-design.md`).
+
+**POV Race Coverage page** (`c87d2a9`)
+- Every race card named a different race from the video it played ("UTMB 171km, 850K+" played CCC 2018, 317K) and the
+  view counts were invented. Cards now describe their own videos (`src/app/services/pov-race-coverage/races.ts`), with
+  live counts and the channel total via `youtube-stats.ts`, like the documentary page. No count shown rather than a
+  made-up one if YouTube is down. Distances left blank for UTMB, TDS and Ben Nevis Ultra until Stephen gives them.
+- "200+ races filmed", "15 years", "12 countries" are unverified and unchanged. Other service pages may carry invented
+  figures the same way; not checked.
+
 ## 2-3 Oct 2026: news fixes, must-cover races, Ask Stephen busy switch, Fartlex
 
 **News pipeline**
