@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2026-10-22T10:13:10.649Z",
+  "lastUpdated": "2026-10-23T08:05:41.262Z",
   "races": [
     {
       "activityId": "33811771",
@@ -3948,7 +3948,7 @@
       "time": "3:43:23",
       "position": 508,
       "elevation": 170,
-      "video": "",
+      "video": "https://youtu.be/x83SD4rho6E",
       "report": "",
       "strava": "https://www.strava.com/activities/20154672420",
       "officialResults": "https://manobegimas.lt/results/71?search=c&distance=219&page=9",
@@ -4003,7 +4003,7 @@
       "roadCount": 32,
       "trailCount": "",
       "hundredMilers": "",
-      "raceCount": ""
+      "raceCount": "1 x Abingdon Marathon"
     }
   ]
 }
