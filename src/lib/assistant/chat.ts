@@ -10,7 +10,9 @@ import { getClient } from '@/lib/llm';
  */
 export const ASSISTANT_MODEL = process.env.ASSISTANT_MODEL || 'anthropic/claude-haiku-5.5';
 
-export const LIMITS = { messages: 20, chars: 1000, replyTokens: 600 };
+// replyTokens covers Haiku's thinking too: at 600 a hard question spent it all thinking and replied with nothing
+// (found on zwift.run's copy, 23 Oct).
+export const LIMITS = { messages: 20, chars: 1000, replyTokens: 1500 };
 
 const RULES = `You are the Film My Run assistant on filmmyrun.com, the website of Stephen Cousins, a runner and running filmmaker.
 You talk to visitors about Stephen, his running, his films and everything on the site.
@@ -92,8 +94,8 @@ export async function reply(messages: ChatMessage[]): Promise<{ text: string; co
       { role: 'system', content: [{ type: 'text', text: system(), cache_control: { type: 'ephemeral' } } as { type: 'text'; text: string }] },
       ...messages,
     ],
-    // OpenRouter-only field: include the call's cost in `usage.cost`.
-    ...({ usage: { include: true } } as Record<string, unknown>),
+    // OpenRouter-only fields: a little thinking (never the whole reply budget), and the call's cost in `usage.cost`.
+    ...({ reasoning: { effort: 'low' }, usage: { include: true } } as Record<string, unknown>),
   });
   const text = cleanReply(completion.choices[0]?.message?.content ?? '');
   const usage = completion.usage as { cost?: number; prompt_tokens?: number; prompt_tokens_details?: { cached_tokens?: number } } | undefined;
