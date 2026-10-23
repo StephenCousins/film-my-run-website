@@ -2,6 +2,17 @@
 
 Dated status entries moved out of CLAUDE.md. Newest first.
 
+## 23 Oct 2026: site stats page; assistant reply fix
+
+- **/admin/stats** (885343f): traffic, most-read posts and news, tools and games, newsletter by source, accounts,
+  paying members, shop, iPhone app, referrers, outbound clicks. Queries in `src/lib/admin-stats.ts`. New
+  `site_events` table (migration 20261023120000): tool uses via `track()` in `src/lib/track.ts` and the
+  `useRequireAuth({ tool })` option (sign-in walls counted separately), outbound clicks from `Analytics.tsx`, app API
+  calls from `withAppApi`. Those three only count from 23 Oct. Not yet seen signed in.
+- **Assistant** (2aa08c1): low reasoning effort and 1,500 reply tokens. At 600, Haiku 5.5 could spend the whole
+  budget thinking and return nothing, which showed visitors "not available" (found on zwift.run's copy).
+- Uncommitted shoe-finder work from another session was left alone.
+
 ## 22 Oct 2026: site chat assistant, POV page made honest
 
 **Site assistant** (`docs/assistant.md`; commits `97fd8f9` to `db929d9`)
