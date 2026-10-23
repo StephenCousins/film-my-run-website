@@ -5,7 +5,7 @@ import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { nutritionInputFromForm, planNutrition, type NutritionResult } from '@/lib/calculators';
 
 export function NutritionCalculator() {
-  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators', tool: ['calculators', 'nutrition'] });
   const [weight, setWeight] = useState('70');
   const [distance, setDistance] = useState('42.195');
   const [paceMin, setPaceMin] = useState('5');

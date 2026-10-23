@@ -19,6 +19,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import { cn } from '@/lib/utils';
 import { COUNTRIES, AGE_GROUPS } from '@/lib/stone-tracker/countries';
+import { track } from '@/lib/track';
 
 // ---- Types (mirror the API) ------------------------------------------------
 
@@ -132,6 +133,7 @@ export default function StoneTrackerPage() {
 
   function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    track('tool', 'stone-tracker', 'search');
     runSearch(query, { country, sex, age });
   }
 

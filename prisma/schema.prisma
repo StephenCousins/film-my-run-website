@@ -759,3 +759,19 @@ model assistant_messages {
   @@index([session_id, created_at])
   @@index([created_at])
 }
+
+/// Things a page view can't show (src/lib/track.ts, /api/track/event): a tool actually used, an outbound or
+/// affiliate click, an iOS app API call (withAppApi). Read at /admin/stats. session_id is the browser's tab
+/// session, or for the app a daily hash of IP + user agent (no install id is sent), so it counts devices per day.
+model site_events {
+  id         Int      @id @default(autoincrement())
+  name       String // 'tool' | 'outbound' | 'app_api'
+  label      String? // the tool, the outbound host, the app route
+  detail     String? // e.g. the calculator, the full outbound URL
+  path       String?
+  session_id String?
+  created_at DateTime @default(now())
+
+  @@index([name, created_at])
+  @@index([created_at])
+}

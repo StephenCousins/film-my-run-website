@@ -14,7 +14,7 @@ import {
 type ZoneMode = 'hr' | 'pace';
 
 export function TrainingZonesCalculator() {
-  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators', tool: ['calculators', 'zones'] });
   const [mode, setMode] = useState<ZoneMode>('hr');
 
   // HR mode inputs

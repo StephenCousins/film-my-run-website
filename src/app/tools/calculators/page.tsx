@@ -97,7 +97,7 @@ const calculators = [
 // ============================================
 
 function PaceCalculator() {
-  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators', tool: ['calculators', 'pace'] });
   const [distance, setDistance] = useState('42.195');
   const [distanceUnit, setDistanceUnit] = useState<'km' | 'miles'>('km');
   const [time, setTime] = useState({ hours: '3', minutes: '30', seconds: '0' });

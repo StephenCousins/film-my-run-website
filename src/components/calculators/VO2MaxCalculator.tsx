@@ -7,7 +7,7 @@ import { estimateVO2Max, vo2MaxInputFromForm, type VO2MaxResult, type VO2TestTyp
 type TestType = VO2TestType;
 
 export function VO2MaxCalculator() {
-  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators', tool: ['calculators', 'vo2max'] });
   const [testType, setTestType] = useState<TestType>('vdot');
   const [result, setResult] = useState<VO2MaxResult | null>(null);
 

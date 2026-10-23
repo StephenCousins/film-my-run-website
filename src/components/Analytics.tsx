@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import { track } from '@/lib/track';
 
 function getSessionId(): string {
   if (typeof window === 'undefined') return '';
@@ -86,6 +87,19 @@ export default function Analytics() {
       sendDuration();
     };
   }, [pathname]);
+
+  // Outbound clicks (affiliate and discount links, YouTube, Strava, race sites): one listener for the whole site.
+  useEffect(() => {
+    function onClick(e: MouseEvent) {
+      const a = (e.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+      if (!a || !/^https?:/.test(a.href)) return;
+      const url = new URL(a.href);
+      if (url.host === location.host) return;
+      track('outbound', url.host.replace(/^www\./, ''), a.href);
+    }
+    document.addEventListener('click', onClick, { capture: true });
+    return () => document.removeEventListener('click', onClick, { capture: true });
+  }, []);
 
   return null;
 }

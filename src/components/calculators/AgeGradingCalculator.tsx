@@ -13,7 +13,7 @@ import {
 } from '@/lib/calculators';
 
 export function AgeGradingCalculator() {
-  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators', tool: ['calculators', 'age-grade'] });
   const [age, setAge] = useState('40');
   const [gender, setGender] = useState<'men' | 'women'>('men');
   const [event, setEvent] = useState('5000m');

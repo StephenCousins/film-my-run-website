@@ -115,7 +115,7 @@ interface Po10Data {
 }
 
 export default function HowFastAmIPage() {
-  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'parkrun stats' });
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'parkrun stats', tool: ['how-fast-am-i', 'search'] });
   const [activeTab, setActiveTab] = useState<Tab>('parkrun');
   const [athleteId, setAthleteId] = useState('');
   const [isLoading, setIsLoading] = useState(false);

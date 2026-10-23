@@ -8,6 +8,7 @@ import AddShoeModal from './AddShoeModal';
 import LoginModal from '@/components/auth/LoginModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useShoeRatings, type RateResult, type RemoveResult } from './useShoeRatings';
+import { track } from '@/lib/track';
 
 export interface ShoeReview {
   source: string;
@@ -122,6 +123,7 @@ export default function ShoeFinderClient() {
       params.set('maxDrop', max);
     }
 
+    track('tool', 'shoe-finder', params.toString() || 'all shoes');
     const res = await fetch(`/api/shoes?${params.toString()}`);
     if (res.ok) {
       const data = await res.json();

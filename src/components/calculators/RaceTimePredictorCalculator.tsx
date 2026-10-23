@@ -152,7 +152,7 @@ function Result({ result, cross }: { result: RacePrediction | AdvancedPrediction
 }
 
 export function RaceTimePredictorCalculator() {
-  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators', tool: ['calculators', 'predictor'] });
   const [mode, setMode] = useState<'quick' | 'advanced'>('quick');
 
   // Quick mode inputs

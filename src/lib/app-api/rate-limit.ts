@@ -1,4 +1,6 @@
+import { createHash } from 'crypto';
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/db';
 
 /**
  * Light per-IP rate limiting for /api/app/v1/* (iPhone app routes).
@@ -63,10 +65,25 @@ export function withAppApi(
       );
     }
     const response = await handler(request);
+    logAppCall(request);
     response.headers.set('X-FMR-API', 'v1');
     if (options.cacheControl && response.ok) {
       response.headers.set('Cache-Control', options.cacheControl);
     }
     return response;
   };
+}
+
+/**
+ * One site_events row per app API call, for /admin/stats. The app sends no install id, so a device is a hash of
+ * IP + user agent that changes daily: distinct ones per day approximate daily app users. Never blocks the reply.
+ */
+function logAppCall(request: NextRequest) {
+  if (process.env.NODE_ENV === 'test') return;
+  const day = new Date().toISOString().slice(0, 10);
+  const device = createHash('sha256').update(`${clientIp(request)}|${request.headers.get('user-agent') ?? ''}|${day}`).digest('hex').slice(0, 16);
+  const route = request.nextUrl.pathname.replace('/api/app/v1', '').replace(/\/\d+(?=\/|$)/g, '/:id') || '/';
+  prisma.site_events
+    .create({ data: { name: 'app_api', label: route.slice(0, 100), detail: request.method, session_id: device } })
+    .catch(() => {});
 }

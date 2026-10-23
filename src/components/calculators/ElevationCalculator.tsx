@@ -5,7 +5,7 @@ import { useRequireAuth } from '@/hooks/useRequireAuth';
 import { adjustForElevation, elevationInputFromForm, type ElevationResult } from '@/lib/calculators';
 
 export function ElevationCalculator() {
-  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators' });
+  const { requireAuth, LoginModal } = useRequireAuth({ feature: 'running calculators', tool: ['calculators', 'elevation'] });
   const [distance, setDistance] = useState('21.0975');
   const [time, setTime] = useState({ hours: '1', minutes: '45', seconds: '0' });
   const [elevGain, setElevGain] = useState('500');

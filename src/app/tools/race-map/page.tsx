@@ -22,6 +22,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { extractActivityId, extractYear } from '@/lib/race-map/mapUtils';
 import type { Race, Routes, Filters } from '@/lib/race-map/types';
 import { cn } from '@/lib/utils';
+import { track } from '@/lib/track';
 
 // Dynamically import the map to avoid SSR issues
 const RaceMapView = dynamic(
@@ -335,6 +336,7 @@ export default function RaceMapPage() {
 
   const handleRaceSelect = useCallback((race: Race | null) => {
     setSelectedRace(race);
+    if (race) track('tool', 'race-map', race.name);
   }, []);
 
   const activeFiltersCount = useMemo(() => {

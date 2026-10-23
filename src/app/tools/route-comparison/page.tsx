@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { RouteComparisonProvider, useRouteComparison } from '@/contexts/RouteComparisonContext';
 import Header from '@/components/layout/Header';
@@ -38,6 +38,7 @@ import {
   Scissors,
   Activity,
 } from 'lucide-react';
+import { track } from '@/lib/track';
 
 type Tab = 'overview' | 'charts' | 'splits' | 'gaps' | 'segments' | 'insights';
 
@@ -67,6 +68,12 @@ function RouteComparisonContent() {
   const [selectedMetric, setSelectedMetric] = useState<MetricType>('pace');
 
   const selectedRoutes = routes.filter((r) => selectedRouteIds.includes(r.id));
+  // A route added (GPX loaded) is a use; the first render's saved routes aren't.
+  const routeCount = useRef(routes.length);
+  useEffect(() => {
+    if (routes.length > routeCount.current) track('tool', 'route-comparison', 'route added');
+    routeCount.current = routes.length;
+  }, [routes.length]);
   const referenceRoute = routes.find((r) => r.id === referenceRouteId);
 
   // CSV export

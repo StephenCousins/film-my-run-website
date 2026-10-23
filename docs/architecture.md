@@ -224,6 +224,7 @@ Prisma directly. The iOS app's `/api/app/v1/*` routes are in `docs/app-api.md`.
 ### Races & stats
 - `GET /api/races`, `POST /api/races/sync` (Google Sheets)
 - `GET /api/stats`, `GET /api/race-map`, `GET /api/age-grading`
+- `POST /api/track` (page views), `POST /api/track/event` (tool uses, outbound clicks: `src/lib/track.ts`); app API calls are logged by `withAppApi`. All of it, plus newsletter, members, orders, quiz, Fartlex and assistant counts, shows at `/admin/stats` (`src/lib/admin-stats.ts`, admin login = `CHAT_ADMIN_EMAIL`)
 - `GET /api/parkrun`, `GET /api/parkrun/rankings`
 - `/api/how-fast/parkrun`, `/api/how-fast/po10` (each with a `/refresh`)
 - `/api/stone-tracker/runner`, `/api/stone-tracker/search`
