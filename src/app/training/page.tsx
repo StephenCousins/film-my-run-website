@@ -62,10 +62,13 @@ const METHOD = [
 function StoreButtons() {
   return (
     <div className="flex flex-wrap items-center gap-4">
-      <span className="inline-flex items-center gap-2 px-7 py-3.5 bg-white/10 text-white font-semibold rounded-full border border-white/20">
+      <a
+        href="https://apps.apple.com/gb/app/film-my-run/id6815156969"
+        className="inline-flex items-center gap-2 px-7 py-3.5 bg-white/10 text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-colors"
+      >
         <Smartphone className="w-5 h-5" />
-        Coming soon to the App Store
-      </span>
+        Download on the App Store
+      </a>
       <Link
         href="/club"
         className="inline-flex items-center gap-2 px-7 py-3.5 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-colors"

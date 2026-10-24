@@ -184,12 +184,15 @@ export default function TrainingCTA() {
               </div>
             </div>
 
-            {/* CTA: not on the App Store yet */}
+            {/* CTA: the app (live on the App Store since 24 Oct 2026) and the Club */}
             <div className="flex flex-wrap items-center gap-4">
-              <span className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20">
+              <a
+                href="https://apps.apple.com/gb/app/film-my-run/id6815156969"
+                className="inline-flex items-center gap-2 px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-colors"
+              >
                 <Smartphone className="w-5 h-5" />
-                Coming soon to the App Store
-              </span>
+                Download on the App Store
+              </a>
               <Link
                 href="/club"
                 className="inline-flex items-center gap-2 px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-all hover:scale-105"
