@@ -8,9 +8,10 @@ import { prisma } from '@/lib/db';
 export const dynamic = 'force-dynamic';
 
 // Gated here as well as in the page: see chatAdminMetadata.
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ source?: string }> }): Promise<Metadata> {
   const session = await getServerSession(authOptions);
-  return chatAdminMetadata(session, 'Site assistant: conversations');
+  const wilson = (await searchParams).source === 'wilson';
+  return chatAdminMetadata(session, `${wilson ? 'Wilson' : 'Site'} assistant: conversations`);
 }
 
 /** What visitors asked the site assistant, newest conversation first, and what it cost. */
@@ -34,7 +35,7 @@ export default async function AssistantLogPage({ searchParams }: { searchParams:
     <main className="min-h-screen bg-background py-10 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
         <p className="text-xs font-semibold uppercase tracking-widest text-brand mb-2">{source === 'wilson' ? 'Ask Wilson' : 'Site assistant'}</p>
-        <h1 className="font-display text-3xl font-semibold text-foreground">Conversations</h1>
+        <h1 className="font-display text-3xl font-semibold text-foreground">{source === 'wilson' ? 'Wilson assistant' : 'Conversations'}</h1>
         <p className="text-secondary mt-2 mb-8">
           {sessions.size} recent conversations ({source === 'wilson' ? <a href="?" className="underline">show site</a> : <a href="?source=wilson" className="underline">show Wilson</a>}). This month: ${(month._sum.cost_usd ?? 0).toFixed(3)}.
         </p>

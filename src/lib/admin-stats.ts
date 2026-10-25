@@ -82,7 +82,7 @@ export async function loadStats() {
       FROM fartlex_results WHERE created_at > now() - interval '30 days'`,
     prisma.$queryRaw<{ uses7: bigint; uses30: bigint; people30: bigint }[]>`
       SELECT count(*) FILTER (WHERE created_at > now() - interval '7 days') uses7, count(*) uses30, count(DISTINCT session_id) people30
-      FROM assistant_messages WHERE role = 'user' AND created_at > now() - interval '30 days'`,
+      FROM assistant_messages WHERE role = 'user' AND source = 'site' AND created_at > now() - interval '30 days'`,
     prisma.$queryRaw<{ label: string; detail: string; uses: bigint }[]>`
       SELECT label, detail, count(*) uses FROM site_events
       WHERE name = 'tool' AND label IN ('calculators', 'race-map') AND created_at > now() - interval '30 days'

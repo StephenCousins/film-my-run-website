@@ -114,7 +114,8 @@ export default function WilsonPrivacyPage() {
                 <P>
                   When you send a question, the app sends it with some facts it has worked out on your phone, such as your
                   Wilson index, your home event and your challenge progress. It does not send your name, barcode,
-                  athlete ID, email or location.
+                  athlete ID, email or exact location. The app also sends a random ID for this install, used only to
+                  limit how many questions can be sent; it isn&apos;t stored.
                 </P>
                 <P>
                   It goes to our server at filmmyrun.com, which passes it to an AI provider, OpenRouter, which passes it
