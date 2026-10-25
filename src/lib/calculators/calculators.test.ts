@@ -36,6 +36,10 @@ import {
  * predictor moved to the evidence model (band exponents by distance pair and
  * known time, ability × race cost beyond the marathon; two races are two
  * anchors, no age/BMI terms). Regenerated with scripts/regen-predictor-golden.ts.
+ *
+ * Changed on purpose: 25 Oct 2026, two `pace` cases (rounding-59.6s, 100mi-30h)
+ * that had captured the 3:60 bug: pace is now rounded to whole seconds before
+ * splitting into minutes and seconds (UI sweep T1).
  */
 
 type Case<I, O> = { id: string; input: I; output: O };
@@ -120,4 +124,18 @@ describe('nutrition', () => {
   each(cases.nutrition as Case<Parameters<typeof nutritionInputFromForm>[0], unknown>[], (f) =>
     planNutrition(nutritionInputFromForm(f))
   );
+});
+
+describe('pace rounding (UI sweep T1)', () => {
+  it('rounds the whole pace before splitting, so 239.6 s/km is 4:00, not 3:60', () => {
+    const r = calculatePace({ distanceKm: 10, totalSeconds: 2396 });
+    expect(r?.pace).toBe('4:00 /km');
+    expect(r?.speed).toContain('(6:26 /mile)');
+  });
+
+  it('training pace zones never show :60', () => {
+    const zones = calculatePaceZones({ thresholdMinutes: 3, thresholdSecondsPerKm: 239.6 });
+    expect(zones?.find((z) => z.name.startsWith('Zone 4'))?.pace).toBe('4:00/km');
+    for (const z of zones ?? []) expect(z.pace).not.toContain(':60');
+  });
 });

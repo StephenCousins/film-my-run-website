@@ -10,9 +10,10 @@ export interface QA {
 
 function fmtDuration(sec: number): string {
   if (!sec) return '—';
+  sec = Math.round(sec);
   const h = Math.floor(sec / 3600);
   const m = Math.floor((sec % 3600) / 60);
-  const s = Math.round(sec % 60);
+  const s = sec % 60;
   return h > 0
     ? `${h}h ${m}m ${s}s`
     : `${m}m ${s}s`;
@@ -20,9 +21,9 @@ function fmtDuration(sec: number): string {
 
 function fmtPace(distanceKm: number, movingSec: number): string {
   if (!distanceKm || !movingSec) return '—';
-  const secPerKm = movingSec / distanceKm;
+  const secPerKm = Math.round(movingSec / distanceKm);
   const m = Math.floor(secPerKm / 60);
-  const s = Math.round(secPerKm % 60);
+  const s = secPerKm % 60;
   return `${m}:${s.toString().padStart(2, '0')} /km`;
 }
 

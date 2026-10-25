@@ -103,8 +103,9 @@ export function calculatePaceZones(input: PaceZonesInput): PaceZone[] | null {
 
   return PACE_ZONE_DEFINITIONS.map((zone) => {
     const zonePaceSeconds = thresholdPaceSeconds * zone.factor;
-    const paceMin = Math.floor(zonePaceSeconds / 60);
-    const paceSec = Math.round(zonePaceSeconds % 60);
+    const paceRounded = Math.round(zonePaceSeconds);
+    const paceMin = Math.floor(paceRounded / 60);
+    const paceSec = paceRounded % 60;
     return {
       name: zone.name,
       paceSecondsPerKm: zonePaceSeconds,

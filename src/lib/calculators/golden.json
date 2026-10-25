@@ -189,7 +189,7 @@
       },
       "output": {
         "pace": "11:11 /km",
-        "speed": "5.37 km/h (17:60 /mile)",
+        "speed": "5.37 km/h (18:00 /mile)",
         "predictions": [
           {
             "name": "5K",
@@ -223,7 +223,7 @@
         }
       },
       "output": {
-        "pace": "5:60 /km",
+        "pace": "6:00 /km",
         "speed": "10.01 km/h (9:39 /mile)",
         "predictions": [
           {

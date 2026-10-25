@@ -8,6 +8,7 @@ import {
   formatHeartRate,
   getDistanceLabel,
   formatSplitElevation,
+  formatSplitTime,
 } from './formatting';
 
 describe('formatDistance', () => {
@@ -140,5 +141,13 @@ describe('formatSplitElevation', () => {
 
   it('formats negative elevation with minus sign', () => {
     expect(formatSplitElevation(-8.7)).toBe('-9m');
+  });
+});
+
+describe('rounding before splitting minutes (UI sweep T1)', () => {
+  it('never shows :60', () => {
+    expect(formatPace(3.995)).toBe('4:00 /km');
+    expect(formatSplitTime(239.6)).toBe('4:00');
+    expect(formatDuration(119.7)).toBe('2m 0s');
   });
 });

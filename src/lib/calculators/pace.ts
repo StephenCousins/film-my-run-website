@@ -43,13 +43,16 @@ export function calculatePace(input: PaceInput): PaceResult | null {
   if (!(dist && totalSeconds)) return null;
 
   const paceSecondsPerKm = totalSeconds / dist;
-  const paceMinutes = Math.floor(paceSecondsPerKm / 60);
-  const paceSeconds = Math.round(paceSecondsPerKm % 60);
+  // Round the whole pace first, so 239.6 s shows 4:00, not 3:60.
+  const paceRounded = Math.round(paceSecondsPerKm);
+  const paceMinutes = Math.floor(paceRounded / 60);
+  const paceSeconds = paceRounded % 60;
   const pace = `${paceMinutes}:${paceSeconds.toString().padStart(2, '0')} /km`;
 
   const paceSecondsPerMile = paceSecondsPerKm * 1.60934;
-  const paceMiMin = Math.floor(paceSecondsPerMile / 60);
-  const paceMiSec = Math.round(paceSecondsPerMile % 60);
+  const paceMiRounded = Math.round(paceSecondsPerMile);
+  const paceMiMin = Math.floor(paceMiRounded / 60);
+  const paceMiSec = paceMiRounded % 60;
 
   const speedKmh = (dist / totalSeconds) * 3600;
   const speed = `${speedKmh.toFixed(2)} km/h (${paceMiMin}:${paceMiSec.toString().padStart(2, '0')} /mile)`;

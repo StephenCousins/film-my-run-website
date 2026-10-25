@@ -38,8 +38,9 @@ const METRIC_CONFIG: Record<MetricType, {
     unit: 'min/km',
     getValues: (r) => r.paces,
     formatValue: (v) => {
-      const mins = Math.floor(v);
-      const secs = Math.round((v - mins) * 60);
+      const total = Math.round(v * 60);
+      const mins = Math.floor(total / 60);
+      const secs = total % 60;
       return `${mins}:${secs.toString().padStart(2, '0')}`;
     },
     reversed: true,

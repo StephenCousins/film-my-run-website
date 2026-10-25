@@ -70,9 +70,10 @@ function fmtDistance(km: number) {
   return `${km.toFixed(2)} km`;
 }
 function fmtDuration(sec: number) {
+  sec = Math.round(sec);
   const h = Math.floor(sec / 3600);
   const m = Math.floor((sec % 3600) / 60);
-  const s = Math.round(sec % 60);
+  const s = sec % 60;
   return h > 0 ? `${h}h ${m}m` : `${m}m ${s}s`;
 }
 function fmtDate(iso: string) {

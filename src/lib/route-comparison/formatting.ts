@@ -19,9 +19,10 @@ export function formatElevation(m: number): string {
  */
 export function formatDuration(seconds: number | null): string {
   if (!seconds) return 'N/A';
+  seconds = Math.round(seconds);
   const hours = Math.floor(seconds / 3600);
   const mins = Math.floor((seconds % 3600) / 60);
-  const secs = Math.round(seconds % 60);
+  const secs = seconds % 60;
   if (hours > 0) {
     return `${hours}h ${mins}m`;
   } else if (mins > 0) {
@@ -39,8 +40,9 @@ export function formatBreakDuration(seconds: number | null): string {
   if (seconds < 60) {
     return `${Math.round(seconds)} seconds`;
   } else {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.round(seconds % 60);
+    const total = Math.round(seconds);
+    const mins = Math.floor(total / 60);
+    const secs = total % 60;
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   }
 }
@@ -66,8 +68,9 @@ export function formatPace(minPerKm: number | null): string {
   ) {
     return 'N/A';
   }
-  const mins = Math.floor(minPerKm);
-  const secs = Math.round((minPerKm - mins) * 60);
+  const total = Math.round(minPerKm * 60);
+  const mins = Math.floor(total / 60);
+  const secs = total % 60;
   return `${mins}:${secs.toString().padStart(2, '0')} /km`;
 }
 
@@ -103,8 +106,9 @@ export function formatSplitPace(pace: number | null): string {
   if (pace === null || pace === undefined || isNaN(pace) || !isFinite(pace)) {
     return 'N/A';
   }
-  const mins = Math.floor(pace);
-  const secs = Math.round((pace - mins) * 60);
+  const total = Math.round(pace * 60);
+  const mins = Math.floor(total / 60);
+  const secs = total % 60;
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
@@ -136,8 +140,9 @@ export function formatSplitTime(seconds: number | null): string {
   if (seconds === null || seconds === undefined || isNaN(seconds)) {
     return 'N/A';
   }
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.round(seconds % 60);
+  const total = Math.round(seconds);
+  const mins = Math.floor(total / 60);
+  const secs = total % 60;
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
@@ -149,9 +154,9 @@ export function formatSplitGap(seconds: number | null): string {
     return '-';
   }
   const sign = seconds >= 0 ? '+' : '-';
-  const absSecs = Math.abs(seconds);
+  const absSecs = Math.round(Math.abs(seconds));
   const mins = Math.floor(absSecs / 60);
-  const secs = Math.round(absSecs % 60);
+  const secs = absSecs % 60;
   if (mins > 0) {
     return `${sign}${mins}:${secs.toString().padStart(2, '0')}`;
   }
@@ -165,8 +170,9 @@ export function formatSegmentDuration(seconds: number | null): string {
   if (seconds === null || seconds === undefined || isNaN(seconds)) {
     return 'N/A';
   }
-  const mins = Math.floor(seconds / 60);
-  const secs = Math.round(seconds % 60);
+  const total = Math.round(seconds);
+  const mins = Math.floor(total / 60);
+  const secs = total % 60;
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
