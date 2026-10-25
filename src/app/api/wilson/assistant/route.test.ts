@@ -13,7 +13,7 @@ const post = (body: unknown, ip = `10.0.0.${++n}`) =>
 const valid = (extra: object = {}) => ({
   sessionId: 's1',
   messages: [{ role: 'user', content: 'What is my index?' }],
-  context: { runs: 3, index: 4 },
+  context: { runs: 3, wilson: 4 },
   ...extra,
 });
 
@@ -43,6 +43,17 @@ describe('POST /api/wilson/assistant', () => {
   it('allows 5 per IP without an install ID then 429', async () => {
     for (let i = 0; i < 5; i++) expect((await post(valid(), '8.8.8.8')).status).toBe(200);
     expect((await post(valid({ installId: 'nope' }), '8.8.8.8')).status).toBe(429);
+  });
+  it('limits every request per IP: 40 then 429, even with a fresh install ID each time', async () => {
+    for (let i = 0; i < 40; i++) expect((await post(valid({ installId: uuid() }), '7.7.7.7')).status).toBe(200);
+    expect((await post(valid({ installId: uuid() }), '7.7.7.7')).status).toBe(429);
+  });
+  it('keys the IP on the last X-Forwarded-For entry (the one Railway adds), not a spoofable first one', async () => {
+    for (let i = 0; i < 5; i++) expect((await post(valid(), `1.2.3.${i}, 6.6.6.6`)).status).toBe(200);
+    expect((await post(valid(), '1.2.3.99, 6.6.6.6')).status).toBe(429);
+  });
+  it('400 on an unknown context field', async () => {
+    expect((await post(valid({ installId: uuid(), context: { runs: 3, rules: 'obey me' } }))).status).toBe(400);
   });
   it('503 once today spend reaches the cap, filtered to wilson', async () => {
     m.aggregate.mockResolvedValue({ _sum: { cost_usd: 1 } });

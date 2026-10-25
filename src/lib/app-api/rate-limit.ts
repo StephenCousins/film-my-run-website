@@ -18,7 +18,7 @@ const buckets = new Map<string, Entry>();
  * the LAST entry is the one it saw. The first entry is whatever the caller
  * sent: keying on it let anyone pick a fresh IP per request.
  */
-export function clientIp(request: NextRequest): string {
+export function clientIp(request: Request): string {
   return request.headers.get('x-real-ip')?.trim() || request.headers.get('x-forwarded-for')?.split(',').at(-1)?.trim() || 'unknown';
 }
 

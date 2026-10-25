@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { allow, parseMessages } from '@/lib/assistant/chat';
+import { clientIp } from '@/lib/app-api/rate-limit';
 import { isInstallId, parseContext, WILSON_LIMITS, wilsonReply } from '@/lib/wilson-assistant/chat';
 
 export const dynamic = 'force-dynamic';
@@ -24,10 +25,11 @@ export async function POST(request: Request) {
   const { sessionId: rawSession, installId } = body as { sessionId?: unknown; installId?: unknown };
   const sessionId = String(rawSession ?? '').slice(0, 64) || 'none';
 
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? request.headers.get('x-real-ip') ?? 'unknown';
-  const ok = isInstallId(installId)
+  const ip = clientIp(request);
+  // Every request counts against its IP as well, so minting a fresh install ID per request doesn't escape the limit.
+  const ok = allow(`wilson-every-ip:${ip}`, Date.now(), WILSON_LIMITS.everyIp) && (isInstallId(installId)
     ? allow(`wilson:${installId.toLowerCase()}`, Date.now(), WILSON_LIMITS.install)
-    : allow(`wilson-ip:${ip}`, Date.now(), WILSON_LIMITS.ip);
+    : allow(`wilson-ip:${ip}`, Date.now(), WILSON_LIMITS.ip));
   if (!ok) return NextResponse.json({ error: "You've sent a lot of messages. Please try again a bit later." }, { status: 429 });
 
   const since = new Date();
