@@ -52,12 +52,13 @@ export function parseMessages(body: unknown): ChatMessage[] | string {
     if (!m || (m.role !== 'user' && m.role !== 'assistant') || typeof m.content !== 'string' || !m.content.trim()) {
       return 'Invalid message.';
     }
-    if (m.content.length > LIMITS.chars * 2) return 'Message too long.';
+    if (m.role === 'user' && m.content.length > LIMITS.chars * 2) return 'Message too long.';
   }
   const last = messages[messages.length - 1];
   if (last.role !== 'user') return 'Invalid message.';
   if (last.content.length > LIMITS.chars) return `Please keep messages under ${LIMITS.chars} characters.`;
-  return messages.map((m) => ({ role: m.role, content: m.content.trim() }));
+  // A long earlier reply is the model's own words coming back: trim it rather than fail the visitor's next question.
+  return messages.map((m) => ({ role: m.role, content: m.content.trim().slice(0, LIMITS.chars * 2) }));
 }
 
 /** Stephen never uses em dashes; models love them. */
@@ -67,11 +68,18 @@ export function cleanReply(text: string): string {
 
 // ponytail: in-memory, per instance, reset on each deploy. Enough for one Railway instance; move to the DB if the
 // site ever runs on several.
-const hits = new Map<string, number[]>();
-const WINDOWS: [ms: number, max: number][] = [[10 * 60_000, 15], [24 * 3_600_000, 60]];
+export const hits = new Map<string, number[]>();
+const DAY = 24 * 3_600_000;
+const WINDOWS: [ms: number, max: number][] = [[10 * 60_000, 15], [DAY, 60]];
+let calls = 0;
 
 /** True when this visitor may send another message now (and records it). */
 export function allow(key: string, now = Date.now(), windows: [number, number][] = WINDOWS): boolean {
+  // Every 1,000 calls, forget keys with no hit in the last day, so one-off keys (fresh IPs, install IDs) don't pile
+  // up. ponytail: assumes no caller's window is longer than a day.
+  if (++calls % 1000 === 0) {
+    for (const [k, t] of hits) if (now - t[t.length - 1] >= DAY) hits.delete(k);
+  }
   const day = Math.max(...windows.map(([ms]) => ms));
   const times = (hits.get(key) ?? []).filter((t) => now - t < day);
   if (windows.some(([ms, max]) => times.filter((t) => now - t < ms).length >= max)) {

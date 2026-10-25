@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { allow, cleanReply, parseMessages } from './chat';
+import { allow, cleanReply, hits, parseMessages } from './chat';
 import { pageSummary } from './html';
 
 describe('parseMessages', () => {
@@ -15,6 +15,11 @@ describe('parseMessages', () => {
     expect(parseMessages({ messages: [{ role: 'user', content: 'x'.repeat(1001) }] })).toMatch(/under 1000/);
     const many = Array.from({ length: 25 }, (_, i) => ({ role: i % 2 ? 'assistant' : 'user', content: String(i) }));
     expect((parseMessages({ messages: many }) as unknown[]).length).toBe(20);
+  });
+  it('truncates a long assistant message instead of rejecting it', () => {
+    const r = parseMessages({ messages: [{ role: 'assistant', content: 'y'.repeat(5000) }, { role: 'user', content: 'ok' }] });
+    expect((r as { content: string }[])[0].content).toHaveLength(2000);
+    expect(parseMessages({ messages: [{ role: 'user', content: 'x'.repeat(2001) }, { role: 'assistant', content: 'b' }, { role: 'user', content: 'c' }] })).toBe('Message too long.');
   });
 });
 
@@ -41,6 +46,12 @@ describe('allow with custom windows', () => {
     expect(allow('t', 1001, windows)).toBe(true);
     expect(allow('t', 1002, windows)).toBe(false);
     expect(allow('u', 1002, windows)).toBe(true);
+  });
+  it('drops keys whose hits have all expired', () => {
+    allow('stale', 0);
+    for (let i = 0; i < 1000; i++) allow(`sweep-${i}`, 2 * 86_400_000);
+    expect(hits.has('stale')).toBe(false);
+    expect(hits.has('sweep-999')).toBe(true);
   });
 });
 
