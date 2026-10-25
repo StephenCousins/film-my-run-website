@@ -71,10 +71,10 @@ const hits = new Map<string, number[]>();
 const WINDOWS: [ms: number, max: number][] = [[10 * 60_000, 15], [24 * 3_600_000, 60]];
 
 /** True when this visitor may send another message now (and records it). */
-export function allow(key: string, now = Date.now()): boolean {
-  const day = WINDOWS[WINDOWS.length - 1][0];
+export function allow(key: string, now = Date.now(), windows: [number, number][] = WINDOWS): boolean {
+  const day = Math.max(...windows.map(([ms]) => ms));
   const times = (hits.get(key) ?? []).filter((t) => now - t < day);
-  if (WINDOWS.some(([ms, max]) => times.filter((t) => now - t < ms).length >= max)) {
+  if (windows.some(([ms, max]) => times.filter((t) => now - t < ms).length >= max)) {
     hits.set(key, times);
     return false;
   }
@@ -83,15 +83,21 @@ export function allow(key: string, now = Date.now()): boolean {
   return true;
 }
 
-export async function reply(messages: ChatMessage[]): Promise<{ text: string; costUsd: number }> {
+export type SystemBlock = { text: string; cache?: boolean };
+
+/** One model call over system blocks and a conversation. Shared by the site assistant and the Wilson endpoint. */
+export async function complete(system: SystemBlock[], messages: ChatMessage[]): Promise<{ text: string; costUsd: number }> {
   const completion = await getClient().chat.completions.create({
     model: ASSISTANT_MODEL,
     max_tokens: LIMITS.replyTokens,
     temperature: 0.3,
     messages: [
-      // cache_control marks the pack for the prompt cache: Anthropic models only cache what is marked (Gemini and
+      // cache_control marks a block for the prompt cache: Anthropic models only cache what is marked (Gemini and
       // DeepSeek cache on their own and ignore it). OpenRouter passes it through; the OpenAI types don't know it.
-      { role: 'system', content: [{ type: 'text', text: system(), cache_control: { type: 'ephemeral' } } as { type: 'text'; text: string }] },
+      {
+        role: 'system',
+        content: system.map((b) => (b.cache ? { type: 'text', text: b.text, cache_control: { type: 'ephemeral' } } : { type: 'text', text: b.text })) as { type: 'text'; text: string }[],
+      },
       ...messages,
     ],
     // OpenRouter-only fields: a little thinking (never the whole reply budget), and the call's cost in `usage.cost`.
@@ -103,4 +109,8 @@ export async function reply(messages: ChatMessage[]): Promise<{ text: string; co
   // One line per reply in the Railway log: proves the prompt cache is being hit.
   console.log(`assistant: $${costUsd.toFixed(5)}, ${usage?.prompt_tokens_details?.cached_tokens ?? 0}/${usage?.prompt_tokens ?? 0} prompt tokens cached`);
   return { text, costUsd };
+}
+
+export function reply(messages: ChatMessage[]): Promise<{ text: string; costUsd: number }> {
+  return complete([{ text: system(), cache: true }], messages);
 }

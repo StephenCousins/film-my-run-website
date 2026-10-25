@@ -34,6 +34,16 @@ describe('allow', () => {
   });
 });
 
+describe('allow with custom windows', () => {
+  it('uses the windows it is given and keeps keys apart', () => {
+    const windows: [number, number][] = [[600_000, 2]];
+    expect(allow('t', 1000, windows)).toBe(true);
+    expect(allow('t', 1001, windows)).toBe(true);
+    expect(allow('t', 1002, windows)).toBe(false);
+    expect(allow('u', 1002, windows)).toBe(true);
+  });
+});
+
 describe('pageSummary', () => {
   it('pulls title, description and main text', () => {
     const html = '<title>Films &amp; More | Film My Run</title><meta name="description" content="Stephen&#x27;s films">' +
