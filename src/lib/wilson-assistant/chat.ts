@@ -30,10 +30,10 @@ Rules:
 Pack:
 `;
 
-let pack: string | null = null;
-function rules(): string {
-  pack ??= RULES + readFileSync(join(process.cwd(), 'content/wilson-assistant/pack.md'), 'utf8');
-  return pack;
+let systemPromptCache: string | null = null;
+function systemPrompt(): string {
+  systemPromptCache ??= RULES + readFileSync(join(process.cwd(), 'content/wilson-assistant/pack.md'), 'utf8');
+  return systemPromptCache;
 }
 
 /** The context re-serialised compactly, or an error to show. */
@@ -50,19 +50,18 @@ export function isInstallId(s: unknown): s is string {
 
 const ALLOWED = /^(wilson:\/\/(plan|map|find|wilson|challenges|glossary|barcode|settings|(challenge|event|number)\/[\w-]+)|https:\/\/filmmyrun\.com\/wilson(\/\S*)?)$/;
 
-/** Markdown links off the allow list become their label; bare off-list URLs are dropped. */
+/** Markdown links off the allow list become their label; bare off-list URLs (including a URL used as a label) are dropped. */
 export function cleanLinks(text: string): string {
   return text
-    .replace(/\[([^\]]*)\]\(([^)\s]*)\)|(?:https?|wilson):\/\/[^\s)]+/g, (m, label?: string, url?: string) =>
-      ALLOWED.test(url ?? m) ? m : label ?? '',
-    )
+    .replace(/\[([^\]]*)\]\(((?:[^()]|\([^()]*\))*)\)/g, (m, label: string, target: string) => (ALLOWED.test(target.trim().split(/\s+/)[0]) ? m : label))
+    .replace(/(?:https?|wilson):\/\/[^\s)\]]+/g, (m) => (ALLOWED.test(m) ? m : ''))
     .replace(/[ \t]{2,}/g, ' ')
     .trim();
 }
 
 export async function wilsonReply(messages: ChatMessage[], context: string): Promise<{ text: string; costUsd: number }> {
   const r = await complete(
-    [{ text: rules(), cache: true }, { text: "Runner's facts (worked out by the app):\n" + context }],
+    [{ text: systemPrompt(), cache: true }, { text: "Runner's facts (worked out by the app):\n" + context }],
     messages,
   );
   return { text: cleanLinks(cleanReply(r.text)), costUsd: r.costUsd };
