@@ -6458,7 +6458,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny running t-shirt for the runner with another race already booked.\n\nThe shirt for the runner whose race calendar never seems to empty.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny running t-shirt for the runner with another race already booked.\n\nThe shirt for the runner whose race calendar never seems to empty.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "marathon gift",
         "ultra runner gift",
@@ -6776,7 +6776,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576427162/another-marathon-another-ultra-another",
       "etsyListingId": "4576427162",
       "printifyId": "6aaa855736398cafc3089b9c",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-ask-me-again-at-halfway",
@@ -6787,7 +6833,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny marathon t-shirt for anyone who refuses to say how it is going until halfway.\n\nHow is it going? Too early to say. Ask me again at halfway.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny marathon t-shirt for anyone who refuses to say how it is going until halfway.\n\nHow is it going? Too early to say. Ask me again at halfway.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "half marathon gift",
         "half marathon tee",
@@ -7096,7 +7142,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576428036/ask-me-again-at-halfway-funny-running-t",
       "etsyListingId": "4576428036",
       "printifyId": "6aaa85e87f987e28510651c4",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-bonus-miles",
@@ -7107,7 +7199,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny running t-shirt for the runner whose watch always reads long.\n\nThe course was a bit long. The GPS says so. Bonus miles.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny running t-shirt for the runner whose watch always reads long.\n\nThe course was a bit long. The GPS says so. Bonus miles.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "bonus miles tee",
         "gps watch humor",
@@ -7416,7 +7508,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576401829/bonus-miles-funny-running-t-shirt-film",
       "etsyListingId": "4576401829",
       "printifyId": "6aaa81281e8e8928e904ff19",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-everything-hurts",
@@ -7427,7 +7565,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny running t-shirt for mile 22 and everything after it.\n\nThe honest state of affairs at mile 22, printed on a shirt.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny running t-shirt for mile 22 and everything after it.\n\nThe honest state of affairs at mile 22, printed on a shirt.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "everything hurts",
         "post marathon gift",
@@ -7735,7 +7873,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576429078/everything-hurts-funny-running-t-shirt",
       "etsyListingId": "4576429078",
       "printifyId": "6aaa86609f975eeaf40e18b4",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-everythings-longer",
@@ -7746,7 +7930,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny trail running t-shirt for races where nothing is the distance it claimed.\n\nThe hills. The miles. The wait for the results. Everything's longer.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny trail running t-shirt for races where nothing is the distance it claimed.\n\nThe hills. The miles. The wait for the results. Everything's longer.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "trail running tee",
         "hill running gift",
@@ -8054,7 +8238,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576411919/everythings-longer-funny-running-t-shirt",
       "etsyListingId": "4576411919",
       "printifyId": "6aaa86f141e9069d6d02d2d1",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "logo-left-chest",
@@ -8065,7 +8295,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A minimal running t-shirt with the Film My Run logo small on the left chest.\n\nThe Film My Run logo, small on the left chest. Understated, for people who do not want to shout about their running.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A minimal running t-shirt with the Film My Run logo small on the left chest.\n\nThe Film My Run logo, small on the left chest. Understated, for people who do not want to shout about their running.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "minimal running tee",
         "film my run merch",
@@ -8374,7 +8604,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576446924/film-my-run-small-logo-t-shirt-left",
       "etsyListingId": "4576446924",
       "printifyId": "6aaa8eb3bfacc682240aa92f",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "logo-front",
@@ -8385,7 +8661,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "The Film My Run logo t-shirt, printed big across the chest.\n\nThe Film My Run logo, big across the chest. The film frames are see-through so they take the colour of the shirt.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "The Film My Run logo t-shirt, printed big across the chest.\n\nThe Film My Run logo, big across the chest. The film frames are see-through so they take the colour of the shirt.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "film my run merch",
         "running channel tee",
@@ -8693,7 +8969,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576445986/film-my-run-logo-t-shirt-running-youtube",
       "etsyListingId": "4576445986",
       "printifyId": "6aaa8e60377612072d06c915",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-get-on-with-it",
@@ -8704,7 +9026,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A motivational running t-shirt with the only pep talk that works.\n\nThe only pep talk that has ever worked.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A motivational running t-shirt with the only pep talk that works.\n\nThe only pep talk that has ever worked.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "motivational runner",
         "running motivation",
@@ -9013,7 +9335,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576412861/get-on-with-it-funny-running-t-shirt",
       "etsyListingId": "4576412861",
       "printifyId": "6aaa87683bc2f554150c2594",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-glorious-up-above-diabolical-down-below",
@@ -9024,7 +9392,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A fell and trail running t-shirt for big views and worse footing.\n\nBlue sky, mountain views, and a trail underfoot that wants to end you.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A fell and trail running t-shirt for big views and worse footing.\n\nBlue sky, mountain views, and a trail underfoot that wants to end you.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "fell running gift",
         "mountain running",
@@ -9332,7 +9700,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576413801/glorious-up-above-diabolical-down-below",
       "etsyListingId": "4576413801",
       "printifyId": "6aaa87e0dfdf7a1c750c975e",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-held-the-demons-back",
@@ -9343,7 +9757,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "An ultra running t-shirt for the race that is fought in your own head.\n\nSome races are a fight with the course. Most are a fight with your own head.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "An ultra running t-shirt for the race that is fought in your own head.\n\nSome races are a fight with the course. Most are a fight with your own head.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "mental strength",
         "ultra runner gift",
@@ -9656,7 +10070,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576432942/held-the-demons-back-for-another-day",
       "etsyListingId": "4576432942",
       "printifyId": "6aaa885a71876e950d0dbf63",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-100-miles-lousy-tshirt",
@@ -9667,7 +10127,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny ultramarathon t-shirt for the hundred-mile finisher.\n\nFor anyone who has finished a hundred miler and been handed a t-shirt that did not quite reflect the effort. This one does.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny ultramarathon t-shirt for the hundred-mile finisher.\n\nFor anyone who has finished a hundred miler and been handed a t-shirt that did not quite reflect the effort. This one does.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "hundred miler",
         "100 mile race tee",
@@ -9976,7 +10436,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576425912/i-ran-100-miles-and-all-i-got-was-this",
       "etsyListingId": "4576425912",
       "printifyId": "6aaa84c355f959cbed0671d1",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-just-a-parkrun-to-go",
@@ -9987,7 +10493,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny running t-shirt for the last three miles of a marathon.\n\nThree miles left in a marathon. Just a parkrun to go. Easy.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny running t-shirt for the last three miles of a marathon.\n\nThree miles left in a marathon. Just a parkrun to go. Easy.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "parkrun gift",
         "parkrun tee",
@@ -10296,7 +10802,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576417257/just-a-parkrun-to-go-funny-running-t",
       "etsyListingId": "4576417257",
       "printifyId": "6aaa8973e600ce1ca10a69fa",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-legs-have-gone",
@@ -10307,7 +10859,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny running t-shirt for the point where the legs stop negotiating.\n\nNot tired. Not cramping. Gone.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny running t-shirt for the point where the legs stop negotiating.\n\nNot tired. Not cramping. Gone.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "legs have gone",
         "sore legs runner",
@@ -10615,7 +11167,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576418363/legs-have-gone-funny-running-t-shirt",
       "etsyListingId": "4576418363",
       "printifyId": "6aaa8a03e4c6d4129d0d4379",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-no-coffee-no-cake-no-sympathy",
@@ -10626,7 +11224,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny running t-shirt for the aid station that has run out of everything.\n\nThe three things that keep a runner going, and what happens when the aid station has none of them.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny running t-shirt for the aid station that has run out of everything.\n\nThe three things that keep a runner going, and what happens when the aid station has none of them.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "cake lover gift",
         "coffee lover runner",
@@ -10950,7 +11548,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576419355/no-coffee-no-cake-no-sympathy-funny",
       "etsyListingId": "4576419355",
       "printifyId": "6aaa8a7b4f0ea50b28071118",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-not-my-best-not-bad",
@@ -10961,7 +11605,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny running t-shirt with the honest race review, in seven words.\n\nThe honest race review, in seven words.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny running t-shirt with the honest race review, in seven words.\n\nThe honest race review, in seven words.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "personal best gift",
         "pb gift runner",
@@ -11274,7 +11918,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576420177/not-my-best-not-bad-itll-do-funny",
       "etsyListingId": "4576420177",
       "printifyId": "6aaa8ae037f4ecc04c080c4c",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-how-hard-can-it-be",
@@ -11285,7 +11975,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny ultramarathon t-shirt with the famous last words of every hundred-miler.\n\nFamous last words, every single time.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny ultramarathon t-shirt with the famous last words of every hundred-miler.\n\nFamous last words, every single time.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "100 mile race tee",
         "hundred miler",
@@ -11594,7 +12284,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576415983/how-hard-can-it-be-funny-running-t-shirt",
       "etsyListingId": "4576415983",
       "printifyId": "6aaa88e6dfdf7a1c750c978c",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-plan-for-today-finish",
@@ -11605,7 +12341,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A running t-shirt for a first marathon or first ultra, where finishing is the whole plan.\n\nNo splits. No target time. Just get to the end.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A running t-shirt for a first marathon or first ultra, where finishing is the whole plan.\n\nNo splits. No target time. Just get to the end.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "first marathon gift",
         "first ultra gift",
@@ -11913,7 +12649,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576439222/plan-for-today-finish-funny-running-t",
       "etsyListingId": "4576439222",
       "printifyId": "6aaa8b58dfdf7a1c750c994c",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-rapidly-losing-my-patience",
@@ -11924,7 +12706,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny ultra running t-shirt for the lap where the fun stops.\n\nSomewhere around the fourth loop, the fun stops and the patience goes.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny ultra running t-shirt for the lap where the fun stops.\n\nSomewhere around the fourth loop, the fun stops and the patience goes.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "lap race humor",
         "sarcastic runner",
@@ -12232,7 +13014,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576422315/rapidly-losing-my-patience-with-this",
       "etsyListingId": "4576422315",
       "printifyId": "6aaa8bd2f4b5fbd104042307",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-see-you-on-the-start-line",
@@ -12243,7 +13071,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A running t-shirt carrying the sign-off from every Film My Run video.\n\nThe sign-off from every Film My Run video, now on a shirt.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A running t-shirt carrying the sign-off from every Film My Run video.\n\nThe sign-off from every Film My Run video, now on a shirt.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "film my run merch",
         "running channel tee",
@@ -12551,7 +13379,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576441242/see-you-on-the-start-line-funny-running",
       "etsyListingId": "4576441242",
       "printifyId": "6aaa8c4b4f0ea50b28071232",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-should-be-running-eating-cake",
@@ -12562,7 +13436,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny running t-shirt for rest day, or whatever we are calling it.\n\nRest day. Or that is what we are calling it.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny running t-shirt for rest day, or whatever we are calling it.\n\nRest day. Or that is what we are calling it.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "cake lover gift",
         "rest day tee",
@@ -12870,7 +13744,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576424675/should-be-running-eating-cake-instead",
       "etsyListingId": "4576424675",
       "printifyId": "6aaa8cd94f0ea50b2807127e",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-thats-the-hard-part-done",
@@ -12881,7 +13801,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "An ultra running t-shirt for long races, where the hard part is never the last one.\n\nThe truth about long races: the hard part is never the last one.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "An ultra running t-shirt for long races, where the hard part is never the last one.\n\nThe truth about long races: the hard part is never the last one.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "ultra runner gift",
         "ultramarathon gift",
@@ -13194,7 +14114,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576443596/thats-the-hard-part-done-more-hard-parts",
       "etsyListingId": "4576443596",
       "printifyId": "6aaa8d56dfdf7a1c750c9a21",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "phrase-threw-up-now-i-feel-great",
@@ -13205,7 +14171,7 @@
       "category": "tees",
       "categoryLabel": "Casual T-Shirts",
       "productType": "Casual cotton tee, Bella+Canvas 3001 (not technical running fabric)",
-      "description": "A funny ultra running t-shirt for the runner's reset button.\n\nThe ultra runner's reset button.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes S to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
+      "description": "A funny ultra running t-shirt for the runner's reset button.\n\nThe ultra runner's reset button.\n\nPrinted on a Bella+Canvas 3001 unisex jersey tee: soft ringspun cotton, retail fit, side seams, tear-away label. Printed and shipped from the UK.\n\nThe film frame and sprocket holes are see-through, so the colour of the shirt shows through them and the design always matches the shirt.\n\nFrom Film My Run, the running channel on YouTube. Every phrase on these shirts was said out loud, on camera, somewhere between a start line and a finish line.\n\nSizes XS to 4XL. Check the size chart before ordering; this tee is a retail fit, so go up a size if you like it loose.",
       "tags": [
         "aid station humor",
         "ultra runner gift",
@@ -13533,13 +14499,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576426925/threw-up-now-i-feel-great-funny-running",
       "etsyListingId": "4576426925",
       "printifyId": "6aaa8de56be5e7b699080cd3",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "XS",
+            "cm": "42",
+            "inch": "16.5"
+          },
+          {
+            "size": "S",
+            "cm": "46",
+            "inch": "18"
+          },
+          {
+            "size": "M",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "L",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "XL",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "2XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "3XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "4XL",
+            "cm": "76",
+            "inch": "30"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-glorious-up-above-diabolical-down-below",
       "slug": "hoodie-glorious-up-above-diabolical-down-below",
-      "name": "Fell Running Hoodie, Glorious Up Above Diabolical Down Below, Trail Runner Gift",
-      "subtitle": "",
+      "name": "Glorious Up Above. Diabolical Down Below Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Fell Running Hoodie, Glorious Up Above Diabolical Down Below, Trail Runner Gift | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -13862,7 +14874,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576732689/glorious-up-above-diabolical-down-below",
       "etsyListingId": "4576732689",
       "printifyId": "6aaafc88332b26efaf03e5f2",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-logo-front",
@@ -14181,7 +15239,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576749439/film-my-run-logo-hoodie-running-youtube",
       "etsyListingId": "4576749439",
       "printifyId": "6aaafd1f26eb1586c207d737",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-logo-left-chest",
@@ -14502,13 +15606,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576767910/film-my-run-small-logo-hoodie-left-chest",
       "etsyListingId": "4576767910",
       "printifyId": "6aaafbcc08c3e239f80faf7d",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-plan-for-today-finish",
       "slug": "hoodie-plan-for-today-finish",
-      "name": "First Marathon Hoodie, Plan for Today Finish, Gift for New Runner",
-      "subtitle": "",
+      "name": "Plan for Today: Finish Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "First Marathon Hoodie, Plan for Today Finish, Gift for New Runner | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -14821,13 +15971,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576745855/plan-for-today-finish-funny-running",
       "etsyListingId": "4576745855",
       "printifyId": "6aaafcd88af7eb61f5062678",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-another-marathon-another-ultra",
       "slug": "hoodie-another-marathon-another-ultra",
-      "name": "Funny Running Hoodie, Another Marathon Another Ultra Another Crazy Adventure, Marathon Runner Gift",
-      "subtitle": "",
+      "name": "Another Crazy Adventure Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Funny Running Hoodie, Another Marathon Another Ultra Another Crazy Adventure, Marathon Runner Gift | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -15140,13 +16336,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576746512/another-marathon-another-ultra-another",
       "etsyListingId": "4576746512",
       "printifyId": "6aaafc3db04bce6625044bf4",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-bonus-miles",
       "slug": "hoodie-bonus-miles",
-      "name": "Funny Running Hoodie, Bonus Miles, Gift for Runner, Marathon and Ultra Runner Hoodie",
-      "subtitle": "",
+      "name": "Bonus Miles Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Funny Running Hoodie, Bonus Miles, Gift for Runner, Marathon and Ultra Runner Hoodie | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -15459,13 +16701,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576747846/bonus-miles-funny-running-hoodie-film-my",
       "etsyListingId": "4576747846",
       "printifyId": "6aaafbc00cca3e76890b9a30",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-everything-hurts",
       "slug": "hoodie-everything-hurts",
-      "name": "Funny Running Hoodie, Everything Hurts, Marathon Runner Gift, Race Day Hoodie",
-      "subtitle": "",
+      "name": "Everything Hurts Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Funny Running Hoodie, Everything Hurts, Marathon Runner Gift, Race Day Hoodie | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -15778,13 +17066,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576730543/everything-hurts-funny-running-hoodie",
       "etsyListingId": "4576730543",
       "printifyId": "6aaafc5960d6d313a5013d2c",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-legs-have-gone",
       "slug": "hoodie-legs-have-gone",
-      "name": "Funny Running Hoodie, Legs Have Gone, Marathon Runner Gift, Race Day Hoodie",
-      "subtitle": "",
+      "name": "Legs Have Gone Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Funny Running Hoodie, Legs Have Gone, Marathon Runner Gift, Race Day Hoodie | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -16097,13 +17431,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576739313/legs-have-gone-funny-running-hoodie-film",
       "etsyListingId": "4576739313",
       "printifyId": "6aaafcb5332b26efaf03e61a",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-no-coffee-no-cake-no-sympathy",
       "slug": "hoodie-no-coffee-no-cake-no-sympathy",
-      "name": "Funny Running Hoodie, No Coffee No Cake No Sympathy, Gift for Runner Who Loves Cake",
-      "subtitle": "",
+      "name": "No Coffee. No Cake. No Sympathy Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Funny Running Hoodie, No Coffee No Cake No Sympathy, Gift for Runner Who Loves Cake | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -16416,13 +17796,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576736595/no-coffee-no-cake-no-sympathy-funny",
       "etsyListingId": "4576736595",
       "printifyId": "6aaafcc0e801ec43fb0e415d",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-not-my-best-not-bad",
       "slug": "hoodie-not-my-best-not-bad",
-      "name": "Funny Running Hoodie, Not My Best Not Bad It'll Do, Marathon Runner Gift",
-      "subtitle": "",
+      "name": "Not My Best. Not Bad. It'll Do Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Funny Running Hoodie, Not My Best Not Bad It'll Do, Marathon Runner Gift | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -16735,13 +18161,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576744911/not-my-best-not-bad-itll-do-funny",
       "etsyListingId": "4576744911",
       "printifyId": "6aaafccde801ec43fb0e4166",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-should-be-running-eating-cake",
       "slug": "hoodie-should-be-running-eating-cake",
-      "name": "Funny Running Hoodie, Should Be Running Eating Cake Instead, Rest Day Gift for Runner",
-      "subtitle": "",
+      "name": "Should Be Running. Eating Cake Instead Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Funny Running Hoodie, Should Be Running Eating Cake Instead, Rest Day Gift for Runner | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -17054,13 +18526,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576765602/should-be-running-eating-cake-instead",
       "etsyListingId": "4576765602",
       "printifyId": "6aaafcf960d6d313a5013d9c",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-everythings-longer",
       "slug": "hoodie-everythings-longer",
-      "name": "Funny Trail Running Hoodie, Everything's Longer, Ultra Runner Gift",
-      "subtitle": "",
+      "name": "Everything's Longer Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Funny Trail Running Hoodie, Everything's Longer, Ultra Runner Gift | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -17373,13 +18891,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576731261/everythings-longer-funny-running-hoodie",
       "etsyListingId": "4576731261",
       "printifyId": "6aaafc6b332b26efaf03e5dc",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-rapidly-losing-my-patience",
       "slug": "hoodie-rapidly-losing-my-patience",
-      "name": "Funny Ultra Running Hoodie, Rapidly Losing My Patience With This Race, Runner Gift",
-      "subtitle": "",
+      "name": "Rapidly Losing My Patience With This Race Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Funny Ultra Running Hoodie, Rapidly Losing My Patience With This Race, Runner Gift | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -17692,13 +19256,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576746533/rapidly-losing-my-patience-with-this",
       "etsyListingId": "4576746533",
       "printifyId": "6aaafce30cca3e76890b9ae3",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-threw-up-now-i-feel-great",
       "slug": "hoodie-threw-up-now-i-feel-great",
-      "name": "Funny Ultra Running Hoodie, Threw Up Now I Feel Great, Gift for Ultra Runner",
-      "subtitle": "",
+      "name": "Threw Up. Now I Feel Great Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Funny Ultra Running Hoodie, Threw Up Now I Feel Great, Gift for Ultra Runner | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -18011,13 +19621,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576766772/threw-up-now-i-feel-great-funny-running",
       "etsyListingId": "4576766772",
       "printifyId": "6aaafd12015594199004ca17",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-ask-me-again-at-halfway",
       "slug": "hoodie-ask-me-again-at-halfway",
-      "name": "Half Marathon Hoodie, Ask Me Again at Halfway, Funny Gift for Marathon Runner",
-      "subtitle": "",
+      "name": "Ask Me Again at Halfway Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Half Marathon Hoodie, Ask Me Again at Halfway, Funny Gift for Marathon Runner | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -18330,13 +19986,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576729277/ask-me-again-at-halfway-funny-running",
       "etsyListingId": "4576729277",
       "printifyId": "6aaafc4860d6d313a5013d18",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-get-on-with-it",
       "slug": "hoodie-get-on-with-it",
-      "name": "Motivational Running Hoodie, Get On With It, Funny Gift for Runner",
-      "subtitle": "",
+      "name": "Get On With It Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Motivational Running Hoodie, Get On With It, Funny Gift for Runner | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -18649,13 +20351,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576731925/get-on-with-it-funny-running-hoodie-film",
       "etsyListingId": "4576731925",
       "printifyId": "6aaafc794ba9c497490386e5",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-just-a-parkrun-to-go",
       "slug": "hoodie-just-a-parkrun-to-go",
-      "name": "Parkrun Hoodie, Just a parkrun to Go, Funny Marathon Runner Gift",
-      "subtitle": "",
+      "name": "Just a parkrun to Go Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Parkrun Hoodie, Just a parkrun to Go, Funny Marathon Runner Gift | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -18968,13 +20716,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576735043/just-a-parkrun-to-go-funny-running",
       "etsyListingId": "4576735043",
       "printifyId": "6aaafcaae801ec43fb0e4154",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-see-you-on-the-start-line",
       "slug": "hoodie-see-you-on-the-start-line",
-      "name": "Running Hoodie, See You on the Start Line, Film My Run Merch, Gift for Runner",
-      "subtitle": "",
+      "name": "See You on the Start Line Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Running Hoodie, See You on the Start Line, Film My Run Merch, Gift for Runner",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -19287,13 +21081,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576765076/see-you-on-the-start-line-funny-running",
       "etsyListingId": "4576765076",
       "printifyId": "6aaafced3a7f75db1703b261",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-held-the-demons-back",
       "slug": "hoodie-held-the-demons-back",
-      "name": "Ultra Running Hoodie, Held the Demons Back for Another Day, Gift for Ultra Runner",
-      "subtitle": "",
+      "name": "Held the Demons Back for Another Day Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Ultra Running Hoodie, Held the Demons Back for Another Day, Gift for Ultra Runner | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -19621,13 +21461,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576733567/held-the-demons-back-for-another-day",
       "etsyListingId": "4576733567",
       "printifyId": "6aaafc938af7eb61f5062646",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-thats-the-hard-part-done",
       "slug": "hoodie-thats-the-hard-part-done",
-      "name": "Ultra Running Hoodie, That's the Hard Part Done More Hard Parts to Come, Runner Gift",
-      "subtitle": "",
+      "name": "That's the Hard Part Done. More Hard Parts to Come Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Ultra Running Hoodie, That's the Hard Part Done More Hard Parts to Come, Runner Gift | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -19940,13 +21826,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576766242/thats-the-hard-part-done-more-hard-parts",
       "etsyListingId": "4576766242",
       "printifyId": "6aaafd0608c3e239f80fb041",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-100-miles-lousy-tshirt",
       "slug": "hoodie-100-miles-lousy-tshirt",
-      "name": "Ultramarathon Hoodie, I Ran 100 Miles and All I Got Was This Lousy Hoodie, Funny Gift for Ultra Runner",
-      "subtitle": "",
+      "name": "I Ran 100 Miles and All I Got Was This Lousy Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Ultramarathon Hoodie, I Ran 100 Miles and All I Got Was This Lousy Hoodie, Funny Gift for Ultra Runner | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -20259,13 +22191,59 @@
       "etsyUrl": "https://www.etsy.com/listing/4576728127/i-ran-100-miles-and-all-i-got-was-this",
       "etsyListingId": "4576728127",
       "printifyId": "6aaafc31b04bce6625044be5",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "hoodie-how-hard-can-it-be",
       "slug": "hoodie-how-hard-can-it-be",
-      "name": "Ultramarathon Hoodie, Only 100 Miles How Hard Can It Be, Funny Ultra Runner Gift",
-      "subtitle": "",
+      "name": "Only 100 Miles. How Hard Can It Be? Hoodie",
+      "subtitle": "Funny Running Hoodie",
       "title": "Ultramarathon Hoodie, Only 100 Miles How Hard Can It Be, Funny Ultra Runner Gift | Film My Run",
       "category": "hoodies",
       "categoryLabel": "Hoodies",
@@ -20578,7 +22556,53 @@
       "etsyUrl": "https://www.etsy.com/listing/4576752278/how-hard-can-it-be-funny-running-hoodie",
       "etsyListingId": "4576752278",
       "printifyId": "6aaafc9efe78403f1f0a7ca6",
-      "supplier": "printify"
+      "supplier": "printify",
+      "sizeGuide": {
+        "measure": "Chest width",
+        "howTo": "These are measurements of the garment, not of you: laid flat, straight across the chest from the seam under one arm to the other. Lay a top you like flat and compare.",
+        "rows": [
+          {
+            "size": "S",
+            "cm": "51",
+            "inch": "20"
+          },
+          {
+            "size": "M",
+            "cm": "56",
+            "inch": "22"
+          },
+          {
+            "size": "L",
+            "cm": "61",
+            "inch": "24"
+          },
+          {
+            "size": "XL",
+            "cm": "66",
+            "inch": "26"
+          },
+          {
+            "size": "2XL",
+            "cm": "71",
+            "inch": "28"
+          },
+          {
+            "size": "3XL",
+            "cm": "76",
+            "inch": "30"
+          },
+          {
+            "size": "4XL",
+            "cm": "81",
+            "inch": "32"
+          },
+          {
+            "size": "5XL",
+            "cm": "86",
+            "inch": "34"
+          }
+        ]
+      }
     },
     {
       "key": "trucker-logo",
@@ -20968,8 +22992,8 @@
     {
       "key": "cap-plan-for-today-finish",
       "slug": "cap-plan-for-today-finish",
-      "name": "First Marathon Cap, Plan for Today Finish, Gift for New Runner",
-      "subtitle": "",
+      "name": "Plan for Today: Finish Cap",
+      "subtitle": "Funny Running Cap",
       "title": "First Marathon Cap, Plan for Today Finish, Gift for New Runner | Film My Run",
       "category": "caps",
       "categoryLabel": "Caps",
@@ -21108,8 +23132,8 @@
     {
       "key": "cap-bonus-miles",
       "slug": "cap-bonus-miles",
-      "name": "Funny Running Cap, Bonus Miles, Gift for Runner, Marathon and Ultra Runner Cap",
-      "subtitle": "",
+      "name": "Bonus Miles Cap",
+      "subtitle": "Funny Running Cap",
       "title": "Funny Running Cap, Bonus Miles, Gift for Runner, Marathon and Ultra Runner Cap | Film My Run",
       "category": "caps",
       "categoryLabel": "Caps",
@@ -21238,8 +23262,8 @@
     {
       "key": "cap-everything-hurts",
       "slug": "cap-everything-hurts",
-      "name": "Funny Running Cap, Everything Hurts, Marathon Runner Gift, Race Day Cap",
-      "subtitle": "",
+      "name": "Everything Hurts Cap",
+      "subtitle": "Funny Running Cap",
       "title": "Funny Running Cap, Everything Hurts, Marathon Runner Gift, Race Day Cap | Film My Run",
       "category": "caps",
       "categoryLabel": "Caps",
@@ -21413,8 +23437,8 @@
     {
       "key": "cap-legs-have-gone",
       "slug": "cap-legs-have-gone",
-      "name": "Funny Running Cap, Legs Have Gone, Marathon Runner Gift, Race Day Cap",
-      "subtitle": "",
+      "name": "Legs Have Gone Cap",
+      "subtitle": "Funny Running Cap",
       "title": "Funny Running Cap, Legs Have Gone, Marathon Runner Gift, Race Day Cap | Film My Run",
       "category": "caps",
       "categoryLabel": "Caps",
@@ -21553,8 +23577,8 @@
     {
       "key": "cap-get-on-with-it",
       "slug": "cap-get-on-with-it",
-      "name": "Motivational Running Cap, Get On With It, Funny Gift for Runner",
-      "subtitle": "",
+      "name": "Get On With It Cap",
+      "subtitle": "Funny Running Cap",
       "title": "Motivational Running Cap, Get On With It, Funny Gift for Runner | Film My Run",
       "category": "caps",
       "categoryLabel": "Caps",
@@ -21683,8 +23707,8 @@
     {
       "key": "cap-just-a-parkrun-to-go",
       "slug": "cap-just-a-parkrun-to-go",
-      "name": "Parkrun Cap, Just a parkrun to Go, Funny Marathon Runner Gift",
-      "subtitle": "",
+      "name": "Just a parkrun to Go Cap",
+      "subtitle": "Funny Running Cap",
       "title": "Parkrun Cap, Just a parkrun to Go, Funny Marathon Runner Gift | Film My Run",
       "category": "caps",
       "categoryLabel": "Caps",
@@ -21813,8 +23837,8 @@
     {
       "key": "cap-see-you-on-the-start-line",
       "slug": "cap-see-you-on-the-start-line",
-      "name": "Running Cap, See You on the Start Line, Film My Run Merch, Gift for Runner",
-      "subtitle": "",
+      "name": "See You on the Start Line Cap",
+      "subtitle": "Funny Running Cap",
       "title": "Running Cap, See You on the Start Line, Film My Run Merch, Gift for Runner",
       "category": "caps",
       "categoryLabel": "Caps",
@@ -21943,8 +23967,8 @@
     {
       "key": "cap-how-hard-can-it-be",
       "slug": "cap-how-hard-can-it-be",
-      "name": "Ultramarathon Cap, Only 100 Miles How Hard Can It Be, Funny Ultra Runner Gift",
-      "subtitle": "",
+      "name": "Only 100 Miles. How Hard Can It Be? Cap",
+      "subtitle": "Funny Running Cap",
       "title": "Ultramarathon Cap, Only 100 Miles How Hard Can It Be, Funny Ultra Runner Gift | Film My Run",
       "category": "caps",
       "categoryLabel": "Caps",
