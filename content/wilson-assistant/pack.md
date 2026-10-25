@@ -210,6 +210,7 @@ For the letter challenges each letter needs a different event, the first letter 
 This is the app's own short summary, not parkrun's wording. The app is independent and is not an official parkrun app.
 
 - parkrun is a free, timed run held weekly at events all over the world, run by volunteers. Runners register once and get a barcode that is scanned at the finish.
+- parkrun began on 2 October 2004 at Bushy Park in south-west London, when Paul Sinton-Hewitt organised a timed 5k for 13 runners. It was called the Bushy Park Time Trial before it became parkrun. junior parkrun, a 2k for 4 to 14 year olds, followed in 2010. Today parkruns are free and weekly in over 20 countries, all run by volunteers.
 - In the UK the 5k parkrun is on Saturday mornings at 9am. Other countries differ a little.
 - junior parkrun is 2k, for children, on Sundays. Junior runs don't count towards the Wilson index or the app's challenges.
 - Every event numbers its runs: #1 is its first, #2 its second. Those event numbers are what the Wilson index is built from.
