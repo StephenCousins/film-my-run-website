@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 
 const LINKS = [
   'wilson://plan', 'wilson://map', 'wilson://find', 'wilson://wilson', 'wilson://challenges',
-  'wilson://challenge/<id>', 'wilson://event/<id>', 'wilson://number/<n>', 'wilson://glossary',
+  'wilson://challenge/', 'wilson://event/', 'wilson://number/', 'wilson://glossary',
   'wilson://barcode', 'wilson://settings', 'https://filmmyrun.com/wilson/',
 ];
 
@@ -17,5 +17,6 @@ describe('wilson pack', () => {
     const at = ['## Links you may use', '## The Wilson index and the app', '## Words', '## Challenges', '## parkrun'].map((h) => pack.indexOf(`\n${h}\n`));
     expect(at.every((i, n) => i >= 0 && (n === 0 || i > at[n - 1]))).toBe(true);
   });
+  it('has no literal placeholder links', () => expect(pack).not.toMatch(/wilson:\/\/\w+\/<|<eventID>/));
   it('has no em or en dashes', () => expect(pack).not.toMatch(/[—–]/));
 });
