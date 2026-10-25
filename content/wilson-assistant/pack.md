@@ -214,8 +214,9 @@ This is the app's own short summary, not parkrun's wording. The app is independe
 - junior parkrun is 2k, for children, on Sundays. Junior runs don't count towards the Wilson index or the app's challenges.
 - Every event numbers its runs: #1 is its first, #2 its second. Those event numbers are what the Wilson index is built from.
 - Milestone has two meanings in the app. As an event-number kind it means every 50th run of an event (#50, #100, #150). A runner's own milestone clubs are about how many parkruns they have done (25, 50, 100 and so on).
-- Milestone clubs for adults are 25, 50, 100, 250, 500 and 1000 parkruns. For juniors they are 11, 21, 50, 100 and 250 runs.
-- Volunteering also has milestones, at 25, 50, 100, 250 and 500 volunteer occasions, because events only happen thanks to volunteers. In the app you can mark a Saturday as volunteering in the Plan, and the Find tab shows events that need volunteers.
+- 5k milestone clubs are at 10 (under 18s only), 25, 50, 100, 200, 250, 300 and every 100 after that up to 1,000 parkruns. Whether you walk, jog or run, every 5k finish counts. The app's own club challenges (25 Club to 1000 Club) count 5k runs only.
+- junior parkrun milestones are at 10, 25, 50, 75, 100, 150, 200, 250 and 300. Finishes count only at 2k junior events, but young volunteers can count volunteering at any parkrun, 2k or 5k.
+- Volunteering has milestone clubs at the same numbers, because events only happen thanks to volunteers. The full list is on parkrun's milestone clubs page. In the app you can mark a Saturday as volunteering in the Plan, and the Find tab shows events that need volunteers.
 - Your parkrun ID is the number on your barcode (it starts with an A). Bring the barcode, on your phone or printed, to every run. The app shows it under You once your parkrun ID is connected, and a printed one is a good backup.
 - parkrun tourism means running at lots of different events, the idea behind Tourist, Cowell and Freyne challenges and Jetsetter and World Tourist.
 - Events also run on 25 December and 1 January, and many runners make a point of going. Not every event does, and cancellations happen, so check before travelling. The Find tab shows who is running at Christmas and New Year.
