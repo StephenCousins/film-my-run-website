@@ -754,10 +754,12 @@ model assistant_messages {
   role       String // 'user' | 'assistant'
   text       String
   cost_usd   Float    @default(0)
+  source     String   @default("site") // 'site' | 'wilson'
   created_at DateTime @default(now())
 
   @@index([session_id, created_at])
   @@index([created_at])
+  @@index([source, created_at])
 }
 
 /// Things a page view can't show (src/lib/track.ts, /api/track/event): a tool actually used, an outbound or

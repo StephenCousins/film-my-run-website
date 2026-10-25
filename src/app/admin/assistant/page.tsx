@@ -14,16 +14,17 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /** What visitors asked the site assistant, newest conversation first, and what it cost. */
-export default async function AssistantLogPage() {
+export default async function AssistantLogPage({ searchParams }: { searchParams: Promise<{ source?: string }> }) {
   const session = await getServerSession(authOptions);
   if (!isChatAdmin(session)) notFound();
 
+  const source = (await searchParams).source === 'wilson' ? 'wilson' : 'site';
   const monthStart = new Date();
   monthStart.setUTCDate(1);
   monthStart.setUTCHours(0, 0, 0, 0);
   const [rows, month] = await Promise.all([
-    prisma.assistant_messages.findMany({ orderBy: { created_at: 'desc' }, take: 400 }),
-    prisma.assistant_messages.aggregate({ _sum: { cost_usd: true }, where: { created_at: { gte: monthStart } } }),
+    prisma.assistant_messages.findMany({ where: { source }, orderBy: { created_at: 'desc' }, take: 400 }),
+    prisma.assistant_messages.aggregate({ _sum: { cost_usd: true }, where: { source, created_at: { gte: monthStart } } }),
   ]);
 
   const sessions = new Map<string, typeof rows>();
@@ -32,10 +33,10 @@ export default async function AssistantLogPage() {
   return (
     <main className="min-h-screen bg-background py-10 px-4 sm:px-6">
       <div className="max-w-3xl mx-auto">
-        <p className="text-xs font-semibold uppercase tracking-widest text-brand mb-2">Site assistant</p>
+        <p className="text-xs font-semibold uppercase tracking-widest text-brand mb-2">{source === 'wilson' ? 'Ask Wilson' : 'Site assistant'}</p>
         <h1 className="font-display text-3xl font-semibold text-foreground">Conversations</h1>
         <p className="text-secondary mt-2 mb-8">
-          {sessions.size} recent conversations. This month: ${(month._sum.cost_usd ?? 0).toFixed(3)}.
+          {sessions.size} recent conversations ({source === 'wilson' ? <a href="?" className="underline">show site</a> : <a href="?source=wilson" className="underline">show Wilson</a>}). This month: ${(month._sum.cost_usd ?? 0).toFixed(3)}.
         </p>
         <div className="space-y-6">
           {[...sessions].map(([id, msgs]) => (

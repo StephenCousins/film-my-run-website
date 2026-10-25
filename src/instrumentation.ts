@@ -62,6 +62,15 @@ export async function register() {
         console.log('[news-push] daily push timer on');
       }
     }
+    // Ask Wilson log: delete rows older than 90 days, at start-up and then daily.
+    const wg = globalThis as { __wilsonPurgeTimer?: NodeJS.Timeout };
+    if (process.env.NODE_ENV === 'production' && !wg.__wilsonPurgeTimer) {
+      const { purgeWilsonLog } = await import('@/lib/wilson-assistant/purge');
+      const purge = () => purgeWilsonLog().then((n) => n && console.log(`[wilson-purge] deleted ${n} rows`)).catch((e) => { Sentry.captureException(e); });
+      void purge();
+      wg.__wilsonPurgeTimer = setInterval(purge, 24 * 3_600_000);
+      wg.__wilsonPurgeTimer.unref();
+    }
   }
 }
 

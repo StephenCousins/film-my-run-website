@@ -27,7 +27,7 @@ export async function POST(request: Request) {
 
   const since = new Date();
   since.setUTCHours(0, 0, 0, 0);
-  const spent = await prisma.assistant_messages.aggregate({ _sum: { cost_usd: true }, where: { created_at: { gte: since } } });
+  const spent = await prisma.assistant_messages.aggregate({ _sum: { cost_usd: true }, where: { source: 'site', created_at: { gte: since } } });
   if ((spent._sum.cost_usd ?? 0) >= DAILY_USD) return NextResponse.json({ error: BUSY }, { status: 503 });
 
   const question = messages[messages.length - 1].content;
@@ -36,14 +36,14 @@ export async function POST(request: Request) {
     if (!text) throw new Error('empty reply');
     await prisma.assistant_messages.createMany({
       data: [
-        { session_id: sessionId, role: 'user', text: question },
-        { session_id: sessionId, role: 'assistant', text, cost_usd: costUsd },
+        { session_id: sessionId, role: 'user', text: question, source: 'site' },
+        { session_id: sessionId, role: 'assistant', text, cost_usd: costUsd, source: 'site' },
       ],
     });
     return NextResponse.json({ reply: text });
   } catch (e) {
     console.error('assistant failed:', (e as Error).message);
-    await prisma.assistant_messages.create({ data: { session_id: sessionId, role: 'user', text: question } }).catch(() => {});
+    await prisma.assistant_messages.create({ data: { session_id: sessionId, role: 'user', text: question, source: 'site' } }).catch(() => {});
     return NextResponse.json({ error: BUSY }, { status: 502 });
   }
 }
