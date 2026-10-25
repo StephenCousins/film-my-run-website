@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 export const metadata: Metadata = {
   title: 'Wilson Index: Privacy Policy',
   alternates: { canonical: 'https://filmmyrun.com/wilson/privacy' },
-  description: 'How the Wilson Index app for iPhone handles your data. Short version: it stays on your phone.',
+  description: 'How the Wilson Index app for iPhone handles your data. Short version: it stays on your phone, unless you choose to use Ask Wilson.',
 };
 
 const CONTACT = 'stephen@filmmyrun.com';
@@ -37,12 +37,13 @@ export default function WilsonPrivacyPage() {
             <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-8">Wilson Index: Privacy Policy</h1>
 
             <div className="prose prose-zinc dark:prose-invert max-w-none">
-              <p className="text-secondary text-sm mb-8">Last updated: 17 October 2026</p>
+              <p className="text-secondary text-sm mb-8">Last updated: 25 October 2026</p>
 
               <Section title="The short version">
                 <P>
-                  Wilson Index doesn&apos;t collect any personal data. There&apos;s no account, no sign-in, no analytics
-                  and no ads. Everything you put into the app stays on your iPhone.
+                  Wilson Index has no account, no sign-in, no analytics and no ads. Everything you put into the app stays
+                  on your iPhone, with one optional exception: if you use Ask Wilson, your questions are sent to our
+                  server (section 8).
                 </P>
               </Section>
 
@@ -61,7 +62,7 @@ export default function WilsonPrivacyPage() {
                   <li>Your parkrun results, if you add them, which the app uses for your Wilson index, Match and new events</li>
                 </List>
                 <P>
-                  None of this is sent to us or anyone else. Deleting the app deletes it. The home screen widget reads
+                  None of this is sent to us or anyone else, apart from the facts that go with a question if you use Ask Wilson (section 8). Deleting the app deletes it. The home screen widget reads
                   the same data on the phone.
                 </P>
               </Section>
@@ -105,21 +106,40 @@ export default function WilsonPrivacyPage() {
                 </P>
               </Section>
 
-              <Section title="8. Emailing us">
+              <Section title="8. Ask Wilson">
+                <P>
+                  Ask Wilson is an optional chat where you can ask Wilson about parkrun and your results. It asks before
+                  it sends anything, and you can use the rest of the app without it.
+                </P>
+                <P>
+                  When you send a question, the app sends it with some facts it has worked out on your phone, such as your
+                  Wilson index, your home event and your challenge progress. It does not send your name, barcode,
+                  athlete ID, email or location.
+                </P>
+                <P>
+                  It goes to our server at filmmyrun.com, which passes it to an AI provider, OpenRouter, which passes it
+                  to Anthropic to write the reply. We keep your questions and Wilson&apos;s replies for 90 days, then
+                  delete them. We use them to check the chat works and to improve the answers, never for tracking or
+                  advertising.
+                </P>
+                <P>You can stop at any time in the app&apos;s Settings, under Ask Wilson.</P>
+              </Section>
+
+              <Section title="9. Emailing us">
                 <P>
                   If you email <Mail />, we keep your email so we can reply, and delete it on request.
                 </P>
               </Section>
 
-              <Section title="9. Children">
-                <P>The app collects no personal data from anyone, children included.</P>
+              <Section title="10. Children">
+                <P>Wilson Index has no accounts and doesn&apos;t collect personal data from anyone, children included. Ask Wilson sends no name or contact details, and is optional.</P>
               </Section>
 
-              <Section title="10. Changes">
+              <Section title="11. Changes">
                 <P>If this policy changes in a way that matters, we&apos;ll say so on this page and in the app&apos;s release notes.</P>
               </Section>
 
-              <Section title="11. Contact">
+              <Section title="12. Contact">
                 <P>
                   Stephen Cousins, Film My Run: <Mail />
                 </P>
