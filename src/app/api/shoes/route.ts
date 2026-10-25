@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { CATEGORY_LABELS, SOURCE_LABELS, TERRAIN_LABELS } from '@/lib/shoes/taxonomy';
-import { buildShoeQuery } from './query';
+import { buildShoeQuery, rankByWeightedScore, WEIGHTED_SORTS } from './query';
 import { reviewSelect, serializeReview, serializeShoe, shoeSelect } from './serialize';
 
 // Catalogue only: no session, no per-user ratings, so the response is the
@@ -18,7 +18,10 @@ export async function GET(req: NextRequest) {
   const { where, orderBy } = buildShoeQuery(searchParams);
   const withReviews = searchParams.get('withReviews') === '1';
 
-  const [data, allShoes] = await Promise.all([
+  const sort = searchParams.get('sort') ?? 'score';
+  const weighted = sort === 'score' || sort === 'user_rating' ? WEIGHTED_SORTS[sort] : null;
+
+  const [rows, allShoes, mean] = await Promise.all([
     withReviews
       ? prisma.shoes
           .findMany({ where, orderBy, select: { ...shoeSelect, shoe_reviews: { select: reviewSelect } } })
@@ -29,7 +32,17 @@ export async function GET(req: NextRequest) {
       distinct: ['brand', 'category'],
       orderBy: { brand: 'asc' },
     }),
+    // C for the weighted rating: the whole catalogue, not just this filter, as in the app.
+    weighted
+      ? prisma.shoes
+          .aggregate({ _avg: { [weighted.dbAvg]: true }, where: { [weighted.dbCount]: { gt: 0 } } })
+          .then(r => {
+            const v = (r._avg as Record<string, unknown>)[weighted.dbAvg];
+            return v == null ? null : Number(v);
+          })
+      : null,
   ]);
+  const data = weighted ? rankByWeightedScore(rows, sort as keyof typeof WEIGHTED_SORTS, mean) : rows;
 
   const brands = [...new Set(allShoes.map(s => s.brand))].sort();
   const categories = [...new Set(allShoes.map(s => s.category))].sort();

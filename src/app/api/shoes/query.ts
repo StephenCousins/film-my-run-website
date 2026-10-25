@@ -59,3 +59,35 @@ export function buildShoeQuery(sp: URLSearchParams): {
 
   return { where, orderBy: ORDER_BY[sort] ?? ORDER_BY.score };
 }
+
+/** Reviews' worth of the catalogue mean every shoe starts with (UI sweep X2). */
+export const PRIOR_REVIEWS = 5;
+
+/** Which average and count each rating sort weights. */
+export const WEIGHTED_SORTS = {
+  score: { avg: 'avgScore', count: 'reviewCount', dbAvg: 'avg_score', dbCount: 'review_count' },
+  user_rating: { avg: 'userAvgScore', count: 'userRatingCount', dbAvg: 'user_avg_score', dbCount: 'user_rating_count' },
+} as const;
+
+type Rated = { avgScore: number | null; reviewCount: number; userAvgScore: number | null; userRatingCount: number };
+
+/**
+ * Ranks by a Bayesian average, (n·avg + m·C) / (n + m) with m = PRIOR_REVIEWS
+ * and C = the catalogue mean (shoes with at least one review), so a single
+ * 10/10 review cannot top the list. Unrated shoes go last, then more reviews
+ * first. Same rule as the app's ShoeFilter.weightedScores.
+ */
+export function rankByWeightedScore<T extends Rated>(rows: T[], sort: keyof typeof WEIGHTED_SORTS, catalogueMean: number | null): T[] {
+  if (catalogueMean === null) return rows;
+  const { avg, count } = WEIGHTED_SORTS[sort];
+  const m = PRIOR_REVIEWS;
+  const weighted = (s: T) => {
+    const a = s[avg];
+    const n = s[count];
+    return n > 0 && a !== null ? (n * a + m * catalogueMean) / (n + m) : -1;
+  };
+  return rows
+    .map(s => [s, weighted(s)] as const)
+    .sort(([a, wa], [b, wb]) => wb - wa || b[count] - a[count])
+    .map(([s]) => s);
+}
