@@ -1,5 +1,6 @@
 import type { Prisma } from '@prisma/client';
 import { cardUrlFor } from '@/lib/shoes/images/store';
+import { SOURCE_LABELS } from '@/lib/shoes/taxonomy';
 
 /** Catalogue columns only: no reviews, no per-user ratings, so the list is cacheable. */
 export const shoeSelect = {
@@ -66,9 +67,20 @@ export const reviewSelect = {
 
 export type ReviewRow = Prisma.shoe_reviewsGetPayload<{ select: typeof reviewSelect }>;
 
+/** What a reader should see as the source: the site's name, or for `other` its host ("rtings.com"), never "Other". */
+export function reviewSourceName(source: ReviewRow['source'], url: string | null): string {
+  if (source !== 'other') return SOURCE_LABELS[source];
+  try {
+    return url ? new URL(url).hostname.replace(/^www\./, '') : SOURCE_LABELS.other;
+  } catch {
+    return SOURCE_LABELS.other;
+  }
+}
+
 export function serializeReview(r: ReviewRow) {
   return {
     source: r.source,
+    sourceName: reviewSourceName(r.source, r.source_url),
     sourceUrl: r.source_url,
     expertScore: num(r.expert_score),
     userScore: num(r.user_score),

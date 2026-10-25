@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { Prisma } from '@prisma/client';
-import { serializeReview, serializeShoe } from './serialize';
+import { reviewSourceName, serializeReview, serializeShoe } from './serialize';
 
 describe('serializeShoe', () => {
   it('maps catalogue columns to camelCase with numeric scores and the superseding slug', () => {
@@ -21,6 +21,14 @@ describe('serializeReview', () => {
       source: 'runrepeat', source_url: 'https://runrepeat.com/x', expert_score: new Prisma.Decimal('9.1'),
       user_score: null, user_count: 12, summary: 'Soft.',
     });
-    expect(out).toEqual({ source: 'runrepeat', sourceUrl: 'https://runrepeat.com/x', expertScore: 9.1, userScore: null, userCount: 12, summary: 'Soft.' });
+    expect(out).toEqual({ source: 'runrepeat', sourceName: 'RunRepeat', sourceUrl: 'https://runrepeat.com/x', expertScore: 9.1, userScore: null, userCount: 12, summary: 'Soft.' });
+  });
+});
+
+describe('reviewSourceName (UI sweep X4)', () => {
+  it('names an other source by its host, not "Other"', () => {
+    expect(reviewSourceName('other', 'https://www.rtings.com/shoes/x')).toBe('rtings.com');
+    expect(reviewSourceName('other', null)).toBe('Other');
+    expect(reviewSourceName('irunfar', 'https://irunfar.com/x')).toBe('iRunFar');
   });
 });
