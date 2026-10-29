@@ -234,16 +234,11 @@ export default function CenturionPitchPage() {
         </div>
       </section>
 
-      {/* About */}
+      {/* Sign-off */}
       <section className="py-16 lg:py-20 bg-zinc-900 text-white">
         <div className="mx-auto max-w-3xl px-5">
-          <h2 className="text-3xl font-black uppercase tracking-wide">Who built it</h2>
+          <h2 className="text-3xl font-black uppercase tracking-wide">Over to you</h2>
           <div className="mt-6 space-y-4 text-lg leading-relaxed text-white/80">
-            <p>
-              Me, Stephen Cousins. I&apos;ve finished 13 Centurion races since 2016, including the Grand Slam of 100s and
-              the Downs Double in 2023. I make Film My Run, and I build running apps. ClubRoutes and the Film My Run app
-              are both on the App Store.
-            </p>
             <p>
               Nothing a runner puts in the app leaves their phone. There&apos;s no account and no tracking. If you take it
               on, it moves to Centurion&apos;s own Apple account, under your name and your privacy policy.
