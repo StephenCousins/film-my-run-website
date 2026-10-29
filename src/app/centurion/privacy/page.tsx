@@ -78,6 +78,11 @@ export default function CenturionPrivacyPage() {
                   your name happens on your phone and sends nothing anywhere.
                 </P>
                 <P>
+                  Once a day the app checks Film My Run&apos;s file storage, on Cloudflare, for newer results and race
+                  details, so new results and entry status arrive without an app update. Like any download, that server
+                  sees your phone&apos;s internet address. The request carries nothing about you.
+                </P>
+                <P>
                   If you would like a result changed or removed, please contact Centurion Running, who publish it, and
                   email <Mail /> so we can remove it from the app too.
                 </P>

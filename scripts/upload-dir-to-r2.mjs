@@ -1,4 +1,4 @@
-// Upload every image in a folder to R2 under a prefix: node scripts/upload-dir-to-r2.mjs <dir> <prefix>
+// Upload every image (or JSON file) in a folder to R2 under a prefix: node scripts/upload-dir-to-r2.mjs <dir> <prefix>
 // e.g. node scripts/upload-dir-to-r2.mjs ~/shots centurion/pitch  →  {R2_PUBLIC_URL}/centurion/pitch/<file>
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import * as fs from 'fs';
@@ -17,7 +17,7 @@ const client = new S3Client({
   endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
   credentials: { accessKeyId: process.env.R2_ACCESS_KEY_ID, secretAccessKey: process.env.R2_SECRET_ACCESS_KEY },
 });
-const MIME = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp' };
+const MIME = { '.json': 'application/json', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp' };
 
 for (const file of fs.readdirSync(dir).filter(f => MIME[path.extname(f).toLowerCase()])) {
   const key = `${prefix.replace(/\/$/, '')}/${file}`;
