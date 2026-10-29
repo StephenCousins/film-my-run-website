@@ -173,25 +173,32 @@ export default function CenturionPitchPage() {
       <Feature flip eyebrow="Race Live" title="Follow the race, checkpoint by checkpoint"
         shots={[{ src: 'live', alt: 'Following runners in Race Live' }, { src: 'leaders', alt: 'Leaders and the course record watch' }]}>
         <p>
-          Follow runners and see where they are, their place, their ETA at the next checkpoint and how far ahead of the
-          cut-off they are. Leaders, a course record watch, the map and a feed. The clock card goes dark at night and
-          lightens at dawn, because that&apos;s what a 100 does.
+          This is race day in the app. Follow runners and see where they are, their place, their ETA at the next
+          checkpoint and how far ahead of the cut-off they are. Leaders, a course record watch, the map and a feed. The
+          clock card goes dark at night and lightens at dawn, because that&apos;s what a 100 does. Checkpoint
+          notifications and a lock screen Live Activity are built in.
         </p>
         <p>
-          On the TestFlight build this replays real races from your published splits. David Green&apos;s 13:27:13 at the
-          SDW100 is a good one to watch. Checkpoint notifications and a lock screen Live Activity are built in.
+          On the TestFlight build it&apos;s a replay. There&apos;s no live feed yet, so the app plays back real races
+          from your published splits, up to 600 times faster. David Green&apos;s 13:27:13 at the SDW100 is a good one to
+          watch.
         </p>
       </Feature>
 
-      <Feature eyebrow="Race day" title="And on the day itself"
-        shots={[{ src: 'raceday', alt: 'Live now card for the Wendover Woods 50' }]}>
+      <Feature eyebrow="Going live" title="The same screens, actually live"
+        shots={[{ src: 'raceday', alt: 'A Live Now card for the Wendover Woods 50, linking to OpenTracking' }]}>
         <p>
-          During a real race, a Live Now card sits at the top of Race Live and opens OpenTracking&apos;s page for it. The
-          day before, it counts down. You&apos;ll see it for real at Wendover Woods on 14 November.
+          Everything in Race Live works the same with live data. It just needs OpenTracking&apos;s feed in place of the
+          splits. Then followers get the checkpoint notifications as their runner goes through, not after the results
+          go up, and nobody has to leave the app.
         </p>
         <p>
-          With a feed from OpenTracking, the same screens follow a live race instead of a replay. That needs a small
-          server and push notifications, about one to two weeks of work once there&apos;s a feed to build against.
+          That&apos;s a small server and push notifications. About one to two weeks of work once Centurion has agreed a
+          feed with OpenTracking and there&apos;s something to build against.
+        </p>
+        <p>
+          Until then, a Live Now card at the top of Race Live links to OpenTracking&apos;s own page on race day, and
+          counts down the day before. You&apos;ll see it at Wendover Woods on 14 November.
         </p>
       </Feature>
 
@@ -227,8 +234,8 @@ export default function CenturionPitchPage() {
           <h2 className="mt-3 text-3xl lg:text-4xl font-black uppercase tracking-wide">Community, without replacing Facebook</h2>
           <p className="mt-5 max-w-3xl text-lg text-zinc-600 leading-relaxed">
             Your Facebook group is where people talk, and it should stay that way. These are the things it can&apos;t do,
-            because they hang off results, race day and entries. None of them are in the build yet. They&apos;re for us to
-            pick from together.
+            because they hang off results, race day and entries. None of them are in the build yet. Tell me which ones
+            you&apos;d want.
           </p>
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             <Idea title="Cheers">Followers tap to cheer a runner through a checkpoint. At the finish they see &quot;212 people cheered you through Washington&quot;.</Idea>
