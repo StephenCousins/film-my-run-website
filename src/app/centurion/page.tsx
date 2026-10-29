@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://filmmyrun.com/centurion' },
 };
 
-const IMG = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/centurion/pitch';
+const IMG = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/centurion/pitch-v2';
 const NAV = '#325BB6';
 const SWORD = '#1C75BC';
 const TESTFLIGHT = ''; // the public TestFlight link, once Apple has passed the beta review
@@ -113,10 +113,10 @@ export default function CenturionPitchPage() {
         <div className="mx-auto max-w-6xl px-5 py-14">
           <h2 className="text-xl font-black uppercase tracking-widest text-white/90">Built on what you already publish</h2>
           <div className="mt-8 grid grid-cols-2 gap-8 lg:grid-cols-5">
-            <Stat n="129" label="race results, 2011 to 2026" />
+            <Stat n="129" label="race results, 2012 to 2026" />
             <Stat n="25,089" label="finishes, every split" />
             <Stat n="9,856" label="Centurion finishers" />
-            <Stat n="15" label="events, with course maps" />
+            <Stat n="14" label="races, with course maps" />
             <Stat n="192" label="podcast episodes" />
           </div>
           <p className="mt-8 max-w-3xl text-lg text-white/85 leading-relaxed">
@@ -130,7 +130,8 @@ export default function CenturionPitchPage() {
         shots={[{ src: 'season', alt: 'Season screen' }, { src: 'calendar', alt: 'Race calendar grouped by month' }]}>
         <p>
           Runners tick the races they&apos;re entered in and the app is built around them. A countdown to the next one,
-          the other entries underneath, and both Grand Slams filling in with your race badges as they go.
+          the other entries underneath, and both Grand Slams filling in as they go. A badge gets a tick when you&apos;re
+          entered and goes full colour once you&apos;ve finished.
         </p>
         <p>
           The race calendar has every event from the SDW 5km to the Winter Downs 200, with the entry status straight off
@@ -146,7 +147,8 @@ export default function CenturionPitchPage() {
         </p>
         <p>
           <strong className="text-zinc-900">Crew plan.</strong> Each crew point with your runner&apos;s expected arrival, the
-          cut-off, your own crew notes and a button for directions. Pick a target time and the arrivals change.
+          cut-off, your own crew notes and a button for directions. Pick a target time and the arrivals change. Crew and
+          pacing share the one target, so set sub-24 once and both follow it.
         </p>
         <p>
           <strong className="text-zinc-900">Race the archive.</strong> Pick sub-24 at the SDW100 and the app shows where 264
@@ -163,7 +165,8 @@ export default function CenturionPitchPage() {
         </p>
         <p>
           History has every year of every race. The finishers per year, both winners and their times, and every
-          runner&apos;s splits with their place at each checkpoint.
+          runner&apos;s splits with their place at each checkpoint. Tap a past finish anywhere in the app, on Season or
+          a passport, and it opens that year.
         </p>
       </Feature>
 
@@ -196,7 +199,7 @@ export default function CenturionPitchPage() {
         shots={[{ src: 'passport', alt: 'Stephen Cousins passport' }, { src: 'claim', alt: 'Confirming a passport by picking a race' }]}>
         <p>
           Runners find their name and confirm it by picking the one race of theirs from four. Then their passport fills
-          itself in: finishes, miles, hours on course, a stamp for every Centurion event, and the medals. Grand Slams,
+          itself in: finishes, miles, hours on course, a stamp for each of the 12 Centurion events, and the medals. Grand Slams,
           Downs Doubles, One Day buckles.
         </p>
         <p>
@@ -210,6 +213,10 @@ export default function CenturionPitchPage() {
         <p>
           All 192 episodes, filtered by races, Weekly News and coaching. Episodes about a race pick up its colours and
           badge, and show up on that race&apos;s page. It keeps playing with the phone locked, which matters on a long run.
+        </p>
+        <p>
+          It&apos;s light by default, like your website, with dark or match the phone in Settings. Settings also has
+          your links, the privacy policy and where all the data comes from.
         </p>
       </Feature>
 
