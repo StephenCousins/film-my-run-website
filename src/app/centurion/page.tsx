@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const IMG = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/centurion/pitch-v2';
 const NAV = '#325BB6';
 const SWORD = '#1C75BC';
-const TESTFLIGHT = ''; // the public TestFlight link, once Apple has passed the beta review
+const TESTFLIGHT = 'https://testflight.apple.com/join/c855NStD';
 const EMAIL = 'stephen@filmmyrun.com';
 
 function Phone({ src, alt, className = '' }: { src: string; alt: string; className?: string }) {
@@ -75,7 +75,7 @@ export default function CenturionPitchPage() {
         <div className="mx-auto max-w-6xl px-5 pt-14 pb-10 lg:pt-20 grid gap-12 lg:grid-cols-[1.05fr_1fr] lg:items-center">
           <div>
             <div className="flex items-center gap-3">
-              <img src={`${IMG}/icon.png`} alt="" className="h-14 w-14 rounded-2xl shadow-md" />
+              <img src={`${IMG}/icon-cr.png`} alt="" className="h-14 w-14 rounded-2xl shadow-md" />
               <span className="text-sm font-bold text-zinc-500">An iPhone app for Centurion Running</span>
             </div>
             <h1 className="mt-6 text-5xl lg:text-7xl font-black uppercase tracking-wide leading-[0.95]">
@@ -156,21 +156,35 @@ export default function CenturionPitchPage() {
         </p>
       </Feature>
 
-      <Feature eyebrow="Kit and history" title="The kit list as a checklist"
-        shots={[{ src: 'kit', alt: 'Winter Downs 100 mandatory kit checklist' }, { src: 'history', alt: 'Thames Path 100 history by year' }]}>
+      <Feature eyebrow="Kit" title="The kit list as a checklist"
+        shots={[{ src: 'kit', alt: 'Winter Downs 100 mandatory kit checklist' }]}>
         <p>
           Your mandatory kit lists, read from each race&apos;s rules, as a checklist runners tick off as they pack. All 22
           items for the Winter Downs 100, with the recommended extras kept separate. Tap the bag and it opens that item
           in the Ultrarunning Store.
         </p>
+      </Feature>
+
+      <Feature flip eyebrow="History and stats" title="Numbers the website doesn't have"
+        shots={[{ src: 'history', alt: 'Thames Path 100 history by year' }, { src: 'stats', alt: 'SDW100 race stats: slowest stretch, last-hour finishers, usual finish time and most races in a row' }]}>
         <p>
-          History has every year of every race. The finishers per year, both winners and their times, and every
-          runner&apos;s splits with their place at each checkpoint. Tap a past finish anywhere in the app, on Season or
-          a passport, and it opens that year.
+          History has every year of every race. The finishers per year and both winners, then tap a year for the full
+          results and every runner&apos;s splits with their place at each checkpoint. Tap a past finish anywhere in the
+          app, on Season or a passport, and it opens that year.
+        </p>
+        <p>
+          Each race also gets its own stats, worked out from all your results. The slowest stretch of the course, how
+          many get in during the last hour, the usual finish time year by year, and who has finished it the most times
+          in a row. On the SDW100 that&apos;s Washington to Botolphs at about 21 minutes a mile, and Elaine Battson with
+          ten in a row from 2012 to 2022.
+        </p>
+        <p>
+          Passports get the same treatment. Mine says I&apos;ve passed 328 runners after halfway, the best being the
+          TP100 in 2020, 150th at halfway and 59th at the finish.
         </p>
       </Feature>
 
-      <Feature flip eyebrow="Race Live" title="Follow the race, checkpoint by checkpoint"
+      <Feature eyebrow="Race Live" title="Follow the race, checkpoint by checkpoint"
         shots={[{ src: 'live', alt: 'Following runners in Race Live' }, { src: 'leaders', alt: 'Leaders and the course record watch' }]}>
         <p>
           This is race day in the app. Follow runners and see where they are, their place, their ETA at the next
@@ -185,7 +199,7 @@ export default function CenturionPitchPage() {
         </p>
       </Feature>
 
-      <Feature eyebrow="Going live" title="The same screens, actually live"
+      <Feature flip eyebrow="Going live" title="The same screens, actually live"
         shots={[{ src: 'raceday', alt: 'A Live Now card for the Wendover Woods 50, linking to OpenTracking' }]}>
         <p>
           Everything in Race Live works the same with live data. It just needs OpenTracking&apos;s feed in place of the
@@ -202,7 +216,7 @@ export default function CenturionPitchPage() {
         </p>
       </Feature>
 
-      <Feature flip eyebrow="Passport" title="Every finish, in one place"
+      <Feature eyebrow="Passport" title="Every finish, in one place"
         shots={[{ src: 'passport', alt: 'Stephen Cousins passport' }, { src: 'claim', alt: 'Confirming a passport by picking a race' }]}>
         <p>
           Runners find their name and confirm it by picking the one race of theirs from four. Then their passport fills
@@ -215,7 +229,7 @@ export default function CenturionPitchPage() {
         </p>
       </Feature>
 
-      <Feature eyebrow="Listen" title="The podcast, race by race"
+      <Feature flip eyebrow="Listen" title="The podcast, race by race"
         shots={[{ src: 'listen', alt: 'The Centurion Running Podcast' }]}>
         <p>
           All 192 episodes, filtered by races, Weekly News and coaching. Episodes about a race pick up its colours and
