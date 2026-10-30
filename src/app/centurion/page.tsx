@@ -137,6 +137,11 @@ export default function CenturionPitchPage() {
           The race calendar has every event from the SDW 5km to the Winter Downs 200, with the entry status straight off
           your entrants pages. Full, limited places, last places or open.
         </p>
+        <p>
+          It nudges them too. A week out to start packing, two days out to send the crew plan, and good luck the night
+          before. When the results go up it tells them their time and place, and a new podcast episode gets a
+          notification of its own. All of it runs on the phone, no server needed.
+        </p>
       </Feature>
 
       <Feature flip eyebrow="Race pages" title="Everything for race day, in one place"
