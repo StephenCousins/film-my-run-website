@@ -36,7 +36,7 @@ export default function WsfrlPrivacyPage() {
             <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-8">WSFRL app: Privacy Policy</h1>
 
             <div className="prose prose-zinc dark:prose-invert max-w-none">
-              <p className="text-secondary text-sm mb-8">Last updated: 31 October 2026</p>
+              <p className="text-secondary text-sm mb-8">Last updated: 3 November 2026</p>
 
               <Section title="The short version">
                 <P>
@@ -59,16 +59,26 @@ export default function WsfrlPrivacyPage() {
                   finishing times, as published by the league and its member clubs after each race.
                 </P>
                 <P>
+                  New results arrive each week: the app downloads the latest results from the league&apos;s results
+                  server when it opens. That download only brings results down to your phone. The app sends nothing
+                  about you with it.
+                </P>
+                <P>
                   If you&apos;d like your name changed or taken out of the results, email <Mail /> and it will be removed
                   from the next update of the app.
                 </P>
               </Section>
 
-              <Section title="3. Maps">
+              <Section title="3. Maps and race films">
                 <P>
                   A race page shows a map of the venue. To place the pin, the app sends the venue&apos;s postcode to Apple
                   Maps. Nothing about you goes with it. If you tap Directions, Apple Maps opens and Apple&apos;s privacy
                   policy covers what happens there.
+                </P>
+                <P>
+                  Some race pages show a Film My Run race film. The film&apos;s thumbnail picture loads from YouTube when
+                  the page opens, and the film itself only loads, in YouTube&apos;s privacy-enhanced mode, when you tap
+                  play. YouTube&apos;s privacy policy covers the film once it plays.
                 </P>
               </Section>
 
