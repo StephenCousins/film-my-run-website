@@ -119,8 +119,8 @@ export default function AboutPage() {
               </h1>
               <p className="text-lg text-zinc-300 leading-relaxed">
                 I'm Stephen Cousins, and I've been documenting my running journey since 2011.
-                What started as a simple blog has grown into a platform for films, tools,
-                and resources used by hundreds of thousands of runners every month.
+                What started as a simple blog has grown into a platform for films, tools
+                and resources for runners.
               </p>
             </div>
           </div>

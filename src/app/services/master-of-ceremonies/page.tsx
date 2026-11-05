@@ -9,13 +9,6 @@ import Footer from '@/components/layout/Footer';
 // DATA
 // ============================================
 
-const stats = [
-  { label: 'Events MC\'d', value: '50+', icon: Mic },
-  { label: 'Runners Welcomed Home', value: '10K+', icon: Users },
-  { label: 'Years on the Mic', value: '7+', icon: Clock },
-  { label: 'Presentation Ceremonies', value: '20+', icon: Trophy },
-];
-
 const services = [
   {
     icon: Megaphone,
@@ -149,26 +142,6 @@ export default function MasterOfCeremoniesPage() {
                   <ArrowRight className="w-5 h-5" />
                 </Link>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Stats Bar */}
-        <section className="border-y border-border bg-surface-secondary">
-          <div className="container py-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-              {stats.map((stat) => {
-                const Icon = stat.icon;
-                return (
-                  <div key={stat.label} className="text-center">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-500/10 mb-3">
-                      <Icon className="w-6 h-6 text-amber-400" />
-                    </div>
-                    <p className="font-display text-3xl font-bold text-foreground">{stat.value}</p>
-                    <p className="text-secondary text-sm">{stat.label}</p>
-                  </div>
-                );
-              })}
             </div>
           </div>
         </section>

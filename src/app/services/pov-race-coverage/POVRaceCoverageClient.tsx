@@ -13,10 +13,8 @@ import { pastRaces } from './races';
 
 // Total Views is filled in from the live channel total (page.tsx).
 const stats = [
-  { label: 'Races Filmed', value: '200+', icon: MapPin },
-  { label: 'Total Views', value: '', icon: Eye },
+  { label: 'YouTube Channel Views', value: '', icon: Eye },
   { label: 'Years Experience', value: '15', icon: Calendar },
-  { label: 'Countries', value: '12', icon: Mountain },
 ];
 
 const benefits = [
@@ -268,8 +266,8 @@ export default function POVRaceCoverageClient({
         {/* Stats Bar */}
         <section className="border-y border-border bg-surface-secondary/50">
           <div className="container py-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-              {stats.map((s) => (s.label === 'Total Views' ? { ...s, value: totalViews } : s)).map((stat) => {
+            <div className="grid grid-cols-2 gap-8 max-w-xl mx-auto">
+              {stats.map((s) => (s.label === 'YouTube Channel Views' ? { ...s, value: totalViews } : s)).map((stat) => {
                 const Icon = stat.icon;
                 return (
                   <div key={stat.label} className="text-center">

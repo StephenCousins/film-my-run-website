@@ -13,7 +13,6 @@ export interface ShowcaseFilm {
   title: string;
   description: string;
   fallbackViews: string;
-  watchTime: string;
   award: string | null;
   featured: boolean;
 }
@@ -24,7 +23,6 @@ export const pastWork: ShowcaseFilm[] = [
     title: "You've Got To Win UTMB",
     description: "Tom Evans tells the inside story of his 2025 UTMB victory — two DNFs, a knife attack that nearly ended his running career, and the night everything finally came together on the 100 miles around Mont Blanc.",
     fallbackViews: '21K+',
-    watchTime: '-',
     award: null,
     featured: true,
   },
@@ -33,7 +31,6 @@ export const pastWork: ShowcaseFilm[] = [
     title: '81 Yards',
     description: 'John Stocker breaks the backyard ultra world record in this gripping documentary following every yard of his historic 81-yard journey.',
     fallbackViews: '80K+',
-    watchTime: '45K hrs',
     award: 'Winner - Sheffield Adventure Film Festival',
     featured: false,
   },
@@ -42,7 +39,6 @@ export const pastWork: ShowcaseFilm[] = [
     title: 'Making Marks',
     description: 'Mark Derbyshire attempts to break the South Downs Way 100 course record — a time that has stood for eleven years. A story of patience, obsession, and quiet competitive fire.',
     fallbackViews: '7K+',
-    watchTime: '-',
     award: null,
     featured: false,
   },
@@ -51,7 +47,6 @@ export const pastWork: ShowcaseFilm[] = [
     title: 'Sub 40',
     description: 'Masters runner Tim Grose chases the sub-40 minute 10k. A story of dedication that resonated with runners of all ages.',
     fallbackViews: '4K+',
-    watchTime: '12K hrs',
     award: null,
     featured: false,
   },
@@ -60,7 +55,6 @@ export const pastWork: ShowcaseFilm[] = [
     title: "Martin Yelling's Long Run Home",
     description: "Marathon Talk co-host Martin Yelling takes on an epic long run home. A film about the joy of simply running.",
     fallbackViews: '4.5K+',
-    watchTime: '8K hrs',
     award: null,
     featured: false,
   },
@@ -69,7 +63,6 @@ export const pastWork: ShowcaseFilm[] = [
     title: "Victoria's Marathon",
     description: 'An intimate first marathon journey that connected with first-time runners worldwide.',
     fallbackViews: '2K+',
-    watchTime: '8K hrs',
     award: null,
     featured: false,
   },
@@ -78,7 +71,6 @@ export const pastWork: ShowcaseFilm[] = [
     title: 'The 401 Challenge',
     description: '401 marathons in 401 days. The extraordinary story of one man\'s mission to raise awareness for bullying and mental health.',
     fallbackViews: '5K+',
-    watchTime: '10K hrs',
     award: null,
     featured: false,
   },
@@ -87,7 +79,6 @@ export const pastWork: ShowcaseFilm[] = [
     title: 'The Road to 100',
     description: "James Bennett's Paris Marathon marks his hundredth. A celebration of the everyday marathon runner.",
     fallbackViews: '1.5K+',
-    watchTime: '6K hrs',
     award: null,
     featured: false,
   },

@@ -9,13 +9,6 @@ import Footer from '@/components/layout/Footer';
 // DATA
 // ============================================
 
-const stats = [
-  { label: 'Events Streamed', value: '25+', icon: Radio },
-  { label: 'Peak Concurrent Viewers', value: '5K+', icon: Users },
-  { label: 'Total Watch Hours', value: '100K+', icon: Eye },
-  { label: 'Countries Reached', value: '40+', icon: Globe },
-];
-
 const services = [
   {
     icon: Radio,
@@ -45,12 +38,10 @@ const caseStudies = [
     subtitle: "UK's Biggest Backyard Ultra",
     description: 'Live coverage of Britain\'s largest backyard ultra event, where runners complete 6.7km loops every hour until one remains. Our stream captured the drama, strategy, and emotion across multiple days of racing.',
     highlights: [
-      '72+ hours of continuous coverage',
       'Multiple camera positions around the loop',
       'Real-time leaderboard and lap tracking',
       'Athlete interviews between yards',
     ],
-    stats: { viewers: '3.5K peak', hours: '45K watch hours' },
   },
   {
     title: 'Arc of Attrition',
@@ -62,7 +53,6 @@ const caseStudies = [
       'Night vision camera capability',
       'Live GPS tracking integration',
     ],
-    stats: { viewers: '4.2K peak', hours: '38K watch hours' },
   },
 ];
 
@@ -170,26 +160,6 @@ export default function EventLiveStreamingPage() {
           </div>
         </section>
 
-        {/* Stats Bar */}
-        <section className="border-y border-border bg-surface-secondary">
-          <div className="container py-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-              {stats.map((stat) => {
-                const Icon = stat.icon;
-                return (
-                  <div key={stat.label} className="text-center">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-500/10 mb-3">
-                      <Icon className="w-6 h-6 text-red-400" />
-                    </div>
-                    <p className="font-display text-3xl font-bold text-foreground">{stat.value}</p>
-                    <p className="text-secondary text-sm">{stat.label}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
         {/* Services */}
         <section className="py-16 lg:py-24">
           <div className="container">
@@ -264,16 +234,6 @@ export default function EventLiveStreamingPage() {
                       ))}
                     </div>
 
-                    <div className="flex gap-8 pt-6 border-t border-border">
-                      <div>
-                        <p className="font-display text-xl font-bold text-red-400">{study.stats.viewers}</p>
-                        <p className="text-muted text-xs">Peak Viewers</p>
-                      </div>
-                      <div>
-                        <p className="font-display text-xl font-bold text-red-400">{study.stats.hours}</p>
-                        <p className="text-muted text-xs">Watch Hours</p>
-                      </div>
-                    </div>
                   </div>
                 </div>
               ))}

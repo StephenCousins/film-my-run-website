@@ -17,9 +17,8 @@ type StatCard =
 
 const statCards: StatCard[] = [
   { label: 'YouTube Subscribers', key: 'subscribers', icon: Users },
-  { label: 'Total Film Views', key: 'totalViews', icon: Eye },
-  { label: 'Festival Selections', value: '8', icon: Film },
-  { label: 'Festival Awards', value: '1', icon: Trophy },
+  { label: 'YouTube Channel Views', key: 'totalViews', icon: Eye },
+  { label: 'Festival Award', value: '1', icon: Trophy },
 ];
 
 export interface DocumentaryFilmsClientProps {
@@ -51,12 +50,6 @@ const sponsorBenefits = [
   },
 ];
 
-const audienceDemo = [
-  { label: 'Active Runners', value: '78%' },
-  { label: 'Age 25-54', value: '65%' },
-  { label: 'UK Based', value: '60%' },
-  { label: 'Disposable Income £50K+', value: '45%' },
-];
 
 // ============================================
 // VIDEO MODAL
@@ -148,10 +141,6 @@ function CaseStudyCard({
             <div>
               <p className="text-brand font-display font-bold text-lg">{views}</p>
               <p className="text-muted text-xs">Views</p>
-            </div>
-            <div>
-              <p className="text-brand font-display font-bold text-lg">{film.watchTime}</p>
-              <p className="text-muted text-xs">Watch Time</p>
             </div>
           </div>
         </div>
@@ -251,7 +240,7 @@ export default function DocumentaryFilmsClient({
         {/* Stats Bar */}
         <section className="border-y border-border bg-surface/50">
           <div className="container py-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-3 gap-8">
               {statCards.map((stat) => {
                 const Icon = stat.icon;
                 const value = 'key' in stat ? channelStats[stat.key] : stat.value;
@@ -314,20 +303,11 @@ export default function DocumentaryFilmsClient({
                 <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                   Reach the Right Audience
                 </h2>
-                <p className="text-muted mb-8">
+                <p className="text-muted">
                   Our viewers aren't passive scrollers—they're dedicated runners actively
                   investing in gear, nutrition, events, and experiences. They trust our content
                   and the brands we partner with.
                 </p>
-
-                <div className="grid grid-cols-2 gap-4">
-                  {audienceDemo.map((demo) => (
-                    <div key={demo.label} className="bg-surface-tertiary rounded-lg p-4">
-                      <p className="font-display text-2xl font-bold text-brand">{demo.value}</p>
-                      <p className="text-muted text-sm">{demo.label}</p>
-                    </div>
-                  ))}
-                </div>
               </div>
 
               <div className="bg-surface rounded-2xl p-8 border border-border">

@@ -9,13 +9,6 @@ import Footer from '@/components/layout/Footer';
 // DATA
 // ============================================
 
-const stats = [
-  { label: 'Events Covered', value: '100+', icon: Camera },
-  { label: 'Reels Created', value: '500+', icon: Play },
-  { label: 'Combined Reach', value: '10M+', icon: Users },
-  { label: 'Avg Engagement', value: '8.5%', icon: TrendingUp },
-];
-
 const contentTypes = [
   {
     icon: Play,
@@ -48,21 +41,6 @@ const deliverables = [
   'Behind-the-scenes content',
   'All raw footage provided',
   'Branded templates available',
-];
-
-const whyItMatters = [
-  {
-    stat: '68%',
-    label: 'of runners discover new races through social media',
-  },
-  {
-    stat: '3x',
-    label: 'higher engagement on video vs static posts',
-  },
-  {
-    stat: '24hrs',
-    label: 'window when race content performs best',
-  },
 ];
 
 // ============================================
@@ -112,30 +90,10 @@ export default function SocialMediaCoveragePage() {
           </div>
         </section>
 
-        {/* Stats Bar */}
-        <section className="border-y border-border bg-surface-secondary">
-          <div className="container py-8">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
-              {stats.map((stat) => {
-                const Icon = stat.icon;
-                return (
-                  <div key={stat.label} className="text-center">
-                    <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-purple-500/10 mb-3">
-                      <Icon className="w-6 h-6 text-purple-400" />
-                    </div>
-                    <p className="font-display text-3xl font-bold text-foreground">{stat.value}</p>
-                    <p className="text-secondary text-sm">{stat.label}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
         {/* Why Social Matters */}
         <section className="py-16 lg:py-24">
           <div className="container">
-            <div className="max-w-3xl mx-auto text-center mb-12">
+            <div className="max-w-3xl mx-auto text-center">
               <h2 className="font-display text-2xl lg:text-3xl font-bold text-foreground mb-4">
                 Social Media Sells Out Races
               </h2>
@@ -145,16 +103,6 @@ export default function SocialMediaCoveragePage() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              {whyItMatters.map((item) => (
-                <div key={item.label} className="text-center">
-                  <p className="font-display text-5xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
-                    {item.stat}
-                  </p>
-                  <p className="text-secondary text-sm">{item.label}</p>
-                </div>
-              ))}
-            </div>
           </div>
         </section>
 
