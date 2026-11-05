@@ -52,7 +52,7 @@ export default function ContactForm() {
           Message Sent
         </h3>
         <p className="text-secondary mb-6">
-          Thanks for getting in touch. I'll get back to you soon.
+          Thanks for getting in touch. I'll get back to you within 24 hours.
         </p>
         <button
           onClick={() => setStatus('idle')}

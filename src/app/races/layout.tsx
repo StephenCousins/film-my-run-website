@@ -4,7 +4,7 @@ export const metadata: Metadata = {
   title: 'Race Dashboard',
   alternates: { canonical: 'https://filmmyrun.com/races' },
   description:
-    'Every race Stephen has run since 2012, marathons and ultras, with times, positions and analysis.',
+    'Track and analyze all race results. 174 races, 94 marathons, 80 ultras - explore the complete race history with times, positions, and analysis.',
   keywords: [
     'race results',
     'marathon times',
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'Race Dashboard | Film My Run',
-    description: 'Every race since 2012: times, positions and progress.',
+    description: '174 races analyzed. Track times, positions, and progress.',
     images: ['https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/og/races-og.jpg'],
   },
 };

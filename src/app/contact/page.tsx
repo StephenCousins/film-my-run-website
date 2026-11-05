@@ -144,7 +144,7 @@ export default function ContactPage() {
                   Send a Message
                 </h2>
                 <p className="text-secondary mb-8">
-                  Fill out the form below and I'll get back to you.
+                  Fill out the form below and I'll get back to you within 24 hours.
                 </p>
 
                 <ContactForm />
@@ -215,7 +215,8 @@ export default function ContactPage() {
                       Quick Response
                     </h3>
                     <p className="text-secondary text-sm">
-                      For urgent filming inquiries, please mention the date in your message.
+                      I typically respond within 24 hours. For urgent filming inquiries,
+                      please mention the date in your message.
                     </p>
                   </div>
                 </div>
