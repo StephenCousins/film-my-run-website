@@ -195,7 +195,7 @@ export default function Hero() {
             <div className="flex flex-col sm:flex-row flex-wrap gap-4">
               <Link
                 href="/films"
-                className="hero-cta group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-all hover:scale-105"
+                className="hero-cta group inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-all hover:scale-105"
               >
                 <Play className="w-5 h-5 fill-current" />
                 Watch Films
@@ -208,7 +208,7 @@ export default function Hero() {
               </Link>
               <a
                 href="https://apps.apple.com/gb/app/film-my-run/id6815156969"
-                className="hero-cta inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-all hover:scale-105"
+                className="hero-cta inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-orange-500 text-white font-semibold rounded-full hover:bg-orange-600 transition-all hover:scale-105"
               >
                 <Smartphone className="w-5 h-5" />
                 Get the iPhone App
