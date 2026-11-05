@@ -44,15 +44,24 @@ async function mostWatched(): Promise<string> {
   const key = process.env.YOUTUBE_API_KEY;
   if (!key) throw new Error('YOUTUBE_API_KEY is not set (run with .env, see the header)');
   const api = (path: string) => fetchText(`https://www.googleapis.com/youtube/v3/${path}&key=${key}`).then(JSON.parse);
-  const search = await api(`search?part=id&channelId=${CHANNEL}&order=viewCount&type=video&maxResults=25`);
-  const ids = search.items.map((i: { id: { videoId: string } }) => i.id.videoId).join(',');
-  const [videos, channel] = await Promise.all([
-    api(`videos?part=snippet,statistics&id=${ids}`),
-    api(`channels?part=statistics&id=${CHANNEL}`),
-  ]);
+  // Every upload's real count, sorted here: search's order=viewCount is approximate and skipped 81 Yards (106K).
+  const channel = await api(`channels?part=statistics,contentDetails&id=${CHANNEL}`);
+  const uploads = channel.items[0].contentDetails.relatedPlaylists.uploads;
+  const ids: string[] = [];
+  let page = '';
+  do {
+    const list = await api(`playlistItems?part=contentDetails&maxResults=50&playlistId=${uploads}${page ? `&pageToken=${page}` : ''}`);
+    ids.push(...list.items.map((i: { contentDetails: { videoId: string } }) => i.contentDetails.videoId));
+    page = list.nextPageToken ?? '';
+  } while (page);
+  const videos = { items: [] as unknown[] };
+  for (let i = 0; i < ids.length; i += 50) {
+    videos.items.push(...(await api(`videos?part=snippet,statistics&id=${ids.slice(i, i + 50).join(',')}`)).items);
+  }
   type Video = { id: string; snippet: { title: string; publishedAt: string }; statistics: { viewCount: string } };
   const lines = (videos.items as Video[])
     .sort((a, b) => Number(b.statistics.viewCount) - Number(a.statistics.viewCount))
+    .slice(0, 40)
     .map((v, i) => `${i + 1}. [${v.snippet.title}](https://www.youtube.com/watch?v=${v.id}): ${Number(v.statistics.viewCount).toLocaleString('en-GB')} views, published ${v.snippet.publishedAt.slice(0, 10)}`);
   const c = channel.items[0].statistics;
   return [
