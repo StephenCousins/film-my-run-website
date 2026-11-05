@@ -22,6 +22,9 @@ page from the site, this file wins. Edit freely, then run `npm run assistant:pac
   - Zwift content creator and NoblePro treadmill ambassador (on zwift.run).
 - He started running in 2011 with a resolution to run the London Marathon. First ultra 2014, first 100-miler
   (South Downs Way 100) 2016, first alpine ultra (CCC) 2018, first sub-3 marathon (Goodwood) 2020. He ran UTMB in 2023.
+- His personal bests, as Stephen gave them (22 Oct 2026). Use these, not times worked out from blog posts:
+  5K 18:16; 10K 39:43; 15K 59:49; 10 miles 1:04:23; 20K 1:20:41; half marathon 1:23:27; marathon 2:55:42;
+  50K 4:08:54; 50 miles 8:12:57; 100K 11:28:03; 100 miles 21:33:08.
 - His film "81 Yards - A Backyard Story" won Best Running Film at the Sheffield Adventure Film Festival 2022.
 
 ## What the assistant must not discuss

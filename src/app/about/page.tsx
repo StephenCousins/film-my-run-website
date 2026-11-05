@@ -31,9 +31,9 @@ export const metadata: Metadata = {
 // ============================================
 
 const stats = [
-  { value: '174', label: 'Races Completed' },
-  { value: '94', label: 'Marathons' },
-  { value: '80', label: 'Ultras' },
+  { value: '182', label: 'Races Completed' },
+  { value: '99', label: 'Marathons' },
+  { value: '83', label: 'Ultras' },
   { value: '15', label: 'Years Running' },
 ];
 
@@ -167,13 +167,13 @@ export default function AboutPage() {
                 <div className="prose dark:prose-invert prose-zinc max-w-none">
                   <p>
                     My running journey began in 2011 with a New Year's resolution to run the
-                    London Marathon. I was overweight, undertrained, and had no idea what I
-                    was getting into. I finished in 4:45:32, and I was hooked.
+                    London Marathon. My first marathon was Paris in April 2012, in 3:43:25.
+                    London came in 2015, in 3:18:36.
                   </p>
                   <p>
                     Since then, running has taken me across the UK and around the world.
-                    I've run through the Alps at UTMB, along the Pennine Way in winter,
-                    and around the Lake District in a single push. Each race teaches me
+                    I've run UTMB, the CCC and the TDS in the Alps, the Lakeland 100 and the
+                    Pennine Barrier Ultra. Each race teaches me
                     something new about myself.
                   </p>
                   <p>
