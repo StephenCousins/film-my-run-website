@@ -53,8 +53,8 @@ const sponsorBenefits = [
 
 const audienceDemo = [
   { label: 'Active Runners', value: '78%' },
-  { label: 'Age 25-54', value: '65%' },
-  { label: 'UK Based', value: '60%' },
+  { label: 'Age 25-54', value: '76%' },
+  { label: 'UK Based', value: '29%' },
   { label: 'Disposable Income £50K+', value: '45%' },
 ];
 

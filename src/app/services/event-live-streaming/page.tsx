@@ -62,7 +62,7 @@ const caseStudies = [
       'Night vision camera capability',
       'Live GPS tracking integration',
     ],
-    stats: { viewers: '4.2K peak', hours: '38K watch hours' },
+    stats: { viewers: '4.2K peak', hours: '1.9K watch hours' },
   },
 ];
 
