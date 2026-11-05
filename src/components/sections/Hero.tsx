@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Play, ChevronDown, Volume2, VolumeX } from 'lucide-react';
+import { Play, ChevronDown, Volume2, VolumeX, Smartphone } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // ============================================
@@ -206,6 +206,13 @@ export default function Hero() {
               >
                 Running Tools
               </Link>
+              <a
+                href="https://apps.apple.com/gb/app/film-my-run/id6815156969"
+                className="hero-cta inline-flex items-center justify-center gap-2 w-full sm:w-auto px-8 py-4 bg-white/10 backdrop-blur-sm text-white font-semibold rounded-full border border-white/20 hover:bg-white/20 transition-all hover:scale-105"
+              >
+                <Smartphone className="w-5 h-5" />
+                Get the iPhone App
+              </a>
             </div>
           </div>
         </div>
