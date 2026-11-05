@@ -5,7 +5,7 @@ import { shopItems, formatPrice, type ShopItem } from '@/lib/shop';
 
 /**
  * Homepage shop section: a strip of film frames that scrolls continuously,
- * each frame a real product mockup, over a ticker of the phrases. All from the
+ * each frame a real product mockup. All from the
  * exported Printify catalogue; the animation is CSS only.
  */
 
@@ -73,7 +73,6 @@ function Sprockets() {
 
 export default function ShopTeaser() {
   const strip = pickStrip(shopItems, 14);
-  const phrases = shopItems.filter((i) => i.category === 'tees' && !i.key.startsWith('logo')).map((i) => i.name);
   const categories = [...new Set(shopItems.map((i) => i.categoryLabel))];
 
   return (
@@ -117,21 +116,6 @@ export default function ShopTeaser() {
           </div>
         </div>
         <Sprockets />
-      </div>
-
-      {/* Phrase ticker */}
-      <div className="overflow-hidden border-b border-border py-3">
-        <div className="flex w-max animate-marquee motion-reduce:animate-none">
-          {[0, 1].map((copy) => (
-            <div key={copy} className="flex" aria-hidden={copy === 1}>
-              {phrases.map((p) => (
-                <span key={`${copy}-${p}`} className="font-display text-sm sm:text-base font-semibold uppercase tracking-wide text-muted whitespace-nowrap px-5">
-                  {p} <span className="text-brand">·</span>
-                </span>
-              ))}
-            </div>
-          ))}
-        </div>
       </div>
 
       <div className="container mt-8">
