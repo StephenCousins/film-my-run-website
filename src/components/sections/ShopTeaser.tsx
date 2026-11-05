@@ -121,7 +121,7 @@ export default function ShopTeaser() {
 
       {/* Phrase ticker */}
       <div className="overflow-hidden border-b border-border py-3">
-        <div className="flex w-max animate-marquee-reverse motion-reduce:animate-none">
+        <div className="flex w-max animate-marquee motion-reduce:animate-none">
           {[0, 1].map((copy) => (
             <div key={copy} className="flex" aria-hidden={copy === 1}>
               {phrases.map((p) => (
