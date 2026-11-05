@@ -101,8 +101,8 @@ export default async function HomePage() {
         {/* Section 1: Hero with video background */}
         <Hero />
 
-        {/* Section 2: Stats Banner with animated counters */}
-        <StatsBanner filmCount={900} subscribers={channel?.subscribers} videoViews={channel?.totalViews} />
+        {/* Section 2: Shop Teaser */}
+        <ShopTeaser />
 
         {/* Section 3: Featured Film showcase */}
         <FeaturedFilm />
@@ -122,8 +122,8 @@ export default async function HomePage() {
         {/* Section 7: Training CTA (Marathon Plan App) */}
         <TrainingCTA />
 
-        {/* Section 8: Shop Teaser */}
-        <ShopTeaser />
+        {/* Section 8: Stats Banner with animated counters */}
+        <StatsBanner filmCount={900} subscribers={channel?.subscribers} videoViews={channel?.totalViews} />
       </main>
 
       {/* Footer */}
