@@ -175,6 +175,10 @@ export default function Footer() {
         <div className="container py-6">
           <div className="flex flex-wrap justify-center gap-8 text-center">
             <div>
+              <span className="font-display text-2xl font-bold text-brand">500+</span>
+              <p className="text-muted text-xs mt-1">Races Filmed</p>
+            </div>
+            <div>
               <span className="font-display text-2xl font-bold text-brand">15</span>
               <p className="text-muted text-xs mt-1">Years Running</p>
             </div>
