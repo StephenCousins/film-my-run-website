@@ -16,6 +16,8 @@ export const NEWS_CONFIG = {
   /** Waiting longer than this, a story is dropped unless it scores bigStory or more. */
   staleAfterDays: 4,
   bigStory: 8,
+  /** Below this (after fading) a story is not worth a slot: quiet days were filling up with other countries' domestic news (Stephen, 10 Nov 2026). */
+  minImportance: 3,
   /** Feeds that can back up a story but never lead one. */
   referenceOnlySources: ['Marathon Investigation'] as readonly string[],
 } as const;

@@ -181,6 +181,12 @@ const RSS_FEEDS: Array<{
     filterMode: 'none',
   },
   {
+    name: 'British Athletics',
+    url: 'https://www.britishathletics.org.uk/feed/',
+    category: 'athletics',
+    filterMode: 'none',
+  },
+  {
     name: 'RunABC South',
     url: 'https://runabc.co.uk/feeds/south-news',
     category: 'running',

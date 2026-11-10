@@ -30,7 +30,8 @@ export function pickBundles(bundles: Bundle[], cap: number, now: Date = new Date
   const open = bundles
     .filter((b) => !b.alreadyCovered && !isStale(b, now))
     .sort((a, b) => freshImportance(b, now) - freshImportance(a, now));
-  return [...open.filter((b) => b.mustCover), ...open.filter((b) => !b.mustCover).slice(0, cap)];
+  const worthASlot = (b: Bundle) => b.onDemand || freshImportance(b, now) >= NEWS_CONFIG.minImportance;
+  return [...open.filter((b) => b.mustCover), ...open.filter((b) => !b.mustCover && worthASlot(b)).slice(0, cap)];
 }
 
 export function withinCeiling(monthSpentUsd: number, nextEstimateUsd: number): boolean {

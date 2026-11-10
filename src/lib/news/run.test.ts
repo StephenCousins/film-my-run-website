@@ -17,7 +17,7 @@ function deps(over: Record<string, unknown> = {}) {
   const seen: number[] = [];
   const d = {
     gather: async () => [cand(1), cand(2), cand(3), cand(4), cand(5), cand(6)],
-    sort: async (c: Candidate) => ({ verdict: c.articleId === 6 ? { ...news(9), type: 'review' as const } : news(c.articleId), costUsd: 0.001 }),
+    sort: async (c: Candidate) => ({ verdict: c.articleId === 6 ? { ...news(9), type: 'review' as const } : news(c.articleId + 2), costUsd: 0.001 }),
     group: async (items: { c: Candidate; v: Verdict }[]) => ({ costUsd: 0.002, bundles: items.map(({ c, v }) => ({ key: `e${c.articleId}`, headline: `E${c.articleId}`, items: [c], verdicts: [v], alreadyCovered: false })) }),
     write: async (b: Bundle) => ({ draft: { title: `A title ${b.key}`, excerpt: 'An excerpt.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }),
     check: async () => ({ ok: true, unsupported: [], costUsd: 0.03 }),

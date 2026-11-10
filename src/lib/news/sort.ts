@@ -52,8 +52,9 @@ Give "confidence" as the probability (0-1) that your "type" is right.
 6-7 as well: trails or races losing access (closures, permits pulled), viral human-interest (the oldest finisher, a record in fancy dress, a run across a continent).
 5: celebrities running a race.
 6-7: notable results at well-known races, big-name injuries or retirements, rule changes that affect many runners.
-4-5: results at smaller races, national-level news.
+4-5: results at smaller races, UK national-level news.
 1-3: local news, minor announcements, entries and logistics.
+1-3 as well: another country's domestic news (its national titles, national or age-group records, university or club rankings, its own races, its governing body's fees and rules), unless it matters to runners worldwide (a world record, a world-class field, one of the sport's big names).
 Add 1 when British athletes or UK races are central, capped at 10.
 "isUk": British athletes or UK races are central.
 
@@ -139,7 +140,7 @@ export async function sortItemJev(c: Candidate, call: typeof completeJson = comp
         'Minor race news of local interest.',
         'Local race results.',
         'Results at smaller races.',
-        'National-level news, or celebrities running a race.',
+        'UK national-level news, or celebrities running a race. Another country\'s domestic news (its national titles, national or age-group records, university rankings, its own races) scores 1-3 unless it matters to runners worldwide.',
         'Notable results at well-known races, big-name injuries or retirements, trails or races losing access, viral human-interest, a provisional doping suspension.',
         'Changes that affect thousands of ordinary runners (qualifying times, cut-offs, ballots for the Majors or UTMB), governing-body rows, a race sold, axed or losing its sponsor, a legend retiring or coming back.',
         'World championship results in ultra, trail or mountain running, a course record at a major ultra, a record on a classic round or long trail (Bob Graham, Paddy Buckley, Ramsay, Pennine Way, a notable FKT), a road or track world record, a Majors marathon win, the death of a known runner, doping bans, cheating punished, race disasters, results overturned, sporting firsts, a controversy the running world is talking about.',

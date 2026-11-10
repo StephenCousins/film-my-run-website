@@ -10,6 +10,9 @@ describe('choosing what to write', () => {
     const picked = pickBundles([b('a', 3), b('b', 9), b('c', 7, true), b('d', 8), b('e', 5), b('f', 6)], 4);
     expect(picked.map((x) => x.key)).toEqual(['b', 'd', 'f', 'e']);
   });
+  it('leaves a slot empty rather than fill it with a story under importance 3', () => {
+    expect(pickBundles([b('a', 2), b('b', 3), b('c', 1)], 4).map((x) => x.key)).toEqual(['b']);
+  });
   it('stops before the month passes £10', () => {
     expect(withinCeiling(12.0, 0.12)).toBe(true);    // $12.12 < £10 x 1.27 = $12.70
     expect(withinCeiling(12.65, 0.12)).toBe(false);
