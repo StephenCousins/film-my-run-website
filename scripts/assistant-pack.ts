@@ -30,13 +30,14 @@ async function mapLimit<T, R>(items: T[], limit: number, fn: (t: T) => Promise<R
   return out;
 }
 
-// [path, heading, how much of each page's description to keep]
-const SECTIONS: [RegExp, string, number][] = [
-  [/^\/blog\//, "Stephen's blog (race reports and stories)", 300],
-  [/^\/films\//, "Stephen's films", 300],
-  // Headlines say enough, and every token here is paid for on every message.
-  [/^\/news\//, 'Recent news stories on the site', 0],
-  [/^\/runners\//, 'Runner profiles (elite and notable runners, not Stephen)', 0],
+// [path, heading, characters to keep, from the page's description or its main text]
+// Films are in the assistant's always-sent core (src/lib/assistant/search.ts), so they stay short. Blog, news and
+// runners are only searched, and a question carries at most 8 passages, so their full text costs next to nothing.
+const SECTIONS: [RegExp, string, number, 'description' | 'text'][] = [
+  [/^\/blog\//, "Stephen's blog (race reports and stories)", 6000, 'text'],
+  [/^\/films\//, "Stephen's films", 300, 'description'],
+  [/^\/news\//, 'Recent news stories on the site', 4000, 'text'],
+  [/^\/runners\//, 'Runner profiles (elite and notable runners, not Stephen)', 4000, 'text'],
 ];
 
 /** The channel's 25 most-viewed videos with real counts, so the assistant never quotes a page's marketing figures. */
@@ -118,7 +119,7 @@ async function raceResults(): Promise<string> {
     }
     const section = SECTIONS.find(([re]) => re.test(p.path));
     if (!section) continue;
-    const description = p.description.slice(0, section[2]);
+    const description = p[section[3]].slice(0, section[2]);
     lists.get(section[1])!.push(`- [${p.title}](${SITE}${p.path})${description ? `: ${description}` : ''}`);
   }
 

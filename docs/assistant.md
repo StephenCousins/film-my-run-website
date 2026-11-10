@@ -6,8 +6,9 @@ Built 22 Oct 2026. A chat bubble that answers visitors' questions about Stephen 
 
 - **Knowledge pack:** `content/assistant/pack.md`, built by `npm run assistant:pack` from
   `content/assistant/facts.md` (hand-written by Stephen, wins over everything else) plus every page in the live
-  sitemap, plus every race result from `/api/races` (the race dashboard renders in the browser, so the page scrape never saw his times; until 5 Nov 2026 the assistant repeated an invented 4:45:32 London time from the About page), plus the YouTube channel's 40 most-viewed videos, sorted from every upload's real count (search's order=viewCount skipped 81 Yards) (needs `YOUTUBE_API_KEY` in `.env`): core pages in full (trimmed to 4,000 characters), blog and films as title plus description, news and runners as titles only. About 214 KB
-  (95k Sonnet tokens on 10 Nov 2026). Read it to see exactly what the assistant knows. Rebuild after editing facts.md or when the site has moved
+  sitemap, plus every race result from `/api/races` (the race dashboard renders in the browser, so the page scrape never saw his times; until 5 Nov 2026 the assistant repeated an invented 4:45:32 London time from the About page), plus the YouTube channel's 40 most-viewed videos, sorted from every upload's real count (search's order=viewCount skipped 81 Yards) (needs `YOUTUBE_API_KEY` in `.env`): core pages in full (trimmed to 4,000 characters), films as title plus description, and blog posts, news stories and runner profiles with their page text (up to
+  6,000 / 4,000 / 4,000 characters; searched, never sent whole). About 3.2 MB on 10 Nov 2026, of which the always-sent
+  core is ~36k characters. Read it to see exactly what the assistant knows. Rebuild after editing facts.md or when the site has moved
   on (new posts, news), then commit the pack and push.
 - **Core + search (since 10 Nov 2026).** `splitPack()` in `src/lib/assistant/search.ts` keeps the pack's facts,
   YouTube figures, every race result, films and a list of page titles as the prompt-cached system prompt (~36k
