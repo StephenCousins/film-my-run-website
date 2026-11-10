@@ -179,8 +179,8 @@ export default function TrainingPage() {
         <section className="bg-zinc-950">
           <div className="container py-14 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
             <div>
-              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white">The Film My Run app is coming to iPhone</h2>
-              <p className="text-zinc-400 mt-2">Join FMR Club now and it follows your account into the app.</p>
+              <h2 className="font-display text-2xl lg:text-3xl font-bold text-white">The Film My Run app is out now on iPhone</h2>
+              <p className="text-zinc-400 mt-2">Download it free from the App Store. Join FMR Club and it follows your account into the app.</p>
             </div>
             <StoreButtons />
           </div>
