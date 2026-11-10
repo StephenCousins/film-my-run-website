@@ -2,6 +2,30 @@
 
 Dated status entries moved out of CLAUDE.md. Newest first.
 
+## 10 Nov 2026: Claude first on the Max plan API credit; site assistant public
+
+- **The credit.** Stephen's Max plan includes $100 a month of Claude API credit (monthly, not weekly; expires
+  unused; doesn't cover Claude Code). `ANTHROPIC_CREDIT_API_KEY` draws on it: Stephen has never bought credit and
+  auto-reload is off, so calls that succeed are paid from the Max credit, and his card can't be charged. When the
+  month's credit runs out, calls 400 and fall back to OpenRouter until the next month's arrives. The "$100 prepaid
+  credit" of 12 Oct was this credit being claimed.
+- **Claude first everywhere** (654051e, `docs/llm.md`): `completeText` / `completeTextWithImage` try Claude
+  directly: Haiku 5.5 for extraction, Sonnet 5.5 for `JUDGE_MODEL` (Shoe Finder review checks and image
+  verification), Opus 5.5 for `WRITING_MODEL`. News and runner profiles keep `claude -p` (subscription) first, then
+  the credit on Opus 5.5, then OpenRouter. News sort/group and Jev unchanged. YES/NO checks now ignore leading
+  markdown bold, which Sonnet adds. Same day: morning-briefing, content-autopilot and zwift.run's Jarvis assistant.
+- **Site assistant on Sonnet 5.5, core plus search** (0d95e5c, 48a3a75, `docs/assistant.md`). The whole pack in
+  every prompt was 95k tokens, ~$0.24 a cold question on Sonnet. Now facts, YouTube figures, every race result,
+  films and a page list are the cached core (~20k tokens); page text, blog posts, news and runner profiles (full
+  text since 48a3a75, 2,886 passages) are searched per question (BM25 in `src/lib/assistant/search.ts`, ported from
+  zwift.run). Measured: ~$0.06 cold, ~1p within the 5-minute cache. Ask Wilson shares `complete()`, so it is on
+  Sonnet too (its own 18 KB pack, ~$0.02 cold).
+- **Public for everyone** since 10 Nov (`ASSISTANT_PUBLIC=true`). Limits unchanged: 15 messages/10 min and 60/day
+  per IP, `ASSISTANT_DAILY_USD` default $1 (worst case ~$30/month). Log at `/admin/assistant`.
+- **Training page** (013132e): "The Film My Run app is out now on iPhone", not "coming".
+- **Review on 10 Dec 2026** (in Stephen's Google Calendar): a month of questions, cost, spam, unanswered questions,
+  and how much of the $100 everything used (Console > Billing > Promotional credits).
+
 ## 23 Oct 2026: site stats page; assistant reply fix
 
 - **/admin/stats** (885343f): traffic, most-read posts and news, tools and games, newsletter by source, accounts,
