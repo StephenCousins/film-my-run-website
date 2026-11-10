@@ -25,7 +25,7 @@ Reply NO if it is an animal, logo, cartoon, default avatar, landscape or text gr
 
 Reply ONLY: YES or NO.`,
     });
-    return answer.trim().toUpperCase().startsWith('YES');
+    return answer.replace(/^[*_\s]+/, '').toUpperCase().startsWith('YES');
   } catch {
     return false;
   }

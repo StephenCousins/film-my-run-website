@@ -15,20 +15,25 @@ Two exceptions are tried first, each falling back to OpenRouter on any failure:
   `claude setup-token`). If the CLI is missing, fails, times out, hits a usage
   limit or returns something that isn't JSON, the call falls back to
   OpenRouter. A call served by the subscription counts as $0 against the news
-  ceiling. See `completeJsonViaClaude()` in `src/lib/llm.ts`.
-- **`WRITING_MODEL` calls (RaceScript)** go to `claude-opus-5-5` through the
-  Anthropic SDK while Stephen's prepaid API credit lasts (from 12 Oct 2026),
-  when `ANTHROPIC_CREDIT_API_KEY` is set. No key, credit used up (a 400), any
-  other API error, or a reply that didn't finish means OpenRouter. The old
-  `ANTHROPIC_API_KEY` on Railway is deliberately not used. See
-  `completeTextViaClaude()` in `src/lib/llm.ts`. This is the only Anthropic SDK
-  caller; don't add new ones without asking.
+  ceiling. See `completeJsonViaClaude()` in `src/lib/llm.ts`. If that fails,
+  the same call tries the Anthropic credit (below) on Opus 5.5 before OpenRouter.
+- **Anthropic credit (from 10 Nov 2026).** When `ANTHROPIC_CREDIT_API_KEY` is
+  set, `completeText` / `completeTextWithImage` calls go to Claude directly
+  first, on the monthly API credit included with Stephen's Max plan
+  ($100/month, expires unused): `WRITING_MODEL` on Opus 5.5, `JUDGE_MODEL`
+  (Shoe Finder review checks and image verification) on Sonnet 5.5, everything
+  else on Haiku 5.5. The site assistant and Ask Wilson use Sonnet 5.5
+  (`src/lib/assistant/chat.ts`). No key, credit used up (a 400), any other API
+  error, or a reply that didn't finish means OpenRouter, on the model the call
+  names. The old `ANTHROPIC_API_KEY` on Railway is deliberately not used. See
+  `completeViaClaude()` in `src/lib/llm.ts`.
 
 Models are chosen per job (news models live in `src/lib/news/models.ts`):
 
 | Model | Used for | $/MTok in/out |
 |---|---|---|
-| `google/gemini-2.5-flash-lite` (default) | Extraction, scoring, yes/no checks, image verification | 0.10 / 0.40 |
+| `google/gemini-2.5-flash-lite` (default) | Extraction, runner photo checks (Claude Haiku 5.5 first) | 0.10 / 0.40 |
+| `google/gemini-3.7-flash` (`JUDGE_MODEL`) | Shoe review checks and image verification (Claude Sonnet 5.5 first) | Sonnet 2 / 10 |
 | `deepseek/deepseek-v3.2` (`WRITING_MODEL`) | RaceScript generation (after the Anthropic credit path) | 0.269 / 0.400 |
 | `ASSISTANT_MODEL` (default `anthropic/claude-haiku-5.5`) | Site chat assistant (`docs/assistant.md`) | 0.10 / 0.50, cached input 0.01 |
 | `WRITE_MODEL` / `CHECK_MODEL` | News writing and fact-checking (subscription first, see above) | n/a |

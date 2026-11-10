@@ -1,4 +1,4 @@
-import { completeTextWithImage } from '@/lib/llm';
+import { completeTextWithImage, JUDGE_MODEL } from '@/lib/llm';
 
 /**
  * Hosts that serve user-uploaded or editorial photography rather than
@@ -88,6 +88,7 @@ export async function visionConfirmShoeImage(
   try {
     const answer = await deps.completeTextWithImage({
       imageUrl,
+      model: JUDGE_MODEL,
       maxTokens: 40,
       prompt: `Verify a product photo for a running shoe database.
 
@@ -104,7 +105,7 @@ Do NOT reply NO because you cannot confirm a version number. Version numbers are
 Reply ONLY: YES, or NO followed by a 6-word reason.`,
     });
     if (!answer) return null;
-    return answer.toUpperCase().startsWith('YES');
+    return answer.replace(/^[*_\s]+/, '').toUpperCase().startsWith('YES');
   } catch {
     return null;
   }

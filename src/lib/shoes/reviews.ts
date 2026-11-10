@@ -1,4 +1,4 @@
-import { completeText } from '@/lib/llm';
+import { completeText, JUDGE_MODEL } from '@/lib/llm';
 import type { ReviewSource } from '@prisma/client';
 import { identifySource } from './taxonomy';
 import { extractExplicitScore } from './scores';
@@ -39,6 +39,7 @@ async function inferScoreFromText(brand: string, model: string, text: string, de
   if (!text || text.length < 60) return null;
   try {
     const answer = await deps.completeText({
+      model: JUDGE_MODEL,
       maxTokens: 100,
       prompt: `Score this running shoe review excerpt. Assign 0.0–10.0 based on sentiment toward the ${brand} ${model}.
 
@@ -62,6 +63,7 @@ async function claudeVerifyResult(brand: string, model: string, result: SearchRe
 
   try {
     const answer = await deps.completeText({
+      model: JUDGE_MODEL,
       maxTokens: 60,
       prompt: `Is this search result a review of EXACTLY the ${brand} ${model} running shoe?
 ${adjacentList}
@@ -77,7 +79,7 @@ Rules:
 
 Reply: YES or NO, then a 5-word reason.`,
     });
-    return { verified: answer.toUpperCase().startsWith('YES'), reason: answer || 'no answer' };
+    return { verified: answer.replace(/^[*_\s]+/, '').toUpperCase().startsWith('YES'), reason: answer || 'no answer' };
   } catch {
     return { verified: false, reason: 'API error' };
   }

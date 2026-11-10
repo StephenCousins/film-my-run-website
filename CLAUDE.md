@@ -52,8 +52,8 @@ After adding a dependency, run `npm install` so `package-lock.json` is in sync b
   response is a real image (>5KB; YouTube also serves a ~1KB grey placeholder).
 - **Strava embeds need a per-activity `data-token`** on recent activities, else the iframe shows "Error code: EEE".
   Store it in the post's `meta.strava_embed_token`; `applyStravaEmbedToken()` injects it at render.
-- **LLM calls go through `src/lib/llm.ts`** (OpenRouter by default; news via `claude -p` first; RaceScript via the
-  Anthropic credit key first). Details and models: `docs/llm.md`.
+- **LLM calls go through `src/lib/llm.ts`** (news via `claude -p` first; everything else tries Claude on the Max
+  plan's API credit first via `ANTHROPIC_CREDIT_API_KEY`; OpenRouter is the fallback). Details and models: `docs/llm.md`.
 - **Blog posts:** read `BLOG-WRITING-INSTRUCTIONS.md` first. The transcript says what happened; the post retells it
   in original prose in Stephen's voice, never copied from the transcript. Tracking: `BLOG-POST-PROJECT.md`.
 - `/tools/racescript` is live but unlinked and has never worked in production (`docs/architecture.md`).

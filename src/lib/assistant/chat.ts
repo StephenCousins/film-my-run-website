@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import Anthropic from '@anthropic-ai/sdk';
 import { getClient } from '@/lib/llm';
 
 /**
@@ -93,8 +94,43 @@ export function allow(key: string, now = Date.now(), windows: [number, number][]
 
 export type SystemBlock = { text: string; cache?: boolean };
 
+/**
+ * Claude Sonnet 5.5 direct on the Max plan's monthly API credit (10 Nov 2026), so answers are as good as we can
+ * make them. Null means "use OpenRouter Haiku": no key, credit used up, or any error. costUsd is what the call
+ * would cost at list price, so the daily cap still protects the credit.
+ */
+const CLAUDE_ASSISTANT = 'claude-sonnet-5-5';
+const SONNET_PER_TOKEN = { input: 2e-6, cacheWrite: 2.5e-6, cacheRead: 0.1e-6, output: 10e-6 };
+
+async function completeViaClaude(system: SystemBlock[], messages: ChatMessage[]): Promise<{ text: string; costUsd: number } | null> {
+  if (!process.env.ANTHROPIC_CREDIT_API_KEY) return null;
+  try {
+    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_CREDIT_API_KEY, maxRetries: 1, timeout: 60_000 });
+    const message = await client.messages.create({
+      model: CLAUDE_ASSISTANT,
+      max_tokens: LIMITS.replyTokens,
+      output_config: { effort: 'low' },
+      system: system.map((b) => (b.cache ? { type: 'text' as const, text: b.text, cache_control: { type: 'ephemeral' as const } } : { type: 'text' as const, text: b.text })),
+      messages,
+    });
+    if (message.stop_reason !== 'end_turn') throw new Error(`stop_reason ${message.stop_reason}`);
+    const text = cleanReply(message.content.map((b) => (b.type === 'text' ? b.text : '')).join(''));
+    if (!text) throw new Error('empty reply');
+    const u = message.usage;
+    const costUsd = u.input_tokens * SONNET_PER_TOKEN.input + (u.cache_creation_input_tokens ?? 0) * SONNET_PER_TOKEN.cacheWrite
+      + (u.cache_read_input_tokens ?? 0) * SONNET_PER_TOKEN.cacheRead + u.output_tokens * SONNET_PER_TOKEN.output;
+    console.log(`assistant: ${CLAUDE_ASSISTANT} $${costUsd.toFixed(5)} (credit), ${u.cache_read_input_tokens ?? 0} cached / ${u.cache_creation_input_tokens ?? 0} written / ${u.input_tokens} new prompt tokens`);
+    return { text, costUsd };
+  } catch (e) {
+    console.log(`assistant: claude-credit failed: ${(e as Error).message.split('\n')[0].slice(0, 200)}, falling back to OpenRouter`);
+    return null;
+  }
+}
+
 /** One model call over system blocks and a conversation. Shared by the site assistant and the Wilson endpoint. */
 export async function complete(system: SystemBlock[], messages: ChatMessage[]): Promise<{ text: string; costUsd: number }> {
+  const viaClaude = await completeViaClaude(system, messages);
+  if (viaClaude) return viaClaude;
   const completion = await getClient().chat.completions.create({
     model: ASSISTANT_MODEL,
     max_tokens: LIMITS.replyTokens,

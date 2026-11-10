@@ -54,35 +54,61 @@ export interface CompleteOptions {
 }
 
 /**
- * WRITING_MODEL calls go to Claude directly while Stephen's prepaid Anthropic
- * API credit lasts (12 Oct 2026). Null means "use OpenRouter": no
- * ANTHROPIC_CREDIT_API_KEY, credit used up (a 400), any other API error, or a
- * reply that didn't finish. The old ANTHROPIC_API_KEY on Railway is
- * deliberately not used, so nothing switches on until the new key is set.
+ * Judgement calls where a wrong answer costs us (is this review about exactly
+ * this shoe version? is this the right shoe photo?). On the Anthropic credit
+ * they run on Sonnet 5.5; the OpenRouter fallback is a step up from the default.
  */
-const CLAUDE_MODEL = 'claude-opus-5-5';
+export const JUDGE_MODEL = 'google/gemini-3.7-flash';
 
-async function completeTextViaClaude({ prompt, maxTokens, system }: CompleteOptions): Promise<string | null> {
+/**
+ * Calls go to Claude directly first, on the monthly API credit included with
+ * Stephen's Max plan ($100/month, expires unused; 10 Nov 2026). Null means
+ * "use OpenRouter": no ANTHROPIC_CREDIT_API_KEY, credit used up (a 400), any
+ * other API error, or a reply that didn't finish. The old ANTHROPIC_API_KEY on
+ * Railway is deliberately not used.
+ */
+type ClaudeRoute = { model: string; effort: 'low' | 'medium' };
+const CLAUDE_WRITER: ClaudeRoute = { model: 'claude-opus-5-5', effort: 'medium' };
+const CLAUDE_ROUTES: Record<string, ClaudeRoute> = {
+  [WRITING_MODEL]: CLAUDE_WRITER,
+  [WRITE_MODEL]: CLAUDE_WRITER, // CHECK_MODEL is the same model id
+  [JUDGE_MODEL]: { model: 'claude-sonnet-5-5', effort: 'medium' },
+};
+const CLAUDE_CHEAP: ClaudeRoute = { model: 'claude-haiku-5-5', effort: 'low' };
+
+async function completeViaClaude(
+  route: ClaudeRoute,
+  { prompt, maxTokens, system }: CompleteOptions,
+  extra: { imageUrl?: string; schema?: object } = {},
+): Promise<string | null> {
   if (!process.env.ANTHROPIC_CREDIT_API_KEY) return null;
   try {
     const client = new Anthropic({ apiKey: process.env.ANTHROPIC_CREDIT_API_KEY, maxRetries: 1 });
     const message = await client.messages
       .stream({
-        model: CLAUDE_MODEL,
+        model: route.model,
         // Thinking counts against max_tokens, so leave room above the reply's own cap.
         max_tokens: maxTokens + 8000,
-        output_config: { effort: 'medium' },
+        output_config: {
+          effort: route.effort,
+          ...(extra.schema ? { format: { type: 'json_schema' as const, schema: extra.schema as Record<string, unknown> } } : {}),
+        },
         ...(system ? { system } : {}),
-        messages: [{ role: 'user', content: prompt }],
+        messages: [{
+          role: 'user',
+          content: extra.imageUrl
+            ? [{ type: 'image', source: { type: 'url', url: extra.imageUrl } }, { type: 'text', text: prompt }]
+            : prompt,
+        }],
       })
       .finalMessage();
     if (message.stop_reason !== 'end_turn') throw new Error(`stop_reason ${message.stop_reason}`);
     const text = message.content.map((b) => (b.type === 'text' ? b.text : '')).join('').trim();
     if (!text) throw new Error('empty reply');
-    console.log('claude-credit ok');
+    console.log(`claude-credit ok (${route.model})`);
     return text;
   } catch (e) {
-    console.log(`claude-credit failed: ${(e as Error).message.split('\n')[0].slice(0, 200)}, falling back to OpenRouter`);
+    console.log(`claude-credit failed (${route.model}): ${(e as Error).message.split('\n')[0].slice(0, 200)}, falling back to OpenRouter`);
     return null;
   }
 }
@@ -102,10 +128,8 @@ export async function completeText({
   temperature = 0,
   model = process.env.OPENROUTER_MODEL || DEFAULT_MODEL,
 }: CompleteOptions): Promise<string> {
-  if (model === WRITING_MODEL) {
-    const viaClaude = await completeTextViaClaude({ prompt, maxTokens, system });
-    if (viaClaude !== null) return viaClaude;
-  }
+  const viaClaude = await completeViaClaude(CLAUDE_ROUTES[model] ?? CLAUDE_CHEAP, { prompt, maxTokens, system });
+  if (viaClaude !== null) return viaClaude;
 
   const client = getClient();
 
@@ -135,6 +159,9 @@ export async function completeTextWithImage({
   temperature = 0,
   model = process.env.OPENROUTER_MODEL || DEFAULT_MODEL,
 }: CompleteOptions & { imageUrl: string }): Promise<string> {
+  const viaClaude = await completeViaClaude(CLAUDE_ROUTES[model] ?? CLAUDE_CHEAP, { prompt, maxTokens }, { imageUrl });
+  if (viaClaude !== null) return viaClaude;
+
   const client = getClient();
 
   const completion = await client.chat.completions.create({
@@ -250,6 +277,14 @@ export async function completeJson<T>(
   if (process.env.CLAUDE_CODE_OAUTH_TOKEN && (model === WRITE_MODEL || model === CHECK_MODEL)) {
     const viaClaude = await completeJsonViaClaude<T>(opts, run);
     if (viaClaude) return viaClaude;
+  }
+  // Writing and checking (news, runner profiles) next try the API credit, so a
+  // run without the subscription token, or past its usage limit, still avoids
+  // paying OpenRouter for Opus. Sorting and grouping stay on OpenRouter as tuned.
+  if (model === WRITE_MODEL || model === CHECK_MODEL) {
+    const raw = await completeViaClaude(CLAUDE_WRITER, { prompt, system, maxTokens }, { schema });
+    const data = raw === null ? null : parseJson<T>(raw);
+    if (data !== null) return { data, costUsd: 0, raw: raw! };
   }
   const client = getClient();
   const completion = await client.chat.completions.create({
