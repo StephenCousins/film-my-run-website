@@ -33,8 +33,8 @@ Dated status entries moved out of CLAUDE.md. Newest first.
   15 s; once per 7 days per browser; never on contact/account/admin/checkout/login/games. `?assistant=1` resets it.
 - Tested live: 14 questions plus off-topic (football), unknown (pizza, Lakeland shoes), small talk; all handled. One
   small-talk joke ("my legs do all the hard work") didn't quite land; offered Stephen example jokes in his style.
-- **State:** `ASSISTANT_ENABLED=true` on Railway; `ASSISTANT_PUBLIC` not set, so only browsers that opened a page with
-  `?assistant=1` see it. Stephen turns it on for everyone when happy.
+- **State:** public for every visitor since 10 Nov 2026 (`ASSISTANT_ENABLED=true`, `ASSISTANT_PUBLIC=true` on
+  Railway), on Sonnet 5.5 with core-plus-search (`docs/assistant.md`).
 - **Open:** Stephen's PBs for facts.md (it currently infers the marathon PB from a blog post); "unanswered" filter and
   weekly email of unanswered questions offered, not built; app version planned after 1.0 (filmmyrun-ios
   `docs/superpowers/specs/2026-10-22-site-assistant-in-app-design.md`).

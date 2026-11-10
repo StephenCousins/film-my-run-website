@@ -6,12 +6,17 @@ Built 22 Oct 2026. A chat bubble that answers visitors' questions about Stephen 
 
 - **Knowledge pack:** `content/assistant/pack.md`, built by `npm run assistant:pack` from
   `content/assistant/facts.md` (hand-written by Stephen, wins over everything else) plus every page in the live
-  sitemap, plus every race result from `/api/races` (the race dashboard renders in the browser, so the page scrape never saw his times; until 5 Nov 2026 the assistant repeated an invented 4:45:32 London time from the About page), plus the YouTube channel's 40 most-viewed videos, sorted from every upload's real count (search's order=viewCount skipped 81 Yards) (needs `YOUTUBE_API_KEY` in `.env`): core pages in full (trimmed to 4,000 characters), blog and films as title plus description, news and runners as titles only. About 44k
-  tokens. Read it to see exactly what the assistant knows. Rebuild after editing facts.md or when the site has moved
+  sitemap, plus every race result from `/api/races` (the race dashboard renders in the browser, so the page scrape never saw his times; until 5 Nov 2026 the assistant repeated an invented 4:45:32 London time from the About page), plus the YouTube channel's 40 most-viewed videos, sorted from every upload's real count (search's order=viewCount skipped 81 Yards) (needs `YOUTUBE_API_KEY` in `.env`): core pages in full (trimmed to 4,000 characters), blog and films as title plus description, news and runners as titles only. About 214 KB
+  (95k Sonnet tokens on 10 Nov 2026). Read it to see exactly what the assistant knows. Rebuild after editing facts.md or when the site has moved
   on (new posts, news), then commit the pack and push.
-- **No retrieval.** The whole pack is the system prompt on every turn (`src/lib/assistant/chat.ts`), with the rules
-  above it. The provider's prompt cache makes the repeated part cheap.
-- **Model:** `ASSISTANT_MODEL` env var, default `anthropic/claude-haiku-5.5` via OpenRouter, with the pack marked for the prompt cache (`docs/llm.md`).
+- **Core + search (since 10 Nov 2026).** `splitPack()` in `src/lib/assistant/search.ts` keeps the pack's facts,
+  YouTube figures, every race result, films and a list of page titles as the prompt-cached system prompt (~36k
+  characters, ~20k tokens). Page text, blog, news and runner profiles become ~900 passages; each question carries the
+  best 6 to 8 (BM25 keyword search, ported from zwift.run). The whole pack in every prompt cost ~$0.24 per uncached
+  question on Sonnet; now ~$0.05 uncached, under 1p cached. Section headings in the pack decide what is core (`CORE`
+  in search.ts), so keep them when changing the pack builder.
+- **Model:** Claude Sonnet 5.5 direct on the Max plan's API credit when `ANTHROPIC_CREDIT_API_KEY` is set; any
+  failure falls back to `ASSISTANT_MODEL` (default `anthropic/claude-haiku-5.5`) via OpenRouter (`docs/llm.md`).
 - **API:** `POST /api/assistant` `{ sessionId, messages: [{ role, content }] }` → `{ reply }` or `{ error }`.
   Limits: 1,000 characters a message, last 20 messages kept, 15 messages per IP per 10 minutes and 60 a day
   (in memory, reset on deploy), and a daily spend cap.
