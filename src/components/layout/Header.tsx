@@ -14,7 +14,12 @@ import BasketLink from '@/components/shop/BasketLink';
 // NAVIGATION DATA
 // ============================================
 
-const navigation = [
+interface NavLink { name: string; href: string; desc?: string }
+interface NavEntry { name: string; href: string; children?: NavLink[]; groups?: { title: string; items: NavLink[] }[] }
+
+// For Runners had grown to ten flat links (Nov 2026): now two labelled columns with a line each,
+// and the games have their own top-level item.
+const navigation: NavEntry[] = [
   {
     name: 'Stories',
     href: '/blog',
@@ -27,22 +32,38 @@ const navigation = [
   },
   {
     name: 'For Runners',
-    href: '/tools/calculators',
-    children: [
-      { name: 'Running Calculators', href: '/tools/calculators' },
-      { name: 'StoneTracker', href: '/tools/stone-tracker' },
-      { name: 'Shoe Finder', href: '/tools/shoe-finder' },
-      { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
-      { name: 'Runner Quiz', href: '/tools/runner-quiz' },
-      { name: 'RunGuessr: daily race quiz', href: '/games/runguessr' },
-      { name: 'Fartlex: daily word game', href: '/games/fartlex' },
-      { name: 'Route Comparison', href: '/tools/route-comparison' },
-      { name: 'Training Plans', href: '/training' },
-      { name: 'Discount Codes', href: '/discounts' },
+    href: '/tools',
+    groups: [
+      {
+        title: 'Race tools',
+        items: [
+          { name: 'Running Calculators', href: '/tools/calculators', desc: 'Pace, splits and race predictions' },
+          { name: 'How Fast Are You', href: '/tools/how-fast-am-i', desc: 'Where your times rank in the UK' },
+          { name: 'Route Comparison', href: '/tools/route-comparison', desc: 'Lay your GPX files side by side' },
+          { name: 'StoneTracker', href: '/tools/stone-tracker', desc: 'Your UTMB Running Stones' },
+        ],
+      },
+      {
+        title: 'Kit & training',
+        items: [
+          { name: 'Shoe Finder', href: '/tools/shoe-finder', desc: 'The right shoe for your running' },
+          { name: 'Training Plans', href: '/training', desc: 'Plans in the Film My Run app' },
+          { name: 'Discount Codes', href: '/discounts', desc: 'Money off running kit' },
+        ],
+      },
     ],
   },
   {
-    name: 'For Event Organisers',
+    name: 'Games',
+    href: '/games',
+    children: [
+      { name: 'RunGuessr', href: '/games/runguessr', desc: 'Guess the race from its course' },
+      { name: 'Fartlex', href: '/games/fartlex', desc: 'The daily running word' },
+      { name: 'Runner Quiz', href: '/tools/runner-quiz', desc: 'What kind of runner are you?' },
+    ],
+  },
+  {
+    name: 'For Events', // 'For Event Organisers' wrapped at 1024px once Games joined the bar; matches the phone menu
     href: '/services',
     children: [
       { name: 'All Services', href: '/services' },
@@ -82,15 +103,25 @@ function Logo({ variant }: { variant: 'default' | 'hero' | 'scrolled' }) {
 // DESKTOP NAV
 // ============================================
 
+function MenuLink({ link, onPick }: { link: NavLink; onPick: () => void }) {
+  return (
+    <Link href={link.href} role="menuitem" onClick={onPick}
+      className={cn('block rounded-lg px-3 py-2 hover:bg-surface-secondary group', link.desc ? '' : 'px-4 rounded-none')}>
+      <span className="block text-sm font-medium text-foreground group-hover:text-brand">{link.name}</span>
+      {link.desc && <span className="block text-xs text-muted mt-0.5">{link.desc}</span>}
+    </Link>
+  );
+}
+
 interface NavItemProps {
-  item: typeof navigation[0];
+  item: NavEntry;
   isActive: boolean;
   variant: 'default' | 'hero' | 'scrolled';
 }
 
 function DesktopNavItem({ item, isActive, variant }: NavItemProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const hasChildren = 'children' in item && item.children;
+  const hasChildren = !!(item.children || item.groups);
   const closeTimeout = useRef<ReturnType<typeof setTimeout>>(undefined);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -143,7 +174,7 @@ function DesktopNavItem({ item, isActive, variant }: NavItemProps) {
           aria-expanded={isOpen}
           aria-haspopup="true"
           className={cn(
-            'flex items-center gap-1 px-3 py-2 text-sm font-medium transition-colors duration-300',
+            'flex items-center gap-1 px-2 xl:px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-300',
             textClass
           )}
         >
@@ -163,19 +194,30 @@ function DesktopNavItem({ item, isActive, variant }: NavItemProps) {
           )}
           role="menu"
         >
-          <div className="bg-surface rounded-xl shadow-xl border border-border py-2 min-w-[200px]">
-            {item.children?.map((child) => (
-              <Link
-                key={child.href}
-                href={child.href}
-                role="menuitem"
-                className="block px-4 py-2 text-sm text-secondary hover:text-brand hover:bg-surface-secondary"
-                onClick={() => setIsOpen(false)}
-              >
-                {child.name}
+          {item.groups ? (
+            <div className="bg-surface rounded-xl shadow-xl border border-border p-3 grid grid-cols-2 gap-x-2 w-[520px]">
+              {item.groups.map((g) => (
+                <div key={g.title}>
+                  <p className="px-3 pt-1 pb-2 text-[11px] font-semibold uppercase tracking-widest text-muted">{g.title}</p>
+                  {g.items.map((child) => <MenuLink key={child.href} link={child} onPick={() => setIsOpen(false)} />)}
+                </div>
+              ))}
+              <Link href={item.href} role="menuitem" onClick={() => setIsOpen(false)}
+                className="col-span-2 mt-2 pt-3 px-3 border-t border-border text-sm font-semibold text-brand hover:underline">
+                All tools →
               </Link>
-            ))}
-          </div>
+            </div>
+          ) : (
+            <div className={cn('bg-surface rounded-xl shadow-xl border border-border', item.children?.some((c) => c.desc) ? 'p-2 w-[280px]' : 'py-2 min-w-[200px]')}>
+              {item.children?.map((child) => <MenuLink key={child.href} link={child} onPick={() => setIsOpen(false)} />)}
+              {item.children?.some((c) => c.desc) && (
+                <Link href={item.href} role="menuitem" onClick={() => setIsOpen(false)}
+                  className="block mt-1 pt-2 px-3 pb-1 border-t border-border text-sm font-semibold text-brand hover:underline">
+                  All {item.name.toLowerCase()} →
+                </Link>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );
@@ -187,7 +229,7 @@ function DesktopNavItem({ item, isActive, variant }: NavItemProps) {
       <Link
         href={item.href}
         className={cn(
-          'mx-1 px-4 py-2 text-sm font-semibold rounded-full bg-[#f88c00] text-white shadow-sm transition-colors duration-300 hover:bg-[#ff9f1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f88c00]',
+          'mx-1 px-4 py-2 text-sm font-semibold whitespace-nowrap rounded-full bg-[#f88c00] text-white shadow-sm transition-colors duration-300 hover:bg-[#ff9f1c] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#f88c00]',
           isActive && 'bg-[#e07800]'
         )}
       >
@@ -200,7 +242,7 @@ function DesktopNavItem({ item, isActive, variant }: NavItemProps) {
     <Link
       href={item.href}
       className={cn(
-        'px-3 py-2 text-sm font-medium transition-colors duration-300',
+        'px-2 xl:px-3 py-2 text-sm font-medium whitespace-nowrap transition-colors duration-300',
         textClass
       )}
     >

@@ -7,6 +7,7 @@ import { Camera, ChevronRight, Map as MapIcon, Mountain, Share2, Shuffle } from 
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import GameHero from '@/components/games/GameHero';
+import { track } from '@/lib/track';
 import {
   BASE, CLUES, CLUE_COST, EMPTY_STATS, GAME_NAME, ROUNDS, liveStreak, pickRounds, record, resultOf, roundScore, shareText,
   type ClueKey, type Mode, type Photo, type RaceData, type Round, type Stats,
@@ -83,6 +84,7 @@ export default function RunGuessrClient({ number, rounds: daily, raceCount }: Pr
     const next = answers.map((a, n) => (n === i ? id : a));
     setAnswers(next);
     let s = stats;
+    if (next.every(Boolean)) track('tool', 'runguessr', practice ? 'practice' : 'daily');
     if (!practice && next.every(Boolean)) {
       const final = rounds.reduce((sum, r, n) => sum + roundScore(next[n] === r.race.id, clues[n].length), 0);
       s = record(stats, number, final);

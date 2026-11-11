@@ -6,6 +6,7 @@ import Script from 'next/script';
 import { Calendar, Clock, ArrowLeft, Twitter, Facebook, Linkedin, Tag, ChevronRight } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import DailyGamesCard from '@/components/games/DailyGamesCard';
 import NewsletterForm from '@/components/newsletter/NewsletterForm';
 import { prisma } from '@/lib/db';
 import { sanitizeContent } from '@/lib/sanitize';
@@ -525,6 +526,8 @@ export default async function BlogPostPage({ params }: PageProps) {
                       ))}
                     </div>
                   </div>
+
+                  <DailyGamesCard />
 
                   {/* Newsletter */}
                   <div className="p-6 bg-surface rounded-2xl">

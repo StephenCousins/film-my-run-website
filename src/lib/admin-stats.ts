@@ -16,6 +16,7 @@ export const TOOLS = [
   { label: 'parkrun', path: '/tools/parkrun', name: 'parkrun stats' },
   { label: 'runner-quiz', path: '/tools/runner-quiz', name: 'Runner quiz (finished)' },
   { label: 'fartlex', path: '/games/fartlex', name: 'Fartlex (games, signed in)' },
+  { label: 'runguessr', path: '/games/runguessr', name: 'RunGuessr (games finished)' },
   { label: 'assistant', path: null, name: 'Site assistant (questions)' },
 ] as const;
 

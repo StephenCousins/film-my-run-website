@@ -13,6 +13,14 @@ import ThemeToggle from '@/components/ui/ThemeToggle';
 
 const sheetSections = [
   {
+    title: 'Daily Games',
+    links: [
+      { name: 'RunGuessr: guess the race', href: '/games/runguessr' },
+      { name: 'Fartlex: running word', href: '/games/fartlex' },
+      { name: 'Runner Quiz', href: '/tools/runner-quiz' },
+    ],
+  },
+  {
     title: 'For Runners',
     links: [
       { name: 'Running Calculators', href: '/tools/calculators' },

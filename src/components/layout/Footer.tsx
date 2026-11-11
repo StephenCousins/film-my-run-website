@@ -14,6 +14,7 @@ const footerLinks = {
   forRunners: {
     title: 'For Runners',
     links: [
+      { name: 'Daily Games', href: '/games' },
       { name: 'Running Calculators', href: '/tools/calculators' },
       { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
       { name: 'Route Comparison', href: '/tools/route-comparison' },
