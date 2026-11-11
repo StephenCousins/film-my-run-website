@@ -515,3 +515,19 @@ blockquote.pull-quote p,
 @media (prefers-reduced-motion: reduce) {
   [class*='wordrun-shake'] { animation: none !important; }
 }
+
+/* RunGuessr: the course line draws itself in (paths carry pathLength="1"). */
+.rg-draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: rg-draw 1.1s cubic-bezier(0.19, 1, 0.22, 1) 0.1s forwards; }
+@keyframes rg-draw { to { stroke-dashoffset: 0; } }
+
+/* Fartlex: a submitted row turns over tile by tile. */
+.wordrun-flip { animation: wordrun-flip 0.45s ease-out both; }
+@keyframes wordrun-flip {
+  0% { transform: rotateX(0); }
+  50% { transform: rotateX(90deg); }
+  100% { transform: rotateX(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rg-draw { animation: none; stroke-dashoffset: 0; }
+  .wordrun-flip { animation: none; }
+}

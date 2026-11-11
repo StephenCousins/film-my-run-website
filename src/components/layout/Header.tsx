@@ -34,6 +34,7 @@ const navigation = [
       { name: 'Shoe Finder', href: '/tools/shoe-finder' },
       { name: 'How Fast Are You', href: '/tools/how-fast-am-i' },
       { name: 'Runner Quiz', href: '/tools/runner-quiz' },
+      { name: 'RunGuessr: daily race quiz', href: '/games/runguessr' },
       { name: 'Fartlex: daily word game', href: '/games/fartlex' },
       { name: 'Route Comparison', href: '/tools/route-comparison' },
       { name: 'Training Plans', href: '/training' },
@@ -60,7 +61,8 @@ const navigation = [
 const SHOP_HREF = '/shop';
 
 // Pages where the hero extends behind the header (no pt-20 gap)
-const HERO_PAGES = ['/'];
+// Pages that open on a dark band, so the header starts in white text. The games share GameHero (Nov 2026).
+const HERO_PAGES = ['/', '/games', '/games/runguessr', '/games/fartlex'];
 
 // ============================================
 // LOGO COMPONENT

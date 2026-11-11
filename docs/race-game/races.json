@@ -1,0 +1,5206 @@
+[
+ {
+  "id": "western-states",
+  "name": "Western States 100",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Jun",
+  "km": 161,
+  "gain_m": 4972,
+  "route": "Olympic Valley to Auburn",
+  "hook": "Oldest 100-miler; silver buckle under 24h",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/western-states-endurance-run/main/course.gpx",
+   "gpx_km": 161.05,
+   "gpx_gain_m": 4972,
+   "aid_stations": 22,
+   "partial": false,
+   "origin": "https://www.wser.org/wp-content/uploads/gpx/WSER2025welev.gpx"
+  },
+  "photos": [
+   {
+    "file": "Finish!.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Finish!.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Jon Roig"
+   },
+   {
+    "file": "Foot repair, Michigan Bluff.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Foot_repair,_Michigan_Bluff.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Jon Roig"
+   },
+   {
+    "file": "Gordy Ainsleigh during the 2007 Western States Endurance Run pre-race briefing.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gordy_Ainsleigh_during_the_2007_Western_States_Endurance_Run_pre-race_briefing.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "FartherFaster at en.wikipedia"
+   },
+   {
+    "file": "Weigh in, Michigan Bluff.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Weigh_in,_Michigan_Bluff.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Jon Roig"
+   },
+   {
+    "file": "Western States 100 Finish Line.JPEG",
+    "page": "https://commons.wikimedia.org/wiki/File:Western_States_100_Finish_Line.JPEG",
+    "license": "CC BY-SA 4.0",
+    "credit": "Trackinfo"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "barkley",
+  "name": "Barkley Marathons",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Mar/Apr",
+  "km": 160,
+  "gain_m": 18000,
+  "route": "5 loops, Frozen Head State Park",
+  "hook": "Starts when the cigarette is lit; course secret, no GPX",
+  "course": null,
+  "photos": [
+   {
+    "file": "Licence plates Barkley.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Licence_plates_Barkley.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Michael Hoodge"
+   },
+   {
+    "file": "Lighting the cigarette to start Barkley.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lighting_the_cigarette_to_start_Barkley.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Michael Hodge"
+   },
+   {
+    "file": "Start of Barkley 2009.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Start_of_Barkley_2009.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Michael Hodge"
+   }
+  ],
+  "photos_checked": "title only; open each before use",
+  "course_todo": "Course is secret by design. Trivia rounds only."
+ },
+ {
+  "id": "spine",
+  "name": "Montane Spine Race",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": "Jan",
+  "km": 431,
+  "gain_m": 9991,
+  "route": "Edale to Kirk Yetholm (Pennine Way)",
+  "hook": "Non-stop in winter, 7-day cut-off",
+  "course": {
+   "source": "gpx",
+   "urls": [
+    "https://storage.googleapis.com/advntm/gpx/OLD_Winter23_SPINE.gpx"
+   ],
+   "path": "courses/spine.gpx",
+   "gpx_km": 424.24,
+   "gpx_gain_m": 9991,
+   "elevation": "source",
+   "partial": false,
+   "notes": "Official 2023 winter route. Source elevation gives 9,991 m vs ~13,000 m advertised (smoothed track)."
+  },
+  "photos": [
+   {
+    "file": "Eoin keith spine race finish.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Eoin_keith_spine_race_finish.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "LazarusThe2nd"
+   },
+   {
+    "file": "Pavel Paloncý during Spine Race.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pavel_Palonc%C3%BD_during_Spine_Race.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ClermontFerrand007"
+   },
+   {
+    "file": "Pavel Paloncý on Spine Race.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pavel_Palonc%C3%BD_on_Spine_Race.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ClermontFerrand007"
+   },
+   {
+    "file": "Pavel Paloncý on Spine Race - Cowgreen Reservoir.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pavel_Palonc%C3%BD_on_Spine_Race_-_Cowgreen_Reservoir.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ClermontFerrand007"
+   },
+   {
+    "file": "Pavel Paloncý on Spine Race - Fountain Fell.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pavel_Palonc%C3%BD_on_Spine_Race_-_Fountain_Fell.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ClermontFerrand007"
+   },
+   {
+    "file": "Pavel Paloncý on Spine Race - above Greg's Hut.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pavel_Palonc%C3%BD_on_Spine_Race_-_above_Greg%27s_Hut.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ClermontFerrand007"
+   },
+   {
+    "file": "Pavel Paloncý on Spine Race - finish line.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pavel_Palonc%C3%BD_on_Spine_Race_-_finish_line.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ClermontFerrand007"
+   },
+   {
+    "file": "Pavel Paloncý on Spine Race 2017.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pavel_Palonc%C3%BD_on_Spine_Race_2017.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ClermontFerrand007"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "dragons-back",
+  "name": "Dragon's Back Race",
+  "country": "UK",
+  "type": "stage ultra",
+  "month": "Sep",
+  "km": 380,
+  "gain_m": 16506,
+  "route": "Conwy to Cardiff, 6 days",
+  "hook": "Length of Wales over the mountains",
+  "course": {
+   "source": "gpx",
+   "urls": [
+    "https://www.dragonsbackrace.com/s/DBR26-DAY-1-FINAL.gpx",
+    "https://www.dragonsbackrace.com/s/DBR26-DAY-2-FINAL.gpx",
+    "https://www.dragonsbackrace.com/s/DBR26-DAY-3-FINAL.gpx",
+    "https://www.dragonsbackrace.com/s/DBR26-DAY-4-FINAL.gpx",
+    "https://www.dragonsbackrace.com/s/DBR26-DAY-5-FINAL.gpx",
+    "https://www.dragonsbackrace.com/s/DBR26-DAY-6-FINAL.gpx"
+   ],
+   "path": "courses/dragons-back.gpx",
+   "gpx_km": 383.3,
+   "gpx_gain_m": 16506,
+   "elevation": "source",
+   "partial": false
+  },
+  "photos": [],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "west-highland-way",
+  "name": "West Highland Way Race",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": "Jun",
+  "km": 153,
+  "gain_m": 3371,
+  "route": "Milngavie to Fort William",
+  "hook": "Course photos only (scenery, not race)",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/west-highland-way-race/main/course.gpx",
+   "gpx_km": 152.79,
+   "gpx_gain_m": 3371,
+   "aid_stations": 15,
+   "partial": false,
+   "origin": "https://westhighlandwayrace.org/wp-content/uploads/2024/06/West-Highland-Way-Race-2024-V1-1.gpx"
+  },
+  "photos": [
+   {
+    "file": "130707 Glen Coe from east C.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:130707_Glen_Coe_from_east_C.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Dave souza"
+   },
+   {
+    "file": "At the start of the Devil's Staircase - geograph.org.uk - 723805.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:At_the_start_of_the_Devil%27s_Staircase_-_geograph.org.uk_-_723805.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Nigel Brown"
+   },
+   {
+    "file": "Balmaha-Inversnaid-2.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Balmaha-Inversnaid-2.jpg",
+    "license": "CC0",
+    "credit": "MartinThoma"
+   },
+   {
+    "file": "Balmaha-Inversnaid-32.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Balmaha-Inversnaid-32.jpg",
+    "license": "CC0",
+    "credit": "MartinThoma"
+   },
+   {
+    "file": "Balmaha-Inversnaid-8.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Balmaha-Inversnaid-8.jpg",
+    "license": "CC0",
+    "credit": "MartinThoma"
+   },
+   {
+    "file": "Bridge-of-Orchy-Kinlochleven-13.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Bridge-of-Orchy-Kinlochleven-13.jpg",
+    "license": "CC0",
+    "credit": "MartinThoma"
+   },
+   {
+    "file": "Fallen tree at Lochan Maol Dhuinne.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Fallen_tree_at_Lochan_Maol_Dhuinne.jpg",
+    "license": "CC0",
+    "credit": "GeographUser"
+   },
+   {
+    "file": "Inverarnan-Tyndrum-19.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Inverarnan-Tyndrum-19.jpg",
+    "license": "CC0",
+    "credit": "MartinThoma"
+   },
+   {
+    "file": "Sair feet statue.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Sair_feet_statue.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Ronaldcameron"
+   },
+   {
+    "file": "The West Highland Way - geograph.org.uk - 3993277.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_West_Highland_Way_-_geograph.org.uk_-_3993277.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "M J Richardson"
+   },
+   {
+    "file": "WHW 11 - panoramio.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:WHW_11_-_panoramio.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Antoni Pons Oliver"
+   },
+   {
+    "file": "WHW Rannoch-Moor.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:WHW_Rannoch-Moor.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Mogens Engelund"
+   },
+   {
+    "file": "West Highland Way, Glasgow, United Kingdom (Unsplash b9ehD6WFNSg).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:West_Highland_Way,_Glasgow,_United_Kingdom_(Unsplash_b9ehD6WFNSg).jpg",
+    "license": "CC0",
+    "credit": "Asa Rodger asarodger"
+   },
+   {
+    "file": "West Highland Way - panoramio (9).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:West_Highland_Way_-_panoramio_(9).jpg",
+    "license": "CC BY 3.0",
+    "credit": "lombiedezombie@hotma…"
+   },
+   {
+    "file": "West Highland Way near Craw Knowe - geograph.org.uk - 4204929.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:West_Highland_Way_near_Craw_Knowe_-_geograph.org.uk_-_4204929.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Dave Kelly"
+   },
+   {
+    "file": "West Highland Way north of Drymen 2025-07-24.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:West_Highland_Way_north_of_Drymen_2025-07-24.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Opus 113"
+   },
+   {
+    "file": "Westhighlandway.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Westhighlandway.jpg",
+    "license": "Public domain",
+    "credit": "self"
+   },
+   {
+    "file": "Westhighlandway2.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Westhighlandway2.jpg",
+    "license": "Public domain",
+    "credit": "self"
+   },
+   {
+    "file": "Whw-drymen-balmaha-3.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Whw-drymen-balmaha-3.jpg",
+    "license": "CC0",
+    "credit": "MartinThoma"
+   },
+   {
+    "file": "Whw-drymen-balmaha-4.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Whw-drymen-balmaha-4.jpg",
+    "license": "CC0",
+    "credit": "MartinThoma"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "badwater",
+  "name": "Badwater 135",
+  "country": "USA",
+  "type": "road ultra",
+  "month": "Jul",
+  "km": 217,
+  "gain_m": 4552,
+  "route": "Badwater Basin (-86 m) to Whitney Portal",
+  "hook": "Death Valley in July",
+  "course": {
+   "source": "kml",
+   "urls": [
+    "https://www.google.com/maps/d/kml?mid=1viv6sBVQfmnfq1vfvkuX7sv7gnTrbbXD&forcekml=1"
+   ],
+   "path": "courses/badwater.gpx",
+   "gpx_km": 217.0,
+   "gpx_gain_m": 4552,
+   "elevation": "dem (opentopodata mapzen, ~30 m)",
+   "partial": false
+  },
+  "photos": [
+   {
+    "file": "Bad Water Death Valley11.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Bad_Water_Death_Valley11.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "No machine-readable author provided. Urban~commonswiki assumed (based on copyrig"
+   },
+   {
+    "file": "Gerald Tabios.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gerald_Tabios.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Usamakram1"
+   },
+   {
+    "file": "Gerald Tabios (1).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gerald_Tabios_(1).jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Usamakram1"
+   },
+   {
+    "file": "Mónica \"La Toti\" Fernández.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:M%C3%B3nica_%22La_Toti%22_Fern%C3%A1ndez.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Kaisove"
+   },
+   {
+    "file": "US Navy 070723-N-6138R-001 U.S. Navy SEAL, Petty Officer 1st Class David Goggins runs 135 miles through Death Valley, California in the Kiehl's Badwater Ultra Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:US_Navy_070723-N-6138R-001_U.S._Navy_SEAL,_Petty_Officer_1st_Class_David_Goggins_runs_135_miles_through_Death_Valley,_California_in_the_Kiehl%27s_Badwater_Ultra_Marathon.jpg",
+    "license": "Public domain",
+    "credit": "U.S. Navy photo by Mass Communication Specialist Seaman Brandon Rogers"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "swiss-peaks",
+  "name": "Swiss Peaks 360",
+  "country": "Switzerland",
+  "type": "trail ultra",
+  "month": "Sep",
+  "km": 360,
+  "gain_m": 26000,
+  "route": "Oberwald to Le Bouveret",
+  "hook": "Length of Valais",
+  "course": null,
+  "photos": [],
+  "photos_checked": "title only; open each before use",
+  "course_todo": "Organiser's 2024 track is on Trace de Trail (tracedetrail.fr/en/trace/251606); download needs a free login."
+ },
+ {
+  "id": "hardrock",
+  "name": "Hardrock 100",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Jul",
+  "km": 161,
+  "gain_m": 10190,
+  "route": "Silverton loop (kiss the rock)",
+  "hook": "Average altitude over 3,300 m",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/hardrock-100/main/course.gpx",
+   "gpx_km": 158.89,
+   "gpx_gain_m": 10190,
+   "aid_stations": 14,
+   "partial": false,
+   "origin": "https://www.hardrock100.com/files/course/HR100-Course-Clockwise.gpx"
+  },
+  "photos": [
+   {
+    "file": "Bear Creek Trail (34794599714).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Bear_Creek_Trail_(34794599714).jpg",
+    "license": "CC BY 2.0",
+    "credit": "John Fowler from Placitas, NM, USA"
+   },
+   {
+    "file": "Course Markers (7575357998).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Course_Markers_(7575357998).jpg",
+    "license": "CC BY 2.0",
+    "credit": "John Fowler from Placitas, NM, USA"
+   },
+   {
+    "file": "Hardrock Race Headquarters.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Hardrock_Race_Headquarters.JPG",
+    "license": "CC BY-SA 4.0",
+    "credit": "Ericshawwhite"
+   },
+   {
+    "file": "Number 486 leaves Silverton, (7644100208).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Number_486_leaves_Silverton,_(7644100208).jpg",
+    "license": "CC BY 2.0",
+    "credit": "John Fowler from Placitas, NM, USA"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "leadville",
+  "name": "Leadville Trail 100",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Aug",
+  "km": 161,
+  "gain_m": 4345,
+  "route": "Out-and-back from Leadville",
+  "hook": "Race Across the Sky; Hope Pass twice",
+  "course": {
+   "source": "gpx",
+   "urls": [
+    "https://ridewithgps.com/routes/56633050.gpx?privacy_code=QhhFfahGrBfMsssPHVvaty7zns4NyLcN&sub_format=track"
+   ],
+   "path": "courses/leadville.gpx",
+   "gpx_km": 160.23,
+   "gpx_gain_m": 4345,
+   "elevation": "source",
+   "partial": false
+  },
+  "photos": [
+   {
+    "file": "Drop bag station with volunteers (6077292293).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Drop_bag_station_with_volunteers_(6077292293).jpg",
+    "license": "Public domain",
+    "credit": "USFWS Mountain Prairie"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "javelina",
+  "name": "Javelina Jundred",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Oct",
+  "km": 161,
+  "gain_m": 3497,
+  "route": "Loops in McDowell Mountain park",
+  "hook": "Halloween costumes; course photo only",
+  "course": {
+   "source": "caltopo",
+   "urls": [
+    "https://caltopo.com/api/v1/map/JS0PC/since/0"
+   ],
+   "path": "courses/javelina.gpx",
+   "gpx_km": 159.18,
+   "gpx_gain_m": 3497,
+   "elevation": "source",
+   "partial": false,
+   "notes": "CalTopo track; its own elevation gives 3,497 m, official is ~2,400 m (noisy source)."
+  },
+  "photos": [
+   {
+    "file": "Pemberton Trail.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pemberton_Trail.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Andy Blackledge"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "utmb",
+  "name": "UTMB",
+  "country": "France/Italy/Switzerland",
+  "type": "trail ultra",
+  "month": "Aug",
+  "km": 174,
+  "gain_m": 9879,
+  "route": "Chamonix loop round Mont Blanc",
+  "hook": "Trail running's world final",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/ultra-trail-du-mont-blanc/utmb/course.gpx",
+   "gpx_km": 174.01,
+   "gpx_gain_m": 9879,
+   "aid_stations": 26,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1785143155/montblanc/Races/GPX/2026/UTMB_2026_a0a3da9863.gpx"
+  },
+  "photos": [
+   {
+    "file": "Lizzy Hawker (2005).png",
+    "page": "https://commons.wikimedia.org/wiki/File:Lizzy_Hawker_(2005).png",
+    "license": "CC BY 3.0",
+    "credit": "EpicTVAdventure"
+   },
+   {
+    "file": "Lizzy Hawker UTMB (2012).png",
+    "page": "https://commons.wikimedia.org/wiki/File:Lizzy_Hawker_UTMB_(2012).png",
+    "license": "CC BY 3.0",
+    "credit": "EpicTVAdventure"
+   },
+   {
+    "file": "ON UTMB.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:ON_UTMB.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Narbethwriter"
+   },
+   {
+    "file": "Start UTMB 2013 in Chamonix-Mont-Blanc.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Start_UTMB_2013_in_Chamonix-Mont-Blanc.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "PaulasBunt"
+   },
+   {
+    "file": "UTMB, Chamonix 2019.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:UTMB,_Chamonix_2019.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Tiia Monto"
+   },
+   {
+    "file": "UTMB (2017).png",
+    "page": "https://commons.wikimedia.org/wiki/File:UTMB_(2017).png",
+    "license": "CC BY 3.0",
+    "credit": "Pablo Gualdron Photography"
+   },
+   {
+    "file": "UTMB 2005 check point.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:UTMB_2005_check_point.jpg",
+    "license": "CC BY 2.5",
+    "credit": "Thierry Braun"
+   },
+   {
+    "file": "UTMB 2015.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:UTMB_2015.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "BeatPitch"
+   },
+   {
+    "file": "UTMB 2019 in Chamonix.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:UTMB_2019_in_Chamonix.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Tiia Monto"
+   },
+   {
+    "file": "UTMB 2021- Km 103,5 The end of the ascent of the Grand Col Ferret 2537m marked by wind and cold- VJTH.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:UTMB_2021-_Km_103,5_The_end_of_the_ascent_of_the_Grand_Col_Ferret_2537m_marked_by_wind_and_cold-_VJTH.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "UTMB 2021- La Flégère and the Chamonix valley are revealed. It is deliverance for runners- UPLCJF.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:UTMB_2021-_La_Fl%C3%A9g%C3%A8re_and_the_Chamonix_valley_are_revealed._It_is_deliverance_for_runners-_UPLCJF.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "UTMB 2021- The descent to Courmayeur that we see below is dusty- OQCPA.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:UTMB_2021-_The_descent_to_Courmayeur_that_we_see_below_is_dusty-_OQCPA.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "UTMB 2021- Un teleférico en el ascenso de Delevret y el valle de abajo EADLDS.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:UTMB_2021-_Un_telef%C3%A9rico_en_el_ascenso_de_Delevret_y_el_valle_de_abajo_EADLDS.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "UTMB in Chamonix 2.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:UTMB_in_Chamonix_2.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Tiia Monto"
+   },
+   {
+    "file": "Utmb-eau.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Utmb-eau.jpg",
+    "license": "CC BY 2.0",
+    "credit": "mako10"
+   },
+   {
+    "file": "Utmb0197.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Utmb0197.jpg",
+    "license": "CC BY 2.0",
+    "credit": "mako10"
+   },
+   {
+    "file": "Utmb0217.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Utmb0217.jpg",
+    "license": "CC BY 2.0",
+    "credit": "mako10"
+   },
+   {
+    "file": "Utmb176.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Utmb176.jpg",
+    "license": "CC BY 2.0",
+    "credit": "mako10"
+   },
+   {
+    "file": "Utmb208.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Utmb208.jpg",
+    "license": "CC BY 2.0",
+    "credit": "mako10"
+   },
+   {
+    "file": "Utmb225.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Utmb225.jpg",
+    "license": "CC BY 2.0",
+    "credit": "mako10"
+   },
+   {
+    "file": "Utmb 0196.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Utmb_0196.jpg",
+    "license": "CC BY 2.0",
+    "credit": "mako10"
+   },
+   {
+    "file": "Xavier Thévenard (2013).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Xavier_Th%C3%A9venard_(2013).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Peter Fredricson"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "tor-des-geants",
+  "name": "Tor des Géants",
+  "country": "Italy",
+  "type": "trail ultra",
+  "month": "Sep",
+  "km": 330,
+  "gain_m": 24000,
+  "route": "Courmayeur loop of Aosta Valley",
+  "hook": "150-hour cut-off",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/tor-des-geants/main/course.gpx",
+   "gpx_km": 55.43,
+   "gpx_gain_m": 4352,
+   "aid_stations": 0,
+   "partial": true,
+   "origin": "https://torxtrail.com/wp-content/uploads/2025/08/TOR330-CERT-2025-T2.gpx"
+  },
+  "photos": [
+   {
+    "file": "Col de la Crosatie.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Col_de_la_Crosatie.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Rollopack"
+   },
+   {
+    "file": "Finestra di Champorcher.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Finestra_di_Champorcher.JPG",
+    "license": "Public domain",
+    "credit": "Francofranco56"
+   },
+   {
+    "file": "La Thuile-Rifugio Deffeyes.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Thuile-Rifugio_Deffeyes.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Rollopack"
+   },
+   {
+    "file": "Miserin Tor des Géants 2017.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Miserin_Tor_des_G%C3%A9ants_2017.png",
+    "license": "CC BY-SA 4.0",
+    "credit": "Pampuco"
+   },
+   {
+    "file": "Rifugio Sella - Tor des Geants.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Rifugio_Sella_-_Tor_des_Geants.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "Patafisik"
+   },
+   {
+    "file": "Rifugio coda - tor geants.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Rifugio_coda_-_tor_geants.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "F Ceragioli"
+   },
+   {
+    "file": "Tor de geants.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tor_de_geants.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "F.cadioli"
+   },
+   {
+    "file": "Yang Yuan TDG.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Yang_Yuan_TDG.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Cranky2017"
+   }
+  ],
+  "photos_checked": "title only; open each before use",
+  "course_todo": "Organiser account vdatrailers on Trace de Trail (traces 238942, 275214); download needs a free login. Current file is a 55 km section only."
+ },
+ {
+  "id": "lavaredo",
+  "name": "Lavaredo Ultra Trail",
+  "country": "Italy",
+  "type": "trail ultra",
+  "month": "Jun",
+  "km": 120,
+  "gain_m": 5268,
+  "route": "Cortina d'Ampezzo loop",
+  "hook": "Tre Cime di Lavaredo",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/lavaredo-ultra-trail/120K/course.gpx",
+   "gpx_km": 119.48,
+   "gpx_gain_m": 5268,
+   "aid_stations": 18,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1782387012/lavaredo/files/2026/LUT_20_Madre_2026_6_2025_2065s_20pul_89a81f913b.gpx"
+  },
+  "photos": [
+   {
+    "file": "Cortina ultratrail 01.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Cortina_ultratrail_01.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Felvalen"
+   },
+   {
+    "file": "Cortina ultratrail 02.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Cortina_ultratrail_02.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Felvalen"
+   },
+   {
+    "file": "La Sportiva LUT 2021- arrivée Cortina d'Ampezzo 48 km jour.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Sportiva_LUT_2021-_arriv%C3%A9e_Cortina_d%27Ampezzo_48_km_jour.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- Bajamos a la estación de repostaje del paso de Gallina abajo LPSEM.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_Bajamos_a_la_estaci%C3%B3n_de_repostaje_del_paso_de_Gallina_abajo_LPSEM.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- Der Gipfel der Forcella col dei Bos OVCD.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_Der_Gipfel_der_Forcella_col_dei_Bos_OVCD.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- Seguimos subiendo un poco después del refugio Auronzo WCFL.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_Seguimos_subiendo_un_poco_despu%C3%A9s_del_refugio_Auronzo_WCFL.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- Sul sentiero del rifugio Auronzo IAG.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_Sul_sentiero_del_rifugio_Auronzo_IAG.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- To the km 76,6- Below is the supply of Malga Ra Stua 1705m.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_To_the_km_76,6-_Below_is_the_supply_of_Malga_Ra_Stua_1705m.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- We climb towards the Averau refuge and its ski slopes AEEM.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_We_climb_towards_the_Averau_refuge_and_its_ski_slopes_AEEM.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- base-vie de Cimabanche IYAMI.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_base-vie_de_Cimabanche_IYAMI.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- breve discesa prima del passo Giau DPAQNT.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_breve_discesa_prima_del_passo_Giau_DPAQNT.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- climb in the valley of Travenanzes IFIFAB.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_climb_in_the_valley_of_Travenanzes_IFIFAB.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- gifts for those who finished the race MTSC.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_gifts_for_those_who_finished_the_race_MTSC.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- il rifugio Auronzo sotto le tre cime.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_il_rifugio_Auronzo_sotto_le_tre_cime.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- línea de llegada en Cortina d'Ampezzo, en la noche MVCH.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_l%C3%ADnea_de_llegada_en_Cortina_d%27Ampezzo,_en_la_noche_MVCH.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- profilo del grande percorso JAMMN.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_profilo_del_grande_percorso_JAMMN.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- regalos para los que han terminado UMDP.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_regalos_para_los_que_han_terminado_UMDP.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- snowfield in the ascent of the Auronzo hut JPBP.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_snowfield_in_the_ascent_of_the_Auronzo_hut_JPBP.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- start in Cortina d'Ampezzo at 23 o'clock.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_start_in_Cortina_d%27Ampezzo_at_23_o%27clock.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2021- torrente del rio travenanzes e piedi bagnati.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_torrente_del_rio_travenanzes_e_piedi_bagnati.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2023- El suministro principal de Cimabanche km 67,5- 1532m ISALH.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2023-_El_suministro_principal_de_Cimabanche_km_67,5-_1532m_ISALH.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2023- Lago di Misurina 1754m- IWLTTYA.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2023-_Lago_di_Misurina_1754m-_IWLTTYA.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2023- Nos acercamos al final de la subida del paso dei Bos- PMSTTYA.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2023-_Nos_acercamos_al_final_de_la_subida_del_paso_dei_Bos-_PMSTTYA.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2023- Wir steigen zur Averau- Hütte auf- LPDAEP.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2023-_Wir_steigen_zur_Averau-_H%C3%BCtte_auf-_LPDAEP.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2023- black tee-shirt and yellow jacket after finishing the race- VCALU.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2023-_black_tee-shirt_and_yellow_jacket_after_finishing_the_race-_VCALU.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2023- km 101,8 Arriviamo al rifugio Averau 2419m- IMGTT.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2023-_km_101,8_Arriviamo_al_rifugio_Averau_2419m-_IMGTT.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Lavaredo Ultra Trail 2023- stone pathway after Landro valley- ISHNM.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2023-_stone_pathway_after_Landro_valley-_ISHNM.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   },
+   {
+    "file": "Subida al refugio Auronzo ITA- las últimas horquillas de este camino tan empinado.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Subida_al_refugio_Auronzo_ITA-_las_%C3%BAltimas_horquillas_de_este_camino_tan_empinado.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Anthospace"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "eiger",
+  "name": "Eiger Ultra Trail E101",
+  "country": "Switzerland",
+  "type": "trail ultra",
+  "month": "Jul",
+  "km": 101,
+  "gain_m": 6271,
+  "route": "Grindelwald loop",
+  "hook": "Under the north face",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/eiger-ultra-trail/main/course.gpx",
+   "gpx_km": 99.11,
+   "gpx_gain_m": 6271,
+   "aid_stations": 0,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1782804276/eiger/Races/GPX%202026/E101_2026_5258b44cf2.gpx"
+  },
+  "photos": [],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "comrades",
+  "name": "Comrades Marathon",
+  "country": "South Africa",
+  "type": "road ultra",
+  "month": "Jun",
+  "km": 91,
+  "gain_m": 1800,
+  "route": "Durban <-> Pietermaritzburg, alternates up/down",
+  "hook": "World's biggest ultra",
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/06/08/comrades-marathon-2025-pietermaritzburg-2025-track.gpx"
+   ],
+   "path": "courses/comrades.gpx",
+   "gpx_km": 90.92,
+   "gpx_gain_m": 832,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/comrades-marathon-2025-pietermaritzburg-course-map-1.php"
+  },
+  "photos": [
+   {
+    "file": "1997 Comrades Marathon winner, Charl Mattheus's, race kit.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:1997_Comrades_Marathon_winner,_Charl_Mattheus%27s,_race_kit.jpg",
+    "license": "CC0",
+    "credit": "Upjav"
+   },
+   {
+    "file": "2024 Comrades Marathon at Camperdown.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2024_Comrades_Marathon_at_Camperdown.jpg",
+    "license": "CC0",
+    "credit": "Upjav"
+   },
+   {
+    "file": "2025 Comrades Marathon outside Pietermaritzburg.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2025_Comrades_Marathon_outside_Pietermaritzburg.jpg",
+    "license": "CC0",
+    "credit": "Upjav"
+   },
+   {
+    "file": "Comrades Marathon 2008 (2580073608).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Comrades_Marathon_2008_(2580073608).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Chris Bloom from Durban, South Africa"
+   },
+   {
+    "file": "Comrades Marathon 2009 (3560073968).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Comrades_Marathon_2009_(3560073968).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Chris Bloom from Durban, South Africa"
+   },
+   {
+    "file": "Gert Thys, 2012 Comrades.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gert_Thys,_2012_Comrades.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "NRJ"
+   },
+   {
+    "file": "Johannes Maros Mosehla.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Johannes_Maros_Mosehla.jpg",
+    "license": "CC0",
+    "credit": "Upjav"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "marathon-des-sables",
+  "name": "Marathon des Sables",
+  "country": "Morocco",
+  "type": "stage ultra",
+  "month": "Apr",
+  "km": 250,
+  "gain_m": null,
+  "route": "Self-sufficient Sahara stages",
+  "hook": "Carry your own food for a week",
+  "course": null,
+  "photos": [
+   {
+    "file": "Foto Carlos Sposito.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Foto_Carlos_Sposito.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Carlos Sposito"
+   },
+   {
+    "file": "Franck Meyer Robredo.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Franck_Meyer_Robredo.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "The photographer is Toño Miranda"
+   },
+   {
+    "file": "JC S4147.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:JC_S4147.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Joeljuht"
+   },
+   {
+    "file": "MDS1.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:MDS1.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "James Heilman, MD"
+   },
+   {
+    "file": "MDS2.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:MDS2.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "James Heilman, MD"
+   },
+   {
+    "file": "MDS3.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:MDS3.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "James Heilman, MD"
+   },
+   {
+    "file": "MDS 2025 Elisabet Barnes.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:MDS_2025_Elisabet_Barnes.jpg",
+    "license": "CC0",
+    "credit": "Tanz339"
+   },
+   {
+    "file": "Marathon Des Sables 023.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Marathon_Des_Sables_023.jpg",
+    "license": "CC BY 2.0",
+    "credit": "tent86"
+   },
+   {
+    "file": "Marathon des Sables (2010).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Marathon_des_Sables_(2010).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Achim Knacksterdt (U.S. Army Corps of Engineers Europe District)"
+   },
+   {
+    "file": "Running the Marathon des Sable.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Running_the_Marathon_des_Sable.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ben Hammersley"
+   },
+   {
+    "file": "Toti Fernández \"Marathon Des Sables\".jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Toti_Fern%C3%A1ndez_%22Marathon_Des_Sables%22.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Kaisove"
+   },
+   {
+    "file": "USACE People Europe District engineer takes to Africa’s dunes.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:USACE_People_Europe_District_engineer_takes_to_Africa%E2%80%99s_dunes.jpg",
+    "license": "CC BY 2.0",
+    "credit": "U.S. Army Corps of Engineers Europe District"
+   }
+  ],
+  "photos_checked": "title only; open each before use",
+  "course_todo": "Route only in the participants' roadbook. Ask the organiser."
+ },
+ {
+  "id": "spartathlon",
+  "name": "Spartathlon",
+  "country": "Greece",
+  "type": "road ultra",
+  "month": "Sep",
+  "km": 246,
+  "gain_m": 3040,
+  "route": "Athens to Sparta",
+  "hook": "Kiss the feet of King Leonidas",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/spartathlon/main/course.gpx",
+   "gpx_km": 245.66,
+   "gpx_gain_m": 3040,
+   "aid_stations": 0,
+   "partial": false,
+   "origin": "https://spartathlon.gr/gpx/spartathlon-2025.gpx"
+  },
+  "photos": [
+   {
+    "file": "Erős Tibor a 2022-es Spartathlon céljában.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Er%C5%91s_Tibor_a_2022-es_Spartathlon_c%C3%A9lj%C3%A1ban.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "E.Kinga27"
+   },
+   {
+    "file": "Spartathlon 2016.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Spartathlon_2016.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Softniky"
+   },
+   {
+    "file": "Spartathlon 2023 magyar finisher.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Spartathlon_2023_magyar_finisher.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Czajamatyas"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "transgrancanaria",
+  "name": "Transgrancanaria Classic",
+  "country": "Spain",
+  "type": "trail ultra",
+  "month": "Feb",
+  "km": 126,
+  "gain_m": 6239,
+  "route": "Coast to coast across Gran Canaria",
+  "hook": "Season opener",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/transgrancanaria/classic/course.gpx",
+   "gpx_km": 126.09,
+   "gpx_gain_m": 6239,
+   "aid_stations": 12,
+   "partial": false,
+   "origin": "https://transgrancanaria.net/wp-content/uploads/TGCC-2026-28052025-1-1.gpx"
+  },
+  "photos": [
+   {
+    "file": "Anton Krupicka (2015).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Anton_Krupicka_(2015).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Juan Ramón Rodríguez Sosa (El Coleccionista de Instantes Fotografía &amp; Video)"
+   },
+   {
+    "file": "El Roque Nublo entre la niebla.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:El_Roque_Nublo_entre_la_niebla.JPG",
+    "license": "CC BY-SA 3.0 es",
+    "credit": "Obdulio Obduliez"
+   },
+   {
+    "file": "Fotos The North Face Transgrancanaria 2013 a su paso por la finca de Osorio en Teror Gran Canaria Islas Canarias (02-03-2013). (8523268371).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Fotos_The_North_Face_Transgrancanaria_2013_a_su_paso_por_la_finca_de_Osorio_en_Teror_Gran_Canaria_Islas_Canarias_(02-03-2013)._(8523268371).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "El Coleccionista de Instantes  Fotografía &amp; Video"
+   },
+   {
+    "file": "Núria Picas (2015).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:N%C3%BAria_Picas_(2015).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Juan Ramón Rodríguez Sosa (El Coleccionista de Instantes Fotografía &amp; Video"
+   },
+   {
+    "file": "Sendero de subida al Roque Nublo.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Sendero_de_subida_al_Roque_Nublo.JPG",
+    "license": "CC BY-SA 3.0 es",
+    "credit": "Obdulio Obduliez"
+   },
+   {
+    "file": "Sébastien chaigneau transgrancanaria.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:S%C3%A9bastien_chaigneau_transgrancanaria.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Guillaume LOUIS"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "transvulcania",
+  "name": "Transvulcania",
+  "country": "Spain",
+  "type": "trail ultra",
+  "month": "May",
+  "km": 75,
+  "gain_m": 4114,
+  "route": "Sea level to Roque de los Muchachos",
+  "hook": "Volcano ridge on La Palma",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/transvulcania/ultra/course.gpx",
+   "gpx_km": 74.01,
+   "gpx_gain_m": 4114,
+   "aid_stations": 10,
+   "partial": false,
+   "origin": "https://transvulcania.com/wp-content/uploads/gpx/sin-categorizar/Ultramaraton_TRV24.gpx"
+  },
+  "photos": [
+   {
+    "file": "Hillary Allen at Transvulcania 2017.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Hillary_Allen_at_Transvulcania_2017.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Alexis Martín"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 01 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_01_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 03 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_03_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 04 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_04_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 05 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_05_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 08 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_08_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 09 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_09_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 10 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_10_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 11 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_11_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 13 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_13_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 14 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_14_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 15 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_15_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 16 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_16_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 17 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_17_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 18 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_18_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 19 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_19_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 21 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_21_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 22 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_22_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 23 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_23_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 24 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_24_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Palma - El Paso - Transvulcania 2015 25 ies.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_25_ies.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frank Vincentz"
+   },
+   {
+    "file": "La Reina de Transvulcania (33871013253).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:La_Reina_de_Transvulcania_(33871013253).jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Alexis Martín from España"
+   },
+   {
+    "file": "Las Arenas de Transvulcania (34513898122).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Las_Arenas_de_Transvulcania_(34513898122).jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Alexis Martín from España"
+   },
+   {
+    "file": "Transvulcania Los Llanos 06 2014-05-10.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Transvulcania_Los_Llanos_06_2014-05-10.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "Hans-Peter Balfanz"
+   },
+   {
+    "file": "Transvulcania Los Llanos 07 2014-05-10.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Transvulcania_Los_Llanos_07_2014-05-10.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "Hans-Peter Balfanz"
+   },
+   {
+    "file": "Transvulcania Los Llanos 08 2014-05-10.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Transvulcania_Los_Llanos_08_2014-05-10.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "Hans-Peter Balfanz"
+   },
+   {
+    "file": "Transvulcania Puerto Tazacorte 01 2014-05-10.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Transvulcania_Puerto_Tazacorte_01_2014-05-10.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "Hans-Peter Balfanz"
+   },
+   {
+    "file": "Transvulcania Puerto Tazacorte 02 2014-05-10.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Transvulcania_Puerto_Tazacorte_02_2014-05-10.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "Hans-Peter Balfanz"
+   },
+   {
+    "file": "Transvulcania Puerto Tazacorte 03 2014-05-10.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Transvulcania_Puerto_Tazacorte_03_2014-05-10.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "Hans-Peter Balfanz"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "zegama",
+  "name": "Zegama-Aizkorri",
+  "country": "Spain",
+  "type": "mountain marathon",
+  "month": "May",
+  "km": 42,
+  "gain_m": 2619,
+  "route": "Zegama loop over Aizkorri",
+  "hook": "Loudest crowds in trail running",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/zegama-aizkorri/main/course.gpx",
+   "gpx_km": 42.45,
+   "gpx_gain_m": 2619,
+   "aid_stations": 0,
+   "partial": false,
+   "origin": "https://www.zegama-aizkorri.com/images/tracks/Track-Zegama-Aizkorri-Sky-2020.gpx"
+  },
+  "photos": [],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "hk100",
+  "name": "Hong Kong 100",
+  "country": "Hong Kong",
+  "type": "trail ultra",
+  "month": "Jan",
+  "km": 103,
+  "gain_m": 5404,
+  "route": "MacLehose Trail and beyond",
+  "hook": "Ends on Tai Mo Shan",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/hong-kong-100-ultramarathon/main/course.gpx",
+   "gpx_km": 95.29,
+   "gpx_gain_m": 5404,
+   "aid_stations": 0,
+   "partial": false,
+   "origin": "https://hk100ultra.com/wp-content/uploads/2026/06/HK100-Full-2027.gpx"
+  },
+  "photos": [],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "lakeland-100",
+  "name": "Lakeland 100",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": "Jul",
+  "km": 169,
+  "gain_m": 5994,
+  "route": "Coniston loop of the Lakes",
+  "hook": "Starts on a Friday evening",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/montane-lakeland-100/main/course.gpx",
+   "gpx_km": 164.37,
+   "gpx_gain_m": 5994,
+   "aid_stations": 16,
+   "partial": false,
+   "origin": "https://lakeland100.com/wp-content/uploads/2024/07/new-whole-100-copy.gpx_.zip"
+  },
+  "photos": [],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "uts",
+  "name": "Ultra-Trail Snowdonia 80K",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": "May",
+  "km": 80,
+  "gain_m": 2555,
+  "route": "Eryri loop",
+  "hook": "UTMB World Series in Wales",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-snowdonia/uts-80k/course.gpx",
+   "gpx_km": 77.95,
+   "gpx_gain_m": 2555,
+   "aid_stations": 8,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1778676440/snowdonia/GPX%20Files/2026_UTS_80_K_f440650b20.gpx"
+  },
+  "photos": [],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "sdw100",
+  "name": "South Downs Way 100",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": "Jun",
+  "km": 161,
+  "gain_m": 3420,
+  "route": "Winchester to Eastbourne",
+  "hook": "Finish lap of the track",
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/centurion-south-downs-way-100/main/course.gpx",
+   "gpx_km": 159.64,
+   "gpx_gain_m": 3420,
+   "aid_stations": 14,
+   "partial": false,
+   "origin": "https://centurionrunning.s3-eu-west-1.amazonaws.com/races/gpx/6a6fd6e9f2b13030641b3421a3b4ed0d.gpx"
+  },
+  "photos": [],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "gucr",
+  "name": "Grand Union Canal Race",
+  "country": "UK",
+  "type": "towpath ultra",
+  "month": "May",
+  "km": 233,
+  "gain_m": null,
+  "route": "Birmingham to London",
+  "hook": "145 miles, almost no climb",
+  "course": null,
+  "photos": [],
+  "photos_checked": "title only; open each before use",
+  "course_todo": "Plotaroute 3237734 (linked from canalrace.org.uk) is behind a Cloudflare check: export the GPX in a browser."
+ },
+ {
+  "id": "cape-wrath",
+  "name": "Cape Wrath Ultra",
+  "country": "UK",
+  "type": "stage ultra",
+  "month": "May",
+  "km": 400,
+  "gain_m": 11206,
+  "route": "Fort William to Cape Wrath, 8 days",
+  "hook": "Pathless Highlands",
+  "course": {
+   "source": "gpx",
+   "urls": [
+    "https://www.capewrathultra.com/s/Cape-Wrath-Ultra-2025-Day-1.gpx",
+    "https://www.capewrathultra.com/s/Cape-Wrath-Ultra-2025-Day-2.gpx",
+    "https://www.capewrathultra.com/s/Cape-Wrath-Ultra-2025-Day-3.gpx",
+    "https://www.capewrathultra.com/s/Cape-Wrath-Ultra-2025-Day-4.gpx",
+    "https://www.capewrathultra.com/s/Cape-Wrath-Ultra-2025-Day-5.gpx",
+    "https://www.capewrathultra.com/s/Cape-Wrath-Ultra-2025-Day-6.gpx",
+    "https://www.capewrathultra.com/s/Cape-Wrath-Ultra-2025-Day-7.gpx",
+    "https://www.capewrathultra.com/s/Cape-Wrath-Ultra-2025-Day-8.gpx"
+   ],
+   "path": "courses/cape-wrath.gpx",
+   "gpx_km": 371.67,
+   "gpx_gain_m": 11206,
+   "elevation": "source",
+   "partial": false
+  },
+  "photos": [],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "two-oceans",
+  "name": "Two Oceans Marathon",
+  "country": "South Africa",
+  "type": "road ultra",
+  "month": "Apr",
+  "km": 56,
+  "gain_m": null,
+  "route": "Cape Town peninsula",
+  "hook": "Chapman's Peak",
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/04/11/totalsports-two-oceans-marathon-2026-cape-town-2026-track.gpx"
+   ],
+   "path": "courses/two-oceans.gpx",
+   "gpx_km": 56.37,
+   "gpx_gain_m": 687,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/totalsports-two-oceans-marathon-2026-cape-town-course-map-1.php"
+  },
+  "photos": [
+   {
+    "file": "TwoOceansFinish.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:TwoOceansFinish.JPG",
+    "license": "Public domain",
+    "credit": "User:Zaian"
+   },
+   {
+    "file": "Two Oceans Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Two_Oceans_Marathon.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Bernard303"
+   },
+   {
+    "file": "Vice-Chancellor Dr Max Price completes his first Two Oceans as a member of UCTAC.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Vice-Chancellor_Dr_Max_Price_completes_his_first_Two_Oceans_as_a_member_of_UCTAC.jpg",
+    "license": "CC BY 2.0",
+    "credit": "UCT Athletics Club"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "london",
+  "name": "London Marathon",
+  "country": "UK",
+  "type": "road marathon",
+  "month": "Apr",
+  "km": 42.2,
+  "gain_m": 73,
+  "route": "Greenwich to The Mall",
+  "hook": "Tower Bridge",
+  "course": {
+   "source": "gpx",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/04/26/tcs-london-marathon-2026-london-2026-track.gpx"
+   ],
+   "path": "courses/london.gpx",
+   "gpx_km": 42.25,
+   "gpx_gain_m": 73,
+   "elevation": "source",
+   "partial": false
+  },
+  "photos": [
+   {
+    "file": "2010 London Marathon II.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2010_London_Marathon_II.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Julian Mason"
+   },
+   {
+    "file": "2013 London Marathon at Victoria Embankment (1).JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:2013_London_Marathon_at_Victoria_Embankment_(1).JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "Chmee2"
+   },
+   {
+    "file": "2017 London Marathon - Derek Rae (2).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2017_London_Marathon_-_Derek_Rae_(2).jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Katie Chan"
+   },
+   {
+    "file": "2017 London Marathon - Hanna Vandenbussche.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2017_London_Marathon_-_Hanna_Vandenbussche.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Katie Chan"
+   },
+   {
+    "file": "2018 London Marathon (41654606041).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2018_London_Marathon_(41654606041).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Jan Kraus from London, UK"
+   },
+   {
+    "file": "2019 London Marathon IMG 9029 (32788526567) edited.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2019_London_Marathon_IMG_9029_(32788526567)_edited.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "rodney berry, edited by Petar Milošević"
+   },
+   {
+    "file": "2021 London Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2021_London_Marathon.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "DanHuddleston"
+   },
+   {
+    "file": "Emily Sisson (2019 London Marathon).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Emily_Sisson_(2019_London_Marathon).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Alan Wilkinson"
+   },
+   {
+    "file": "Juan Carlos Cardona (Columbia) - London 2012 Men's Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Juan_Carlos_Cardona_(Columbia)_-_London_2012_Men%27s_Marathon.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Matt Kieffer from London, United Kingdom"
+   },
+   {
+    "file": "London Marathon.png",
+    "page": "https://commons.wikimedia.org/wiki/File:London_Marathon.png",
+    "license": "CC BY-SA 2.0",
+    "credit": "© OpenStreetMap contributors"
+   },
+   {
+    "file": "London Marathon ... nearly there - geograph.org.uk - 5761294.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:London_Marathon_..._nearly_there_-_geograph.org.uk_-_5761294.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Stephen Craven"
+   },
+   {
+    "file": "London Marathon 13.04.14 (117) (13828033555).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:London_Marathon_13.04.14_(117)_(13828033555).jpg",
+    "license": "CC BY 2.0",
+    "credit": "JULIAN MASON from London, UK"
+   },
+   {
+    "file": "London Marathon 2005 at Blackfriars.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:London_Marathon_2005_at_Blackfriars.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Chris j wood"
+   },
+   {
+    "file": "London Marathon 2005 at Embankment.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:London_Marathon_2005_at_Embankment.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Chris j wood"
+   },
+   {
+    "file": "London Marathon 2017 DSC06381 (33837861030).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:London_Marathon_2017_DSC06381_(33837861030).jpg",
+    "license": "CC BY 2.0",
+    "credit": "JULIAN MASON from London, UK"
+   },
+   {
+    "file": "London Marathon 24.04.2016 - DSC05028 (26013297674).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:London_Marathon_24.04.2016_-_DSC05028_(26013297674).jpg",
+    "license": "CC BY 2.0",
+    "credit": "JULIAN MASON from London, UK"
+   },
+   {
+    "file": "London Marathon 25 Mile Marker - geograph.org.uk - 5749926.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:London_Marathon_25_Mile_Marker_-_geograph.org.uk_-_5749926.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "PAUL FARMER"
+   },
+   {
+    "file": "London marathon 2009 - 4.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:London_marathon_2009_-_4.jpg",
+    "license": "CC BY 2.0",
+    "credit": "paulsimpson1976"
+   },
+   {
+    "file": "Marcel Hug and Manuela Schar for 2021 London Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Marcel_Hug_and_Manuela_Schar_for_2021_London_Marathon.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "User:Jastrow\n\nUser:Gr5555"
+   },
+   {
+    "file": "Richard Branson butterfly (London Marathon 2014).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Richard_Branson_butterfly_(London_Marathon_2014).jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Endim8"
+   },
+   {
+    "file": "Sara Hall (2016 London Marathon).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Sara_Hall_(2016_London_Marathon).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Julian Mason"
+   },
+   {
+    "file": "Sisay lemma joyciline jepkosgei for 2021 london marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Sisay_lemma_joyciline_jepkosgei_for_2021_london_marathon.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "User:JeLuF\n\nUser:Luzifiga"
+   },
+   {
+    "file": "Stephanie Bruce (2018).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stephanie_Bruce_(2018).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Alan Wilkinson"
+   },
+   {
+    "file": "Top Three Men at London Marathon 2009 crop.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Top_Three_Men_at_London_Marathon_2009_crop.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Top_Three_Men_at_London_Marathon_2009.jpg: SNappa2006\nderivative work: SilkTork "
+   },
+   {
+    "file": "Wilson Kipsang 2012 London Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Wilson_Kipsang_2012_London_Marathon.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Tom Page from London, UK"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "boston",
+  "name": "Boston Marathon",
+  "country": "USA",
+  "type": "road marathon",
+  "month": "Apr",
+  "km": 42.2,
+  "gain_m": null,
+  "route": "Hopkinton to Boylston St",
+  "hook": "Heartbreak Hill; qualifying times",
+  "course": {
+   "source": "osm",
+   "urls": [
+    "https://api.openstreetmap.org/api/0.6/relation/11680552/full.json"
+   ],
+   "path": "courses/boston.gpx",
+   "gpx_km": 42.42,
+   "gpx_gain_m": 165,
+   "elevation": "dem (opentopodata mapzen, ~30 m)",
+   "partial": false,
+   "notes": "DEM gain on city streets is noise (bridges, buildings): use the outline, not the profile."
+  },
+  "photos": [
+   {
+    "file": "1143 running Boston like a champ (13960534152).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:1143_running_Boston_like_a_champ_(13960534152).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Rob Larsen from Boston, USA"
+   },
+   {
+    "file": "2013 Boston Marathon-102 (8674767957).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2013_Boston_Marathon-102_(8674767957).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Gianina Lindsey"
+   },
+   {
+    "file": "Awesome running 4968 (13963453715).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Awesome_running_4968_(13963453715).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Rob Larsen from Boston, USA"
+   },
+   {
+    "file": "BC guy running to BC (13963721165).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:BC_guy_running_to_BC_(13963721165).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Rob Larsen from Boston, USA"
+   },
+   {
+    "file": "Bates, Salpeter, Obiri at Walnut St BM2023.agr.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Bates,_Salpeter,_Obiri_at_Walnut_St_BM2023.agr.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ArnoldReinhold"
+   },
+   {
+    "file": "Boston Marathon 2007 runners past mile 19.agr.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Boston_Marathon_2007_runners_past_mile_19.agr.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ArnoldReinhold"
+   },
+   {
+    "file": "Boston Marathon 2019 runners crossing Walnut Street.agr.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Boston_Marathon_2019_runners_crossing_Walnut_Street.agr.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ArnoldReinhold"
+   },
+   {
+    "file": "Boston Marathon Runners, April 1978 (33283184533).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Boston_Marathon_Runners,_April_1978_(33283184533).jpg",
+    "license": "CC BY 2.0",
+    "credit": "USMC Archives from Quantico, USA"
+   },
+   {
+    "file": "Evans Chebet in the pack at Walnut St BM2023.agr.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Evans_Chebet_in_the_pack_at_Walnut_St_BM2023.agr.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ArnoldReinhold"
+   },
+   {
+    "file": "Geay leading the men BM2023.agr.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Geay_leading_the_men_BM2023.agr.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ArnoldReinhold"
+   },
+   {
+    "file": "Jack Caffrey and William Davis (winner and runner-up of the 1901 Boston Marathon).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Jack_Caffrey_and_William_Davis_(winner_and_runner-up_of_the_1901_Boston_Marathon).jpg",
+    "license": "Public domain",
+    "credit": "The Hamilton Spectator"
+   },
+   {
+    "file": "Marathon banner will greet runners. (6937516786).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Marathon_banner_will_greet_runners._(6937516786).jpg",
+    "license": "CC BY 2.0",
+    "credit": "BU Interactive News"
+   },
+   {
+    "file": "Massachusetts national guardsmen encouraging runners in the third wave of runners during the 2024 Boston Marathon GLNuD5fW4AITUJ1.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Massachusetts_national_guardsmen_encouraging_runners_in_the_third_wave_of_runners_during_the_2024_Boston_Marathon_GLNuD5fW4AITUJ1.jpg",
+    "license": "Public domain",
+    "credit": "Massachusetts National Guard"
+   },
+   {
+    "file": "Massachusetts national guardsmen encouraging runners in the third wave of runners during the 2024 Boston Marathon GLNuD5iWoAAapGq.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Massachusetts_national_guardsmen_encouraging_runners_in_the_third_wave_of_runners_during_the_2024_Boston_Marathon_GLNuD5iWoAAapGq.jpg",
+    "license": "Public domain",
+    "credit": "Massachusetts National Guard"
+   },
+   {
+    "file": "Massachusetts national guardsmen encouraging runners in the third wave of runners during the 2024 Boston Marathon GLNuD5mWcAAw3Ax.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Massachusetts_national_guardsmen_encouraging_runners_in_the_third_wave_of_runners_during_the_2024_Boston_Marathon_GLNuD5mWcAAw3Ax.jpg",
+    "license": "Public domain",
+    "credit": "Massachusetts National Guard"
+   },
+   {
+    "file": "Mayor Raymond L. Flynn running in 1985 Boston Marathon (9501949747).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Mayor_Raymond_L._Flynn_running_in_1985_Boston_Marathon_(9501949747).jpg",
+    "license": "CC BY 2.0",
+    "credit": "City of Boston Archives from West Roxbury, United States"
+   },
+   {
+    "file": "Mayor Raymond L. Flynn running in 1985 Boston Marathon (9504751606).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Mayor_Raymond_L._Flynn_running_in_1985_Boston_Marathon_(9504751606).jpg",
+    "license": "CC BY 2.0",
+    "credit": "City of Boston Archives from West Roxbury, United States"
+   },
+   {
+    "file": "Mayor Raymond L. Flynn running in 1985 Boston Marathon (9504751796).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Mayor_Raymond_L._Flynn_running_in_1985_Boston_Marathon_(9504751796).jpg",
+    "license": "CC BY 2.0",
+    "credit": "City of Boston Archives from West Roxbury, United States"
+   },
+   {
+    "file": "Ray Flynn running in Boston Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ray_Flynn_running_in_Boston_Marathon.jpg",
+    "license": "CC BY 2.0",
+    "credit": "City of Boston"
+   },
+   {
+    "file": "Runners at Mile 19 Boston Marathon 2021.agr.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runners_at_Mile_19_Boston_Marathon_2021.agr.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ArnoldReinhold"
+   },
+   {
+    "file": "Runners at Mile 19 at 3-20 pm BM2023.agr.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runners_at_Mile_19_at_3-20_pm_BM2023.agr.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ArnoldReinhold"
+   },
+   {
+    "file": "Runners spread across the road (8659670405).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runners_spread_across_the_road_(8659670405).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Rob Larsen from Boston, USA"
+   },
+   {
+    "file": "Runners starting uphill BM2026.agr.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runners_starting_uphill_BM2026.agr.jpg",
+    "license": "CC BY 4.0",
+    "credit": "ArnoldReinhold"
+   },
+   {
+    "file": "Runners starting uphill at Walnut St. BM2024.agr.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runners_starting_uphill_at_Walnut_St._BM2024.agr.jpg",
+    "license": "CC BY 4.0",
+    "credit": "ArnoldReinhold"
+   },
+   {
+    "file": "Running Strong (7085484311).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Running_Strong_(7085484311).jpg",
+    "license": "CC BY 2.0",
+    "credit": "BU Interactive News"
+   },
+   {
+    "file": "These are some awesome runners (13960532361).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:These_are_some_awesome_runners_(13960532361).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Rob Larsen from Boston, USA"
+   },
+   {
+    "file": "Vehicles surround women at Walnut St BM2023.agr.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Vehicles_surround_women_at_Walnut_St_BM2023.agr.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "ArnoldReinhold"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "berlin",
+  "name": "Berlin Marathon",
+  "country": "Germany",
+  "type": "road marathon",
+  "month": "Sep",
+  "km": 42.2,
+  "gain_m": 15,
+  "route": "Loop through Berlin",
+  "hook": "World records; Brandenburg Gate",
+  "course": {
+   "source": "gpx",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/09/21/bmw-berlin-marathon-2025-berlin-2025-track.gpx"
+   ],
+   "path": "courses/berlin.gpx",
+   "gpx_km": 42.75,
+   "gpx_gain_m": 15,
+   "elevation": "source",
+   "partial": false
+  },
+  "photos": [
+   {
+    "file": "1000 - Ziel Berlin Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:1000_-_Ziel_Berlin_Marathon.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Lear 21"
+   },
+   {
+    "file": "1BerlinMarathon2022.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:1BerlinMarathon2022.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Lear 21"
+   },
+   {
+    "file": "2BerlinMarathon2022.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2BerlinMarathon2022.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Lear 21"
+   },
+   {
+    "file": "3BerlinMarathon2022.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:3BerlinMarathon2022.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Lear 21"
+   },
+   {
+    "file": "Berlin-Marathon handbikes on Rheinstraße Berlin-Friedenau 2024-09-29 06.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin-Marathon_handbikes_on_Rheinstra%C3%9Fe_Berlin-Friedenau_2024-09-29_06.jpg",
+    "license": "CC0",
+    "credit": "Leonhard Lenz"
+   },
+   {
+    "file": "Berlin Marathon (6218565284).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_(6218565284).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Claire"
+   },
+   {
+    "file": "Berlin Marathon 2004 013.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2004_013.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Simon Mannweiler"
+   },
+   {
+    "file": "Berlin Marathon 2018 011.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_011.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 014.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_014.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 057.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_057.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 074.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_074.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 085.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_085.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 148.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_148.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 263.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_263.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 405.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_405.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 426.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_426.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 455.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_455.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 482.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_482.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 488.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_488.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 489.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_489.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 513.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_513.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 544.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_544.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 615.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_615.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin Marathon 2018 645.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_Marathon_2018_645.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "This image is a work by Wikipedia and Wikimedia Commons user C.Suthorn. When reu"
+   },
+   {
+    "file": "Berlin marathon 2008 gebressalie 1.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Berlin_marathon_2008_gebressalie_1.JPG",
+    "license": "CC BY-SA 2.0",
+    "credit": "Dirk Ingo Franke"
+   },
+   {
+    "file": "Pavillon Marathon de Belin.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pavillon_Marathon_de_Belin.jpg",
+    "license": "CC0",
+    "credit": "Yasminkaa"
+   },
+   {
+    "file": "Spartan Brigade armor officer places at 2021 Berlin Marathon (6919348).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Spartan_Brigade_armor_officer_places_at_2021_Berlin_Marathon_(6919348).jpg",
+    "license": "Public domain",
+    "credit": "U.S. Army 2BCT-3ID by [null Courtesy]"
+   },
+   {
+    "file": "Spartan Brigade armor officer places at 2021 Berlin Marathon (6919349).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Spartan_Brigade_armor_officer_places_at_2021_Berlin_Marathon_(6919349).jpg",
+    "license": "Public domain",
+    "credit": "U.S. Army 2BCT-3ID by [null Courtesy]"
+   }
+  ],
+  "photos_checked": "title only; open each before use",
+  "course_todo": "No official file or OSM relation."
+ },
+ {
+  "id": "nyc",
+  "name": "New York City Marathon",
+  "country": "USA",
+  "type": "road marathon",
+  "month": "Nov",
+  "km": 42.2,
+  "gain_m": 39,
+  "route": "Staten Island to Central Park",
+  "hook": "Five boroughs, Verrazzano bridge",
+  "course": {
+   "source": "gpx",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/11/02/tcs-new-york-city-marathon-2025-new-york-2025-track.gpx"
+   ],
+   "path": "courses/nyc.gpx",
+   "gpx_km": 42.61,
+   "gpx_gain_m": 39,
+   "elevation": "source",
+   "partial": false
+  },
+  "photos": [
+   {
+    "file": "2005 New York City Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2005_New_York_City_Marathon.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "User:Postdlf"
+   },
+   {
+    "file": "2024 New York City Marathon Elite Men Leaders.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2024_New_York_City_Marathon_Elite_Men_Leaders.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Nrbelex"
+   },
+   {
+    "file": "2024 New York City Marathon Elite Women Leaders.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2024_New_York_City_Marathon_Elite_Women_Leaders.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Nrbelex"
+   },
+   {
+    "file": "2026 NYC Marathon - Mile 24 - 1.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2026_NYC_Marathon_-_Mile_24_-_1.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Sashimi-b"
+   },
+   {
+    "file": "2026 NYC Marathon - Mile 24 - 2.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2026_NYC_Marathon_-_Mile_24_-_2.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Sashimi-b"
+   },
+   {
+    "file": "2026 NYC Marathon - Mile 24 - 3.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2026_NYC_Marathon_-_Mile_24_-_3.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Sashimi-b"
+   },
+   {
+    "file": "2026 NYC Marathon - Mile 24 - 4.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2026_NYC_Marathon_-_Mile_24_-_4.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Sashimi-b"
+   },
+   {
+    "file": "2026 NYC Marathon - Mile 24 - 5.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2026_NYC_Marathon_-_Mile_24_-_5.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Sashimi-b"
+   },
+   {
+    "file": "2026 NYC Marathon - Mile 24 - 6.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2026_NYC_Marathon_-_Mile_24_-_6.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Sashimi-b"
+   },
+   {
+    "file": "2026 NYC Marathon - Mile 24 - 7.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2026_NYC_Marathon_-_Mile_24_-_7.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Sashimi-b"
+   },
+   {
+    "file": "2026 NYC Marathon - Mile 24 - 8.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2026_NYC_Marathon_-_Mile_24_-_8.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Sashimi-b"
+   },
+   {
+    "file": "2026 NYC Marathon - Mile 24 - 9.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2026_NYC_Marathon_-_Mile_24_-_9.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Sashimi-b"
+   },
+   {
+    "file": "Anna Incerti (2015 NYC Marathon).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Anna_Incerti_(2015_NYC_Marathon).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "maisa_nyc"
+   },
+   {
+    "file": "Harbert Okuti et al Greenpoint Av 2020 NYCM jeh.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Harbert_Okuti_et_al_Greenpoint_Av_2020_NYCM_jeh.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Jim.henderson"
+   },
+   {
+    "file": "Jonathan Mendes - New York City Marathon - Official Certificate of Completion - 2016.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Jonathan_Mendes_-_New_York_City_Marathon_-_Official_Certificate_of_Completion_-_2016.jpg",
+    "license": "CC0",
+    "credit": "Akiva123"
+   },
+   {
+    "file": "Leaders on Greenpoint Av 2020 NYCM jeh.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Leaders_on_Greenpoint_Av_2020_NYCM_jeh.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Jim.henderson"
+   },
+   {
+    "file": "Lewis Tewanima 2162665005 0effc1f895 o.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lewis_Tewanima_2162665005_0effc1f895_o.jpg",
+    "license": "Public domain",
+    "credit": "Bain News Service"
+   },
+   {
+    "file": "NYC Marathon Clinton Hill 2024 01.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:NYC_Marathon_Clinton_Hill_2024_01.jpg",
+    "license": "CC BY 4.0",
+    "credit": "Wil540 art"
+   },
+   {
+    "file": "New York City Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:New_York_City_Marathon.jpg",
+    "license": "Public domain",
+    "credit": ""
+   },
+   {
+    "file": "New York marathon Verrazano bridge.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:New_York_marathon_Verrazano_bridge.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Martineric from Lille, France."
+   },
+   {
+    "file": "Runners NYC Marathon Clinton Hill 2024.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runners_NYC_Marathon_Clinton_Hill_2024.jpg",
+    "license": "CC BY 4.0",
+    "credit": "Wil540 art"
+   },
+   {
+    "file": "Runners at start of Brooklyn Marathon, New York LCCN2014683140.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runners_at_start_of_Brooklyn_Marathon,_New_York_LCCN2014683140.jpg",
+    "license": "Public domain",
+    "credit": "Bain News Service, publisher"
+   },
+   {
+    "file": "Runners at start of Brooklyn Marathon, New York LCCN2014683140.tif",
+    "page": "https://commons.wikimedia.org/wiki/File:Runners_at_start_of_Brooklyn_Marathon,_New_York_LCCN2014683140.tif",
+    "license": "Public domain",
+    "credit": "Bain News Service, publisher"
+   },
+   {
+    "file": "Ted sign NYC Marathon Clinton Hill 2024.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ted_sign_NYC_Marathon_Clinton_Hill_2024.jpg",
+    "license": "CC BY 4.0",
+    "credit": "Wil540 art"
+   }
+  ],
+  "photos_checked": "title only; open each before use",
+  "course_todo": "No official file or OSM relation."
+ },
+ {
+  "id": "tokyo",
+  "name": "Tokyo Marathon",
+  "country": "Japan",
+  "type": "road marathon",
+  "month": "Mar",
+  "km": 42.2,
+  "gain_m": null,
+  "route": "Shinjuku to Tokyo Station",
+  "hook": "Costumes, huge ballot",
+  "course": {
+   "source": "kml",
+   "urls": [
+    "https://www.google.com/maps/d/kml?mid=1DkVRDZhVD4sp8pKTvYvHoZUIOA61YngW&forcekml=1"
+   ],
+   "path": "courses/tokyo.gpx",
+   "gpx_km": 42.34,
+   "gpx_gain_m": 421,
+   "elevation": "dem (opentopodata mapzen, ~30 m)",
+   "partial": false,
+   "notes": "DEM gain on city streets is noise (bridges, buildings): use the outline, not the profile."
+  },
+  "photos": [
+   {
+    "file": "2021 Tokyo Marathon Course inspector Subaru XV.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2021_Tokyo_Marathon_Course_inspector_Subaru_XV.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Comyu"
+   },
+   {
+    "file": "Runner (32321434987).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runner_(32321434987).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Runner (32322110217).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runner_(32322110217).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Runner (33388158008).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runner_(33388158008).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Runner (40299251213).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runner_(40299251213).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Runner (47212126902).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runner_(47212126902).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Runner (47212161042).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Runner_(47212161042).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon - 32380227397.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_-_32380227397.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "TheNickster"
+   },
+   {
+    "file": "Tokyo Marathon - 32380231847.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_-_32380231847.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "TheNickster"
+   },
+   {
+    "file": "Tokyo Marathon - 46407101375.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_-_46407101375.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "TheNickster"
+   },
+   {
+    "file": "Tokyo Marathon - 47269584972.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_-_47269584972.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "TheNickster"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (32321830407).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(32321830407).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (32321838847).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(32321838847).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (33387999358).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(33387999358).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (40298625883).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(40298625883).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (40298944593).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(40298944593).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (46348789105).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(46348789105).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (46540044364).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(46540044364).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (47211517452).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(47211517452).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (47211781082).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(47211781082).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (47263694811).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(47263694811).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Runner (47263802261).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Runner_(47263802261).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 Tokyo marathon 2019 東京マラソン2019 (40298855363).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_Tokyo_marathon_2019_%E6%9D%B1%E4%BA%AC%E3%83%9E%E3%83%A9%E3%82%BD%E3%83%B32019_(40298855363).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 wheelchair Runner (33387654718).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_wheelchair_Runner_(33387654718).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 wheelchair Runner (46348846715).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_wheelchair_Runner_(46348846715).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 wheelchair runner (46539979544).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_wheelchair_runner_(46539979544).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 wheelchair runner (47211714322).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_wheelchair_runner_(47211714322).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2019 wheelchair runner (47211715232).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2019_wheelchair_runner_(47211715232).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "nakashi from Chofu, Tokyo, JAPAN"
+   },
+   {
+    "file": "Tokyo Marathon 2020 (Hibiya-dori).JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Tokyo_Marathon_2020_(Hibiya-dori).JPG",
+    "license": "Public domain",
+    "credit": "Abasaa"
+   }
+  ],
+  "photos_checked": "title only; open each before use"
+ },
+ {
+  "id": "chicago",
+  "name": "Chicago Marathon",
+  "country": "USA",
+  "type": "road marathon",
+  "month": "Oct",
+  "km": 42.2,
+  "gain_m": null,
+  "route": "Grant Park loop",
+  "hook": "Flat and fast",
+  "course": {
+   "source": "gpx",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/10/12/bank-of-america-chicago-marathon-2025-chicago-2025-track.gpx"
+   ],
+   "path": "courses/chicago.gpx",
+   "gpx_km": 42.81,
+   "gpx_gain_m": 0,
+   "elevation": "source",
+   "partial": false
+  },
+  "photos": [
+   {
+    "file": "2007 Chicago Marathon Masses.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:2007_Chicago_Marathon_Masses.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "User:TonyTheTiger."
+   },
+   {
+    "file": "2019 Chicago Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2019_Chicago_Marathon.jpg",
+    "license": "CC BY 4.0",
+    "credit": "Kenneth C. Zirkel"
+   },
+   {
+    "file": "A conveyerbelt of bananas (215773398).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:A_conveyerbelt_of_bananas_(215773398).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Señor Codo"
+   },
+   {
+    "file": "Chicago Marathon 2008 (3215618310).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Chicago_Marathon_2008_(3215618310).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Amy Guth from Chicago, IL, USA, USA"
+   },
+   {
+    "file": "Chicago Marathon Logo.png",
+    "page": "https://commons.wikimedia.org/wiki/File:Chicago_Marathon_Logo.png",
+    "license": "Public domain",
+    "credit": "Chicago Marathon"
+   },
+   {
+    "file": "Chicago marathon 2019.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Chicago_marathon_2019.jpg",
+    "license": "CC BY 4.0",
+    "credit": "Kenneth C. Zirkel"
+   },
+   {
+    "file": "Dakotah Lindwurm 2023 Chicago Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dakotah_Lindwurm_2023_Chicago_Marathon.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Chad Veal"
+   },
+   {
+    "file": "Dennis Bennett at the Chicago Marathon (Chicago Daily Tribune, October 2, 1906).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Dennis_Bennett_at_the_Chicago_Marathon_(Chicago_Daily_Tribune,_October_2,_1906).jpg",
+    "license": "Public domain",
+    "credit": "Unknown authorUnknown author"
+   },
+   {
+    "file": "Go Runners! (27762047343).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Go_Runners!_(27762047343).jpg",
+    "license": "CC BY 2.0",
+    "credit": "nathanmac87"
+   },
+   {
+    "file": "Kelvin Kiptum 2023 Chicago Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Kelvin_Kiptum_2023_Chicago_Marathon.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Chad Veal"
+   }
+  ],
+  "photos_checked": "title only; open each before use",
+  "course_todo": "PDF map only."
+ },
+ {
+  "id": "bear-100",
+  "name": "Bear 100",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Sep",
+  "km": 161,
+  "gain_m": 6026,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/bear-100-mile-endurance-run/main/course.gpx",
+   "gpx_km": 159.79,
+   "gpx_gain_m": 6026,
+   "partial": false,
+   "origin": "https://www.bear100.com/Content/Data/Bear_100_-_Full_Route__2026__.gpx"
+  }
+ },
+ {
+  "id": "canyons",
+  "name": "Canyons 100",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Apr",
+  "km": 160,
+  "gain_m": 5586,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-canyons/100m/course.gpx",
+   "gpx_km": 158.68,
+   "gpx_gain_m": 5586,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1776808245/canyons/2026/GPX%20Files/2026_Canyons_Endurance_Runs_by_UTMB_100_mile_Course_Alternate_3b179d0806.gpx"
+  }
+ },
+ {
+  "id": "ndw100",
+  "name": "North Downs Way 100",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": "Aug",
+  "km": 161,
+  "gain_m": 3827,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/centurion-north-downs-way-100/main/course.gpx",
+   "gpx_km": 165.56,
+   "gpx_gain_m": 3827,
+   "partial": false,
+   "origin": "https://centurionrunning.s3-eu-west-1.amazonaws.com/races/gpx/5c9e4d317443ee6cc142dcc61f508119.gpx"
+  }
+ },
+ {
+  "id": "tp100",
+  "name": "Thames Path 100",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": "May",
+  "km": 161,
+  "gain_m": 421,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/centurion-thames-path-100/main/course.gpx",
+   "gpx_km": 164.16,
+   "gpx_gain_m": 421,
+   "partial": false,
+   "origin": "https://centurionrunning.s3-eu-west-1.amazonaws.com/races/gpx/fa208569e1046f80a34bd73909727bd6.gpx"
+  }
+ },
+ {
+  "id": "winter-downs",
+  "name": "Winter Downs 100",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": null,
+  "km": 161,
+  "gain_m": 2626,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/centurion-winter-downs-100/main/course.gpx",
+   "gpx_km": 154.94,
+   "gpx_gain_m": 2626,
+   "partial": false,
+   "origin": "https://centurionrunning.s3-eu-west-1.amazonaws.com/races/gpx/1c5d9261296186cb857a6d71beecf497.gpx"
+  }
+ },
+ {
+  "id": "doi-inthanon",
+  "name": "Doi Inthanon by UTMB",
+  "country": "Thailand",
+  "type": "trail ultra",
+  "month": "Dec",
+  "km": 161,
+  "gain_m": 9012,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/doi-inthanon-thailand-by-utmb/main/course.gpx",
+   "gpx_km": 170.36,
+   "gpx_gain_m": 9012,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1782288165/thailand/GPX/2026/Chiang_Mai_Chiang_Dao_173k_9900_2206_2f1dab9569.gpx"
+  }
+ },
+ {
+  "id": "ehunmilak",
+  "name": "Ehunmilak",
+  "country": "Spain",
+  "type": "trail ultra",
+  "month": "Jul",
+  "km": 168,
+  "gain_m": 9461,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "Ehunmilak 2025.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ehunmilak_2025.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "EvaLizarralde"
+   }
+  ],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/ehunmilak-ultra-trail/main/course.gpx",
+   "gpx_km": 171.1,
+   "gpx_gain_m": 9461,
+   "partial": false,
+   "origin": "https://www.ehunmilak.com/wp-content/uploads/dokumentuak/ehunmilak.gpx"
+  }
+ },
+ {
+  "id": "glen-coe-skyline",
+  "name": "Glen Coe Skyline",
+  "country": "UK",
+  "type": "skyrace",
+  "month": "Sep",
+  "km": 52,
+  "gain_m": 4593,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/glen-coe-skyline/main/course.gpx",
+   "gpx_km": 51.29,
+   "gpx_gain_m": 4593,
+   "partial": false,
+   "origin": "https://oureaevents.squarespace.com/s/Salomon-Glen-Coe-Skyline-2023.gpx"
+  }
+ },
+ {
+  "id": "gorge-waterfalls",
+  "name": "Gorge Waterfalls 100K",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": null,
+  "km": 100,
+  "gain_m": 4128,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/gorge-waterfalls/main/course.gpx",
+   "gpx_km": 98.61,
+   "gpx_gain_m": 4128,
+   "partial": false,
+   "origin": "https://www.daybreakracing.com/s/Gorge_Waterfalls_100K_version-2-19-2026.gpx"
+  }
+ },
+ {
+  "id": "grindstone",
+  "name": "Grindstone 100",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Sep",
+  "km": 161,
+  "gain_m": 5884,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/grindstone-100/main/course.gpx",
+   "gpx_km": 167.77,
+   "gpx_gain_m": 5884,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1751337451/grindstone/GPX%20FILES/2025/2025_Grindstone_Trail_Running_Festival_by_UTMB_100_Mile_Course_ac89972229.gpx"
+  }
+ },
+ {
+  "id": "hardmoors-110",
+  "name": "Hardmoors 110",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": null,
+  "km": 179,
+  "gain_m": 4255,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/hardmoors-110/main/course.gpx",
+   "gpx_km": 180.57,
+   "gpx_gain_m": 4255,
+   "partial": false,
+   "origin": "https://www.hardmoors110.org.uk/wp-content/uploads/Hardmoors-110-2027.gpx"
+  }
+ },
+ {
+  "id": "high-lonesome",
+  "name": "High Lonesome 100",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Jul",
+  "km": 161,
+  "gain_m": 6528,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/high-lonesome-100/main/course.gpx",
+   "gpx_km": 159.89,
+   "gpx_gain_m": 6528,
+   "partial": false,
+   "origin": "https://www.highlonesome100.com/s/2026_High_Lonesome_100_course-07092026.gpx"
+  }
+ },
+ {
+  "id": "mozart-100",
+  "name": "Mozart 100",
+  "country": "Austria",
+  "type": "trail ultra",
+  "month": "Jun",
+  "km": 105,
+  "gain_m": 6633,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/mozart-100-by-utmb/main/course.gpx",
+   "gpx_km": 115.92,
+   "gpx_gain_m": 6633,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1778920147/mozart/mozart%20100%202026/GPX%20files%202026/mozart100_2026_mozart100_NEW_20260516_d1a5f7ec90.gpx"
+  }
+ },
+ {
+  "id": "mt-fuji-100",
+  "name": "Mt. Fuji 100",
+  "country": "Japan",
+  "type": "trail ultra",
+  "month": null,
+  "km": 165,
+  "gain_m": 7219,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/mt-fuji-100/main/course.gpx",
+   "gpx_km": 163.48,
+   "gpx_gain_m": 7219,
+   "partial": false,
+   "origin": "https://en.mtfuji100.com/wp-content/themes/utmf/img/course/26FUJI100mi_ver.1.5.gpx"
+  }
+ },
+ {
+  "id": "oman",
+  "name": "Oman by UTMB",
+  "country": "Oman",
+  "type": "trail ultra",
+  "month": null,
+  "km": 155,
+  "gain_m": 7998,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-oman/hajar-ultra/course.gpx",
+   "gpx_km": 151.95,
+   "gpx_gain_m": 7998,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1770141497/oman/Races/GPX%20Files/2026/100_M_2386c35f10.gpx"
+  }
+ },
+ {
+  "id": "san-juan-solstice",
+  "name": "San Juan Solstice 50",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Jun",
+  "km": 80,
+  "gain_m": 3623,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/san-juan-solstice/main/course.gpx",
+   "gpx_km": 78.73,
+   "gpx_gain_m": 3623,
+   "partial": false,
+   "origin": "https://9126ddcd-3850-4010-b803-baaf7e635435.filesusr.com/ugd/7b9246_04094e80b2b448d1969cba2c92a87955.gpx?dn=San_Juan_Solstice_.gpx"
+  }
+ },
+ {
+  "id": "speedgoat",
+  "name": "Speedgoat 50K",
+  "country": "USA",
+  "type": "mountain race",
+  "month": "Jul",
+  "km": 50,
+  "gain_m": 3528,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/speedgoat-mountain-races/main/course.gpx",
+   "gpx_km": 50.51,
+   "gpx_gain_m": 3528,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1760548434/speedgoat/2026/GPX%20Files/2026_Speedgoat_Mountain_Races_by_UTMB_50k_Course_2dacaf2cbb.gpx"
+  }
+ },
+ {
+  "id": "squamish-50",
+  "name": "Squamish 50",
+  "country": "Canada",
+  "type": "trail ultra",
+  "month": "Aug",
+  "km": 80,
+  "gain_m": 2568,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/squamish-50/main/course.gpx",
+   "gpx_km": 78.45,
+   "gpx_gain_m": 2568,
+   "partial": false,
+   "origin": "https://squamish50.com/wp-content/uploads/2026/07/2026-SQ50-50M.gpx"
+  }
+ },
+ {
+  "id": "swiss-canyon",
+  "name": "Swiss Canyon Trail",
+  "country": "Switzerland",
+  "type": "trail ultra",
+  "month": "Jun",
+  "km": 111,
+  "gain_m": 4819,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "Swiss Canyon Trail.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Swiss_Canyon_Trail.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Tripack7"
+   }
+  ],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/swiss-canyon-trail/main/course.gpx",
+   "gpx_km": 112.16,
+   "gpx_gain_m": 4819,
+   "partial": false,
+   "origin": "https://cdn.shopify.com/s/files/1/0728/0240/2521/files/Swiss_Canyon_Trail_111K_2026_2.gpx?v=1779097882"
+  }
+ },
+ {
+  "id": "tarawera",
+  "name": "Tarawera 100 Mile",
+  "country": "New Zealand",
+  "type": "trail ultra",
+  "month": "Feb",
+  "km": 163,
+  "gain_m": 3662,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-tarawera/tmiler/course.gpx",
+   "gpx_km": 161.12,
+   "gpx_gain_m": 3662,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1769550545/tarawera/Races/2026_Tarawera_Ultra_Trail_160km_V5_52f24e574e.gpx"
+  }
+ },
+ {
+  "id": "uta",
+  "name": "Ultra-Trail Australia 100",
+  "country": "Australia",
+  "type": "trail ultra",
+  "month": "May",
+  "km": 100,
+  "gain_m": 4069,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/ultra-trail-australia/main/course.gpx",
+   "gpx_km": 100.11,
+   "gpx_gain_m": 4069,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1776334050/uta/Races/2026%20RACE%20ALIGNMENTS/uta_100k_cleaned_livetrail_f81c7a5085.gpx"
+  }
+ },
+ {
+  "id": "uts-100",
+  "name": "Ultra-Trail Snowdonia 100M",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": "May",
+  "km": 161,
+  "gain_m": 9211,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/ultra-trail-snowdonia-by-utmb/main/course.gpx",
+   "gpx_km": 161.19,
+   "gpx_gain_m": 9211,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1778676443/snowdonia/GPX%20Files/2026_UTS_100_M_35706b61af.gpx"
+  }
+ },
+ {
+  "id": "alsace",
+  "name": "Trail Alsace",
+  "country": "France",
+  "type": "trail ultra",
+  "month": null,
+  "km": 159,
+  "gain_m": 5702,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-alsace/ultra-trail-des-chevaliers/course.gpx",
+   "gpx_km": 157.11,
+   "gpx_gain_m": 5702,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1778483103/alsacegrandest/GPX%202026/2026_tage_utdc_v17_113abf93d4.gpx"
+  }
+ },
+ {
+  "id": "andorra",
+  "name": "Andorra 105K",
+  "country": "Andorra",
+  "type": "trail ultra",
+  "month": "Jun",
+  "km": 107,
+  "gain_m": 6169,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-andorra/ultra-105k/course.gpx",
+   "gpx_km": 103.19,
+   "gpx_gain_m": 6169,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1780912062/andorra/Gpx/GPX%202026/105_K_2024_Parc_Central_BO_2914c10629.gpx"
+  }
+ },
+ {
+  "id": "bariloche",
+  "name": "Patagonia Bariloche 130K",
+  "country": "Argentina",
+  "type": "trail ultra",
+  "month": null,
+  "km": 132,
+  "gain_m": 6516,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-bariloche/tronador-130k/course.gpx",
+   "gpx_km": 130.06,
+   "gpx_gain_m": 6516,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1761398705/bariloche/BARILOCHE%202025/DISTANCIAS/GPX/FFFF_130k_Bariloche_by_UTMB_a4fb584874.gpx"
+  }
+ },
+ {
+  "id": "chianti",
+  "name": "Chianti Ultra Trail",
+  "country": "Italy",
+  "type": "trail ultra",
+  "month": "Mar",
+  "km": 124,
+  "gain_m": 4810,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-chianti/ultra-trail-chianti-castles/course.gpx",
+   "gpx_km": 121.95,
+   "gpx_gain_m": 4810,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1780669402/chianti/Races/gpx%20files/UTCC_120_K_2027_01_8d79fda70b.gpx"
+  }
+ },
+ {
+  "id": "great-wall",
+  "name": "Ultra-Trail Great Wall",
+  "country": "China",
+  "type": "trail ultra",
+  "month": null,
+  "km": 100,
+  "gain_m": 3884,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-dajingmen/dgw100/course.gpx",
+   "gpx_km": 98.62,
+   "gpx_gain_m": 3884,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1780371285/dajingmen/2026%E8%BD%A8%E8%BF%B9%E6%96%87%E4%BB%B6/20260601/DGW_f4e57cc74e.gpx"
+  }
+ },
+ {
+  "id": "istria",
+  "name": "Istria 100",
+  "country": "Croatia",
+  "type": "trail ultra",
+  "month": "Apr",
+  "km": 168,
+  "gain_m": 6510,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-istria/168k/course.gpx",
+   "gpx_km": 166.8,
+   "gpx_gain_m": 6510,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1781524089/istria/.gpx/ISTRIA_168k_2027_85dcf7c2ad.gpx"
+  }
+ },
+ {
+  "id": "julian-alps",
+  "name": "Julian Alps Trail Run",
+  "country": "Slovenia",
+  "type": "trail ultra",
+  "month": null,
+  "km": 125,
+  "gain_m": 6821,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-julianalps/i-feel-slovenia-120k/course.gpx",
+   "gpx_km": 123.12,
+   "gpx_gain_m": 6821,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1785239119/julianalps/GPX%20FILES%20JULY%202026/JAT_120_km_2026_b4ad9125ef.gpx"
+  }
+ },
+ {
+  "id": "kat100",
+  "name": "KAT100",
+  "country": "Austria",
+  "type": "trail ultra",
+  "month": "Aug",
+  "km": 168,
+  "gain_m": 8940,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-kat/100-miles/course.gpx",
+   "gpx_km": 163.17,
+   "gpx_gain_m": 8940,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1778845343/kat/2026/Trails/Trails%2015.05.2026/kat100_by_utmb_26_6545304304.gpx"
+  }
+ },
+ {
+  "id": "kodiak",
+  "name": "Kodiak 100",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": "Oct",
+  "km": 162,
+  "gain_m": 4355,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-kodiak/100m/course.gpx",
+   "gpx_km": 160.82,
+   "gpx_gain_m": 4355,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1784845598/kodiak/GPX%20FILES/2026/2026_Kodiak_Course_Map_pending_approval_by_USFS_993b7a0f77.gpx"
+  }
+ },
+ {
+  "id": "kosciuszko",
+  "name": "Ultra-Trail Kosciuszko",
+  "country": "Australia",
+  "type": "trail ultra",
+  "month": null,
+  "km": 163,
+  "gain_m": 5040,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-kosciuszko/koscimiler/course.gpx",
+   "gpx_km": 160.08,
+   "gpx_gain_m": 5040,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1783553059/kosciuszko/Races/2026%20Race%20Alignment%20GPX/2026_UTK_by_UTMB_Miler_RACE_ALINGMENT_08072026_03898b768f.gpx"
+  }
+ },
+ {
+  "id": "kullamannen",
+  "name": "Kullamannen 100 Mile",
+  "country": "Sweden",
+  "type": "trail ultra",
+  "month": null,
+  "km": 172,
+  "gain_m": 2112,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-kullamannen/ultra-100-miles/course.gpx",
+   "gpx_km": 170.83,
+   "gpx_gain_m": 2112,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1761590529/kullamannen/GPX%202024/Final_Kullamannen_2025_100_M_v16_5578ac8b21.gpx"
+  }
+ },
+ {
+  "id": "mallorca",
+  "name": "Mallorca Serra de Tramuntana",
+  "country": "Spain",
+  "type": "trail ultra",
+  "month": null,
+  "km": 138,
+  "gain_m": 5334,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-mallorca/serra-de-tramuntana-sdt/course.gpx",
+   "gpx_km": 137.46,
+   "gpx_gain_m": 5334,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1758093232/mallorca/RECORREGUTS%20DEFINITIUS/REC2025/100_M_ESTELLENCS_SDT_v3_47e378f05d.gpx"
+  }
+ },
+ {
+  "id": "mut",
+  "name": "Mountain Ultra Trail Miler",
+  "country": "South Africa",
+  "type": "trail ultra",
+  "month": null,
+  "km": 168,
+  "gain_m": 8015,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-mut/mut-miler-by-utmb/course.gpx",
+   "gpx_km": 166.11,
+   "gpx_gain_m": 8015,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1777656020/mut/GPX%20files/2026%20GPX/MILER_2026_1_8db284754b.gpx"
+  }
+ },
+ {
+  "id": "nice",
+  "name": "Nice Côte d'Azur 100M",
+  "country": "France",
+  "type": "trail ultra",
+  "month": null,
+  "km": 167,
+  "gain_m": 8549,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-nice/ultra-trail-m-tropole-nice-c-te-d-azur-100m/course.gpx",
+   "gpx_km": 164.86,
+   "gpx_gain_m": 8549,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1767772423/nice/Races/GPX/100_M_par_Venanson_et_baisse_Combe_V1_8310759dbf.gpx"
+  }
+ },
+ {
+  "id": "restonica",
+  "name": "Restonica Trail 100M",
+  "country": "France (Corsica)",
+  "type": "trail ultra",
+  "month": "Jul",
+  "km": 111,
+  "gain_m": 7177,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-restonica/utc100m/course.gpx",
+   "gpx_km": 108.31,
+   "gpx_gain_m": 7177,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1777838033/restonica/Races/GPX/UTC_2026_645f729353.gpx"
+  }
+ },
+ {
+  "id": "transjeju",
+  "name": "TransJeju 100M",
+  "country": "South Korea",
+  "type": "trail ultra",
+  "month": "Oct",
+  "km": 148,
+  "gain_m": 5097,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-transjeju/jeju100m/course.gpx",
+   "gpx_km": 146.9,
+   "gpx_gain_m": 5097,
+   "partial": false,
+   "origin": "https://transjeju.utmb.world/races/jeju100m"
+  }
+ },
+ {
+  "id": "translantau",
+  "name": "Translantau 100",
+  "country": "Hong Kong",
+  "type": "trail ultra",
+  "month": null,
+  "km": 104,
+  "gain_m": 4546,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-translantau/translantau100/course.gpx",
+   "gpx_km": 102.65,
+   "gpx_gain_m": 4546,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1775921428/translantau/Races/TL%202026/TL_104k_4600_1004_2de34f807b.gpx"
+  }
+ },
+ {
+  "id": "verbier",
+  "name": "Verbier St-Bernard X-Alpine",
+  "country": "Switzerland",
+  "type": "trail ultra",
+  "month": "Jul",
+  "km": 140,
+  "gain_m": 9127,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-verbier/x-alpine/course.gpx",
+   "gpx_km": 137.89,
+   "gpx_gain_m": 9127,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1783593400/verbier/Races/GPX2026/2026xalpine_3d4ea3a6de.gpx"
+  }
+ },
+ {
+  "id": "wildstrubel",
+  "name": "Wildstrubel 110",
+  "country": "Switzerland",
+  "type": "trail ultra",
+  "month": null,
+  "km": 114,
+  "gain_m": 6598,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-wildstrubel/wild-110-crans-montana/course.gpx",
+   "gpx_km": 111.94,
+   "gpx_gain_m": 6598,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1757916709/wildstrubel/Races/Wild%20100M/GPX/WILD_110_K_officiel_79d0995203.gpx"
+  }
+ },
+ {
+  "id": "zugspitz",
+  "name": "Zugspitz Ultratrail",
+  "country": "Germany",
+  "type": "trail ultra",
+  "month": "Jun",
+  "km": 111,
+  "gain_m": 5348,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "Florian Neuschwander im Interview beim Start vom Zugspitz Ultratrail in Grainau 2025-06-14.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Florian_Neuschwander_im_Interview_beim_Start_vom_Zugspitz_Ultratrail_in_Grainau_2025-06-14.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Strubbl"
+   },
+   {
+    "file": "Kurz vor dem Start des Zugspitz Ultratrail in Grainau 2025-06-14.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Kurz_vor_dem_Start_des_Zugspitz_Ultratrail_in_Grainau_2025-06-14.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Strubbl"
+   },
+   {
+    "file": "Letzte Meter vor dem Ziel des Zugspitz Ultratrail beim Richard-Strauss-Platz in Garmisch-Partenkirchen 2025-06-14.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Letzte_Meter_vor_dem_Ziel_des_Zugspitz_Ultratrail_beim_Richard-Strauss-Platz_in_Garmisch-Partenkirchen_2025-06-14.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Strubbl"
+   },
+   {
+    "file": "Läufer am Start des Zugspitz Ultratrail in Grainau 2025-06-14.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:L%C3%A4ufer_am_Start_des_Zugspitz_Ultratrail_in_Grainau_2025-06-14.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Strubbl"
+   },
+   {
+    "file": "Ziel des Zugspitz Ultratrail am Richard-Strauss-Platz in Garmisch-Partenkirchen Bild 1 2025-06-14.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ziel_des_Zugspitz_Ultratrail_am_Richard-Strauss-Platz_in_Garmisch-Partenkirchen_Bild_1_2025-06-14.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Strubbl"
+   },
+   {
+    "file": "Ziel des Zugspitz Ultratrail am Richard-Strauss-Platz in Garmisch-Partenkirchen Bild 2 2025-06-14.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Ziel_des_Zugspitz_Ultratrail_am_Richard-Strauss-Platz_in_Garmisch-Partenkirchen_Bild_2_2025-06-14.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Strubbl"
+   }
+  ],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/zugspitz-ultratrail/main/course.gpx",
+   "gpx_km": 106.06,
+   "gpx_gain_m": 5348,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1760105332/zugspitz/Races/Ultratrail/Ultratrail_ZUT_2025_3b6cbaa510.gpx"
+  }
+ },
+ {
+  "id": "val-d-aran",
+  "name": "Val d'Aran 100M",
+  "country": "Spain",
+  "type": "trail ultra",
+  "month": "Jul",
+  "km": 162,
+  "gain_m": 9999,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/val-d-aran-by-utmb/main/course.gpx",
+   "gpx_km": 159.87,
+   "gpx_gain_m": 9999,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1781796580/valdaran/Races/GPX%202026%20DEFINTIVOS%20EVENTO/NORMALES/VDA_2026_WEB_COLOMERS_1_b8cad96a9e.gpx"
+  }
+ },
+ {
+  "id": "arc-50",
+  "name": "Arc 50",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": "Feb",
+  "km": 80,
+  "gain_m": 2292,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/arc-50/main/course.gpx",
+   "gpx_km": 80.28,
+   "gpx_gain_m": 2292,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1768816470/arcofattrition/Races/GPS%20Files/2026%20FINAL/AOA_2026_Arc_50_V20_5672c3b8dc.gpx"
+  }
+ },
+ {
+  "id": "chihuahua",
+  "name": "Chihuahua Rarámuri 100M",
+  "country": "Mexico",
+  "type": "trail ultra",
+  "month": null,
+  "km": 134,
+  "gain_m": 6704,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-chihuahua/rar-muri-100m/course.gpx",
+   "gpx_km": 132.43,
+   "gpx_gain_m": 6704,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1770675731/chihuahua/Chuihuahua_134k_6700_b6385afd16.gpx"
+  }
+ },
+ {
+  "id": "ushuaia",
+  "name": "Ushuaia Epic 130K",
+  "country": "Argentina",
+  "type": "trail ultra",
+  "month": null,
+  "km": 113,
+  "gain_m": 4937,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-ushuaia/epic-130k/course.gpx",
+   "gpx_km": 111.82,
+   "gpx_gain_m": 4937,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1773964236/valholl/130_plan_b_ok_2c095ed49e.gpx"
+  }
+ },
+ {
+  "id": "whistler",
+  "name": "Ultra Trail Whistler 100K",
+  "country": "Canada",
+  "type": "trail ultra",
+  "month": null,
+  "km": 103,
+  "gain_m": 5916,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-whistler/100k/course.gpx",
+   "gpx_km": 100.81,
+   "gpx_gain_m": 5916,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1776445314/whistler/GPX%20FILES/2026/2026_UT_Whistler_100_K_v1_e604730b99.gpx"
+  }
+ },
+ {
+  "id": "desert-rats",
+  "name": "Desert RATS 100K",
+  "country": "USA",
+  "type": "trail ultra",
+  "month": null,
+  "km": 102,
+  "gain_m": 1951,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "ultra-course-data",
+   "path": "out/utmb-desertrats/100k/course.gpx",
+   "gpx_km": 102.08,
+   "gpx_gain_m": 1951,
+   "partial": false,
+   "origin": "https://res.cloudinary.com/utmb-world/raw/upload/v1775206524/desertrats/GPX%20Files/2026/2026_Desert_Rats_Trail_Running_Festival_by_UTMB_100k_V7_e06e49755d.gpx"
+  }
+ },
+ {
+  "id": "paris",
+  "name": "Paris Marathon",
+  "country": "France",
+  "type": "road marathon",
+  "month": "Apr",
+  "km": 42.2,
+  "gain_m": 81,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "Paris marathon 2008 10.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_10.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 11.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_11.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 12.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_12.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 13.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_13.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 14.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_14.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 15.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_15.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 16.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_16.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 17.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_17.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 18.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_18.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 19.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_19.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 2.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_2.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 20.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_20.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 21.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_21.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 22.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_22.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 23.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_23.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 24.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_24.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 25.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_25.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 26.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_26.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 27.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_27.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 28.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_28.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 3.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_3.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 30.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_30.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 31.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_31.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 32.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_32.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 33.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_33.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 36.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_36.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 37.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_37.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 5.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_5.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 7.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_7.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   },
+   {
+    "file": "Paris marathon 2008 9.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_9.jpg",
+    "license": "CC0",
+    "credit": "Syced"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/04/12/marathon-de-paris-2026-paris-2026-track.gpx"
+   ],
+   "path": "courses/paris.gpx",
+   "gpx_km": 42.18,
+   "gpx_gain_m": 81,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/marathon-de-paris-2026-course-map-1.php"
+  }
+ },
+ {
+  "id": "amsterdam",
+  "name": "Amsterdam Marathon",
+  "country": "Netherlands",
+  "type": "road marathon",
+  "month": "Oct",
+  "km": 42.2,
+  "gain_m": 20,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "Amsterdam Marathon 2014 - 10.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2014_-_10.JPG",
+    "license": "CC BY-SA 4.0",
+    "credit": "Little Savage"
+   },
+   {
+    "file": "Amsterdam Marathon 2014 - 13.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2014_-_13.JPG",
+    "license": "CC BY-SA 4.0",
+    "credit": "Little Savage"
+   },
+   {
+    "file": "Amsterdam Marathon 2016 DSCF4425 (29728395714).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2016_DSCF4425_(29728395714).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Franklin Heijnen"
+   },
+   {
+    "file": "Amsterdam Marathon 2016 DSCF4512 (30323757516).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2016_DSCF4512_(30323757516).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Franklin Heijnen"
+   },
+   {
+    "file": "Amsterdam Marathon 2016 DSCF4544 (30359050485).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2016_DSCF4544_(30359050485).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Franklin Heijnen"
+   },
+   {
+    "file": "Amsterdam Marathon 2016 DSCF4560 (30323794966).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2016_DSCF4560_(30323794966).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Franklin Heijnen"
+   },
+   {
+    "file": "Amsterdam Marathon 2016 DSCF4574 (30359121425).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2016_DSCF4574_(30359121425).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Franklin Heijnen"
+   },
+   {
+    "file": "Amsterdam Marathon 2016 DSCF4580 (29727397923).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2016_DSCF4580_(29727397923).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Franklin Heijnen"
+   },
+   {
+    "file": "Amsterdam Marathon 2016 DSCF4581 (30062181900).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2016_DSCF4581_(30062181900).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Franklin Heijnen"
+   },
+   {
+    "file": "Derde internationale marathon van Amsterdam Rodgers gaat over de finish, Bestanddeelnr 929-1874.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Derde_internationale_marathon_van_Amsterdam_Rodgers_gaat_over_de_finish,_Bestanddeelnr_929-1874.jpg",
+    "license": "CC0",
+    "credit": "Koen Suyk / Anefo"
+   },
+   {
+    "file": "Internationale marathon in Amsterdam massale start van de Dam, Bestanddeelnr 930-7943.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Internationale_marathon_in_Amsterdam_massale_start_van_de_Dam,_Bestanddeelnr_930-7943.jpg",
+    "license": "CC0",
+    "credit": "Rob Bogaerts / Anefo"
+   },
+   {
+    "file": "Kopgroep Marathon van Amsterdam 2012.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Kopgroep_Marathon_van_Amsterdam_2012.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "Apus apus"
+   },
+   {
+    "file": "Marathon Amsterdam 2008 01.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Marathon_Amsterdam_2008_01.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Apus apus"
+   },
+   {
+    "file": "Marathon van Amsterdam finish winnaar Gerard Nijboer, Bestanddeelnr 932-9658.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Marathon_van_Amsterdam_finish_winnaar_Gerard_Nijboer,_Bestanddeelnr_932-9658.jpg",
+    "license": "CC0",
+    "credit": "Rob Croes / Anefo"
+   },
+   {
+    "file": "Medaille t.g.v. de 20ste Amsterdam City Marathon, objectnr PA 3237.12.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Medaille_t.g.v._de_20ste_Amsterdam_City_Marathon,_objectnr_PA_3237.12.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Unknown authorUnknown author"
+   },
+   {
+    "file": "Zevende internationale marathon van Amsterdam 6a, 7a Cor Vriend en Jose Reveyn, Bestanddeelnr 932-1489.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Zevende_internationale_marathon_van_Amsterdam_6a,_7a_Cor_Vriend_en_Jose_Reveyn,_Bestanddeelnr_932-1489.jpg",
+    "license": "CC0",
+    "credit": "Rob Croes / Anefo"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/10/19/tcs-amsterdam-marathon-2025-amsterdam-2025-track.gpx"
+   ],
+   "path": "courses/amsterdam.gpx",
+   "gpx_km": 42.77,
+   "gpx_gain_m": 20,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/tcs-amsterdam-marathon-2025-course-map-1.php"
+  }
+ },
+ {
+  "id": "valencia",
+  "name": "Valencia Marathon",
+  "country": "Spain",
+  "type": "road marathon",
+  "month": "Dec",
+  "km": 42.2,
+  "gain_m": 25,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/12/07/valencia-marathon-2025-valencia-2025-track.gpx"
+   ],
+   "path": "courses/valencia.gpx",
+   "gpx_km": 42.63,
+   "gpx_gain_m": 25,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/valencia-marathon-2025-valencia-course-map-1.php"
+  }
+ },
+ {
+  "id": "great-north-run",
+  "name": "Great North Run",
+  "country": "UK",
+  "type": "road half marathon",
+  "month": "Sep",
+  "km": 21.1,
+  "gain_m": 60,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "2015 Great North Run (20769768754).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2015_Great_North_Run_(20769768754).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Northumbria Blood Bikes"
+   },
+   {
+    "file": "2015 Great North Run (21204629188).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2015_Great_North_Run_(21204629188).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Northumbria Blood Bikes"
+   },
+   {
+    "file": "2015 Great North Run (21366245116).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2015_Great_North_Run_(21366245116).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Northumbria Blood Bikes"
+   },
+   {
+    "file": "2015 Great North Run (21400829831).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2015_Great_North_Run_(21400829831).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Northumbria Blood Bikes"
+   },
+   {
+    "file": "Approaching the half way point on Great North Run - geograph.org.uk - 5122035.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Approaching_the_half_way_point_on_Great_North_Run_-_geograph.org.uk_-_5122035.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Chris Morgan"
+   },
+   {
+    "file": "Great North Run, one mile to go - geograph.org.uk - 3624207.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Great_North_Run,_one_mile_to_go_-_geograph.org.uk_-_3624207.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Chris Denny"
+   },
+   {
+    "file": "Great North Run (geograph 2608344).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Great_North_Run_(geograph_2608344).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Peter McDermott"
+   },
+   {
+    "file": "Great North Run - geograph.org.uk - 4660363.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Great_North_Run_-_geograph.org.uk_-_4660363.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Chris Morgan"
+   },
+   {
+    "file": "John Reid Road^^ Great North Run - geograph.org.uk - 5122055.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:John_Reid_Road%5E%5E_Great_North_Run_-_geograph.org.uk_-_5122055.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Chris Morgan"
+   },
+   {
+    "file": "Meseret Defar, Great North Run - geograph.org.uk - 3656060.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Meseret_Defar,_Great_North_Run_-_geograph.org.uk_-_3656060.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Chris Denny"
+   },
+   {
+    "file": "Mo Farah at Great North Run 2014.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Mo_Farah_at_Great_North_Run_2014.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Ryanicus Girraficus"
+   },
+   {
+    "file": "The Great North Run (259730978).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Great_North_Run_(259730978).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Julia from birmingham, england"
+   },
+   {
+    "file": "The Great North Run (259730979).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Great_North_Run_(259730979).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Julia from birmingham, england"
+   },
+   {
+    "file": "The Great North Run (259730985).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:The_Great_North_Run_(259730985).jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Julia from birmingham, england"
+   },
+   {
+    "file": "Uphill again on Great North Run - geograph.org.uk - 5122044.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Uphill_again_on_Great_North_Run_-_geograph.org.uk_-_5122044.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Chris Morgan"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/09/05/aj-bell-great-north-run-2025-newcastle-upon-tyne-2025-track.gpx"
+   ],
+   "path": "courses/great-north-run.gpx",
+   "gpx_km": 21.12,
+   "gpx_gain_m": 60,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/aj-bell-great-north-run-2025-newcastle-upon-tyne-course-map-1.php"
+  }
+ },
+ {
+  "id": "brighton",
+  "name": "Brighton Marathon",
+  "country": "UK",
+  "type": "road marathon",
+  "month": "Apr",
+  "km": 42.2,
+  "gain_m": 58,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "2018 Brighton Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2018_Brighton_Marathon.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Kane Brooker"
+   },
+   {
+    "file": "Brighton Marathon Medal.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Brighton_Marathon_Medal.jpg",
+    "license": "Public domain",
+    "credit": "Templer27"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/04/12/brighton-marathon-2026-brighton-and-hove-2026-track.gpx"
+   ],
+   "path": "courses/brighton.gpx",
+   "gpx_km": 42.43,
+   "gpx_gain_m": 58,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/brighton-marathon-2026-brighton-and-hove-course-map-1.php"
+  }
+ },
+ {
+  "id": "athens",
+  "name": "Athens Authentic Marathon",
+  "country": "Greece",
+  "type": "road marathon",
+  "month": "Nov",
+  "km": 42.2,
+  "gain_m": 279,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "1ID Soldier runs historic marathon (4902969).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:1ID_Soldier_runs_historic_marathon_(4902969).jpg",
+    "license": "Public domain",
+    "credit": "U.S. Army 24TPASE by Sgt. Michael West"
+   },
+   {
+    "file": "1ID Soldier runs historic marathon (4902979).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:1ID_Soldier_runs_historic_marathon_(4902979).jpg",
+    "license": "Public domain",
+    "credit": "U.S. Army 24TPASE by Sgt. Michael West"
+   },
+   {
+    "file": "1ID Soldier runs historic marathon (4903022).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:1ID_Soldier_runs_historic_marathon_(4903022).jpg",
+    "license": "Public domain",
+    "credit": "U.S. Army 24TPASE by Sgt. Michael West"
+   },
+   {
+    "file": "1ID Soldier runs historic marathon (4903027).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:1ID_Soldier_runs_historic_marathon_(4903027).jpg",
+    "license": "Public domain",
+    "credit": "U.S. Army 24TPASE by Sgt. Michael West"
+   },
+   {
+    "file": "1ID Soldier runs historic marathon (4903049).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:1ID_Soldier_runs_historic_marathon_(4903049).jpg",
+    "license": "Public domain",
+    "credit": "U.S. Army 24TPASE by Sgt. Michael West"
+   },
+   {
+    "file": "34 Athens Authentic Marathon (1).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:34_Athens_Authentic_Marathon_(1).jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Ανώνυμος Βικιπαιδιστής"
+   },
+   {
+    "file": "34 Athens Authentic Marathon (2).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:34_Athens_Authentic_Marathon_(2).jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Ανώνυμος Βικιπαιδιστής"
+   },
+   {
+    "file": "PWD Souda Bay’s Lt Katy Pekala Triumphs in Athens- Smashing Personal Records at Historic Marathon (8765003).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:PWD_Souda_Bay%E2%80%99s_Lt_Katy_Pekala_Triumphs_in_Athens-_Smashing_Personal_Records_at_Historic_Marathon_(8765003).jpg",
+    "license": "Public domain",
+    "credit": "U.S. Navy NAVFACEUR by Anthony Cage"
+   },
+   {
+    "file": "PWD Souda Bay’s Lt Katy Pekala Triumphs in Athens- Smashing Personal Records at Historic Marathon (8765004).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:PWD_Souda_Bay%E2%80%99s_Lt_Katy_Pekala_Triumphs_in_Athens-_Smashing_Personal_Records_at_Historic_Marathon_(8765004).jpg",
+    "license": "Public domain",
+    "credit": "U.S. Navy NAVFACEUR by Anthony Cage"
+   },
+   {
+    "file": "PWD Souda Bay’s Lt Katy Pekala Triumphs in Athens- Smashing Personal Records at Historic Marathon (8765006).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:PWD_Souda_Bay%E2%80%99s_Lt_Katy_Pekala_Triumphs_in_Athens-_Smashing_Personal_Records_at_Historic_Marathon_(8765006).jpg",
+    "license": "Public domain",
+    "credit": "U.S. Navy NAVFACEUR by Anthony Cage"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/11/09/athens-marathon-2025-athens-2025-track.gpx"
+   ],
+   "path": "courses/athens.gpx",
+   "gpx_km": 42.27,
+   "gpx_gain_m": 279,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/athens-marathon-2025-athens-course-map-1.php"
+  }
+ },
+ {
+  "id": "big-sur",
+  "name": "Big Sur Marathon",
+  "country": "USA",
+  "type": "road marathon",
+  "month": "Apr",
+  "km": 42.2,
+  "gain_m": 295,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/04/26/big-sur-international-marathon-2026-big-sur-2026-track.gpx"
+   ],
+   "path": "courses/big-sur.gpx",
+   "gpx_km": 42.41,
+   "gpx_gain_m": 295,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/04/big-sur-international-marathon-2026-course-map-1.php"
+  }
+ },
+ {
+  "id": "edinburgh",
+  "name": "Edinburgh Marathon",
+  "country": "UK",
+  "type": "road marathon",
+  "month": "May",
+  "km": 42.2,
+  "gain_m": 16,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "Edinburgh Marathon 2019 0439 (48266709981).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0439_(48266709981).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0449 (48266800342).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0449_(48266800342).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0452 (48266806292).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0452_(48266806292).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0453 (48329743522).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0453_(48329743522).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0455 (48329745752).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0455_(48329745752).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0458 (48329615121).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0458_(48329615121).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0459 (48329752807).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0459_(48329752807).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0462 (48329619976).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0462_(48329619976).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0467 (48329763172).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0467_(48329763172).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0469 (48329630901).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0469_(48329630901).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0472 (48329768257).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0472_(48329768257).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0481 (48329774662).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0481_(48329774662).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0483 (48329798042).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0483_(48329798042).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0484 (48329800642).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0484_(48329800642).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0489 (48329807727).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0489_(48329807727).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0492 (48329676051).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0492_(48329676051).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0493 (48329812417).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0493_(48329812417).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0495 (48329711661).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0495_(48329711661).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0505 (48329858362).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0505_(48329858362).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0507 (48329845046).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0507_(48329845046).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0515 (48330763362).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0515_(48330763362).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0520 (48330635066).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0520_(48330635066).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0524 (48330639951).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0524_(48330639951).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   },
+   {
+    "file": "Edinburgh Marathon 2019 0525 (48330776242).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0525_(48330776242).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Ian Robertson from East Lothian, Scotland"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/05/24/edinburgh-marathon-festival-2026-edinburgh-2026-track.gpx"
+   ],
+   "path": "courses/edinburgh.gpx",
+   "gpx_km": 42.5,
+   "gpx_gain_m": 16,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/05/edinburgh-marathon-festival-2026-course-map-1.php"
+  }
+ },
+ {
+  "id": "sydney",
+  "name": "Sydney Marathon",
+  "country": "Australia",
+  "type": "road marathon",
+  "month": "Aug",
+  "km": 42.2,
+  "gain_m": 165,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/08/30/tcs-sydney-marathon-2026-sydney-2026-track.gpx"
+   ],
+   "path": "courses/sydney.gpx",
+   "gpx_km": 42.24,
+   "gpx_gain_m": 165,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/08/tcs-sydney-marathon-2026-course-map-1.php"
+  }
+ },
+ {
+  "id": "honolulu",
+  "name": "Honolulu Marathon",
+  "country": "USA",
+  "type": "road marathon",
+  "month": "Dec",
+  "km": 42.2,
+  "gain_m": 71,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "Firefighters to hike upcoming Honolulu Marathon to benefit wounded warriors DVIDS345432.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Firefighters_to_hike_upcoming_Honolulu_Marathon_to_benefit_wounded_warriors_DVIDS345432.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Firefighters to hike upcoming Honolulu Marathon to benefit wounded warriors DVIDS345433.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Firefighters_to_hike_upcoming_Honolulu_Marathon_to_benefit_wounded_warriors_DVIDS345433.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349739.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349739.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349740.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349740.jpg",
+    "license": "Public domain",
+    "credit": "Lance Cpl. Reece E. Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349741.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349741.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349742.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349742.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349743.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349743.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349744.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349744.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349745.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349745.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349746.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349746.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349747.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349747.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349748.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349748.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "Pressing on with purpose, Marine firefighters hike Honolulu Marathon for second year, raise money for wounded warriors DVIDS349750.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349750.jpg",
+    "license": "Public domain",
+    "credit": "Cpl. Reece Lodder"
+   },
+   {
+    "file": "ﾎﾉﾙﾙﾏﾗｿﾝ走行中。暑くてだるい。。 Honolulu Marathon - panoramio.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:%EF%BE%8E%EF%BE%89%EF%BE%99%EF%BE%99%EF%BE%8F%EF%BE%97%EF%BD%BF%EF%BE%9D%E8%B5%B0%E8%A1%8C%E4%B8%AD%E3%80%82%E6%9A%91%E3%81%8F%E3%81%A6%E3%81%A0%E3%82%8B%E3%81%84%E3%80%82%E3%80%82_Honolulu_Marathon_-_panoramio.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Sugi ura"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/12/13/honolulu-marathon-2026-honolulu-2026-track.gpx"
+   ],
+   "path": "courses/honolulu.gpx",
+   "gpx_km": 42.45,
+   "gpx_gain_m": 71,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/12/honolulu-marathon-2026-course-map-1.php"
+  }
+ },
+ {
+  "id": "los-angeles",
+  "name": "Los Angeles Marathon",
+  "country": "USA",
+  "type": "road marathon",
+  "month": "Mar",
+  "km": 42.2,
+  "gain_m": 133,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "2016 LA Marathon (24469704883).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:2016_LA_Marathon_(24469704883).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Eric Garcetti"
+   },
+   {
+    "file": "LA Marathon 2009 - Benjamin Limo.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:LA_Marathon_2009_-_Benjamin_Limo.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Michael Dorausch"
+   },
+   {
+    "file": "LA Marathon walkers.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:LA_Marathon_walkers.jpg",
+    "license": "CC BY 3.0",
+    "credit": "Downtowngal"
+   },
+   {
+    "file": "Opas Srimas LA Marathon 3rd Place Trophy.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Opas_Srimas_LA_Marathon_3rd_Place_Trophy.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "MarathonRecordKeeper"
+   },
+   {
+    "file": "Wesley Korir of Kenya - LA Marathon Winner 2009.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Wesley_Korir_of_Kenya_-_LA_Marathon_Winner_2009.jpg",
+    "license": "CC BY-SA 2.0",
+    "credit": "Michael Dorausch"
+   },
+   {
+    "file": "Wheelchair racers Los Angeles Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Wheelchair_racers_Los_Angeles_Marathon.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Downtowngal"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/03/08/los-angeles-marathon-2026-los-angeles-2026-track.gpx"
+   ],
+   "path": "courses/los-angeles.gpx",
+   "gpx_km": 42.1,
+   "gpx_gain_m": 133,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/los-angeles-marathon-2026-los-angeles-course-map-1.php"
+  }
+ },
+ {
+  "id": "stockholm",
+  "name": "Stockholm Marathon",
+  "country": "Sweden",
+  "type": "road marathon",
+  "month": "May",
+  "km": 42.2,
+  "gain_m": 175,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "Djurgården Djurgårdsbron Maraton.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:Djurg%C3%A5rden_Djurg%C3%A5rdsbron_Maraton.JPG",
+    "license": "CC BY-SA 3.0",
+    "credit": "Mats Halldin 16:37, 9 June 2007 (UTC)"
+   },
+   {
+    "file": "Lawi Kiptui vinnare Stockholm Marathon 2018 bild 1.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Lawi_Kiptui_vinnare_Stockholm_Marathon_2018_bild_1.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Adville"
+   },
+   {
+    "file": "SthlmMarathon2001 38.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:SthlmMarathon2001_38.JPG",
+    "license": "CC BY-SA 4.0",
+    "credit": "Patrik Nylin"
+   },
+   {
+    "file": "SthlmMarathon2001 51.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:SthlmMarathon2001_51.JPG",
+    "license": "CC BY-SA 4.0",
+    "credit": "Patrik Nylin"
+   },
+   {
+    "file": "SthlmMarathon2002 08.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:SthlmMarathon2002_08.JPG",
+    "license": "CC BY-SA 4.0",
+    "credit": "Patrik Nylin"
+   },
+   {
+    "file": "SthlmMarathon2013 07.JPG",
+    "page": "https://commons.wikimedia.org/wiki/File:SthlmMarathon2013_07.JPG",
+    "license": "CC BY-SA 4.0",
+    "credit": "Patrik Nylin"
+   },
+   {
+    "file": "Stockholm Marathon.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon.jpg",
+    "license": "CC BY 2.0",
+    "credit": "Matt Borowick"
+   },
+   {
+    "file": "Stockholm Marathon 2009.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2009.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Holger.Ellgaard"
+   },
+   {
+    "file": "Stockholm Marathon 2009d banner.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2009d_banner.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "http://commons.wikimedia.org/wiki/User:Holger.Ellgaard"
+   },
+   {
+    "file": "Stockholm Marathon 2012.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2012.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Holger.Ellgaard"
+   },
+   {
+    "file": "Stockholm Marathon 2013 -8.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2013_-8.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Frankie Fouganthin"
+   },
+   {
+    "file": "Stockholm Marathon 2013 08.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2013_08.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Arild Vågen"
+   },
+   {
+    "file": "Stockholm Marathon 2013 12.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2013_12.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Arild Vågen"
+   },
+   {
+    "file": "Stockholm Marathon 2013 18.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2013_18.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Arild Vågen"
+   },
+   {
+    "file": "Stockholm Marathon 2013 27.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2013_27.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Arild Vågen"
+   },
+   {
+    "file": "Stockholm Marathon 2016, del 14.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2016,_del_14.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "AleWi"
+   },
+   {
+    "file": "Stockholm Marathon 2016, del 2, 03.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2016,_del_2,_03.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "AleWi"
+   },
+   {
+    "file": "Stockholm Marathon 2016, del 21.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2016,_del_21.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "AleWi"
+   },
+   {
+    "file": "Stockholm Marathon 2016, del 26.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2016,_del_26.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "AleWi"
+   },
+   {
+    "file": "Stockholm Marathon 2016, del 9.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2016,_del_9.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "AleWi"
+   },
+   {
+    "file": "Stockholm Marathon 2016 012.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2016_012.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Patrik Nylin"
+   },
+   {
+    "file": "Stockholm Marathon 2016 015.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholm_Marathon_2016_015.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Patrik Nylin"
+   },
+   {
+    "file": "Stockholmmarathon22.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholmmarathon22.jpg",
+    "license": "CC0",
+    "credit": "AleWi"
+   },
+   {
+    "file": "Stockholmmarathon 2009-start3.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Stockholmmarathon_2009-start3.jpg",
+    "license": "CC BY-SA 3.0",
+    "credit": "Prolineserver (talk)"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/05/30/adidas-stockholm-marathon-2026-stockholm-2026-track.gpx"
+   ],
+   "path": "courses/stockholm.gpx",
+   "gpx_km": 42.95,
+   "gpx_gain_m": 175,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/05/adidas-stockholm-marathon-2026-course-map-1.php"
+  }
+ },
+ {
+  "id": "san-francisco",
+  "name": "San Francisco Marathon",
+  "country": "USA",
+  "type": "road marathon",
+  "month": "Jul",
+  "km": 42.2,
+  "gain_m": 263,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/07/26/san-francisco-marathon-2026-san-francisco-2026-track.gpx"
+   ],
+   "path": "courses/san-francisco.gpx",
+   "gpx_km": 42.74,
+   "gpx_gain_m": 263,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/07/san-francisco-marathon-2026-course-map-1.php"
+  }
+ },
+ {
+  "id": "gold-coast",
+  "name": "Gold Coast Marathon",
+  "country": "Australia",
+  "type": "road marathon",
+  "month": "Jul",
+  "km": 42.2,
+  "gain_m": 0,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "Gold Coast Marathon, 1986 (51762441417).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51762441417).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51762441872).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51762441872).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51762441937).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51762441937).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51762442017).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51762442017).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763273176).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763273176).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763273201).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763273201).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763273276).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763273276).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763273596).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763273596).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763273661).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763273661).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763501653).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763501653).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763516993).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763516993).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763517233).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763517233).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763517783).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763517783).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763923694).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763923694).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763923844).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763923844).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763923919).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763923919).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763924049).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763924049).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763924279).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763924279).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763924364).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763924364).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51763952389).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51763952389).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51764140055).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51764140055).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51764140275).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51764140275).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   },
+   {
+    "file": "Gold Coast Marathon, 1986 (51764140595).jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51764140595).jpg",
+    "license": "CC BY 2.0",
+    "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/07/04/asics-gold-coast-marathon-2026-southport-2026-track.gpx"
+   ],
+   "path": "courses/gold-coast.gpx",
+   "gpx_km": 42.72,
+   "gpx_gain_m": 0,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/07/asics-gold-coast-marathon-2026-southport-course-map-1.php"
+  }
+ },
+ {
+  "id": "rio",
+  "name": "Rio de Janeiro Marathon",
+  "country": "Brazil",
+  "type": "road marathon",
+  "month": "Jun",
+  "km": 42.2,
+  "gain_m": 82,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/06/07/maratona-da-cidade-do-rio-de-janeiro-2026-rio-de-janeiro-2026-track.gpx"
+   ],
+   "path": "courses/rio.gpx",
+   "gpx_km": 42.49,
+   "gpx_gain_m": 82,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/06/maratona-da-cidade-do-rio-de-janeiro-2026-course-map-1.php"
+  }
+ },
+ {
+  "id": "victoria-falls",
+  "name": "Victoria Falls Marathon",
+  "country": "Zimbabwe",
+  "type": "road marathon",
+  "month": "Jul",
+  "km": 42.2,
+  "gain_m": 256,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/07/05/victoria-falls-marathon-2026-victoria-falls-2026-track.gpx"
+   ],
+   "path": "courses/victoria-falls.gpx",
+   "gpx_km": 42.9,
+   "gpx_gain_m": 256,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/07/victoria-falls-marathon-2026-course-map-1.php"
+  }
+ },
+ {
+  "id": "knysna",
+  "name": "Knysna Forest Marathon",
+  "country": "South Africa",
+  "type": "trail marathon",
+  "month": "Jul",
+  "km": 42.4,
+  "gain_m": 539,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/07/04/knysna-forest-marathon-2026-knysna-2026-track.gpx"
+   ],
+   "path": "courses/knysna.gpx",
+   "gpx_km": 42.4,
+   "gpx_gain_m": 539,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/07/knysna-forest-marathon-2026-course-map-1.php"
+  }
+ },
+ {
+  "id": "windermere",
+  "name": "Windermere Marathon",
+  "country": "UK",
+  "type": "road marathon",
+  "month": "Jun",
+  "km": 42.2,
+  "gain_m": 305,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/06/14/windermere-marathon-2026-ambleside-2026-track.gpx"
+   ],
+   "path": "courses/windermere.gpx",
+   "gpx_km": 42.29,
+   "gpx_gain_m": 305,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/06/windermere-marathon-2026-ambleside-course-map-1.php"
+  }
+ },
+ {
+  "id": "pikes-peak",
+  "name": "Pikes Peak Marathon",
+  "country": "USA",
+  "type": "mountain marathon",
+  "month": "Sep",
+  "km": 42.01,
+  "gain_m": 2353,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/09/21/pikes-peak-marathon-2025-manitou-springs-2025-track.gpx"
+   ],
+   "path": "courses/pikes-peak.gpx",
+   "gpx_km": 42.01,
+   "gpx_gain_m": 2353,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/pikes-peak-marathon-2025-manitou-springs-course-map-1.php"
+  }
+ },
+ {
+  "id": "mont-blanc-marathon",
+  "name": "Marathon du Mont-Blanc 90K",
+  "country": "France",
+  "type": "trail ultra",
+  "month": "Jun",
+  "km": 90,
+  "gain_m": 5955,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/06/27/marathon-du-mont-blanc-2025-chamonix-2025-track.gpx"
+   ],
+   "path": "courses/mont-blanc-marathon.gpx",
+   "gpx_km": 92.16,
+   "gpx_gain_m": 5955,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/marathon-du-mont-blanc-2025-chamonix-course-map-1.php"
+  }
+ },
+ {
+  "id": "zermatt",
+  "name": "Zermatt Ultramarathon",
+  "country": "Switzerland",
+  "type": "mountain ultra",
+  "month": "Jul",
+  "km": 45.6,
+  "gain_m": 2310,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/07/05/gornergrat-zermatt-marathon-2025-zermatt-2025-track.gpx"
+   ],
+   "path": "courses/zermatt.gpx",
+   "gpx_km": 45.69,
+   "gpx_gain_m": 2310,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/gornergrat-zermatt-marathon-2025-course-map-1.php"
+  }
+ },
+ {
+  "id": "passatore",
+  "name": "100 km del Passatore",
+  "country": "Italy",
+  "type": "road ultra",
+  "month": "May",
+  "km": 101.46,
+  "gain_m": 1484,
+  "route": null,
+  "hook": null,
+  "photos": [
+   {
+    "file": "100 KM DEL PASSATORE 2018.jpg",
+    "page": "https://commons.wikimedia.org/wiki/File:100_KM_DEL_PASSATORE_2018.jpg",
+    "license": "CC BY-SA 4.0",
+    "credit": "Pmorelli1969"
+   }
+  ],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2026/05/23/100-km-del-passatore-2026-firenze-2026-track.gpx"
+   ],
+   "path": "courses/passatore.gpx",
+   "gpx_km": 101.46,
+   "gpx_gain_m": 1484,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2026/05/100-km-del-passatore-2026-firenze-course-map-1.php"
+  }
+ },
+ {
+  "id": "biel",
+  "name": "Biel 100 km",
+  "country": "Switzerland",
+  "type": "road ultra",
+  "month": "Jun",
+  "km": 101.22,
+  "gain_m": 526,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/06/07/biel-running-days-2025-bienne-2025-track.gpx"
+   ],
+   "path": "courses/biel.gpx",
+   "gpx_km": 101.22,
+   "gpx_gain_m": 526,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/06/biel-running-days-2025-bienne-course-map-1.php"
+  }
+ },
+ {
+  "id": "endurancelife-sussex",
+  "name": "Endurancelife Sussex",
+  "country": "UK",
+  "type": "trail marathon",
+  "month": "Mar",
+  "km": 52.33,
+  "gain_m": 980,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/03/08/endurancelife-sussex-2025-eastbourne-2025-track.gpx"
+   ],
+   "path": "courses/endurancelife-sussex.gpx",
+   "gpx_km": 52.33,
+   "gpx_gain_m": 980,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/endurancelife-sussex-2025-eastbourne-course-map-1.php"
+  }
+ },
+ {
+  "id": "chiltern-ridge",
+  "name": "Chiltern Ridge 50K",
+  "country": "UK",
+  "type": "trail ultra",
+  "month": "Apr",
+  "km": 50.95,
+  "gain_m": 644,
+  "route": null,
+  "hook": null,
+  "photos": [],
+  "course": {
+   "source": "goandrace",
+   "urls": [
+    "https://www.goandrace.com/gpx/2025/04/05/chiltern-ridge-classic-50k-2025-berkhamsted-2025-track.gpx"
+   ],
+   "path": "courses/chiltern-ridge.gpx",
+   "gpx_km": 50.95,
+   "gpx_gain_m": 644,
+   "partial": false,
+   "page": "https://www.goandrace.com/en/map/2025/chiltern-ridge-classic-50k-2025-berkhamsted-course-map-1.php"
+  }
+ }
+]

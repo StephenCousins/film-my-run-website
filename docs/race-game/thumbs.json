@@ -1,0 +1,898 @@
+[
+ {
+  "race": "western-states",
+  "file": "thumbs/western-states-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Finish!.jpg",
+  "license": "CC BY 2.0",
+  "credit": "Jon Roig"
+ },
+ {
+  "race": "western-states",
+  "file": "thumbs/western-states-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Foot_repair,_Michigan_Bluff.jpg",
+  "license": "CC BY 2.0",
+  "credit": "Jon Roig"
+ },
+ {
+  "race": "western-states",
+  "file": "thumbs/western-states-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gordy_Ainsleigh_during_the_2007_Western_States_Endurance_Run_pre-race_briefing.jpg",
+  "license": "CC BY-SA 3.0",
+  "credit": "FartherFaster at en.wikipedia"
+ },
+ {
+  "race": "western-states",
+  "file": "thumbs/western-states-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Weigh_in,_Michigan_Bluff.jpg",
+  "license": "CC BY 2.0",
+  "credit": "Jon Roig"
+ },
+ {
+  "race": "barkley",
+  "file": "thumbs/barkley-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Licence_plates_Barkley.jpg",
+  "license": "CC BY 2.0",
+  "credit": "Michael Hoodge"
+ },
+ {
+  "race": "barkley",
+  "file": "thumbs/barkley-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Lighting_the_cigarette_to_start_Barkley.jpg",
+  "license": "CC BY 2.0",
+  "credit": "Michael Hodge"
+ },
+ {
+  "race": "barkley",
+  "file": "thumbs/barkley-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Start_of_Barkley_2009.jpg",
+  "license": "CC BY 2.0",
+  "credit": "Michael Hodge"
+ },
+ {
+  "race": "spine",
+  "file": "thumbs/spine-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Eoin_keith_spine_race_finish.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "LazarusThe2nd"
+ },
+ {
+  "race": "spine",
+  "file": "thumbs/spine-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pavel_Palonc%C3%BD_during_Spine_Race.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "ClermontFerrand007"
+ },
+ {
+  "race": "spine",
+  "file": "thumbs/spine-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pavel_Palonc%C3%BD_on_Spine_Race.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "ClermontFerrand007"
+ },
+ {
+  "race": "spine",
+  "file": "thumbs/spine-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pavel_Palonc%C3%BD_on_Spine_Race_-_Cowgreen_Reservoir.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "ClermontFerrand007"
+ },
+ {
+  "race": "west-highland-way",
+  "file": "thumbs/west-highland-way-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:130707_Glen_Coe_from_east_C.jpg",
+  "license": "CC BY-SA 3.0",
+  "credit": "Dave souza"
+ },
+ {
+  "race": "west-highland-way",
+  "file": "thumbs/west-highland-way-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:At_the_start_of_the_Devil%27s_Staircase_-_geograph.org.uk_-_723805.jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "Nigel Brown"
+ },
+ {
+  "race": "west-highland-way",
+  "file": "thumbs/west-highland-way-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Balmaha-Inversnaid-2.jpg",
+  "license": "CC0",
+  "credit": "MartinThoma"
+ },
+ {
+  "race": "west-highland-way",
+  "file": "thumbs/west-highland-way-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Balmaha-Inversnaid-32.jpg",
+  "license": "CC0",
+  "credit": "MartinThoma"
+ },
+ {
+  "race": "badwater",
+  "file": "thumbs/badwater-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Bad_Water_Death_Valley11.jpg",
+  "license": "CC BY-SA 3.0",
+  "credit": "No machine-readable author provided. Urban~commonswiki assumed (based on copyrig"
+ },
+ {
+  "race": "badwater",
+  "file": "thumbs/badwater-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gerald_Tabios.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Usamakram1"
+ },
+ {
+  "race": "badwater",
+  "file": "thumbs/badwater-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gerald_Tabios_(1).jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Usamakram1"
+ },
+ {
+  "race": "badwater",
+  "file": "thumbs/badwater-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:M%C3%B3nica_%22La_Toti%22_Fern%C3%A1ndez.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Kaisove"
+ },
+ {
+  "race": "hardrock",
+  "file": "thumbs/hardrock-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Bear_Creek_Trail_(34794599714).jpg",
+  "license": "CC BY 2.0",
+  "credit": "John Fowler from Placitas, NM, USA"
+ },
+ {
+  "race": "hardrock",
+  "file": "thumbs/hardrock-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Course_Markers_(7575357998).jpg",
+  "license": "CC BY 2.0",
+  "credit": "John Fowler from Placitas, NM, USA"
+ },
+ {
+  "race": "hardrock",
+  "file": "thumbs/hardrock-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Hardrock_Race_Headquarters.JPG",
+  "license": "CC BY-SA 4.0",
+  "credit": "Ericshawwhite"
+ },
+ {
+  "race": "hardrock",
+  "file": "thumbs/hardrock-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Number_486_leaves_Silverton,_(7644100208).jpg",
+  "license": "CC BY 2.0",
+  "credit": "John Fowler from Placitas, NM, USA"
+ },
+ {
+  "race": "leadville",
+  "file": "thumbs/leadville-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Drop_bag_station_with_volunteers_(6077292293).jpg",
+  "license": "Public domain",
+  "credit": "USFWS Mountain Prairie"
+ },
+ {
+  "race": "javelina",
+  "file": "thumbs/javelina-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pemberton_Trail.jpg",
+  "license": "CC BY 2.0",
+  "credit": "Andy Blackledge"
+ },
+ {
+  "race": "utmb",
+  "file": "thumbs/utmb-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Lizzy_Hawker_(2005).png",
+  "license": "CC BY 3.0",
+  "credit": "EpicTVAdventure"
+ },
+ {
+  "race": "utmb",
+  "file": "thumbs/utmb-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Lizzy_Hawker_UTMB_(2012).png",
+  "license": "CC BY 3.0",
+  "credit": "EpicTVAdventure"
+ },
+ {
+  "race": "utmb",
+  "file": "thumbs/utmb-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:ON_UTMB.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Narbethwriter"
+ },
+ {
+  "race": "utmb",
+  "file": "thumbs/utmb-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Start_UTMB_2013_in_Chamonix-Mont-Blanc.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "PaulasBunt"
+ },
+ {
+  "race": "tor-des-geants",
+  "file": "thumbs/tor-des-geants-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Col_de_la_Crosatie.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Rollopack"
+ },
+ {
+  "race": "tor-des-geants",
+  "file": "thumbs/tor-des-geants-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Finestra_di_Champorcher.JPG",
+  "license": "Public domain",
+  "credit": "Francofranco56"
+ },
+ {
+  "race": "tor-des-geants",
+  "file": "thumbs/tor-des-geants-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:La_Thuile-Rifugio_Deffeyes.jpg",
+  "license": "CC BY-SA 3.0",
+  "credit": "Rollopack"
+ },
+ {
+  "race": "tor-des-geants",
+  "file": "thumbs/tor-des-geants-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Miserin_Tor_des_G%C3%A9ants_2017.png",
+  "license": "CC BY-SA 4.0",
+  "credit": "Pampuco"
+ },
+ {
+  "race": "lavaredo",
+  "file": "thumbs/lavaredo-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Cortina_ultratrail_01.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Felvalen"
+ },
+ {
+  "race": "lavaredo",
+  "file": "thumbs/lavaredo-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Cortina_ultratrail_02.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Felvalen"
+ },
+ {
+  "race": "lavaredo",
+  "file": "thumbs/lavaredo-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:La_Sportiva_LUT_2021-_arriv%C3%A9e_Cortina_d%27Ampezzo_48_km_jour.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Anthospace"
+ },
+ {
+  "race": "lavaredo",
+  "file": "thumbs/lavaredo-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Lavaredo_Ultra_Trail_2021-_Bajamos_a_la_estaci%C3%B3n_de_repostaje_del_paso_de_Gallina_abajo_LPSEM.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Anthospace"
+ },
+ {
+  "race": "comrades",
+  "file": "thumbs/comrades-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1997_Comrades_Marathon_winner,_Charl_Mattheus%27s,_race_kit.jpg",
+  "license": "CC0",
+  "credit": "Upjav"
+ },
+ {
+  "race": "comrades",
+  "file": "thumbs/comrades-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2024_Comrades_Marathon_at_Camperdown.jpg",
+  "license": "CC0",
+  "credit": "Upjav"
+ },
+ {
+  "race": "comrades",
+  "file": "thumbs/comrades-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2025_Comrades_Marathon_outside_Pietermaritzburg.jpg",
+  "license": "CC0",
+  "credit": "Upjav"
+ },
+ {
+  "race": "comrades",
+  "file": "thumbs/comrades-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Comrades_Marathon_2008_(2580073608).jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "Chris Bloom from Durban, South Africa"
+ },
+ {
+  "race": "marathon-des-sables",
+  "file": "thumbs/marathon-des-sables-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Foto_Carlos_Sposito.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Carlos Sposito"
+ },
+ {
+  "race": "marathon-des-sables",
+  "file": "thumbs/marathon-des-sables-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Franck_Meyer_Robredo.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "The photographer is Toño Miranda"
+ },
+ {
+  "race": "marathon-des-sables",
+  "file": "thumbs/marathon-des-sables-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:JC_S4147.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Joeljuht"
+ },
+ {
+  "race": "marathon-des-sables",
+  "file": "thumbs/marathon-des-sables-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:MDS1.JPG",
+  "license": "CC BY-SA 3.0",
+  "credit": "James Heilman, MD"
+ },
+ {
+  "race": "spartathlon",
+  "file": "thumbs/spartathlon-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Er%C5%91s_Tibor_a_2022-es_Spartathlon_c%C3%A9lj%C3%A1ban.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "E.Kinga27"
+ },
+ {
+  "race": "spartathlon",
+  "file": "thumbs/spartathlon-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Spartathlon_2016.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Softniky"
+ },
+ {
+  "race": "spartathlon",
+  "file": "thumbs/spartathlon-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Spartathlon_2023_magyar_finisher.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Czajamatyas"
+ },
+ {
+  "race": "transgrancanaria",
+  "file": "thumbs/transgrancanaria-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Anton_Krupicka_(2015).jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "Juan Ramón Rodríguez Sosa (El Coleccionista de Instantes Fotografía &amp; Video)"
+ },
+ {
+  "race": "transgrancanaria",
+  "file": "thumbs/transgrancanaria-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:El_Roque_Nublo_entre_la_niebla.JPG",
+  "license": "CC BY-SA 3.0 es",
+  "credit": "Obdulio Obduliez"
+ },
+ {
+  "race": "transgrancanaria",
+  "file": "thumbs/transgrancanaria-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Fotos_The_North_Face_Transgrancanaria_2013_a_su_paso_por_la_finca_de_Osorio_en_Teror_Gran_Canaria_Islas_Canarias_(02-03-2013)._(8523268371).jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "El Coleccionista de Instantes  Fotografía &amp; Video"
+ },
+ {
+  "race": "transgrancanaria",
+  "file": "thumbs/transgrancanaria-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:N%C3%BAria_Picas_(2015).jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "Juan Ramón Rodríguez Sosa (El Coleccionista de Instantes Fotografía &amp; Video"
+ },
+ {
+  "race": "transvulcania",
+  "file": "thumbs/transvulcania-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Hillary_Allen_at_Transvulcania_2017.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Alexis Martín"
+ },
+ {
+  "race": "transvulcania",
+  "file": "thumbs/transvulcania-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_01_ies.jpg",
+  "license": "CC BY-SA 3.0",
+  "credit": "Frank Vincentz"
+ },
+ {
+  "race": "transvulcania",
+  "file": "thumbs/transvulcania-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_03_ies.jpg",
+  "license": "CC BY-SA 3.0",
+  "credit": "Frank Vincentz"
+ },
+ {
+  "race": "transvulcania",
+  "file": "thumbs/transvulcania-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:La_Palma_-_El_Paso_-_Transvulcania_2015_04_ies.jpg",
+  "license": "CC BY-SA 3.0",
+  "credit": "Frank Vincentz"
+ },
+ {
+  "race": "two-oceans",
+  "file": "thumbs/two-oceans-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:TwoOceansFinish.JPG",
+  "license": "Public domain",
+  "credit": "User:Zaian"
+ },
+ {
+  "race": "two-oceans",
+  "file": "thumbs/two-oceans-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Two_Oceans_Marathon.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Bernard303"
+ },
+ {
+  "race": "two-oceans",
+  "file": "thumbs/two-oceans-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Vice-Chancellor_Dr_Max_Price_completes_his_first_Two_Oceans_as_a_member_of_UCTAC.jpg",
+  "license": "CC BY 2.0",
+  "credit": "UCT Athletics Club"
+ },
+ {
+  "race": "london",
+  "file": "thumbs/london-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2010_London_Marathon_II.jpg",
+  "license": "CC BY 2.0",
+  "credit": "Julian Mason"
+ },
+ {
+  "race": "london",
+  "file": "thumbs/london-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2013_London_Marathon_at_Victoria_Embankment_(1).JPG",
+  "license": "CC BY-SA 3.0",
+  "credit": "Chmee2"
+ },
+ {
+  "race": "london",
+  "file": "thumbs/london-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2017_London_Marathon_-_Derek_Rae_(2).jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Katie Chan"
+ },
+ {
+  "race": "london",
+  "file": "thumbs/london-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2017_London_Marathon_-_Hanna_Vandenbussche.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Katie Chan"
+ },
+ {
+  "race": "boston",
+  "file": "thumbs/boston-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1143_running_Boston_like_a_champ_(13960534152).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Rob Larsen from Boston, USA"
+ },
+ {
+  "race": "boston",
+  "file": "thumbs/boston-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2013_Boston_Marathon-102_(8674767957).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Gianina Lindsey"
+ },
+ {
+  "race": "boston",
+  "file": "thumbs/boston-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Awesome_running_4968_(13963453715).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Rob Larsen from Boston, USA"
+ },
+ {
+  "race": "boston",
+  "file": "thumbs/boston-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:BC_guy_running_to_BC_(13963721165).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Rob Larsen from Boston, USA"
+ },
+ {
+  "race": "berlin",
+  "file": "thumbs/berlin-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1000_-_Ziel_Berlin_Marathon.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Lear 21"
+ },
+ {
+  "race": "berlin",
+  "file": "thumbs/berlin-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1BerlinMarathon2022.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Lear 21"
+ },
+ {
+  "race": "berlin",
+  "file": "thumbs/berlin-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2BerlinMarathon2022.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Lear 21"
+ },
+ {
+  "race": "berlin",
+  "file": "thumbs/berlin-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:3BerlinMarathon2022.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Lear 21"
+ },
+ {
+  "race": "nyc",
+  "file": "thumbs/nyc-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2005_New_York_City_Marathon.jpg",
+  "license": "CC BY-SA 3.0",
+  "credit": "User:Postdlf"
+ },
+ {
+  "race": "nyc",
+  "file": "thumbs/nyc-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2024_New_York_City_Marathon_Elite_Men_Leaders.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Nrbelex"
+ },
+ {
+  "race": "nyc",
+  "file": "thumbs/nyc-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2024_New_York_City_Marathon_Elite_Women_Leaders.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Nrbelex"
+ },
+ {
+  "race": "nyc",
+  "file": "thumbs/nyc-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2026_NYC_Marathon_-_Mile_24_-_1.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Sashimi-b"
+ },
+ {
+  "race": "tokyo",
+  "file": "thumbs/tokyo-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2021_Tokyo_Marathon_Course_inspector_Subaru_XV.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Comyu"
+ },
+ {
+  "race": "tokyo",
+  "file": "thumbs/tokyo-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Runner_(32321434987).jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "nakashi from Chofu, Tokyo, JAPAN"
+ },
+ {
+  "race": "tokyo",
+  "file": "thumbs/tokyo-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Runner_(32322110217).jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "nakashi from Chofu, Tokyo, JAPAN"
+ },
+ {
+  "race": "tokyo",
+  "file": "thumbs/tokyo-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Runner_(33388158008).jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "nakashi from Chofu, Tokyo, JAPAN"
+ },
+ {
+  "race": "chicago",
+  "file": "thumbs/chicago-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2007_Chicago_Marathon_Masses.JPG",
+  "license": "CC BY-SA 3.0",
+  "credit": "User:TonyTheTiger."
+ },
+ {
+  "race": "chicago",
+  "file": "thumbs/chicago-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2019_Chicago_Marathon.jpg",
+  "license": "CC BY 4.0",
+  "credit": "Kenneth C. Zirkel"
+ },
+ {
+  "race": "chicago",
+  "file": "thumbs/chicago-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:A_conveyerbelt_of_bananas_(215773398).jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "Señor Codo"
+ },
+ {
+  "race": "chicago",
+  "file": "thumbs/chicago-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Chicago_Marathon_2008_(3215618310).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Amy Guth from Chicago, IL, USA, USA"
+ },
+ {
+  "race": "athens",
+  "file": "thumbs/athens-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1ID_Soldier_runs_historic_marathon_(4902969).jpg",
+  "license": "Public domain",
+  "credit": "U.S. Army 24TPASE by Sgt. Michael West"
+ },
+ {
+  "race": "athens",
+  "file": "thumbs/athens-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1ID_Soldier_runs_historic_marathon_(4902979).jpg",
+  "license": "Public domain",
+  "credit": "U.S. Army 24TPASE by Sgt. Michael West"
+ },
+ {
+  "race": "athens",
+  "file": "thumbs/athens-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1ID_Soldier_runs_historic_marathon_(4903022).jpg",
+  "license": "Public domain",
+  "credit": "U.S. Army 24TPASE by Sgt. Michael West"
+ },
+ {
+  "race": "athens",
+  "file": "thumbs/athens-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:1ID_Soldier_runs_historic_marathon_(4903027).jpg",
+  "license": "Public domain",
+  "credit": "U.S. Army 24TPASE by Sgt. Michael West"
+ },
+ {
+  "race": "great-north-run",
+  "file": "thumbs/great-north-run-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2015_Great_North_Run_(20769768754).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Northumbria Blood Bikes"
+ },
+ {
+  "race": "great-north-run",
+  "file": "thumbs/great-north-run-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2015_Great_North_Run_(21204629188).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Northumbria Blood Bikes"
+ },
+ {
+  "race": "great-north-run",
+  "file": "thumbs/great-north-run-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2015_Great_North_Run_(21366245116).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Northumbria Blood Bikes"
+ },
+ {
+  "race": "great-north-run",
+  "file": "thumbs/great-north-run-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2015_Great_North_Run_(21400829831).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Northumbria Blood Bikes"
+ },
+ {
+  "race": "los-angeles",
+  "file": "thumbs/los-angeles-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2016_LA_Marathon_(24469704883).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Eric Garcetti"
+ },
+ {
+  "race": "brighton",
+  "file": "thumbs/brighton-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2018_Brighton_Marathon.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Kane Brooker"
+ },
+ {
+  "race": "amsterdam",
+  "file": "thumbs/amsterdam-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2014_-_10.JPG",
+  "license": "CC BY-SA 4.0",
+  "credit": "Little Savage"
+ },
+ {
+  "race": "amsterdam",
+  "file": "thumbs/amsterdam-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2014_-_13.JPG",
+  "license": "CC BY-SA 4.0",
+  "credit": "Little Savage"
+ },
+ {
+  "race": "amsterdam",
+  "file": "thumbs/amsterdam-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2016_DSCF4425_(29728395714).jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "Franklin Heijnen"
+ },
+ {
+  "race": "amsterdam",
+  "file": "thumbs/amsterdam-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Amsterdam_Marathon_2016_DSCF4512_(30323757516).jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "Franklin Heijnen"
+ },
+ {
+  "race": "brighton",
+  "file": "thumbs/brighton-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Brighton_Marathon_Medal.jpg",
+  "license": "Public domain",
+  "credit": "Templer27"
+ },
+ {
+  "race": "stockholm",
+  "file": "thumbs/stockholm-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Djurg%C3%A5rden_Djurg%C3%A5rdsbron_Maraton.JPG",
+  "license": "CC BY-SA 3.0",
+  "credit": "Mats Halldin 16:37, 9 June 2007 (UTC)"
+ },
+ {
+  "race": "edinburgh",
+  "file": "thumbs/edinburgh-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0439_(48266709981).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Ian Robertson from East Lothian, Scotland"
+ },
+ {
+  "race": "edinburgh",
+  "file": "thumbs/edinburgh-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0449_(48266800342).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Ian Robertson from East Lothian, Scotland"
+ },
+ {
+  "race": "edinburgh",
+  "file": "thumbs/edinburgh-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0452_(48266806292).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Ian Robertson from East Lothian, Scotland"
+ },
+ {
+  "race": "edinburgh",
+  "file": "thumbs/edinburgh-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Edinburgh_Marathon_2019_0453_(48329743522).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Ian Robertson from East Lothian, Scotland"
+ },
+ {
+  "race": "ehunmilak",
+  "file": "thumbs/ehunmilak-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ehunmilak_2025.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "EvaLizarralde"
+ },
+ {
+  "race": "honolulu",
+  "file": "thumbs/honolulu-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Firefighters_to_hike_upcoming_Honolulu_Marathon_to_benefit_wounded_warriors_DVIDS345432.jpg",
+  "license": "Public domain",
+  "credit": "Cpl. Reece Lodder"
+ },
+ {
+  "race": "honolulu",
+  "file": "thumbs/honolulu-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Firefighters_to_hike_upcoming_Honolulu_Marathon_to_benefit_wounded_warriors_DVIDS345433.jpg",
+  "license": "Public domain",
+  "credit": "Cpl. Reece Lodder"
+ },
+ {
+  "race": "zugspitz",
+  "file": "thumbs/zugspitz-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Florian_Neuschwander_im_Interview_beim_Start_vom_Zugspitz_Ultratrail_in_Grainau_2025-06-14.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Strubbl"
+ },
+ {
+  "race": "zugspitz",
+  "file": "thumbs/zugspitz-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Kurz_vor_dem_Start_des_Zugspitz_Ultratrail_in_Grainau_2025-06-14.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Strubbl"
+ },
+ {
+  "race": "los-angeles",
+  "file": "thumbs/los-angeles-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:LA_Marathon_2009_-_Benjamin_Limo.jpg",
+  "license": "CC BY-SA 2.0",
+  "credit": "Michael Dorausch"
+ },
+ {
+  "race": "los-angeles",
+  "file": "thumbs/los-angeles-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:LA_Marathon_walkers.jpg",
+  "license": "CC BY 3.0",
+  "credit": "Downtowngal"
+ },
+ {
+  "race": "stockholm",
+  "file": "thumbs/stockholm-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Lawi_Kiptui_vinnare_Stockholm_Marathon_2018_bild_1.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Adville"
+ },
+ {
+  "race": "zugspitz",
+  "file": "thumbs/zugspitz-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Letzte_Meter_vor_dem_Ziel_des_Zugspitz_Ultratrail_beim_Richard-Strauss-Platz_in_Garmisch-Partenkirchen_2025-06-14.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Strubbl"
+ },
+ {
+  "race": "zugspitz",
+  "file": "thumbs/zugspitz-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:L%C3%A4ufer_am_Start_des_Zugspitz_Ultratrail_in_Grainau_2025-06-14.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Strubbl"
+ },
+ {
+  "race": "los-angeles",
+  "file": "thumbs/los-angeles-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Opas_Srimas_LA_Marathon_3rd_Place_Trophy.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "MarathonRecordKeeper"
+ },
+ {
+  "race": "paris",
+  "file": "thumbs/paris-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_10.jpg",
+  "license": "CC0",
+  "credit": "Syced"
+ },
+ {
+  "race": "paris",
+  "file": "thumbs/paris-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_11.jpg",
+  "license": "CC0",
+  "credit": "Syced"
+ },
+ {
+  "race": "paris",
+  "file": "thumbs/paris-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_12.jpg",
+  "license": "CC0",
+  "credit": "Syced"
+ },
+ {
+  "race": "paris",
+  "file": "thumbs/paris-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Paris_marathon_2008_13.jpg",
+  "license": "CC0",
+  "credit": "Syced"
+ },
+ {
+  "race": "honolulu",
+  "file": "thumbs/honolulu-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349739.jpg",
+  "license": "Public domain",
+  "credit": "Cpl. Reece Lodder"
+ },
+ {
+  "race": "honolulu",
+  "file": "thumbs/honolulu-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pressing_on_with_purpose,_Marine_firefighters_hike_Honolulu_Marathon_for_second_year,_raise_money_for_wounded_warriors_DVIDS349740.jpg",
+  "license": "Public domain",
+  "credit": "Lance Cpl. Reece E. Lodder"
+ },
+ {
+  "race": "stockholm",
+  "file": "thumbs/stockholm-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:SthlmMarathon2001_38.JPG",
+  "license": "CC BY-SA 4.0",
+  "credit": "Patrik Nylin"
+ },
+ {
+  "race": "stockholm",
+  "file": "thumbs/stockholm-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:SthlmMarathon2001_51.JPG",
+  "license": "CC BY-SA 4.0",
+  "credit": "Patrik Nylin"
+ },
+ {
+  "race": "swiss-canyon",
+  "file": "thumbs/swiss-canyon-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Swiss_Canyon_Trail.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Tripack7"
+ },
+ {
+  "race": "passatore",
+  "file": "thumbs/passatore-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:100_KM_DEL_PASSATORE_2018.jpg",
+  "license": "CC BY-SA 4.0",
+  "credit": "Pmorelli1969"
+ },
+ {
+  "race": "gold-coast",
+  "file": "thumbs/gold-coast-0.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51762441417).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+ },
+ {
+  "race": "gold-coast",
+  "file": "thumbs/gold-coast-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51762441872).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+ },
+ {
+  "race": "gold-coast",
+  "file": "thumbs/gold-coast-2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51762441937).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+ },
+ {
+  "race": "gold-coast",
+  "file": "thumbs/gold-coast-3.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gold_Coast_Marathon,_1986_(51762442017).jpg",
+  "license": "CC BY 2.0",
+  "credit": "Queensland State Archives from Runcorn, Queensland, Australia"
+ }
+]

@@ -1,0 +1,239 @@
+<title>Know the Course</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one column "race number" card per round; chart is the hero, clues as checkpoint chips below. */
+:root {
+  --bg: #fafafa; --surface: #ffffff; --sunk: #f4f4f5; --fg: #18181b; --fg2: #52525b; --muted: #8a8a93;
+  --line: #e4e4e7; --accent: #f88c00; --accent-ink: #b35f00; --accent-soft: #fff1de;
+  --good: #16a34a; --warn: #ca8a04; --bad: #dc2626; --terrain: #f88c00; --terrain-fill: rgba(248,140,0,.18);
+  --display: 'Space Grotesk', 'Inter', system-ui, sans-serif; --body: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #09090b; --surface: #18181b; --sunk: #111113; --fg: #fafafa; --fg2: #a1a1aa; --muted: #71717a;
+  --line: #27272a; --accent: #f88c00; --accent-ink: #ffb04d; --accent-soft: #2a1a05;
+  --good: #22c55e; --warn: #eab308; --bad: #ef4444; --terrain: #ff9f1c; --terrain-fill: rgba(255,159,28,.16); color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #09090b; --surface: #18181b; --sunk: #111113; --fg: #fafafa; --fg2: #a1a1aa; --muted: #71717a;
+  --line: #27272a; --accent: #f88c00; --accent-ink: #ffb04d; --accent-soft: #2a1a05;
+  --good: #22c55e; --warn: #eab308; --bad: #ef4444; --terrain: #ff9f1c; --terrain-fill: rgba(255,159,28,.16); color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 15px/1.5 var(--body); }
+.wrap { max-width: 720px; margin: 0 auto; padding-block: 24px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 20px; }
+header { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+h1 { font: 700 28px/1.1 var(--display); margin: 0; letter-spacing: -.01em; }
+h1 span { color: var(--accent); }
+.meta { font: 500 12px var(--mono); color: var(--fg2); text-transform: uppercase; letter-spacing: .06em; }
+.legs { display: flex; gap: 6px; }
+.leg { width: 28px; height: 6px; border-radius: 3px; background: var(--line); }
+.leg.now { background: var(--accent); } .leg.g { background: var(--good); } .leg.y { background: var(--warn); } .leg.r { background: var(--bad); }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; display: grid; gap: 14px; min-width: 0; }
+.q { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.q h2 { font: 700 19px/1.2 var(--display); margin: 0; text-wrap: balance; }
+.pts { font: 600 14px var(--mono); color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+.chart { background: var(--sunk); border-radius: 10px; padding: 8px; }
+.chart svg { display: block; width: 100%; height: auto; }
+.chart text { fill: var(--muted); font: 10px var(--mono); }
+.grid { stroke: var(--line); stroke-width: 1; }
+
+.clues { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 8px; }
+.clue { border: 1px dashed var(--line); background: transparent; color: var(--fg2); border-radius: 10px; padding: 8px 10px;
+  text-align: left; cursor: pointer; font: inherit; min-width: 0; }
+.clue small { display: block; font: 500 10px var(--mono); text-transform: uppercase; letter-spacing: .07em; color: var(--muted); }
+.clue b { display: block; font: 600 14px var(--body); color: var(--fg); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.clue:hover:not(:disabled) { border-color: var(--accent); }
+.clue.open { border-style: solid; background: var(--accent-soft); border-color: transparent; cursor: default; }
+.clue:disabled:not(.open) { opacity: .5; cursor: default; }
+
+.choices { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+.choice { font: 600 15px var(--body); padding: 12px 14px; border-radius: 10px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--fg); cursor: pointer; text-align: left; }
+.choice:hover:not(:disabled) { border-color: var(--accent); }
+.choice.right { background: var(--good); color: #fff; border-color: transparent; }
+.choice.wrong { background: var(--bad); color: #fff; border-color: transparent; }
+.choice:disabled { cursor: default; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.reveal { display: grid; grid-template-columns: 140px minmax(0,1fr); gap: 14px; align-items: start; border-top: 1px solid var(--line); padding-top: 14px; }
+.reveal.solo { grid-template-columns: minmax(0,1fr); }
+.photo { margin: 0; display: grid; gap: 6px; }
+.photo img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 10px; background: var(--sunk); display: block; }
+.photo figcaption { font: 11px var(--mono); color: var(--muted); }
+.photo figcaption a { color: inherit; }
+.reveal .mini { background: var(--sunk); border-radius: 10px; padding: 6px; }
+.reveal h3 { font: 700 18px var(--display); margin: 0 0 2px; }
+.reveal p { margin: 0; color: var(--fg2); }
+.stats { display: flex; gap: 14px; flex-wrap: wrap; font: 500 13px var(--mono); margin-top: 6px; font-variant-numeric: tabular-nums; }
+.next { justify-self: end; font: 700 15px var(--display); background: var(--accent); color: #18181b; border: 0; border-radius: 10px; padding: 11px 18px; cursor: pointer; }
+
+.final { text-align: center; justify-items: center; }
+.big { font: 700 56px/1 var(--display); color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+.share { font: 22px/1.2 var(--mono); letter-spacing: 2px; }
+.row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.ghost { font: 600 14px var(--body); background: transparent; color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 10px 16px; cursor: pointer; }
+.results { width: 100%; display: grid; gap: 6px; text-align: left; }
+.results div { display: flex; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 8px; background: var(--sunk); font-size: 14px; }
+.results span:last-child { font: 600 13px var(--mono); }
+.note { font-size: 12px; color: var(--muted); text-align: center; }
+@media (max-width: 520px) {
+  .clues { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .choices { grid-template-columns: 1fr; }
+  .reveal { grid-template-columns: 96px minmax(0,1fr); }
+  h1 { font-size: 24px; }
+}
+@media (prefers-reduced-motion: no-preference) { .card { animation: in .25s ease-out; } @keyframes in { from { transform: translateY(6px); } } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div>
+      <h1>Know the <span>Course</span></h1>
+      <div class="meta" id="meta"></div>
+    </div>
+    <div class="legs" id="legs" aria-label="Round progress"></div>
+  </header>
+  <main id="app"></main>
+  <p class="note">Prototype · <span id="count"></span> races so far · courses from race organisers, OpenStreetMap and goandrace.com · photos from Wikimedia Commons</p>
+</div>
+
+<script>
+const DATA = __DATA__;
+const ROUNDS = 5, BASE = 1000, CLUE_COST = 200;
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// Seeded RNG so today's five are the same for everyone.
+function rng(seed) { let a = seed >>> 0; return () => { a = (a + 0x6D2B79F5) >>> 0; let t = a; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const shuffle = (arr, r) => { const a = arr.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const today = new Date().toISOString().slice(0, 10);
+const daySeed = [...today].reduce((h, c) => Math.imul(h ^ c.charCodeAt(0), 16777619), 2166136261);
+
+let state;
+function newGame(seed, label) {
+  const r = rng(seed);
+  const has = { photo: c => c.photos.some(p => p.quiz), profile: c => c.profile, outline: c => c.outline };
+  const used = new Set(), picks = [];
+  for (const want of ['photo', 'profile', 'outline', 'photo', 'profile']) {
+    const mode = [want, 'outline', 'profile', 'photo'].find(m => DATA.courses.some(c => !used.has(c.id) && has[m](c)));
+    const c = shuffle(DATA.courses.filter(c => !used.has(c.id) && has[mode](c)), r)[0];
+    used.add(c.id); picks.push([c, mode]);
+  }
+  state = { label, i: 0, rounds: picks.map(([c, mode]) => {
+    const photo = mode === 'photo' ? shuffle(c.photos.filter(p => p.quiz), r)[0] : null;
+    const same = DATA.courses.filter(o => o.id !== c.id);
+    // Distractors: prefer the same kind of race so it isn't obvious.
+    const pool = shuffle(same.filter(o => (o.type === 'road marathon') === (c.type === 'road marathon')), r);
+    const extra = shuffle(DATA.all.filter(o => o.id !== c.id && !pool.some(p => p.id === o.id)), r);
+    const opts = shuffle([c, ...pool.slice(0, 3), ...extra].slice(0, 4), r);
+    return { c, mode, photo, opts, clues: [], answer: null, score: 0 };
+  }) };
+  render();
+}
+
+function profileSVG(p, showKm, km) {
+  const W = 640, H = 220, L = 44, R = 10, T = 10, B = 24;
+  const lo = Math.min(...p), hi = Math.max(...p);
+  const span = Math.max(hi - lo, 200), step = [100, 200, 250, 500, 1000].find(s => span / s <= 5) || 1000;
+  const y0 = Math.floor(lo / step) * step, y1 = Math.ceil((lo + span) / step) * step;
+  const x = i => L + (W - L - R) * i / (p.length - 1), y = v => T + (H - T - B) * (1 - (v - y0) / (y1 - y0));
+  let g = '';
+  for (let v = y0; v <= y1; v += step) g += `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text x="${L - 6}" y="${y(v) + 3}" text-anchor="end">${v}</text>`;
+  if (showKm) { const ks = [25, 50, 100].find(s => km / s <= 8) || 100; for (let k = 0; k <= km; k += ks) { const xx = L + (W - L - R) * k / km; g += `<text x="${xx}" y="${H - 6}" text-anchor="middle">${k}</text>`; } }
+  else g += `<text x="${(L + W - R) / 2}" y="${H - 6}" text-anchor="middle">distance hidden</text>`;
+  const pts = p.map((v, i) => `${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+  return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Elevation profile in metres">${g}
+    <polygon points="${L},${H - B} ${pts} ${W - R},${H - B}" fill="var(--terrain-fill)"/>
+    <polyline points="${pts}" fill="none" stroke="var(--terrain)" stroke-width="2" stroke-linejoin="round"/>
+    <text x="${L - 6}" y="${T - 1}" text-anchor="end">m</text></svg>`;
+}
+function outlineSVG(o, size = 300, pad = 18) {
+  const xs = o.map(q => q[0]), ys = o.map(q => q[1]);
+  const w = Math.max(...xs), h = Math.max(...ys), s = (size - 2 * pad);
+  const ox = pad + (s - w * s) / 2, oy = pad + (s - h * s) / 2;
+  const pts = o.map(q => `${(ox + q[0] * s).toFixed(1)},${(oy + q[1] * s).toFixed(1)}`);
+  const [sx, sy] = pts[0].split(','), [fx, fy] = pts[pts.length - 1].split(',');
+  return `<svg viewBox="0 0 ${size} ${size}" role="img" aria-label="Course outline, north up">
+    <polyline points="${pts.join(' ')}" fill="none" stroke="var(--terrain)" stroke-width="${size > 200 ? 3 : 2.5}" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${sx}" cy="${sy}" r="${size > 200 ? 6 : 4}" fill="var(--good)"/><circle cx="${fx}" cy="${fy}" r="${size > 200 ? 6 : 4}" fill="none" stroke="var(--fg)" stroke-width="2"/></svg>`;
+}
+
+const CLUES = [
+  ['km', 'Distance', c => `${c.km} km`],
+  ['gain', 'Climb', c => c.gain ? `${c.gain.toLocaleString()} m` : 'Flat-ish'],
+  ['month', 'Month', c => c.month],
+  ['country', 'Country', c => c.country],
+];
+
+const credit = p => `<figcaption>Photo: <a href="${esc(p.page)}" target="_blank" rel="noopener">${esc(p.credit || 'Wikimedia Commons')}</a>, ${esc(p.license)}</figcaption>`;
+// After answering: the course view the player didn't see, and a photo if the round wasn't already one.
+function revealMini(r) {
+  const c = r.c;
+  if (r.mode !== 'outline' && c.outline) return outlineSVG(c.outline, 140, 10);
+  if (r.mode !== 'profile' && c.profile) return profileSVG(c.profile, true, c.km);
+  return '';
+}
+function revealPhoto(r) {
+  if (r.mode === 'photo' || !r.c.photos.length) return '';
+  const p = r.c.photos.find(p => p.quiz) || r.c.photos[0];
+  return `<img src="${esc(p.src)}" alt="${esc(r.c.name)}">${credit(p)}`;
+}
+
+function render() {
+  const app = $('#app');
+  $('#meta').textContent = state.label;
+  $('#legs').innerHTML = state.rounds.map((r, n) => `<i class="leg ${r.answer ? (r.answer === r.c.id ? (r.clues.length ? 'y' : 'g') : 'r') : n === state.i ? 'now' : ''}"></i>`).join('');
+  if (state.i >= ROUNDS) return renderEnd(app);
+  const r = state.rounds[state.i], c = r.c, done = !!r.answer;
+  const showKm = done || r.clues.includes('km');
+  const avail = BASE - CLUE_COST * r.clues.length;
+  app.innerHTML = `<section class="card">
+    <div class="q"><h2>${{ profile: 'Whose elevation profile is this?', outline: 'Whose course is this?', photo: 'Which race is this?' }[r.mode]}</h2>
+      <span class="pts">${done ? `+${r.score}` : `${avail} pts`}</span></div>
+    ${r.mode === 'photo' ? `<figure class="photo"><img src="${esc(r.photo.src)}" alt="A runner or scene from the mystery race">${credit(r.photo)}</figure>`
+      : `<div class="chart">${r.mode === 'profile' ? profileSVG(c.profile, showKm, c.km) : `<div style="max-width:340px;margin:0 auto">${outlineSVG(c.outline)}</div>`}</div>`}
+    ${r.mode === 'outline' ? `<div class="meta" style="text-align:center">North up · green dot start · ring finish</div>` : ''}
+    <div class="clues">${CLUES.map(([k, lab, f]) => { const open = done || r.clues.includes(k);
+      if (!f(c)) return `<button class="clue" disabled><small>${lab}</small><b>Not known yet</b></button>`;
+      return `<button class="clue ${open ? 'open' : ''}" data-clue="${k}" ${open || done ? 'disabled' : ''}><small>${lab}${open ? '' : ` · −${CLUE_COST}`}</small><b>${open ? esc(f(c)) : 'Reveal'}</b></button>`; }).join('')}</div>
+    <div class="choices">${r.opts.map(o => { const cls = done ? (o.id === c.id ? 'right' : o.id === r.answer ? 'wrong' : '') : '';
+      return `<button class="choice ${cls}" data-id="${o.id}" ${done ? 'disabled' : ''}>${esc(o.name)}</button>`; }).join('')}</div>
+    ${done ? `${revealPhoto(r) ? `<figure class="photo">${revealPhoto(r)}</figure>` : ''}<div class="reveal ${revealMini(r) ? '' : 'solo'}">
+      ${revealMini(r) ? `<div class="mini">${revealMini(r)}</div>` : ''}
+      <div><h3>${esc(c.name)}</h3>${c.route || c.hook ? `<p>${[c.route, c.hook].filter(Boolean).map(s => esc(s) + '.').join(' ')}</p>` : ''}
+        <div class="stats"><span>${c.km} km</span>${c.gain ? `<span>${c.gain.toLocaleString()} m up</span>` : ''}${c.month ? `<span>${esc(c.month)}</span>` : ''}<span>${esc(c.country)}</span></div></div>
+    </div>
+    <button class="next" id="next">${state.i === ROUNDS - 1 ? 'See your score' : 'Next round →'}</button>` : ''}
+  </section>`;
+  app.querySelectorAll('[data-clue]').forEach(b => b.onclick = () => { r.clues.push(b.dataset.clue); render(); });
+  app.querySelectorAll('[data-id]').forEach(b => b.onclick = () => { r.answer = b.dataset.id; r.score = r.answer === c.id ? avail : 0; render(); });
+  const nx = $('#next'); if (nx) nx.onclick = () => { state.i++; render(); window.scrollTo({ top: 0 }); };
+}
+
+function renderEnd(app) {
+  const total = state.rounds.reduce((s, r) => s + r.score, 0);
+  const grid = state.rounds.map(r => r.answer === r.c.id ? (r.clues.length ? '🟨' : '🟩') : '🟥').join('');
+  const text = `Know the Course ${state.label}\n${grid} ${total}/${ROUNDS * BASE}\nfilmmyrun.com`;
+  app.innerHTML = `<section class="card final">
+    <div class="meta">Finish line</div>
+    <div class="big">${total.toLocaleString()}</div>
+    <div class="meta">out of ${(ROUNDS * BASE).toLocaleString()}</div>
+    <div class="share" aria-label="Result grid">${grid}</div>
+    <div class="results">${state.rounds.map(r => `<div><span>${esc(r.c.name)}</span><span>${r.answer === r.c.id ? `+${r.score}` : 'missed'}</span></div>`).join('')}</div>
+    <div class="row"><button class="next" id="copy">Copy result</button><button class="ghost" id="again">Play a random five</button></div>
+    <pre id="sharetext" hidden>${esc(text)}</pre>
+  </section>`;
+  $('#copy').onclick = async e => {
+    try { await navigator.clipboard.writeText(text); e.target.textContent = 'Copied'; }
+    catch { const p = $('#sharetext'); p.hidden = false; getSelection().selectAllChildren(p); e.target.textContent = 'Select and copy'; }
+  };
+  $('#again').onclick = () => newGame(Math.floor(Math.random() * 2 ** 31), 'Random five');
+}
+
+$('#count').textContent = DATA.courses.length;
+newGame(daySeed, `Daily · ${today}`);
+</script>

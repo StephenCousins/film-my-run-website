@@ -12,6 +12,7 @@ import {
   Gem,
   Footprints,
   Puzzle,
+  Mountain,
 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -36,6 +37,16 @@ export const metadata: Metadata = {
 // ============================================
 
 const tools = [
+  {
+    name: 'RunGuessr',
+    description:
+      'Guess the race from a photo, an elevation profile or a course map. Five races a day, from Western States to the Great North Run.',
+    href: '/games/runguessr',
+    icon: Mountain,
+    color: 'from-orange-500 to-amber-700',
+    stats: 'Daily race quiz',
+    popular: true,
+  },
   {
     name: 'Fartlex',
     description:

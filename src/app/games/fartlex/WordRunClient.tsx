@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Delete, Share2 } from 'lucide-react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import GameHero from '@/components/games/GameHero';
 import { GAME_NAME, score, shareText, type Mark } from '@/lib/word-run/game';
 import { EMPTY_STATS, liveStreak, record, type Stats } from '@/lib/word-run/stats';
 
@@ -172,17 +173,19 @@ export default function WordRunClient({ puzzle }: Props) {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-background pt-28 pb-16 px-4">
-        <div className="max-w-md mx-auto flex flex-col items-center">
-          <p className="text-xs font-semibold uppercase tracking-widest text-brand">Daily running word</p>
-          <h1 className="font-display text-3xl font-bold text-foreground mt-1">{GAME_NAME} #{number}</h1>
-          <p className="text-secondary text-sm mt-1">
-            {length} letters, {maxGuesses} guesses{streak > 0 ? ` · Run streak ${streak}` : ''}
-          </p>
+      <main className="min-h-screen bg-background pb-16">
+        <GameHero eyebrow="Daily running word" title={GAME_NAME} subtitle="Speed play with words. Four letters early in the week, building to a seven-letter long run on Sunday." bib={{ number, label: 'Today' }} compact>
+          <div className="flex flex-wrap gap-2 mt-4 text-xs font-medium">
+            <span className="rounded-full bg-white/10 px-3 py-1">{length} letters</span>
+            <span className="rounded-full bg-white/10 px-3 py-1">{maxGuesses} guesses</span>
+            {streak > 0 && <span className="rounded-full bg-brand/90 px-3 py-1">Run streak {streak}</span>}
+          </div>
+        </GameHero>
+        <div className="relative -mt-16 max-w-md mx-auto px-4">
+        <div className="card shadow-xl shadow-black/10 px-3 sm:px-6 pt-2 pb-6 flex flex-col items-center">
+          <div className="h-8 mt-1 text-sm font-medium text-foreground" role="status" aria-live="polite">{message}</div>
 
-          <div className="h-8 mt-3 text-sm font-medium text-foreground" role="status" aria-live="polite">{message}</div>
-
-          <div className="grid gap-1.5 mb-6" style={{ gridTemplateRows: `repeat(${maxGuesses}, auto)` }}>
+          <div className="grid gap-1.5 mb-6 [perspective:600px]" style={{ gridTemplateRows: `repeat(${maxGuesses}, auto)` }}>
             {Array.from({ length: maxGuesses }, (_, r) => {
               const g = r < guesses.length ? guesses[r] : r === guesses.length ? current : '';
               const marks = r < guesses.length ? rows[r] : null;
@@ -192,7 +195,8 @@ export default function WordRunClient({ puzzle }: Props) {
                     const ch = g[c] ?? '';
                     const kind = marks ? marks[c] : ch ? 'typed' : 'empty';
                     return (
-                      <div key={c} className={`${tile} border-2 rounded-md flex items-center justify-center font-bold uppercase ${TILE[kind]}`} aria-label={ch ? `${ch}${marks ? `, ${marks[c]}` : ''}` : 'empty'}>
+                      <div key={c} className={`${tile} border-2 rounded-lg flex items-center justify-center font-display font-bold uppercase transition-colors ${TILE[kind]} ${marks ? 'wordrun-flip shadow-sm' : ''} ${kind === 'typed' ? 'scale-105' : ''}`}
+                        style={marks ? { animationDelay: `${c * 90}ms` } : undefined} aria-label={ch ? `${ch}${marks ? `, ${marks[c]}` : ''}` : 'empty'}>
                         {ch}
                       </div>
                     );
@@ -203,7 +207,7 @@ export default function WordRunClient({ puzzle }: Props) {
           </div>
 
           {done ? (
-            <section className="card w-full p-6 text-center">
+            <section className="w-full pt-6 border-t border-border text-center animate-fade-up">
               <p className="text-sm text-secondary">{won ? `Solved in ${guesses.length}` : 'Out of guesses. The word was'}</p>
               <p className="font-display text-3xl font-bold tracking-widest text-brand mt-1">{word}</p>
               <p className="text-foreground mt-4 leading-relaxed">{puzzle.fact}</p>
@@ -212,14 +216,17 @@ export default function WordRunClient({ puzzle }: Props) {
               )}
               <div className="grid grid-cols-4 gap-2 mt-6 text-center">
                 {[['Played', stats.played], ['Won', stats.played ? `${Math.round((stats.won / stats.played) * 100)}%` : '0%'], ['Run streak', streak], ['Best', stats.best]].map(([label, value]) => (
-                  <div key={label as string}>
-                    <p className="font-display text-2xl font-bold text-foreground">{value}</p>
-                    <p className="text-xs text-muted">{label}</p>
+                  <div key={label as string} className="rounded-xl bg-surface-secondary py-3">
+                    <p className="font-display text-2xl font-bold text-foreground tabular-nums">{value}</p>
+                    <p className="text-[11px] uppercase tracking-wider text-muted">{label}</p>
                   </div>
                 ))}
               </div>
-              <button onClick={share} className="btn-primary mt-6"><Share2 className="w-4 h-4" /> Share</button>
+              <button onClick={share} className="btn-primary mt-6 inline-flex items-center gap-2"><Share2 className="w-4 h-4" /> Share</button>
               <p className="text-xs text-muted mt-4">Next word in {countdown}</p>
+              <p className="text-xs text-muted mt-3">
+                Fancy another? Try <Link href="/games/runguessr" className="text-brand font-semibold hover:underline">RunGuessr</Link>: guess the race from its course.
+              </p>
               {signedOut && (
                 <p className="text-xs text-muted mt-2">
                   <Link href="/login?callbackUrl=/games/fartlex" className="underline">Sign in</Link> to keep your streak on every device, the app included.
@@ -230,20 +237,21 @@ export default function WordRunClient({ puzzle }: Props) {
             <div className="w-full select-none" aria-label="Keyboard">
               {ROWS.map((row, i) => (
                 <div key={row} className="flex justify-center gap-1.5 mb-1.5">
-                  {i === 2 && <button onClick={() => press('ENTER')} className="px-3 h-12 rounded-md bg-surface-tertiary text-foreground text-xs font-bold">ENTER</button>}
+                  {i === 2 && <button onClick={() => press('ENTER')} className="px-3 h-12 rounded-lg bg-brand text-white text-xs font-bold shadow-sm active:translate-y-px">ENTER</button>}
                   {[...row].map((k) => {
                     const m = keyMarks.get(k);
                     return (
-                      <button key={k} onClick={() => press(k)} className={`flex-1 max-w-10 h-12 rounded-md text-sm font-bold ${m ? TILE[m] : 'bg-surface-tertiary text-foreground'} ${m === 'absent' ? 'opacity-40 line-through' : ''}`} aria-label={m === 'absent' ? `${k}, not in the word` : undefined}>{k}</button>
+                      <button key={k} onClick={() => press(k)} className={`flex-1 max-w-10 h-12 rounded-lg text-sm font-bold shadow-sm active:translate-y-px transition-colors ${m ? TILE[m] : 'bg-surface-tertiary text-foreground hover:bg-border'} ${m === 'absent' ? 'opacity-40 line-through' : ''}`} aria-label={m === 'absent' ? `${k}, not in the word` : undefined}>{k}</button>
                     );
                   })}
-                  {i === 2 && <button onClick={() => press('BACKSPACE')} aria-label="Delete" className="px-3 h-12 rounded-md bg-surface-tertiary text-foreground"><Delete className="w-5 h-5" /></button>}
+                  {i === 2 && <button onClick={() => press('BACKSPACE')} aria-label="Delete" className="px-3 h-12 rounded-lg bg-surface-tertiary text-foreground shadow-sm active:translate-y-px"><Delete className="w-5 h-5" /></button>}
                 </div>
               ))}
             </div>
           )}
+        </div>
 
-          <p className="text-xs text-muted mt-8 text-center max-w-sm">
+          <p className="text-xs text-muted mt-6 text-center max-w-sm mx-auto">
             Orange: right letter, right place. Blue: in the word, wrong place. A new word every day at midnight UK time.
           </p>
         </div>

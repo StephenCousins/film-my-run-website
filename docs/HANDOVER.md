@@ -2,6 +2,20 @@
 
 Dated status entries moved out of CLAUDE.md. Newest first.
 
+## 11 Nov 2026: RunGuessr live; games restyled
+
+- **RunGuessr** (`/games/runguessr`): daily race quiz, five races (photo, elevation profile, course outline), four
+  options, clues cost 200 of each race's 1,000. Same five for everyone, changing at midnight London time; streak and
+  stats in localStorage (`runguessr:v1`); practice fives after the daily. Logic and tests in `src/lib/runguessr/`.
+- **Data** is `public/games/runguessr/races.json` (104 races), built from `docs/race-game/` (races.json, build_game.py;
+  course GPX from ultra-course-data, OSM, organisers and goandrace.com). Photos are Wikimedia Commons (CC BY/SA,
+  CC0, PD; no NC), each graded by eye in `docs/race-game/grades.json` (q quiz, r answer screen only, x dropped), on R2
+  at `runguessr/photos/`. Credit shows under every photo. New races and month/route/hook gaps: `docs/race-game/`.
+- **Organiser photos**: Stephen says replies granting use came back; not yet seen by Claude, so none added.
+- **Games look**: shared `src/components/games/GameHero.tsx` (dark contour band, race-bib day number), used by
+  `/games` (new hub), RunGuessr and Fartlex (logic untouched; tiles flip on submit). Header treats the three game
+  pages as dark-hero pages. Homepage strip now shows both games.
+
 ## 10 Nov 2026: Claude first on the Max plan API credit; site assistant public
 
 - **The credit.** Stephen's Max plan includes $100 a month of Claude API credit (monthly, not weekly; expires
