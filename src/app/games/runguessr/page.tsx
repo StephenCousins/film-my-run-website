@@ -1,7 +1,6 @@
-import fs from 'node:fs/promises';
-import path from 'node:path';
 import type { Metadata } from 'next';
-import { GAME_NAME, londonDate, pickRounds, puzzleNumber, seedFor, type RaceData } from '@/lib/runguessr/game';
+import { loadRaceData, roundsFor } from '@/lib/runguessr/data';
+import { GAME_NAME, londonDate, puzzleNumber } from '@/lib/runguessr/game';
 import RunGuessrClient from './RunGuessrClient';
 
 // Today's five change at midnight London time, so never prerender.
@@ -17,11 +16,8 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', title: `${GAME_NAME} | Film My Run`, description: DESCRIPTION, images: ['/games/runguessr/og'] },
 };
 
-let cached: Promise<RaceData> | null = null;
-const loadData = () => (cached ??= fs.readFile(path.join(process.cwd(), 'public/games/runguessr/races.json'), 'utf8').then((t) => JSON.parse(t) as RaceData));
-
 export default async function RunGuessrPage() {
-  const data = await loadData();
-  const date = londonDate();
-  return <RunGuessrClient number={puzzleNumber(date)} rounds={pickRounds(data, seedFor(date))} raceCount={data.courses.length} />;
+  const number = puzzleNumber(londonDate());
+  const [data, rounds] = await Promise.all([loadRaceData(), roundsFor(number)]);
+  return <RunGuessrClient number={number} rounds={rounds} raceCount={data.courses.length} />;
 }

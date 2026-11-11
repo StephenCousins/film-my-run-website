@@ -72,3 +72,16 @@ cached here for a day. Logic in `src/lib/races/handlers.ts`.
   the race has no track. `cutoffElapsedMin` is minutes from the gun.
 - Crew Notes unreachable and nothing cached: 503.
 
+
+## RunGuessr (11 Nov 2026)
+
+Daily race quiz, the same five on the website and in the app. Logic in `src/lib/runguessr/`; data in
+`public/games/runguessr/races.json`.
+
+- `GET /api/app/v1/runguessr` → `{ ok, number, date, raceCount, rounds: [{ race, mode, photo, options }] }`. Anyone.
+  `race` carries everything the round and its answer screen need (outline, profile, photos, facts). `mode` is
+  `photo`, `profile` or `outline`. `?practice=1` gives a random five with `number: null`.
+- `POST /api/app/v1/runguessr/record` `{ result?: { puzzle, answers: [5 race ids], clues: [5 × ["km","gain"] or "km,gain"] } }`
+  → `{ ok, stats: { played, streak, bestStreak, lastPlayed, bestScore, totalScore }, today: { puzzle, answers, clues } | null }`.
+  Bearer (app) or session cookie (website); 401 signed out. The server scores the game from that day's rounds; the
+  first finished game for a puzzle wins. Table `runguessr_results`.

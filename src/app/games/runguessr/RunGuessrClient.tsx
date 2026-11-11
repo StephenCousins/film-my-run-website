@@ -25,6 +25,22 @@ function save(s: Saved) {
   try { localStorage.setItem(KEY, JSON.stringify(s)); } catch { /* private mode: the game still works, it just forgets */ }
 }
 
+/**
+ * A signed-in player's record lives on their account, shared with the app (11 Nov 2026).
+ * Sends a finished daily game (if any) and gets back the account's record and today's game. null when offline.
+ */
+type Synced = { stats: Stats; today: { puzzle: number; answers: string[]; clues: ClueKey[][] } | null };
+async function sync(result?: { puzzle: number; answers: (string | null)[]; clues: ClueKey[][] }): Promise<Synced | 'signed_out' | null> {
+  try {
+    const r = await fetch('/api/app/v1/runguessr/record', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(result ? { result } : {}) });
+    if (r.status === 401) return 'signed_out';
+    const j = await r.json();
+    return j.ok ? j : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Time until midnight in London, when the next five arrive. */
 function untilNext(now = new Date()): string {
   const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/London', hour: 'numeric', minute: 'numeric', second: 'numeric', hourCycle: 'h23' }).formatToParts(now);
@@ -51,18 +67,34 @@ export default function RunGuessrClient({ number, rounds: daily, raceCount }: Pr
   const [countdown, setCountdown] = useState('');
   const [message, setMessage] = useState('');
   const [loadingPractice, setLoadingPractice] = useState(false);
+  const [signedOut, setSignedOut] = useState(false);
 
-  // Restore today's game after mount (localStorage isn't there on the server).
+  // Restore today's game after mount (localStorage isn't there on the server). Then, for a signed-in player,
+  // the account's record (the app's games included) replaces this browser's, and a game finished elsewhere wins.
   useEffect(() => {
     const s = load();
-    if (!s) return;
-    setStats(s.stats);
-    if (s.day === number) {
-      setAnswers(s.answers);
-      setClues(s.clues);
-      const next = s.answers.findIndex((a) => a === null);
-      setI(next === -1 ? ROUNDS : next);
+    if (s) {
+      setStats(s.stats);
+      if (s.day === number) {
+        setAnswers(s.answers);
+        setClues(s.clues);
+        const next = s.answers.findIndex((a) => a === null);
+        setI(next === -1 ? ROUNDS : next);
+      }
     }
+    const finishedHere = s?.day === number && s.answers.every(Boolean);
+    sync(finishedHere ? { puzzle: number, answers: s!.answers, clues: s!.clues } : undefined).then((r) => {
+      if (r === 'signed_out') return setSignedOut(true);
+      if (!r) return;
+      setStats(r.stats);
+      const today = r.today?.puzzle === number && r.today.answers.length === ROUNDS ? r.today : null;
+      if (today) {
+        setAnswers(today.answers);
+        setClues(today.clues);
+        setI(ROUNDS);
+      }
+      save({ day: number, answers: today?.answers ?? s?.answers ?? blank().answers, clues: today?.clues ?? s?.clues ?? blank().clues, stats: r.stats });
+    });
   }, [number]);
 
   const scores = rounds.map((r, n) => (answers[n] ? roundScore(answers[n] === r.race.id, clues[n].length) : 0));
@@ -89,6 +121,9 @@ export default function RunGuessrClient({ number, rounds: daily, raceCount }: Pr
       const final = rounds.reduce((sum, r, n) => sum + roundScore(next[n] === r.race.id, clues[n].length), 0);
       s = record(stats, number, final);
       setStats(s);
+      sync({ puzzle: number, answers: next, clues }).then((r) => {
+        if (r && r !== 'signed_out') { setStats(r.stats); save({ day: number, answers: next, clues, stats: r.stats }); }
+      });
     }
     persist(next, clues, s);
   }, [answers, i, stats, practice, rounds, clues, number]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -167,7 +202,7 @@ export default function RunGuessrClient({ number, rounds: daily, raceCount }: Pr
           <Progress rounds={rounds} answers={answers} results={results} current={i} />
           {finished ? (
             <Finish rounds={rounds} answers={answers} scores={scores} total={total} stats={stats} streak={streak}
-              practice={!!practice} countdown={countdown} onShare={share} onPractice={startPractice} loadingPractice={loadingPractice} message={message} />
+              practice={!!practice} countdown={countdown} signedOut={signedOut} onShare={share} onPractice={startPractice} loadingPractice={loadingPractice} message={message} />
           ) : (
             <RoundCard key={`${practice ? 'p' : 'd'}-${i}`} n={i} round={rounds[i]} answer={answers[i]} clues={clues[i]}
               onClue={reveal} onAnswer={answer} onNext={advance} last={i === ROUNDS - 1} />
@@ -378,8 +413,8 @@ function OutlineChart({ outline, small }: { outline: [number, number][]; small?:
   );
 }
 
-function Finish({ rounds, answers, scores, total, stats, streak, practice, countdown, onShare, onPractice, loadingPractice, message }: {
-  rounds: Round[]; answers: (string | null)[]; scores: number[]; total: number; stats: Stats; streak: number; practice: boolean;
+function Finish({ rounds, answers, scores, total, stats, streak, practice, countdown, signedOut, onShare, onPractice, loadingPractice, message }: {
+  rounds: Round[]; answers: (string | null)[]; scores: number[]; total: number; stats: Stats; streak: number; practice: boolean; signedOut: boolean;
   countdown: string; onShare: () => void; onPractice: () => void; loadingPractice: boolean; message: string;
 }) {
   const verdict = total >= 4600 ? 'Course record' : total >= 3800 ? 'Podium' : total >= 2600 ? 'Age-group win' : total >= 1400 ? 'Solid finish' : 'You finished. That counts.';
@@ -423,6 +458,11 @@ function Finish({ rounds, answers, scores, total, stats, streak, practice, count
       </div>
       <p className="text-center text-sm font-medium text-foreground h-5 mt-3" role="status" aria-live="polite">{message}</p>
       {!practice && <p className="text-center text-xs text-muted">Next five in {countdown}. Practice games don&apos;t count towards your streak.</p>}
+      {signedOut && !practice && (
+        <p className="text-center text-xs text-muted mt-2">
+          <Link href="/login?callbackUrl=/games/runguessr" className="underline">Sign in</Link> to keep your streak on every device, the Film My Run app included.
+        </p>
+      )}
       <p className="text-center text-xs text-muted mt-4">
         Like word games? Try <Link href="/games/fartlex" className="text-brand font-semibold hover:underline">Fartlex</Link>, the daily running word.
       </p>

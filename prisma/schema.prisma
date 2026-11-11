@@ -332,6 +332,7 @@ model users {
   posts               posts[]
   saved_routes        saved_routes[]
   fartlex_results     fartlex_results[]
+  runguessr_results   runguessr_results[]
   sessions            sessions[]
   shoe_user_ratings   shoe_user_ratings[]
 }
@@ -740,6 +741,21 @@ model fartlex_results {
   won        Boolean
   /// The guesses, so another device can show the finished grid. Empty for results carried over from a device's old record.
   guesses    String[]
+  created_at DateTime @default(now())
+  users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@id([user_id, puzzle])
+}
+
+/// RunGuessr (11 Nov 2026): one row per finished daily puzzle for a signed-in player, shared by the website and the app.
+/// answers: the race id picked in each of the five rounds. clues: per round, the clue keys revealed, comma-joined.
+/// score is worked out by the server when the row is written.
+model runguessr_results {
+  user_id    Int
+  puzzle     Int
+  answers    String[]
+  clues      String[]
+  score      Int
   created_at DateTime @default(now())
   users      users    @relation(fields: [user_id], references: [id], onDelete: Cascade)
 

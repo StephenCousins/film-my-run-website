@@ -57,6 +57,11 @@ export function puzzleNumber(date: string): number {
   return dayNumber(date) - dayNumber(LAUNCH) + 1;
 }
 
+/** The London date a puzzle number belongs to (1 is launch day). */
+export function dateFor(puzzle: number): string {
+  return new Date((dayNumber(LAUNCH) + puzzle - 1) * DAY).toISOString().slice(0, 10);
+}
+
 /** Small seeded RNG (mulberry32), so a date always gives the same five. */
 export function rng(seed: number): () => number {
   let a = seed >>> 0;
