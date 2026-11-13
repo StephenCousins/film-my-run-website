@@ -1,6 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
+import { resetOpenRouterHealth } from '@/lib/llm';
 import { NEWS_CONFIG } from './config';
 import { gatherCandidates } from './gather';
 import { bundleImportance, groupItems } from './group';
@@ -120,6 +121,8 @@ export class NewsRunError extends Error {
 type RunOpts = { now: Date; dryRun: boolean; outDir?: string; deps?: Partial<RunDeps>; maxStories?: number };
 
 export async function runNews(opts: RunOpts): Promise<RunLog> {
+  // Every run starts with OpenRouter switched on, whatever happened in the last one (llm.ts).
+  resetOpenRouterHealth();
   const log: RunLog = { dryRun: opts.dryRun, itemsSeen: 0, sortedOut: [], borderline: [], ungrouped: [], skipped: [], notPublished: [], published: [], costUsd: 0, stoppedByCeiling: false, profiles: [] };
   try {
     return await run(log, opts);

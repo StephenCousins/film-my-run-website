@@ -1,4 +1,4 @@
-import { completeJson } from '@/lib/llm';
+import { completeJsonOpenRouterFirst } from '@/lib/llm';
 import { GROUP_MODEL } from './models';
 import type { Bundle, Candidate, Verdict } from './types';
 
@@ -34,7 +34,14 @@ const SCHEMA = {
   } } },
 };
 
-export async function groupItems(items: { c: Candidate; v: Verdict }[], recentHeadlines: string[], call: typeof completeJson = completeJson) {
+/**
+ * Gemini on OpenRouter, then (only if OpenRouter fails) Claude Opus through Claude Code, then the
+ * Anthropic credit. Opus, not Sonnet: it is one call a day and the whole run hangs on it.
+ */
+type GroupCall = typeof completeJsonOpenRouterFirst;
+const groupCall: GroupCall = (opts, run) => completeJsonOpenRouterFirst({ ...opts, label: 'group', claude: 'opus' }, run);
+
+export async function groupItems(items: { c: Candidate; v: Verdict }[], recentHeadlines: string[], call: GroupCall = groupCall) {
   if (items.length === 0) return { bundles: [], costUsd: 0 };
   const list = items.map(({ c }) => `${c.articleId} | ${c.source} | ${c.pubDate.toISOString().slice(0, 10)} | ${c.title}`).join('\n');
   const prompt = `Group these running news items by the single event they report (the same race result, record or announcement). One group per event; an item in exactly one group. Never put two different races or incidents in one group, even on the same weekend or in the same round-up: a backyard ultra in Derbyshire and the Tor des Géants are two groups.
@@ -46,7 +53,7 @@ ${list}
 
 Already published in the last 14 days:
 ${recentHeadlines.map((h) => `- ${h}`).join('\n') || '- none'}`;
-  const r = await call<{ groups: { key: string; headline: string; articleIds: number[]; alreadyCovered: boolean }[] }>({ model: GROUP_MODEL, prompt, maxTokens: 12000, schemaName: 'groups', schema: SCHEMA });
+  const r = await call<{ groups: { key: string; headline: string; articleIds: number[]; alreadyCovered: boolean }[] }>({ model: GROUP_MODEL, prompt, maxTokens: 12000, schemaName: 'groups', schema: SCHEMA, label: 'group' });
   const byId = new Map(items.map((i) => [i.c.articleId, i]));
   const used = new Set<number>();
   const bundles: Bundle[] = (r.data?.groups ?? []).flatMap((g) => {

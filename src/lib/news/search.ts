@@ -42,7 +42,19 @@ const liveDeps: CoverageDeps = { search: (q) => searchWeb(SORT_MODEL, q), fetchH
  */
 export async function moreCoverage(b: Bundle, now: Date, deps: CoverageDeps = liveDeps, want = 3): Promise<{ items: Candidate[]; costUsd: number }> {
   const hosts = new Set(b.items.map((i) => new URL(i.url).hostname.replace(/^www\./, '')));
-  const { urls, costUsd } = await deps.search(`${b.headline} (${now.getUTCFullYear()})`);
+  // Extra coverage is a nice-to-have: if the search can't run (OpenRouter down or switched off for
+  // the run), the story goes ahead on the sources it has, and the run carries on. There is no Claude
+  // stand-in here: `claude -p` would need its web tools switched on and its free-text answer parsed
+  // for links, which is new, untested ground for a step that is optional anyway (docs/llm.md).
+  let found: { urls: string[]; costUsd: number };
+  try {
+    found = await deps.search(`${b.headline} (${now.getUTCFullYear()})`);
+  } catch (e) {
+    console.warn(`search: skipped for "${b.headline}" (${(e as Error).message.split('\n')[0].slice(0, 200)}), going ahead without extra coverage`);
+    return { items: [], costUsd: 0 };
+  }
+  console.log('search: openrouter-web');
+  const { urls, costUsd } = found;
   const since = now.getTime() - NEWS_CONFIG.windowDays * 86_400_000;
   const items: Candidate[] = [];
   for (const url of urls) {

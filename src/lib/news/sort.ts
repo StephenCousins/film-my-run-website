@@ -1,4 +1,4 @@
-import { completeJson } from '@/lib/llm';
+import { completeJsonOpenRouterFirst, openRouterUnavailable } from '@/lib/llm';
 import { NEWS_CONFIG } from './config';
 import { decide } from '@/lib/jev';
 import { SORT_MODEL } from './models';
@@ -35,7 +35,14 @@ export function isRoundUp(title: string): boolean {
 }
 const ROUND_UP: Verdict = { type: 'opinion', confidence: 1, isRunning: true, topic: 'trail_ultra', isUk: false, importance: 1 };
 
-export async function sortItem(c: Candidate, call: typeof completeJson = completeJson) {
+/**
+ * The chat call the sorter makes: Gemini on OpenRouter, then (only if OpenRouter fails) Claude
+ * Sonnet through Claude Code, then the Anthropic credit (completeJsonOpenRouterFirst in llm.ts).
+ */
+type SortCall = typeof completeJsonOpenRouterFirst;
+const sortCall: SortCall = (opts, run) => completeJsonOpenRouterFirst({ ...opts, label: 'sort', claude: 'sonnet' }, run);
+
+export async function sortItem(c: Candidate, call: SortCall = sortCall) {
   // Video, audio and live pages carry no text to write from, whatever the event: settle them without a call.
   if (isRoundUp(c.title)) return { verdict: ROUND_UP, costUsd: 0 };
   if (MEDIA_URL.test(c.url)) return { verdict: { type: 'media', confidence: 1, isRunning: true, topic: 'road', isUk: false, importance: 1 } as Verdict, costUsd: 0 };
@@ -65,7 +72,7 @@ Summary: ${c.summary.slice(0, 1200)}
 Opening: ${(c.text ?? '').slice(0, 1500)}`;
   // Gemini 3.7 Flash always reasons first (it can't be switched off) and the reasoning
   // counts against max_tokens: at 300 it used ~190 and cut the JSON short. Only used tokens are billed.
-  const r = await call<Verdict>({ model: SORT_MODEL, prompt, maxTokens: 2000, schemaName: 'verdict', schema: SCHEMA });
+  const r = await call<Verdict>({ model: SORT_MODEL, prompt, maxTokens: 2000, schemaName: 'verdict', schema: SCHEMA, label: 'sort' });
   const d = r.data;
   const valid = d && typeof d.confidence === 'number' && d.confidence >= 0 && d.confidence <= 1 && typeof d.importance === 'number';
   return { verdict: valid ? { ...d, importance: Math.max(1, Math.min(10, Math.round(d.importance))) } : null, costUsd: r.costUsd };
@@ -92,8 +99,10 @@ interface JevAnswers {
  * because Jev reads instructions literally and leaves arithmetic to code. Jev has no fallback of
  * its own, so a failed or malformed answer goes to sortItem instead.
  */
-export async function sortItemJev(c: Candidate, call: typeof completeJson = completeJson): Promise<{ verdict: Verdict | null; costUsd: number }> {
+export async function sortItemJev(c: Candidate, call: SortCall = sortCall): Promise<{ verdict: Verdict | null; costUsd: number }> {
   if (MEDIA_URL.test(c.url) || isRoundUp(c.title)) return sortItem(c, call);
+  // OpenRouter switched off for this run (a dead key, say): Jev is on OpenRouter too, so skip it.
+  if (openRouterUnavailable()) return sortItem(c, call);
   const state = {
     source: c.source, title: c.title, published: c.pubDate.toISOString().slice(0, 10),
     summary: c.summary.slice(0, 1200), opening: (c.text ?? '').slice(0, 1500),
@@ -149,6 +158,8 @@ export async function sortItemJev(c: Candidate, call: typeof completeJson = comp
       ],
     },
   };
+  // A Jev failure doesn't switch OpenRouter off by itself: Jev is on OpenRouter's alpha Decisions
+  // API, so the Gemini call in sortItem decides whether the key itself is dead.
   try {
     const { answers: a, costUsd } = await decide<JevAnswers>(state, questions);
     if (!TYPES.includes(a?.type?.choice) || !TOPICS.includes(a.topic?.choice) || typeof a.importance?.score !== 'number') {
@@ -164,6 +175,7 @@ export async function sortItemJev(c: Candidate, call: typeof completeJson = comp
       isUk,
       importance: Math.max(1, Math.min(10, Math.round(a.importance.score) + 1 + (isUk ? 1 : 0) - JEV_TOPIC_OFFSET[topic])),
     };
+    console.log('sort: openrouter-jev');
     return { verdict, costUsd };
   } catch (e) {
     console.warn(`Jev sort failed for ${c.url}, falling back to ${SORT_MODEL}: ${(e as Error).message}`);

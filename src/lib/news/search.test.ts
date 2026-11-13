@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { moreCoverage, publishedAt } from './search';
 import type { Bundle, Candidate } from './types';
 
@@ -32,5 +32,20 @@ describe('more coverage from the web', () => {
     expect(publishedAt('<script type="application/ld+json">{"datePublished":"2026-09-21"}</script>')?.toISOString().slice(0, 10)).toBe('2026-09-21');
     expect(publishedAt('<time datetime="2026-09-19T12:00:00+01:00">19 Sep</time>')?.toISOString().slice(0, 10)).toBe('2026-09-19');
     expect(publishedAt('<p>no date</p>')).toBeNull();
+  });
+});
+
+describe('more coverage when the search is down', () => {
+  it('skips extra coverage and carries on instead of failing the run', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const fetchHtml = vi.fn(async () => null);
+    const r = await moreCoverage(bundle, now, {
+      search: async () => { throw Object.assign(new Error('401 User not found.'), { status: 401 }); },
+      fetchHtml,
+    });
+    expect(r).toEqual({ items: [], costUsd: 0 });
+    expect(fetchHtml).not.toHaveBeenCalled();
+    expect(warn.mock.calls[0][0]).toMatch(/search: skipped .*User not found/);
+    warn.mockRestore();
   });
 });

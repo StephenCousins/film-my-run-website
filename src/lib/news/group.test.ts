@@ -1,4 +1,9 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+
+const create = vi.fn();
+vi.mock('openai', () => ({ default: class { chat = { completions: { create } }; } }));
+
+import { completeJsonOpenRouterFirst, openRouterUnavailable, resetOpenRouterHealth, type ClaudeRunner } from '@/lib/llm';
 import { bundleImportance, groupItems } from './group';
 import type { Candidate, Verdict } from './types';
 
@@ -47,5 +52,59 @@ describe('grouping', () => {
     const wr = bundleImportance({ key: 'k', headline: 'h', items: [item('a', 'Sawe breaks the marathon world record in Berlin'), item('b'), item('c')], verdicts: [road(9)], alreadyCovered: false });
     expect(wr).toBeGreaterThan(bgr);
     expect(bundleImportance({ key: 'k', headline: 'h', items: [], verdicts: [{ ...v(7), topic: 'track' }], alreadyCovered: false })).toBe(5);
+  });
+});
+
+describe('grouping when OpenRouter is down', () => {
+  const groups = { groups: [{ key: 'utmb-2026-result', headline: 'UTMB result', articleIds: [1, 2], alreadyCovered: false }] };
+  const items = [{ c: cand(1), v: v(9) }, { c: cand(2), v: v(8) }];
+  let run: ReturnType<typeof vi.fn>;
+  const call = ((opts: Parameters<typeof completeJsonOpenRouterFirst>[0]) =>
+    completeJsonOpenRouterFirst({ ...opts, label: 'group', claude: 'opus' }, run as unknown as ClaudeRunner)) as never;
+
+  beforeEach(() => {
+    process.env.OPENROUTER_API_KEY = 'k';
+    process.env.CLAUDE_CODE_OAUTH_TOKEN = 't';
+    create.mockReset().mockResolvedValue({ choices: [{ message: { content: JSON.stringify(groups) } }], usage: { cost: 0.003 } });
+    run = vi.fn(async () => JSON.stringify({ is_error: false, result: JSON.stringify(groups) }));
+    vi.spyOn(console, 'log').mockImplementation(() => {});
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+  });
+  afterEach(() => {
+    vi.restoreAllMocks();
+    resetOpenRouterHealth();
+    delete process.env.CLAUDE_CODE_OAUTH_TOKEN;
+  });
+
+  it('OpenRouter 401: Claude Code (Opus) groups them, with the same prompt and schema', async () => {
+    create.mockRejectedValue(Object.assign(new Error('401 User not found.'), { status: 401 }));
+    const r = await groupItems(items, [], call);
+    expect(r.costUsd).toBe(0);
+    expect(r.bundles.map((b) => b.items.map((i) => i.articleId))).toEqual([[1, 2]]);
+    const [args, stdin] = run.mock.calls[0];
+    expect(args).toEqual(expect.arrayContaining(['--model', 'opus']));
+    expect(stdin).toContain('Group these running news items');
+    expect(stdin).toContain('"alreadyCovered"');
+  });
+
+  it('OpenRouter already switched off by the sort: no OpenRouter call at all', async () => {
+    create.mockRejectedValue(Object.assign(new Error('401 User not found.'), { status: 401 }));
+    await completeJsonOpenRouterFirst({ model: 'm', prompt: 'p', maxTokens: 1, schemaName: 's', schema: {}, label: 'sort' }, run as unknown as ClaudeRunner);
+    create.mockClear();
+    await groupItems(items, [], call);
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it('OpenRouter up: Gemini groups them and Claude is not called', async () => {
+    expect(openRouterUnavailable()).toBeNull();
+    const r = await groupItems(items, [], call);
+    expect(r.costUsd).toBe(0.003);
+    expect(run).not.toHaveBeenCalled();
+  });
+
+  it('every provider down: a clear error', async () => {
+    create.mockRejectedValue(Object.assign(new Error('401 User not found.'), { status: 401 }));
+    run = vi.fn(async () => { throw new Error('spawn claude ENOENT'); });
+    await expect(groupItems(items, [], call)).rejects.toThrow(/group: every provider failed/);
   });
 });
