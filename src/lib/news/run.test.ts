@@ -5,6 +5,7 @@ import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { NewsRunError, runNews } from './run';
+import { noteOpenRouterFailure, openRouterUnavailable } from '@/lib/llm';
 import type { Bundle, Candidate, Draft, Verdict } from './types';
 import { UNVERIFIED_NOTE } from './write';
 
@@ -40,6 +41,17 @@ function deps(over: Record<string, unknown> = {}) {
 }
 
 describe('a news run', () => {
+  it('starts with OpenRouter switched back on, whatever the last run found', async () => {
+    vi.spyOn(console, 'warn').mockImplementation(() => {});
+    noteOpenRouterFailure(Object.assign(new Error('401 User not found.'), { status: 401 }));
+    expect(openRouterUnavailable()).not.toBeNull();
+    let offDuringSort: string | null = 'unset';
+    const { d } = deps({ gather: async () => [cand(1)], sort: async () => { offDuringSort = openRouterUnavailable(); return { verdict: null, costUsd: 0 }; } });
+    await runNews({ now: new Date(), dryRun: true, deps: d as never });
+    expect(offDuringSort).toBeNull();
+    vi.restoreAllMocks();
+  });
+
   it('a runner file joins the sources the writer sees, but not the published sources, and does not stand in for a second report', async () => {
     const file: Candidate = { articleId: 0, url: 'https://filmmyrun.com/runners/ruth-croft', source: 'Film My Run runner file', title: 'Ruth Croft', pubDate: new Date(), summary: '', text: 'Ruth Croft (NZ). UTMB Index 920.', imageUrl: null, photoCredit: null };
     let writerSaw: string[] = [];

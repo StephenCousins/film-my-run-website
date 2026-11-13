@@ -108,7 +108,7 @@ async function completeViaClaude(
     console.log(`claude-credit ok (${route.model})`);
     return text;
   } catch (e) {
-    console.log(`claude-credit failed (${route.model}): ${(e as Error).message.split('\n')[0].slice(0, 200)}, falling back to OpenRouter`);
+    console.log(`claude-credit failed (${route.model}): ${(e as Error).message.split('\n')[0].slice(0, 200)}, trying the next route`);
     return null;
   }
 }
@@ -235,18 +235,21 @@ const runClaude: ClaudeRunner = (args, stdin, timeoutMs) =>
 
 /**
  * The same JSON call through Claude Code headless (`claude -p`), on the owner's
- * subscription via CLAUDE_CODE_OAUTH_TOKEN. Null means "use OpenRouter instead":
+ * subscription via CLAUDE_CODE_OAUTH_TOKEN. Null means "try the next route":
  * CLI missing, error, timeout, usage limit, or a reply that isn't JSON.
+ * `cliModel` is the CLI's model alias: opus for writing and checking, sonnet
+ * when it stands in for the cheap news sorter.
  * Cost is 0: the subscription has no marginal cost, and the news ceiling must
  * count only real OpenRouter spend.
  */
 export async function completeJsonViaClaude<T>(
   { prompt, system, schema }: JsonCallOptions,
   run: ClaudeRunner = runClaude,
+  cliModel = 'opus',
 ): Promise<{ data: T; costUsd: number; raw: string } | null> {
   const args = [
     '-p',
-    '--model', 'opus',
+    '--model', cliModel,
     '--output-format', 'json',
     '--tools', '',
     '--system-prompt', system || 'You are a careful writer and fact-checker. Follow the instructions exactly.',
@@ -261,10 +264,10 @@ export async function completeJsonViaClaude<T>(
     const raw = out.result.trim();
     const data = parseJson<T>(raw);
     if (data === null) throw new Error('reply was not JSON');
-    console.log('claude-cli ok');
+    console.log(`claude-cli ok (${cliModel})`);
     return { data, costUsd: 0, raw };
   } catch (e) {
-    console.log(`claude-cli failed: ${(e as Error).message.split('\n')[0].slice(0, 200)}, falling back to OpenRouter`);
+    console.log(`claude-cli failed (${cliModel}): ${(e as Error).message.split('\n')[0].slice(0, 200)}, trying the next route`);
     return null;
   }
 }
@@ -273,19 +276,26 @@ export async function completeJson<T>(
   opts: JsonCallOptions,
   run: ClaudeRunner = runClaude,
 ): Promise<{ data: T | null; costUsd: number; raw: string }> {
-  const { model, prompt, system, maxTokens, temperature = 0, schemaName, schema } = opts;
+  const { model, prompt, system, maxTokens, schema } = opts;
   if (process.env.CLAUDE_CODE_OAUTH_TOKEN && (model === WRITE_MODEL || model === CHECK_MODEL)) {
     const viaClaude = await completeJsonViaClaude<T>(opts, run);
     if (viaClaude) return viaClaude;
   }
   // Writing and checking (news, runner profiles) next try the API credit, so a
   // run without the subscription token, or past its usage limit, still avoids
-  // paying OpenRouter for Opus. Sorting and grouping stay on OpenRouter as tuned.
+  // paying OpenRouter for Opus. Sorting and grouping use completeJsonOpenRouterFirst.
   if (model === WRITE_MODEL || model === CHECK_MODEL) {
     const raw = await completeViaClaude(CLAUDE_WRITER, { prompt, system, maxTokens }, { schema });
     const data = raw === null ? null : parseJson<T>(raw);
     if (data !== null) return { data, costUsd: 0, raw: raw! };
   }
+  return completeJsonViaOpenRouter<T>(opts);
+}
+
+/** The plain OpenRouter JSON call, with structured output and its real cost. Throws on an API error. */
+async function completeJsonViaOpenRouter<T>(
+  { model, prompt, system, maxTokens, temperature = 0, schemaName, schema }: JsonCallOptions,
+): Promise<{ data: T | null; costUsd: number; raw: string }> {
   const client = getClient();
   const completion = await client.chat.completions.create({
     model,
@@ -304,6 +314,125 @@ export async function completeJson<T>(
   return { data: parseJson<T>(raw), costUsd, raw };
 }
 
+/*
+ * Is OpenRouter usable in this run?
+ *
+ * On 13 Nov 2026 the OpenRouter key died (401 "User not found") and the news run
+ * stopped at the sort. The news sort, group and search now fall back to Claude
+ * when OpenRouter fails, and this switch stops them waiting on a dead key for
+ * every remaining item:
+ * - a key or billing problem (401, 402, "User not found", key missing, out of
+ *   credit) switches OpenRouter off straight away;
+ * - anything else (a 5xx, a timeout, no connection) is let through per item, but
+ *   three in a row switch it off too, so a hanging OpenRouter can't eat the run.
+ * One success resets the count. runNews() calls resetOpenRouterHealth() at the
+ * start of every run, so one bad run doesn't carry over to the next.
+ */
+let openRouterOff: string | null = null;
+let openRouterFailsInARow = 0;
+const OPENROUTER_FAILS_BEFORE_OFF = 3;
+
+/** Turns OpenRouter back on and clears the failure count (start of every news run, and tests). */
+export function resetOpenRouterHealth(): void {
+  openRouterOff = null;
+  openRouterFailsInARow = 0;
+}
+
+/** Why OpenRouter was switched off for this run, or null when it is still in use. */
+export function openRouterUnavailable(): string | null {
+  return openRouterOff;
+}
+
+/** A dead or unpaid key, as opposed to a passing outage: retrying won't help. */
+export function isOpenRouterKeyProblem(e: unknown): boolean {
+  const status = (e as { status?: unknown })?.status;
+  if (status === 401 || status === 402) return true;
+  const msg = e instanceof Error ? e.message : String(e);
+  return /\b40[12]\b|user not found|invalid api key|no auth|OPENROUTER_API_KEY is not set|payment required|insufficient credits|credits? (exhausted|used up)/i.test(msg);
+}
+
+/** First line of an error, short, for the log. Never includes request headers, so no key. */
+function shortError(e: unknown): string {
+  return (e instanceof Error ? e.message : String(e)).split('\n')[0].slice(0, 200);
+}
+
+/** Record an OpenRouter failure; switches OpenRouter off for the run when it should. */
+export function noteOpenRouterFailure(e: unknown): void {
+  openRouterFailsInARow += 1;
+  if (openRouterOff) return;
+  if (isOpenRouterKeyProblem(e)) openRouterOff = `key or billing problem: ${shortError(e)}`;
+  else if (openRouterFailsInARow >= OPENROUTER_FAILS_BEFORE_OFF) openRouterOff = `${openRouterFailsInARow} failures in a row, last: ${shortError(e)}`;
+  if (openRouterOff) console.warn(`OpenRouter switched off for the rest of this run (${openRouterOff})`);
+}
+
+/** Record an OpenRouter success: the failure count starts again. */
+export function noteOpenRouterSuccess(): void {
+  openRouterFailsInARow = 0;
+}
+
+/** Which Claude to use when OpenRouter can't: the CLI alias and the matching API-credit model. */
+const CLAUDE_FALLBACK = {
+  sonnet: { cli: 'sonnet', credit: { model: 'claude-sonnet-5-5', effort: 'medium' } as ClaudeRoute },
+  opus: { cli: 'opus', credit: CLAUDE_WRITER },
+};
+
+/**
+ * For the cheap, tuned news jobs (sort and group): OpenRouter first, as before,
+ * and only when OpenRouter fails (or is switched off for the run, see above)
+ * Claude Code headless on the subscription, then the Anthropic credit if
+ * ANTHROPIC_CREDIT_API_KEY is set. Same prompt and JSON schema throughout.
+ * Throws a clear error when every route fails.
+ *
+ * `label` names the stage in the log ("sort", "group"); `claude` picks which
+ * Claude stands in. A reply that isn't JSON from OpenRouter is not a failure:
+ * it comes back as data null, as it always has.
+ */
+export async function completeJsonOpenRouterFirst<T>(
+  opts: JsonCallOptions & { label: string; claude?: keyof typeof CLAUDE_FALLBACK },
+  run: ClaudeRunner = runClaude,
+): Promise<{ data: T | null; costUsd: number; raw: string }> {
+  const { label, model, prompt, maxTokens, schema } = opts;
+  const fallback = CLAUDE_FALLBACK[opts.claude ?? 'sonnet'];
+  const system = opts.system || 'You sort and group running news for a news desk. Follow the instructions exactly.';
+  const tried: string[] = [];
+
+  const off = openRouterUnavailable();
+  if (off) tried.push(`OpenRouter switched off for this run (${off})`);
+  else {
+    try {
+      const r = await completeJsonViaOpenRouter<T>(opts);
+      noteOpenRouterSuccess();
+      console.log(`${label}: openrouter-${model.split('/').pop()?.split('-')[0] ?? model}`);
+      return r;
+    } catch (e) {
+      noteOpenRouterFailure(e);
+      console.warn(`${label}: OpenRouter failed (${shortError(e)}), trying Claude`);
+      tried.push(`OpenRouter: ${shortError(e)}`);
+    }
+  }
+
+  if (process.env.CLAUDE_CODE_OAUTH_TOKEN) {
+    const viaCli = await completeJsonViaClaude<T>({ ...opts, system }, run, fallback.cli);
+    if (viaCli) {
+      console.log(`${label}: claude-cli`);
+      return viaCli;
+    }
+    tried.push('Claude Code CLI failed (see log above)');
+  } else tried.push('Claude Code CLI not set up (no CLAUDE_CODE_OAUTH_TOKEN)');
+
+  if (process.env.ANTHROPIC_CREDIT_API_KEY) {
+    const raw = await completeViaClaude(fallback.credit, { prompt, system, maxTokens }, { schema });
+    const data = raw === null ? null : parseJson<T>(raw);
+    if (data !== null) {
+      console.log(`${label}: claude-credit`);
+      return { data, costUsd: 0, raw: raw! };
+    }
+    tried.push(raw === null ? 'Anthropic credit failed (see log above)' : 'Anthropic credit reply was not JSON');
+  } else tried.push('Anthropic credit not set up (no ANTHROPIC_CREDIT_API_KEY)');
+
+  throw new Error(`${label}: every provider failed. ${tried.join('; ')}`);
+}
+
 /**
  * A web search through OpenRouter's web plugin: the URLs a cheap model cites
  * for a query, and what it cost (5 results is about $0.02 plus the model).
@@ -311,14 +440,24 @@ export async function completeJson<T>(
  * feed source can't be read.
  */
 export async function searchWeb(model: string, query: string, maxResults = 5): Promise<{ urls: string[]; costUsd: number }> {
-  const client = getClient();
-  const completion = await client.chat.completions.create({
-    model,
-    max_tokens: 2000,
-    temperature: 0,
-    messages: [{ role: 'user', content: `Find recent news reports of: ${query}. List the article URLs.` }],
-    ...({ plugins: [{ id: 'web', engine: 'exa', max_results: maxResults }], usage: { include: true } } as Record<string, unknown>),
-  });
+  // Throws when OpenRouter is switched off for the run or the call fails; the
+  // news caller (moreCoverage) treats that as "no extra coverage" and carries on.
+  const off = openRouterUnavailable();
+  if (off) throw new Error(`OpenRouter switched off for this run (${off})`);
+  let completion: OpenAI.Chat.Completions.ChatCompletion;
+  try {
+    completion = await getClient().chat.completions.create({
+      model,
+      max_tokens: 2000,
+      temperature: 0,
+      messages: [{ role: 'user', content: `Find recent news reports of: ${query}. List the article URLs.` }],
+      ...({ plugins: [{ id: 'web', engine: 'exa', max_results: maxResults }], usage: { include: true } } as Record<string, unknown>),
+    });
+  } catch (e) {
+    noteOpenRouterFailure(e);
+    throw e;
+  }
+  noteOpenRouterSuccess();
   const message = completion.choices[0]?.message as { annotations?: { type: string; url_citation?: { url: string } }[] } | undefined;
   const urls = [...new Set((message?.annotations ?? []).filter((a) => a.type === 'url_citation' && a.url_citation?.url).map((a) => a.url_citation!.url))];
   return { urls, costUsd: Number((completion.usage as { cost?: number } | undefined)?.cost ?? 0) };
