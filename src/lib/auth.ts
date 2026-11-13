@@ -4,6 +4,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import bcrypt from 'bcryptjs';
 import { prisma } from './db';
 import { PrismaAdapterWithIntIds } from './prisma-adapter-int';
+import { refreshTokenTier, type LoadUser } from './auth-tier';
 
 // Extend the built-in session types
 declare module 'next-auth' {
@@ -14,6 +15,8 @@ declare module 'next-auth' {
       name?: string | null;
       image?: string | null;
       accessTier: 'FREE' | 'PREMIUM' | 'PRO';
+      /** When a paid Club period ends (ISO date); null for none or hand-set. */
+      subscriptionEnd?: string | null;
     };
   }
 
@@ -26,8 +29,17 @@ declare module 'next-auth/jwt' {
   interface JWT {
     id: string;
     accessTier: 'FREE' | 'PREMIUM' | 'PRO';
+    subscriptionEnd?: string | null;
+    /** When accessTier was last read from the database (ms). See lib/auth-tier.ts. */
+    tierCheckedAt?: number;
   }
 }
+
+const tierSelect = { id: true, access_tier: true, subscription_end: true } as const;
+const loadTierRow: LoadUser = (by) =>
+  'id' in by
+    ? prisma.users.findUnique({ where: { id: by.id }, select: tierSelect })
+    : prisma.users.findUnique({ where: { email: by.email }, select: tierSelect });
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapterWithIntIds(prisma),
@@ -106,31 +118,21 @@ export const authOptions: NextAuthOptions = {
     error: '/login',
   },
   callbacks: {
-    async jwt({ token, user, account }) {
-      // Initial sign in
-      if (user) {
-        token.id = user.id;
-        token.accessTier = user.accessTier || 'FREE';
-      }
-
-      // For OAuth users, fetch the access tier from DB
-      if (account?.provider === 'google' && token.email) {
-        const dbUser = await prisma.users.findUnique({
-          where: { email: token.email },
-          select: { id: true, access_tier: true },
-        });
-        if (dbUser) {
-          token.id = dbUser.id.toString();
-          token.accessTier = dbUser.access_tier;
-        }
-      }
-
-      return token;
+    async jwt({ token, user, trigger }) {
+      // One path for every provider (credentials, code, Google): the tier is read from the
+      // database at sign-in, again every few minutes, and at once when the page calls
+      // useSession().update() (after paying for the Club). An ended Club shows as FREE.
+      return refreshTokenTier(token, {
+        load: loadTierRow,
+        trigger,
+        signedIn: user ? { id: String(user.id), accessTier: user.accessTier } : undefined,
+      });
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id;
         session.user.accessTier = token.accessTier;
+        session.user.subscriptionEnd = token.subscriptionEnd ?? null;
       }
       return session;
     },

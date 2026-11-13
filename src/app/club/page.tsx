@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
@@ -54,7 +55,10 @@ export default function ClubPage() {
               who want to chip in anyway, and it comes with the things that take real work to run.
             </p>
             <div className="mt-10">
-              <JoinTheClub monthlyPence={CLUB_MONTHLY_PENCE} yearlyPence={CLUB_YEARLY_PENCE} />
+              {/* Suspense: the widget reads ?joined=1 (back from Stripe) with useSearchParams. */}
+              <Suspense fallback={<div className="h-14" />}>
+                <JoinTheClub monthlyPence={CLUB_MONTHLY_PENCE} yearlyPence={CLUB_YEARLY_PENCE} />
+              </Suspense>
             </div>
           </div>
         </section>

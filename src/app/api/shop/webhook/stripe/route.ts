@@ -32,6 +32,9 @@ export async function POST(request: Request) {
   if (event.type !== 'checkout.session.completed') return NextResponse.json({ ignored: event.type });
 
   const session = event.data.object as Stripe.Checkout.Session;
+  // FMR Club checkouts reach this endpoint too. The Club webhook handles them; a 400 here
+  // only made Stripe retry for days. Shop baskets are 'payment' mode and carry on below.
+  if (session.mode === 'subscription') return NextResponse.json({ ignored: 'subscription' });
   const email = session.customer_details?.email;
   const ship = shippingOf(session as Parameters<typeof shippingOf>[0]);
   if (!email || !ship?.address) {

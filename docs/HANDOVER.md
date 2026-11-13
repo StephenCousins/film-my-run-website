@@ -2,6 +2,22 @@
 
 Dated status entries moved out of CLAUDE.md. Newest first.
 
+## 13 Nov 2026: FMR Club shows straight after paying (branch `club-tier-refresh`)
+
+- **The bug.** Dave Westhead paid for the Club on 10 Nov; the webhook set him PRO within seconds, but the website
+  still showed him as free. The sign-in cookie copied the tier only at sign-in, and he had signed in 50 seconds
+  before paying.
+- **Fix.** The cookie now re-reads the tier from the database every 2 minutes, and at once when a page calls
+  `useSession().update()` (`src/lib/auth-tier.ts`). An ended Club (PRO with `subscription_end` passed) now shows as
+  FREE on the website too, matching the app. Nothing is written to the database for that.
+- **`/club?joined=1`** refreshes the session up to 5 times, 2 seconds apart, showing "Switching on your
+  membership…" instead of the join buttons, then a welcome; if the webhook still hasn't landed, a calm "payment went
+  through, refresh or sign out and in" message.
+- **Shop webhook** now answers 200 `{ ignored: 'subscription' }` for Club checkouts instead of a 400 that Stripe kept
+  retrying. Shop baskets missing an address still get 400.
+- **App API unchanged**: it already read the database on every request.
+- Existing cookies pick up the right tier within 2 minutes of the deploy; nobody needs to sign in again.
+
 ## 11 Nov 2026: RunGuessr live; games restyled
 
 - **RunGuessr** (`/games/runguessr`): daily race quiz, five races (photo, elevation profile, course outline), four

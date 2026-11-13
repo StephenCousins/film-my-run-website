@@ -52,6 +52,11 @@ After adding a dependency, run `npm install` so `package-lock.json` is in sync b
   response is a real image (>5KB; YouTube also serves a ~1KB grey placeholder).
 - **Strava embeds need a per-activity `data-token`** on recent activities, else the iframe shows "Error code: EEE".
   Store it in the post's `meta.strava_embed_token`; `applyStravaEmbedToken()` injects it at render.
+- **FMR Club access on the website** lives in the NextAuth JWT cookie, which re-reads `access_tier` and
+  `subscription_end` from the database every 2 minutes and at once on `useSession().update()`
+  (`src/lib/auth-tier.ts`). A PRO whose `subscription_end` has passed shows as FREE, the same rule as `toMember`.
+  `/club?joined=1` (Stripe's success page) calls `update()` a few times while the Club webhook lands. The app API
+  doesn't use the cookie: it reads the database on every request.
 - **LLM calls go through `src/lib/llm.ts`.** News writing and checking: `claude -p` first, then the Max plan's API
   credit (`ANTHROPIC_CREDIT_API_KEY`), then OpenRouter. News sort and group: OpenRouter first (Jev, then Gemini),
   falling back to `claude -p` then the credit only when OpenRouter fails; a dead key switches OpenRouter off for the
