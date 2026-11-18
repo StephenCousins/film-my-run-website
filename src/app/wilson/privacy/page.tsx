@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 export const metadata: Metadata = {
   title: 'Wilson Index: Privacy Policy',
   alternates: { canonical: 'https://filmmyrun.com/wilson/privacy' },
-  description: 'How the Wilson Index app for iPhone handles your data. Short version: it stays on your phone, unless you choose to use Ask Wilson.',
+  description: 'How the Wilson Index app for iPhone handles your data. Short version: it stays on your phone. Only your parkrun ID, to fetch your results, and Ask Wilson questions, if you use it, reach our servers.',
 };
 
 const CONTACT = 'stephen@filmmyrun.com';
@@ -37,12 +37,13 @@ export default function WilsonPrivacyPage() {
             <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-8">Wilson Index: Privacy Policy</h1>
 
             <div className="prose prose-zinc dark:prose-invert max-w-none">
-              <p className="text-secondary text-sm mb-8">Last updated: 25 October 2026</p>
+              <p className="text-secondary text-sm mb-8">Last updated: 18 November 2026</p>
 
               <Section title="The short version">
                 <P>
                   Wilson Index has no account, no sign-in, no analytics and no ads. Everything you put into the app stays
-                  on your iPhone, with one optional exception: if you use Ask Wilson, your questions are sent to our
+                  on your iPhone, with two exceptions: if you connect your parkrun ID, it is sent to our server to fetch
+                  your results and isn&apos;t stored (section 3), and if you use Ask Wilson, your questions are sent to our
                   server (section 8).
                 </P>
               </Section>
@@ -62,16 +63,19 @@ export default function WilsonPrivacyPage() {
                   <li>Your parkrun results, if you add them, which the app uses for your Wilson index, Match and new events</li>
                 </List>
                 <P>
-                  None of this is sent to us or anyone else, apart from the facts that go with a question if you use Ask Wilson (section 8). Deleting the app deletes it. The home screen widget reads
+                  None of this is sent to us or anyone else, apart from your parkrun ID (section 3) and the facts that go with a question if you use Ask Wilson (section 8). Deleting the app deletes it. The home screen widget reads
                   the same data on the phone.
                 </P>
               </Section>
 
-              <Section title="3. Importing your results">
+              <Section title="3. Your parkrun results">
                 <P>
-                  If you import from parkrun, the app opens parkrun&apos;s own results page for your parkrun ID inside the
-                  app and reads the table on your phone. That page comes straight from parkrun, so parkrun&apos;s privacy
-                  policy covers it. Nothing from it reaches us. You can also paste your results in or type them by hand.
+                  If you connect your parkrun ID, the app sends it to our server, which reads your public results from
+                  parkrun&apos;s website and passes them back to the app. That happens when you connect, when you open
+                  the app (at most once an hour) and on Saturday afternoons. Only the ID is sent. The server keeps the
+                  results in memory for up to an hour so it doesn&apos;t ask parkrun twice, then forgets them. It never
+                  writes your ID down or logs it. The app never opens parkrun&apos;s website, and sets or reads no
+                  cookies. Disconnect on the You tab stops it.
                 </P>
               </Section>
 
