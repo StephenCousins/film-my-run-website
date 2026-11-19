@@ -25,7 +25,7 @@ to two photos, best finishes, a live UTMB index and "In the news". The spec is
   so a weekend's result shows by Monday. No AI, no cost.
 - **Automatic pages:** `src/lib/runners/auto.ts` writes pages for runners new
   stories are about.
-  - At most 6 attempts a day and $1.50 per run, inside the £10 ceiling.
+  - At most 6 attempts a day and $1.50 per run, inside the £15 ceiling.
   - An 8-minute limit.
   - It never overwrites an existing slug and skips names that failed in the
     last 14 days.

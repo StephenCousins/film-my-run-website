@@ -10,7 +10,8 @@ import { prisma } from '@/lib/db';
 import { londonClock } from '@/lib/push/news-push';
 import { isCompletedDailyRun, londonMidnight } from '@/lib/news/daily-run';
 import { NEWS_CONFIG } from '@/lib/news/config';
-import { errorText, NewsRunError, runNews } from '@/lib/news/run';
+import { claudeCreditSpentThisRun, resetOpenRouterHealth } from '@/lib/llm';
+import { claudeMonthSpentUsd, errorText, newsRunRow, runNews, startClaudeCreditBudget } from '@/lib/news/run';
 import { liveMonthlyDeps, monthlyRefresh, type MonthlySummary } from '@/lib/runners/monthly';
 import { refreshPersonalBests } from '@/lib/runners/pbs';
 import { refreshUtmbIndexes } from '@/lib/runners/refresh';
@@ -50,10 +51,12 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
     console.log('No run yet today (the scheduled one was skipped): running now.');
   }
   const log = await runNews({ now: new Date(), dryRun, outDir, maxStories });
-  await prisma.news_runs.create({ data: { dry_run: dryRun, cost_usd: log.costUsd, summary: log as never } });
+  await prisma.news_runs.create({ data: newsRunRow(dryRun, { log }) });
   const text = [
-    `${dryRun ? `DRY RUN (stories in ${outDir}). ` : ''}${log.published.length} published, ${log.notPublished.length} not published, ${log.itemsSeen} items seen, $${log.costUsd.toFixed(3)}.`,
-    log.stoppedByCeiling ? `Stopped at the £${NEWS_CONFIG.monthlyCeilingGbp} monthly ceiling.` : '',
+    `${dryRun ? `DRY RUN (stories in ${outDir}). ` : ''}${log.published.length} published, ${log.notPublished.length} not published, ${log.itemsSeen} items seen.`,
+    openRouterLine(log.costUsd),
+    claudeCreditLine(log.claudeCostUsd, log.claudeMonthBeforeUsd),
+    log.stoppedByCeiling ? `Stopped at the £${NEWS_CONFIG.monthlyCeilingGbp} monthly ceiling (OpenRouter spend).` : '',
     ...runLines(log as unknown as RunSummary, dryRun),
   ].filter(Boolean).join('\n');
   console.log(text);
@@ -84,21 +87,35 @@ const outDir = dryRun ? `news-dry-run/${new Date().toISOString().slice(0, 10)}` 
   console.error(e);
   // Best effort from here on: record what the failed run spent, and say it failed. Neither may hide the original error.
   const message = errorText(e);
-  const spent = e instanceof NewsRunError ? e.log.costUsd : 0;
-  await prisma.news_runs.create({ data: { dry_run: dryRun, cost_usd: spent, summary: { error: message } } }).catch((err) => console.error('Could not record the failed run:', err));
-  await report(`Film My Run news${dryRun ? ' (dry run)' : ''}: run failed`, `News run failed: ${message}\nSpent before failing: $${spent.toFixed(3)}.`).catch((err) => console.error('Could not send the failure email:', err));
+  const row = newsRunRow(dryRun, { error: e });
+  await prisma.news_runs.create({ data: row }).catch((err) => console.error('Could not record the failed run:', err));
+  await report(`Film My Run news${dryRun ? ' (dry run)' : ''}: run failed`, `News run failed: ${message}\nSpent before failing: OpenRouter (paid) $${row.cost_usd.toFixed(3)}, Claude API credit $${row.claude_cost_usd.toFixed(3)}.`).catch((err) => console.error('Could not send the failure email:', err));
   await prisma.$disconnect().catch(() => {});
   process.exit(1);
 });
 
+/** The run's OpenRouter spend: real money, and the only spend the monthly ceiling counts. */
+function openRouterLine(usd: number): string {
+  return `OpenRouter (paid, counts towards the £${NEWS_CONFIG.monthlyCeilingGbp} monthly ceiling): $${usd.toFixed(3)}.`;
+}
+
+/** The run's Claude API key spend, on its own monthly credit (not the ceiling). */
+function claudeCreditLine(usd: number, monthBefore?: number): string {
+  const month = monthBefore === undefined ? '' : ` (month so far $${(monthBefore + usd).toFixed(2)} of $${NEWS_CONFIG.claudeCreditMonthlyUsd})`;
+  return `Claude API credit used this run: $${usd.toFixed(3)}${month}.`;
+}
+
 /**
  * The monthly runner refresh. Its spend goes into a news_runs row after every bio (so the
- * monthly ceiling sees it even if the job is killed), then a short email says what it did.
+ * monthly ceiling and the Claude credit budget see it even if the job is killed), then a
+ * short email says what it did. Its own run: the Claude key's state and spend start afresh.
  */
 async function runMonthlyRefresh(): Promise<void> {
+  resetOpenRouterHealth();
+  const claudeBefore = await startClaudeCreditBudget(() => claudeMonthSpentUsd(new Date()));
   let rowId: number | null = null;
   const record = async (r: MonthlySummary) => {
-    const data = { cost_usd: r.costUsd, summary: { monthlyRefresh: r } as never };
+    const data = { cost_usd: r.costUsd, claude_cost_usd: claudeCreditSpentThisRun(), summary: { monthlyRefresh: r } as never };
     if (rowId === null) rowId = (await prisma.news_runs.create({ data: { dry_run: false, ...data } })).id;
     else await prisma.news_runs.update({ where: { id: rowId }, data });
   };
@@ -112,7 +129,9 @@ async function runMonthlyRefresh(): Promise<void> {
     const r = await monthlyRefresh({ ...liveMonthlyDeps(), progress: record });
     await record(r);
     text = [
-      `Monthly runner refresh: ${r.biosRefreshed.length} bios refreshed${r.biosRefreshed.length ? ` (${r.biosRefreshed.join(', ')})` : ''}, ${r.skipped.length} skipped. $${r.costUsd.toFixed(2)}.`,
+      `Monthly runner refresh: ${r.biosRefreshed.length} bios refreshed${r.biosRefreshed.length ? ` (${r.biosRefreshed.join(', ')})` : ''}, ${r.skipped.length} skipped.`,
+      openRouterLine(r.costUsd),
+      claudeCreditLine(claudeCreditSpentThisRun(), claudeBefore),
       ...r.skipped.map((x) => `  ${x.slug}: ${x.reason}`),
       r.cutShort ? 'Cut short by the budget or the time limit.' : '',
       pbLine,
@@ -141,7 +160,7 @@ function runLines(log: RunSummary, dryRun = false, brief = false): string[] {
     ...(log.published ?? []).map((p) => `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
     ...(log.notPublished ?? log.held ?? []).map((h) => `Not published: ${h.headline} (${h.reason})`),
     ...((log as { profiles?: { name: string; slug?: string; reason?: string }[] }).profiles ?? []).map((p) => p.slug ? `Runner page: ${p.name} https://filmmyrun.com/runners/${p.slug}` : `No runner page for ${p.name} (${p.reason})`),
-    passedOver ? `${passedOver} more passed the sort but weren't written (cap, too old, or no group).` : '',
+    passedOver ? `${passedOver} more passed the sort but weren't written (cap, below minimum importance, too old, or no group).` : '',
   ].filter(Boolean);
   return [
     ...(log.published ?? []).map((p) => dryRun ? `Would publish: ${p.title}` : `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
@@ -157,12 +176,13 @@ function runLines(log: RunSummary, dryRun = false, brief = false): string[] {
 async function weeklyReport(extra = '') {
   const since = new Date(Date.now() - 7 * 24 * 3600 * 1000);
   const runs = await prisma.news_runs.findMany({ where: { dry_run: false, started_at: { gte: since } }, orderBy: { started_at: 'asc' } });
-  const logs = runs.map((r) => ({ at: r.started_at, cost: Number(r.cost_usd ?? 0), log: (r.summary ?? {}) as RunSummary }));
+  const logs = runs.map((r) => ({ at: r.started_at, cost: Number(r.cost_usd ?? 0), claudeCost: Number(r.claude_cost_usd ?? 0), log: (r.summary ?? {}) as RunSummary }));
   const published = logs.reduce((n, r) => n + (r.log.published?.length ?? 0), 0);
   const notPublished = logs.reduce((n, r) => n + (r.log.notPublished ?? r.log.held ?? []).length, 0);
   const cost = logs.reduce((n, r) => n + r.cost, 0);
+  const claudeCost = logs.reduce((n, r) => n + r.claudeCost, 0);
   const text = [
-    `The week to ${new Date().toISOString().slice(0, 10)}: ${runs.length} runs, ${published} published, ${notPublished} not published, $${cost.toFixed(2)}.`,
+    `The week to ${new Date().toISOString().slice(0, 10)}: ${runs.length} runs, ${published} published, ${notPublished} not published. OpenRouter (paid) $${cost.toFixed(2)}, Claude API credit $${claudeCost.toFixed(2)}.`,
     ...(extra ? [extra] : []),
     ...logs.flatMap((r) => [
       '',

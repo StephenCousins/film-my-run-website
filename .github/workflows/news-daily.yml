@@ -27,13 +27,16 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22, cache: npm }
       - run: npm ci && npx prisma generate
-      # Writing and checking run on the owner's Claude subscription; OpenRouter if this fails.
+      # Claude first, OpenRouter only as the backup (docs/llm.md, 19 Nov 2026). Writing and checking run on the
+      # owner's Claude subscription (this CLI) first; sort, group and search on the Claude API key first.
       - run: npm install -g @anthropic-ai/claude-code
       - run: npm run news:daily -- ${{ (github.event_name == 'workflow_dispatch' && inputs.dry_run) && '--dry-run' || '' }} ${{ (github.event_name == 'workflow_dispatch' && inputs.max_stories != '') && format('--max {0}', inputs.max_stories) || '' }} ${{ (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.if_not_run_today)) && '--if-not-run-today' || '' }}
         env:
           DATABASE_URL: ${{ secrets.DATABASE_PUBLIC_URL }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # An unset secret arrives as '': the code treats that as no key and skips to the next route.
+          ANTHROPIC_CREDIT_API_KEY: ${{ secrets.ANTHROPIC_CREDIT_API_KEY }}
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}

@@ -3,7 +3,7 @@ import { prisma } from '@/lib/db';
 import { extractPage, fetchHtml } from './gather';
 import type { RunDeps } from './run';
 import { publishedAt } from './search';
-import { sortItemJev } from './sort';
+import { sortItem } from './sort';
 import type { Candidate, Verdict } from './types';
 
 /**
@@ -58,7 +58,7 @@ export function storyDeps(
   candidates: Candidate[],
   opts: { note?: string; headline?: string; sort?: RunDeps['sort'] } = {}
 ): Partial<RunDeps> {
-  const sort = opts.sort ?? ((c: Candidate) => sortItemJev(c));
+  const sort = opts.sort ?? ((c: Candidate) => sortItem(c));
   return {
     gather: async () => candidates,
     sort: async (c) => {

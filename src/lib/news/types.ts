@@ -74,7 +74,12 @@ export interface RunLog {
   /** Picked but not published, with why: it failed the checks after every round of fixes, or the writer refused. Never held for review (Stephen, 27 Sep 2026). */
   notPublished: { headline: string; reason: string; storyId?: number }[];
   published: { slug: string; title: string }[];
+  /** OpenRouter (paid) spend this run: what the monthly ceiling counts (news_runs.cost_usd). */
   costUsd: number;
+  /** Claude API key spend this run, on its own $100/month credit, not the ceiling (news_runs.claude_cost_usd). */
+  claudeCostUsd: number;
+  /** Claude API key spend this month before this run, for the report. */
+  claudeMonthBeforeUsd?: number;
   stoppedByCeiling: boolean;
   /** Runner pages made for people new stories named (runners/auto.ts). */
   profiles: { name: string; slug?: string; reason?: string }[];

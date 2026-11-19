@@ -9,6 +9,7 @@ import { parseUserQuery } from '@/lib/shoes/parseUserQuery';
 import { evaluate, type CandidateInput } from '@/lib/shoes/publish/gate';
 import { publishCandidate } from '@/lib/shoes/publish/publish';
 import { findAndStoreImage } from '@/lib/shoes/images';
+import { llmConfigured } from '@/lib/llm';
 
 export const maxDuration = 120;
 export const dynamic = 'force-dynamic';
@@ -50,7 +51,8 @@ export async function POST(req: NextRequest) {
   if (!session?.user?.id) return json({ error: 'Sign in required' }, 401);
   const userId = parseInt(session.user.id);
 
-  if (!process.env.OPENROUTER_API_KEY || (!process.env.BRAVE_SEARCH_API_KEY && !process.env.SERPER_API_KEY)) {
+  // Either LLM route will do: the Claude key is tried first, OpenRouter is the backup (llm.ts).
+  if (!llmConfigured() || (!process.env.BRAVE_SEARCH_API_KEY && !process.env.SERPER_API_KEY)) {
     return json({ error: 'Shoe suggestion service is not configured' }, 503);
   }
 

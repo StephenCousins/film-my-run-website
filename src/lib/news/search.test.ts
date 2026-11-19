@@ -1,4 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
+
+// The live search, with both providers down: no network.
+vi.mock('openai', () => ({ default: class { chat = { completions: { create: async () => { throw Object.assign(new Error('401 User not found.'), { status: 401 }); } } }; } }));
+vi.mock('@anthropic-ai/sdk', () => ({ default: class { messages = { stream: () => ({ finalMessage: async () => { throw new Error('529 overloaded'); } }) }; } }));
+
 import { moreCoverage, publishedAt } from './search';
 import type { Bundle, Candidate } from './types';
 
@@ -47,5 +52,26 @@ describe('more coverage when the search is down', () => {
     expect(fetchHtml).not.toHaveBeenCalled();
     expect(warn.mock.calls[0][0]).toMatch(/search: skipped .*User not found/);
     warn.mockRestore();
+  });
+
+  it('the live search with the Claude key and OpenRouter both failing: no extra items, the story goes ahead', async () => {
+    process.env.ANTHROPIC_CREDIT_API_KEY = 'c';
+    process.env.OPENROUTER_API_KEY = 'k';
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    const r = await moreCoverage(bundle, now);
+    expect(r).toEqual({ items: [], costUsd: 0 });
+    expect(warn.mock.calls.at(-1)![0]).toMatch(/search: skipped .*every search provider failed.*529 overloaded.*User not found/);
+    warn.mockRestore();
+    delete process.env.ANTHROPIC_CREDIT_API_KEY;
+  });
+
+  it('drops social and video sites, subdomains included, whatever the search returns', async () => {
+    const fetchHtml = vi.fn(async () => body('2026-09-22T10:00:00Z'));
+    const r = await moreCoverage(bundle, now, {
+      search: async () => ({ urls: ['https://m.youtube.com/watch?v=1', 'https://en.wikipedia.org/wiki/Pennine_Way', 'https://x.com/a'], costUsd: 0 }),
+      fetchHtml,
+    });
+    expect(r.items).toEqual([]);
+    expect(fetchHtml).not.toHaveBeenCalled();
   });
 });

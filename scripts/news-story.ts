@@ -3,7 +3,7 @@
 // Run:   npm run news:story -- <url> [<url> ...] [--note "lead with the British angle"] [--headline "..."] [--dry-run]
 // Needs: DATABASE_URL, OPENROUTER_API_KEY and the R2_* keys (see .claude/skills/news-story/SKILL.md).
 import { prisma } from '@/lib/db';
-import { errorText, NewsRunError, runNews } from '@/lib/news/run';
+import { errorText, newsRunRow, runNews } from '@/lib/news/run';
 import { storyCandidates, storyDeps } from '@/lib/news/story';
 
 const args = process.argv.slice(2);
@@ -24,17 +24,16 @@ const urls = args.filter((a, i) => /^https?:\/\//.test(a) && !['--note', '--head
   for (const c of candidates) console.log(`${c.text ? 'read' : 'could not read'}: ${c.source} · ${c.title}`);
   const outDir = dryRun ? `news-dry-run/story-${now.toISOString().slice(0, 16).replace(/[:T]/g, '-')}` : undefined;
   const log = await runNews({ now, dryRun, outDir, maxStories: 1, deps: storyDeps(candidates, { note, headline }) });
-  await prisma.news_runs.create({ data: { dry_run: dryRun, cost_usd: log.costUsd, summary: { ...log, onDemand: urls } as never } });
+  await prisma.news_runs.create({ data: newsRunRow(dryRun, { log }, { onDemand: urls }) });
   for (const p of log.published) console.log(dryRun ? `WOULD PUBLISH: ${p.title} (draft in ${outDir})` : `PUBLISHED: https://filmmyrun.com/news/${p.slug}`);
   for (const h of log.notPublished) console.log(`NOT PUBLISHED: ${h.headline}: ${h.reason}`);
   for (const s of log.skipped) console.log(`NOT WRITTEN: ${s.headline}: ${s.reason}`);
-  console.log(`Cost: $${log.costUsd.toFixed(3)}`);
+  console.log(`Cost: OpenRouter (paid) $${log.costUsd.toFixed(3)}, Claude API credit $${log.claudeCostUsd.toFixed(3)}`);
   await prisma.$disconnect();
   process.exit(log.published.length ? 0 : 2);
 })().catch(async (e) => {
   console.error(`FAILED: ${errorText(e)}`);
-  const spent = e instanceof NewsRunError ? e.log.costUsd : 0;
-  await prisma.news_runs.create({ data: { dry_run: dryRun, cost_usd: spent, summary: { error: errorText(e), onDemand: urls } } }).catch(() => {});
+  await prisma.news_runs.create({ data: newsRunRow(dryRun, { error: e }, { onDemand: urls }) }).catch(() => {});
   await prisma.$disconnect().catch(() => {});
   process.exit(1);
 });

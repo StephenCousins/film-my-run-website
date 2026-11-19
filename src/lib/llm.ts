@@ -3,9 +3,15 @@ import OpenAI from 'openai';
 import { spawn } from 'node:child_process';
 import { tmpdir } from 'node:os';
 import { CHECK_MODEL, WRITE_MODEL } from './news/models';
+import { claudeCostUsd } from './llm-prices';
 
 /**
- * LLM calls for the Shoe Finder, routed through OpenRouter.
+ * LLM calls for the site and the news pipeline. Claude on the API key
+ * (ANTHROPIC_CREDIT_API_KEY) is tried first almost everywhere, OpenRouter is
+ * the backup; the per-job order is in docs/llm.md. The notes below are about
+ * the OpenRouter models.
+ *
+ * Originally the Shoe Finder's calls, routed through OpenRouter.
  *
  * These are small, mechanical jobs — pull JSON out of a search snippet, score a
  * review, answer yes/no — so they run on a cheap model rather than a frontier
@@ -76,14 +82,142 @@ const CLAUDE_ROUTES: Record<string, ClaudeRoute> = {
 };
 const CLAUDE_CHEAP: ClaudeRoute = { model: 'claude-haiku-5-5', effort: 'low' };
 
+/**
+ * The Claude API key, or null when it is missing, empty or blank. GitHub passes
+ * an unset secret as '', so an empty key must count as "not set", not as a key.
+ */
+export function claudeApiKey(): string | null {
+  return process.env.ANTHROPIC_CREDIT_API_KEY?.trim() || null;
+}
+
+/** Is any LLM route configured (the Claude key or OpenRouter)? */
+export function llmConfigured(): boolean {
+  return !!(claudeApiKey() || process.env.OPENROUTER_API_KEY?.trim());
+}
+
+/*
+ * "Claude API key not set" is logged once per stage per run, not once per item
+ * (a run sorts dozens). resetOpenRouterHealth() clears it with the rest of the
+ * per-run state.
+ */
+const keySkipLogged = new Set<string>();
+function logKeySkip(label: string, next: string): void {
+  if (keySkipLogged.has(label)) return;
+  keySkipLogged.add(label);
+  console.log(`${label}: Claude API key not set (ANTHROPIC_CREDIT_API_KEY), skipping to ${next}`);
+}
+
+/*
+ * The Claude API key's own spend and budget (19 Nov 2026, Stephen: "I get a $100
+ * free monthly spend on my Claude API key as part of my Claude Subscription. We can
+ * use all of that before the fallback to OpenRouter.").
+ *
+ * - Key calls are NOT part of the £15 news ceiling (that is OpenRouter, real money):
+ *   they never go into a result's `costUsd`. What they cost (llm-prices.ts) is added
+ *   up here instead; the news run copies claudeCreditSpentThisRun() into
+ *   news_runs.claude_cost_usd.
+ * - A news run sets the month's budget (setClaudeCreditBudget, NEWS_CONFIG
+ *   .claudeCreditMonthlyUsd) with what earlier runs this month spent. Once that plus
+ *   this run's spend reaches it, the key is skipped for the rest of the run. The web
+ *   app never sets a budget, so it is not gated by this.
+ * - The website on Railway uses the same credit and the news run can't see that
+ *   spend, so the API's own answer counts too: a billing or credit-exhausted error
+ *   (402, a 400 about the credit balance or billing) or a bad key (401/403) switches
+ *   the key off straight away; rate limits and overload (429, 529) fall through for
+ *   that call, and three in a row switch it off. One success resets the count.
+ * - Off lasts for the run: resetOpenRouterHealth() at the start of every run turns it
+ *   back on. In the long-lived web server, which never resets, it expires after an
+ *   hour (CLAUDE_KEY_OFF_MS), so a new month's credit is picked up again.
+ */
+let claudeSpent = 0;
+let claudeBudget: { monthToDateUsd: number; budgetUsd: number } | null = null;
+let claudeKeyOff: { reason: string; until: number } | null = null;
+let claudeBusyInARow = 0;
+const CLAUDE_BUSY_BEFORE_OFF = 3;
+const CLAUDE_KEY_OFF_MS = 60 * 60_000;
+
+/** What Claude API key calls have cost since the last reset (start of the run), in US dollars. */
+export function claudeCreditSpentThisRun(): number {
+  return claudeSpent;
+}
+
+/**
+ * The key's monthly budget for this run: `monthToDateUsd` is what earlier runs this
+ * month spent on it (news_runs.claude_cost_usd). Cleared by resetOpenRouterHealth().
+ */
+export function setClaudeCreditBudget(monthToDateUsd: number, budgetUsd: number): void {
+  claudeBudget = { monthToDateUsd, budgetUsd };
+}
+
+function switchClaudeKeyOff(reason: string): void {
+  if (claudeKeyOff) return;
+  claudeKeyOff = { reason, until: Date.now() + CLAUDE_KEY_OFF_MS };
+  console.warn(`Claude API key switched off for the rest of this run (${reason}), using the next route`);
+}
+
+/** Why the Claude API key is not being used just now (switched off, budget reached), or null. */
+export function claudeKeyOffReason(): string | null {
+  if (claudeKeyOff && Date.now() >= claudeKeyOff.until) claudeKeyOff = null;
+  if (!claudeKeyOff && claudeBudget && claudeBudget.monthToDateUsd + claudeSpent >= claudeBudget.budgetUsd) {
+    const { monthToDateUsd, budgetUsd } = claudeBudget;
+    switchClaudeKeyOff(`monthly Claude credit budget reached: $${(monthToDateUsd + claudeSpent).toFixed(2)} of $${budgetUsd}`);
+  }
+  return claudeKeyOff?.reason ?? null;
+}
+
+/** The key, or null when it is not set or not to be used just now (claudeKeyOffReason). */
+function usableClaudeKey(): string | null {
+  const key = claudeApiKey();
+  return key && !claudeKeyOffReason() ? key : null;
+}
+
+/** Rate limited or overloaded: worth trying again later, not on this call. */
+export function isClaudeBusy(e: unknown): boolean {
+  const status = (e as { status?: unknown })?.status;
+  if (status === 429 || status === 529) return true;
+  const msg = e instanceof Error ? e.message : String(e);
+  return /\b(429|529)\b|rate.?limit|overloaded|too many requests/i.test(msg);
+}
+
+/** Anthropic says the credit is gone, billing is off, or the key is bad: retrying won't help this run. */
+export function isClaudeCreditProblem(e: unknown): boolean {
+  if (isClaudeBusy(e)) return false;
+  const status = (e as { status?: unknown })?.status;
+  if (status === 401 || status === 402 || status === 403) return true;
+  const msg = e instanceof Error ? e.message : String(e);
+  return /\b40[123]\b|credit balance|billing|\bcredits?\b|usage limit|spend(ing)? limit|payment required/i.test(msg);
+}
+
+/** Record a failed key call; switches the key off for the run when it should. */
+function noteClaudeFailure(e: unknown): void {
+  if (isClaudeBusy(e)) {
+    claudeBusyInARow += 1;
+    if (claudeBusyInARow >= CLAUDE_BUSY_BEFORE_OFF) switchClaudeKeyOff(`${claudeBusyInARow} rate limits or overloads in a row, last: ${shortError(e)}`);
+  } else if (isClaudeCreditProblem(e)) switchClaudeKeyOff(`credit, billing or key problem: ${shortError(e)}`);
+}
+
 async function completeViaClaude(
+  route: ClaudeRoute,
+  opts: CompleteOptions,
+  extra: { imageUrl?: string; schema?: object } = {},
+): Promise<string | null> {
+  return (await completeViaClaudeCosted(route, opts, extra))?.text ?? null;
+}
+
+/**
+ * completeViaClaude for the news pipeline. What the call cost (llm-prices.ts) goes
+ * to claudeCreditSpentThisRun(), never to the news ceiling, so nothing is returned
+ * but the text. Null: no usable key, an API error, or a reply that didn't finish.
+ */
+async function completeViaClaudeCosted(
   route: ClaudeRoute,
   { prompt, maxTokens, system }: CompleteOptions,
   extra: { imageUrl?: string; schema?: object } = {},
-): Promise<string | null> {
-  if (!process.env.ANTHROPIC_CREDIT_API_KEY) return null;
+): Promise<{ text: string } | null> {
+  const apiKey = usableClaudeKey();
+  if (!apiKey) return null;
   try {
-    const client = new Anthropic({ apiKey: process.env.ANTHROPIC_CREDIT_API_KEY, maxRetries: 1 });
+    const client = new Anthropic({ apiKey, maxRetries: 1 });
     const message = await client.messages
       .stream({
         model: route.model,
@@ -102,13 +236,17 @@ async function completeViaClaude(
         }],
       })
       .finalMessage();
+    claudeBusyInARow = 0;
+    // Billed whatever the reply turns out to be (unfinished, empty, not JSON).
+    claudeSpent += claudeCostUsd(route.model, message.usage);
     if (message.stop_reason !== 'end_turn') throw new Error(`stop_reason ${message.stop_reason}`);
     const text = message.content.map((b) => (b.type === 'text' ? b.text : '')).join('').trim();
     if (!text) throw new Error('empty reply');
     console.log(`claude-credit ok (${route.model})`);
-    return text;
+    return { text };
   } catch (e) {
-    console.log(`claude-credit failed (${route.model}): ${(e as Error).message.split('\n')[0].slice(0, 200)}, trying the next route`);
+    noteClaudeFailure(e);
+    console.log(`claude-credit failed (${route.model}): ${shortError(e)}, trying the next route`);
     return null;
   }
 }
@@ -237,10 +375,10 @@ const runClaude: ClaudeRunner = (args, stdin, timeoutMs) =>
  * The same JSON call through Claude Code headless (`claude -p`), on the owner's
  * subscription via CLAUDE_CODE_OAUTH_TOKEN. Null means "try the next route":
  * CLI missing, error, timeout, usage limit, or a reply that isn't JSON.
- * `cliModel` is the CLI's model alias: opus for writing and checking, sonnet
- * when it stands in for the cheap news sorter.
- * Cost is 0: the subscription has no marginal cost, and the news ceiling must
- * count only real OpenRouter spend.
+ * `cliModel` is the CLI's model alias: opus for writing, checking and grouping,
+ * sonnet for the news sorter.
+ * Cost is 0: the subscription has no marginal cost. The news ceiling counts only
+ * OpenRouter; the Claude API key has its own budget (claudeCreditSpentThisRun).
  */
 export async function completeJsonViaClaude<T>(
   { prompt, system, schema }: JsonCallOptions,
@@ -277,17 +415,20 @@ export async function completeJson<T>(
   run: ClaudeRunner = runClaude,
 ): Promise<{ data: T | null; costUsd: number; raw: string }> {
   const { model, prompt, system, maxTokens, schema } = opts;
-  if (process.env.CLAUDE_CODE_OAUTH_TOKEN && (model === WRITE_MODEL || model === CHECK_MODEL)) {
+  if (process.env.CLAUDE_CODE_OAUTH_TOKEN?.trim() && (model === WRITE_MODEL || model === CHECK_MODEL)) {
     const viaClaude = await completeJsonViaClaude<T>(opts, run);
     if (viaClaude) return viaClaude;
   }
-  // Writing and checking (news, runner profiles) next try the API credit, so a
+  // Writing and checking (news, runner profiles) next try the Claude API key, so a
   // run without the subscription token, or past its usage limit, still avoids
-  // paying OpenRouter for Opus. Sorting and grouping use completeJsonOpenRouterFirst.
+  // paying OpenRouter for Opus. Its cost goes to the Claude credit
+  // (claudeCreditSpentThisRun), not the news ceiling: `costUsd` is OpenRouter only.
+  // Sorting and grouping use completeJsonClaudeFirst.
   if (model === WRITE_MODEL || model === CHECK_MODEL) {
-    const raw = await completeViaClaude(CLAUDE_WRITER, { prompt, system, maxTokens }, { schema });
-    const data = raw === null ? null : parseJson<T>(raw);
-    if (data !== null) return { data, costUsd: 0, raw: raw! };
+    if (!claudeApiKey()) logKeySkip('write', 'OpenRouter');
+    const r = await completeViaClaudeCosted(CLAUDE_WRITER, { prompt, system, maxTokens }, { schema });
+    const data = r === null ? null : parseJson<T>(r.text);
+    if (data !== null) return { data, costUsd: 0, raw: r!.text };
   }
   return completeJsonViaOpenRouter<T>(opts);
 }
@@ -318,9 +459,9 @@ async function completeJsonViaOpenRouter<T>(
  * Is OpenRouter usable in this run?
  *
  * On 13 Nov 2026 the OpenRouter key died (401 "User not found") and the news run
- * stopped at the sort. The news sort, group and search now fall back to Claude
- * when OpenRouter fails, and this switch stops them waiting on a dead key for
- * every remaining item:
+ * stopped at the sort. Since 19 Nov 2026 the news sort, group and search try
+ * Claude first and keep OpenRouter as the last resort; this switch stops them
+ * waiting on a dead key for every remaining item when they do reach it:
  * - a key or billing problem (401, 402, "User not found", key missing, out of
  *   credit) switches OpenRouter off straight away;
  * - anything else (a 5xx, a timeout, no connection) is let through per item, but
@@ -332,10 +473,20 @@ let openRouterOff: string | null = null;
 let openRouterFailsInARow = 0;
 const OPENROUTER_FAILS_BEFORE_OFF = 3;
 
-/** Turns OpenRouter back on and clears the failure count (start of every news run, and tests). */
+/**
+ * The per-run reset (start of every news run, the monthly refresh, and tests):
+ * OpenRouter back on and its failure count cleared, and the same for the Claude API
+ * key, whose spend this run goes back to 0 and whose budget is cleared until the run
+ * sets it again (setClaudeCreditBudget).
+ */
 export function resetOpenRouterHealth(): void {
   openRouterOff = null;
   openRouterFailsInARow = 0;
+  keySkipLogged.clear(); // and say "Claude API key not set" again, once, next run
+  claudeSpent = 0;
+  claudeBudget = null;
+  claudeKeyOff = null;
+  claudeBusyInARow = 0;
 }
 
 /** Why OpenRouter was switched off for this run, or null when it is still in use. */
@@ -370,31 +521,62 @@ export function noteOpenRouterSuccess(): void {
   openRouterFailsInARow = 0;
 }
 
-/** Which Claude to use when OpenRouter can't: the CLI alias and the matching API-credit model. */
-const CLAUDE_FALLBACK = {
-  sonnet: { cli: 'sonnet', credit: { model: 'claude-sonnet-5-5', effort: 'medium' } as ClaudeRoute },
-  opus: { cli: 'opus', credit: CLAUDE_WRITER },
+/**
+ * Which Claude does a news job: the API model on the key and the matching CLI alias.
+ * The sort runs per item, so it asks for low effort: a classification needs little
+ * thinking, and thinking tokens are billed as output.
+ */
+const CLAUDE_FIRST = {
+  sonnet: { api: { model: 'claude-sonnet-5-5', effort: 'low' } as ClaudeRoute, cli: 'sonnet' },
+  opus: { api: CLAUDE_WRITER, cli: 'opus' },
 };
 
 /**
- * For the cheap, tuned news jobs (sort and group): OpenRouter first, as before,
- * and only when OpenRouter fails (or is switched off for the run, see above)
- * Claude Code headless on the subscription, then the Anthropic credit if
- * ANTHROPIC_CREDIT_API_KEY is set. Same prompt and JSON schema throughout.
- * Throws a clear error when every route fails.
+ * For the news sort and group (19 Nov 2026, Stephen: Claude first, OpenRouter
+ * only as a backup): the Claude API key (ANTHROPIC_CREDIT_API_KEY), then Claude
+ * Code headless on the subscription, then OpenRouter on the call's own model
+ * unless it is switched off for the run (see above). Same prompt and JSON schema
+ * throughout. Throws a clear error when every route fails.
  *
  * `label` names the stage in the log ("sort", "group"); `claude` picks which
- * Claude stands in. A reply that isn't JSON from OpenRouter is not a failure:
- * it comes back as data null, as it always has.
+ * Claude. A Claude reply that isn't JSON falls through to the next route; one
+ * from OpenRouter, the last route, comes back as data null, as it always has.
+ * `costUsd` is OpenRouter's only: key calls go to the Claude credit
+ * (claudeCreditSpentThisRun), CLI calls cost 0.
  */
-export async function completeJsonOpenRouterFirst<T>(
-  opts: JsonCallOptions & { label: string; claude?: keyof typeof CLAUDE_FALLBACK },
+export async function completeJsonClaudeFirst<T>(
+  opts: JsonCallOptions & { label: string; claude?: keyof typeof CLAUDE_FIRST },
   run: ClaudeRunner = runClaude,
 ): Promise<{ data: T | null; costUsd: number; raw: string }> {
   const { label, model, prompt, maxTokens, schema } = opts;
-  const fallback = CLAUDE_FALLBACK[opts.claude ?? 'sonnet'];
+  const claude = CLAUDE_FIRST[opts.claude ?? 'sonnet'];
   const system = opts.system || 'You sort and group running news for a news desk. Follow the instructions exactly.';
   const tried: string[] = [];
+  const keyOff = claudeKeyOffReason();
+
+  if (!claudeApiKey()) {
+    logKeySkip(label, 'Claude Code CLI');
+    tried.push('Claude API key not set (ANTHROPIC_CREDIT_API_KEY)');
+  } else if (keyOff) {
+    tried.push(`Claude API key switched off for this run (${keyOff})`);
+  } else {
+    const r = await completeViaClaudeCosted(claude.api, { prompt, system, maxTokens }, { schema });
+    const data = r === null ? null : parseJson<T>(r.text);
+    if (data !== null) {
+      console.log(`${label}: claude-api (${claude.api.model})`);
+      return { data, costUsd: 0, raw: r!.text };
+    }
+    tried.push(r === null ? 'Claude API key failed (see log above)' : 'Claude API key reply was not JSON');
+  }
+
+  if (process.env.CLAUDE_CODE_OAUTH_TOKEN?.trim()) {
+    const viaCli = await completeJsonViaClaude<T>({ ...opts, system }, run, claude.cli);
+    if (viaCli) {
+      console.log(`${label}: claude-cli`);
+      return viaCli;
+    }
+    tried.push('Claude Code CLI failed (see log above)');
+  } else tried.push('Claude Code CLI not set up (no CLAUDE_CODE_OAUTH_TOKEN)');
 
   const off = openRouterUnavailable();
   if (off) tried.push(`OpenRouter switched off for this run (${off})`);
@@ -406,42 +588,99 @@ export async function completeJsonOpenRouterFirst<T>(
       return r;
     } catch (e) {
       noteOpenRouterFailure(e);
-      console.warn(`${label}: OpenRouter failed (${shortError(e)}), trying Claude`);
+      console.warn(`${label}: OpenRouter failed (${shortError(e)})`);
       tried.push(`OpenRouter: ${shortError(e)}`);
     }
   }
 
-  if (process.env.CLAUDE_CODE_OAUTH_TOKEN) {
-    const viaCli = await completeJsonViaClaude<T>({ ...opts, system }, run, fallback.cli);
-    if (viaCli) {
-      console.log(`${label}: claude-cli`);
-      return viaCli;
-    }
-    tried.push('Claude Code CLI failed (see log above)');
-  } else tried.push('Claude Code CLI not set up (no CLAUDE_CODE_OAUTH_TOKEN)');
-
-  if (process.env.ANTHROPIC_CREDIT_API_KEY) {
-    const raw = await completeViaClaude(fallback.credit, { prompt, system, maxTokens }, { schema });
-    const data = raw === null ? null : parseJson<T>(raw);
-    if (data !== null) {
-      console.log(`${label}: claude-credit`);
-      return { data, costUsd: 0, raw: raw! };
-    }
-    tried.push(raw === null ? 'Anthropic credit failed (see log above)' : 'Anthropic credit reply was not JSON');
-  } else tried.push('Anthropic credit not set up (no ANTHROPIC_CREDIT_API_KEY)');
-
   throw new Error(`${label}: every provider failed. ${tried.join('; ')}`);
 }
 
+/** The search runs on Haiku: it only has to search and stop, and the results come back as structured blocks. */
+export const SEARCH_CLAUDE_MODEL = 'claude-haiku-5-5';
+/** Searches one call may run. Each is $0.01 on top of tokens (llm-prices.ts). */
+const SEARCH_MAX_USES = 3;
+
+export interface SearchOptions {
+  maxResults?: number;
+  /** Bare domains (no scheme or path) never to return; subdomains are covered too. */
+  blockedDomains?: readonly string[];
+  /** The OpenRouter backup's model. */
+  openRouterModel: string;
+}
+export interface SearchResult { urls: string[]; costUsd: number; via: 'claude-web' | 'openrouter-web' }
+
 /**
- * A web search through OpenRouter's web plugin: the URLs a cheap model cites
- * for a query, and what it cost (5 results is about $0.02 plus the model).
+ * A web search for news reports: the result URLs and what the search cost.
  * The news pipeline uses it to find more reports of an event when its own
- * feed source can't be read.
+ * feed source can't be read. Since 19 Nov 2026: Anthropic's server-side
+ * web_search tool on the Claude API key first, OpenRouter's web plugin as the
+ * backup. `costUsd` is OpenRouter's only (the news ceiling); a Claude search's
+ * cost, even one that got only error results, goes to the Claude credit
+ * (claudeCreditSpentThisRun). Throws when both fail; moreCoverage treats that
+ * as "no extra coverage" and the run carries on.
  */
-export async function searchWeb(model: string, query: string, maxResults = 5): Promise<{ urls: string[]; costUsd: number }> {
-  // Throws when OpenRouter is switched off for the run or the call fails; the
-  // news caller (moreCoverage) treats that as "no extra coverage" and carries on.
+export async function searchWeb(query: string, opts: SearchOptions): Promise<SearchResult> {
+  const maxResults = opts.maxResults ?? 5;
+  const tried: string[] = [];
+  const keyOff = claudeKeyOffReason();
+  if (!claudeApiKey()) {
+    logKeySkip('search', 'OpenRouter web search');
+    tried.push('Claude API key not set (ANTHROPIC_CREDIT_API_KEY)');
+  } else if (keyOff) {
+    tried.push(`Claude API key switched off for this run (${keyOff})`);
+  } else {
+    try {
+      const r = await searchViaClaude(query, maxResults, opts.blockedDomains ?? []);
+      claudeBusyInARow = 0;
+      return r;
+    } catch (e) {
+      noteClaudeFailure(e);
+      console.warn(`search: Claude web search failed (${shortError(e)}), trying OpenRouter`);
+      tried.push(`Claude web search: ${shortError(e)}`);
+    }
+  }
+  try {
+    return await searchViaOpenRouter(query, maxResults, opts.openRouterModel);
+  } catch (e) {
+    tried.push(`OpenRouter: ${shortError(e)}`);
+    throw new Error(`every search provider failed. ${tried.join('; ')}`);
+  }
+}
+
+async function searchViaClaude(query: string, maxResults: number, blockedDomains: readonly string[]): Promise<SearchResult> {
+  const client = new Anthropic({ apiKey: claudeApiKey()!, maxRetries: 1 });
+  const message = await client.messages
+    .stream({
+      model: SEARCH_CLAUDE_MODEL,
+      max_tokens: 2000,
+      output_config: { effort: 'low' },
+      tools: [{
+        type: 'web_search_20250305', name: 'web_search', max_uses: SEARCH_MAX_USES,
+        ...(blockedDomains.length ? { blocked_domains: [...blockedDomains] } : {}),
+      }],
+      messages: [{ role: 'user', content: `Find recent news reports of: ${query}. Search the web and list the article URLs.` }],
+    })
+    .finalMessage();
+  // Billed whether or not the searches worked; the Claude credit, not the news ceiling.
+  claudeSpent += claudeCostUsd(SEARCH_CLAUDE_MODEL, message.usage);
+  // The URLs come from the search results themselves, not the model's prose.
+  const urls: string[] = [];
+  const errors: string[] = [];
+  for (const block of message.content) {
+    if (block.type !== 'web_search_tool_result') continue;
+    if (!Array.isArray(block.content)) { errors.push(block.content.error_code); continue; }
+    for (const r of block.content) if (r.type === 'web_search_result' && r.url && !urls.includes(r.url)) urls.push(r.url);
+  }
+  // Every search failed (too_many_requests, max_uses_exceeded...): the backup may do better.
+  // These are the search tool's own errors, not the API's, so they don't count towards
+  // switching the key off.
+  if (!urls.length && errors.length) throw new Error(`web_search error: ${errors.join(', ')}`);
+  console.log(`search: claude-web (${SEARCH_CLAUDE_MODEL})`);
+  return { urls: urls.slice(0, maxResults), costUsd: 0, via: 'claude-web' };
+}
+
+async function searchViaOpenRouter(query: string, maxResults: number, model: string): Promise<SearchResult> {
   const off = openRouterUnavailable();
   if (off) throw new Error(`OpenRouter switched off for this run (${off})`);
   let completion: OpenAI.Chat.Completions.ChatCompletion;
@@ -458,7 +697,8 @@ export async function searchWeb(model: string, query: string, maxResults = 5): P
     throw e;
   }
   noteOpenRouterSuccess();
+  console.log('search: openrouter-web');
   const message = completion.choices[0]?.message as { annotations?: { type: string; url_citation?: { url: string } }[] } | undefined;
   const urls = [...new Set((message?.annotations ?? []).filter((a) => a.type === 'url_citation' && a.url_citation?.url).map((a) => a.url_citation!.url))];
-  return { urls, costUsd: Number((completion.usage as { cost?: number } | undefined)?.cost ?? 0) };
+  return { urls, costUsd: Number((completion.usage as { cost?: number } | undefined)?.cost ?? 0), via: 'openrouter-web' };
 }

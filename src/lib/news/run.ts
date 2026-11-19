@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import type { Prisma } from '@prisma/client';
 import { prisma } from '@/lib/db';
-import { resetOpenRouterHealth } from '@/lib/llm';
+import { claudeCreditSpentThisRun, resetOpenRouterHealth, setClaudeCreditBudget } from '@/lib/llm';
 import { NEWS_CONFIG } from './config';
 import { gatherCandidates } from './gather';
 import { bundleImportance, groupItems } from './group';
@@ -12,7 +12,7 @@ import { moreCoverage } from './search';
 import { gapBundle, gapsToFill, mustCoverFor, mustCoverNote } from './must-cover';
 import { runnerCandidates, RUNNER_FILE_SOURCE } from '@/lib/runners/runner-file';
 import { autoProfiles } from '@/lib/runners/auto';
-import { isBorderline, passesSort, sortItem, sortItemJev } from './sort';
+import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
 import { checkFacts, writeStory, editStory, type Fix } from './write';
 
@@ -36,7 +36,10 @@ export interface RunDeps {
   publish: (s: StoryToPublish) => Promise<void>;
   /** Saves the story unpublished with its reason; returns its id for `npm run news:publish <id>`. */
   hold: (s: StoryToPublish, reason: string) => Promise<number>;
+  /** OpenRouter spend this month (the ceiling). */
   monthSpentUsd: (now: Date) => Promise<number>;
+  /** Claude API key spend this month (its own budget, NEWS_CONFIG.claudeCreditMonthlyUsd). */
+  claudeMonthSpentUsd: (now: Date) => Promise<number>;
   /** Titles from the last 14 days, published or held: what the grouper's alreadyCovered check must see. */
   recentHeadlines: (now: Date) => Promise<string[]>;
   /** Published stories from the last 14 days, for spotting a must-cover event with no story yet. */
@@ -64,16 +67,26 @@ async function saveStory(s: StoryToPublish, status: 'published' | 'held', heldRe
   });
 }
 
-/** Everything the news runs (and the monthly runner refresh) have spent since the 1st of this month, UTC. */
+const monthStart = (now: Date) => new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+
+/**
+ * What the news runs (and the monthly runner refresh) have spent on OpenRouter since the 1st of
+ * this month, UTC: the monthly ceiling's figure. The Claude key's spend is claudeMonthSpentUsd.
+ */
 export async function monthSpentUsd(now: Date): Promise<number> {
-  const from = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
-  const r = await prisma.news_runs.aggregate({ _sum: { cost_usd: true }, where: { started_at: { gte: from } } });
+  const r = await prisma.news_runs.aggregate({ _sum: { cost_usd: true }, where: { started_at: { gte: monthStart(now) } } });
   return r._sum.cost_usd ?? 0;
+}
+
+/** What they have spent on the Claude API key since the 1st, UTC (its $100 credit; the website's use isn't in here). */
+export async function claudeMonthSpentUsd(now: Date): Promise<number> {
+  const r = await prisma.news_runs.aggregate({ _sum: { claude_cost_usd: true }, where: { started_at: { gte: monthStart(now) } } });
+  return r._sum.claude_cost_usd ?? 0;
 }
 
 const liveDeps: RunDeps = {
   gather: gatherCandidates,
-  sort: (c) => sortItemJev(c),
+  sort: (c) => sortItem(c), // Claude first (19 Nov 2026); Jev is no longer in the daily run
   group: (items, recent) => groupItems(items, recent),
   write: (b, now, avoid, unsupported) => writeStory(b, now, undefined, avoid, unsupported),
   edit: (d, b, fix) => editStory(d, b, fix),
@@ -85,6 +98,7 @@ const liveDeps: RunDeps = {
   publish: async (s) => { await saveStory(s, 'published', null); },
   hold: (s, reason) => saveStory(s, 'held', reason),
   monthSpentUsd,
+  claudeMonthSpentUsd,
   recentHeadlines: async (now) => (await prisma.news_stories.findMany({ where: { status: { in: ['published', 'held'] }, created_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { title: true } })).map((s) => s.title),
   recentStories: async (now) => (await prisma.news_stories.findMany({ where: { status: 'published', created_at: { gte: new Date(now.getTime() - NEWS_CONFIG.windowDays * 86_400_000) } }, select: { title: true, created_at: true } })).map((s) => ({ title: s.title, createdAt: s.created_at })),
   takenSlugs: async () => new Set((await prisma.news_stories.findMany({ select: { slug: true } })).map((s) => s.slug)),
@@ -118,21 +132,48 @@ export class NewsRunError extends Error {
   }
 }
 
-type RunOpts = { now: Date; dryRun: boolean; outDir?: string; deps?: Partial<RunDeps>; maxStories?: number };
+/**
+ * The news_runs row for a finished run, or a failed one (`e`: the error; a NewsRunError carries
+ * what was spent before it failed). cost_usd is OpenRouter (the ceiling), claude_cost_usd the
+ * Claude API key (its own credit). `summary` adds to the row's summary (e.g. onDemand).
+ */
+export function newsRunRow(dryRun: boolean, r: { log: RunLog } | { error: unknown }, summary: Record<string, unknown> = {}) {
+  if ('log' in r) return { dry_run: dryRun, cost_usd: r.log.costUsd, claude_cost_usd: r.log.claudeCostUsd, summary: { ...r.log, ...summary } as Prisma.InputJsonValue };
+  const log = r.error instanceof NewsRunError ? r.error.log : null;
+  return { dry_run: dryRun, cost_usd: log?.costUsd ?? 0, claude_cost_usd: log?.claudeCostUsd ?? 0, summary: { error: errorText(r.error), ...summary } as Prisma.InputJsonValue };
+}
+
+type RunOpts ={ now: Date; dryRun: boolean; outDir?: string; deps?: Partial<RunDeps>; maxStories?: number };
 
 export async function runNews(opts: RunOpts): Promise<RunLog> {
-  // Every run starts with OpenRouter switched on, whatever happened in the last one (llm.ts).
+  // Every run starts with OpenRouter and the Claude key switched on and the run's Claude
+  // spend at 0, whatever happened in the last one (llm.ts).
   resetOpenRouterHealth();
-  const log: RunLog = { dryRun: opts.dryRun, itemsSeen: 0, sortedOut: [], borderline: [], ungrouped: [], skipped: [], notPublished: [], published: [], costUsd: 0, stoppedByCeiling: false, profiles: [] };
+  const log: RunLog = { dryRun: opts.dryRun, itemsSeen: 0, sortedOut: [], borderline: [], ungrouped: [], skipped: [], notPublished: [], published: [], costUsd: 0, claudeCostUsd: 0, stoppedByCeiling: false, profiles: [] };
   try {
     return await run(log, opts);
   } catch (e) {
     throw new NewsRunError(e, log);
+  } finally {
+    // The Claude key's spend is added up in llm.ts, not passed back through each call.
+    log.claudeCostUsd = claudeCreditSpentThisRun();
   }
+}
+
+/**
+ * Start the Claude key's monthly budget for a run (NEWS_CONFIG.claudeCreditMonthlyUsd):
+ * what earlier runs this month spent on it. If that can't be read, the key runs ungated
+ * by the budget; Anthropic's own "credit used up" still switches it off (llm.ts).
+ */
+export async function startClaudeCreditBudget(spent: () => Promise<number>): Promise<number | undefined> {
+  const before = await spent().catch((e) => { console.warn(`Claude credit month-to-date unreadable (${errorText(e)}), no budget check this run`); return undefined; });
+  if (before !== undefined) setClaudeCreditBudget(before, NEWS_CONFIG.claudeCreditMonthlyUsd);
+  return before;
 }
 
 async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: RunOpts): Promise<RunLog> {
   const d: RunDeps = { ...liveDeps, ...deps };
+  log.claudeMonthBeforeUsd = await startClaudeCreditBudget(() => d.claudeMonthSpentUsd(now));
   const markSeen = (items: Seen[]) => (dryRun || items.length === 0 ? Promise.resolve() : d.markSeen(items));
   const save = async (name: string, data: unknown) => { if (outDir) await writeFile(`${outDir}/${name}`, JSON.stringify(data, null, 2)); };
   if (outDir) await mkdir(outDir, { recursive: true });
@@ -152,7 +193,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
   log.costUsd += grouped.costUsd;
 
   // Anything not decided this run stays unseen, so tomorrow's run looks at it again:
-  // items the grouper left out, and bundles over the cap or past the ceiling.
+  // items the grouper left out, and bundles over the cap, under the minimum or past the ceiling.
   const inBundle = new Set(grouped.bundles.flatMap((b) => b.items.map((i) => i.articleId)));
   for (const { c } of passed) if (!inBundle.has(c.articleId)) log.ungrouped.push({ url: c.url, title: c.title });
   // A race on the must-cover list (must-cover.ts): first in line, outside the cap, never stale.
@@ -179,10 +220,9 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
 
   // maxStories: a one-off larger run (the launch fill); the daily cap otherwise.
   const cap = maxStories ?? NEWS_CONFIG.maxStoriesPerRun;
-  const picked = pickBundles(grouped.bundles, cap, now);
-  for (const b of grouped.bundles) {
-    if (!b.alreadyCovered && !picked.includes(b)) log.skipped.push({ headline: b.headline, reason: `over the ${cap}-story cap` });
-  }
+  const { picked, passedOver } = pickBundles(grouped.bundles, cap, now);
+  // The cap, or under NEWS_CONFIG.minImportance: each says which (scripts/news-daily.ts prints them).
+  for (const { bundle, reason } of passedOver) log.skipped.push({ headline: bundle.headline, reason });
 
   // A must-cover race that finished a few days ago with nothing published: go and find it.
   for (const { event, edition } of gapsToFill(now, await d.recentStories(now))) {
@@ -192,6 +232,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
 
   const taken = await d.takenSlugs();
   const recentSlugs = await d.recentSlugs(now);
+  // The ceiling counts OpenRouter only: every costUsd below is OpenRouter's (llm.ts).
   const monthBefore = await d.monthSpentUsd(now);
   const people: string[] = [];
   for (const b of picked) {
@@ -292,6 +333,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
   }
   // Pages for the runners today's stories are about who have none yet. Never on a dry run.
   if (!dryRun && people.length) {
+    // What's left of the ceiling: OpenRouter only (log.costUsd), Claude key spend isn't in it.
     const budget = NEWS_CONFIG.monthlyCeilingGbp * NEWS_CONFIG.usdPerGbp - (monthBefore + log.costUsd);
     const p = await d.autoProfiles(people, budget).catch((e) => ({ log: [{ name: people.join(', '), reason: `error: ${errorText(e)}` }], costUsd: 0 }));
     log.profiles.push(...p.log);

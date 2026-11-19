@@ -2,8 +2,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const create = vi.fn();
 vi.mock('openai', () => ({ default: class { chat = { completions: { create } }; } }));
+const finalMessage = vi.fn();
+const stream = vi.fn((_req: unknown) => ({ finalMessage }));
+vi.mock('@anthropic-ai/sdk', () => ({ default: class { messages = { stream }; } }));
 
-import { completeJsonOpenRouterFirst, openRouterUnavailable, resetOpenRouterHealth, type ClaudeRunner } from '@/lib/llm';
+import { claudeCreditSpentThisRun, completeJsonClaudeFirst, noteOpenRouterFailure, resetOpenRouterHealth, type ClaudeRunner } from '@/lib/llm';
 import { bundleImportance, groupItems } from './group';
 import type { Candidate, Verdict } from './types';
 
@@ -55,17 +58,22 @@ describe('grouping', () => {
   });
 });
 
-describe('grouping when OpenRouter is down', () => {
+describe('grouping: Claude key, then Claude Code, then OpenRouter (19 Nov 2026)', () => {
   const groups = { groups: [{ key: 'utmb-2026-result', headline: 'UTMB result', articleIds: [1, 2], alreadyCovered: false }] };
   const items = [{ c: cand(1), v: v(9) }, { c: cand(2), v: v(8) }];
   let run: ReturnType<typeof vi.fn>;
-  const call = ((opts: Parameters<typeof completeJsonOpenRouterFirst>[0]) =>
-    completeJsonOpenRouterFirst({ ...opts, label: 'group', claude: 'opus' }, run as unknown as ClaudeRunner)) as never;
+  const call = ((opts: Parameters<typeof completeJsonClaudeFirst>[0]) =>
+    completeJsonClaudeFirst({ ...opts, label: 'group', claude: 'opus' }, run as unknown as ClaudeRunner)) as never;
+  const keyFails = () => finalMessage.mockRejectedValue(new Error('400 credit balance too low'));
+  const cliFails = () => { run = vi.fn(async () => { throw new Error('spawn claude ENOENT'); }); };
 
   beforeEach(() => {
     process.env.OPENROUTER_API_KEY = 'k';
     process.env.CLAUDE_CODE_OAUTH_TOKEN = 't';
+    process.env.ANTHROPIC_CREDIT_API_KEY = 'c';
     create.mockReset().mockResolvedValue({ choices: [{ message: { content: JSON.stringify(groups) } }], usage: { cost: 0.003 } });
+    finalMessage.mockReset().mockResolvedValue({ stop_reason: 'end_turn', content: [{ type: 'text', text: JSON.stringify(groups) }], usage: { input_tokens: 5000, output_tokens: 1000 } });
+    stream.mockClear();
     run = vi.fn(async () => JSON.stringify({ is_error: false, result: JSON.stringify(groups) }));
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'warn').mockImplementation(() => {});
@@ -74,37 +82,64 @@ describe('grouping when OpenRouter is down', () => {
     vi.restoreAllMocks();
     resetOpenRouterHealth();
     delete process.env.CLAUDE_CODE_OAUTH_TOKEN;
+    delete process.env.ANTHROPIC_CREDIT_API_KEY;
   });
 
-  it('OpenRouter 401: Claude Code (Opus) groups them, with the same prompt and schema', async () => {
-    create.mockRejectedValue(Object.assign(new Error('401 User not found.'), { status: 401 }));
+  it('the key groups them on Opus 5.5, its real cost on the Claude credit, not the ceiling; nothing else is called', async () => {
+    const r = await groupItems(items, [], call);
+    expect(r.bundles.map((b) => b.items.map((i) => i.articleId))).toEqual([[1, 2]]);
+    expect(r.costUsd).toBe(0);
+    expect(claudeCreditSpentThisRun()).toBeCloseTo((5000 * 4 + 1000 * 20) / 1e6);
+    expect((stream.mock.calls[0][0] as { model: string }).model).toBe('claude-opus-5-5');
+    expect(run).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it.each([['missing', undefined], ['empty', '']])('key %s: Claude Code (Opus) groups them, with the same prompt and schema', async (_n, key) => {
+    if (key === undefined) delete process.env.ANTHROPIC_CREDIT_API_KEY;
+    else process.env.ANTHROPIC_CREDIT_API_KEY = key;
     const r = await groupItems(items, [], call);
     expect(r.costUsd).toBe(0);
-    expect(r.bundles.map((b) => b.items.map((i) => i.articleId))).toEqual([[1, 2]]);
+    expect(stream).not.toHaveBeenCalled();
     const [args, stdin] = run.mock.calls[0];
     expect(args).toEqual(expect.arrayContaining(['--model', 'opus']));
     expect(stdin).toContain('Group these running news items');
     expect(stdin).toContain('"alreadyCovered"');
   });
 
-  it('OpenRouter already switched off by the sort: no OpenRouter call at all', async () => {
-    create.mockRejectedValue(Object.assign(new Error('401 User not found.'), { status: 401 }));
-    await completeJsonOpenRouterFirst({ model: 'm', prompt: 'p', maxTokens: 1, schemaName: 's', schema: {}, label: 'sort' }, run as unknown as ClaudeRunner);
-    create.mockClear();
+  it('the key fails: Claude Code', async () => {
+    keyFails();
     await groupItems(items, [], call);
+    expect(run).toHaveBeenCalledOnce();
     expect(create).not.toHaveBeenCalled();
   });
 
-  it('OpenRouter up: Gemini groups them and Claude is not called', async () => {
-    expect(openRouterUnavailable()).toBeNull();
+  it('the key replies with prose: Claude Code', async () => {
+    finalMessage.mockResolvedValue({ stop_reason: 'end_turn', content: [{ type: 'text', text: 'Here are the groups.' }], usage: { input_tokens: 1, output_tokens: 1 } });
+    await groupItems(items, [], call);
+    expect(run).toHaveBeenCalledOnce();
+  });
+
+  it('key and Claude Code fail: Gemini on OpenRouter', async () => {
+    keyFails();
+    cliFails();
     const r = await groupItems(items, [], call);
     expect(r.costUsd).toBe(0.003);
-    expect(run).not.toHaveBeenCalled();
+    expect(r.bundles).toHaveLength(1);
+  });
+
+  it('OpenRouter already switched off by the sort: no OpenRouter call at all', async () => {
+    keyFails();
+    cliFails();
+    noteOpenRouterFailure(Object.assign(new Error('401 User not found.'), { status: 401 }));
+    await expect(groupItems(items, [], call)).rejects.toThrow(/group: every provider failed/);
+    expect(create).not.toHaveBeenCalled();
   });
 
   it('every provider down: a clear error', async () => {
+    keyFails();
+    cliFails();
     create.mockRejectedValue(Object.assign(new Error('401 User not found.'), { status: 401 }));
-    run = vi.fn(async () => { throw new Error('spawn claude ENOENT'); });
     await expect(groupItems(items, [], call)).rejects.toThrow(/group: every provider failed/);
   });
 });

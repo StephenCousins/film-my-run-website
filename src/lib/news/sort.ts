@@ -1,4 +1,4 @@
-import { completeJsonOpenRouterFirst, openRouterUnavailable } from '@/lib/llm';
+import { completeJsonClaudeFirst, openRouterUnavailable } from '@/lib/llm';
 import { NEWS_CONFIG } from './config';
 import { decide } from '@/lib/jev';
 import { SORT_MODEL } from './models';
@@ -36,11 +36,12 @@ export function isRoundUp(title: string): boolean {
 const ROUND_UP: Verdict = { type: 'opinion', confidence: 1, isRunning: true, topic: 'trail_ultra', isUk: false, importance: 1 };
 
 /**
- * The chat call the sorter makes: Gemini on OpenRouter, then (only if OpenRouter fails) Claude
- * Sonnet through Claude Code, then the Anthropic credit (completeJsonOpenRouterFirst in llm.ts).
+ * The live sorter since 19 Nov 2026 (Stephen: Claude first, OpenRouter only as a backup):
+ * Claude Sonnet 5.5 on the API key, then Sonnet through Claude Code, then SORT_MODEL on
+ * OpenRouter (completeJsonClaudeFirst in llm.ts).
  */
-type SortCall = typeof completeJsonOpenRouterFirst;
-const sortCall: SortCall = (opts, run) => completeJsonOpenRouterFirst({ ...opts, label: 'sort', claude: 'sonnet' }, run);
+type SortCall = typeof completeJsonClaudeFirst;
+const sortCall: SortCall = (opts, run) => completeJsonClaudeFirst({ ...opts, label: 'sort', claude: 'sonnet' }, run);
 
 export async function sortItem(c: Candidate, call: SortCall = sortCall) {
   // Video, audio and live pages carry no text to write from, whatever the event: settle them without a call.
@@ -93,8 +94,9 @@ interface JevAnswers {
 }
 
 /**
- * The live sorter since 1 Oct 2026: the same verdict from Jev, a decision model, at ~1/30th of
- * SORT_MODEL's cost (scripts/news-sorter-check.ts --jev, docs/news/sorter-check-jev.md).
+ * The live sorter from 1 Oct to 19 Nov 2026, now only for scripts/news-sorter-check.ts --jev
+ * (Jev is OpenRouter-only, and the daily run is Claude first: sortItem). The same verdict from
+ * Jev, a decision model, at ~1/30th of SORT_MODEL's cost (docs/news/sorter-check-jev.md).
  * "confidence" is Jev's probability for the chosen type, and the +1 for UK stories is done here
  * because Jev reads instructions literally and leaves arithmetic to code. Jev has no fallback of
  * its own, so a failed or malformed answer goes to sortItem instead.

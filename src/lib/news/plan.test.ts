@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { NEWS_CONFIG } from './config';
 import { freshImportance, isStale, pickBundles, uniqueSlug, withinCeiling } from './plan';
 import type { Bundle, Verdict } from './types';
 
@@ -7,15 +8,26 @@ const b = (key: string, i: number, alreadyCovered = false): Bundle => ({ key, he
 
 describe('choosing what to write', () => {
   it('drops already-covered events, ranks by importance, caps at 4', () => {
-    const picked = pickBundles([b('a', 3), b('b', 9), b('c', 7, true), b('d', 8), b('e', 5), b('f', 6)], 4);
+    const { picked } = pickBundles([b('a', 3), b('b', 9), b('c', 7, true), b('d', 8), b('e', 5), b('f', 6)], 4);
     expect(picked.map((x) => x.key)).toEqual(['b', 'd', 'f', 'e']);
   });
   it('leaves a slot empty rather than fill it with a story under importance 3', () => {
-    expect(pickBundles([b('a', 2), b('b', 3), b('c', 1)], 4).map((x) => x.key)).toEqual(['b']);
+    expect(pickBundles([b('a', 2), b('b', 3), b('c', 1)], 4).picked.map((x) => x.key)).toEqual(['b']);
   });
-  it('stops before the month passes £10', () => {
-    expect(withinCeiling(12.0, 0.12)).toBe(true);    // $12.12 < £10 x 1.27 = $12.70
-    expect(withinCeiling(12.65, 0.12)).toBe(false);
+  it('says why each open bundle was passed over: under the minimum is not the cap', () => {
+    const { passedOver } = pickBundles([b('a', 9), b('b', 8), b('c', 2), b('d', 7, true)], 1);
+    expect(passedOver.map((p) => [p.bundle.key, p.reason])).toEqual([
+      ['b', 'over the 1-story cap'],
+      ['c', 'below minimum importance (score 2 < 3)'],
+    ]);
+  });
+  it('stops before the month passes £15', () => {
+    expect(withinCeiling(18.35, 0.12)).toBe(true);   // $18.47 < £15 x 1.27 = $19.05
+    expect(withinCeiling(18.95, 0.12)).toBe(false);  // $19.07 > $19.05
+  });
+  it('the Claude API key has its own $100 a month, separate from the £15 OpenRouter ceiling (Stephen, 19 Nov 2026)', () => {
+    expect(NEWS_CONFIG.claudeCreditMonthlyUsd).toBe(100);
+    expect(NEWS_CONFIG.monthlyCeilingGbp).toBe(15);
   });
   it('never reuses a slug', () => {
     const taken = new Set(['evans-wins-utmb']);
@@ -33,11 +45,11 @@ describe('choosing what to write', () => {
     expect(slug).toBe('story-2');
   });
   it('caps at 0 yields empty list', () => {
-    const picked = pickBundles([b('a', 5), b('b', 9)], 0);
+    const { picked } = pickBundles([b('a', 5), b('b', 9)], 0);
     expect(picked).toEqual([]);
   });
   it('returns all non-covered when fewer than cap', () => {
-    const picked = pickBundles([b('a', 3), b('b', 9, true)], 10);
+    const { picked } = pickBundles([b('a', 3), b('b', 9, true)], 10);
     expect(picked.map((x) => x.key)).toEqual(['a']);
   });
 });
@@ -60,7 +72,7 @@ describe('stories fade while they wait (27 Sep 2026)', () => {
     expect(isStale({ ...aged('a', 5, 12), onDemand: true }, now)).toBe(false);
   });
   it('picks fresh over faded, and never a stale one', () => {
-    const picked = pickBundles([aged('old', 7, 6), aged('faded', 8, 6), aged('fresh', 6, 0)], 2, now);
+    const { picked } = pickBundles([aged('old', 7, 6), aged('faded', 8, 6), aged('fresh', 6, 0)], 2, now);
     expect(picked.map((x) => x.key)).toEqual(['fresh', 'faded']); // 6 now vs 8-3=5; 'old' is stale
   });
 });

@@ -25,13 +25,25 @@ export function isStale(b: Bundle, now: Date): boolean {
   return !b.onDemand && !b.mustCover && bundleAgeDays(b, now) > NEWS_CONFIG.staleAfterDays && bundleImportance(b) < NEWS_CONFIG.bigStory;
 }
 
-/** Must-cover events first and outside the cap (Stephen, 2 Oct 2026), then the rest by importance up to it. */
-export function pickBundles(bundles: Bundle[], cap: number, now: Date = new Date()): Bundle[] {
+/**
+ * Must-cover events first and outside the cap (Stephen, 2 Oct 2026), then the rest by importance up to it.
+ * `passedOver` is every open bundle not picked and why, for the run report: under the minimum
+ * importance is a different story from a busy day's cap.
+ */
+export function pickBundles(bundles: Bundle[], cap: number, now: Date = new Date()): { picked: Bundle[]; passedOver: { bundle: Bundle; reason: string }[] } {
   const open = bundles
     .filter((b) => !b.alreadyCovered && !isStale(b, now))
     .sort((a, b) => freshImportance(b, now) - freshImportance(a, now));
   const worthASlot = (b: Bundle) => b.onDemand || freshImportance(b, now) >= NEWS_CONFIG.minImportance;
-  return [...open.filter((b) => b.mustCover), ...open.filter((b) => !b.mustCover && worthASlot(b)).slice(0, cap)];
+  const contenders = open.filter((b) => !b.mustCover && worthASlot(b));
+  const picked = [...open.filter((b) => b.mustCover), ...contenders.slice(0, cap)];
+  const passedOver = open.filter((b) => !picked.includes(b)).map((bundle) => ({
+    bundle,
+    reason: worthASlot(bundle)
+      ? `over the ${cap}-story cap`
+      : `below minimum importance (score ${freshImportance(bundle, now)} < ${NEWS_CONFIG.minImportance})`,
+  }));
+  return { picked, passedOver };
 }
 
 export function withinCeiling(monthSpentUsd: number, nextEstimateUsd: number): boolean {
