@@ -36,7 +36,7 @@ and `completeJsonClaudeFirst()` for the news pipeline, and `searchWeb()`.
 
 ## Spend counted against the news ceiling
 
-The news ceiling (`NEWS_CONFIG.monthlyCeilingGbp`, £10) is the sum of
+The news ceiling (`NEWS_CONFIG.monthlyCeilingGbp`, £15 since 19 Nov 2026, was £10) is the sum of
 `news_runs.cost_usd` for the month. Each run adds up the cost of every call:
 
 - OpenRouter: the real cost it reports (`usage.cost`).

@@ -169,7 +169,7 @@ describe('monthly runner refresh: limits', () => {
   });
 
   it('never spends past what is left of the monthly news ceiling', async () => {
-    const d = deps(rows, { latestNews: news, monthSpentUsd: async () => 12.6 });
+    const d = deps(rows, { latestNews: news, monthSpentUsd: async () => 18.95 }); // $0.10 left of £15 x 1.27 = $19.05
     const s = await monthlyRefresh(d);
     expect(s.biosRefreshed).toEqual([]);
     expect(s.cutShort).toBe(true);

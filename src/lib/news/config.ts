@@ -3,7 +3,8 @@ export const NEWS_CONFIG = {
   maxStoriesPerRun: 4,
   newsThreshold: 0.9,
   borderlineFrom: 0.5,
-  monthlyCeilingGbp: 10,
+  /** Raised from £10 on 19 Nov 2026 (Stephen). */
+  monthlyCeilingGbp: 15,
   usdPerGbp: 1.27,
   imageWidth: 1200,
   imageHeight: 675,

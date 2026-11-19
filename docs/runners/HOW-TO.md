@@ -99,7 +99,7 @@ The branded card shows instead.
 - **Automatic pages:** runners a new story is about get a page written
   through OpenRouter (`written_by = 'auto'`, the card), with the runner's UTMB
   profile picture as their portrait when they have one, otherwise no photo.
-  - At most 6 attempts a day, and at most $1.50 of spend per run, inside the £10 monthly ceiling.
+  - At most 6 attempts a day, and at most $1.50 of spend per run, inside the £15 monthly ceiling.
   - An 8-minute limit.
   - They never overwrite an existing page.
   - Only runners with a UTMB entry or a Wikipedia article about running get one.
@@ -116,7 +116,7 @@ The branded card shows instead.
   - A bio that fails isn't tried again for 30 days. Finishes a session chose are
     never dropped; over 10, only UTMB ones go, lowest place first.
   - Pages with no UTMB link are never looked up on UTMB by name.
-  - At most $3, inside the £10 ceiling. Results stop after 5 minutes, and no bio
+  - At most $3, inside the £15 ceiling. Results stop after 5 minutes, and no bio
     starts after 10.
   - It runs after the Monday email and sends its own short one.
   - `npm run news:daily -- --monthly-refresh` runs it by hand (live).

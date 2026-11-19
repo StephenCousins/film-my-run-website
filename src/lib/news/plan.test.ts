@@ -20,9 +20,9 @@ describe('choosing what to write', () => {
       ['c', 'below minimum importance (score 2 < 3)'],
     ]);
   });
-  it('stops before the month passes £10', () => {
-    expect(withinCeiling(12.0, 0.12)).toBe(true);    // $12.12 < £10 x 1.27 = $12.70
-    expect(withinCeiling(12.65, 0.12)).toBe(false);
+  it('stops before the month passes £15', () => {
+    expect(withinCeiling(18.35, 0.12)).toBe(true);   // $18.47 < £15 x 1.27 = $19.05
+    expect(withinCeiling(18.95, 0.12)).toBe(false);  // $19.07 > $19.05
   });
   it('never reuses a slug', () => {
     const taken = new Set(['evans-wins-utmb']);

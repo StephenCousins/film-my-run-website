@@ -128,9 +128,9 @@ describe('a news run', () => {
   });
 
   it('stops writing at the ceiling but keeps what it wrote', async () => {
-    // $12.50 already spent this month; the ceiling is £10 x 1.27 = $12.70. The first story fits,
+    // $18.85 already spent this month; the ceiling is £15 x 1.27 = $19.05. The first story fits,
     // and what this run has spent (sorting, grouping, that story) stops the second.
-    const { d, published } = deps({ monthSpentUsd: async () => 12.5 });
+    const { d, published } = deps({ monthSpentUsd: async () => 18.85 });
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(published).toHaveLength(1);
     expect(log.stoppedByCeiling).toBe(true);
