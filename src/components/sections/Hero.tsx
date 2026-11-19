@@ -2,14 +2,27 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Play, ChevronDown, Volume2, VolumeX, Smartphone } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+// Home hero background loop, hosted on Cloudflare R2.
+// null because no hero loop has been uploaded to R2 yet (videos/hero-loop.mp4 and
+// .webm have never existed, so the old <video> only ever 404'd). Upload a loop and
+// set this to its R2 URLs to turn the video back on, e.g.
+//   { mp4: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/hero-loop.mp4',
+//     webm: 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/hero-loop.webm' }
+// Until then (or if the video fails to load) the hero shows HERO_STILL.
+// (Written as a cast so TypeScript keeps the video branch type-checked while it is null.)
+const HERO_VIDEO = null as { mp4: string; webm?: string } | null;
+
+const HERO_STILL = '/images/hero/transgrancanaria2020.jpg';
 
 // ============================================
 // HERO SECTION
 // ============================================
 // Full-screen hero with:
-// - Looping video background
+// - Looping video background (when HERO_VIDEO is set), else an optimised still
 // - Parallax scroll effect (GSAP)
 // - Animated text reveal
 // - Scroll indicator
@@ -20,6 +33,29 @@ export default function Hero() {
   const contentRef = useRef<HTMLDivElement>(null);
   const [isMuted, setIsMuted] = useState(true);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
+  const showVideo = HERO_VIDEO !== null && !videoFailed;
+
+  // The sources can fail before React hydrates and attaches onError, so check
+  // the element's state after mount too. NETWORK_NO_SOURCE is also set briefly
+  // while the browser starts picking a source, so only trust it after a moment.
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.error) {
+      setVideoFailed(true);
+      return;
+    }
+    const timer = window.setTimeout(() => {
+      if (
+        video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE &&
+        video.readyState === HTMLMediaElement.HAVE_NOTHING
+      ) {
+        setVideoFailed(true);
+      }
+    }, 2000);
+    return () => window.clearTimeout(timer);
+  }, []);
 
   // Initialize GSAP animations
   useEffect(() => {
@@ -114,6 +150,12 @@ export default function Hero() {
     setIsLoaded(true);
   };
 
+  // A missing or unplayable video falls back to the still
+  const handleVideoError = () => {
+    setIsLoaded(false);
+    setVideoFailed(true);
+  };
+
   // Toggle mute
   const toggleMute = () => {
     if (videoRef.current) {
@@ -127,38 +169,46 @@ export default function Hero() {
       ref={sectionRef}
       className="relative h-screen min-h-[600px] lg:min-h-[700px] w-full overflow-hidden"
     >
-      {/* Video Background */}
-      <div className="absolute inset-0">
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          onLoadedData={handleVideoLoaded}
+      {/* Background: optimised still, with the video loop on top when configured */}
+      <div className="absolute inset-0 bg-surface-secondary">
+        <Image
+          src={HERO_STILL}
+          alt="Stephen Cousins running up a mountain trail at Transgrancanaria 2020"
+          fill
+          priority
+          sizes="100vw"
           className={cn(
-            'absolute inset-0 w-full h-full object-cover transition-opacity duration-1000',
-            isLoaded ? 'opacity-100' : 'opacity-0'
+            'object-cover transition-opacity duration-1000',
+            showVideo && isLoaded ? 'opacity-0' : 'opacity-100'
           )}
-          poster="/images/hero/transgrancanaria2020.jpg"
-        >
-          {/* Videos hosted on Cloudflare R2 */}
-          <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/hero-loop.mp4" type="video/mp4" />
-          <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/hero-loop.webm" type="video/webm" />
-        </video>
-
-        {/* Fallback image while loading */}
-        <div
-          className={cn(
-            'absolute inset-0 bg-surface-secondary transition-opacity duration-1000',
-            isLoaded ? 'opacity-0' : 'opacity-100'
-          )}
-          style={{
-            backgroundImage: 'url(/images/hero/transgrancanaria2020.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
         />
+
+        {HERO_VIDEO && showVideo && (
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+            onLoadedData={handleVideoLoaded}
+            onError={handleVideoError}
+            className={cn(
+              'absolute inset-0 w-full h-full object-cover transition-opacity duration-1000',
+              isLoaded ? 'opacity-100' : 'opacity-0'
+            )}
+            poster={HERO_STILL}
+          >
+            {/* Videos hosted on Cloudflare R2. Errors on the last source mean none could play. */}
+            <source
+              src={HERO_VIDEO.mp4}
+              type="video/mp4"
+              onError={HERO_VIDEO.webm ? undefined : handleVideoError}
+            />
+            {HERO_VIDEO.webm && (
+              <source src={HERO_VIDEO.webm} type="video/webm" onError={handleVideoError} />
+            )}
+          </video>
+        )}
 
         {/* Gradient overlays */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/30 to-black/70" />
@@ -218,18 +268,20 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Sound toggle */}
-      <button
-        onClick={toggleMute}
-        className="absolute bottom-24 lg:bottom-8 right-8 p-3 bg-black/30 backdrop-blur-sm rounded-full border border-white/10 text-white hover:bg-black/50 transition-colors z-10"
-        aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-      >
-        {isMuted ? (
-          <VolumeX className="w-5 h-5" />
-        ) : (
-          <Volume2 className="w-5 h-5" />
-        )}
-      </button>
+      {/* Sound toggle (only when the video is showing) */}
+      {showVideo && (
+        <button
+          onClick={toggleMute}
+          className="absolute bottom-24 lg:bottom-8 right-8 p-3 bg-black/30 backdrop-blur-sm rounded-full border border-white/10 text-white hover:bg-black/50 transition-colors z-10"
+          aria-label={isMuted ? 'Unmute video' : 'Mute video'}
+        >
+          {isMuted ? (
+            <VolumeX className="w-5 h-5" />
+          ) : (
+            <Volume2 className="w-5 h-5" />
+          )}
+        </button>
+      )}
 
       {/* Scroll indicator */}
       <div className="hero-scroll absolute bottom-24 lg:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60">

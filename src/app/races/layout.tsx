@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Race Dashboard',
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Race Dashboard | Film My Run',
     description: '182 races analyzed. Track times, positions, and progress.',
-    images: ['https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/og/races-og.jpg'],
+    images: DEFAULT_OG_IMAGES,
   },
 };
 

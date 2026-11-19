@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'How Fast Am I?',
@@ -16,9 +17,7 @@ export const metadata: Metadata = {
     title: 'How Fast Am I? | Film My Run',
     description:
       'See how your running pace compares to other runners. Enter a race time and find your percentile.',
-    images: [
-      'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/og/how-fast-am-i-og.jpg',
-    ],
+    images: DEFAULT_OG_IMAGES,
   },
 };
 

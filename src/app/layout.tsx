@@ -6,6 +6,7 @@ import MobileTabBar from '@/components/layout/MobileTabBar';
 import SiteAssistant from '@/components/layout/SiteAssistant';
 import Analytics from '@/components/Analytics';
 import '@/styles/globals.css';
+import { DEFAULT_OG_IMAGE, DEFAULT_OG_IMAGES, DEFAULT_OG_IMAGE_ABSOLUTE } from '@/lib/og';
 
 // Fonts
 const inter = Inter({
@@ -56,20 +57,13 @@ export const metadata: Metadata = {
     title: 'Film My Run | Documentary Filmmaker & Ultra Runner',
     description:
       'Award-winning documentary filmmaker, ultra-marathoner, and creator of running tools.',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Film My Run',
-      },
-    ],
+    images: DEFAULT_OG_IMAGES,
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Film My Run',
     description: 'Documentary filmmaker & ultra runner',
-    images: ['/og-image.jpg'],
+    images: [DEFAULT_OG_IMAGE],
   },
   robots: {
     index: true,
@@ -153,7 +147,7 @@ export default function RootLayout({
                   url: 'https://filmmyrun.com',
                   logo: {
                     '@type': 'ImageObject',
-                    url: 'https://filmmyrun.com/og-image.jpg',
+                    url: DEFAULT_OG_IMAGE_ABSOLUTE,
                   },
                   description:
                     'Award-winning documentary filmmaker, ultra-marathoner, and creator of running tools.',

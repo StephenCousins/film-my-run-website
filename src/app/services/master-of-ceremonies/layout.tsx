@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Master of Ceremonies',
@@ -16,9 +17,7 @@ export const metadata: Metadata = {
     title: 'Master of Ceremonies | Film My Run',
     description:
       'Experienced MC for trail races, ultra-marathons, and running events across the UK.',
-    images: [
-      'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/og/master-of-ceremonies-og.jpg',
-    ],
+    images: DEFAULT_OG_IMAGES,
   },
 };
 
