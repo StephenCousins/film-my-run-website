@@ -138,7 +138,7 @@ export default function NewsletterEditForm({
   const savedRef = useRef(JSON.stringify(initialPayload));
   const dirty = JSON.stringify(payload) !== savedRef.current;
   const [restore, setRestore] = useState<NewsletterPayload | null>(null);
-  const [confirm, setConfirm] = useState<{ recipients: number } | null>(null);
+  const [confirm, setConfirm] = useState<{ recipients: number; warnings: string[] } | null>(null);
   const [sendState, setSendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [sendMessage, setSendMessage] = useState('');
   const [status, setStatus] = useState<SaveStatus>('idle');
@@ -244,7 +244,7 @@ export default function NewsletterEditForm({
       const r = await fetch(`/api/newsletter/edit/${token}`, { cache: 'no-store' });
       const d = await r.json();
       if (!r.ok) throw new Error(d.error || 'Could not count subscribers.');
-      setConfirm({ recipients: d.recipients });
+      setConfirm({ recipients: d.recipients, warnings: d.warnings ?? [] });
       // Show the refreshed preview while they decide.
       setTimeout(() => previewFrameRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
     } catch (e) {
@@ -506,6 +506,14 @@ export default function NewsletterEditForm({
               Send this to {confirm.recipients} subscriber{confirm.recipients === 1 ? '' : 's'}?
             </p>
             <p className="text-sm text-secondary mt-2">It was just saved: the preview on this page is exactly what goes out.</p>
+            {confirm.warnings.length > 0 && (
+              <div className="mt-4 rounded-lg border border-red-500 bg-red-500/10 p-3 text-sm text-foreground">
+                <p className="font-semibold text-red-500">Check before sending</p>
+                <ul className="mt-1 list-disc pl-5 space-y-1">
+                  {confirm.warnings.map((w) => <li key={w}>{w}</li>)}
+                </ul>
+              </div>
+            )}
             <div className="mt-5 flex gap-3 justify-end">
               <button type="button" className="btn-ghost text-sm" onClick={() => setConfirm(null)} disabled={sendState === 'sending'}>
                 Cancel

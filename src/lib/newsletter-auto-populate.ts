@@ -5,6 +5,7 @@ import { shopItems, type ShopItem } from '@/lib/shop';
 import { CLUB_MONTHLY_PENCE } from '@/lib/club/subscription';
 import { FILM_MY_RUN_CHANNEL_ID } from '@/lib/youtube-stats';
 import { NEWS_PAGE_OURS_ONLY } from '@/lib/news/present';
+import { PARKRUN_MAX_DAYS } from '@/lib/newsletter/checks';
 
 const WMO_DESCRIPTIONS: Record<number, string> = {
   0: 'clear skies', 1: 'mostly clear skies', 2: 'partly cloudy skies',
@@ -355,7 +356,9 @@ async function autoPopulateArchives(
     select: { title: true, slug: true, excerpt: true, featured_image: true },
   });
 
-  const post = posts.find((p) => !usedUrls.has(`${baseUrl}/blog/${p.slug}`)) || posts[0];
+  // Never the same post as this issue's latest post (issue #49 had it twice).
+  const ok = posts.filter((p) => `${baseUrl}/blog/${p.slug}` !== payload.blogPost?.url);
+  const post = ok.find((p) => !usedUrls.has(`${baseUrl}/blog/${p.slug}`)) || ok[0];
   if (!post) return;
 
   payload.fromTheArchives = {
@@ -461,7 +464,7 @@ async function autoPopulateParkrun(
     }
 
     // No parkrun this week: leave the section out rather than print filler.
-    if (daysSince > 9) return;
+    if (daysSince > PARKRUN_MAX_DAYS) return;
 
     const timeParts = latest.time_formatted.split(':');
     const mins = parseInt(timeParts[0], 10);
@@ -542,11 +545,12 @@ export async function autoPopulateNewsletter(
     autoPopulateNews(payload, baseUrl),
     autoPopulateBlogPost(payload, baseUrl),
     autoPopulateVideo(payload),
-    autoPopulateArchives(payload, baseUrl),
     autoPopulateAppOfTheWeek(payload, baseUrl, dryRun),
     autoPopulateOneTip(payload, dryRun),
     autoPopulateParkrun(payload),
   ]);
+
+  await autoPopulateArchives(payload, baseUrl); // after the latest post, so it can avoid it
 
   if (!payload.promo) payload.promo = promoForWeek(weekIndex(), baseUrl);
 

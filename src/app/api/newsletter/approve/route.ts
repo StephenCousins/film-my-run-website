@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db';
 import type { NewsletterPayload } from '@/lib/newsletter-template';
 import { sectionHeadings, sendIssue } from '@/lib/newsletter/send-issue';
 import { liveRecipientCount, liveSendDeps } from '@/lib/newsletter/send-deps';
+import { checkIssue, warningsHtml } from '@/lib/newsletter/checks';
+import { lastParkrunDate } from '@/lib/newsletter/stage';
 
 function htmlPage(title: string, message: string, color: string = '#18181b', extra = ''): Response {
   const html = `<!DOCTYPE html>
@@ -50,7 +52,7 @@ export async function GET(request: NextRequest) {
       'Send this newsletter?',
       `<strong style="color:#18181b">${esc(payload.subject)}</strong>`,
       '#18181b',
-      `<ul style="text-align:left;margin:20px auto;padding-left:20px;color:#52525b;font-size:15px;max-width:360px">${sections}</ul>
+      `${warningsHtml(checkIssue(payload, { now: new Date(), lastParkrun: await lastParkrunDate() }))}<ul style="text-align:left;margin:20px auto;padding-left:20px;color:#52525b;font-size:15px;max-width:360px">${sections}</ul>
       <form method="POST" action="${action}" style="margin-top:24px">
         <button type="submit" style="padding:14px 28px;background:#f88c00;color:#000;font-weight:700;font-size:16px;border:0;border-radius:999px;cursor:pointer">Send now to ${n} subscriber${n === 1 ? '' : 's'}</button>
       </form>

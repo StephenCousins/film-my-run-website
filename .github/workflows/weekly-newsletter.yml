@@ -1,10 +1,10 @@
 name: Weekly Newsletter
 
 on:
+  # Backup only since 19 Nov 2026: the server stages the draft itself at 07:00 London (src/lib/newsletter/weekly.ts)
+  # because GitHub started this 6 to 10 hours late. A late run here finds today's draft and does nothing.
   schedule:
-    # Every Monday at 7:00 AM UK time (GMT)
-    # Note: During BST (late March–late October), this fires at 8am local
-    - cron: '0 7 * * 1'
+    - cron: '17 9 * * 1'
   workflow_dispatch: # Allow manual trigger from GitHub UI
 
 jobs:

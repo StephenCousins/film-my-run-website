@@ -62,6 +62,52 @@ export async function register() {
         console.log('[news-push] daily push timer on');
       }
     }
+    // Monday newsletter draft from 07:00 London, and an email to the admin at noon if there still isn't one
+    // (src/lib/newsletter/weekly.ts). The GitHub workflow is only a late backup now; staging is once a day either way.
+    const ng = globalThis as { __newsletterTimer?: NodeJS.Timeout };
+    if (process.env.NODE_ENV === 'production' && !ng.__newsletterTimer) {
+      const { runWeeklyNewsletter } = await import('@/lib/newsletter/weekly');
+      const { stageDraft, issueToday, emailAdmin, baseUrl } = await import('@/lib/newsletter/stage');
+      const { DEFAULT_SUBJECT } = await import('@/lib/newsletter-auto-populate');
+      const state = { day: '', tries: 0, alerted: false };
+      let running = false;
+      const tick = async () => {
+        if (running) return;
+        running = true;
+        try {
+          const r = await runWeeklyNewsletter({
+            now: new Date(),
+            state,
+            issueToday: async () => !!(await issueToday()),
+            stage: async () => {
+              const s = await stageDraft({ subject: DEFAULT_SUBJECT });
+              console.log(`[newsletter] ${s.status} #${s.issueId}${s.status === 'draft' ? `, ${s.warnings.length} warnings` : ''}`);
+            },
+            alert: async () => {
+              Sentry.captureMessage('[newsletter] no draft by noon', { level: 'error' });
+              await emailAdmin(
+                'No newsletter draft this Monday',
+                `The weekly newsletter draft wasn't made this morning (3 tries from 07:00 failed).\n\n` +
+                  `Make it by hand: https://github.com/StephenCousins/film-my-run-website/actions/workflows/weekly-newsletter.yml (Run workflow), ` +
+                  `or ask Claude Code to stage it. Server logs on Railway show the error ([newsletter]).\n\n${baseUrl()}`,
+              );
+            },
+          });
+          if (r.outcome === 'error') {
+            console.error(`[newsletter] ${r.error}`);
+            Sentry.captureMessage('[newsletter] staging failed', { level: 'warning', extra: { error: r.error } });
+          }
+        } catch (e) {
+          Sentry.captureException(e);
+        } finally {
+          running = false;
+        }
+      };
+      ng.__newsletterTimer = setInterval(tick, 5 * 60_000);
+      ng.__newsletterTimer.unref();
+      console.log('[newsletter] Monday timer on');
+    }
+
     // Ask Wilson log: delete rows older than 90 days, at start-up and then daily.
     const wg = globalThis as { __wilsonPurgeTimer?: NodeJS.Timeout };
     if (process.env.NODE_ENV === 'production' && !wg.__wilsonPurgeTimer) {

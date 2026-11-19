@@ -3,6 +3,8 @@ import { prisma } from '@/lib/db';
 import { buildNewsletterHtml, type NewsletterPayload } from '@/lib/newsletter-template';
 import { newsletterPayloadSchema } from '@/lib/newsletter-payload-schema';
 import { liveRecipientCount } from '@/lib/newsletter/send-deps';
+import { checkIssue } from '@/lib/newsletter/checks';
+import { lastParkrunDate } from '@/lib/newsletter/stage';
 
 export async function POST(
   request: NextRequest,
@@ -50,10 +52,11 @@ export async function POST(
   return NextResponse.json({ ok: true, html });
 }
 
-/** GET → { ok, recipients }: how many a send would go to now, for the editor's confirmation. */
+/** GET → { ok, recipients, warnings }: for the editor's confirmation, after it has saved. */
 export async function GET(_request: NextRequest, { params }: { params: Promise<{ token: string }> }) {
   const { token } = await params;
-  const issue = await prisma.newsletter_issues.findUnique({ where: { approve_token: token }, select: { status: true } });
+  const issue = await prisma.newsletter_issues.findUnique({ where: { approve_token: token }, select: { status: true, content: true } });
   if (!issue) return NextResponse.json({ error: 'Draft not found' }, { status: 404 });
-  return NextResponse.json({ ok: true, recipients: await liveRecipientCount(), status: issue.status });
+  const warnings = checkIssue(issue.content as unknown as NewsletterPayload, { now: new Date(), lastParkrun: await lastParkrunDate() });
+  return NextResponse.json({ ok: true, recipients: await liveRecipientCount(), status: issue.status, warnings });
 }

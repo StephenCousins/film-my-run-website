@@ -2,6 +2,25 @@
 
 Dated status entries moved out of CLAUDE.md. Newest first.
 
+## 19 Nov 2026: newsletter on time, checked, once
+
+- **On time.** GitHub's Monday cron started 6 to 10 hours late every week. The server now stages the draft itself
+  from 07:00 London (`src/lib/newsletter/weekly.ts`, 5-minute tick in `src/instrumentation.ts`, up to 3 tries). No
+  draft by 12:00: one email to `NEWSLETTER_ADMIN_EMAIL` plus a Sentry error. The GitHub workflow is a backup at 09:17.
+- **Once.** `stageDraft` (`src/lib/newsletter/stage.ts`) returns today's draft if one exists (London day), so the
+  timer and GitHub can't make two; `"force": true` in the POST body makes a fresh one. Sending was already once-only
+  (atomic draft → sending claim, tested).
+- **Checks** (`src/lib/newsletter/checks.ts`): the same link twice, news with no blurb, news linking to /news, a
+  greeting naming the wrong day or "weekend" on a weekday, a parkrun card when the last parkrun was over 6 days ago.
+  Shown in red at the top of the draft email (subject says "N to check"), in the editor's send dialog, and on the
+  emailed confirmation page. Warnings only, never blocks. Run over issues 44-51: caught #49's archive = latest post,
+  and "Happy weekend" on a Monday in all eight.
+- **Builder fixes**: the archive pick skips this issue's latest post; parkrun card only for runs in the last 6 days
+  (was 9, which let the previous weekend's run in).
+- **Tests**: `src/lib/newsletter-auto-populate.test.ts` builds a whole draft from fixed data; `checks.test.ts`,
+  `weekly.test.ts`. CI: `.github/workflows/test.yml` (typecheck + tests on push); Railway's "Wait for CI" is Stephen's
+  switch.
+
 ## 11 Nov 2026: RunGuessr live; games restyled
 
 - **RunGuessr** (`/games/runguessr`): daily race quiz, five races (photo, elevation profile, course outline), four
