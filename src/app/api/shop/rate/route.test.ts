@@ -3,6 +3,8 @@ import type { Member } from '@/lib/members/handlers';
 
 const current = vi.hoisted(() => ({ value: { member: null as Member | null, hadBearer: false, pro: false } }));
 vi.mock('@/lib/members/current', () => ({ currentMember: async () => current.value }));
+// The orders lookup would otherwise hit whatever database .env points at.
+vi.mock('@/lib/shop/own-type', () => ({ ownTypeOffAvailable: async () => false }));
 
 import { GET } from './route';
 
