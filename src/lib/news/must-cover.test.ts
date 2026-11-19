@@ -33,7 +33,7 @@ describe('must-cover events', () => {
     const bundles = [b('A', 9, 0, now), b('B', 8, 0, now), b('Hawks wins UTMB', 3, 6, now)];
     for (const x of bundles) x.mustCover = mustCoverFor(x, now, [utmb])?.name;
     expect(isStale(bundles[2], now)).toBe(false);
-    expect(pickBundles(bundles, 2, now).map((x) => x.key)).toEqual(['Hawks wins UTMB', 'A', 'B']);
+    expect(pickBundles(bundles, 2, now).picked.map((x) => x.key)).toEqual(['Hawks wins UTMB', 'A', 'B']);
   });
   it('ignores an event outside its window', () => {
     expect(mustCoverFor(b('UTMB lottery opens'), at('2027-03-01'), [utmb])).toBeUndefined();

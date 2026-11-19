@@ -12,7 +12,7 @@ import { moreCoverage } from './search';
 import { gapBundle, gapsToFill, mustCoverFor, mustCoverNote } from './must-cover';
 import { runnerCandidates, RUNNER_FILE_SOURCE } from '@/lib/runners/runner-file';
 import { autoProfiles } from '@/lib/runners/auto';
-import { isBorderline, passesSort, sortItem, sortItemJev } from './sort';
+import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
 import { checkFacts, writeStory, editStory, type Fix } from './write';
 
@@ -73,7 +73,7 @@ export async function monthSpentUsd(now: Date): Promise<number> {
 
 const liveDeps: RunDeps = {
   gather: gatherCandidates,
-  sort: (c) => sortItemJev(c),
+  sort: (c) => sortItem(c), // Claude first (19 Nov 2026); Jev is no longer in the daily run
   group: (items, recent) => groupItems(items, recent),
   write: (b, now, avoid, unsupported) => writeStory(b, now, undefined, avoid, unsupported),
   edit: (d, b, fix) => editStory(d, b, fix),
@@ -152,7 +152,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
   log.costUsd += grouped.costUsd;
 
   // Anything not decided this run stays unseen, so tomorrow's run looks at it again:
-  // items the grouper left out, and bundles over the cap or past the ceiling.
+  // items the grouper left out, and bundles over the cap, under the minimum or past the ceiling.
   const inBundle = new Set(grouped.bundles.flatMap((b) => b.items.map((i) => i.articleId)));
   for (const { c } of passed) if (!inBundle.has(c.articleId)) log.ungrouped.push({ url: c.url, title: c.title });
   // A race on the must-cover list (must-cover.ts): first in line, outside the cap, never stale.
@@ -179,10 +179,9 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
 
   // maxStories: a one-off larger run (the launch fill); the daily cap otherwise.
   const cap = maxStories ?? NEWS_CONFIG.maxStoriesPerRun;
-  const picked = pickBundles(grouped.bundles, cap, now);
-  for (const b of grouped.bundles) {
-    if (!b.alreadyCovered && !picked.includes(b)) log.skipped.push({ headline: b.headline, reason: `over the ${cap}-story cap` });
-  }
+  const { picked, passedOver } = pickBundles(grouped.bundles, cap, now);
+  // The cap, or under NEWS_CONFIG.minImportance: each says which (scripts/news-daily.ts prints them).
+  for (const { bundle, reason } of passedOver) log.skipped.push({ headline: bundle.headline, reason });
 
   // A must-cover race that finished a few days ago with nothing published: go and find it.
   for (const { event, edition } of gapsToFill(now, await d.recentStories(now))) {

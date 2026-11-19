@@ -158,6 +158,16 @@ describe('a news run', () => {
     expect(seen).not.toContain(1);
     expect(seen).toContain(7);
   });
+  it('says a bundle under the minimum importance was too small, not over the cap', async () => {
+    // Importance is articleId + 2: item 0 scores 2, under NEWS_CONFIG.minImportance (3); 1 to 4 fill the cap.
+    const { d, seen } = deps({ gather: async () => [0, 1, 2, 3, 4, 5].map(cand) });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(log.skipped).toEqual([
+      { headline: 'E1', reason: 'over the 4-story cap' },
+      { headline: 'E0', reason: 'below minimum importance (score 2 < 3)' },
+    ]);
+    expect(seen).not.toContain(0);
+  });
   it('never reuses a slug from the database or from earlier in the run', async () => {
     const { d, published } = deps({
       write: async () => ({ draft: { title: 'Same title', excerpt: 'E.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: 0.06 }),

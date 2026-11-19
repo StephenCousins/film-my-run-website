@@ -141,7 +141,7 @@ function runLines(log: RunSummary, dryRun = false, brief = false): string[] {
     ...(log.published ?? []).map((p) => `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
     ...(log.notPublished ?? log.held ?? []).map((h) => `Not published: ${h.headline} (${h.reason})`),
     ...((log as { profiles?: { name: string; slug?: string; reason?: string }[] }).profiles ?? []).map((p) => p.slug ? `Runner page: ${p.name} https://filmmyrun.com/runners/${p.slug}` : `No runner page for ${p.name} (${p.reason})`),
-    passedOver ? `${passedOver} more passed the sort but weren't written (cap, too old, or no group).` : '',
+    passedOver ? `${passedOver} more passed the sort but weren't written (cap, below minimum importance, too old, or no group).` : '',
   ].filter(Boolean);
   return [
     ...(log.published ?? []).map((p) => dryRun ? `Would publish: ${p.title}` : `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),

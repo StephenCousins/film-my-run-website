@@ -53,10 +53,11 @@ After adding a dependency, run `npm install` so `package-lock.json` is in sync b
 - **Strava embeds need a per-activity `data-token`** on recent activities, else the iframe shows "Error code: EEE".
   Store it in the post's `meta.strava_embed_token`; `applyStravaEmbedToken()` injects it at render.
 - **LLM calls go through `src/lib/llm.ts`.** News writing and checking: `claude -p` first, then the Max plan's API
-  credit (`ANTHROPIC_CREDIT_API_KEY`), then OpenRouter. News sort and group: OpenRouter first (Jev, then Gemini),
-  falling back to `claude -p` then the credit only when OpenRouter fails; a dead key switches OpenRouter off for the
-  rest of the run. Extra-coverage search is OpenRouter only and is skipped if that fails. Everything else: the credit
-  first, then OpenRouter. Details and models: `docs/llm.md`.
+  credit (`ANTHROPIC_CREDIT_API_KEY`), then OpenRouter. News sort and group (since 19 Nov 2026): the credit first
+  (Sonnet 5.5 / Opus 5.5), then `claude -p`, then OpenRouter; a dead OpenRouter key switches it off for the rest of
+  the run. Jev is out of the daily run. Extra-coverage search: Claude's web search tool on the credit, then
+  OpenRouter's web plugin, skipped if both fail. An empty key counts as unset. Key calls count against the news
+  ceiling (`src/lib/llm-prices.ts`). Everything else: the credit first, then OpenRouter. Details: `docs/llm.md`.
 - **Blog posts:** read `BLOG-WRITING-INSTRUCTIONS.md` first. The transcript says what happened; the post retells it
   in original prose in Stephen's voice, never copied from the transcript. Tracking: `BLOG-POST-PROJECT.md`.
 - `/tools/racescript` is live but unlinked and has never worked in production (`docs/architecture.md`).

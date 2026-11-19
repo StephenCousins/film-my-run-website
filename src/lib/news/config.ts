@@ -21,3 +21,12 @@ export const NEWS_CONFIG = {
   /** Feeds that can back up a story but never lead one. */
   referenceOnlySources: ['Marathon Investigation'] as readonly string[],
 } as const;
+
+/**
+ * Not news reports, whatever a search says. Bare domains, subdomains included: the Claude
+ * web search takes them as `blocked_domains`, and moreCoverage filters on them as well.
+ */
+export const NOT_NEWS_DOMAINS: readonly string[] = [
+  'youtube.com', 'youtu.be', 'facebook.com', 'instagram.com', 'x.com', 'twitter.com', 'tiktok.com',
+  'strava.com', 'reddit.com', 'wikipedia.org', 'linkedin.com',
+];

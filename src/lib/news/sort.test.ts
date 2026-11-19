@@ -2,8 +2,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const create = vi.fn();
 vi.mock('openai', () => ({ default: class { chat = { completions: { create } }; } }));
+const finalMessage = vi.fn();
+const stream = vi.fn((_req: unknown) => ({ finalMessage }));
+vi.mock('@anthropic-ai/sdk', () => ({ default: class { messages = { stream }; } }));
 
-import { completeJsonOpenRouterFirst, openRouterUnavailable, resetOpenRouterHealth, type ClaudeRunner } from '@/lib/llm';
+import { completeJsonClaudeFirst, noteOpenRouterFailure, resetOpenRouterHealth, type ClaudeRunner } from '@/lib/llm';
 import { passesSort, isBorderline, isRoundUp, sortItem, sortItemJev } from './sort';
 import type { Candidate, Verdict } from './types';
 
@@ -94,25 +97,29 @@ describe('sortItemJev', () => {
   });
 });
 
-describe('sorting when OpenRouter is down (13 Nov 2026: 401 "User not found")', () => {
-  const jevOk = { type: { choice: 'news', probabilities: { news: 0.93 } }, topic: { choice: 'trail_ultra', probabilities: {} }, running: { noul: 0.9 }, uk: { noul: 0.1 }, importance: { score: 6 } };
-  const claudeVerdict = v({ importance: 6 });
-  let fetchMock: ReturnType<typeof vi.fn>;
+describe('the daily sorter: Claude key, then Claude Code, then OpenRouter (19 Nov 2026)', () => {
+  const keyVerdict = v({ importance: 8 });
+  const cliVerdict = v({ importance: 6 });
+  const orVerdict = v({ importance: 4 });
   let run: ReturnType<typeof vi.fn>;
+  let fetchMock: ReturnType<typeof vi.fn>;
   // The live sort call, with the Claude CLI swapped for a fake.
-  const call = ((opts: Parameters<typeof completeJsonOpenRouterFirst>[0]) =>
-    completeJsonOpenRouterFirst({ ...opts, label: 'sort', claude: 'sonnet' }, run as unknown as ClaudeRunner)) as never;
-  const deadKey = () => {
-    fetchMock = vi.fn(async () => new Response('{"error":{"message":"User not found.","code":401}}', { status: 401 }));
-    vi.stubGlobal('fetch', fetchMock);
-    create.mockRejectedValue(Object.assign(new Error('401 User not found.'), { status: 401 }));
-  };
+  const call = ((opts: Parameters<typeof completeJsonClaudeFirst>[0]) =>
+    completeJsonClaudeFirst({ ...opts, label: 'sort', claude: 'sonnet' }, run as unknown as ClaudeRunner)) as never;
+  const keyReplies = (text: string) => finalMessage.mockResolvedValue({ stop_reason: 'end_turn', content: [{ type: 'text', text }], usage: { input_tokens: 2000, output_tokens: 200 } });
+  const cliFails = () => { run = vi.fn(async () => { throw new Error('exit 1: Claude usage limit reached'); }); };
 
   beforeEach(() => {
     process.env.OPENROUTER_API_KEY = 'k';
     process.env.CLAUDE_CODE_OAUTH_TOKEN = 't';
-    create.mockReset().mockResolvedValue({ choices: [{ message: { content: JSON.stringify(v({ importance: 4 })) } }], usage: { cost: 0.002 } });
-    run = vi.fn(async () => JSON.stringify({ is_error: false, result: JSON.stringify(claudeVerdict) }));
+    process.env.ANTHROPIC_CREDIT_API_KEY = 'c';
+    create.mockReset().mockResolvedValue({ choices: [{ message: { content: JSON.stringify(orVerdict) } }], usage: { cost: 0.002 } });
+    finalMessage.mockReset();
+    stream.mockClear();
+    run = vi.fn(async () => JSON.stringify({ is_error: false, result: JSON.stringify(cliVerdict) }));
+    // Jev is out of the daily run: it must not be called.
+    fetchMock = vi.fn(async () => { throw new Error('Jev should not be called'); });
+    vi.stubGlobal('fetch', fetchMock);
     vi.spyOn(console, 'log').mockImplementation(() => {});
     vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
@@ -124,49 +131,62 @@ describe('sorting when OpenRouter is down (13 Nov 2026: 401 "User not found")', 
     delete process.env.ANTHROPIC_CREDIT_API_KEY;
   });
 
-  it('Jev 401, Gemini 401: Claude Code sorts it, with the same prompt and schema', async () => {
-    deadKey();
-    const r = await sortItemJev(c, call);
-    expect(r).toEqual({ verdict: claudeVerdict, costUsd: 0 });
-    expect(fetchMock).toHaveBeenCalledOnce();
-    expect(create).toHaveBeenCalledOnce();
+  it('the key sorts it on Sonnet 5.5, with the real cost; nothing else is called', async () => {
+    keyReplies(JSON.stringify(keyVerdict));
+    const r = await sortItem(c, call);
+    expect(r.verdict).toEqual(keyVerdict);
+    expect(r.costUsd).toBeCloseTo((2000 * 2 + 200 * 10) / 1e6);
+    const req = stream.mock.calls[0][0] as { model: string; messages: { content: string }[] };
+    expect(req.model).toBe('claude-sonnet-5-5');
+    expect(req.messages[0].content).toContain('Classify this running article for a news desk');
+    expect(run).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it.each([['missing', undefined], ['empty', '']])('key %s: Claude Code sorts it, with the same prompt and schema', async (_n, key) => {
+    if (key === undefined) delete process.env.ANTHROPIC_CREDIT_API_KEY;
+    else process.env.ANTHROPIC_CREDIT_API_KEY = key;
+    const r = await sortItem(c, call);
+    expect(r).toEqual({ verdict: cliVerdict, costUsd: 0 });
+    expect(stream).not.toHaveBeenCalled();
     const [args, stdin] = run.mock.calls[0];
     expect(args).toEqual(expect.arrayContaining(['--model', 'sonnet']));
     expect(stdin).toContain('Classify this running article for a news desk');
     expect(stdin).toContain('"personal_race_report"');
   });
 
-  it('after a 401, the next item goes straight to Claude: no Jev, no Gemini', async () => {
-    deadKey();
-    await sortItemJev(c, call);
-    await sortItemJev({ ...c, articleId: 2, url: 'https://x.test/b' }, call);
-    await sortItemJev({ ...c, articleId: 3, url: 'https://x.test/c' }, call);
-    expect(fetchMock).toHaveBeenCalledOnce();
-    expect(create).toHaveBeenCalledOnce();
-    expect(run).toHaveBeenCalledTimes(3);
-  });
-
-  it('the switch does not leak: the next test sorts on Jev again, and Claude is not called', async () => {
-    expect(openRouterUnavailable()).toBeNull();
-    fetchMock = vi.fn(async () => Response.json({ answers: jevOk, usage: { cost: 0.00006 } }));
-    vi.stubGlobal('fetch', fetchMock);
-    const r = await sortItemJev(c, call);
-    expect(r.costUsd).toBe(0.00006);
-    expect(fetchMock).toHaveBeenCalledOnce();
+  it('the key fails: Claude Code', async () => {
+    finalMessage.mockRejectedValue(new Error('400 credit balance too low'));
+    expect((await sortItem(c, call)).verdict).toEqual(cliVerdict);
     expect(create).not.toHaveBeenCalled();
-    expect(run).not.toHaveBeenCalled();
   });
 
-  it('Jev down but Gemini up: Gemini sorts it, Claude is not called', async () => {
-    vi.stubGlobal('fetch', vi.fn(async () => new Response('down', { status: 503 })));
-    const r = await sortItemJev(c, call);
-    expect(r).toEqual({ verdict: v({ importance: 4 }), costUsd: 0.002 });
-    expect(run).not.toHaveBeenCalled();
+  it('the key replies with prose: Claude Code', async () => {
+    keyReplies('I think this is news.');
+    expect((await sortItem(c, call)).verdict).toEqual(cliVerdict);
+  });
+
+  it('key and Claude Code fail: OpenRouter on SORT_MODEL', async () => {
+    finalMessage.mockRejectedValue(new Error('400 credit balance too low'));
+    cliFails();
+    const r = await sortItem(c, call);
+    expect(r.verdict).toEqual(orVerdict);
+    expect(create.mock.calls[0][0].model).toBe('google/gemini-3.7-flash');
+  });
+
+  it('OpenRouter switched off for the run: not called, and a clear error', async () => {
+    finalMessage.mockRejectedValue(new Error('400 credit balance too low'));
+    cliFails();
+    noteOpenRouterFailure(Object.assign(new Error('401 User not found.'), { status: 401 }));
+    await expect(sortItem(c, call)).rejects.toThrow(/sort: every provider failed.*switched off/);
+    expect(create).not.toHaveBeenCalled();
   });
 
   it('every provider down: a clear error, not a silent null verdict', async () => {
-    deadKey();
-    run = vi.fn(async () => { throw new Error('exit 1: Claude usage limit reached'); });
-    await expect(sortItemJev(c, call)).rejects.toThrow(/sort: every provider failed/);
+    finalMessage.mockRejectedValue(new Error('400 credit balance too low'));
+    cliFails();
+    create.mockRejectedValue(Object.assign(new Error('401 User not found.'), { status: 401 }));
+    await expect(sortItem(c, call)).rejects.toThrow(/sort: every provider failed/);
   });
 });

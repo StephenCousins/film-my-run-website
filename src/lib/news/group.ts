@@ -1,4 +1,4 @@
-import { completeJsonOpenRouterFirst } from '@/lib/llm';
+import { completeJsonClaudeFirst } from '@/lib/llm';
 import { GROUP_MODEL } from './models';
 import type { Bundle, Candidate, Verdict } from './types';
 
@@ -35,11 +35,11 @@ const SCHEMA = {
 };
 
 /**
- * Gemini on OpenRouter, then (only if OpenRouter fails) Claude Opus through Claude Code, then the
- * Anthropic credit. Opus, not Sonnet: it is one call a day and the whole run hangs on it.
+ * Claude Opus 5.5 on the API key, then Opus through Claude Code, then GROUP_MODEL on OpenRouter
+ * (19 Nov 2026). Opus, not Sonnet: it is one call a day and the whole run hangs on it.
  */
-type GroupCall = typeof completeJsonOpenRouterFirst;
-const groupCall: GroupCall = (opts, run) => completeJsonOpenRouterFirst({ ...opts, label: 'group', claude: 'opus' }, run);
+type GroupCall = typeof completeJsonClaudeFirst;
+const groupCall: GroupCall = (opts, run) => completeJsonClaudeFirst({ ...opts, label: 'group', claude: 'opus' }, run);
 
 export async function groupItems(items: { c: Candidate; v: Verdict }[], recentHeadlines: string[], call: GroupCall = groupCall) {
   if (items.length === 0) return { bundles: [], costUsd: 0 };

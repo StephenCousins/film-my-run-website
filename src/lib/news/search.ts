@@ -1,12 +1,12 @@
 import * as cheerio from 'cheerio';
-import { searchWeb } from '@/lib/llm';
-import { NEWS_CONFIG } from './config';
+import { errorCostUsd, searchWeb } from '@/lib/llm';
+import { NEWS_CONFIG, NOT_NEWS_DOMAINS } from './config';
 import { extractPage, fetchHtml } from './gather';
 import { SORT_MODEL } from './models';
 import type { Bundle, Candidate } from './types';
 
-/** Not news reports, whatever a search says. */
-const SKIP_HOSTS = /(^|\.)(youtube\.com|youtu\.be|facebook\.com|instagram\.com|x\.com|twitter\.com|tiktok\.com|strava\.com|reddit\.com|wikipedia\.org|linkedin\.com)$/;
+/** Kept as a filter even though the Claude search is told to block them: the OpenRouter backup isn't. */
+const isSkipHost = (host: string) => NOT_NEWS_DOMAINS.some((d) => host === d || host.endsWith(`.${d}`));
 
 /** When a page says it was published: meta tags, JSON-LD, then a <time>. Null when it doesn't say. */
 export function publishedAt(html: string): Date | null {
@@ -30,7 +30,8 @@ export interface CoverageDeps {
   fetchHtml: (url: string) => Promise<string | null>;
 }
 
-const liveDeps: CoverageDeps = { search: (q) => searchWeb(SORT_MODEL, q), fetchHtml };
+// Claude's web search first, OpenRouter's (on SORT_MODEL) as the backup (llm.ts, 19 Nov 2026).
+const liveDeps: CoverageDeps = { search: (q) => searchWeb(q, { blockedDomains: NOT_NEWS_DOMAINS, openRouterModel: SORT_MODEL }), fetchHtml };
 
 /**
  * Other sites' reports of a bundle's event, for when its own source can't be
@@ -42,18 +43,17 @@ const liveDeps: CoverageDeps = { search: (q) => searchWeb(SORT_MODEL, q), fetchH
  */
 export async function moreCoverage(b: Bundle, now: Date, deps: CoverageDeps = liveDeps, want = 3): Promise<{ items: Candidate[]; costUsd: number }> {
   const hosts = new Set(b.items.map((i) => new URL(i.url).hostname.replace(/^www\./, '')));
-  // Extra coverage is a nice-to-have: if the search can't run (OpenRouter down or switched off for
-  // the run), the story goes ahead on the sources it has, and the run carries on. There is no Claude
-  // stand-in here: `claude -p` would need its web tools switched on and its free-text answer parsed
-  // for links, which is new, untested ground for a step that is optional anyway (docs/llm.md).
+  // Extra coverage is a nice-to-have: if the search can't run (no Claude key or it failed, and
+  // OpenRouter down or switched off for the run), the story goes ahead on the sources it has, and
+  // the run carries on. searchWeb logs which provider answered.
   let found: { urls: string[]; costUsd: number };
   try {
     found = await deps.search(`${b.headline} (${now.getUTCFullYear()})`);
   } catch (e) {
     console.warn(`search: skipped for "${b.headline}" (${(e as Error).message.split('\n')[0].slice(0, 200)}), going ahead without extra coverage`);
-    return { items: [], costUsd: 0 };
+    // A Claude search that ran but found nothing usable was still billed: count it.
+    return { items: [], costUsd: errorCostUsd(e) };
   }
-  console.log('search: openrouter-web');
   const { urls, costUsd } = found;
   const since = now.getTime() - NEWS_CONFIG.windowDays * 86_400_000;
   const items: Candidate[] = [];
@@ -61,7 +61,7 @@ export async function moreCoverage(b: Bundle, now: Date, deps: CoverageDeps = li
     if (items.length >= want) break;
     let host: string;
     try { host = new URL(url).hostname.replace(/^www\./, ''); } catch { continue; }
-    if (hosts.has(host) || SKIP_HOSTS.test(host)) continue;
+    if (hosts.has(host) || isSkipHost(host)) continue;
     const html = await deps.fetchHtml(url);
     if (!html) continue;
     const when = publishedAt(html);
