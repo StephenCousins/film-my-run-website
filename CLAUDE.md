@@ -56,8 +56,10 @@ After adding a dependency, run `npm install` so `package-lock.json` is in sync b
   credit (`ANTHROPIC_CREDIT_API_KEY`), then OpenRouter. News sort and group (since 19 Nov 2026): the credit first
   (Sonnet 5.5 / Opus 5.5), then `claude -p`, then OpenRouter; a dead OpenRouter key switches it off for the rest of
   the run. Jev is out of the daily run. Extra-coverage search: Claude's web search tool on the credit, then
-  OpenRouter's web plugin, skipped if both fail. An empty key counts as unset. Key calls count against the news
-  ceiling (`src/lib/llm-prices.ts`). Everything else: the credit first, then OpenRouter. Details: `docs/llm.md`.
+  OpenRouter's web plugin, skipped if both fail. An empty key counts as unset. The £15 news ceiling is OpenRouter
+  spend only (`news_runs.cost_usd`); key calls go to their own $100/month budget (`news_runs.claude_cost_usd`,
+  `NEWS_CONFIG.claudeCreditMonthlyUsd`), and the key is skipped for the run once that is reached or Anthropic says
+  the credit is used up. Everything else: the credit first, then OpenRouter. Details: `docs/llm.md`.
 - **Blog posts:** read `BLOG-WRITING-INSTRUCTIONS.md` first. The transcript says what happened; the post retells it
   in original prose in Stephen's voice, never copied from the transcript. Tracking: `BLOG-POST-PROJECT.md`.
 - `/tools/racescript` is live but unlinked and has never worked in production (`docs/architecture.md`).

@@ -6,7 +6,7 @@ const finalMessage = vi.fn();
 const stream = vi.fn((_req: unknown) => ({ finalMessage }));
 vi.mock('@anthropic-ai/sdk', () => ({ default: class { messages = { stream }; } }));
 
-import { completeJsonClaudeFirst, noteOpenRouterFailure, resetOpenRouterHealth, type ClaudeRunner } from '@/lib/llm';
+import { claudeCreditSpentThisRun, completeJsonClaudeFirst, noteOpenRouterFailure, resetOpenRouterHealth, type ClaudeRunner } from '@/lib/llm';
 import { passesSort, isBorderline, isRoundUp, sortItem, sortItemJev } from './sort';
 import type { Candidate, Verdict } from './types';
 
@@ -131,11 +131,12 @@ describe('the daily sorter: Claude key, then Claude Code, then OpenRouter (19 No
     delete process.env.ANTHROPIC_CREDIT_API_KEY;
   });
 
-  it('the key sorts it on Sonnet 5.5, with the real cost; nothing else is called', async () => {
+  it('the key sorts it on Sonnet 5.5, its real cost on the Claude credit, not the ceiling; nothing else is called', async () => {
     keyReplies(JSON.stringify(keyVerdict));
     const r = await sortItem(c, call);
     expect(r.verdict).toEqual(keyVerdict);
-    expect(r.costUsd).toBeCloseTo((2000 * 2 + 200 * 10) / 1e6);
+    expect(r.costUsd).toBe(0);
+    expect(claudeCreditSpentThisRun()).toBeCloseTo((2000 * 2 + 200 * 10) / 1e6);
     const req = stream.mock.calls[0][0] as { model: string; messages: { content: string }[] };
     expect(req.model).toBe('claude-sonnet-5-5');
     expect(req.messages[0].content).toContain('Classify this running article for a news desk');

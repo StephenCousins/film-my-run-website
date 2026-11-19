@@ -107,6 +107,95 @@ function logKeySkip(label: string, next: string): void {
   console.log(`${label}: Claude API key not set (ANTHROPIC_CREDIT_API_KEY), skipping to ${next}`);
 }
 
+/*
+ * The Claude API key's own spend and budget (19 Nov 2026, Stephen: "I get a $100
+ * free monthly spend on my Claude API key as part of my Claude Subscription. We can
+ * use all of that before the fallback to OpenRouter.").
+ *
+ * - Key calls are NOT part of the £15 news ceiling (that is OpenRouter, real money):
+ *   they never go into a result's `costUsd`. What they cost (llm-prices.ts) is added
+ *   up here instead; the news run copies claudeCreditSpentThisRun() into
+ *   news_runs.claude_cost_usd.
+ * - A news run sets the month's budget (setClaudeCreditBudget, NEWS_CONFIG
+ *   .claudeCreditMonthlyUsd) with what earlier runs this month spent. Once that plus
+ *   this run's spend reaches it, the key is skipped for the rest of the run. The web
+ *   app never sets a budget, so it is not gated by this.
+ * - The website on Railway uses the same credit and the news run can't see that
+ *   spend, so the API's own answer counts too: a billing or credit-exhausted error
+ *   (402, a 400 about the credit balance or billing) or a bad key (401/403) switches
+ *   the key off straight away; rate limits and overload (429, 529) fall through for
+ *   that call, and three in a row switch it off. One success resets the count.
+ * - Off lasts for the run: resetOpenRouterHealth() at the start of every run turns it
+ *   back on. In the long-lived web server, which never resets, it expires after an
+ *   hour (CLAUDE_KEY_OFF_MS), so a new month's credit is picked up again.
+ */
+let claudeSpent = 0;
+let claudeBudget: { monthToDateUsd: number; budgetUsd: number } | null = null;
+let claudeKeyOff: { reason: string; until: number } | null = null;
+let claudeBusyInARow = 0;
+const CLAUDE_BUSY_BEFORE_OFF = 3;
+const CLAUDE_KEY_OFF_MS = 60 * 60_000;
+
+/** What Claude API key calls have cost since the last reset (start of the run), in US dollars. */
+export function claudeCreditSpentThisRun(): number {
+  return claudeSpent;
+}
+
+/**
+ * The key's monthly budget for this run: `monthToDateUsd` is what earlier runs this
+ * month spent on it (news_runs.claude_cost_usd). Cleared by resetOpenRouterHealth().
+ */
+export function setClaudeCreditBudget(monthToDateUsd: number, budgetUsd: number): void {
+  claudeBudget = { monthToDateUsd, budgetUsd };
+}
+
+function switchClaudeKeyOff(reason: string): void {
+  if (claudeKeyOff) return;
+  claudeKeyOff = { reason, until: Date.now() + CLAUDE_KEY_OFF_MS };
+  console.warn(`Claude API key switched off for the rest of this run (${reason}), using the next route`);
+}
+
+/** Why the Claude API key is not being used just now (switched off, budget reached), or null. */
+export function claudeKeyOffReason(): string | null {
+  if (claudeKeyOff && Date.now() >= claudeKeyOff.until) claudeKeyOff = null;
+  if (!claudeKeyOff && claudeBudget && claudeBudget.monthToDateUsd + claudeSpent >= claudeBudget.budgetUsd) {
+    const { monthToDateUsd, budgetUsd } = claudeBudget;
+    switchClaudeKeyOff(`monthly Claude credit budget reached: $${(monthToDateUsd + claudeSpent).toFixed(2)} of $${budgetUsd}`);
+  }
+  return claudeKeyOff?.reason ?? null;
+}
+
+/** The key, or null when it is not set or not to be used just now (claudeKeyOffReason). */
+function usableClaudeKey(): string | null {
+  const key = claudeApiKey();
+  return key && !claudeKeyOffReason() ? key : null;
+}
+
+/** Rate limited or overloaded: worth trying again later, not on this call. */
+export function isClaudeBusy(e: unknown): boolean {
+  const status = (e as { status?: unknown })?.status;
+  if (status === 429 || status === 529) return true;
+  const msg = e instanceof Error ? e.message : String(e);
+  return /\b(429|529)\b|rate.?limit|overloaded|too many requests/i.test(msg);
+}
+
+/** Anthropic says the credit is gone, billing is off, or the key is bad: retrying won't help this run. */
+export function isClaudeCreditProblem(e: unknown): boolean {
+  if (isClaudeBusy(e)) return false;
+  const status = (e as { status?: unknown })?.status;
+  if (status === 401 || status === 402 || status === 403) return true;
+  const msg = e instanceof Error ? e.message : String(e);
+  return /\b40[123]\b|credit balance|billing|\bcredits?\b|usage limit|spend(ing)? limit|payment required/i.test(msg);
+}
+
+/** Record a failed key call; switches the key off for the run when it should. */
+function noteClaudeFailure(e: unknown): void {
+  if (isClaudeBusy(e)) {
+    claudeBusyInARow += 1;
+    if (claudeBusyInARow >= CLAUDE_BUSY_BEFORE_OFF) switchClaudeKeyOff(`${claudeBusyInARow} rate limits or overloads in a row, last: ${shortError(e)}`);
+  } else if (isClaudeCreditProblem(e)) switchClaudeKeyOff(`credit, billing or key problem: ${shortError(e)}`);
+}
+
 async function completeViaClaude(
   route: ClaudeRoute,
   opts: CompleteOptions,
@@ -115,13 +204,17 @@ async function completeViaClaude(
   return (await completeViaClaudeCosted(route, opts, extra))?.text ?? null;
 }
 
-/** completeViaClaude plus what the call cost (llm-prices.ts), for the news pipeline's ceiling. */
+/**
+ * completeViaClaude for the news pipeline. What the call cost (llm-prices.ts) goes
+ * to claudeCreditSpentThisRun(), never to the news ceiling, so nothing is returned
+ * but the text. Null: no usable key, an API error, or a reply that didn't finish.
+ */
 async function completeViaClaudeCosted(
   route: ClaudeRoute,
   { prompt, maxTokens, system }: CompleteOptions,
   extra: { imageUrl?: string; schema?: object } = {},
-): Promise<{ text: string; costUsd: number } | null> {
-  const apiKey = claudeApiKey();
+): Promise<{ text: string } | null> {
+  const apiKey = usableClaudeKey();
   if (!apiKey) return null;
   try {
     const client = new Anthropic({ apiKey, maxRetries: 1 });
@@ -143,13 +236,17 @@ async function completeViaClaudeCosted(
         }],
       })
       .finalMessage();
+    claudeBusyInARow = 0;
+    // Billed whatever the reply turns out to be (unfinished, empty, not JSON).
+    claudeSpent += claudeCostUsd(route.model, message.usage);
     if (message.stop_reason !== 'end_turn') throw new Error(`stop_reason ${message.stop_reason}`);
     const text = message.content.map((b) => (b.type === 'text' ? b.text : '')).join('').trim();
     if (!text) throw new Error('empty reply');
     console.log(`claude-credit ok (${route.model})`);
-    return { text, costUsd: claudeCostUsd(route.model, message.usage) };
+    return { text };
   } catch (e) {
-    console.log(`claude-credit failed (${route.model}): ${(e as Error).message.split('\n')[0].slice(0, 200)}, trying the next route`);
+    noteClaudeFailure(e);
+    console.log(`claude-credit failed (${route.model}): ${shortError(e)}, trying the next route`);
     return null;
   }
 }
@@ -280,8 +377,8 @@ const runClaude: ClaudeRunner = (args, stdin, timeoutMs) =>
  * CLI missing, error, timeout, usage limit, or a reply that isn't JSON.
  * `cliModel` is the CLI's model alias: opus for writing, checking and grouping,
  * sonnet for the news sorter.
- * Cost is 0: the subscription has no marginal cost, and the news ceiling must
- * count only real spend (OpenRouter and the Claude API key).
+ * Cost is 0: the subscription has no marginal cost. The news ceiling counts only
+ * OpenRouter; the Claude API key has its own budget (claudeCreditSpentThisRun).
  */
 export async function completeJsonViaClaude<T>(
   { prompt, system, schema }: JsonCallOptions,
@@ -324,18 +421,16 @@ export async function completeJson<T>(
   }
   // Writing and checking (news, runner profiles) next try the Claude API key, so a
   // run without the subscription token, or past its usage limit, still avoids
-  // paying OpenRouter for Opus. Its real cost counts against the news ceiling.
+  // paying OpenRouter for Opus. Its cost goes to the Claude credit
+  // (claudeCreditSpentThisRun), not the news ceiling: `costUsd` is OpenRouter only.
   // Sorting and grouping use completeJsonClaudeFirst.
-  let spent = 0; // a paid key reply that wasn't JSON still counts
   if (model === WRITE_MODEL || model === CHECK_MODEL) {
     if (!claudeApiKey()) logKeySkip('write', 'OpenRouter');
     const r = await completeViaClaudeCosted(CLAUDE_WRITER, { prompt, system, maxTokens }, { schema });
     const data = r === null ? null : parseJson<T>(r.text);
-    if (data !== null) return { data, costUsd: r!.costUsd, raw: r!.text };
-    spent = r?.costUsd ?? 0;
+    if (data !== null) return { data, costUsd: 0, raw: r!.text };
   }
-  const o = await completeJsonViaOpenRouter<T>(opts);
-  return { ...o, costUsd: o.costUsd + spent };
+  return completeJsonViaOpenRouter<T>(opts);
 }
 
 /** The plain OpenRouter JSON call, with structured output and its real cost. Throws on an API error. */
@@ -378,11 +473,20 @@ let openRouterOff: string | null = null;
 let openRouterFailsInARow = 0;
 const OPENROUTER_FAILS_BEFORE_OFF = 3;
 
-/** Turns OpenRouter back on and clears the failure count (start of every news run, and tests). */
+/**
+ * The per-run reset (start of every news run, the monthly refresh, and tests):
+ * OpenRouter back on and its failure count cleared, and the same for the Claude API
+ * key, whose spend this run goes back to 0 and whose budget is cleared until the run
+ * sets it again (setClaudeCreditBudget).
+ */
 export function resetOpenRouterHealth(): void {
   openRouterOff = null;
   openRouterFailsInARow = 0;
   keySkipLogged.clear(); // and say "Claude API key not set" again, once, next run
+  claudeSpent = 0;
+  claudeBudget = null;
+  claudeKeyOff = null;
+  claudeBusyInARow = 0;
 }
 
 /** Why OpenRouter was switched off for this run, or null when it is still in use. */
@@ -437,7 +541,8 @@ const CLAUDE_FIRST = {
  * `label` names the stage in the log ("sort", "group"); `claude` picks which
  * Claude. A Claude reply that isn't JSON falls through to the next route; one
  * from OpenRouter, the last route, comes back as data null, as it always has.
- * Key calls return their real cost (llm-prices.ts); CLI calls cost 0.
+ * `costUsd` is OpenRouter's only: key calls go to the Claude credit
+ * (claudeCreditSpentThisRun), CLI calls cost 0.
  */
 export async function completeJsonClaudeFirst<T>(
   opts: JsonCallOptions & { label: string; claude?: keyof typeof CLAUDE_FIRST },
@@ -447,27 +552,28 @@ export async function completeJsonClaudeFirst<T>(
   const claude = CLAUDE_FIRST[opts.claude ?? 'sonnet'];
   const system = opts.system || 'You sort and group running news for a news desk. Follow the instructions exactly.';
   const tried: string[] = [];
-  let spent = 0; // a paid key reply that wasn't JSON still counts
+  const keyOff = claudeKeyOffReason();
 
-  if (claudeApiKey()) {
+  if (!claudeApiKey()) {
+    logKeySkip(label, 'Claude Code CLI');
+    tried.push('Claude API key not set (ANTHROPIC_CREDIT_API_KEY)');
+  } else if (keyOff) {
+    tried.push(`Claude API key switched off for this run (${keyOff})`);
+  } else {
     const r = await completeViaClaudeCosted(claude.api, { prompt, system, maxTokens }, { schema });
     const data = r === null ? null : parseJson<T>(r.text);
     if (data !== null) {
       console.log(`${label}: claude-api (${claude.api.model})`);
-      return { data, costUsd: r!.costUsd, raw: r!.text };
+      return { data, costUsd: 0, raw: r!.text };
     }
-    spent = r?.costUsd ?? 0;
     tried.push(r === null ? 'Claude API key failed (see log above)' : 'Claude API key reply was not JSON');
-  } else {
-    logKeySkip(label, 'Claude Code CLI');
-    tried.push('Claude API key not set (ANTHROPIC_CREDIT_API_KEY)');
   }
 
   if (process.env.CLAUDE_CODE_OAUTH_TOKEN?.trim()) {
     const viaCli = await completeJsonViaClaude<T>({ ...opts, system }, run, claude.cli);
     if (viaCli) {
       console.log(`${label}: claude-cli`);
-      return { ...viaCli, costUsd: spent };
+      return viaCli;
     }
     tried.push('Claude Code CLI failed (see log above)');
   } else tried.push('Claude Code CLI not set up (no CLAUDE_CODE_OAUTH_TOKEN)');
@@ -479,7 +585,7 @@ export async function completeJsonClaudeFirst<T>(
       const r = await completeJsonViaOpenRouter<T>(opts);
       noteOpenRouterSuccess();
       console.log(`${label}: openrouter-${model.split('/').pop()?.split('-')[0] ?? model}`);
-      return { ...r, costUsd: r.costUsd + spent };
+      return r;
     } catch (e) {
       noteOpenRouterFailure(e);
       console.warn(`${label}: OpenRouter failed (${shortError(e)})`);
@@ -509,42 +615,37 @@ export interface SearchResult { urls: string[]; costUsd: number; via: 'claude-we
  * The news pipeline uses it to find more reports of an event when its own
  * feed source can't be read. Since 19 Nov 2026: Anthropic's server-side
  * web_search tool on the Claude API key first, OpenRouter's web plugin as the
- * backup. A Claude search that ran but got only error results still costs
- * money: that cost is added to the backup's. Throws when both fail, with what
- * was spent on the error (errorCostUsd); moreCoverage treats that as "no extra
- * coverage", counts the cost, and the run carries on.
+ * backup. `costUsd` is OpenRouter's only (the news ceiling); a Claude search's
+ * cost, even one that got only error results, goes to the Claude credit
+ * (claudeCreditSpentThisRun). Throws when both fail; moreCoverage treats that
+ * as "no extra coverage" and the run carries on.
  */
 export async function searchWeb(query: string, opts: SearchOptions): Promise<SearchResult> {
   const maxResults = opts.maxResults ?? 5;
   const tried: string[] = [];
-  // A Claude search that ran but returned only error results was still billed.
-  let spent = 0;
-  if (claudeApiKey()) {
+  const keyOff = claudeKeyOffReason();
+  if (!claudeApiKey()) {
+    logKeySkip('search', 'OpenRouter web search');
+    tried.push('Claude API key not set (ANTHROPIC_CREDIT_API_KEY)');
+  } else if (keyOff) {
+    tried.push(`Claude API key switched off for this run (${keyOff})`);
+  } else {
     try {
-      return await searchViaClaude(query, maxResults, opts.blockedDomains ?? []);
+      const r = await searchViaClaude(query, maxResults, opts.blockedDomains ?? []);
+      claudeBusyInARow = 0;
+      return r;
     } catch (e) {
-      spent = errorCostUsd(e);
+      noteClaudeFailure(e);
       console.warn(`search: Claude web search failed (${shortError(e)}), trying OpenRouter`);
       tried.push(`Claude web search: ${shortError(e)}`);
     }
-  } else {
-    logKeySkip('search', 'OpenRouter web search');
-    tried.push('Claude API key not set (ANTHROPIC_CREDIT_API_KEY)');
   }
   try {
-    const r = await searchViaOpenRouter(query, maxResults, opts.openRouterModel);
-    return { ...r, costUsd: r.costUsd + spent };
+    return await searchViaOpenRouter(query, maxResults, opts.openRouterModel);
   } catch (e) {
     tried.push(`OpenRouter: ${shortError(e)}`);
-    // The error carries what was spent (errorCostUsd reads it) so the caller can still count it.
-    throw Object.assign(new Error(`every search provider failed. ${tried.join('; ')}`), { costUsd: spent });
+    throw new Error(`every search provider failed. ${tried.join('; ')}`);
   }
-}
-
-/** The cost a failed call attached to its error (searchWeb does this), else 0. */
-export function errorCostUsd(e: unknown): number {
-  const c = (e as { costUsd?: unknown } | null)?.costUsd;
-  return typeof c === 'number' && Number.isFinite(c) ? c : 0;
 }
 
 async function searchViaClaude(query: string, maxResults: number, blockedDomains: readonly string[]): Promise<SearchResult> {
@@ -561,7 +662,8 @@ async function searchViaClaude(query: string, maxResults: number, blockedDomains
       messages: [{ role: 'user', content: `Find recent news reports of: ${query}. Search the web and list the article URLs.` }],
     })
     .finalMessage();
-  const costUsd = claudeCostUsd(SEARCH_CLAUDE_MODEL, message.usage);
+  // Billed whether or not the searches worked; the Claude credit, not the news ceiling.
+  claudeSpent += claudeCostUsd(SEARCH_CLAUDE_MODEL, message.usage);
   // The URLs come from the search results themselves, not the model's prose.
   const urls: string[] = [];
   const errors: string[] = [];
@@ -571,10 +673,11 @@ async function searchViaClaude(query: string, maxResults: number, blockedDomains
     for (const r of block.content) if (r.type === 'web_search_result' && r.url && !urls.includes(r.url)) urls.push(r.url);
   }
   // Every search failed (too_many_requests, max_uses_exceeded...): the backup may do better.
-  // The call itself was billed, so the error carries its cost for searchWeb to pass on.
-  if (!urls.length && errors.length) throw Object.assign(new Error(`web_search error: ${errors.join(', ')}`), { costUsd });
+  // These are the search tool's own errors, not the API's, so they don't count towards
+  // switching the key off.
+  if (!urls.length && errors.length) throw new Error(`web_search error: ${errors.join(', ')}`);
   console.log(`search: claude-web (${SEARCH_CLAUDE_MODEL})`);
-  return { urls: urls.slice(0, maxResults), costUsd, via: 'claude-web' };
+  return { urls: urls.slice(0, maxResults), costUsd: 0, via: 'claude-web' };
 }
 
 async function searchViaOpenRouter(query: string, maxResults: number, model: string): Promise<SearchResult> {

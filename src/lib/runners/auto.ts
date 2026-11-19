@@ -25,7 +25,11 @@ export function topFinishes(results: BestFinish[]): BestFinish[] {
 export const AUTO_PROFILES_PER_DAY = 6;
 /** Write, check and up to NEWS_CONFIG.fixRounds rounds of edits on Opus, several pence; rounded up for the ceiling check. */
 export const PROFILE_ESTIMATE_USD = 0.15;
-/** Never more than this from one run, whatever's left of the monthly ceiling. */
+/**
+ * Never more than this from one run, whatever's left of the monthly ceiling. Both count OpenRouter
+ * spend only: Claude Code is $0 and the Claude API key has its own credit (llm.ts), so on a normal
+ * day this budget barely moves and the day cap and deadline are what stop the run.
+ */
 export const PROFILE_RUN_BUDGET_USD = 1.5;
 
 type Entry = { name: string; slug?: string; reason?: string };

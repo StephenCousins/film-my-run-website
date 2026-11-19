@@ -134,7 +134,9 @@ const unescape = (s: string) => s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').re
  * weekly UTMB refresh since 20 Oct 2026) or a newer story are revised through
  * OpenRouter and the same fix loop as automatic pages. A bio that fails the checks
  * leaves the old one untouched and isn't retried for 30 days. Its own $3 budget, never
- * more than what's left of the monthly news ceiling; no bio starts after 10 minutes.
+ * more than what's left of the monthly news ceiling (both OpenRouter spend only; the
+ * Claude API key's spend goes to its own credit, recorded by scripts/news-daily.ts);
+ * no bio starts after 10 minutes.
  */
 export async function monthlyRefresh(deps: MonthlyDeps = liveMonthlyDeps()): Promise<MonthlySummary> {
   const clock = deps.clock ?? Date.now;

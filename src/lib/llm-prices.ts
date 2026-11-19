@@ -1,11 +1,12 @@
 /**
- * Claude API prices, so calls on the API key count against the news ceiling
- * (NEWS_CONFIG.monthlyCeilingGbp) like OpenRouter calls do. The API doesn't
- * return a cost, so it is worked out from `message.usage`.
+ * Claude API prices, so calls on the API key count against the key's own
+ * monthly credit (NEWS_CONFIG.claudeCreditMonthlyUsd, news_runs.claude_cost_usd).
+ * They are not part of the £15 news ceiling, which is OpenRouter only. The API
+ * doesn't return a cost, so it is worked out from `message.usage`.
  *
  * US dollars per million tokens, from Anthropic's price list on 19 Nov 2026.
  * Cache writes and reads are counted at the plain input price: a slight
- * overestimate, which is the safe side for a ceiling.
+ * overestimate, which is the safe side for a budget.
  */
 export const CLAUDE_PRICES: Record<string, { inPerMTok: number; outPerMTok: number }> = {
   'claude-haiku-5-5': { inPerMTok: 0.1, outPerMTok: 0.5 },

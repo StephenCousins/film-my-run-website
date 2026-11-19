@@ -1,5 +1,5 @@
 import * as cheerio from 'cheerio';
-import { errorCostUsd, searchWeb } from '@/lib/llm';
+import { searchWeb } from '@/lib/llm';
 import { NEWS_CONFIG, NOT_NEWS_DOMAINS } from './config';
 import { extractPage, fetchHtml } from './gather';
 import { SORT_MODEL } from './models';
@@ -51,8 +51,8 @@ export async function moreCoverage(b: Bundle, now: Date, deps: CoverageDeps = li
     found = await deps.search(`${b.headline} (${now.getUTCFullYear()})`);
   } catch (e) {
     console.warn(`search: skipped for "${b.headline}" (${(e as Error).message.split('\n')[0].slice(0, 200)}), going ahead without extra coverage`);
-    // A Claude search that ran but found nothing usable was still billed: count it.
-    return { items: [], costUsd: errorCostUsd(e) };
+    // A failed OpenRouter call costs nothing; a billed Claude search went to the Claude credit (llm.ts).
+    return { items: [], costUsd: 0 };
   }
   const { urls, costUsd } = found;
   const since = now.getTime() - NEWS_CONFIG.windowDays * 86_400_000;

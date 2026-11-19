@@ -7,7 +7,8 @@ const stream = vi.fn((_req: unknown) => ({ finalMessage }));
 vi.mock('@anthropic-ai/sdk', () => ({ default: class { messages = { stream }; } }));
 
 import {
-  claudeApiKey, completeJson, completeJsonClaudeFirst, errorCostUsd, isOpenRouterKeyProblem, llmConfigured, noteOpenRouterFailure,
+  claudeApiKey, claudeCreditSpentThisRun, claudeKeyOffReason, completeJson, completeJsonClaudeFirst, completeText, isClaudeBusy,
+  isClaudeCreditProblem, isOpenRouterKeyProblem, llmConfigured, noteOpenRouterFailure, setClaudeCreditBudget,
   openRouterUnavailable, resetOpenRouterHealth, searchWeb, type ClaudeRunner,
 } from './llm';
 import { claudeCostUsd } from './llm-prices';
@@ -92,13 +93,14 @@ describe('completeJson order for writing and checking: CLI, then the key, then O
     expect(create).not.toHaveBeenCalled();
   });
 
-  it('CLI fails: the key on Opus 5.5, with its real cost', async () => {
+  it('CLI fails: the key on Opus 5.5; its real cost goes to the Claude credit, not costUsd (the ceiling)', async () => {
     process.env.ANTHROPIC_CREDIT_API_KEY = 'c';
     finalMessage.mockResolvedValueOnce(apiReply('{"via":"key"}'));
     const r = await completeJson(opts, vi.fn(async () => { throw new Error('exit 1: usage limit'); }));
     expect(r.data).toEqual({ via: 'key' });
     expect(lastRequest().model).toBe('claude-opus-5-5');
-    expect(r.costUsd).toBeCloseTo((1000 * 4 + 100 * 20) / 1e6);
+    expect(r.costUsd).toBe(0);
+    expect(claudeCreditSpentThisRun()).toBeCloseTo((1000 * 4 + 100 * 20) / 1e6);
     expect(create).not.toHaveBeenCalled();
   });
 
@@ -134,7 +136,8 @@ describe('completeJsonClaudeFirst (news sort and group, 19 Nov 2026)', () => {
     const run = cli('{"via":"claude"}');
     const r = await completeJsonClaudeFirst(o, run);
     expect(r.data).toEqual({ via: 'key' });
-    expect(r.costUsd).toBeGreaterThan(0);
+    expect(r.costUsd).toBe(0);
+    expect(claudeCreditSpentThisRun()).toBeGreaterThan(0);
     expect(lastRequest().model).toBe(model);
     expect(run).not.toHaveBeenCalled();
     expect(create).not.toHaveBeenCalled();
@@ -162,12 +165,13 @@ describe('completeJsonClaudeFirst (news sort and group, 19 Nov 2026)', () => {
     expect(create).not.toHaveBeenCalled();
   });
 
-  it('the key replies with something that is not JSON: Claude Code, and the key call still counts', async () => {
+  it('the key replies with something that is not JSON: Claude Code, and the key call still counts against the credit', async () => {
     process.env.ANTHROPIC_CREDIT_API_KEY = 'c';
     finalMessage.mockResolvedValueOnce(apiReply('Sorry, no.', { input_tokens: 1_000_000, output_tokens: 0 }));
     const r = await completeJsonClaudeFirst(sortOpts, cli('{"via":"claude"}'));
     expect(r.data).toEqual({ via: 'claude' });
-    expect(r.costUsd).toBeCloseTo(2); // a million Sonnet input tokens
+    expect(r.costUsd).toBe(0);
+    expect(claudeCreditSpentThisRun()).toBeCloseTo(2); // a million Sonnet input tokens
   });
 
   it('the CLI fails too: OpenRouter, on the call\'s own model', async () => {
@@ -249,7 +253,8 @@ describe('searchWeb: Claude web search first, OpenRouter as the backup', () => {
     expect(req.tools).toEqual([{ type: 'web_search_20250305', name: 'web_search', max_uses: 3, blocked_domains: ['youtube.com', 'x.com'] }]);
     expect(r.urls).toEqual(['https://a.test/1', 'https://b.test/2', 'https://c.test/3']);
     expect(r.via).toBe('claude-web');
-    expect(r.costUsd).toBeCloseTo((10_000 * 0.1 + 500 * 0.5) / 1e6 + 2 * 0.01);
+    expect(r.costUsd).toBe(0); // OpenRouter's only
+    expect(claudeCreditSpentThisRun()).toBeCloseTo((10_000 * 0.1 + 500 * 0.5) / 1e6 + 2 * 0.01);
     expect(create).not.toHaveBeenCalled();
   });
 
@@ -274,30 +279,33 @@ describe('searchWeb: Claude web search first, OpenRouter as the backup', () => {
   ]);
   const errorOnlyCost = (10_000 * 0.1 + 500 * 0.5) / 1e6 + 2 * 0.01;
 
-  it('only error results: the OpenRouter backup, and the Claude call is still counted', async () => {
+  it('only error results: the OpenRouter backup; the billed Claude call goes to the credit, OpenRouter to costUsd', async () => {
     process.env.ANTHROPIC_CREDIT_API_KEY = 'c';
     finalMessage.mockResolvedValueOnce(errorOnlyReply());
     create.mockResolvedValueOnce({ choices: [{ message: { annotations: [{ type: 'url_citation', url_citation: { url: 'https://or.test/1' } }] } }], usage: { cost: 0.02 } });
     const r = await searchWeb('q', searchOpts);
     expect(r.urls).toEqual(['https://or.test/1']);
     expect(r.via).toBe('openrouter-web');
-    expect(r.costUsd).toBeCloseTo(0.02 + errorOnlyCost);
+    expect(r.costUsd).toBeCloseTo(0.02);
+    expect(claudeCreditSpentThisRun()).toBeCloseTo(errorOnlyCost);
+    expect(claudeKeyOffReason()).toBeNull(); // the search tool's own errors don't switch the key off
   });
 
-  it('only error results and the backup fails too: the thrown error carries the Claude cost', async () => {
+  it('only error results and the backup fails too: throws, and the Claude call is still on the credit', async () => {
     process.env.ANTHROPIC_CREDIT_API_KEY = 'c';
     finalMessage.mockResolvedValueOnce(errorOnlyReply());
     create.mockRejectedValueOnce(userNotFound());
-    const e = await searchWeb('q', searchOpts).catch((err: unknown) => err);
-    expect((e as Error).message).toMatch(/every search provider failed.*too_many_requests.*User not found/);
-    expect(errorCostUsd(e)).toBeCloseTo(errorOnlyCost);
+    await expect(searchWeb('q', searchOpts)).rejects.toThrow(/every search provider failed.*too_many_requests.*User not found/);
+    expect(claudeCreditSpentThisRun()).toBeCloseTo(errorOnlyCost);
   });
 
-  it('both fail before anything is billed: the error carries 0', async () => {
+  it('the credit is used up: falls through to OpenRouter and the key is off for the rest of the run', async () => {
     process.env.ANTHROPIC_CREDIT_API_KEY = 'c';
-    finalMessage.mockRejectedValueOnce(new Error('529 overloaded'));
-    create.mockRejectedValueOnce(userNotFound());
-    expect(errorCostUsd(await searchWeb('q', searchOpts).catch((err: unknown) => err))).toBe(0);
+    finalMessage.mockRejectedValueOnce(Object.assign(new Error('400 Your credit balance is too low to access the Anthropic API.'), { status: 400 }));
+    create.mockResolvedValue({ choices: [{ message: { annotations: [{ type: 'url_citation', url_citation: { url: 'https://or.test/1' } }] } }], usage: { cost: 0.02 } });
+    expect((await searchWeb('q', searchOpts)).via).toBe('openrouter-web');
+    expect((await searchWeb('q', searchOpts)).via).toBe('openrouter-web');
+    expect(stream).toHaveBeenCalledOnce();
   });
 
   it.each([['missing', undefined], ['empty', '']])('key %s: logs the skip and uses the OpenRouter backup', async (_n, key) => {
@@ -317,6 +325,115 @@ describe('searchWeb: Claude web search first, OpenRouter as the backup', () => {
     await expect(searchWeb('q', searchOpts)).rejects.toThrow(/every search provider failed.*529 overloaded.*User not found/);
     await expect(searchWeb('q', searchOpts)).rejects.toThrow(/switched off for this run/);
     expect(create).toHaveBeenCalledOnce();
+  });
+});
+
+describe('the Claude API credit: its own $100 budget, and falling through when Anthropic says no (19 Nov 2026)', () => {
+  const sortOpts = { model: SORT_MODEL, prompt: 'classify', maxTokens: 10, schemaName: 's', schema: { type: 'object' }, label: 'sort', claude: 'sonnet' as const };
+  const pricey = () => apiReply('{"via":"key"}', { input_tokens: 1_000_000, output_tokens: 0 }); // $2 on Sonnet
+  const warnings = () => (vi.mocked(console.warn).mock.calls as unknown[][]).map((c) => String(c[0]));
+  beforeEach(() => { process.env.ANTHROPIC_CREDIT_API_KEY = 'c'; });
+
+  it('month to date already at the budget: the key is skipped, Claude Code answers, one log line', async () => {
+    setClaudeCreditBudget(100, 100);
+    const run = cli('{"via":"claude"}');
+    const r1 = await completeJsonClaudeFirst(sortOpts, run);
+    const r2 = await completeJsonClaudeFirst(sortOpts, run);
+    expect([r1.data, r2.data]).toEqual([{ via: 'claude' }, { via: 'claude' }]);
+    expect(stream).not.toHaveBeenCalled();
+    expect(warnings().filter((w) => w.includes('Claude API key switched off'))).toEqual([
+      'Claude API key switched off for the rest of this run (monthly Claude credit budget reached: $100.00 of $100), using the next route',
+    ]);
+  });
+
+  it('budget reached: writing goes from the CLI straight to OpenRouter, and search to the OpenRouter backup', async () => {
+    setClaudeCreditBudget(150, 100);
+    const r = await completeJson(opts, vi.fn(async () => { throw new Error('exit 1'); }));
+    expect(r).toMatchObject({ data: { via: 'openrouter' }, costUsd: 0.5 });
+    create.mockResolvedValueOnce({ choices: [{ message: { annotations: [] } }], usage: { cost: 0.01 } });
+    expect((await searchWeb('q', { openRouterModel: SORT_MODEL })).via).toBe('openrouter-web');
+    expect(stream).not.toHaveBeenCalled();
+  });
+
+  it('budget crossed mid-run: the call that crosses it is used, later calls skip the key', async () => {
+    setClaudeCreditBudget(99, 100);
+    finalMessage.mockResolvedValue(pricey());
+    const run = cli('{"via":"claude"}');
+    expect((await completeJsonClaudeFirst(sortOpts, run)).data).toEqual({ via: 'key' });
+    expect(claudeCreditSpentThisRun()).toBeCloseTo(2);
+    expect((await completeJsonClaudeFirst(sortOpts, run)).data).toEqual({ via: 'claude' });
+    expect(stream).toHaveBeenCalledOnce();
+    expect(claudeKeyOffReason()).toMatch(/budget reached: \$101\.00 of \$100/);
+  });
+
+  it('no budget set (the web app): the key is never gated by spend', async () => {
+    finalMessage.mockResolvedValue(pricey());
+    for (let i = 0; i < 3; i++) expect(await completeText({ prompt: 'hi', maxTokens: 10 })).toBe('{"via":"key"}');
+    expect(claudeCreditSpentThisRun()).toBeCloseTo(0.3); // 3 x a million Haiku input tokens
+    expect(claudeKeyOffReason()).toBeNull();
+    expect(create).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['a 400 "credit balance is too low"', Object.assign(new Error('400 {"type":"error","error":{"message":"Your credit balance is too low to access the Anthropic API."}}'), { status: 400 })],
+    ['a 402', Object.assign(new Error('402 Payment Required'), { status: 402 })],
+    ['a billing error', new Error('billing_error: this organization has billing disabled')],
+    ['a usage limit', new Error('400 You have reached your specified API usage limits.')],
+  ])('%s: falls through, and the key is off for the rest of the run until the reset', async (_n, err) => {
+    finalMessage.mockRejectedValueOnce(err).mockResolvedValue(apiReply('{"via":"key"}'));
+    const run = cli('{"via":"claude"}');
+    expect((await completeJsonClaudeFirst(sortOpts, run)).data).toEqual({ via: 'claude' });
+    expect(claudeKeyOffReason()).toMatch(/credit, billing or key problem/);
+    create.mockRejectedValueOnce(userNotFound());
+    await expect(completeJsonClaudeFirst(sortOpts, vi.fn(async () => { throw new Error('exit 1'); }))).rejects.toThrow(/Claude API key switched off for this run/);
+    expect(stream).toHaveBeenCalledOnce();
+    resetOpenRouterHealth(); // the start of the next run
+    expect(claudeKeyOffReason()).toBeNull();
+    expect((await completeJsonClaudeFirst(sortOpts, run)).data).toEqual({ via: 'key' });
+  });
+
+  it('the web app falls through to OpenRouter when the credit is used up', async () => {
+    finalMessage.mockRejectedValueOnce(Object.assign(new Error('400 Your credit balance is too low'), { status: 400 }));
+    create.mockResolvedValueOnce({ choices: [{ message: { content: 'from openrouter' } }] });
+    expect(await completeText({ prompt: 'hi', maxTokens: 10 })).toBe('from openrouter');
+  });
+
+  it.each([
+    ['429', Object.assign(new Error('429 rate_limit_error'), { status: 429 })],
+    ['529', Object.assign(new Error('529 overloaded_error'), { status: 529 })],
+  ])('a %s falls through for that call only; three in a row switch the key off; a success resets the count', async (_n, err) => {
+    const run = cli('{"via":"claude"}');
+    finalMessage.mockRejectedValueOnce(err).mockRejectedValueOnce(err).mockResolvedValueOnce(apiReply('{"via":"key"}'));
+    expect((await completeJsonClaudeFirst(sortOpts, run)).data).toEqual({ via: 'claude' });
+    expect((await completeJsonClaudeFirst(sortOpts, run)).data).toEqual({ via: 'claude' });
+    expect((await completeJsonClaudeFirst(sortOpts, run)).data).toEqual({ via: 'key' }); // still tried
+    expect(claudeKeyOffReason()).toBeNull();
+    finalMessage.mockRejectedValue(err);
+    for (let i = 0; i < 3; i++) await completeJsonClaudeFirst(sortOpts, run);
+    expect(claudeKeyOffReason()).toMatch(/3 rate limits or overloads in a row/);
+    const calls = stream.mock.calls.length;
+    await completeJsonClaudeFirst(sortOpts, run);
+    expect(stream.mock.calls.length).toBe(calls);
+  });
+
+  it('knows a used-up credit from a busy API, and neither from any other error', () => {
+    expect(isClaudeCreditProblem(Object.assign(new Error('400 credit balance is too low'), { status: 400 }))).toBe(true);
+    expect(isClaudeCreditProblem(Object.assign(new Error('Unauthorized'), { status: 401 }))).toBe(true);
+    expect(isClaudeCreditProblem(Object.assign(new Error('429 rate limited'), { status: 429 }))).toBe(false);
+    expect(isClaudeBusy(Object.assign(new Error('x'), { status: 529 }))).toBe(true);
+    expect(isClaudeBusy(new Error('Overloaded'))).toBe(true);
+    for (const e of [new Error('500 internal'), new Error('400 max_tokens too large'), new Error('stop_reason max_tokens')]) {
+      expect(isClaudeCreditProblem(e)).toBe(false);
+      expect(isClaudeBusy(e)).toBe(false);
+    }
+  });
+
+  it('the key is never logged', async () => {
+    process.env.ANTHROPIC_CREDIT_API_KEY = 'sk-ant-secret-123';
+    finalMessage.mockRejectedValueOnce(Object.assign(new Error('402 Payment Required'), { status: 402 }));
+    await completeJsonClaudeFirst(sortOpts, cli('{"via":"claude"}'));
+    const all = [...log.mock.calls, ...vi.mocked(console.warn).mock.calls].flat().map(String).join('\n');
+    expect(all).not.toContain('sk-ant-secret-123');
   });
 });
 

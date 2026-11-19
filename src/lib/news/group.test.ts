@@ -6,7 +6,7 @@ const finalMessage = vi.fn();
 const stream = vi.fn((_req: unknown) => ({ finalMessage }));
 vi.mock('@anthropic-ai/sdk', () => ({ default: class { messages = { stream }; } }));
 
-import { completeJsonClaudeFirst, noteOpenRouterFailure, resetOpenRouterHealth, type ClaudeRunner } from '@/lib/llm';
+import { claudeCreditSpentThisRun, completeJsonClaudeFirst, noteOpenRouterFailure, resetOpenRouterHealth, type ClaudeRunner } from '@/lib/llm';
 import { bundleImportance, groupItems } from './group';
 import type { Candidate, Verdict } from './types';
 
@@ -85,10 +85,11 @@ describe('grouping: Claude key, then Claude Code, then OpenRouter (19 Nov 2026)'
     delete process.env.ANTHROPIC_CREDIT_API_KEY;
   });
 
-  it('the key groups them on Opus 5.5, with the real cost; nothing else is called', async () => {
+  it('the key groups them on Opus 5.5, its real cost on the Claude credit, not the ceiling; nothing else is called', async () => {
     const r = await groupItems(items, [], call);
     expect(r.bundles.map((b) => b.items.map((i) => i.articleId))).toEqual([[1, 2]]);
-    expect(r.costUsd).toBeCloseTo((5000 * 4 + 1000 * 20) / 1e6);
+    expect(r.costUsd).toBe(0);
+    expect(claudeCreditSpentThisRun()).toBeCloseTo((5000 * 4 + 1000 * 20) / 1e6);
     expect((stream.mock.calls[0][0] as { model: string }).model).toBe('claude-opus-5-5');
     expect(run).not.toHaveBeenCalled();
     expect(create).not.toHaveBeenCalled();

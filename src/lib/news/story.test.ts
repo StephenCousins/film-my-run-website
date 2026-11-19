@@ -36,7 +36,7 @@ describe('a story on demand', () => {
       // Without these, run() falls back to the live deps (runnerFiles hits the DB).
       runnerFiles: async () => [],
       autoProfiles: async () => ({ log: [], costUsd: 0 }),
-      monthSpentUsd: async () => 0, recentHeadlines: async () => [], takenSlugs: async () => new Set(), recentSlugs: async () => new Set(),
+      monthSpentUsd: async () => 0, claudeMonthSpentUsd: async () => 0, recentHeadlines: async () => [], takenSlugs: async () => new Set(), recentSlugs: async () => new Set(),
       markSeen: async () => {},
     };
     const log = await runNews({ now, dryRun: false, maxStories: 1, deps: storyRunDeps as never });

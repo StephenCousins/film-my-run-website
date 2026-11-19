@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { NEWS_CONFIG } from './config';
 import { freshImportance, isStale, pickBundles, uniqueSlug, withinCeiling } from './plan';
 import type { Bundle, Verdict } from './types';
 
@@ -23,6 +24,10 @@ describe('choosing what to write', () => {
   it('stops before the month passes £15', () => {
     expect(withinCeiling(18.35, 0.12)).toBe(true);   // $18.47 < £15 x 1.27 = $19.05
     expect(withinCeiling(18.95, 0.12)).toBe(false);  // $19.07 > $19.05
+  });
+  it('the Claude API key has its own $100 a month, separate from the £15 OpenRouter ceiling (Stephen, 19 Nov 2026)', () => {
+    expect(NEWS_CONFIG.claudeCreditMonthlyUsd).toBe(100);
+    expect(NEWS_CONFIG.monthlyCeilingGbp).toBe(15);
   });
   it('never reuses a slug', () => {
     const taken = new Set(['evans-wins-utmb']);

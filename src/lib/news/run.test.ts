@@ -1,11 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('./must-cover.json', () => ({ default: [{ name: 'Spartathlon', aliases: ['Spartathlon'], topic: 'trail_ultra', editions: [{ start: '2027-09-24', end: '2027-09-26', status: 'confirmed' }] }] }));
+// The Claude API key's replies, for the tests of its spend: a million Opus input tokens is $4.
+const finalMessage = vi.fn(async () => ({ stop_reason: 'end_turn', content: [{ type: 'text', text: '{"ok":true}' }], usage: { input_tokens: 1_000_000, output_tokens: 0 } }));
+vi.mock('@anthropic-ai/sdk', () => ({ default: class { messages = { stream: () => ({ finalMessage }) }; } }));
 import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
-import { NewsRunError, runNews } from './run';
-import { noteOpenRouterFailure, openRouterUnavailable } from '@/lib/llm';
+import { NewsRunError, newsRunRow, runNews } from './run';
+import { completeJson, noteOpenRouterFailure, openRouterUnavailable } from '@/lib/llm';
+import { WRITE_MODEL } from './models';
 import type { Bundle, Candidate, Draft, Verdict } from './types';
 import { UNVERIFIED_NOTE } from './write';
 
@@ -27,6 +31,7 @@ function deps(over: Record<string, unknown> = {}) {
     hold: async (s: { slug: string }) => { held.push(s.slug); return 42; },
     edit: async (dr: Draft) => ({ draft: dr, costUsd: 0.05 }),
     monthSpentUsd: async () => 0,
+    claudeMonthSpentUsd: async () => 0,
     recentHeadlines: async () => [],
     recentStories: async () => [],
     takenSlugs: async () => new Set<string>(),
@@ -344,4 +349,97 @@ describe('a news run', () => {
     expect(searched).toBe(false);
     expect(published).toHaveLength(0);
   });
+});
+
+describe('Claude API key spend: its own $100 credit, not the £15 ceiling (19 Nov 2026)', () => {
+  const jsonOpts = { model: WRITE_MODEL, prompt: 'write', maxTokens: 10, schemaName: 's', schema: { type: 'object' } };
+  /** A writer on the Claude API key ($4 a call here), passing on the cost completeJson reports. */
+  const keyWriter = async (b: Bundle) => {
+    const r = await completeJson(jsonOpts);
+    return { draft: { title: `A title ${b.key}`, excerpt: 'An excerpt.', paragraphs: ['One.', 'Two.', 'Three.'] }, refusal: null, costUsd: r.costUsd };
+  };
+  const withKey = async <T>(fn: () => Promise<T>): Promise<T> => {
+    process.env.ANTHROPIC_CREDIT_API_KEY = 'c';
+    const token = process.env.CLAUDE_CODE_OAUTH_TOKEN;
+    delete process.env.CLAUDE_CODE_OAUTH_TOKEN; // never the real CLI from a test
+    const log = vi.spyOn(console, 'log').mockImplementation(() => {});
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    try { return await fn(); } finally {
+      delete process.env.ANTHROPIC_CREDIT_API_KEY;
+      if (token !== undefined) process.env.CLAUDE_CODE_OAUTH_TOKEN = token;
+      log.mockRestore(); warn.mockRestore(); finalMessage.mockClear();
+    }
+  };
+
+  it('goes to log.claudeCostUsd, never costUsd, and never stops the run at the ceiling', () => withKey(async () => {
+    // $18.85 of OpenRouter already this month: one OpenRouter-priced story fits (see the ceiling
+    // test above). Here the writing is on the key, $16 of it, and all four stories go out.
+    const { d, published } = deps({ monthSpentUsd: async () => 18.85, write: keyWriter, check: async () => ({ ok: true, unsupported: [], costUsd: 0 }) });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(published).toHaveLength(4);
+    expect(log.stoppedByCeiling).toBe(false);
+    expect(log.claudeCostUsd).toBeCloseTo(16);
+    expect(log.costUsd).toBeCloseTo(6 * 0.001 + 0.002); // the OpenRouter sort and group only
+    expect(log.claudeMonthBeforeUsd).toBe(0);
+  }));
+
+  it('OpenRouter spend still stops the run at the ceiling', async () => {
+    const { d } = deps({ monthSpentUsd: async () => 18.85 });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(log.stoppedByCeiling).toBe(true);
+    expect(log.claudeCostUsd).toBe(0);
+  });
+
+  it('the month already at $100: the key is skipped, with one log line, and the next route writes', () => withKey(async () => {
+    const warn = vi.mocked(console.warn);
+    const { d, published } = deps({ claudeMonthSpentUsd: async () => 100, write: keyWriter });
+    process.env.OPENROUTER_API_KEY = ''; // no OpenRouter either: completeJson throws, so nothing is written
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    delete process.env.OPENROUTER_API_KEY;
+    expect(finalMessage).not.toHaveBeenCalled();
+    expect(published).toHaveLength(0);
+    expect(log.claudeCostUsd).toBe(0);
+    expect(log.claudeMonthBeforeUsd).toBe(100);
+    expect(warn.mock.calls.filter((c) => String(c[0]).includes('monthly Claude credit budget reached'))).toHaveLength(1);
+  }));
+
+  it('the budget crossed mid-run: later calls skip the key', () => withKey(async () => {
+    // $95 before the run, $4 a story: the second story takes it to $103, the third and fourth skip the key.
+    process.env.OPENROUTER_API_KEY = '';
+    const { d, published } = deps({ claudeMonthSpentUsd: async () => 95, write: keyWriter });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    delete process.env.OPENROUTER_API_KEY;
+    expect(finalMessage).toHaveBeenCalledTimes(2);
+    expect(published).toHaveLength(2);
+    expect(log.claudeCostUsd).toBeCloseTo(8);
+  }));
+
+  it('a run that fails partway still carries its Claude spend, and the next run starts at 0', () => withKey(async () => {
+    let calls = 0;
+    const { d } = deps({ sort: async () => {
+      if (calls++ > 0) throw new Error('boom');
+      await completeJson(jsonOpts);
+      return { verdict: news(5), costUsd: 0 };
+    } });
+    const err = await runNews({ now: new Date(), dryRun: false, deps: d as never }).catch((e) => e);
+    expect(err).toBeInstanceOf(NewsRunError);
+    expect(err.log.claudeCostUsd).toBeCloseTo(4);
+    expect(newsRunRow(false, { error: err })).toMatchObject({ dry_run: false, cost_usd: 0, claude_cost_usd: 4, summary: { error: 'boom' } });
+    const next = await runNews({ now: new Date(), dryRun: true, deps: deps({ gather: async () => [] }).d as never });
+    expect(next.claudeCostUsd).toBe(0);
+  }));
+
+  it('the news_runs row: OpenRouter in cost_usd, the Claude key in claude_cost_usd', () => {
+    const log = { costUsd: 0.25, claudeCostUsd: 3.5, published: [] } as never;
+    expect(newsRunRow(true, { log }, { onDemand: ['https://x.test'] })).toEqual({
+      dry_run: true, cost_usd: 0.25, claude_cost_usd: 3.5, summary: { costUsd: 0.25, claudeCostUsd: 3.5, published: [], onDemand: ['https://x.test'] },
+    });
+    expect(newsRunRow(false, { error: new Error('not a run error') })).toEqual({ dry_run: false, cost_usd: 0, claude_cost_usd: 0, summary: { error: 'not a run error' } });
+  });
+
+  it('the month-to-date figure unreadable: the run goes on without the budget check', () => withKey(async () => {
+    const { d } = deps({ gather: async () => [], claudeMonthSpentUsd: async () => { throw new Error('db down'); } });
+    const log = await runNews({ now: new Date(), dryRun: true, deps: d as never });
+    expect(log.claudeMonthBeforeUsd).toBeUndefined();
+  }));
 });

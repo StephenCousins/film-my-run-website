@@ -54,16 +54,6 @@ describe('more coverage when the search is down', () => {
     warn.mockRestore();
   });
 
-  it('counts what a failed search still spent (a billed Claude search with only error results)', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const r = await moreCoverage(bundle, now, {
-      search: async () => { throw Object.assign(new Error('every search provider failed. ...'), { costUsd: 0.021 }); },
-      fetchHtml: vi.fn(async () => null),
-    });
-    expect(r).toEqual({ items: [], costUsd: 0.021 });
-    warn.mockRestore();
-  });
-
   it('the live search with the Claude key and OpenRouter both failing: no extra items, the story goes ahead', async () => {
     process.env.ANTHROPIC_CREDIT_API_KEY = 'c';
     process.env.OPENROUTER_API_KEY = 'k';

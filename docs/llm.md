@@ -34,24 +34,57 @@ and `completeJsonClaudeFirst()` for the news pipeline, and `searchWeb()`.
 - **Suggest-a-Shoe** (`/api/shoes/add`) runs when either the Claude key or
   `OPENROUTER_API_KEY` is set (`llmConfigured()`), and refuses only with neither.
 
-## Spend counted against the news ceiling
+## Spend: the £15 ceiling (OpenRouter) and the $100 Claude credit
 
-The news ceiling (`NEWS_CONFIG.monthlyCeilingGbp`, £15 since 19 Nov 2026, was £10) is the sum of
-`news_runs.cost_usd` for the month. Each run adds up the cost of every call:
+Stephen, 19 Nov 2026: "I get a $100 free monthly spend on my Claude API key as
+part of my Claude Subscription. We can use all of that before the fallback to
+OpenRouter." So there are two separate monthly limits:
 
-- OpenRouter: the real cost it reports (`usage.cost`).
-- Claude API key: worked out from `message.usage` with the price table in
-  `src/lib/llm-prices.ts` (19 Nov 2026, $/MTok in/out: Haiku 5.5 0.10/0.50,
-  Sonnet 5.5 2/10, Opus 5.5 4/20; cache writes and reads at the input price;
-  web searches $10 per 1,000 from `usage.server_tool_use.web_search_requests`;
-  an unknown model is priced as Opus). A key reply that wasn't JSON still counts.
-- Claude Code on the subscription: $0.
+| Route | What it costs | Recorded in | Limit |
+|---|---|---|---|
+| OpenRouter | the real cost it reports (`usage.cost`) | `news_runs.cost_usd` (`RunLog.costUsd`) | **£15 ceiling** (`NEWS_CONFIG.monthlyCeilingGbp`, was £10) |
+| Claude API key (`ANTHROPIC_CREDIT_API_KEY`) | worked out from `message.usage` (`src/lib/llm-prices.ts`) | `news_runs.claude_cost_usd` (`RunLog.claudeCostUsd`) | **$100 a month** (`NEWS_CONFIG.claudeCreditMonthlyUsd`) |
+| Claude Code on the subscription | $0 | | the subscription's usage limit |
 
-So the key's spend on sorting now takes room under the ceiling that used to be
-left for writing. A rough guess, not measured: a sort call is ~2k tokens in and
-a few hundred out on Sonnet, about $0.005-0.01 an item.
+- **The £15 ceiling counts OpenRouter only.** Everything that budgets from it
+  (`withinCeiling` / `STORY_ESTIMATE_USD` before each story, the runner-page
+  budget in `run.ts`, the monthly bio refresh in `src/lib/runners/monthly.ts`)
+  reads `cost_usd`, which no longer includes any Claude spend. With Claude
+  doing nearly everything, those budgets rarely bind; the per-run caps and
+  time limits do.
+- **The Claude key's spend** is added up in `src/lib/llm.ts`
+  (`claudeCreditSpentThisRun()`), not passed back through each call: every key
+  call's `costUsd` is 0. `runNews()` copies it into `log.claudeCostUsd`, also
+  when the run fails, and the scripts save it in `claude_cost_usd`
+  (`newsRunRow()`; the monthly refresh row too). Prices (19 Nov 2026, $/MTok
+  in/out): Haiku 5.5 0.10/0.50, Sonnet 5.5 2/10, Opus 5.5 4/20; cache writes and
+  reads at the input price; web searches $10 per 1,000; an unknown model priced
+  as Opus. A key reply that wasn't JSON, or a search that got only error
+  results, was still billed and still counts.
+- **The $100 budget.** At the start of a run (and of the monthly refresh) the
+  month to date is the sum of `claude_cost_usd` since the 1st, UTC
+  (`claudeMonthSpentUsd()`), handed to `setClaudeCreditBudget()`. When that plus
+  this run's spend reaches $100, the key is skipped for the rest of the run, with
+  one log line (`Claude API key switched off for the rest of this run (monthly
+  Claude credit budget reached: $100.40 of $100), using the next route`), and
+  each job goes to its next route (Claude Code, then OpenRouter). If the month to
+  date can't be read the run goes on without the check.
+- **The website shares the credit**, and the news run can't see what Railway
+  spends (shoe checks, the assistant, Ask Wilson). So Anthropic's own answer
+  counts too: a billing or credit-exhausted error (a 400 "credit balance is too
+  low", 402, "billing", "usage limit") or a bad key (401/403) switches the key off
+  for the rest of the run at once; a rate limit or overload (429, 529) falls
+  through for that call only, and three in a row switch it off. A success resets
+  the count. `resetOpenRouterHealth()` at the start of every run turns it back on
+  and zeroes the run's spend. The web server never resets, so there a switched-off
+  key comes back after an hour (`CLAUDE_KEY_OFF_MS`). The web app sets no
+  budget, so only Anthropic's errors stop it using the key. Keys are never logged.
+- **Reports.** The run email says `OpenRouter (paid, counts towards the £15 monthly
+  ceiling): $X.` and `Claude API credit used this run: $Y (month so far $Z of
+  $100).`; the weekly email totals both.
 
-The web app's `completeText` calls are not part of the news ceiling.
+A rough guess, not measured: a sort call on the key is ~2k tokens in and a few
+hundred out on Sonnet, about $0.005-0.01 an item.
 
 ## Notes from before 19 Nov 2026
 

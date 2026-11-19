@@ -462,11 +462,12 @@ model news_items {
 
 /// One row per pipeline run: what it did and what it cost.
 model news_runs {
-  id         Int      @id @default(autoincrement())
-  started_at DateTime @default(now())
-  dry_run    Boolean
-  cost_usd   Float    @default(0)
-  summary    Json
+  id              Int      @id @default(autoincrement())
+  started_at      DateTime @default(now())
+  dry_run         Boolean
+  cost_usd        Float    @default(0) // OpenRouter (paid) spend: what the news ceiling counts
+  claude_cost_usd Float    @default(0) // Claude API key spend, on the $100/month credit (since 19 Nov 2026)
+  summary         Json
 }
 
 model runners {
