@@ -21,6 +21,13 @@ export function liveSendDeps(): SendDeps | null {
       const { error } = await resend.batch.send(emails);
       if (error) throw new Error(error.message);
     },
+    clubMembers: async () => {
+      const rows = await prisma.users.findMany({
+        where: { access_tier: 'PRO', OR: [{ subscription_end: null }, { subscription_end: { gt: new Date() } }] },
+        select: { email: true },
+      });
+      return new Set(rows.map((r) => r.email.toLowerCase()));
+    },
     adminEmails: process.env.NEWSLETTER_ADMIN_EMAIL,
     from: process.env.RESEND_FROM_EMAIL || 'Film My Run <onboarding@resend.dev>',
     baseUrl: process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.com',

@@ -12,6 +12,18 @@ export interface NewsletterPayload {
   parkrun?: { text: string; totalRuns?: number; venues?: number; avgTime?: string };
   fromTheArchives?: { title: string; url: string; description: string; imageUrl?: string };
   whatsNew?: { text: string };
+  /** One rotating Film My Run plug (shop, Club or app), shown after the lead story. */
+  promo?: NewsletterPromo;
+}
+
+export interface NewsletterPromo {
+  kind: 'shop' | 'club' | 'app';
+  label: string;
+  title: string;
+  text: string;
+  url: string;
+  cta: string;
+  imageUrl?: string;
 }
 
 // ─── Palette (light-first design) ───
@@ -217,7 +229,7 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
 
   const firstImage = first.imageUrl
     ? `<tr><td style="padding-bottom:20px;font-size:0;line-height:0;">
-        ${angularImage(first.imageUrl, '', newsPageUrl, 504)}
+        ${angularImage(first.imageUrl, '', first.url, 504)}
       </td></tr>`
     : '';
 
@@ -232,7 +244,7 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
       <span style="font-family:${SANS};font-size:11px;font-weight:600;color:${GREY};letter-spacing:0.5px;">&nbsp;&nbsp;${first.source}</span>
     </td></tr>
     <tr><td style="padding-bottom:24px;">
-      <a href="${newsPageUrl}" style="text-decoration:none;">
+      <a href="${first.url}" style="text-decoration:none;">
         <span style="font-family:${DISPLAY};font-size:20px;font-weight:700;line-height:1.35;color:${DEEP};">${first.title}</span>
       </a>
       ${firstDesc}
@@ -251,7 +263,7 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
           </td>
           <td valign="top">
             <span style="font-family:${SANS};font-size:11px;font-weight:600;color:${GREY};letter-spacing:0.5px;">${item.source}</span><br/>
-            <a href="${newsPageUrl}" style="text-decoration:none;">
+            <a href="${item.url}" style="text-decoration:none;">
               <span style="font-family:${DISPLAY};font-size:16px;font-weight:700;line-height:1.4;color:${DEEP};">${item.title}</span>
             </a>
           </td>
@@ -407,6 +419,27 @@ function renderArchives(item: NonNullable<NewsletterPayload['fromTheArchives']>)
   </td></tr>`;
 }
 
+function renderPromo(p: NewsletterPromo): string {
+  const image = p.imageUrl
+    ? `<td width="180" valign="top" class="mob-stack" style="padding-right:24px;padding-bottom:16px;">
+        <a href="${p.url}" style="text-decoration:none;display:block;">
+          <img src="${p.imageUrl}" alt="${escapeHtml(p.title)}" width="180" style="display:block;width:100%;max-width:180px;height:auto;border:0;border-radius:6px;" />
+        </a>
+      </td>`
+    : '';
+  return `<tr><td style="background:${DEEP};padding:32px 48px 36px;border-top:4px solid ${ORANGE};" class="section-pad">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      ${image}
+      <td valign="top" class="mob-stack">
+        <span style="font-family:${SANS};font-size:11px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2.5px;">${escapeHtml(p.label)}</span>
+        <h2 style="margin:10px 0 10px;font-family:${DISPLAY};font-size:24px;font-weight:700;line-height:1.25;color:${CREAM};">${escapeHtml(p.title)}</h2>
+        <p style="margin:0 0 22px;font-family:${SANS};font-size:15px;line-height:1.7;color:#c9c1b8;">${textToHtml(p.text)}</p>
+        ${ctaButton(p.url, escapeHtml(p.cta))}
+      </td>
+    </tr></table>
+  </td></tr>`;
+}
+
 function renderWhatsNew(text: string): string {
   return `<tr><td style="background:${WHITE};padding:36px 48px 44px;" class="section-pad">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
@@ -422,6 +455,8 @@ function renderWhatsNew(text: string): string {
     </table>
   </td></tr>`;
 }
+
+export const APP_STORE_URL = 'https://apps.apple.com/gb/app/film-my-run/id6815156969';
 
 const R2_URL = 'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev';
 
@@ -515,6 +550,9 @@ export function buildNewsletterHtml(
   if (payload.blogPost) {
     body.push(renderBlogPost(payload.blogPost));
   }
+  if (payload.promo) {
+    body.push(renderPromo(payload.promo));
+  }
   if (payload.videoOfTheWeek) {
     body.push(renderVideo(payload.videoOfTheWeek));
   }
@@ -561,7 +599,7 @@ export function buildNewsletterHtml(
       </table>`
     : '';
 
-  return `<!DOCTYPE html>
+  return withUtm(`<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="utf-8"/>
@@ -644,6 +682,17 @@ export function buildNewsletterHtml(
             <tr><td align="center" style="padding:8px 48px 20px;">
               <span style="font-family:${DISPLAY};font-size:14px;font-style:italic;color:#a89f96;">Every run tells a story.</span>
             </td></tr>
+            <tr><td align="center" style="padding:0 48px 18px;">
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding:0 12px;"><a href="${baseUrl}/shop" style="font-family:${SANS};font-size:12px;font-weight:700;color:${ORANGE};text-decoration:none;letter-spacing:1px;text-transform:uppercase;">Shop</a></td>
+                  <td style="color:#5a534d;font-size:11px;">&middot;</td>
+                  <td style="padding:0 12px;"><a href="${baseUrl}/club" style="font-family:${SANS};font-size:12px;font-weight:700;color:${ORANGE};text-decoration:none;letter-spacing:1px;text-transform:uppercase;">FMR Club</a></td>
+                  <td style="color:#5a534d;font-size:11px;">&middot;</td>
+                  <td style="padding:0 12px;"><a href="${APP_STORE_URL}" style="font-family:${SANS};font-size:12px;font-weight:700;color:${ORANGE};text-decoration:none;letter-spacing:1px;text-transform:uppercase;">Get the app</a></td>
+                </tr>
+              </table>
+            </td></tr>
             <tr><td align="center" style="padding:0 48px 22px;">
               <table role="presentation" cellpadding="0" cellspacing="0">
                 <tr>
@@ -672,5 +721,18 @@ export function buildNewsletterHtml(
     </td></tr>
   </table>
 </body>
-</html>`;
+</html>`, baseUrl);
+}
+
+/**
+ * Tags every link to our own site (except /api/ routes like unsubscribe) with
+ * utm_source=newsletter, so /admin/stats can count newsletter visits.
+ */
+export function withUtm(html: string, baseUrl: string): string {
+  const host = baseUrl.replace(/\/$/, '');
+  const esc = host.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return html.replace(new RegExp(`href="(${esc}(?!/api/)[^"#]*)(#[^"]*)?"`, 'g'), (_m, url: string, hash = '') => {
+    const sep = url.includes('?') ? '&amp;' : '?';
+    return `href="${url}${sep}utm_source=newsletter&amp;utm_medium=email${hash}"`;
+  });
 }

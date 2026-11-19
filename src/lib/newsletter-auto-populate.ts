@@ -1,6 +1,9 @@
 import { prisma } from '@/lib/db';
 import { getAllParkruns, getVenueCoordinates, getMetadata, formatTime } from '@/lib/parkrun-db';
-import type { NewsletterPayload } from '@/lib/newsletter-template';
+import { APP_STORE_URL, type NewsletterPayload, type NewsletterPromo } from '@/lib/newsletter-template';
+import { shopItems, type ShopItem } from '@/lib/shop';
+import { CLUB_MONTHLY_PENCE } from '@/lib/club/subscription';
+import { FILM_MY_RUN_CHANNEL_ID } from '@/lib/youtube-stats';
 import { NEWS_PAGE_OURS_ONLY } from '@/lib/news/present';
 
 const WMO_DESCRIPTIONS: Record<number, string> = {
@@ -32,6 +35,76 @@ async function fetchWeather(lat: number, lng: number, date: string): Promise<{ t
   } catch {
     return null;
   }
+}
+
+export const DEFAULT_SUBJECT = 'Film My Run Weekly';
+
+/** Weeks since the epoch: drives every weekly rotation, so a re-staged draft picks the same thing. */
+export function weekIndex(now: Date = new Date()): number {
+  return Math.floor(now.getTime() / (7 * 24 * 60 * 60 * 1000));
+}
+
+/** Latest long-form upload from the channel's public RSS feed (no API key); Shorts are skipped. */
+async function latestYouTubeVideo(): Promise<{ id: string; title: string } | null> {
+  try {
+    const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${FILM_MY_RUN_CHANNEL_ID}`, {
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return null;
+    const xml = await res.text();
+    for (const entry of xml.split('<entry>').slice(1)) {
+      const id = entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1];
+      const link = entry.match(/<link rel="alternate" href="([^"]+)"/)?.[1] ?? '';
+      const title = entry.match(/<title>([^<]+)<\/title>/)?.[1];
+      if (id && title && !link.includes('/shorts/')) return { id, title: decodeXml(title) };
+    }
+  } catch {
+    // fall back to the races table
+  }
+  return null;
+}
+
+function decodeXml(s: string): string {
+  return s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+}
+
+const money = (pence: number) => `£${(pence / 100).toFixed(2)}`;
+
+function shopPromo(item: ShopItem, baseUrl: string): NewsletterPromo {
+  const image = item.images.find((i) => i.position === 'model') ?? item.images[0];
+  return {
+    kind: 'shop',
+    label: 'From the Film My Run shop',
+    title: item.name,
+    text: `${item.subtitle}. From £${item.priceFrom.toFixed(2)}, and FMR Club members get 15% off.`,
+    url: `${baseUrl}/shop/${item.slug}`,
+    cta: 'Have a look',
+    imageUrl: image?.src,
+  };
+}
+
+/** Shop, Club, app, in turn, one a week. Exported for the test. */
+export function promoForWeek(week: number, baseUrl: string, items: ShopItem[] = shopItems): NewsletterPromo {
+  const slot = week % 3;
+  if (slot === 0 && items.length) return shopPromo(items[Math.floor(week / 3) % items.length], baseUrl);
+  if (slot === 1) {
+    return {
+      kind: 'club',
+      label: 'FMR Club',
+      title: 'Join the FMR Club',
+      text: `${money(CLUB_MONTHLY_PENCE)} a month gets you 15% off everything in the shop, the ultra training plans, Ask Stephen and Ultra Race Pacing. It also keeps the films coming.`,
+      url: `${baseUrl}/club`,
+      cta: 'Join the Club',
+    };
+  }
+  return {
+    kind: 'app',
+    label: 'The Film My Run app',
+    title: 'Training plans in your pocket',
+    text: 'Free training plans from 5K to 100 miles in the Film My Run app for iPhone, built to the 80/20 method.',
+    url: APP_STORE_URL,
+    cta: 'Get the app',
+  };
 }
 
 function extractYouTubeId(url: string): string | null {
@@ -217,6 +290,17 @@ async function autoPopulateVideo(
 ): Promise<void> {
   if (payload.videoOfTheWeek) return;
 
+  const latest = await latestYouTubeVideo();
+  if (latest) {
+    payload.videoOfTheWeek = {
+      title: latest.title,
+      url: `https://youtu.be/${latest.id}`,
+      description: 'The latest film on the Film My Run channel',
+      thumbnailUrl: `https://img.youtube.com/vi/${latest.id}/hqdefault.jpg`,
+    };
+    return;
+  }
+
   const usedUrls = await getRecentlyUsedUrls('videoOfTheWeek', 'url', 8);
 
   const races = await prisma.races.findMany({
@@ -299,21 +383,6 @@ async function autoPopulateAppOfTheWeek(
   };
 }
 
-async function autoPopulateSession(
-  payload: NewsletterPayload,
-  dryRun: boolean
-): Promise<void> {
-  if (payload.sessionOfTheWeek) return;
-
-  const item = await pickFromPool('session', dryRun);
-  if (!item) return;
-
-  payload.sessionOfTheWeek = {
-    title: item.title,
-    description: item.body,
-  };
-}
-
 async function autoPopulateTrainingTip(
   payload: NewsletterPayload,
   dryRun: boolean
@@ -391,15 +460,8 @@ async function autoPopulateParkrun(
       // Stats are a nice-to-have — don't fail the whole section
     }
 
-    if (daysSince > 9) {
-      payload.parkrun = {
-        text: 'No parkrun for us this week — back out there again soon!',
-        totalRuns,
-        venues,
-        avgTime,
-      };
-      return;
-    }
+    // No parkrun this week: leave the section out rather than print filler.
+    if (daysSince > 9) return;
 
     const timeParts = latest.time_formatted.split(':');
     const mins = parseInt(timeParts[0], 10);
@@ -433,7 +495,7 @@ function autoPopulateIntro(payload: NewsletterPayload): void {
   const parts: string[] = [];
 
   // Opening
-  parts.push('Happy weekend, runners!');
+  parts.push('Morning, runners!');
 
   // Mention parkrun
   if (payload.parkrun) {
@@ -456,6 +518,13 @@ function autoPopulateIntro(payload: NewsletterPayload): void {
   payload.intro = parts.join(' ');
 }
 
+/** One tip a week (training, science, nutrition in turn) instead of all three. Session of the Week is editor-only now. */
+async function autoPopulateOneTip(payload: NewsletterPayload, dryRun: boolean): Promise<void> {
+  if (payload.trainingTip || payload.scienceSection || payload.nutritionTip) return;
+  const pick = [autoPopulateTrainingTip, autoPopulateScience, autoPopulateNutrition][weekIndex() % 3];
+  await pick(payload, dryRun);
+}
+
 /**
  * Auto-populate all missing sections of a newsletter payload.
  *
@@ -475,12 +544,17 @@ export async function autoPopulateNewsletter(
     autoPopulateVideo(payload),
     autoPopulateArchives(payload, baseUrl),
     autoPopulateAppOfTheWeek(payload, baseUrl, dryRun),
-    autoPopulateSession(payload, dryRun),
-    autoPopulateTrainingTip(payload, dryRun),
-    autoPopulateScience(payload, dryRun),
-    autoPopulateNutrition(payload, dryRun),
+    autoPopulateOneTip(payload, dryRun),
     autoPopulateParkrun(payload),
   ]);
+
+  if (!payload.promo) payload.promo = promoForWeek(weekIndex(), baseUrl);
+
+  // A subject that says what's inside, not the same line every week. Stephen can still edit it.
+  if (payload.subject === DEFAULT_SUBJECT) {
+    const lead = payload.blogPost?.title ?? payload.videoOfTheWeek?.title;
+    if (lead) payload.subject = lead;
+  }
 
   // Intro depends on other sections being populated, so run last
   autoPopulateIntro(payload);

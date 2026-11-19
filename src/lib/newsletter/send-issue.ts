@@ -17,6 +17,8 @@ export type SendDeps = {
   markSent: (id: number, count: number) => Promise<void>;
   subscribers: () => Promise<Recipient[]>;
   sendBatch: (emails: { from: string; to: string; subject: string; html: string; headers?: Record<string, string> }[]) => Promise<void>;
+  /** Emails of current FMR Club members: they don't get the Club plug. */
+  clubMembers?: () => Promise<Set<string>>;
   adminEmails?: string;
   from: string;
   baseUrl: string;
@@ -36,6 +38,7 @@ export function sectionHeadings(p: NewsletterPayload): string[] {
   const has: [boolean, string][] = [
     [!!p.intro?.trim(), 'Intro'],
     [!!p.blogPost, `Latest post: ${p.blogPost?.title ?? ''}`],
+    [!!p.promo, `Promo: ${p.promo?.title ?? ''}`],
     [!!p.videoOfTheWeek, `Video of the week: ${p.videoOfTheWeek?.title ?? ''}`],
     [!!p.news?.length, `Trail & ultra news (${p.news?.length ?? 0})`],
     [!!p.parkrun, 'parkrun'],
@@ -65,6 +68,8 @@ export async function sendIssue(token: string, d: SendDeps): Promise<SendResult>
   try {
     const payload = issue.content as NewsletterPayload;
     const list = await recipients(d);
+    const members = payload.promo?.kind === 'club' && d.clubMembers ? await d.clubMembers() : new Set<string>();
+    const withoutPromo: NewsletterPayload = { ...payload, promo: undefined };
     for (let i = 0; i < list.length; i += 100) {
       await d.sendBatch(
         list.slice(i, i + 100).map((sub) => {
@@ -73,7 +78,7 @@ export async function sendIssue(token: string, d: SendDeps): Promise<SendResult>
             from: d.from,
             to: sub.email,
             subject: payload.subject,
-            html: buildNewsletterHtml(payload, unsubscribeUrl, d.baseUrl),
+            html: buildNewsletterHtml(members.has(sub.email.toLowerCase()) ? withoutPromo : payload, unsubscribeUrl, d.baseUrl),
             // One-click unsubscribe in the mail app itself (RFC 8058), as Gmail and Yahoo require.
             ...(sub.token !== 'admin' && {
               headers: { 'List-Unsubscribe': `<${unsubscribeUrl}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' },

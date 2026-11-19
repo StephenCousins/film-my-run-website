@@ -24,6 +24,17 @@ function deps(issue: Issue | null) {
 const issue: Issue = { id: 1, subject: 'Hi', status: 'draft', recipient_count: 0, content: { subject: 'Hi', intro: 'x' } };
 
 describe('sendIssue', () => {
+  it('Club members miss the Club plug; everyone else gets it', async () => {
+    const promo = { kind: 'club', label: 'FMR Club', title: 'Join the FMR Club', text: 't', url: 'https://filmmyrun.com/club', cta: 'Join' };
+    const f = deps({ ...issue, content: { subject: 'Hi', promo } });
+    f.d.clubMembers = async () => new Set(['a@x.com']);
+    const batch = vi.spyOn(f.d, 'sendBatch');
+    await sendIssue('tok', f.d);
+    const html = Object.fromEntries(batch.mock.calls[0][0].map((e) => [e.to, e.html]));
+    expect(html['a@x.com']).not.toContain('Join the FMR Club');
+    expect(html['b@x.com']).toContain('Join the FMR Club');
+  });
+
   it('sends once to subscribers plus admins, with one-click unsubscribe headers', async () => {
     const f = deps(issue);
     const batch = vi.spyOn(f.d, 'sendBatch');

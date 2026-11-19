@@ -103,12 +103,13 @@ export function cleanPayload(payload: NewsletterPayload): NewsletterPayload {
   if (clean.fromTheArchives && !clean.fromTheArchives.title.trim()) delete clean.fromTheArchives;
   if (clean.whatsNew && !clean.whatsNew.text.trim()) delete clean.whatsNew;
   if (clean.parkrun && !clean.parkrun.text.trim()) delete clean.parkrun;
+  if (clean.promo && !clean.promo.title.trim()) delete clean.promo;
   if (clean.news) {
     const filtered = clean.news.filter((n) => n.title.trim() && n.url.trim());
     if (filtered.length) clean.news = filtered;
     else delete clean.news;
   }
-  for (const key of ['blogPost', 'videoOfTheWeek', 'fromTheArchives'] as const) {
+  for (const key of ['blogPost', 'videoOfTheWeek', 'fromTheArchives', 'promo'] as const) {
     const section = clean[key];
     if (section && 'imageUrl' in section && !section.imageUrl?.trim()) {
       delete (section as { imageUrl?: string }).imageUrl;
@@ -334,6 +335,19 @@ export default function NewsletterEditForm({
         <Field label="URL" value={payload.blogPost?.url ?? ''} onChange={(v) => update('blogPost', { ...payload.blogPost!, url: v })} />
         <TextArea label="Snippet" value={payload.blogPost?.snippet ?? ''} onChange={(v) => update('blogPost', { ...payload.blogPost!, snippet: v })} rows={3} />
         <Field label="Image URL" value={payload.blogPost?.imageUrl ?? ''} onChange={(v) => update('blogPost', { ...payload.blogPost!, imageUrl: v })} optional />
+      </SectionCard>
+
+      <SectionCard
+        title="Shop / Club / App plug"
+        enabled={!!payload.promo}
+        onToggle={(on) => update('promo', on ? (payload.promo ?? { kind: 'shop', label: '', title: '', text: '', url: '', cta: '', imageUrl: '' }) : undefined)}
+      >
+        <Field label="Small label" value={payload.promo?.label ?? ''} onChange={(v) => update('promo', { ...payload.promo!, label: v })} />
+        <Field label="Headline" value={payload.promo?.title ?? ''} onChange={(v) => update('promo', { ...payload.promo!, title: v })} />
+        <TextArea label="Text" value={payload.promo?.text ?? ''} onChange={(v) => update('promo', { ...payload.promo!, text: v })} rows={3} />
+        <Field label="Link" value={payload.promo?.url ?? ''} onChange={(v) => update('promo', { ...payload.promo!, url: v })} />
+        <Field label="Button text" value={payload.promo?.cta ?? ''} onChange={(v) => update('promo', { ...payload.promo!, cta: v })} />
+        <Field label="Image URL" value={payload.promo?.imageUrl ?? ''} onChange={(v) => update('promo', { ...payload.promo!, imageUrl: v })} optional />
       </SectionCard>
 
       <SectionCard

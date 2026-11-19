@@ -23,4 +23,13 @@ export const newsletterPayloadSchema = z.object({
   nutritionTip: z.object({ text: z.string(), citation: z.string().optional() }).optional(),
   fromTheArchives: z.object({ title: z.string(), url: z.string().url(), description: z.string(), imageUrl: z.string().url().optional() }).optional(),
   whatsNew: z.object({ text: z.string() }).optional(),
+  promo: z.object({
+    kind: z.enum(['shop', 'club', 'app']),
+    label: z.string(),
+    title: z.string(),
+    text: z.string(),
+    url: z.string().url(),
+    cta: z.string(),
+    imageUrl: z.string().url().optional(),
+  }).optional(),
 });

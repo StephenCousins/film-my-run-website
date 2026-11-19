@@ -35,7 +35,8 @@ export default function Analytics() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         path: pathname,
-        referrer: document.referrer || null,
+        // utm_source wins over the mail client's referrer, so newsletter clicks count as "newsletter".
+        referrer: utmReferrer() || document.referrer || null,
         sessionId,
       }),
     })
@@ -102,4 +103,10 @@ export default function Analytics() {
   }, []);
 
   return null;
+}
+
+/** `utm:newsletter` for a landing from a tagged link; /admin/stats lists it with the referrers. */
+function utmReferrer(): string | null {
+  const source = new URLSearchParams(window.location.search).get('utm_source');
+  return source ? `utm:${source.slice(0, 40)}` : null;
 }

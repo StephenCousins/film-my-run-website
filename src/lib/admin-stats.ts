@@ -56,8 +56,9 @@ export async function loadStats() {
       SELECT path, count(*) views, count(DISTINCT session_id) visitors FROM page_views
       WHERE created_at > now() - interval '30 days' GROUP BY 1 ORDER BY 2 DESC LIMIT 20`,
     prisma.$queryRaw<{ host: string; visits: bigint }[]>`
-      SELECT substring(referrer from '^https?://(?:www\\.)?([^/:]+)') AS host, count(*) visits FROM page_views
-      WHERE created_at > now() - interval '30 days' AND referrer ~ '^https?://' AND referrer !~ '^https?://(www\\.)?filmmyrun\\.'
+      SELECT coalesce(substring(referrer from '^utm:(.+)'), substring(referrer from '^https?://(?:www\\.)?([^/:]+)')) AS host, count(*) visits FROM page_views
+      WHERE created_at > now() - interval '30 days'
+        AND (referrer ~ '^utm:' OR (referrer ~ '^https?://' AND referrer !~ '^https?://(www\\.)?filmmyrun\\.'))
       GROUP BY 1 ORDER BY 2 DESC LIMIT 15`,
     prisma.$queryRaw<{ country: string; visitors: bigint }[]>`
       SELECT coalesce(country, '?') country, count(DISTINCT session_id) visitors FROM page_views
