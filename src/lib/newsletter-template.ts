@@ -335,12 +335,12 @@ function renderCards(
 
   if (app) {
     cards.push(`<tr><td style="background:${CREAM};padding:28px 28px 28px 32px;border-left:3px solid ${ORANGE};border-radius:0 6px 6px 0;">
-      <span style="font-family:${SANS};font-size:10px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2px;">App / Tool of the Week</span>
+      <span style="font-family:${SANS};font-size:10px;font-weight:700;color:${ORANGE};text-transform:uppercase;letter-spacing:2px;">On the Site</span>
       <h3 style="margin:10px 0 8px;font-family:${DISPLAY};font-size:22px;font-weight:700;color:${DEEP};">
         <a href="${app.url}" style="text-decoration:none;color:${DEEP};">${app.name}</a>
       </h3>
       <p style="margin:0 0 14px;font-family:${SANS};font-size:14px;line-height:1.7;color:${GREY};">${textToHtml(app.description)}</p>
-      <a href="${app.url}" style="font-family:${SANS};font-size:13px;font-weight:700;color:${ORANGE};text-decoration:none;">Try it &rarr;</a>
+      <a href="${app.url}" style="font-family:${SANS};font-size:13px;font-weight:700;color:${ORANGE};text-decoration:none;">Have a look &rarr;</a>
     </td></tr>`);
   }
 

@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'parkrun Statistics',
   alternates: { canonical: 'https://filmmyrun.com/tools/parkrun' },
   description:
-    'Track your parkrun history, compare performances, and visualize your progress over time. Enter your athlete ID to view all your parkrun runs.',
+    "Every parkrun Stephen Cousins has run: the times, the venues and how his 5K has changed over the years.",
   keywords: [
     'parkrun',
     'parkrun stats',
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'parkrun Statistics | Film My Run',
-    description: 'Track your parkrun history and visualize your progress.',
+    description: 'Every parkrun Stephen has run, with times and venues.',
     images: DEFAULT_OG_IMAGES,
   },
 };

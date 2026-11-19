@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: 'Race Map',
   alternates: { canonical: 'https://filmmyrun.com/tools/race-map' },
   description:
-    'Visualize race routes with elevation profiles, distance markers, and key waypoints. Upload a GPX file or explore sample routes from famous races.',
+    "Every marathon and ultra Stephen Cousins has run, on one map. Click any route to see the race details.",
   keywords: [
     'race map',
     'GPX viewer',
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: 'Race Map | Film My Run',
-    description: 'Visualize race routes with elevation profiles and markers.',
+    description: 'Every marathon and ultra Stephen has run, on one map.',
     images: DEFAULT_OG_IMAGES,
   },
 };
