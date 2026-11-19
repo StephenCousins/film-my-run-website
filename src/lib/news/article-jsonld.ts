@@ -1,3 +1,5 @@
+import { DEFAULT_OG_IMAGE_ABSOLUTE } from '@/lib/og';
+
 interface StoryForJsonLd {
   title: string;
   excerpt: string;
@@ -26,7 +28,7 @@ export function buildArticleJsonLd(story: StoryForJsonLd, storyUrl: string) {
       '@type': 'Organization',
       name: 'Film My Run',
       url: 'https://filmmyrun.com',
-      logo: { '@type': 'ImageObject', url: 'https://filmmyrun.com/og-image.jpg' },
+      logo: { '@type': 'ImageObject', url: DEFAULT_OG_IMAGE_ABSOLUTE },
     },
   };
 }

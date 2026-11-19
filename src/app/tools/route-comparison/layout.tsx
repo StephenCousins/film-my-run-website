@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Route Comparison Tool',
@@ -16,9 +17,7 @@ export const metadata: Metadata = {
     title: 'Route Comparison Tool | Film My Run',
     description:
       'Compare running routes side by side with elevation profiles. Upload GPX files to analyse differences.',
-    images: [
-      'https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/og/route-comparison-og.jpg',
-    ],
+    images: DEFAULT_OG_IMAGES,
   },
 };
 

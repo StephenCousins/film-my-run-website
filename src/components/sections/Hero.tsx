@@ -1,25 +1,24 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Play, ChevronDown, Volume2, VolumeX, Smartphone } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import Image from 'next/image';
+import { Play, ChevronDown, Smartphone } from 'lucide-react';
+
+const HERO_STILL = '/images/hero/transgrancanaria2020.jpg';
 
 // ============================================
 // HERO SECTION
 // ============================================
 // Full-screen hero with:
-// - Looping video background
-// - Parallax scroll effect (GSAP)
+// - Optimised still background (next/image)
+// - Content fades out on scroll (GSAP)
 // - Animated text reveal
 // - Scroll indicator
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const [isMuted, setIsMuted] = useState(true);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   // Initialize GSAP animations
   useEffect(() => {
@@ -32,7 +31,6 @@ export default function Hero() {
         gsap.registerPlugin(ScrollTrigger);
 
         const section = sectionRef.current;
-        const video = videoRef.current;
         const content = contentRef.current;
 
         if (!section || !content) return;
@@ -68,20 +66,6 @@ export default function Hero() {
               '-=0.2'
             );
 
-          // Parallax effect on video
-          if (video) {
-            gsap.to(video, {
-              yPercent: 30,
-              ease: 'none',
-              scrollTrigger: {
-                trigger: section,
-                start: 'top top',
-                end: 'bottom top',
-                scrub: true,
-              },
-            });
-          }
-
           // Fade out content on scroll (start after some scroll)
           gsap.to(content, {
             opacity: 0,
@@ -109,55 +93,20 @@ export default function Hero() {
     };
   }, []);
 
-  // Video loaded handler
-  const handleVideoLoaded = () => {
-    setIsLoaded(true);
-  };
-
-  // Toggle mute
-  const toggleMute = () => {
-    if (videoRef.current) {
-      videoRef.current.muted = !isMuted;
-      setIsMuted(!isMuted);
-    }
-  };
-
   return (
     <section
       ref={sectionRef}
       className="relative h-screen min-h-[600px] lg:min-h-[700px] w-full overflow-hidden"
     >
-      {/* Video Background */}
-      <div className="absolute inset-0">
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          onLoadedData={handleVideoLoaded}
-          className={cn(
-            'absolute inset-0 w-full h-full object-cover transition-opacity duration-1000',
-            isLoaded ? 'opacity-100' : 'opacity-0'
-          )}
-          poster="/images/hero/transgrancanaria2020.jpg"
-        >
-          {/* Videos hosted on Cloudflare R2 */}
-          <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/hero-loop.mp4" type="video/mp4" />
-          <source src="https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/videos/hero-loop.webm" type="video/webm" />
-        </video>
-
-        {/* Fallback image while loading */}
-        <div
-          className={cn(
-            'absolute inset-0 bg-surface-secondary transition-opacity duration-1000',
-            isLoaded ? 'opacity-0' : 'opacity-100'
-          )}
-          style={{
-            backgroundImage: 'url(/images/hero/transgrancanaria2020.jpg)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}
+      {/* Background: optimised still */}
+      <div className="absolute inset-0 bg-surface-secondary">
+        <Image
+          src={HERO_STILL}
+          alt="Stephen Cousins running up a mountain trail at Transgrancanaria 2020"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
         />
 
         {/* Gradient overlays */}
@@ -217,19 +166,6 @@ export default function Hero() {
           </div>
         </div>
       </div>
-
-      {/* Sound toggle */}
-      <button
-        onClick={toggleMute}
-        className="absolute bottom-24 lg:bottom-8 right-8 p-3 bg-black/30 backdrop-blur-sm rounded-full border border-white/10 text-white hover:bg-black/50 transition-colors z-10"
-        aria-label={isMuted ? 'Unmute video' : 'Mute video'}
-      >
-        {isMuted ? (
-          <VolumeX className="w-5 h-5" />
-        ) : (
-          <Volume2 className="w-5 h-5" />
-        )}
-      </button>
 
       {/* Scroll indicator */}
       <div className="hero-scroll absolute bottom-24 lg:bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-white/60">

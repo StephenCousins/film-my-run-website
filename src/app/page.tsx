@@ -21,6 +21,7 @@ import Footer from '@/components/layout/Footer';
 import CustomCursor from '@/components/animations/CustomCursor';
 import { prisma } from '@/lib/db';
 import { getChannelStats } from '@/lib/youtube-stats';
+import { DEFAULT_OG_IMAGES } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Film My Run | Documentary Filmmaker & Ultra Runner',
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
     description:
       'Award-winning documentary filmmaker, ultra-marathoner, and creator of free running tools.',
     url: 'https://filmmyrun.com',
-    images: ['/og-image.jpg'],
+    images: DEFAULT_OG_IMAGES,
   },
   alternates: {
     canonical: 'https://filmmyrun.com',

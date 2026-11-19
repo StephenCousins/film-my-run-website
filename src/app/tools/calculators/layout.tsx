@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { DEFAULT_OG_IMAGES } from '@/lib/og';
 
 export const metadata: Metadata = {
   title: 'Running Calculators',
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
     title: 'Running Calculators | Film My Run',
     description:
       'Free running calculators. Calculate pace, predict race times, age-grade your results.',
-    images: ['https://pub-dbf37311fd7c4d94b4e1f0eb78ebdd18.r2.dev/og/calculators-og.jpg'],
+    images: DEFAULT_OG_IMAGES,
   },
 };
 
