@@ -1,7 +1,10 @@
 // A news story on demand, from links Stephen hands over: written, checked and published now.
 //
 // Run:   npm run news:story -- <url> [<url> ...] [--note "lead with the British angle"] [--headline "..."] [--dry-run]
+//        [--text release.txt --text-url <where it is published> --text-source "HOKA UTMB Mont-Blanc"]
+//        --text: a press release Stephen pasted that isn't online yet (or can't be read): first line the title.
 // Needs: DATABASE_URL, OPENROUTER_API_KEY and the R2_* keys (see .claude/skills/news-story/SKILL.md).
+import { readFileSync } from 'node:fs';
 import { prisma } from '@/lib/db';
 import { errorText, newsRunRow, runNews } from '@/lib/news/run';
 import { storyCandidates, storyDeps } from '@/lib/news/story';
@@ -15,12 +18,20 @@ const flag = (name: string) => { const i = args.indexOf(name); return i >= 0 ? a
 const dryRun = args.includes('--dry-run');
 const note = flag('--note');
 const headline = flag('--headline');
-const urls = args.filter((a, i) => /^https?:\/\//.test(a) && !['--note', '--headline'].includes(args[i - 1]));
+const textFile = flag('--text');
+const urls = args.filter((a, i) => /^https?:\/\//.test(a) && !['--note', '--headline', '--text-url'].includes(args[i - 1]));
 
 (async () => {
-  if (!urls.length) throw new Error('Give at least one link to the story.');
+  if (!urls.length && !textFile) throw new Error('Give at least one link to the story, or --text.');
   const now = new Date();
   const candidates = await storyCandidates(urls, now);
+  if (textFile) {
+    const text = readFileSync(textFile, 'utf8').trim();
+    candidates.unshift({
+      articleId: 0, url: flag('--text-url') ?? urls[0] ?? '', source: flag('--text-source') ?? 'Press release',
+      title: text.split('\n')[0].trim(), pubDate: now, summary: '', text, imageUrl: null, photoCredit: null,
+    });
+  }
   for (const c of candidates) console.log(`${c.text ? 'read' : 'could not read'}: ${c.source} · ${c.title}`);
   const outDir = dryRun ? `news-dry-run/story-${now.toISOString().slice(0, 16).replace(/[:T]/g, '-')}` : undefined;
   const log = await runNews({ now, dryRun, outDir, maxStories: 1, deps: storyDeps(candidates, { note, headline }) });
