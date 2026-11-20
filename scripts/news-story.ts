@@ -2,12 +2,14 @@
 //
 // Run:   npm run news:story -- <url> [<url> ...] [--note "lead with the British angle"] [--headline "..."] [--dry-run]
 //        [--text release.txt --text-url <where it is published> --text-source "HOKA UTMB Mont-Blanc"]
+//        [--no-push]  a published story is pushed to the app at once (07:00-22:00 London, else at 07:00); this skips it
 //        --text: a press release Stephen pasted that isn't online yet (or can't be read): first line the title.
 // Needs: DATABASE_URL, OPENROUTER_API_KEY and the R2_* keys (see .claude/skills/news-story/SKILL.md).
 import { readFileSync } from 'node:fs';
 import { prisma } from '@/lib/db';
 import { errorText, newsRunRow, runNews } from '@/lib/news/run';
 import { storyCandidates, storyDeps } from '@/lib/news/story';
+import { queueBreakingPush } from '@/lib/push/breaking-push';
 
 const args = process.argv.slice(2);
 if (args.includes('--help') || args.length === 0) {
@@ -37,6 +39,10 @@ const urls = args.filter((a, i) => /^https?:\/\//.test(a) && !['--note', '--head
   const log = await runNews({ now, dryRun, outDir, maxStories: 1, deps: storyDeps(candidates, { note, headline }) });
   await prisma.news_runs.create({ data: newsRunRow(dryRun, { log }, { onDemand: urls }) });
   for (const p of log.published) console.log(dryRun ? `WOULD PUBLISH: ${p.title} (draft in ${outDir})` : `PUBLISHED: https://filmmyrun.com/news/${p.slug}`);
+  // A story Stephen asked for is big news: the app gets it now, not at tomorrow's 07:30 push (20 Nov 2026).
+  if (!dryRun && !args.includes('--no-push')) {
+    for (const p of log.published) { await queueBreakingPush({ slug: p.slug, title: p.title }); console.log(`PUSH QUEUED: the app gets it within 5 minutes (07:00-22:00 London)`); }
+  }
   for (const h of log.notPublished) console.log(`NOT PUBLISHED: ${h.headline}: ${h.reason}`);
   for (const s of log.skipped) console.log(`NOT WRITTEN: ${s.headline}: ${s.reason}`);
   console.log(`Cost: OpenRouter (paid) $${log.costUsd.toFixed(3)}, Claude API credit $${log.claudeCostUsd.toFixed(3)}`);

@@ -123,7 +123,11 @@ export async function prismaNewsPushDeps(now: Date, config: ApnsConfig, dryRun =
   return {
     now,
     dryRun,
-    feed: () => latestPublishedStories(now),
+    // A story already sent as breaking news (breaking-push.ts) is never the morning push as well.
+    feed: async () => {
+      const pushed = new Set((await prisma.news_breaking_pushes.findMany({ where: { sent_at: { not: null } }, select: { slug: true } })).map((r) => r.slug));
+      return (await latestPublishedStories(now)).filter((s) => !pushed.has(s.slug));
+    },
     lastSentSlug: async () => (await prisma.news_push_sends.findFirst({ orderBy: { day: 'desc' }, select: { slug: true } }))?.slug ?? null,
     newsRanToday: async (day) => (await import('@/lib/news/daily-run')).dailyRunCompletedOn(day),
     alreadySent: async (day) => (await prisma.news_push_sends.findUnique({ where: { day } })) !== null,

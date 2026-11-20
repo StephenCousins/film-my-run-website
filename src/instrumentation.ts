@@ -46,7 +46,15 @@ export async function register() {
         console.log('[news-push] APNS_* not set, daily push disabled');
       } else {
         const { runNewsPush, prismaNewsPushDeps } = await import('@/lib/push/news-push');
+        const { runBreakingPush, prismaBreakingPushDeps } = await import('@/lib/push/breaking-push');
         const tick = async () => {
+          // Breaking news first (a story Stephen published by hand, any time 07:00-22:00), then the morning push.
+          try {
+            const b = await runBreakingPush(await prismaBreakingPushDeps(await prismaNewsPushDeps(new Date(), config)));
+            if (b.outcome === 'sent') console.log(`[news-push] breaking ${b.slug} to ${b.recipients} devices, ${b.failures} failures`);
+          } catch (e) {
+            Sentry.captureException(e);
+          }
           try {
             const r = await runNewsPush({
               ...(await prismaNewsPushDeps(new Date(), config)),

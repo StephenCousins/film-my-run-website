@@ -727,6 +727,17 @@ model push_devices {
   @@index([news, invalid_at])
 }
 
+// A story published by hand (news:story) is pushed at once by the server's news-push tick, 07:00-22:00 London
+// (src/lib/push/breaking-push.ts). sent_at null = waiting. The morning push never repeats one of these.
+model news_breaking_pushes {
+  slug       String    @id
+  title      String
+  queued_at  DateTime  @default(now())
+  sent_at    DateTime?
+  recipients Int       @default(0)
+  failures   Int       @default(0)
+}
+
 model news_push_sends {
   day        String   @id // 'YYYY-MM-DD' in Europe/London
   slug       String
