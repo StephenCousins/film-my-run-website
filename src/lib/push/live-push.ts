@@ -6,11 +6,11 @@ import type { NewsPushDevice, NewsPushDeps } from './news-push';
 const MIN = 60_000;
 
 // Copied from zwift-run-website src/lib/live-push.ts and must stay in step with it.
-/** Push only a stream that is live, started 30 min ago or less, with no live push in the previous 60 min. */
+/** Push only a stream that is live, started 30 min ago or less, with no live push in the 60 min before the stream started. */
 export function shouldPush(stream: { status: string; startedAt: Date | null }, lastPushAt: Date | null, now: Date): boolean {
   if (stream.status !== 'live' || !stream.startedAt) return false;
   if (now.getTime() - stream.startedAt.getTime() > 30 * MIN) return false;
-  return !lastPushAt || now.getTime() - lastPushAt.getTime() > 60 * MIN;
+  return !lastPushAt || stream.startedAt.getTime() - lastPushAt.getTime() > 60 * MIN;
 }
 
 export const LIVE_FEED_URL = 'https://zwift.run/api/live';
@@ -40,6 +40,7 @@ export async function runLivePush(deps: LivePushDeps) {
   if (!feed) return { outcome: 'feed-unavailable' as const };
   if (!feed.live) return { outcome: 'not-live' as const };
   const { id, title, at } = feed.live;
+  if (isNaN(new Date(at).getTime())) return { outcome: 'not-due' as const };
   if (!shouldPush({ status: 'live', startedAt: new Date(at) }, await deps.lastSentAt(), deps.now)) return { outcome: 'not-due' as const };
   if (!(await deps.claim(id, title))) return { outcome: 'claimed-elsewhere' as const, id };
   const devices = await deps.devices();

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { livePayload, runLivePush, type LivePushDeps } from './live-push';
+import { livePayload, runLivePush, shouldPush, type LivePushDeps } from './live-push';
 import { registerSchema } from './register-schema';
 
 const now = new Date('2026-12-01T12:00:00Z');
@@ -52,6 +52,11 @@ describe('live push', () => {
     expect((await runLivePush(d)).outcome).toBe('not-due');
     expect(sent).toEqual([]);
   });
+  it('does not push when the feed time is invalid', async () => {
+    const { d, sent } = deps({ feed: async () => ({ live: { id: 'v1', title: 'T', at: 'garbage' }, next: null, recent: [] }) });
+    expect((await runLivePush(d)).outcome).toBe('not-due');
+    expect(sent).toEqual([]);
+  });
   it('does nothing when not live', async () => {
     const { d } = deps({ feed: async () => ({ live: null, next: null, recent: [] }) });
     expect((await runLivePush(d)).outcome).toBe('not-live');
@@ -60,6 +65,11 @@ describe('live push', () => {
     const { d } = deps({ feed: async () => null });
     expect((await runLivePush(d)).outcome).toBe('feed-unavailable');
   });
+});
+
+describe('shouldPush 60-minute rule', () => {
+  it('pushes when the previous push was 63 minutes ago (stream started 2 minutes ago)', () => expect(shouldPush({ status: 'live', startedAt: ago(2) }, ago(63), now)).toBe(true));
+  it('skips a stream that started 41 minutes after the previous push, even if checked 61 minutes after it', () => expect(shouldPush({ status: 'live', startedAt: ago(20) }, ago(61), now)).toBe(false));
 });
 
 describe('register schema live flag', () => {
