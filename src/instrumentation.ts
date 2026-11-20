@@ -70,6 +70,28 @@ export async function register() {
         console.log('[news-push] daily push timer on');
       }
     }
+    // Go-live push: a 60-second tick on zwift.run's live feed. Independent of NEWS_PUSH_ENABLED.
+    const lg = globalThis as { __livePushTimer?: NodeJS.Timeout };
+    if (process.env.NODE_ENV === 'production' && process.env.LIVE_PUSH_ENABLED === '1' && !lg.__livePushTimer) {
+      const { apnsConfig } = await import('@/lib/push/apns');
+      const config = apnsConfig();
+      if (!config) {
+        console.log('[live-push] APNS_* not set, live push disabled');
+      } else {
+        const { runLivePush, prismaLivePushDeps } = await import('@/lib/push/live-push');
+        const { prismaNewsPushDeps } = await import('@/lib/push/news-push');
+        lg.__livePushTimer = setInterval(async () => {
+          try {
+            const r = await runLivePush(await prismaLivePushDeps(await prismaNewsPushDeps(new Date(), config)));
+            if (r.outcome === 'sent') console.log(`[live-push] ${r.id} to ${r.recipients} devices, ${r.failures} failures`);
+          } catch (e) {
+            Sentry.captureException(e);
+          }
+        }, 60_000);
+        lg.__livePushTimer.unref();
+        console.log('[live-push] timer on');
+      }
+    }
     // Monday newsletter draft from 07:00 London, and an email to the admin at noon if there still isn't one
     // (src/lib/newsletter/weekly.ts). The GitHub workflow is only a late backup now; staging is once a day either way.
     const ng = globalThis as { __newsletterTimer?: NodeJS.Timeout };

@@ -13,11 +13,11 @@ export const POST = withAppApi(
     if (!parsed.success) {
       return NextResponse.json({ ok: false, error: 'Invalid registration' }, { status: 400 });
     }
-    const { token, environment, news } = parsed.data;
+    const { token, environment, news, live } = parsed.data;
     await prisma.push_devices.upsert({
       where: { token },
-      create: { token, environment, news },
-      update: { environment, news, last_seen_at: new Date(), invalid_at: null },
+      create: { token, environment, news, live },
+      update: { environment, news, live, last_seen_at: new Date(), invalid_at: null },
     });
     return NextResponse.json({ ok: true }, { headers: { 'Cache-Control': 'no-store' } });
   },

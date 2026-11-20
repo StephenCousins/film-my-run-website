@@ -720,11 +720,22 @@ model push_devices {
   token        String    @id
   environment  String // 'sandbox' | 'production'
   news         Boolean   @default(true)
+  live         Boolean   @default(false) // go-live push; only app builds that send `live` set it
   created_at   DateTime  @default(now())
   last_seen_at DateTime  @default(now())
   invalid_at   DateTime?
 
   @@index([news, invalid_at])
+  @@index([live, invalid_at])
+}
+
+// One row per stream pushed (src/lib/push/live-push.ts). Inserting the row is the lock.
+model live_pushes {
+  video_id   String   @id
+  title      String
+  sent_at    DateTime @default(now())
+  recipients Int      @default(0)
+  failures   Int      @default(0)
 }
 
 // A story published by hand (news:story) is pushed at once by the server's news-push tick, 07:00-22:00 London

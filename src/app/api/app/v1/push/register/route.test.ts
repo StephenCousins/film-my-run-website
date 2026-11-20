@@ -43,8 +43,8 @@ describe('POST /api/app/v1/push/register', () => {
     expect(res.headers.get('cache-control')).toBe('no-store');
     expect(upsert).toHaveBeenCalledWith({
       where: { token },
-      create: { token, environment: 'sandbox', news: false },
-      update: { environment: 'sandbox', news: false, last_seen_at: expect.any(Date), invalid_at: null },
+      create: { token, environment: 'sandbox', news: false, live: false },
+      update: { environment: 'sandbox', news: false, live: false, last_seen_at: expect.any(Date), invalid_at: null },
     });
   });
   it('400s on invalid input without touching prisma', async () => {
