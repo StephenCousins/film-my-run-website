@@ -443,6 +443,9 @@ model news_stories {
   @@index([status, roundup_date])
   @@index([slug])
   @@index([roundup_date])
+  // Made by hand in production; listed here so `prisma db push` doesn't drop them.
+  @@index([status], map: "news_stories_status_idx")
+  @@index([published_at], map: "news_stories_published_idx")
 }
 
 /// Every feed item the news pipeline has looked at, so nothing is sorted twice
