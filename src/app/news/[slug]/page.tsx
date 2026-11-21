@@ -141,7 +141,7 @@ export default async function NewsStoryPage({ params }: PageProps) {
   const mentioned = [...mentionedSlugs(sanitizeContent(story.content), runnerIndex)];
   // More stories about the runners in this one first, then the latest to fill three.
   const [aboutSame, latest, storyRunners] = await Promise.all([
-    Promise.all(mentioned.slice(0, 3).map((s) => storiesAbout(s, runnerIndex).catch(() => []))),
+    storiesAbout(mentioned.slice(0, 3), runnerIndex).catch(() => []),
     getRelatedStories(slug),
     mentioned.length
       ? prisma.runners.findMany({ where: { slug: { in: mentioned }, status: 'published' }, select: { slug: true, name: true, nationality: true, photos: true } })
@@ -149,7 +149,7 @@ export default async function NewsStoryPage({ params }: PageProps) {
   ]);
   const seen = new Set([slug]);
   const relatedStories = [
-    ...aboutSame.flat().map((s) => ({ id: s.slug, title: s.title, slug: s.slug, imageUrl: s.imageUrl, publishedAt: s.publishedAt })),
+    ...aboutSame.map((s) => ({ id: s.slug, title: s.title, slug: s.slug, imageUrl: s.imageUrl, publishedAt: s.publishedAt })),
     ...latest,
   ].filter((s) => !seen.has(s.slug) && seen.add(s.slug)).slice(0, 3);
   const runnersHere = mentioned.map((m) => storyRunners.find((r) => r.slug === m)).filter((r) => !!r).slice(0, 6);

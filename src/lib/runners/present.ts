@@ -27,14 +27,16 @@ export function personJsonLd(r: { name: string; slug: string; nationality: strin
 }
 
 /**
- * Our published stories about a runner, newest first: exactly the stories whose
- * text links them (mentionedSlugs), so the two directions always agree.
+ * Our published stories about a runner (or any of several), newest first: exactly the
+ * stories whose text links them (mentionedSlugs), so the two directions always agree.
+ * One query however many runners, so a news page naming three doesn't fire three.
  * ponytail: scans every published story per page view (hundreds of rows); add a
  * story_runners table if it passes a few thousand.
  */
-export async function storiesAbout(slug: string, preloaded?: Map<string, string>) {
+export async function storiesAbout(slugs: string | string[], preloaded?: Map<string, string>) {
+  const wanted = new Set(typeof slugs === 'string' ? [slugs] : slugs);
   const index = preloaded ?? await loadNameIndex();
-  const names = [...index.entries()].filter(([, s]) => s === slug).map(([n]) => n);
+  const names = [...index.entries()].filter(([, s]) => wanted.has(s)).map(([n]) => n);
   if (!names.length) return [];
   const rows = await prisma.news_stories.findMany({
     where: { status: 'published', OR: names.map((n) => ({ content: { contains: lastNameWord(n), mode: 'insensitive' } })) },
@@ -42,7 +44,7 @@ export async function storiesAbout(slug: string, preloaded?: Map<string, string>
     orderBy: { published_at: 'desc' },
   });
   return rows
-    .filter((r) => mentionedSlugs(sanitizeContent(r.content), index).has(slug))
+    .filter((r) => [...mentionedSlugs(sanitizeContent(r.content), index)].some((s) => wanted.has(s)))
     .map((r) => ({ slug: r.slug, title: r.title, imageUrl: r.image_url, publishedAt: (r.published_at ?? r.created_at).toISOString() }));
 }
 
