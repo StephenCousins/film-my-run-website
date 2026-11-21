@@ -246,7 +246,7 @@ export default function NewsletterEditForm({
       if (!r.ok) throw new Error(d.error || 'Could not count subscribers.');
       setConfirm({ recipients: d.recipients, warnings: d.warnings ?? [] });
       // Show the refreshed preview while they decide.
-      setTimeout(() => previewFrameRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 50);
+      setTimeout(() => previewFrameRef.current?.scrollIntoView?.({ behavior: 'smooth', block: 'start' }), 50);
     } catch (e) {
       setSendState('error');
       setSendMessage((e as Error).message);
