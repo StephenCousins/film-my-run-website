@@ -54,7 +54,8 @@ export async function stageDraft(payload: NewsletterPayload, opts: { force?: boo
   });
 
   const html = wrapWithApprovalBanner(
-    buildNewsletterHtml(payload, '#', base, `${base}/api/newsletter/view/${issue.id}`),
+    // The draft isn't public yet, so its browser link carries the review token (the editor's token).
+    buildNewsletterHtml(payload, '#', base, `${base}/api/newsletter/view/${issue.id}?token=${approveToken}`),
     `${base}/api/newsletter/approve?token=${approveToken}`,
     `${base}/admin/newsletter/${approveToken}`,
   ).replace(/<body([^>]*)>/, `<body$1>${warningsHtml(warnings)}`);

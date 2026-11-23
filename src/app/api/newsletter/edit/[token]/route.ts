@@ -47,6 +47,7 @@ export async function POST(
   });
 
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://filmmyrun.com';
+  // Preview only: the real send puts each subscriber's own unsubscribe link here.
   const html = buildNewsletterHtml(payload, '#unsubscribe-preview', baseUrl);
 
   return NextResponse.json({ ok: true, html });

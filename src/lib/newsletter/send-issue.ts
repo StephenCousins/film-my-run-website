@@ -70,15 +70,18 @@ export async function sendIssue(token: string, d: SendDeps): Promise<SendResult>
     const list = await recipients(d);
     const members = payload.promo?.kind === 'club' && d.clubMembers ? await d.clubMembers() : new Set<string>();
     const withoutPromo: NewsletterPayload = { ...payload, promo: undefined };
+    // Public once sending starts (see /api/newsletter/view/[id]).
+    const viewUrl = `${d.baseUrl}/api/newsletter/view/${issue.id}`;
     for (let i = 0; i < list.length; i += 100) {
       await d.sendBatch(
         list.slice(i, i + 100).map((sub) => {
+          // Each subscriber gets their own unsubscribe link. Admin copies have no subscriber token, so '#'.
           const unsubscribeUrl = sub.token === 'admin' ? '#' : `${d.baseUrl}/api/newsletter/unsubscribe?token=${sub.token}`;
           return {
             from: d.from,
             to: sub.email,
             subject: payload.subject,
-            html: buildNewsletterHtml(members.has(sub.email.toLowerCase()) ? withoutPromo : payload, unsubscribeUrl, d.baseUrl),
+            html: buildNewsletterHtml(members.has(sub.email.toLowerCase()) ? withoutPromo : payload, unsubscribeUrl, d.baseUrl, viewUrl),
             // One-click unsubscribe in the mail app itself (RFC 8058), as Gmail and Yahoo require.
             ...(sub.token !== 'admin' && {
               headers: { 'List-Unsubscribe': `<${unsubscribeUrl}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' },

@@ -253,6 +253,10 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
   const compact = rest
     .map((item, i) => {
       const num = String(i + 2).padStart(2, '0');
+      // Every story gets its blurb, a size down from the featured one to suit the compact layout.
+      const desc = item.description
+        ? `<p style="margin:6px 0 0;font-family:${SANS};font-size:13px;line-height:1.6;color:${GREY};">${item.description}</p>`
+        : '';
       return `<tr><td style="padding-bottom:20px;">
         ${thinRule()}
       </td></tr>
@@ -266,6 +270,7 @@ function renderNews(items: NonNullable<NewsletterPayload['news']>, newsPageUrl: 
             <a href="${item.url}" style="text-decoration:none;">
               <span style="font-family:${DISPLAY};font-size:16px;font-weight:700;line-height:1.4;color:${DEEP};">${item.title}</span>
             </a>
+            ${desc}
           </td>
         </tr></table>
       </td></tr>`;

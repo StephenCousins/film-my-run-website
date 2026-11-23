@@ -121,7 +121,10 @@ export function cleanPayload(payload: NewsletterPayload): NewsletterPayload {
   return clean;
 }
 
-const AUTOSAVE_MS = 20_000;
+/** Autosave this long after typing stops. */
+export const AUTOSAVE_MS = 1_500;
+/** After a failed autosave, try again after these waits (the last one repeats). */
+export const RETRY_MS = [5_000, 10_000, 20_000, 30_000];
 const backupKey = (token: string) => `fmr-newsletter-draft:${token}`;
 
 export default function NewsletterEditForm({
@@ -134,9 +137,19 @@ export default function NewsletterEditForm({
   approveUrl?: string;
 }) {
   const [payload, setPayload] = useState<NewsletterPayload>(initialPayload);
-  // What the server holds, as JSON: anything different is unsaved.
-  const savedRef = useRef(JSON.stringify(initialPayload));
-  const dirty = JSON.stringify(payload) !== savedRef.current;
+  // The latest form, for saves that start after a timer or an event.
+  const payloadRef = useRef(payload);
+  payloadRef.current = payload;
+  const payloadJson = JSON.stringify(payload);
+  // What the server holds, as JSON: anything different is unsaved. Kept in state too, so the
+  // "Unsaved changes" / "Saved" line updates as soon as a quiet autosave lands.
+  const [savedJson, setSavedJson] = useState(() => JSON.stringify(initialPayload));
+  const savedRef = useRef(savedJson);
+  const dirty = payloadJson !== savedJson;
+  // Autosaves that have failed in a row (0 = fine). Drives the retry wait and the status line.
+  const [autosaveFailures, setAutosaveFailures] = useState(0);
+  // Saves run one at a time, in order, so an older copy can never land on the server after a newer one.
+  const queueRef = useRef<Promise<unknown>>(Promise.resolve());
   const [restore, setRestore] = useState<NewsletterPayload | null>(null);
   const [confirm, setConfirm] = useState<{ recipients: number; warnings: string[] } | null>(null);
   const [sendState, setSendState] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
@@ -159,42 +172,57 @@ export default function NewsletterEditForm({
   }
 
   /**
-   * Saves the form to the server. `quiet`: the autosave, which leaves the preview and the
-   * status line alone. Returns whether the server now holds exactly this form.
+   * Saves the latest form to the server. `quiet`: the autosave, which leaves the preview alone and
+   * shows a failure only as a small note (it tries again by itself). `keepalive`: the tab is closing or
+   * being hidden, so ask the browser to finish the request even if the page goes away.
+   * Returns whether the server now holds the form as it was when this save started.
    */
   const save = useCallback(
-    async (quiet = false): Promise<boolean> => {
-      const snapshot = payload;
-      if (!quiet) {
-        setStatus('saving');
-        setErrorMessage('');
-      }
-      try {
-        const res = await fetch(`/api/newsletter/edit/${token}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(cleanPayload(snapshot)),
-        });
-        const body = await res.json();
-        if (!res.ok) throw new Error(body.error || 'Failed to save.');
-        savedRef.current = JSON.stringify(snapshot);
+    (quiet = false, keepalive = false): Promise<boolean> => {
+      const run = async (): Promise<boolean> => {
+        const snapshot = payloadRef.current;
+        const snapJson = JSON.stringify(snapshot);
+        if (quiet && snapJson === savedRef.current) return true; // nothing new to save
+        if (!quiet) {
+          setStatus('saving');
+          setErrorMessage('');
+        }
         try {
-          localStorage.removeItem(backupKey(token));
-        } catch {}
-        if (!quiet) {
-          setPreviewHtml(body.html);
+          const res = await fetch(`/api/newsletter/edit/${token}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cleanPayload(snapshot)),
+            ...(keepalive && { keepalive: true }),
+          });
+          const body = await res.json();
+          if (!res.ok) throw new Error(body.error || 'Failed to save.');
+          savedRef.current = snapJson;
+          setSavedJson(snapJson);
+          setAutosaveFailures(0);
+          // Only drop the browser copy if nothing has been typed since this save started.
+          if (JSON.stringify(payloadRef.current) === snapJson) {
+            try {
+              localStorage.removeItem(backupKey(token));
+            } catch {}
+          }
+          if (!quiet) setPreviewHtml(body.html);
           setStatus('saved');
+          return true;
+        } catch (err) {
+          if (quiet) {
+            setAutosaveFailures((n) => n + 1);
+          } else {
+            setStatus('error');
+            setErrorMessage(err instanceof Error ? err.message : 'Failed to save.');
+          }
+          return false;
         }
-        return true;
-      } catch (err) {
-        if (!quiet) {
-          setStatus('error');
-          setErrorMessage(err instanceof Error ? err.message : 'Failed to save.');
-        }
-        return false;
-      }
+      };
+      const result = queueRef.current.then(run);
+      queueRef.current = result;
+      return result;
     },
-    [payload, token]
+    [token]
   );
 
   const handleSave = () => save(false);
@@ -215,14 +243,32 @@ export default function NewsletterEditForm({
     } catch {}
   }, [token]);
 
-  // Quiet autosave while there are changes.
+  // Quiet autosave: shortly after typing stops, and again (waiting longer each time) if it fails.
   const saveRef = useRef(save);
   saveRef.current = save;
   useEffect(() => {
     if (!dirty) return;
-    const t = setInterval(() => void saveRef.current(true), AUTOSAVE_MS);
-    return () => clearInterval(t);
-  }, [dirty]);
+    const wait = autosaveFailures === 0 ? AUTOSAVE_MS : RETRY_MS[Math.min(autosaveFailures, RETRY_MS.length) - 1];
+    const t = setTimeout(() => void saveRef.current(true), wait);
+    return () => clearTimeout(t);
+  }, [dirty, payloadJson, savedJson, autosaveFailures]);
+
+  // Save straight away when a field loses focus, or when the tab is hidden or closed.
+  const flush = useCallback((keepalive = false) => {
+    if (JSON.stringify(payloadRef.current) !== savedRef.current) void saveRef.current(true, keepalive);
+  }, []);
+  useEffect(() => {
+    const onVisibility = () => {
+      if (document.visibilityState === 'hidden') flush(true);
+    };
+    const onPageHide = () => flush(true);
+    document.addEventListener('visibilitychange', onVisibility);
+    window.addEventListener('pagehide', onPageHide);
+    return () => {
+      document.removeEventListener('visibilitychange', onVisibility);
+      window.removeEventListener('pagehide', onPageHide);
+    };
+  }, [flush]);
 
   // Warn before leaving with unsaved changes.
   useEffect(() => {
@@ -269,7 +315,7 @@ export default function NewsletterEditForm({
   }
 
   return (
-    <div className="space-y-6 pb-24">
+    <div className="space-y-6 pb-24" onBlur={() => flush()}>
       {restore && (
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 bg-brand/10 border border-brand/30 rounded-xl text-sm">
           <span className="text-foreground">
@@ -532,7 +578,8 @@ export default function NewsletterEditForm({
           <div aria-live="polite">
             {dirty ? (
               <span className="flex items-center gap-2 text-sm text-amber-500">
-                <AlertCircle className="w-4 h-4" /> Unsaved changes
+                <AlertCircle className="w-4 h-4" />
+                {autosaveFailures > 0 ? 'Unsaved changes: couldn’t save, trying again' : 'Unsaved changes'}
               </span>
             ) : status === 'saved' ? (
               <span className="flex items-center gap-2 text-sm text-green-500">

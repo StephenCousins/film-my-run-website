@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
     // Auto-populate all missing sections (dryRun=true — don't update rotation tracking)
     await autoPopulateNewsletter(payload, baseUrl, true);
 
+    // Preview only: the real send puts each subscriber's own unsubscribe link here.
     const html = buildNewsletterHtml(payload, '#unsubscribe-preview', baseUrl);
 
     return new NextResponse(html, {
