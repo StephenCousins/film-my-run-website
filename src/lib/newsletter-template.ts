@@ -2,7 +2,7 @@ export interface NewsletterPayload {
   subject: string;
   intro?: string;
   news?: { title: string; url: string; source: string; imageUrl?: string; description?: string }[];
-  blogPost?: { title: string; url: string; snippet: string; imageUrl?: string };
+  blogPost?: { title: string; url: string; snippet: string; imageUrl?: string; /** issue 1 (Feb 2026) used this name */ excerpt?: string };
   videoOfTheWeek?: { title: string; url: string; description: string; thumbnailUrl: string };
   appOfTheWeek?: { name: string; url: string; description: string };
   sessionOfTheWeek?: { title: string; description: string };
@@ -171,7 +171,7 @@ function renderBlogPost(post: NonNullable<NewsletterPayload['blogPost']>): strin
             </a>
           </td></tr>
           <tr><td style="padding-bottom:28px;">
-            <p style="margin:0;font-family:${SANS};font-size:15px;line-height:1.75;color:${GREY};">${textToHtml(post.snippet)}</p>
+            <p style="margin:0;font-family:${SANS};font-size:15px;line-height:1.75;color:${GREY};">${textToHtml(post.snippet ?? post.excerpt ?? '')}</p>
           </td></tr>
           <tr><td>${ctaButton(post.url, 'Read the Full Story')}</td></tr>
         </table>
