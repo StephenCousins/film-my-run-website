@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 export const metadata: Metadata = {
   title: 'WSFRL app: Privacy Policy',
   alternates: { canonical: 'https://filmmyrun.com/wsfrl/privacy' },
-  description: 'How the West Sussex Fun Run League app for iPhone handles your data. Short version: it collects none.',
+  description: 'How the West Sussex Fun Run League app for iPhone handles your data. Short version: nothing, unless you suggest a correction.',
 };
 
 const CONTACT = 'stephen@filmmyrun.com';
@@ -36,12 +36,13 @@ export default function WsfrlPrivacyPage() {
             <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-8">WSFRL app: Privacy Policy</h1>
 
             <div className="prose prose-zinc dark:prose-invert max-w-none">
-              <p className="text-secondary text-sm mb-8">Last updated: 3 November 2026</p>
+              <p className="text-secondary text-sm mb-8">Last updated: 24 November 2026</p>
 
               <Section title="The short version">
                 <P>
-                  The West Sussex Fun Run League app has no account, no sign-in, no analytics and no ads. It doesn&apos;t
-                  collect, store or share any personal information about you.
+                  The West Sussex Fun Run League app has no account, no sign-in, no analytics and no ads. The only time
+                  it sends anything about you is if you choose to suggest a correction to a runner&apos;s name (section 3).
+                  Your email address is used once, to confirm that request, and isn&apos;t stored.
                 </P>
               </Section>
 
@@ -64,12 +65,27 @@ export default function WsfrlPrivacyPage() {
                   about you with it.
                 </P>
                 <P>
-                  If you&apos;d like your name changed or taken out of the results, email <Mail /> and it will be removed
-                  from the next update of the app.
+                  If you&apos;d like your name changed or taken out of the results, use the correction form (section 3)
+                  or email <Mail /> and it will be changed in the next weekly update.
                 </P>
               </Section>
 
-              <Section title="3. Maps and race films">
+              <Section title="3. Suggesting a correction">
+                <P>
+                  A runner&apos;s page has a &ldquo;Suggest a correction&rdquo; form, for a misspelt name, a name change
+                  or two records that are the same person. If you send one, the app sends what you type (the names and
+                  any details) and your email address to our results server.
+                </P>
+                <P>
+                  We use your email once, to send you a link to confirm the request. It isn&apos;t stored, shown anywhere
+                  or used for anything else. The request itself (the names and details) is kept so the change can be
+                  checked and made. Once a correction is made, the results show the corrected name, and a former name may
+                  appear on that runner&apos;s page as &ldquo;Previously raced as&rdquo;. Nothing is sent unless you fill
+                  in the form and tap send.
+                </P>
+              </Section>
+
+              <Section title="4. Maps and race films">
                 <P>
                   A race page shows a map of the venue. To place the pin, the app sends the venue&apos;s postcode to Apple
                   Maps. Nothing about you goes with it. If you tap Directions, Apple Maps opens and Apple&apos;s privacy
@@ -82,11 +98,11 @@ export default function WsfrlPrivacyPage() {
                 </P>
               </Section>
 
-              <Section title="4. Links">
+              <Section title="5. Links">
                 <P>Links to wsfrl.co.uk and club websites open in Safari. Those sites have their own privacy policies.</P>
               </Section>
 
-              <Section title="5. Crash reports">
+              <Section title="6. Crash reports">
                 <P>
                   If you&apos;ve allowed it on your iPhone, Apple may share anonymous crash reports and usage figures with
                   us. They don&apos;t identify you. You can change this in the iPhone&apos;s Settings under Privacy &amp;
@@ -94,22 +110,22 @@ export default function WsfrlPrivacyPage() {
                 </P>
               </Section>
 
-              <Section title="6. Emailing us">
+              <Section title="7. Emailing us">
                 <P>If you email <Mail />, we keep your email so we can reply, and delete it on request.</P>
               </Section>
 
-              <Section title="7. Children">
+              <Section title="8. Children">
                 <P>
-                  The app has no accounts and collects no personal data from anyone, children included. Junior race
-                  results appear as the league publishes them.
+                  The app has no accounts. Apart from a correction someone chooses to send (section 3), it collects no
+                  personal data from anyone, children included. Junior race results appear as the league publishes them.
                 </P>
               </Section>
 
-              <Section title="8. Changes">
+              <Section title="9. Changes">
                 <P>If this policy changes in a way that matters, we&apos;ll say so on this page and in the app&apos;s release notes.</P>
               </Section>
 
-              <Section title="9. Contact">
+              <Section title="10. Contact">
                 <P>
                   Stephen Cousins, Film My Run: <Mail />
                 </P>
