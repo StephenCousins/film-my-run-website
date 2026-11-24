@@ -49,6 +49,17 @@ describe('sendIssue', () => {
     expect(f.sent).toHaveLength(3);
   });
 
+  it('each subscriber gets their own unsubscribe link, and everyone gets the view-in-browser link', async () => {
+    const f = deps(issue);
+    const batch = vi.spyOn(f.d, 'sendBatch');
+    await sendIssue('tok', f.d);
+    const html = Object.fromEntries(batch.mock.calls[0][0].map((e) => [e.to, e.html]));
+    expect(html['a@x.com']).toContain('href="https://filmmyrun.com/api/newsletter/unsubscribe?token=ta"');
+    expect(html['b@x.com']).toContain('href="https://filmmyrun.com/api/newsletter/unsubscribe?token=tb"');
+    expect(html['owner@x.com']).not.toContain('/api/newsletter/unsubscribe');
+    for (const h of Object.values(html)) expect(h).toContain('href="https://filmmyrun.com/api/newsletter/view/1"');
+  });
+
   it('a second request while one is sending does nothing', async () => {
     const f = deps(issue);
     await f.d.claim(1);
