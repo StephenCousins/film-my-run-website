@@ -6,7 +6,7 @@ import Footer from '@/components/layout/Footer';
 export const metadata: Metadata = {
   title: 'WSFRL app: Privacy Policy',
   alternates: { canonical: 'https://filmmyrun.com/wsfrl/privacy' },
-  description: 'How the West Sussex Fun Run League app for iPhone handles your data. Short version: nothing, unless you suggest a correction.',
+  description: 'How the West Sussex Fun Run League app for iPhone and Android handles your data. Short version: nothing, unless you suggest a correction.',
 };
 
 const CONTACT = 'stephen@filmmyrun.com';
@@ -36,7 +36,7 @@ export default function WsfrlPrivacyPage() {
             <h1 className="font-display text-3xl lg:text-4xl font-bold text-foreground mb-8">WSFRL app: Privacy Policy</h1>
 
             <div className="prose prose-zinc dark:prose-invert max-w-none">
-              <p className="text-secondary text-sm mb-8">Last updated: 24 November 2026</p>
+              <p className="text-secondary text-sm mb-8">Last updated: 25 November 2026</p>
 
               <Section title="The short version">
                 <P>
@@ -87,9 +87,10 @@ export default function WsfrlPrivacyPage() {
 
               <Section title="4. Maps and race films">
                 <P>
-                  A race page shows a map of the venue. To place the pin, the app sends the venue&apos;s postcode to Apple
-                  Maps. Nothing about you goes with it. If you tap Directions, Apple Maps opens and Apple&apos;s privacy
-                  policy covers what happens there.
+                  A race page shows a map of the venue. On iPhone, the app sends the venue&apos;s postcode to Apple Maps
+                  to place the pin, and Directions opens Apple Maps. On Android, the app sends nothing for the map: tapping
+                  it opens the postcode in your maps app (usually Google Maps). Nothing about you goes with the postcode,
+                  and the maps app&apos;s own privacy policy covers what happens there.
                 </P>
                 <P>
                   Some race pages show a Film My Run race film. The film&apos;s thumbnail picture loads from YouTube when
@@ -99,7 +100,7 @@ export default function WsfrlPrivacyPage() {
               </Section>
 
               <Section title="5. Links">
-                <P>Links to wsfrl.co.uk and club websites open in Safari. Those sites have their own privacy policies.</P>
+                <P>Links to the league website and club websites open in your browser (Safari on iPhone). Those sites have their own privacy policies.</P>
               </Section>
 
               <Section title="6. Crash reports">
@@ -107,6 +108,11 @@ export default function WsfrlPrivacyPage() {
                   If you&apos;ve allowed it on your iPhone, Apple may share anonymous crash reports and usage figures with
                   us. They don&apos;t identify you. You can change this in the iPhone&apos;s Settings under Privacy &amp;
                   Security, Analytics &amp; Improvements.
+                </P>
+                <P>
+                  On Android, Google Play may share anonymous crash reports and app performance figures with us, if
+                  you&apos;ve allowed your phone to send usage and diagnostics to Google. They don&apos;t identify you.
+                  The app itself has no crash reporting or analytics of its own.
                 </P>
               </Section>
 
