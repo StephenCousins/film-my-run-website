@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { socialPostForStory, type SocialDeps, type StoryRow } from './post';
+import { recordSocialSkip, socialCapReached, socialPostForStory, type SocialDeps, type StoryRow } from './post';
 
 const NOW = new Date('2026-11-26T09:00:00Z');
 const creds = { pageId: 'PAGE1', igUserId: 'IG1', token: 'SECRET-TOKEN', fbUsernameExpected: 'filmmyrun', igUsernameExpected: 'filmmyrun' };
@@ -185,13 +185,22 @@ describe('the rules', () => {
       expect(d.copy).not.toHaveBeenCalled();
     }
   });
-  it('the daily cap counts from London midnight and skips the fourth', async () => {
+  it('the daily cap counts from London midnight and skips a second post the same day', async () => {
     let since: Date | null = null;
-    const { d } = fakes({ now: () => new Date('2026-07-01T23:30:00Z'), postedSince: async (s) => { since = s; return 3; } });
+    const { d } = fakes({ now: () => new Date('2026-07-01T23:30:00Z'), postedSince: async (s) => { since = s; return 1; } });
     const r = await socialPostForStory(11, d);
     expect(r).toMatchObject({ status: 'skipped', reason: 'daily cap reached' });
     expect(since!.toISOString()).toBe('2026-07-01T23:00:00.000Z');
     expect(d.copy).not.toHaveBeenCalled();
+  });
+  it('the first post of the day goes ahead', async () => {
+    const { d } = fakes({ postedSince: async () => 0, switchOn: async () => false });
+    expect((await socialPostForStory(11, d)).reason).toBe('posting switched off'); // past the cap, as far as it can go when off
+    expect(d.copy).toHaveBeenCalledTimes(1);
+  });
+  it("socialCapReached: true once today's post is out", async () => {
+    expect(await socialCapReached(fakes({ postedSince: async () => 0 }).d)).toBe(false);
+    expect(await socialCapReached(fakes({ postedSince: async () => 1 }).d)).toBe(true);
   });
   it('never twice: a story that already has a row is left alone', async () => {
     const { d, updates } = fakes({ claim: async () => null });
@@ -218,5 +227,26 @@ describe('never throws', () => {
     await expect(socialPostForStory(11, d)).resolves.toMatchObject({ status: 'failed' });
     const { d: d2 } = fakes({ render: async () => { throw new Error('bad photo'); }, update: async () => { throw new Error('db gone'); } });
     await expect(socialPostForStory(11, d2)).resolves.toMatchObject({ status: 'failed', reason: 'error: bad photo' });
+  });
+});
+
+describe('recordSocialSkip (a run story that is not posted)', () => {
+  it('records a skipped row with the reason, at no cost and with no AI call or upload', async () => {
+    const { d, last } = fakes();
+    const r = await recordSocialSkip({ id: 11, slug: 'walmsley-wins' }, 'not chosen today', d);
+    expect(r).toEqual({ status: 'skipped', reason: 'not chosen today', costUsd: 0 });
+    expect(last()).toMatchObject({ status: 'skipped', reason: 'not chosen today', cost_usd: 0 });
+    expect(d.copy).not.toHaveBeenCalled();
+    expect(d.upload).not.toHaveBeenCalled();
+    expect(fetchSpy).not.toHaveBeenCalled();
+  });
+  it('a story that already has a row is left alone', async () => {
+    const { d, updates } = fakes({ claim: async () => null });
+    expect((await recordSocialSkip({ id: 11, slug: 'walmsley-wins' }, 'not chosen today', d)).status).toBe('skipped');
+    expect(updates).toHaveLength(0);
+  });
+  it('never throws', async () => {
+    const { d } = fakes({ claim: async () => { throw new Error('db gone'); } });
+    await expect(recordSocialSkip({ id: 11, slug: 'x' }, 'no photo', d)).resolves.toMatchObject({ status: 'failed', reason: 'error: db gone' });
   });
 });

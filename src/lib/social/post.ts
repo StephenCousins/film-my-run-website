@@ -1,6 +1,7 @@
 // A published news story → a Facebook Page + Instagram post (docs/social-posts.md).
 //
-// Called after a story is published (runNews's publish step, news:publish). It never throws:
+// Called after a story is published (runNews once per run, for its newest story with a usable
+// photo; news:publish for its story). It never throws:
 // whatever happens ends up as one social_posts row (posted, partial, skipped or failed, with
 // the reason), which /admin/social lists.
 import { Prisma } from '@prisma/client';
@@ -10,7 +11,7 @@ import { uploadToR2 } from '@/lib/r2';
 import { cardJpeg, renderCard, type CardInput } from './card';
 import { writeSocialCopy, type CopyStory, type SocialCopy } from './copy';
 import { metaCredentials, postToFacebook, postToInstagram, verifyAccountLock, type LockResult, type MetaCredentials, type PlatformResult } from './meta';
-import { dailyCapReached, londonDayStart, photoProblem } from './rules';
+import { CAP_REACHED, dailyCapReached, londonDayStart, photoProblem } from './rules';
 import { isSocialPostingEnabled, setSocialPostingEnabled } from './settings';
 import { storyTag } from './tag';
 
@@ -118,7 +119,7 @@ export const liveSocialDeps: SocialDeps = {
  * 1. one row per story (claim): a story already tried is left alone;
  * 2. Stephen's photo rule (photoProblem): no real photo, the branded card, or a source photo
  *    under 1080px wide means no post;
- * 3. the daily cap: 3 posts per UK day;
+ * 3. the daily cap: 1 post per UK day (SOCIAL_CONFIG.maxPostsPerDay);
  * 4. Claude writes the headline and captions, the card is rendered and stored on R2
  *    (social/<slug>.jpg; Meta needs a public URL, and /admin/social shows it);
  * 5. only if the admin switch is on AND all five Meta settings are present;
@@ -150,7 +151,7 @@ export async function socialPostForStory(storyId: number, over: Partial<SocialDe
     const photo = photoProblem(story);
     if (photo) return await finish('skipped', photo);
     const now = d.now();
-    if (dailyCapReached(await d.postedSince(londonDayStart(now)))) return await finish('skipped', 'daily cap reached');
+    if (dailyCapReached(await d.postedSince(londonDayStart(now)))) return await finish('skipped', CAP_REACHED);
 
     const tag = storyTag({
       title: story.title, excerpt: story.excerpt, topic: story.topic, importance: story.importance,
@@ -195,5 +196,30 @@ export async function socialPostForStory(storyId: number, over: Partial<SocialDe
     console.error(`social: story ${storyId} failed (${reason})`);
     if (rowId !== null) await d.update(rowId, { status: 'failed', reason, ...spend() }).catch((err) => console.error(`social: could not record the failure (${errorText(err)})`));
     return { status: 'failed', reason, costUsd };
+  }
+}
+
+/** Is today's (UK day's) post already out? */
+export async function socialCapReached(over: Partial<SocialDeps> = {}): Promise<boolean> {
+  const d: SocialDeps = { ...liveSocialDeps, ...over };
+  return dailyCapReached(await d.postedSince(londonDayStart(d.now())));
+}
+
+/**
+ * A skipped social_posts row for a story the news run is not posting (planSocialRun): no AI
+ * call, no card, nothing sent. A story that already has a row is left alone. Never throws.
+ */
+export async function recordSocialSkip(story: { id: number; slug: string }, reason: string, over: Partial<SocialDeps> = {}): Promise<SocialOutcome> {
+  const d: SocialDeps = { ...liveSocialDeps, ...over };
+  try {
+    const rowId = await d.claim(story.id, story.slug);
+    if (rowId === null) return { status: 'skipped', reason: 'already has a social post (never posted twice)', costUsd: 0 };
+    await d.update(rowId, { status: 'skipped', reason, cost_usd: 0, claude_cost_usd: 0 });
+    console.log(`social: story ${story.id} skipped (${reason})`);
+    return { status: 'skipped', reason, costUsd: 0 };
+  } catch (e) {
+    const why = `error: ${errorText(e)}`;
+    console.error(`social: story ${story.id} skip not recorded (${why})`);
+    return { status: 'failed', reason: why, costUsd: 0 };
   }
 }

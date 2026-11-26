@@ -445,41 +445,88 @@ describe('Claude API key spend: its own $100 credit, not the £15 ceiling (19 No
 });
 
 describe('the social post step', () => {
-  it('runs for each story after it is published, with the new story id; its OpenRouter cost joins the run', async () => {
+  const good = { image_url: 'https://r2.test/x.webp', photo_credit: 'Photo: iRunFar', image_source_width: 1400 };
+  /** Stories 101, 102, ... as the database would return them: each published an hour after the last. */
+  const rows = (over: Record<number, object> = {}) => async (ids: number[]) =>
+    ids.map((id, i) => ({ id, slug: `s${id}`, importance: 5, published_at: new Date(Date.UTC(2026, 10, 26, 8 + i)), ...good, ...over[id] }));
+  function socialDeps(over: Record<string, unknown> = {}) {
     let id = 100;
-    const asked: number[] = [];
-    const { d } = deps({
+    const posted: number[] = [];
+    const skipped: [number, string][] = [];
+    const r = deps({
       gather: async () => [cand(1), cand(2)],
       publish: async () => ++id,
-      social: async (storyId: number) => { asked.push(storyId); return { status: 'skipped', reason: 'posting switched off', costUsd: 0.5 }; },
+      social: async (storyId: number) => { posted.push(storyId); return { status: 'posted', reason: null, costUsd: 0.5 }; },
+      socialStories: rows(),
+      socialCapReached: async () => false,
+      socialSkip: async (st: { id: number }, reason: string) => { skipped.push([st.id, reason]); return { status: 'skipped', reason, costUsd: 0 }; },
+      ...over,
     });
-    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
-    expect(asked).toEqual([101, 102]);
-    expect(log.social?.map((s) => s.status)).toEqual(['skipped', 'skipped']);
-    expect(log.costUsd).toBeGreaterThanOrEqual(1);
-  });
+    return { ...r, posted, skipped };
+  }
 
-  it('a failing social step never stops the run or unpublishes the story', async () => {
-    const { d, published } = deps({
-      gather: async () => [cand(1), cand(2)],
-      publish: async (s: { slug: string; photoCredit: string | null }) => { published.push(s); return 1; },
-      social: async () => { throw new Error('Meta down'); },
+  it('two stories with good photos: only the newer is posted, after both are published; the other is recorded as not chosen', async () => {
+    const order: string[] = [];
+    let id = 100;
+    const { d, skipped } = socialDeps({
+      publish: async () => { order.push('publish'); return ++id; },
+      social: async (storyId: number) => { order.push(`social ${storyId}`); return { status: 'posted', reason: null, costUsd: 0.5 }; },
     });
     const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect(log.published).toHaveLength(2);
-    expect(published).toHaveLength(2);
-    expect(log.social?.[0]).toMatchObject({ status: 'failed', reason: 'error: Meta down' });
+    expect(order).toEqual(['publish', 'publish', 'social 102']);
+    expect(skipped).toEqual([[101, 'not chosen today']]);
+    expect(log.social).toEqual([{ slug: 's102', status: 'posted', reason: null }, { slug: 's101', status: 'skipped', reason: 'not chosen today' }]);
+    expect(log.costUsd).toBeGreaterThanOrEqual(0.5); // its OpenRouter cost joins the run
   });
 
-  it('a dry run makes no social post', async () => {
+  it('the newer story without a usable photo does not take the slot from an older one with one', async () => {
+    const { d, posted, skipped } = socialDeps({ socialStories: rows({ 102: { image_source_width: 900 } }) });
+    await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(posted).toEqual([101]);
+    expect(skipped).toEqual([[102, 'photo too small (900px wide, needs 1080)']]);
+  });
+
+  it('no story with a usable photo: nothing posted, nothing thrown, each skip recorded', async () => {
+    const { d, posted, skipped } = socialDeps({ socialStories: rows({ 101: { image_url: null }, 102: { photo_credit: null, image_source_width: null } }) });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(posted).toEqual([]);
+    expect(skipped).toEqual([[101, 'no photo'], [102, 'branded fallback']]);
+    expect(log.published).toHaveLength(2);
+    expect(log.social?.every((x) => x.status === 'skipped')).toBe(true);
+  });
+
+  it("today's post already out (say an earlier news:publish): nothing posted", async () => {
+    const { d, posted, skipped } = socialDeps({ socialCapReached: async () => true });
+    await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(posted).toEqual([]);
+    expect(skipped).toEqual([[102, 'daily cap reached'], [101, 'daily cap reached']]);
+  });
+
+  it('a failing social step never stops the run or unpublishes the story', async () => {
+    const { d } = socialDeps({ social: async () => { throw new Error('Meta down'); } });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(log.published).toHaveLength(2);
+    expect(log.social?.[0]).toMatchObject({ status: 'failed', reason: 'error: Meta down' });
+    const { d: d2 } = socialDeps({ socialStories: async () => { throw new Error('db down'); } });
+    const log2 = await runNews({ now: new Date(), dryRun: false, deps: d2 as never });
+    expect(log2.published).toHaveLength(2);
+    expect(log2.social).toEqual([{ slug: '(social step)', status: 'failed', reason: 'error: db down' }]);
+  });
+
+  it('a dry run makes no social post and records nothing', async () => {
     const social = vi.fn();
-    const { d } = deps({ gather: async () => [cand(1)], publish: async () => 1, social });
+    const socialSkip = vi.fn();
+    const socialStories = vi.fn();
+    const { d } = socialDeps({ social, socialSkip, socialStories });
     await runNews({ now: new Date(), dryRun: true, deps: d as never });
     expect(social).not.toHaveBeenCalled();
+    expect(socialSkip).not.toHaveBeenCalled();
+    expect(socialStories).not.toHaveBeenCalled();
   });
 
   it('the stored story keeps the source photo width (null for the branded card)', async () => {
-    const { d, published } = deps({ gather: async () => [cand(1)], image: async () => ({ url: 'https://r2.test/x.webp', credit: 'Photo: iRunFar', sourceWidth: 1400 }), social: async () => ({ status: 'skipped', costUsd: 0 }) });
+    const { d, published } = deps({ gather: async () => [cand(1)], image: async () => ({ url: 'https://r2.test/x.webp', credit: 'Photo: iRunFar', sourceWidth: 1400 }), social: async () => ({ status: 'skipped', costUsd: 0 }), socialStories: async () => [], socialCapReached: async () => false });
     await runNews({ now: new Date(), dryRun: false, deps: d as never });
     expect((published[0] as unknown as { imageSourceWidth: number }).imageSourceWidth).toBe(1400);
   });
