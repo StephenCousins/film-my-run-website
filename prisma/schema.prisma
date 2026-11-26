@@ -419,26 +419,30 @@ model newsletter_content_pool {
 }
 
 model news_stories {
-  id             Int       @id @default(autoincrement())
-  slug           String    @unique
-  title          String
-  excerpt        String
-  content        String
-  image_url      String?
-  source_url     String
-  source_heading String?
-  roundup_date   DateTime?
-  topic          String? // trail_ultra | road | track
-  is_uk          Boolean   @default(false)
-  importance     Int?
-  sources        Json? // [{ site, url }]
-  photo_credit   String?
-  held_reason    String?
-  priority       Int       @default(50)
-  status         String    @default("draft")
-  published_at   DateTime?
-  created_at     DateTime  @default(now())
-  updated_at     DateTime  @updatedAt
+  id                 Int       @id @default(autoincrement())
+  slug               String    @unique
+  title              String
+  excerpt            String
+  content            String
+  image_url          String?
+  source_url         String
+  source_heading     String?
+  roundup_date       DateTime?
+  topic              String? // trail_ultra | road | track
+  is_uk              Boolean   @default(false)
+  importance         Int?
+  sources            Json? // [{ site, url }]
+  photo_credit       String?
+  /// Width in px of the ORIGINAL source photo storyImage() picked (the stored copy is always
+  /// resized to 1200x675). Null: the branded fallback card, or published before 26 Nov 2026.
+  /// The social post step needs a real photo at least 1080px wide (src/lib/social).
+  image_source_width Int?
+  held_reason        String?
+  priority           Int       @default(50)
+  status             String    @default("draft")
+  published_at       DateTime?
+  created_at         DateTime  @default(now())
+  updated_at         DateTime  @updatedAt
 
   @@index([status, roundup_date])
   @@index([slug])
@@ -446,6 +450,33 @@ model news_stories {
   // Made by hand in production; listed here so `prisma db push` doesn't drop them.
   @@index([status], map: "news_stories_status_idx")
   @@index([published_at], map: "news_stories_published_idx")
+}
+
+/// One row per published news story the social step looked at (src/lib/social, docs/social-posts.md):
+/// posted to Facebook + Instagram, partly posted, skipped (with why) or failed. One per story, so a
+/// story is never posted twice; the daily cap counts posted and partial rows by posted_at.
+model social_posts {
+  id                 Int       @id @default(autoincrement())
+  story_id           Int       @unique
+  slug               String
+  status             String // posted | partial | skipped | failed
+  reason             String?
+  tag                String?
+  headline           String?
+  caption_facebook   String?
+  caption_instagram  String?
+  card_url           String?
+  facebook_post_id   String?
+  facebook_url       String?
+  instagram_media_id String?
+  instagram_url      String?
+  cost_usd           Float     @default(0)
+  claude_cost_usd    Float     @default(0)
+  created_at         DateTime  @default(now())
+  posted_at          DateTime?
+
+  @@index([created_at])
+  @@index([posted_at])
 }
 
 /// Every feed item the news pipeline has looked at, so nothing is sorted twice

@@ -59,7 +59,8 @@ filmmyrun.com/
 ├── /discounts
 ├── /login, /register           # Route group (auth)
 ├── /privacy, /terms
-└── /admin/newsletter/[token]   # Newsletter approval
+├── /admin/newsletter/[token]   # Newsletter approval
+└── /admin/social               # News → Facebook/Instagram posts: switch and log (docs/social-posts.md)
 ```
 
 `(auth)` is the only route group; there are no `(marketing)` or `(dashboard)`
@@ -262,6 +263,7 @@ Prisma directly. The iOS app's `/api/app/v1/*` routes are in `docs/app-api.md`.
 | OpenRouter | LLM calls (see `docs/llm.md`) | `OPENROUTER_API_KEY`, `OPENROUTER_MODEL` |
 | Anthropic (prepaid credit) | WRITING_MODEL calls while the credit lasts (see `docs/llm.md`) | `ANTHROPIC_CREDIT_API_KEY` |
 | Brave Search | Shoe Finder review/image search | `BRAVE_SEARCH_API_KEY` |
+| Meta Graph API | News stories to the Facebook Page + Instagram (`docs/social-posts.md`); GitHub news workflow | `META_FB_PAGE_ID`, `META_IG_USER_ID`, `META_FB_PAGE_ACCESS_TOKEN`, `META_FB_PAGE_USERNAME_EXPECTED`, `META_IG_USERNAME_EXPECTED` (account lock) |
 | NextAuth + Google | Sign-in | `NEXTAUTH_URL`, `NEXTAUTH_SECRET`, `GOOGLE_CLIENT_*` |
 
 ## SEO

@@ -16,6 +16,7 @@ and `completeJsonClaudeFirst()` for the news pipeline, and `searchWeb()`.
 | News sort (`sortItem`) | Claude API key, Sonnet 5.5 (low effort) | Claude Code `claude -p --model sonnet` | OpenRouter, `SORT_MODEL` (Gemini 3.7 Flash) |
 | News group (`groupItems`) | Claude API key, Opus 5.5 | Claude Code `claude -p --model opus` | OpenRouter, `GROUP_MODEL` (Gemini 3.7 Flash) |
 | News writing and fact-check, runner bios (`completeJson` on `WRITE_MODEL`/`CHECK_MODEL`) | Claude Code `claude -p --model opus` (free on the subscription) | Claude API key, Opus 5.5 | OpenRouter, `anthropic/claude-opus-5.5` |
+| Social post copy (`writeSocialCopy`, `src/lib/social/copy.ts`, docs/social-posts.md) | Claude API key, Opus 5.5 | Claude Code `claude -p --model opus` | OpenRouter, `WRITE_MODEL` |
 | Extra-coverage search (`searchWeb`, `moreCoverage`) | Claude API key, Haiku 5.5 with Anthropic's `web_search` tool | OpenRouter web plugin on `SORT_MODEL` | none: the story goes ahead on its own sources |
 
 - **"Not set" includes empty.** GitHub passes a missing secret as an empty

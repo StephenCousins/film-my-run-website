@@ -84,7 +84,8 @@ export async function brandedCard(headline: string): Promise<Buffer> {
   return sharp(bg).resize(W, H, { fit: 'cover' }).composite([{ input: svg }]).webp({ quality: 85 }).toBuffer();
 }
 
-async function download(url: string, fetchFn: typeof fetch): Promise<Buffer | null> {
+/** The source photo and its original width (before stampImage resizes it to 1200x675). */
+async function download(url: string, fetchFn: typeof fetch): Promise<{ buf: Buffer; width: number } | null> {
   try {
     const res = await fetchFn(url, { signal: AbortSignal.timeout(15000) });
     if (!res.ok) return null;
@@ -102,7 +103,7 @@ async function download(url: string, fetchFn: typeof fetch): Promise<Buffer | nu
     // graphic". Tighten, or replace with real content detection, if genuine photos get rejected.
     const aspect = w / (h || 1);
     if (aspect < 1.0 || aspect > 2.5) return null;
-    return buf;
+    return { buf, width: w };
   } catch {
     return null;
   }
@@ -114,24 +115,35 @@ interface StoryImageDeps {
   stamp?: typeof stampImage;
 }
 
+/**
+ * What storyImage stored. `sourceWidth` is the original source photo's width in px, null for
+ * the branded card: the stored copy is always 1200x675 (small photos upscaled), so only this
+ * says whether the photo is good enough for a social post (src/lib/social, news_stories.image_source_width).
+ */
+export interface StoryImage {
+  url: string;
+  credit: string | null;
+  sourceWidth?: number | null;
+}
+
 /** The lead source's photo, else another source's, else a branded card; stored on R2. */
 export async function storyImage(
   b: Bundle,
   slug: string,
   deps: StoryImageDeps = {}
-): Promise<{ url: string; credit: string | null }> {
+): Promise<StoryImage> {
   const doFetch = deps.fetch ?? fetch;
   const doUpload = deps.upload ?? uploadToR2;
   const doStamp = deps.stamp ?? stampImage;
 
   for (const item of b.items) {
     if (!item.imageUrl) continue;
-    const buf = await download(item.imageUrl, doFetch);
-    if (!buf) continue;
+    const photo = await download(item.imageUrl, doFetch);
+    if (!photo) continue;
     try {
       const credit = creditLine(item.photoCredit, item.source);
-      const url = await doUpload(`news/${slug}.webp`, await doStamp(buf, credit), 'image/webp');
-      return { url, credit };
+      const url = await doUpload(`news/${slug}.webp`, await doStamp(photo.buf, credit), 'image/webp');
+      return { url, credit, sourceWidth: photo.width };
     } catch {
       // A source image that fails to stamp or upload never holds the story back:
       // try the next item, and if all fail, the branded card below is the final fallback.
@@ -139,5 +151,5 @@ export async function storyImage(
     }
   }
   const url = await doUpload(`news/${slug}.webp`, await brandedCard(b.headline), 'image/webp');
-  return { url, credit: null };
+  return { url, credit: null, sourceWidth: null };
 }
