@@ -2,6 +2,25 @@
 
 Dated status entries moved out of CLAUDE.md. Newest first.
 
+## 26 Nov 2026: news stories to Facebook and Instagram (built, switched off)
+
+- **What.** After a news story is published (`runNews`, `news:story`, `news:publish`), `socialPostForStory()`
+  (`src/lib/social/post.ts`) makes a 1080x1350 card (photo on top, dark panel, tag pill, headline with key words in
+  the brand orange, photo credit, logo) and Claude writes the card headline and captions; then it posts to the
+  Facebook Page and Instagram through the Graph API. Full write-up and the Meta setup steps: `docs/social-posts.md`.
+- **Off until Stephen says.** Nothing posts unless the `/admin/social` switch is on (default off) and the
+  five Meta GitHub secrets are set (`META_FB_PAGE_ID`, `META_IG_USER_ID`, `META_FB_PAGE_ACCESS_TOKEN`,
+  `META_FB_PAGE_USERNAME_EXPECTED`, `META_IG_USERNAME_EXPECTED`). **Account lock:** Stephen's Meta login also runs
+  NoblePro's Pages and Instagram, so before every post Meta is asked who the Page, the Instagram account and the
+  token really are; unless both usernames are `filmmyrun` and the token is that Page's, nothing is posted and the
+  switch turns itself off. Until then each story still gets
+  a "skipped" row with its card and captions, so the admin page shows what would have gone out.
+- **Rules.** No post without a real source photo at least 1080px wide (new column `news_stories.image_source_width`,
+  migration `20261126100000_social_posts`; older stories have none and are skipped); 3 posts per UK day; one row per
+  story, never posted twice; never throws into the news run.
+- **To do (Stephen):** run the migration on deploy (`prisma migrate deploy`), set up Meta (doc), add the three
+  secrets, look at a few skipped rows on `/admin/social`, then switch on.
+
 ## 19 Nov 2026: newsletter on time, checked, once
 
 - **On time.** GitHub's Monday cron started 6 to 10 hours late every week. The server now stages the draft itself

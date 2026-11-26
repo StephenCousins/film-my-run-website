@@ -443,3 +443,44 @@ describe('Claude API key spend: its own $100 credit, not the £15 ceiling (19 No
     expect(log.claudeMonthBeforeUsd).toBeUndefined();
   }));
 });
+
+describe('the social post step', () => {
+  it('runs for each story after it is published, with the new story id; its OpenRouter cost joins the run', async () => {
+    let id = 100;
+    const asked: number[] = [];
+    const { d } = deps({
+      gather: async () => [cand(1), cand(2)],
+      publish: async () => ++id,
+      social: async (storyId: number) => { asked.push(storyId); return { status: 'skipped', reason: 'posting switched off', costUsd: 0.5 }; },
+    });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(asked).toEqual([101, 102]);
+    expect(log.social?.map((s) => s.status)).toEqual(['skipped', 'skipped']);
+    expect(log.costUsd).toBeGreaterThanOrEqual(1);
+  });
+
+  it('a failing social step never stops the run or unpublishes the story', async () => {
+    const { d, published } = deps({
+      gather: async () => [cand(1), cand(2)],
+      publish: async (s: { slug: string; photoCredit: string | null }) => { published.push(s); return 1; },
+      social: async () => { throw new Error('Meta down'); },
+    });
+    const log = await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect(log.published).toHaveLength(2);
+    expect(published).toHaveLength(2);
+    expect(log.social?.[0]).toMatchObject({ status: 'failed', reason: 'error: Meta down' });
+  });
+
+  it('a dry run makes no social post', async () => {
+    const social = vi.fn();
+    const { d } = deps({ gather: async () => [cand(1)], publish: async () => 1, social });
+    await runNews({ now: new Date(), dryRun: true, deps: d as never });
+    expect(social).not.toHaveBeenCalled();
+  });
+
+  it('the stored story keeps the source photo width (null for the branded card)', async () => {
+    const { d, published } = deps({ gather: async () => [cand(1)], image: async () => ({ url: 'https://r2.test/x.webp', credit: 'Photo: iRunFar', sourceWidth: 1400 }), social: async () => ({ status: 'skipped', costUsd: 0 }) });
+    await runNews({ now: new Date(), dryRun: false, deps: d as never });
+    expect((published[0] as unknown as { imageSourceWidth: number }).imageSourceWidth).toBe(1400);
+  });
+});

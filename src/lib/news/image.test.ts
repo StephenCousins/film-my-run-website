@@ -82,7 +82,7 @@ describe('storyImage', () => {
       fetch: fetchFn,
       upload,
     });
-    expect(result).toEqual({ url: 'https://r2.example/news/slug.webp', credit: 'Photo: Jane Smith / iRunFar' });
+    expect(result).toEqual({ url: 'https://r2.example/news/slug.webp', credit: 'Photo: Jane Smith / iRunFar', sourceWidth: 1600 });
     expect(upload).toHaveBeenCalledTimes(1);
   });
 
@@ -109,7 +109,14 @@ describe('storyImage', () => {
     const fetchFn = vi.fn().mockResolvedValue(fakeResponse({ ok: false }));
     const upload = vi.fn().mockResolvedValue('https://r2.example/news/card.webp');
     const result = await storyImage(bundle([candidate()]), 'slug', { fetch: fetchFn, upload });
-    expect(result).toEqual({ url: 'https://r2.example/news/card.webp', credit: null });
+    expect(result).toEqual({ url: 'https://r2.example/news/card.webp', credit: null, sourceWidth: null });
+  });
+
+  it('records the original source width, not the stored 1200px copy (the social step needs it)', async () => {
+    const fetchFn = vi.fn().mockResolvedValue(fakeResponse({ body: await fakeImage(900, 600) }));
+    const upload = vi.fn().mockResolvedValue('https://r2.example/news/slug.webp');
+    const result = await storyImage(bundle([candidate()]), 'slug', { fetch: fetchFn, upload });
+    expect(result.sourceWidth).toBe(900);
   });
 
   it('rejects a non-image content-type', async () => {

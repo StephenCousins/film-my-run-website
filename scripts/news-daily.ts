@@ -151,6 +151,7 @@ type RunSummary = {
   ungrouped?: { title: string; url: string }[];
   borderline?: { url: string; confidence: number }[];
   onDemand?: string[];
+  social?: { slug: string; status: string; reason?: string | null }[];
   error?: string;
 };
 
@@ -166,6 +167,7 @@ function runLines(log: RunSummary, dryRun = false, brief = false): string[] {
     ...(log.published ?? []).map((p) => dryRun ? `Would publish: ${p.title}` : `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
     ...(log.notPublished ?? log.held ?? []).map((h) => `Not published: ${h.headline} (${h.reason})`),
     ...((log as { profiles?: { name: string; slug?: string; reason?: string }[] }).profiles ?? []).map((p) => p.slug ? `Runner page: ${p.name} https://filmmyrun.com/runners/${p.slug}` : `No runner page for ${p.name} (${p.reason})`),
+    ...(log.social ?? []).map((s) => `Social post ${s.status}: ${s.slug}${s.reason ? ` (${s.reason})` : ''}`),
     ...(log.skipped ?? []).map((s) => `Not written: ${s.headline} (${s.reason})`),
     ...(log.ungrouped ?? []).map((u) => `Passed the sort but in no group (retried tomorrow): ${u.title} ${u.url}`),
     ...(log.borderline ?? []).map((b) => `Borderline (${b.confidence.toFixed(2)}): ${b.url}`),

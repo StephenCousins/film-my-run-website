@@ -58,6 +58,8 @@ export interface StoryToPublish extends Draft {
   sources: SourceRef[];
   imageUrl: string | null;
   photoCredit: string | null;
+  /** The original source photo's width in px (storyImage's sourceWidth); null for the branded card or no image. */
+  imageSourceWidth?: number | null;
   bundleKey: string;
   articleIds: number[];
 }
@@ -83,4 +85,6 @@ export interface RunLog {
   stoppedByCeiling: boolean;
   /** Runner pages made for people new stories named (runners/auto.ts). */
   profiles: { name: string; slug?: string; reason?: string }[];
+  /** The social post step for each published story (src/lib/social): posted, partial, skipped or failed, and why. */
+  social?: { slug: string; status: string; reason?: string | null }[];
 }

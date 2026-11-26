@@ -45,6 +45,15 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
           NEWS_REPORT_TO: ${{ secrets.NEWS_REPORT_TO }}
+          # Facebook Page + Instagram posts for published stories (docs/social-posts.md). Nothing is posted
+          # unless all five are set AND the switch on /admin/social is on; an unset secret arrives as '' (= not set).
+          # Account lock: before every post Meta is asked who the Page and Instagram IDs are; unless the usernames
+          # match the two _EXPECTED values (filmmyrun) nothing is posted and the switch is turned off.
+          META_FB_PAGE_ID: ${{ secrets.META_FB_PAGE_ID }}
+          META_IG_USER_ID: ${{ secrets.META_IG_USER_ID }}
+          META_FB_PAGE_ACCESS_TOKEN: ${{ secrets.META_FB_PAGE_ACCESS_TOKEN }}
+          META_FB_PAGE_USERNAME_EXPECTED: ${{ secrets.META_FB_PAGE_USERNAME_EXPECTED }}
+          META_IG_USERNAME_EXPECTED: ${{ secrets.META_IG_USERNAME_EXPECTED }}
       - if: ${{ always() && github.event_name == 'workflow_dispatch' && inputs.dry_run }}
         uses: actions/upload-artifact@v4
         with: { name: news-dry-run, path: news-dry-run/, if-no-files-found: ignore }

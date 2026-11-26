@@ -15,6 +15,7 @@ import { autoProfiles } from '@/lib/runners/auto';
 import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
 import { checkFacts, writeStory, editStory, type Fix } from './write';
+import { socialPostForStory } from '@/lib/social/post';
 
 type Seen = { c: Candidate; v: Verdict | null; bundleKey?: string };
 
@@ -33,7 +34,10 @@ export interface RunDeps {
   autoProfiles: (names: string[], budgetUsd: number) => Promise<{ log: RunLog['profiles']; costUsd: number }>;
   check: (d: Draft, b: Bundle) => ReturnType<typeof checkFacts>;
   image: typeof storyImage;
-  publish: (s: StoryToPublish) => Promise<void>;
+  /** Saves the story published; returns its id (the social step needs it). */
+  publish: (s: StoryToPublish) => Promise<number | void>;
+  /** The Facebook + Instagram post for a published story (src/lib/social). Never throws. */
+  social: (storyId: number) => Promise<{ status: string; reason?: string | null; costUsd: number }>;
   /** Saves the story unpublished with its reason; returns its id for `npm run news:publish <id>`. */
   hold: (s: StoryToPublish, reason: string) => Promise<number>;
   /** OpenRouter spend this month (the ceiling). */
@@ -57,7 +61,7 @@ async function saveStory(s: StoryToPublish, status: 'published' | 'held', heldRe
     const story = await tx.news_stories.create({ data: {
       slug: s.slug, title: s.title, excerpt: s.excerpt,
       content: s.paragraphs.map((p) => `<p>${esc(p)}</p>`).join('\n'),
-      image_url: s.imageUrl, photo_credit: s.photoCredit,
+      image_url: s.imageUrl, photo_credit: s.photoCredit, image_source_width: s.imageSourceWidth ?? null,
       source_url: s.sources[0]?.url ?? '', sources: s.sources as unknown as Prisma.InputJsonValue,
       topic: s.topic, is_uk: s.isUk, importance: s.importance, priority: 100 - s.importance * 10,
       status, held_reason: heldReason, published_at: status === 'published' ? new Date() : null,
@@ -95,7 +99,8 @@ const liveDeps: RunDeps = {
   autoProfiles: (names, budget) => autoProfiles(names, budget),
   check: (d, b) => checkFacts(d, b),
   image: storyImage,
-  publish: async (s) => { await saveStory(s, 'published', null); },
+  publish: (s) => saveStory(s, 'published', null),
+  social: (storyId) => socialPostForStory(storyId),
   hold: (s, reason) => saveStory(s, 'held', reason),
   monthSpentUsd,
   claudeMonthSpentUsd,
@@ -323,7 +328,17 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       const img = !dryRun ? await d.image(b, slug) : outDir ? await d.image(b, slug, { upload: saveLocally(outDir) }) : null;
       story.imageUrl = img?.url || null;
       story.photoCredit = img?.credit ?? null;
-      if (!dryRun) await d.publish(story);
+      story.imageSourceWidth = img?.sourceWidth ?? null;
+      if (!dryRun) {
+        const storyId = await d.publish(story);
+        // Facebook + Instagram (src/lib/social). Never on a dry run (no publish), and it never
+        // throws into the run: socialPostForStory records its own failures.
+        if (typeof storyId === 'number') {
+          const s = await d.social(storyId).catch((e) => ({ status: 'failed', reason: `error: ${errorText(e)}`, costUsd: 0 }));
+          log.costUsd += s.costUsd; // OpenRouter only; Claude key spend is in claudeCreditSpentThisRun()
+          (log.social ??= []).push({ slug, status: s.status, reason: s.reason ?? null });
+        }
+      }
       await save(`${slug}.json`, story);
       log.published.push({ slug, title: story.title });
       people.push(...(story.people ?? []));

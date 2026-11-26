@@ -27,6 +27,7 @@
     "news:publish": "tsx --tsconfig tsconfig.json scripts/news-publish.ts",
     "news:unimage": "tsx --tsconfig tsconfig.json scripts/news-unimage.ts",
     "news:story": "tsx --tsconfig tsconfig.json scripts/news-story.ts",
+    "social:sample": "tsx --tsconfig tsconfig.json scripts/social-sample.ts",
     "runners:gather": "tsx --tsconfig tsconfig.json scripts/runners-gather.ts",
     "runners:save": "tsx --tsconfig tsconfig.json scripts/runners-save.ts",
     "runners:photo": "tsx --tsconfig tsconfig.json scripts/runners-photo.ts",
