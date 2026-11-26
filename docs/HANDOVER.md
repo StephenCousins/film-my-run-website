@@ -2,6 +2,14 @@
 
 Dated status entries moved out of CLAUDE.md. Newest first.
 
+## 26 Nov 2026: social posts, one a day
+
+- Stephen saw the test posts and asked for **at most one post a day**, and no worry when there's no suitable story.
+  `SOCIAL_CONFIG.maxPostsPerDay` is now 1. The daily news run publishes all its stories first, then posts only the
+  newest one with a usable photo (`planSocialRun`); the others get a free skipped row (`not chosen today`, their
+  photo problem, or `daily cap reached`). The news email no longer lists those expected skips (`isQuietSkip`);
+  posted, partial and failed still show. `/admin/social` lists everything. `news:publish` still posts at once.
+
 ## 26 Nov 2026: news stories to Facebook and Instagram (built, switched off)
 
 - **What.** After a news story is published (`runNews`, `news:story`, `news:publish`), `socialPostForStory()`
@@ -16,7 +24,8 @@ Dated status entries moved out of CLAUDE.md. Newest first.
   switch turns itself off. Until then each story still gets
   a "skipped" row with its card and captions, so the admin page shows what would have gone out.
 - **Rules.** No post without a real source photo at least 1080px wide (new column `news_stories.image_source_width`,
-  migration `20261126100000_social_posts`; older stories have none and are skipped); 3 posts per UK day; one row per
+  migration `20261126100000_social_posts`; older stories have none and are skipped); 1 post per UK day (was 3, see
+  below); one row per
   story, never posted twice; never throws into the news run.
 - **To do (Stephen):** run the migration on deploy (`prisma migrate deploy`), set up Meta (doc), add the three
   secrets, look at a few skipped rows on `/admin/social`, then switch on.

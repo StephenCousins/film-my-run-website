@@ -75,8 +75,8 @@ After adding a dependency, run `npm install` so `package-lock.json` is in sync b
 - `docs/assistant.md`: the site chat assistant: knowledge pack (`npm run assistant:pack`), switches, cost cap, log.
 - `docs/app-api.md`: the iOS app's `/api/app/v1/*` endpoints.
 - `docs/social-posts.md`: published news stories to Facebook + Instagram (`src/lib/social/`, `/admin/social`): photo
-  rule, 3-a-day cap, on/off switch (default off), the account lock (Film My Run's accounts only, never NoblePro's),
-  Meta setup steps.
+  rule, one post per UK day (a run posts only its newest eligible story; a quiet day is fine), on/off switch
+  (default off), the account lock (Film My Run's accounts only, never NoblePro's), Meta setup steps.
 - `docs/shoe-finder.md`: Shoe Finder weekly pipeline, gate, images, CLI, data model (current). Older catalogue
   notes: `docs/shoes/catalogue-notes.md`.
 - Runner profiles: `docs/runners/system.md` (how it works) and `docs/runners/HOW-TO.md` (recipe for adding runners).

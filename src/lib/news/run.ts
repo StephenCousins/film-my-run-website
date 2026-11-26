@@ -15,7 +15,8 @@ import { autoProfiles } from '@/lib/runners/auto';
 import { isBorderline, passesSort, sortItem } from './sort';
 import type { Bundle, Candidate, Draft, RunLog, StoryToPublish, Verdict } from './types';
 import { checkFacts, writeStory, editStory, type Fix } from './write';
-import { socialPostForStory } from '@/lib/social/post';
+import { recordSocialSkip, socialCapReached, socialPostForStory } from '@/lib/social/post';
+import { planSocialRun, type SocialChoice } from '@/lib/social/rules';
 
 type Seen = { c: Candidate; v: Verdict | null; bundleKey?: string };
 
@@ -38,6 +39,12 @@ export interface RunDeps {
   publish: (s: StoryToPublish) => Promise<number | void>;
   /** The Facebook + Instagram post for a published story (src/lib/social). Never throws. */
   social: (storyId: number) => Promise<{ status: string; reason?: string | null; costUsd: number }>;
+  /** The run's published stories as the social step needs them (photo, published_at, importance). */
+  socialStories: (ids: number[]) => Promise<SocialChoice[]>;
+  /** Has today's (UK day's) social post already gone out? */
+  socialCapReached: () => Promise<boolean>;
+  /** A skipped social_posts row for a story not being posted: no AI call, no card. Never throws. */
+  socialSkip: (story: { id: number; slug: string }, reason: string) => Promise<{ status: string; reason?: string | null; costUsd: number }>;
   /** Saves the story unpublished with its reason; returns its id for `npm run news:publish <id>`. */
   hold: (s: StoryToPublish, reason: string) => Promise<number>;
   /** OpenRouter spend this month (the ceiling). */
@@ -101,6 +108,12 @@ const liveDeps: RunDeps = {
   image: storyImage,
   publish: (s) => saveStory(s, 'published', null),
   social: (storyId) => socialPostForStory(storyId),
+  socialStories: (ids) => prisma.news_stories.findMany({
+    where: { id: { in: ids }, status: 'published' },
+    select: { id: true, slug: true, importance: true, published_at: true, image_url: true, photo_credit: true, image_source_width: true },
+  }),
+  socialCapReached: () => socialCapReached(),
+  socialSkip: (story, reason) => recordSocialSkip(story, reason),
   hold: (s, reason) => saveStory(s, 'held', reason),
   monthSpentUsd,
   claudeMonthSpentUsd,
@@ -240,6 +253,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
   // The ceiling counts OpenRouter only: every costUsd below is OpenRouter's (llm.ts).
   const monthBefore = await d.monthSpentUsd(now);
   const people: string[] = [];
+  const publishedIds: number[] = [];
   for (const b of picked) {
     if (log.stoppedByCeiling || !withinCeiling(monthBefore + log.costUsd, STORY_ESTIMATE_USD)) {
       log.stoppedByCeiling = true;
@@ -331,13 +345,7 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       story.imageSourceWidth = img?.sourceWidth ?? null;
       if (!dryRun) {
         const storyId = await d.publish(story);
-        // Facebook + Instagram (src/lib/social). Never on a dry run (no publish), and it never
-        // throws into the run: socialPostForStory records its own failures.
-        if (typeof storyId === 'number') {
-          const s = await d.social(storyId).catch((e) => ({ status: 'failed', reason: `error: ${errorText(e)}`, costUsd: 0 }));
-          log.costUsd += s.costUsd; // OpenRouter only; Claude key spend is in claudeCreditSpentThisRun()
-          (log.social ??= []).push({ slug, status: s.status, reason: s.reason ?? null });
-        }
+        if (typeof storyId === 'number') publishedIds.push(storyId); // the social step, after the loop
       }
       await save(`${slug}.json`, story);
       log.published.push({ slug, title: story.title });
@@ -346,6 +354,29 @@ async function run(log: RunLog, { now, dryRun, outDir, deps = {}, maxStories }: 
       log.notPublished.push({ headline: b.headline, reason: `error: ${errorText(e)}` });
     }
   }
+  // Facebook + Instagram (src/lib/social), once all the run's stories are out: at most one
+  // post, the newest story with a usable photo, and only if today's post hasn't gone out
+  // already. The others get a skipped row saying why, at no cost. A run with no suitable
+  // story posts nothing, and that's fine. Never on a dry run (nothing published), and it
+  // never throws into the run.
+  if (!dryRun && publishedIds.length) {
+    const failed = (e: unknown) => ({ status: 'failed', reason: `error: ${errorText(e)}`, costUsd: 0 });
+    try {
+      const plan = planSocialRun(await d.socialStories(publishedIds), await d.socialCapReached());
+      if (plan.post) {
+        const s = await d.social(plan.post.id).catch(failed);
+        log.costUsd += s.costUsd; // OpenRouter only; Claude key spend is in claudeCreditSpentThisRun()
+        (log.social ??= []).push({ slug: plan.post.slug, status: s.status, reason: s.reason ?? null });
+      }
+      for (const { story, reason } of plan.skip) {
+        const s = await d.socialSkip(story, reason).catch(failed);
+        (log.social ??= []).push({ slug: story.slug, status: s.status, reason: s.reason ?? null });
+      }
+    } catch (e) {
+      (log.social ??= []).push({ slug: '(social step)', status: 'failed', reason: `error: ${errorText(e)}` });
+    }
+  }
+
   // Pages for the runners today's stories are about who have none yet. Never on a dry run.
   if (!dryRun && people.length) {
     // What's left of the ceiling: OpenRouter only (log.costUsd), Claude key spend isn't in it.

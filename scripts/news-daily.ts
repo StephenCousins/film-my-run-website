@@ -11,6 +11,7 @@ import { londonClock } from '@/lib/push/news-push';
 import { isCompletedDailyRun, londonMidnight } from '@/lib/news/daily-run';
 import { NEWS_CONFIG } from '@/lib/news/config';
 import { claudeCreditSpentThisRun, resetOpenRouterHealth } from '@/lib/llm';
+import { isQuietSkip } from '@/lib/social/rules';
 import { claudeMonthSpentUsd, errorText, newsRunRow, runNews, startClaudeCreditBudget } from '@/lib/news/run';
 import { liveMonthlyDeps, monthlyRefresh, type MonthlySummary } from '@/lib/runners/monthly';
 import { refreshPersonalBests } from '@/lib/runners/pbs';
@@ -167,7 +168,9 @@ function runLines(log: RunSummary, dryRun = false, brief = false): string[] {
     ...(log.published ?? []).map((p) => dryRun ? `Would publish: ${p.title}` : `Published: ${p.title} https://filmmyrun.com/news/${p.slug}`),
     ...(log.notPublished ?? log.held ?? []).map((h) => `Not published: ${h.headline} (${h.reason})`),
     ...((log as { profiles?: { name: string; slug?: string; reason?: string }[] }).profiles ?? []).map((p) => p.slug ? `Runner page: ${p.name} https://filmmyrun.com/runners/${p.slug}` : `No runner page for ${p.name} (${p.reason})`),
-    ...(log.social ?? []).map((s) => `Social post ${s.status}: ${s.slug}${s.reason ? ` (${s.reason})` : ''}`),
+    // Posted, partial and failed are worth seeing; the expected skips (no usable photo, not
+    // chosen, today's post already out) only clutter the email. /admin/social lists them all.
+    ...(log.social ?? []).filter((s) => !isQuietSkip(s.status, s.reason)).map((s) => `Social post ${s.status}: ${s.slug}${s.reason ? ` (${s.reason})` : ''}`),
     ...(log.skipped ?? []).map((s) => `Not written: ${s.headline} (${s.reason})`),
     ...(log.ungrouped ?? []).map((u) => `Passed the sort but in no group (retried tomorrow): ${u.title} ${u.url}`),
     ...(log.borderline ?? []).map((b) => `Borderline (${b.confidence.toFixed(2)}): ${b.url}`),

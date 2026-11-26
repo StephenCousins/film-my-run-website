@@ -50,8 +50,9 @@ export default async function SocialPostsPage() {
         <h1 className="font-display text-3xl font-semibold text-foreground">Social posts</h1>
         <p className="text-secondary mt-2">
           Each published news story with a real photo at least {SOCIAL_CONFIG.minPhotoWidth}px wide gets a card and a caption for
-          Facebook and Instagram, at most {SOCIAL_CONFIG.maxPostsPerDay} a day. While posting is off, the card and captions are still
-          made, so you can see below what would have gone out.
+          Facebook and Instagram, at most {SOCIAL_CONFIG.maxPostsPerDay} a day (UK time). When a news run publishes several, the newest
+          one goes out; a day with no suitable story posts nothing. While posting is off, the card and captions are still made, so you
+          can see below what would have gone out. Skipped rows say why a story wasn&apos;t posted.
         </p>
 
         <form action={setSocialPosting.bind(null, !enabled)} className="card p-4 mt-6 flex items-center justify-between gap-4">
@@ -74,7 +75,7 @@ export default async function SocialPostsPage() {
               {!credsPresent && ` (missing: ${Object.entries(target.present).filter(([, v]) => !v).map(([k]) => k).join(', ')})`}
             </p>
             <p>
-              Today: {today} of {SOCIAL_CONFIG.maxPostsPerDay} posts (UK day).
+              Posted today: {today} of {SOCIAL_CONFIG.maxPostsPerDay} (UK day).
             </p>
           </div>
           <button type="submit" className={enabled ? 'btn-secondary shrink-0' : 'btn-primary shrink-0'}>

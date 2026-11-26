@@ -4,8 +4,8 @@ Added 26 Nov 2026. Code: `src/lib/social/`. Admin page: `/admin/social`.
 
 ## What it does
 
-When the news pipeline publishes a story (the daily run, `news:story`, or `news:publish`), it makes one post
-for the Film My Run Facebook Page and Instagram account:
+When the news pipeline publishes a story (the daily run, `news:story`, or `news:publish`), it can make one post
+for the Film My Run Facebook Page and Instagram account. **At most one a day** (see the rules below):
 
 1. **A card**, 1080x1350 (Instagram's portrait shape, fine on Facebook): the story photo full width at the top,
    fading into a dark panel with a tag pill (BREAKING, RESULTS, RACE NEWS or ULTRA), a big headline with its key
@@ -33,13 +33,26 @@ reason. That is what `/admin/social` shows.
   - the source photo was under 1080px wide (`photo too small`). The site stores every news photo at 1200x675,
     upscaling small ones, so the stored copy says nothing; the original width is recorded when the photo is picked
     (`news_stories.image_source_width`, from 26 Nov 2026). Older stories have no width and are skipped.
-- **At most 3 posts a day**, counted per UK calendar day (midnight to midnight, Europe/London) from the posts that
-  went out (posted or partial). A fourth story that day is skipped with `daily cap reached`.
+- **One post a day at most** (Stephen, 26 Nov 2026), counted per UK calendar day (midnight to midnight,
+  Europe/London) from the posts that went out (posted or partial). `SOCIAL_CONFIG.maxPostsPerDay` in
+  `src/lib/social/rules.ts`; there is no admin setting for it. Any later story that day is skipped with
+  `daily cap reached`.
+- **A quiet day is fine.** If no story that day has a good enough photo, nothing is posted. That is not an error:
+  there is no alert and no extra email. The skipped rows are still on `/admin/social`, so you can see why.
+- **When one news run publishes several stories with good photos, the newest goes out** (latest `published_at`;
+  if two are level, the more important one). The daily run publishes all its stories first, then picks
+  (`planSocialRun` in `rules.ts`, called at the end of `runNews`). The others get a skipped row saying
+  `not chosen today`, or their photo problem, made without asking Claude or making a card, so they cost nothing.
+  If today's post already went out (say an earlier `news:publish`), nothing from the run is posted. `news:story`
+  publishes one story, and `news:publish` posts its story straight away; the one-a-day cap applies to both.
 - **Never twice.** One row per story (a unique key on `story_id`); a story that already has a row is left alone. The
   row is made before anything is posted, so even a crash part way can't lead to a second post.
 - **Dry runs** publish nothing, so they make no social post.
 - **It never stops the news.** Any error is caught and recorded as a failed row; the story stays published.
 - The photo and cap checks come before Claude is asked anything, so a skip costs nothing.
+- **The news-run email** lists social posts that went out (`posted`, `partial`) and any that `failed`. The expected
+  skips (`no photo`, `branded fallback`, `photo too small`, `daily cap reached`, `not chosen today`) are left out
+  (`isQuietSkip` in `rules.ts`). Other skips, such as `posting switched off` or an account-lock refusal, still show.
 
 ## The on/off switch, and "inert" mode
 
