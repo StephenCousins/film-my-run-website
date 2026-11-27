@@ -30,7 +30,7 @@ reason. That is what `/admin/social` shows.
   - the story has no image (`no photo`);
   - its image is the branded fallback card, which `storyImage()` uses when no source photo works and
     `news:publish` always uses (`branded fallback`);
-  - the source photo was under 1080px wide (`photo too small`). The site stores every news photo at 1200x675,
+  - the source photo was under 900px wide (`photo too small`; 1080 until 27 Nov 2026, lowered by Stephen as too many news photos missed it). The site stores every news photo at 1200x675,
     upscaling small ones, so the stored copy says nothing; the original width is recorded when the photo is picked
     (`news_stories.image_source_width`, from 26 Nov 2026). Older stories have no width and are skipped.
 - **One post a day at most** (Stephen, 26 Nov 2026), counted per UK calendar day (midnight to midnight,

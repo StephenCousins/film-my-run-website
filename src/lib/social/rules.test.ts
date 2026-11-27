@@ -4,15 +4,15 @@ import { dailyCapReached, isQuietSkip, londonDayStart, photoProblem, planSocialR
 const photo = { image_url: 'https://r2.test/news/x.webp', photo_credit: 'Photo: Jane / iRunFar', image_source_width: 1600 };
 
 describe('the photo rule', () => {
-  it('a real photo at least 1080px wide is fine', () => {
+  it('a real photo at least 900px wide is fine', () => {
     expect(photoProblem(photo)).toBeNull();
-    expect(photoProblem({ ...photo, image_source_width: 1080 })).toBeNull();
+    expect(photoProblem({ ...photo, image_source_width: 900 })).toBeNull();
   });
-  it('no photo, the branded fallback, or under 1080px wide: no post', () => {
+  it('no photo, the branded fallback, or under 900px wide: no post', () => {
     expect(photoProblem({ ...photo, image_url: null })).toBe('no photo');
     // storyImage's fallback card and news:publish's card both leave photo_credit null.
     expect(photoProblem({ ...photo, photo_credit: null, image_source_width: null })).toBe('branded fallback');
-    expect(photoProblem({ ...photo, image_source_width: 1079 })).toMatch(/^photo too small/);
+    expect(photoProblem({ ...photo, image_source_width: 899 })).toMatch(/^photo too small/);
     // Stored at 1200x675 whatever the source was: an unknown source width is not trusted.
     expect(photoProblem({ ...photo, image_source_width: null })).toMatch(/^photo too small/);
   });
@@ -76,7 +76,7 @@ describe("one news run's stories", () => {
 
 describe('which social outcomes the news email leaves out', () => {
   it('expected skips are quiet', () => {
-    for (const r of ['no photo', 'branded fallback', 'photo too small (900px wide, needs 1080)', 'photo too small (source width unknown)', 'daily cap reached', 'not chosen today']) {
+    for (const r of ['no photo', 'branded fallback', 'photo too small (850px wide, needs 900)', 'photo too small (source width unknown)', 'daily cap reached', 'not chosen today']) {
       expect(isQuietSkip('skipped', r)).toBe(true);
     }
   });

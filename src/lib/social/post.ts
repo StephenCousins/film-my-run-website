@@ -118,7 +118,7 @@ export const liveSocialDeps: SocialDeps = {
  * The social post for one published story. In order:
  * 1. one row per story (claim): a story already tried is left alone;
  * 2. Stephen's photo rule (photoProblem): no real photo, the branded card, or a source photo
- *    under 1080px wide means no post;
+ *    under 900px wide means no post;
  * 3. the daily cap: 1 post per UK day (SOCIAL_CONFIG.maxPostsPerDay);
  * 4. Claude writes the headline and captions, the card is rendered and stored on R2
  *    (social/<slug>.jpg; Meta needs a public URL, and /admin/social shows it);

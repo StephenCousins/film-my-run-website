@@ -175,7 +175,7 @@ describe('the rules', () => {
   it('no usable photo: skipped before any AI call', async () => {
     for (const [s, why] of [
       [{ ...story, photo_credit: null, image_source_width: null }, 'branded fallback'],
-      [{ ...story, image_source_width: 900 }, 'photo too small'],
+      [{ ...story, image_source_width: 850 }, 'photo too small'],
       [{ ...story, image_url: null }, 'no photo'],
     ] as const) {
       const { d } = fakes({ loadStory: async () => s });

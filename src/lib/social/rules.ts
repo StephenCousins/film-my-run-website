@@ -3,8 +3,8 @@ import { londonMidnight } from '@/lib/news/daily-run';
 import { londonClock } from '@/lib/push/news-push';
 
 export const SOCIAL_CONFIG = {
-  /** Instagram's portrait card; also what the source photo must be at least this wide for (Stephen). */
-  minPhotoWidth: 1080,
+  /** Smallest source photo worth posting: the card is 1080 wide, so at most ~20% upscaling (Stephen, 27 Nov 2026; was 1080). */
+  minPhotoWidth: 900,
   /**
    * Posts (posted or partly posted) per UK calendar day, Europe/London. One a day, and a day
    * with no suitable story posts nothing (Stephen, 26 Nov 2026).
@@ -27,7 +27,7 @@ export interface PhotoFacts {
  * - No image at all: "no photo".
  * - The branded fallback card (storyImage found no usable source photo, or news:publish put a
  *   held story out with the card): photo_credit is null for both, so "branded fallback".
- * - The source photo was under 1080px wide, or its width wasn't recorded (stories from before
+ * - The source photo was under 900px wide, or its width wasn't recorded (stories from before
  *   image_source_width existed): "photo too small". The stored copy is always 1200x675, so
  *   only the original width tells us anything.
  */
